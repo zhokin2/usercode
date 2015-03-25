@@ -1,0 +1,20 @@
+ Start CMS run 
+/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/biglib/slc6_amd64_gcc472:/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/lib/slc6_amd64_gcc472:/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/biglib/slc6_amd64_gcc472:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/lib/slc6_amd64_gcc472:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/external/llvm/3.2-cms2/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/external/gcc/4.7.2-cms/lib64:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/external/gcc/4.7.2-cms/lib:/opt/d-cache/dcap/lib:/opt/d-cache/dcap/lib64:/usr/lib64
+RUN = 232116
+Input file = /store/group/dpg_hcal/comm_hcal/LS1/USC_232116.root
+Output file = /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/LED_232116.root
+ After CMS run 
+c++: internal compiler error: Killed (program cc1plus)
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <http://gcc.gnu.org/bugs.html> for instructions.
+mv: cannot stat `a.out': No such file or directory
+total 2196
+-rw-r--r--. 1 kodolova zh 1962880 Feb  9 14:04 LogEleMapdb.h
+-rw-r--r--. 1 kodolova zh  149868 Feb  9 14:04 RemoteMonitoringMAP.cc
+-rwxr-xr-x. 1 kodolova zh     272 Feb  9 14:04 compile.csh
+-rw-r--r--. 1 kodolova zh   24105 Feb  9 14:04 remoteMonitoring_LED_cfg.py
+-rw-r--r--. 1 kodolova zh  101388 Feb  9 14:04 runlist.tmp
+ Start copy png 
+cp: No match.
+cp: No match.

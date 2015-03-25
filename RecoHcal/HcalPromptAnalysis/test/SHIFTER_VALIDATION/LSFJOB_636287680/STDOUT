@@ -1,0 +1,11 @@
+@(#)CERN job starter $Date: 2010/06/23 14:22:16 $
+Working directory is </pool/lsf/dtlisov/636287680> on <b6f6787cfd>
+
+runsets_22032015_2 237068
+Cputime limit exceeded (core dumped)
+
+Job finished at Mon Mar 23 23:15:53 CET 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.6 (Carbon)
+
+CERN statistics: This process used approximately : 8:00:08 KSI2K hours (28808 KSI2K seconds)
+                 This process corresponds to     : 31:12:33 HS06  hours (112353 HS06  seconds)

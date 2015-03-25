@@ -1,0 +1,139 @@
+I. steering lines in remoteMonitoring_NZS_cfg.py 
+regarding LS certification:
+
+1. keep all the time 0 for the 
+flagtodefinebadchannel = cms.int32(0),
+
+2. you can change #bins for each run, 
+but much easy to keep it as 
+max #LS over all runs, ~800 :
+howmanybinsonplots = cms.int32(800)
+
+3. instead nbadchannels1 = cms.int32(7),...,
+new steering lines are added:
+  #Verbosity = cms.untracked.int32(-77),
+  # to select abnormal events,for which Nbcs > this limits
+  lsdep_cut1_peak_HBdepth1 = cms.int32(20),
+  lsdep_cut1_peak_HBdepth2 = cms.int32(7),
+  lsdep_cut1_peak_HEdepth1 = cms.int32(16),
+  lsdep_cut1_peak_HEdepth2 = cms.int32(13),
+  lsdep_cut1_peak_HEdepth3 = cms.int32(4),
+  lsdep_cut1_peak_HFdepth1 = cms.int32(10),
+  lsdep_cut1_peak_HFdepth2 = cms.int32(5),
+  lsdep_cut1_peak_HOdepth4 = cms.int32(46),
+  #  to select events with Nbcs > this limits
+  lsdep_cut3_max_HBdepth1 = cms.int32(19),
+  lsdep_cut3_max_HBdepth2 = cms.int32(6),
+  lsdep_cut3_max_HEdepth1 = cms.int32(15),
+  lsdep_cut3_max_HEdepth2 = cms.int32(12),
+  lsdep_cut3_max_HEdepth3 = cms.int32(3),
+  lsdep_cut3_max_HFdepth1 = cms.int32(9),
+  lsdep_cut3_max_HFdepth2 = cms.int32(4),
+  lsdep_cut3_max_HOdepth4 = cms.int32(40),
+
+
+II. to fill numbers into our table:
+
+(it's important to remember that all dependencies 
+are plotted vs continuous("sploshnoj) numbering 
+of ls(=iLS), not its real numbers LS)
+
+............................................variable in table:           
+
+1) in zRunLS.C - to be used: 
+only 1st page and 
+plot 1:  h_nevents_per_eachLS  .........   #ev per iLS  
+plot 2:  h_lsnumber_per_eachLS .........   LS -> real ls number per iLS 
+
+2) in zRunNbadchan.C - to be used:
+page 1 for HBdepth1: 
+plot2: black dots,Rate1C   .........   <Nbcs> != 0 for only iLS containing abnormal events 
+ratio obtained by dividing of            for which Nbcs bigger "lsdep_cut1_peak_HBdepth1"            
+h_runnbadchannelsC_depth1_HB 
+to h_runbadrate0_depth1_HB
+
+page 2 for HBdepth2              
+plot2: black dots,Rate2C   .........   <Nbcs> != 0 for only iLS containing abnormal events  
+                                          for which Nbcs bigger "lsdep_cut1_peak_HBdepth2" 
+page 3 for HEdepth1              
+plot2: black dots,Rate3C   .........   <Nbcs> != 0 for only iLS containing abnormal events  
+                                          for which Nbcs bigger "lsdep_cut1_peak_HEdepth1"
+page 4 for HEdepth2              
+plot2: black dots,Rate4C   .........   <Nbcs> != 0 for only iLS containing abnormal events  
+                                          for which Nbcs bigger "lsdep_cut1_peak_HEdepth2"
+page 5 for HEdepth3              
+plot2: black dots,Rate5C   .........   <Nbcs> != 0 for only iLS containing abnormal events  
+                                          for which Nbcs bigger "lsdep_cut1_peak_HEdepth3"
+page 9 for HOdepth4              
+plot2: black dots,Rate6C   .........   <Nbcs> != 0 for only iLS containing abnormal events  
+                                          for which Nbcs bigger "lsdep_cut1_peak_HOdepth4"
+page 10 for HFdepth1             
+plot2: black dots,Rate7C    .........   <Nbcs> != 0 for only iLS containing abnormal events 
+                                          for which Nbcs bigger "lsdep_cut1_peak_HFdepth1"
+page 11 for HFdepth2             
+plot2: black dots,Rate8C    .........   <Nbcs> != 0 for only iLS containing abnormal events  
+                                           for which Nbcs bigger "lsdep_cut1_peak_HFdepth2"
+Also, in zRunNbadchan.C - to be used:
+page 1 for HBdepth1: 
+plot2:   Rate1                .........   <Nbcs> for all iLS 
+ratio obtained by dividing of 
+h_runnbadchannels_depth1_HB 
+to h_runbadrate0_depth1_HB 
+(in the table, one can mark this <Nbcs> by red color if it's bigger some_limit, 
+which has to be defined by experts)   
+
+page 2 for HBdepth2 
+plot2:   Rate2                .........   <Nbcs> for all iLS 
+
+page 3 for HEdepth1 
+plot2:   Rate3                .........   <Nbcs> for all iLS 
+
+page 4 for HEdepth2 
+plot2:   Rate4                .........   <Nbcs> for all iLS 
+
+page 5 for HEdepth3 
+plot2:   Rate5                .........   <Nbcs> for all iLS 
+
+page 9 for HOdepth4 
+plot2:   Rate6                .........   <Nbcs> for all iLS 
+
+page 10 for HFdepth1
+plot2:   Rate7                .........   <Nbcs> for all iLS 
+
+page 11 for HFdepth2
+plot2:   Rate8                .........   <Nbcs> for all iLS 
+
+
+3) in zRunRatio34.C - to be used:
+page 2:red dots
+plot1 for HBdepth1: 
+Rate11   .........   portion of events for which Nbcs bigger "lsdep_cut3_max_HBdepth1"
+ratio obtained by dividing of 
+h_runbadrateC_depth1_HB
+to h_runbadrate0_depth1_HB
+(in the table, one can mark this portion by red color if it's bigger some_limit, 
+which has to be defined by experts)   
+
+plot2 for HBdepth2:
+Rate21   .........   portion of events for which Nbcs bigger "lsdep_cut3_max_HBdepth2"
+
+plot3 for HEdepth1:
+Rate31   .........   portion of events for which Nbcs bigger "lsdep_cut3_max_HEdepth1"
+
+plot4 for HEdepth2:
+Rate41   .........   portion of events for which Nbcs bigger "lsdep_cut3_max_HEdepth2"
+
+plot5 for HEdepth3:
+Rate51   .........   portion of events for which Nbcs bigger "lsdep_cut3_max_HEdepth3"
+
+page 6:red dots  
+plot1 for HOdepth4:
+Rate61   .........   portion of events for which Nbcs bigger "lsdep_cut3_max_HOdepth4"
+ 
+plot2 for HFdepth1:
+Rate71   .........   portion of events for which Nbcs bigger "lsdep_cut3_max_HFdepth1"
+ 
+plot3 for HFdepth2:
+Rate81   .........   portion of events for which Nbcs bigger "lsdep_cut3_max_HFdepth2"
+ 
+====================================================================================

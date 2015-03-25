@@ -1,0 +1,33 @@
+</html><html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html"/>
+<title> Raw Data Analyser </title>
+<style type="text/css">
+ body,td{ background-color: #FFFFCC; font-family: arial, arial ce, helvetica; font-size: 12px; }
+   td.s0 { font-family: arial, arial ce, helvetica; }
+   td.s1 { font-family: arial, arial ce, helvetica; font-weight: bold; background-color: #FFC169; text-align: center;}
+   td.s2 { font-family: arial, arial ce, helvetica; background-color: #eeeeee; }
+   td.s3 { font-family: arial, arial ce, helvetica; background-color: #d0d0d0; }
+   td.s4 { font-family: arial, arial ce, helvetica; background-color: #FFC169; }
+</style>
+<body>
+<h1> Remote Monitoring Tool </h1>
+<br>
+<h2> Description </h2>
+<h3> The Remote Monitoring Tool(RMT) was developed in framework of CMSSW to be used for HCAL re-commissioning during LS1 and further data taking. RMT includes the possibility to use both, ntuples and histograms. Using ntuples the signal shape distributions can be monitored for any channel of HCAL. With use of histograms, few tests were developed to monitor the channels with irregular signal shape and firmwares failure - this information is available in raw data. The tests were developed in use of local and global runs of last data taking period where the problematic channels are known and the RMT could be easily adjusted. The following tests were defined. One can assume that if some problem appear in any channel, the signal distribution over time slices(TS) to be wider w.r.t. normal case. So, first of all, the width of shape distribution can be exploited. Width is defined as square root from dispersion. The second way to identify the problems is to see the ratio of adc signal collected in 4 middle TSs(plus one, minus two around TS with maximal amplitude) to full signal. The pedestals were not taken into account since their values are negligible w.r.t. signal itself. In addition, one can define the mean position of adc signal and TS number of its maximum. Then, one can assume that if LED signal of channel, collected over all TSs is small enough, then, this channel can be attributed as bad one. It is important of cause to know how often a CAPID violation is happening and are there any patterns of the CAPID non-rotation in detector space or failures are randomly distributed over channels. So, CAPID, error and validation bits were inspected as well as all the digis have passed through. </h3> 
+<h3> There is enumeration of the tests for Monitoring of channels with irregular </h3> 
+<h3> -  amplitude of LED signal (A) </h3> 
+<h3> -  width of signal shape (W) </h3> 
+<h3> -  portion of signal around maximum (R) </h3> 
+<h3> -  mean signal position (Tn)  </h3> 
+<h3> -  TS number of amplitude maximum (Tx) </h3> 
+<h3> -  CAPID rotation (C) </h3> 
+<h3>  To identify problematic channels in 2D eta-phi space, one have to tune the cuts for each variable of every test to select channels outside regular distribution. Note, that in study of CAPID violation one can identify bad channels without optimization of cuts needed in other tests. </h3> 
+
+<h3> Monitoring on proper signal for calibration channels is provided as well. The same tests are used to identify problematic channels not to be used for calibrations. They are displayed in 2D eta-phi space as well as for normal channels to facilitate proper mapping of problematic calibration channels attributed to normal ones. </h3> 
+
+<h3> And finally, one can monitor the channel response stability in time. It is known that due to drift of HCAL response in time, PMT or HPD gains to be tuned respectively. One can make the comparison of averaged in event response for each channel, in current LED run, and reference run, in which the gain was changed last time .And then, one can monitor response degradation in 2 nearest in time runs, namely, a few percent difference of relative response in these two runs to ask experts to initiate the gain tuning. </h3> 
+
+<h3> In addition, one can study the Run or Lumi Section qualities, based on analysis of rate of events with certain number of bad channels where bad channels are defined on base of any test described above.</h3>
+</body> 
+</html> 

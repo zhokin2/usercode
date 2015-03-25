@@ -1,0 +1,159 @@
+ Start CMS run 
+/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/biglib/slc6_amd64_gcc472:/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/lib/slc6_amd64_gcc472:/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/biglib/slc6_amd64_gcc472:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/lib/slc6_amd64_gcc472:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/external/llvm/3.2-cms2/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/external/gcc/4.7.2-cms/lib64:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/external/gcc/4.7.2-cms/lib:/opt/d-cache/dcap/lib:/opt/d-cache/dcap/lib64:/usr/lib64
+ After CMS run 
+/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/LED_229975.root /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/LED_135077.root
+Warning in <TFile::Append>: Replacing existing TH1: Map (Potential memory leak).
+Warning in <TFile::Append>: Replacing existing TH1: Map (Potential memory leak).
+Warning in <TFile::Append>: Replacing existing TH1: Map (Potential memory leak).
+Warning in <TFile::Append>: Replacing existing TH1: Map (Potential memory leak).
+Warning in <TFile::Append>: Replacing existing TH1: Map (Potential memory leak).
+Warning in <TFile::Append>: Replacing existing TH1: Map (Potential memory leak).
+Warning in <TFile::Append>: Replacing existing TH1: Map (Potential memory leak).
+Map_Ampl[21][1][1]->GetBinContent(27,69)= 272.076
+Map_Ampl[21][1][1]->GetBinContent(28,69)= 227.566
+Map_Ampl[21][1][1]->GetBinContent(30,61)= 385.165
+Map_Ampl[21][1][1]->GetBinContent(53,41)= 300.668
+Map_Ampl[21][1][1]->GetBinContent(53,68)= 311.819
+Map_Ampl[21][1][1]->GetBinContent(55,48)= 349.229
+Map_Ampl[21][1][1]->GetBinContent(56,4)= 240.369
+Map_Ampl[21][1][2]->GetBinContent(57,7)= 226.704
+Map_Ampl[21][1][1]->GetBinContent(57,10)= 233.696
+Error: No such HB, Eta=16, Phi=53, Depth=1 in database
+Error: No such HB, Eta=16, Phi=53, Depth=2 in database
+Error: No such HB, Eta=16, Phi=6, Depth=2 in database
+Error: No such HB, Eta=16, Phi=9, Depth=1 in database
+total 9164
+-rw-r--r--. 1 kodolova zh   52149 Jan 27 14:28 HB.html
+-rw-r--r--. 1 kodolova zh    3325 Jan 27 14:28 HB_Calib.html
+-rw-r--r--. 1 kodolova zh    1757 Jan 27 14:28 HB_Drift.html
+-rw-r--r--. 1 kodolova zh    3274 Jan 27 14:28 HB_Tile.html
+-rw-r--r--. 1 kodolova zh    6206 Jan 27 14:28 HE.html
+-rw-r--r--. 1 kodolova zh    1719 Jan 27 14:28 HELP.html
+-rw-r--r--. 1 kodolova zh    3327 Jan 27 14:28 HE_Calib.html
+-rw-r--r--. 1 kodolova zh    1757 Jan 27 14:28 HE_Drift.html
+-rw-r--r--. 1 kodolova zh    3278 Jan 27 14:28 HE_Tile.html
+-rw-r--r--. 1 kodolova zh    3897 Jan 27 14:28 HF.html
+-rw-r--r--. 1 kodolova zh    3325 Jan 27 14:28 HF_Calib.html
+-rw-r--r--. 1 kodolova zh    1757 Jan 27 14:28 HF_Drift.html
+-rw-r--r--. 1 kodolova zh    3280 Jan 27 14:28 HF_Tile.html
+-rw-r--r--. 1 kodolova zh    3895 Jan 27 14:28 HO.html
+-rw-r--r--. 1 kodolova zh    3327 Jan 27 14:28 HO_Calib.html
+-rw-r--r--. 1 kodolova zh    1757 Jan 27 14:28 HO_Drift.html
+-rw-r--r--. 1 kodolova zh    3278 Jan 27 14:28 HO_Tile.html
+-rw-r--r--. 1 kodolova zh   12939 Jan 27 14:28 Hist43TStoAllTSCalibHB.png
+-rw-r--r--. 1 kodolova zh   14582 Jan 27 14:28 Hist43TStoAllTSCalibHE.png
+-rw-r--r--. 1 kodolova zh   12267 Jan 27 14:28 Hist43TStoAllTSCalibHF.png
+-rw-r--r--. 1 kodolova zh   12372 Jan 27 14:28 Hist43TStoAllTSCalibHO.png
+-rw-r--r--. 1 kodolova zh   17308 Jan 27 14:28 Hist43TStoAllTSHB.png
+-rw-r--r--. 1 kodolova zh   17848 Jan 27 14:28 Hist43TStoAllTSHE.png
+-rw-r--r--. 1 kodolova zh   12738 Jan 27 14:28 Hist43TStoAllTSHF.png
+-rw-r--r--. 1 kodolova zh   12846 Jan 27 14:28 Hist43TStoAllTSHO.png
+-rw-r--r--. 1 kodolova zh   15690 Jan 27 14:28 HistAmplCalibHB.png
+-rw-r--r--. 1 kodolova zh   17496 Jan 27 14:28 HistAmplCalibHE.png
+-rw-r--r--. 1 kodolova zh   13757 Jan 27 14:28 HistAmplCalibHF.png
+-rw-r--r--. 1 kodolova zh   15975 Jan 27 14:28 HistAmplCalibHO.png
+-rw-r--r--. 1 kodolova zh   16575 Jan 27 14:28 HistAmplDriftDepthHB.png
+-rw-r--r--. 1 kodolova zh   24552 Jan 27 14:28 HistAmplDriftDepthHE.png
+-rw-r--r--. 1 kodolova zh   13866 Jan 27 14:28 HistAmplDriftDepthHF.png
+-rw-r--r--. 1 kodolova zh    8751 Jan 27 14:28 HistAmplDriftDepthHO.png
+-rw-r--r--. 1 kodolova zh   16859 Jan 27 14:28 HistAmplHB.png
+-rw-r--r--. 1 kodolova zh   17415 Jan 27 14:28 HistAmplHE.png
+-rw-r--r--. 1 kodolova zh   15835 Jan 27 14:28 HistAmplHF.png
+-rw-r--r--. 1 kodolova zh   18139 Jan 27 14:28 HistAmplHO.png
+-rw-r--r--. 1 kodolova zh   13302 Jan 27 14:28 HistMaxPosCalibHB.png
+-rw-r--r--. 1 kodolova zh   13466 Jan 27 14:28 HistMaxPosCalibHE.png
+-rw-r--r--. 1 kodolova zh   11229 Jan 27 14:28 HistMaxPosCalibHF.png
+-rw-r--r--. 1 kodolova zh   13678 Jan 27 14:28 HistMaxPosCalibHO.png
+-rw-r--r--. 1 kodolova zh   18103 Jan 27 14:28 HistMaxPosHB.png
+-rw-r--r--. 1 kodolova zh   19028 Jan 27 14:28 HistMaxPosHE.png
+-rw-r--r--. 1 kodolova zh   14928 Jan 27 14:28 HistMaxPosHF.png
+-rw-r--r--. 1 kodolova zh   14632 Jan 27 14:28 HistMaxPosHO.png
+-rw-r--r--. 1 kodolova zh   15553 Jan 27 14:28 HistMeanPosCalibHB.png
+-rw-r--r--. 1 kodolova zh   14588 Jan 27 14:28 HistMeanPosCalibHE.png
+-rw-r--r--. 1 kodolova zh   14978 Jan 27 14:28 HistMeanPosCalibHF.png
+-rw-r--r--. 1 kodolova zh   15430 Jan 27 14:28 HistMeanPosCalibHO.png
+-rw-r--r--. 1 kodolova zh   18305 Jan 27 14:28 HistMeanPosHB.png
+-rw-r--r--. 1 kodolova zh   17033 Jan 27 14:28 HistMeanPosHE.png
+-rw-r--r--. 1 kodolova zh   15538 Jan 27 14:28 HistMeanPosHF.png
+-rw-r--r--. 1 kodolova zh   15535 Jan 27 14:28 HistMeanPosHO.png
+-rw-r--r--. 1 kodolova zh   15494 Jan 27 14:28 HistRMSCalibHB.png
+-rw-r--r--. 1 kodolova zh   16601 Jan 27 14:28 HistRMSCalibHE.png
+-rw-r--r--. 1 kodolova zh   14638 Jan 27 14:28 HistRMSCalibHF.png
+-rw-r--r--. 1 kodolova zh   16053 Jan 27 14:28 HistRMSCalibHO.png
+-rw-r--r--. 1 kodolova zh   17543 Jan 27 14:28 HistRMSHB.png
+-rw-r--r--. 1 kodolova zh   17308 Jan 27 14:28 HistRMSHE.png
+-rw-r--r--. 1 kodolova zh   14146 Jan 27 14:28 HistRMSHF.png
+-rw-r--r--. 1 kodolova zh   14248 Jan 27 14:28 HistRMSHO.png
+-rw-r--r--. 1 kodolova zh 1962880 Jan 27 14:26 LogEleMapdb.h
+-rw-r--r--. 1 kodolova zh   33537 Jan 27 14:28 MAP.html
+-rw-r--r--. 1 kodolova zh   16573 Jan 27 14:28 MAP.png
+-rw-r--r--. 1 kodolova zh   17167 Jan 27 14:28 MAPHB.png
+-rw-r--r--. 1 kodolova zh   23635 Jan 27 14:28 MAPHE.png
+-rw-r--r--. 1 kodolova zh   13439 Jan 27 14:28 MAPHF.png
+-rw-r--r--. 1 kodolova zh    8712 Jan 27 14:28 MAPHO.png
+-rw-r--r--. 1 kodolova zh   10468 Jan 27 14:28 MapRate43TStoAllTSCalibHB.png
+-rw-r--r--. 1 kodolova zh   10398 Jan 27 14:28 MapRate43TStoAllTSCalibHE.png
+-rw-r--r--. 1 kodolova zh    8049 Jan 27 14:28 MapRate43TStoAllTSCalibHF.png
+-rw-r--r--. 1 kodolova zh    8180 Jan 27 14:28 MapRate43TStoAllTSCalibHO.png
+-rw-r--r--. 1 kodolova zh   17461 Jan 27 14:28 MapRate43TStoAllTSHB.png
+-rw-r--r--. 1 kodolova zh   22341 Jan 27 14:28 MapRate43TStoAllTSHE.png
+-rw-r--r--. 1 kodolova zh   13439 Jan 27 14:28 MapRate43TStoAllTSHF.png
+-rw-r--r--. 1 kodolova zh    8712 Jan 27 14:28 MapRate43TStoAllTSHO.png
+-rw-r--r--. 1 kodolova zh   23222 Jan 27 14:28 MapRateAmpl1HB.png
+-rw-r--r--. 1 kodolova zh   29860 Jan 27 14:28 MapRateAmpl1HE.png
+-rw-r--r--. 1 kodolova zh   13439 Jan 27 14:28 MapRateAmpl1HF.png
+-rw-r--r--. 1 kodolova zh    8712 Jan 27 14:28 MapRateAmpl1HO.png
+-rw-r--r--. 1 kodolova zh   23009 Jan 27 14:28 MapRateAmpl2HB.png
+-rw-r--r--. 1 kodolova zh   29928 Jan 27 14:28 MapRateAmpl2HE.png
+-rw-r--r--. 1 kodolova zh   13439 Jan 27 14:28 MapRateAmpl2HF.png
+-rw-r--r--. 1 kodolova zh    8712 Jan 27 14:28 MapRateAmpl2HO.png
+-rw-r--r--. 1 kodolova zh   10468 Jan 27 14:28 MapRateAmplCalibHB.png
+-rw-r--r--. 1 kodolova zh   10398 Jan 27 14:28 MapRateAmplCalibHE.png
+-rw-r--r--. 1 kodolova zh    8049 Jan 27 14:28 MapRateAmplCalibHF.png
+-rw-r--r--. 1 kodolova zh    8180 Jan 27 14:28 MapRateAmplCalibHO.png
+-rw-r--r--. 1 kodolova zh   18052 Jan 27 14:28 MapRateAmplDriftHB.png
+-rw-r--r--. 1 kodolova zh   24397 Jan 27 14:28 MapRateAmplDriftHE.png
+-rw-r--r--. 1 kodolova zh   12839 Jan 27 14:28 MapRateAmplDriftHF.png
+-rw-r--r--. 1 kodolova zh    7975 Jan 27 14:28 MapRateAmplDriftHO.png
+-rw-r--r--. 1 kodolova zh   17229 Jan 27 14:28 MapRateAmplHB.png
+-rw-r--r--. 1 kodolova zh   22341 Jan 27 14:28 MapRateAmplHE.png
+-rw-r--r--. 1 kodolova zh   13439 Jan 27 14:28 MapRateAmplHF.png
+-rw-r--r--. 1 kodolova zh    8712 Jan 27 14:28 MapRateAmplHO.png
+-rw-r--r--. 1 kodolova zh   10425 Jan 27 14:28 MapRateCapCalibHB.png
+-rw-r--r--. 1 kodolova zh   10377 Jan 27 14:28 MapRateCapCalibHE.png
+-rw-r--r--. 1 kodolova zh    8070 Jan 27 14:28 MapRateCapCalibHF.png
+-rw-r--r--. 1 kodolova zh    8214 Jan 27 14:28 MapRateCapCalibHO.png
+-rw-r--r--. 1 kodolova zh   17083 Jan 27 14:28 MapRateCapIDHB.png
+-rw-r--r--. 1 kodolova zh   22331 Jan 27 14:28 MapRateCapIDHE.png
+-rw-r--r--. 1 kodolova zh   13439 Jan 27 14:28 MapRateCapIDHF.png
+-rw-r--r--. 1 kodolova zh    8712 Jan 27 14:28 MapRateCapIDHO.png
+-rw-r--r--. 1 kodolova zh   10468 Jan 27 14:28 MapRateMaxPosCalibHB.png
+-rw-r--r--. 1 kodolova zh   10398 Jan 27 14:28 MapRateMaxPosCalibHE.png
+-rw-r--r--. 1 kodolova zh    8049 Jan 27 14:28 MapRateMaxPosCalibHF.png
+-rw-r--r--. 1 kodolova zh    8180 Jan 27 14:28 MapRateMaxPosCalibHO.png
+-rw-r--r--. 1 kodolova zh   17457 Jan 27 14:28 MapRateMaxPosHB.png
+-rw-r--r--. 1 kodolova zh   22360 Jan 27 14:28 MapRateMaxPosHE.png
+-rw-r--r--. 1 kodolova zh   13439 Jan 27 14:28 MapRateMaxPosHF.png
+-rw-r--r--. 1 kodolova zh    8712 Jan 27 14:28 MapRateMaxPosHO.png
+-rw-r--r--. 1 kodolova zh   10468 Jan 27 14:28 MapRateMeanPosCalibHB.png
+-rw-r--r--. 1 kodolova zh   10398 Jan 27 14:28 MapRateMeanPosCalibHE.png
+-rw-r--r--. 1 kodolova zh    8049 Jan 27 14:28 MapRateMeanPosCalibHF.png
+-rw-r--r--. 1 kodolova zh    8180 Jan 27 14:28 MapRateMeanPosCalibHO.png
+-rw-r--r--. 1 kodolova zh   17641 Jan 27 14:28 MapRateMeanPosHB.png
+-rw-r--r--. 1 kodolova zh   23896 Jan 27 14:28 MapRateMeanPosHE.png
+-rw-r--r--. 1 kodolova zh   13439 Jan 27 14:28 MapRateMeanPosHF.png
+-rw-r--r--. 1 kodolova zh    8712 Jan 27 14:28 MapRateMeanPosHO.png
+-rw-r--r--. 1 kodolova zh   10468 Jan 27 14:28 MapRateRMSCalibHB.png
+-rw-r--r--. 1 kodolova zh   10398 Jan 27 14:28 MapRateRMSCalibHE.png
+-rw-r--r--. 1 kodolova zh    8049 Jan 27 14:28 MapRateRMSCalibHF.png
+-rw-r--r--. 1 kodolova zh    8180 Jan 27 14:28 MapRateRMSCalibHO.png
+-rw-r--r--. 1 kodolova zh   17953 Jan 27 14:28 MapRateRMSHB.png
+-rw-r--r--. 1 kodolova zh   25591 Jan 27 14:28 MapRateRMSHE.png
+-rw-r--r--. 1 kodolova zh   13439 Jan 27 14:28 MapRateRMSHF.png
+-rw-r--r--. 1 kodolova zh    8712 Jan 27 14:28 MapRateRMSHO.png
+-rw-r--r--. 1 kodolova zh  115932 Jan 27 14:26 RemoteMonitoringMAP.cc
+-rwxr-xr-x. 1 kodolova zh 5221414 Jan 27 14:28 RemoteMonitoringMAP.cc.exe
+-rwxr-xr-x. 1 kodolova zh     272 Jan 27 14:26 compile.csh
+-rw-r--r--. 1 kodolova zh   24105 Jan 27 14:26 remoteMonitoring_LED_cfg.py
+-rw-r--r--. 1 kodolova zh   79295 Jan 27 14:26 runlist.tmp
+ Start copy png 

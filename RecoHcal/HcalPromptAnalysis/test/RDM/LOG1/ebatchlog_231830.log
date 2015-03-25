@@ -1,0 +1,30 @@
+Warning in <TFile::Init>: file /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/LED_231830.root has no keys
+
+ *** Break *** segmentation violation
+
+
+
+===========================================================
+There was a crash.
+This is the entire stack trace of all threads:
+===========================================================
+#0  0x00002b6c4b4f561e in waitpid () from /lib64/libc.so.6
+#1  0x00002b6c4b487609 in do_system () from /lib64/libc.so.6
+#2  0x00002b6c4784381c in TUnixSystem::StackTrace() () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libCore.so
+#3  0x00002b6c47846003 in TUnixSystem::DispatchSignals(ESignals) () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libCore.so
+#4  <signal handler called>
+#5  0x000000000040354b in main ()
+===========================================================
+
+
+The lines below might hint at the cause of the crash.
+If they do not help you then please submit a bug report at
+http://root.cern.ch/bugs. Please post the ENTIRE stack trace
+from above as an attachment in addition to anything else
+that might help us fixing this issue.
+===========================================================
+#5  0x000000000040354b in main ()
+===========================================================
+
+
+mv: cannot stat `/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/LED_231830/index_draft.html': No such file or directory

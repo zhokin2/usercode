@@ -1,0 +1,179 @@
+ Start CMS run 
+/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/biglib/slc6_amd64_gcc472:/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/lib/slc6_amd64_gcc472:/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/biglib/slc6_amd64_gcc472:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/lib/slc6_amd64_gcc472:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/external/llvm/3.2-cms2/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/external/gcc/4.7.2-cms/lib64:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/external/gcc/4.7.2-cms/lib:/opt/d-cache/dcap/lib:/opt/d-cache/dcap/lib64:/usr/lib64
+RUN = 233591
+Input file = /store/group/dpg_hcal/comm_hcal/LS1/USC_233591.root
+Output file = /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/LED_233591.root
+ Look on parameters you booked:
+ recordNtuples_ = 0
+ maxNeventsInNtuple_ = 1
+ recordHistoes_ = 1
+ studyRunDependenceHist_ = 1
+ studyCapIDErrorsHist_ = 1
+ studyRMSshapeHist_ = 1
+ studyRatioShapeHist_ = 1
+ studyTSmaxShapeHist_ = 1
+ studyTSmeanShapeHist_ = 1
+ studyDiffAmplHist_ = 1
+ studyCalibCellsHist_ = 1
+ studyADCAmplHist_ = 1
+ studyPedestalsHist_ = 1
+ studyPedestalCorrelations_ = 1
+ useADCmassive_ = 1
+ useADCfC_ = 0
+ useADCcounts_ = 0
+ usePedestalSubtraction_ = 0
+ usecontinuousnumbering_ = 1
+ ratioHBMin_ = 0.7
+ ratioHBMax_ = 0.94
+ ratioHEMin_ = 0.6
+ ratioHEMax_ = 0.95
+ ratioHFMin_ = 0.3
+ ratioHFMax_ = 1.02
+ ratioHOMin_ = 0.54
+ ratioHOMax_ = 1.04
+ flagtoaskrunsorls_ = 0
+ flagtodefinebadchannel_ = 0
+ howmanybinsonplots_ = 25
+ rmsHBMin_ = 0.7
+ rmsHBMax_ = 2
+ rmsHEMin_ = 0.7
+ rmsHEMax_ = 2
+ rmsHFMin_ = 0.1
+ rmsHFMax_ = 2.5
+ rmsHOMin_ = 0.1
+ rmsHOMax_ = 2.5
+ ADCAmplHBMin_ = 150
+ ADCAmplHEMin_ = 150
+ ADCAmplHOMin_ = 300
+ ADCAmplHFMin_ = 40
+ ADCAmplHBMax_ = 3000
+ ADCAmplHEMax_ = 3000
+ ADCAmplHOMax_ = 3000
+ ADCAmplHFMax_ = 3000
+ pedestalwHBMax_ = 0.1
+ pedestalwHEMax_ = 0.1
+ pedestalwHFMax_ = 0.4
+ pedestalwHOMax_ = 0.1
+ pedestalHBMax_ = 0.1
+ pedestalHEMax_ = 0.6
+ pedestalHFMax_ = 0.8
+ pedestalHOMax_ = 0.1
+ calibrADCHBMin_ = 120
+ calibrADCHEMin_ = 120
+ calibrADCHOMin_ = 120
+ calibrADCHFMin_ = 60
+ calibrRatioHBMin_ = 0.6
+ calibrRatioHEMin_ = 0.64
+ calibrRatioHOMin_ = 0.25
+ calibrRatioHFMin_ = 0.25
+ calibrTSmaxHBMin_ = 0.5
+ calibrTSmaxHEMin_ = 0.5
+ calibrTSmaxHOMin_ = 0.5
+ calibrTSmaxHFMin_ = 0.5
+ calibrTSmaxHBMax_ = 8.5
+ calibrTSmaxHEMax_ = 8.5
+ calibrTSmaxHOMax_ = 8.5
+ calibrTSmaxHFMax_ = 9.5
+ calibrTSmeanHBMin_ = 1
+ calibrTSmeanHEMin_ = 1
+ calibrTSmeanHOMin_ = 1
+ calibrTSmeanHFMin_ = 1
+ calibrTSmeanHBMax_ = 5.5
+ calibrTSmeanHEMax_ = 5.5
+ calibrTSmeanHOMax_ = 3.5
+ calibrTSmeanHFMax_ = 5.2
+ calibrWidthHBMin_ = 1
+ calibrWidthHEMin_ = 1
+ calibrWidthHOMin_ = 0.5
+ calibrWidthHFMin_ = 0.2
+ calibrWidthHBMax_ = 2.3
+ calibrWidthHEMax_ = 2.3
+ calibrWidthHOMax_ = 3
+ calibrWidthHFMax_ = 2.3
+ TSpeakHBMin_ = 2.5
+ TSpeakHBMax_ = 3.5
+ TSpeakHEMin_ = 2.5
+ TSpeakHEMax_ = 3.5
+ TSpeakHFMin_ = 0.5
+ TSpeakHFMax_ = 6.5
+ TSpeakHOMin_ = 0.5
+ TSpeakHOMax_ = 6.5
+ TSmeanHBMin_ = 1
+ TSmeanHBMax_ = 4.5
+ TSmeanHEMin_ = 1
+ TSmeanHEMax_ = 4.75
+ TSmeanHFMin_ = 1
+ TSmeanHFMax_ = 4.5
+ TSmeanHOMin_ = 1
+ TSmeanHOMax_ = 5.3
+%MSG-e FatalSystemSignal:  source 09-Feb-2015 13:48:02 CET PostBeginLumi
+A fatal system signal has occurred: segmentation violation
+%MSG
+
+
+A fatal system signal has occurred: segmentation violation
+The following is the call stack containing the origin of the signal.
+NOTE:The first few functions on the stack are artifacts of processing the signal and can be ignored
+
+
+Thread 4 (Thread 0x2b8cf278b700 (LWP 6102)):
+#0  0x00002b8cd5fc4a3d in nanosleep () from /lib64/libc.so.6
+#1  0x00002b8cd5fc48b0 in sleep () from /lib64/libc.so.6
+#2  0x00002b8cf2538304 in GarbageCollectorThread(void*, XrdClientThread*) () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libXrdClient.so.1
+#3  0x00002b8cf24ae75f in XrdSysThread_Xeq () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libXrdUtils.so.1
+#4  0x00002b8cd5d029d1 in start_thread () from /lib64/libpthread.so.0
+#5  0x00002b8cd60008fd in clone () from /lib64/libc.so.6
+
+Thread 3 (Thread 0x2b8cf3240700 (LWP 6103)):
+#0  0x00002b8cd5ff70d3 in poll () from /lib64/libc.so.6
+#1  0x00002b8cf251c3a7 in XrdClientSock::RecvRaw(void*, int, int, int*) () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libXrdClient.so.1
+#2  0x00002b8cf254376c in XrdClientPhyConnection::ReadRaw(void*, int, int, int*) () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libXrdClient.so.1
+#3  0x00002b8cf254b28f in XrdClientMessage::ReadRaw(XrdClientPhyConnection*) () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libXrdClient.so.1
+#4  0x00002b8cf2547ed5 in XrdClientPhyConnection::BuildMessage(bool, bool) () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libXrdClient.so.1
+#5  0x00002b8cf2549662 in SocketReaderThread(void*, XrdClientThread*) () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libXrdClient.so.1
+#6  0x00002b8cf24ae75f in XrdSysThread_Xeq () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libXrdUtils.so.1
+#7  0x00002b8cd5d029d1 in start_thread () from /lib64/libpthread.so.0
+#8  0x00002b8cd60008fd in clone () from /lib64/libc.so.6
+
+Thread 2 (Thread 0x2b8cf3ac0700 (LWP 6105)):
+#0  0x00002b8cd5ff70d3 in poll () from /lib64/libc.so.6
+#1  0x00002b8cf251c3a7 in XrdClientSock::RecvRaw(void*, int, int, int*) () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libXrdClient.so.1
+#2  0x00002b8cf254376c in XrdClientPhyConnection::ReadRaw(void*, int, int, int*) () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libXrdClient.so.1
+#3  0x00002b8cf254b28f in XrdClientMessage::ReadRaw(XrdClientPhyConnection*) () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libXrdClient.so.1
+#4  0x00002b8cf2547ed5 in XrdClientPhyConnection::BuildMessage(bool, bool) () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libXrdClient.so.1
+#5  0x00002b8cf2549662 in SocketReaderThread(void*, XrdClientThread*) () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libXrdClient.so.1
+#6  0x00002b8cf24ae75f in XrdSysThread_Xeq () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libXrdUtils.so.1
+#7  0x00002b8cd5d029d1 in start_thread () from /lib64/libpthread.so.0
+#8  0x00002b8cd60008fd in clone () from /lib64/libc.so.6
+
+Thread 1 (Thread 0x2b8cd7a3e440 (LWP 5651)):
+#0  0x00002b8cd5fc465d in waitpid () from /lib64/libc.so.6
+#1  0x00002b8cd5f56609 in do_system () from /lib64/libc.so.6
+#2  0x00002b8cd5f56940 in system () from /lib64/libc.so.6
+#3  0x00002b8cd3e9581c in TUnixSystem::StackTrace() () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libCore.so
+#4  0x00002b8cd95d5ea4 in sig_dostack_then_abort () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/lib/slc6_amd64_gcc472/libFWCoreServices.so
+#5  <signal handler called>
+#6  0x00002b8cd5fa17cb in memcpy () from /lib64/libc.so.6
+#7  0x00002b8cecf9873d in HcalTBSource::produce(edm::Event&) () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/lib/slc6_amd64_gcc472/pluginIORawDataHcalTBInputService.so
+#8  0x00002b8cd27cfbf0 in edm::ConfigurableInputSource::reallyReadEvent() () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/lib/slc6_amd64_gcc472/libFWCoreFramework.so
+#9  0x00002b8cd27cfe6f in edm::ConfigurableInputSource::getNextItemType() () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/lib/slc6_amd64_gcc472/libFWCoreFramework.so
+#10 0x00002b8cd284405a in edm::InputSource::ItemType edm::callWithTryCatchAndPrint<edm::InputSource::ItemType>(std::function<edm::InputSource::ItemType ()>, char const*, bool) () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/lib/slc6_amd64_gcc472/libFWCoreFramework.so
+#11 0x00002b8cd2841073 in edm::InputSource::nextItemType_() () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/lib/slc6_amd64_gcc472/libFWCoreFramework.so
+#12 0x00002b8cd28413b5 in edm::InputSource::nextItemType() () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/lib/slc6_amd64_gcc472/libFWCoreFramework.so
+#13 0x00002b8cd27fe768 in edm::EventProcessor::runCommon(bool, int) () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/lib/slc6_amd64_gcc472/libFWCoreFramework.so
+#14 0x00002b8cd27ff78b in edm::EventProcessor::runToCompletion(bool) () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/lib/slc6_amd64_gcc472/libFWCoreFramework.so
+#15 0x000000000040a477 in main ()
+
+A fatal system signal has occurred: segmentation violation
+ After CMS run 
+total 262716
+-rw-r--r--. 1 kodolova zh   1962880 Feb  9 13:46 LogEleMapdb.h
+-rw-r--r--. 1 kodolova zh    149868 Feb  9 13:46 RemoteMonitoringMAP.cc
+-rwxr-xr-x. 1 kodolova zh   5410374 Feb  9 13:50 RemoteMonitoringMAP.cc.exe
+-rwxr-xr-x. 1 kodolova zh       272 Feb  9 13:46 compile.csh
+-rw-------. 1 kodolova zh 285331456 Feb  9 13:48 core.5651
+-rw-r--r--. 1 kodolova zh     24105 Feb  9 13:46 remoteMonitoring_LED_cfg.py
+-rw-r--r--. 1 kodolova zh    101388 Feb  9 13:46 runlist.tmp
+ Start copy png 
+cp: No match.
+cp: No match.

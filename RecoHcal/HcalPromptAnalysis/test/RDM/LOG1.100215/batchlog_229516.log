@@ -1,0 +1,271 @@
+Sender: LSF System <lsfadmin@p01001532579886.cern.ch>
+Subject: Job 615056216: </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNew.csh 229516 2014-12-18_11_58_49 135074> in cluster batch Done
+
+Job </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNew.csh 229516 2014-12-18_11_58_49 135074> was submitted from host <lxplus0206.cern.ch> by user <kodolova> in cluster <batch>.
+Job was executed on host(s) <p01001532579886.cern.ch>, in queue <8nh>, as user <kodolova> in cluster <batch>.
+</afs/cern.ch/user/k/kodolova> was used as the home directory.
+</afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM> was used as the working directory.
+Started at Mon Jan 26 18:01:13 2015
+Results reported at Mon Jan 26 18:02:32 2015
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNew.csh 229516 2014-12-18_11_58_49 135074
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :     29.88 sec.
+    Max Memory :       391 MB
+    Max Swap   :       825 MB
+
+    Max Processes  :        11
+    Max Threads    :        15
+
+The output (if any) follows:
+
+@(#)CERN job starter $Date: 2010/06/23 14:22:16 $
+Working directory is </pool/lsf/kodolova/615056216> on <>
+
+Abort (core dumped)
+
+Job finished at Mon Jan 26 18:02:30 CET 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.6 (Carbon)
+
+CERN statistics: This process used approximately : 0:00:59 KSI2K hours (59 KSI2K seconds)
+                 This process corresponds to     : 0:03:53 HS06  hours (233 HS06  seconds)
+
+
+PS:
+
+Read file </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/LOG1/ebatchlog_229516.log> for stderr output of this job.
+
+Sender: LSF System <lsfadmin@p01001532265159.cern.ch>
+Subject: Job 615268556: </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNewRoot.csh 229516 2014-12-18_11_58_49 135074> in cluster batch Done
+
+Job </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNewRoot.csh 229516 2014-12-18_11_58_49 135074> was submitted from host <lxplus0059.cern.ch> by user <kodolova> in cluster <batch>.
+Job was executed on host(s) <p01001532265159.cern.ch>, in queue <8nh>, as user <kodolova> in cluster <batch>.
+</afs/cern.ch/user/k/kodolova> was used as the home directory.
+</afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM> was used as the working directory.
+Started at Tue Jan 27 09:27:33 2015
+Results reported at Tue Jan 27 09:30:08 2015
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNewRoot.csh 229516 2014-12-18_11_58_49 135074
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :     69.78 sec.
+    Max Memory :      1367 MB
+    Max Swap   :      1566 MB
+
+    Max Processes  :        10
+    Max Threads    :        11
+
+The output (if any) follows:
+
+@(#)CERN job starter $Date: 2010/06/23 14:22:16 $
+Working directory is </pool/lsf/kodolova/615268556> on <>
+
+
+Job finished at Tue Jan 27 09:29:31 CET 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.6 (Carbon)
+
+CERN statistics: This process used approximately : 0:02:21 KSI2K hours (141 KSI2K seconds)
+                 This process corresponds to     : 0:09:13 HS06  hours (553 HS06  seconds)
+
+
+PS:
+
+Read file </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/LOG1/ebatchlog_229516.log> for stderr output of this job.
+
+Sender: LSF System <lsfadmin@b68ae48569.cern.ch>
+Subject: Job 615301692: </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNewRoot.csh 229516 2014-12-18_11_58_49 135074> in cluster batch Done
+
+Job </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNewRoot.csh 229516 2014-12-18_11_58_49 135074> was submitted from host <lxplus0205.cern.ch> by user <kodolova> in cluster <batch>.
+Job was executed on host(s) <b68ae48569.cern.ch>, in queue <8nh>, as user <kodolova> in cluster <batch>.
+</afs/cern.ch/user/k/kodolova> was used as the home directory.
+</afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM> was used as the working directory.
+Started at Tue Jan 27 11:24:41 2015
+Results reported at Tue Jan 27 11:30:09 2015
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNewRoot.csh 229516 2014-12-18_11_58_49 135074
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :    102.11 sec.
+    Max Memory :      1295 MB
+    Max Swap   :      1486 MB
+
+    Max Processes  :        13
+    Max Threads    :        14
+
+The output (if any) follows:
+
+@(#)CERN job starter $Date: 2010/06/23 14:22:16 $
+Working directory is </pool/lsf/kodolova/615301692> on <>
+
+
+Job finished at Tue Jan 27 11:29:38 CET 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.6 (Carbon)
+
+CERN statistics: This process used approximately : 0:02:51 KSI2K hours (171 KSI2K seconds)
+                 This process corresponds to     : 0:11:08 HS06  hours (668 HS06  seconds)
+
+
+PS:
+
+Read file </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/LOG1/ebatchlog_229516.log> for stderr output of this job.
+
+Sender: LSF System <lsfadmin@b65786549c.cern.ch>
+Subject: Job 615347152: </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNewRoot.csh 229516 2014-12-18_11_58_49 135074> in cluster batch Done
+
+Job </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNewRoot.csh 229516 2014-12-18_11_58_49 135074> was submitted from host <lxplus0207.cern.ch> by user <kodolova> in cluster <batch>.
+Job was executed on host(s) <b65786549c.cern.ch>, in queue <8nh>, as user <kodolova> in cluster <batch>.
+</afs/cern.ch/user/k/kodolova> was used as the home directory.
+</afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM> was used as the working directory.
+Started at Tue Jan 27 13:11:13 2015
+Results reported at Tue Jan 27 13:14:37 2015
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNewRoot.csh 229516 2014-12-18_11_58_49 135074
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :    127.10 sec.
+    Max Memory :       805 MB
+    Max Swap   :       973 MB
+
+    Max Processes  :        10
+    Max Threads    :        11
+
+The output (if any) follows:
+
+@(#)CERN job starter $Date: 2010/06/23 14:22:16 $
+Working directory is </pool/lsf/kodolova/615347152> on <>
+
+
+Job finished at Tue Jan 27 13:14:16 CET 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.6 (Carbon)
+
+CERN statistics: This process used approximately : 0:04:18 KSI2K hours (258 KSI2K seconds)
+                 This process corresponds to     : 0:16:49 HS06  hours (1009 HS06  seconds)
+
+
+PS:
+
+Read file </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/LOG1/ebatchlog_229516.log> for stderr output of this job.
+
+Sender: LSF System <lsfadmin@p05496706p09556.cern.ch>
+Subject: Job 615355795: </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNewRoot.csh 229516 2014-12-18_11_58_49 135077> in cluster batch Done
+
+Job </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNewRoot.csh 229516 2014-12-18_11_58_49 135077> was submitted from host <lxplus0207.cern.ch> by user <kodolova> in cluster <batch>.
+Job was executed on host(s) <p05496706p09556.cern.ch>, in queue <8nh>, as user <kodolova> in cluster <batch>.
+</afs/cern.ch/user/k/kodolova> was used as the home directory.
+</afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM> was used as the working directory.
+Started at Tue Jan 27 13:33:07 2015
+Results reported at Tue Jan 27 13:35:15 2015
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNewRoot.csh 229516 2014-12-18_11_58_49 135077
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :     32.62 sec.
+    Max Memory :       265 MB
+    Max Swap   :       447 MB
+
+    Max Processes  :        11
+    Max Threads    :        12
+
+The output (if any) follows:
+
+@(#)CERN job starter $Date: 2010/06/23 14:22:16 $
+Working directory is </pool/lsf/kodolova/615355795> on <>
+
+
+Job finished at Tue Jan 27 13:34:37 CET 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.6 (Carbon)
+
+CERN statistics: This process used approximately : 0:02:25 KSI2K hours (145 KSI2K seconds)
+                 This process corresponds to     : 0:09:26 HS06  hours (566 HS06  seconds)
+
+
+PS:
+
+Read file </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/LOG1/ebatchlog_229516.log> for stderr output of this job.
+
+Sender: LSF System <lsfadmin@p01001532134838.cern.ch>
+Subject: Job 615374629: </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNewRoot.csh 229516 2014-12-18_11_58_49 135077 10000> in cluster batch Done
+
+Job </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNewRoot.csh 229516 2014-12-18_11_58_49 135077 10000> was submitted from host <lxplus0207.cern.ch> by user <kodolova> in cluster <batch>.
+Job was executed on host(s) <p01001532134838.cern.ch>, in queue <8nh>, as user <kodolova> in cluster <batch>.
+</afs/cern.ch/user/k/kodolova> was used as the home directory.
+</afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM> was used as the working directory.
+Started at Tue Jan 27 14:26:19 2015
+Results reported at Tue Jan 27 14:27:49 2015
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNewRoot.csh 229516 2014-12-18_11_58_49 135077 10000
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :     66.83 sec.
+    Max Memory :      1494 MB
+    Max Swap   :      1669 MB
+
+    Max Processes  :         8
+    Max Threads    :         9
+
+The output (if any) follows:
+
+@(#)CERN job starter $Date: 2010/06/23 14:22:16 $
+Working directory is </pool/lsf/kodolova/615374629> on <>
+
+
+Job finished at Tue Jan 27 14:27:47 CET 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.6 (Carbon)
+
+CERN statistics: This process used approximately : 0:02:15 KSI2K hours (135 KSI2K seconds)
+                 This process corresponds to     : 0:08:50 HS06  hours (530 HS06  seconds)
+
+
+PS:
+
+Read file </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM/LOG1/ebatchlog_229516.log> for stderr output of this job.
+

@@ -1,0 +1,134 @@
+ Start CMS run 
+/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_8/lib/slc5_amd64_gcc462:/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_8/external/slc5_amd64_gcc462/lib:/afs/cern.ch/cms/slc5_amd64_gcc462/cms/cmssw/CMSSW_5_3_8/lib/slc5_amd64_gcc462:/afs/cern.ch/cms/slc5_amd64_gcc462/cms/cmssw/CMSSW_5_3_8/external/slc5_amd64_gcc462/lib:/afs/cern.ch/cms/slc5_amd64_gcc462/external/gcc/4.6.2/lib64:/afs/cern.ch/cms/slc5_amd64_gcc462/external/gcc/4.6.2/lib:/opt/d-cache/dcap/lib:/opt/d-cache/dcap/lib64:/usr/lib64
+RUN = 229482
+Input file = /store/group/dpg_hcal/comm_hcal/LS1/USC_229482.root
+Output file = /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/LED_229482.root
+ Look on parameters you booked:
+ recordNtuples_ = 0
+ maxNeventsInNtuple_ = 1
+ recordHistoes_ = 1
+ studyRunDependenceHist_ = 1
+ studyCapIDErrorsHist_ = 1
+ studyRMSshapeHist_ = 1
+ studyRatioShapeHist_ = 1
+ studyTSmaxShapeHist_ = 1
+ studyTSmeanShapeHist_ = 1
+ studyDiffAmplHist_ = 1
+ studyCalibCellsHist_ = 1
+ studyADCAmplHist_ = 1
+ studyPedestalsHist_ = 1
+ studyPedestalCorrelations_ = 1
+ useADCmassive_ = 1
+ useADCfC_ = 0
+ useADCcounts_ = 0
+ usePedestalSubtraction_ = 0
+ usecontinuousnumbering_ = 1
+ ratioHBMin_ = 0.7
+ ratioHBMax_ = 0.94
+ ratioHEMin_ = 0.6
+ ratioHEMax_ = 0.95
+ ratioHFMin_ = 0.3
+ ratioHFMax_ = 1.02
+ ratioHOMin_ = 0.54
+ ratioHOMax_ = 1.04
+ flagtoaskrunsorls_ = 0
+ flagtodefinebadchannel_ = 0
+ howmanybinsonplots_ = 25
+ rmsHBMin_ = 0.7
+ rmsHBMax_ = 2
+ rmsHEMin_ = 0.7
+ rmsHEMax_ = 2
+ rmsHFMin_ = 0.1
+ rmsHFMax_ = 2.5
+ rmsHOMin_ = 0.1
+ rmsHOMax_ = 2.5
+ ADCAmplHBMin_ = 150
+ ADCAmplHEMin_ = 150
+ ADCAmplHOMin_ = 300
+ ADCAmplHFMin_ = 40
+ ADCAmplHBMax_ = 3000
+ ADCAmplHEMax_ = 3000
+ ADCAmplHOMax_ = 3000
+ ADCAmplHFMax_ = 3000
+ pedestalwHBMax_ = 0.1
+ pedestalwHEMax_ = 0.1
+ pedestalwHFMax_ = 0.4
+ pedestalwHOMax_ = 0.1
+ pedestalHBMax_ = 0.1
+ pedestalHEMax_ = 0.6
+ pedestalHFMax_ = 0.8
+ pedestalHOMax_ = 0.1
+ calibrADCHBMin_ = 120
+ calibrADCHEMin_ = 120
+ calibrADCHOMin_ = 120
+ calibrADCHFMin_ = 60
+ calibrRatioHBMin_ = 0.6
+ calibrRatioHEMin_ = 0.64
+ calibrRatioHOMin_ = 0.25
+ calibrRatioHFMin_ = 0.25
+ calibrTSmaxHBMin_ = 0.5
+ calibrTSmaxHEMin_ = 0.5
+ calibrTSmaxHOMin_ = 0.5
+ calibrTSmaxHFMin_ = 0.5
+ calibrTSmaxHBMax_ = 8.5
+ calibrTSmaxHEMax_ = 8.5
+ calibrTSmaxHOMax_ = 8.5
+ calibrTSmaxHFMax_ = 9.5
+ calibrTSmeanHBMin_ = 1
+ calibrTSmeanHEMin_ = 1
+ calibrTSmeanHOMin_ = 1
+ calibrTSmeanHFMin_ = 1
+ calibrTSmeanHBMax_ = 5.5
+ calibrTSmeanHEMax_ = 5.5
+ calibrTSmeanHOMax_ = 3.5
+ calibrTSmeanHFMax_ = 5.2
+ calibrWidthHBMin_ = 1
+ calibrWidthHEMin_ = 1
+ calibrWidthHOMin_ = 0.5
+ calibrWidthHFMin_ = 0.2
+ calibrWidthHBMax_ = 2.3
+ calibrWidthHEMax_ = 2.3
+ calibrWidthHOMax_ = 3
+ calibrWidthHFMax_ = 2.3
+ TSpeakHBMin_ = 2.5
+ TSpeakHBMax_ = 3.5
+ TSpeakHEMin_ = 2.5
+ TSpeakHEMax_ = 3.5
+ TSpeakHFMin_ = 0.5
+ TSpeakHFMax_ = 6.5
+ TSpeakHOMin_ = 0.5
+ TSpeakHOMax_ = 6.5
+ TSmeanHBMin_ = 1
+ TSmeanHBMax_ = 4.5
+ TSmeanHEMin_ = 1
+ TSmeanHEMax_ = 4.75
+ TSmeanHFMin_ = 1
+ TSmeanHFMax_ = 4.5
+ TSmeanHOMin_ = 1
+ TSmeanHOMax_ = 5.3
+150126 18:08:42 12205 Xrd: GoToAnotherServer: Going to: p05614923d82807.cern.ch:1095
+ ---------***********************------------- 
+ New Run =  229482 runcounter =  1
+ ------- 
+ --------------------------------------- 
+ for Run = 229482 with runcounter = 1 #ev = 10000
+ #LS =  1 #LS10 =  0 Last LS =  1
+ --------------------------------------------- 
+===== full number of events =  10000
+===== possible max number of events in ntuple(each 50th recorded) =  200
+===== but limited by maxNeventsInNtuple  =  1
+===== full number of events*HBHEdigis =  0
+===== full number of events*HFdigis =  17280000
+===== full number of events*HOdigis =  0
+===== Start writing user histograms =====
+===== Finish writing user histograms and ntuple =====
+===== Start writing Channel MAP =====
+===== Finish writing Channel MAP =====
+ After CMS run 
+./compile.csh: Command not found.
+total 1944
+-rw-r--r--. 1 kodolova zh 1962880 Jan 26 18:12 LogEleMapdb.h
+-rw-r--r--. 1 kodolova zh   24105 Jan 26 18:04 remoteMonitoring_LED_cfg.py
+ Start copy png 
+cp: No match.
+cp: No match.

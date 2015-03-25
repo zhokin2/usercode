@@ -1,0 +1,14 @@
+import FWCore.ParameterSet.Config as cms
+
+process = cms.Process("testAnalyzer")
+
+process.maxEvents = cms.untracked.PSet(
+#    input = cms.untracked.int32(100000)
+    input = cms.untracked.int32(-1)
+)
+
+process.options = cms.untracked.PSet(
+        SkipEvent = cms.untracked.vstring('ProductNotFound')
+)
+process.source = cms.Source("PoolSource",
+   fileNames = cms.untracked.vstring(

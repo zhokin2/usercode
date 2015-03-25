@@ -1,0 +1,121 @@
+**** Following environment variables are going to be unset.
+       PERL5LIB
+       ROOT_INCLUDE_PATH
+       COMPILER_RUNTIME_OBJECTS
+       CMSSW_GIT_HASH
+       GIT_SSL_CAINFO
+       GIT_TEMPLATE_DIR
+cp: cannot stat `RemoteMonitoringMAP.cc': No such file or directory
+cp: cannot stat `compile.csh': No such file or directory
+cp: cannot stat `RDM/LED_LIST/runlist.tmp0.2014-12-18_11_58_49': No such file or directory
+rm: cannot remove `LOG/log_227072': No such file or directory
+rm: cannot remove `/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/LED_227072.root': No such file or directory
+./RemoteMonitoringMAP.cc.exe: Command not found.
+cat: runlist.tmp: No such file or directory
+cat: index.html: No such file or directory
+rm: cannot remove `index.html': No such file or directory
+mv: cannot stat `/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/LED_227072/index_draft.html': No such file or directory
+./RemoteMonitoringMAP.cc.exe: Command not found.
+--2015-01-27 09:33:47--  http://cmshcalweb01.cern.ch/DetDiag/Local_HTML/DQM_Hcal_R000227072_0
+Resolving cmshcalweb01.cern.ch... 137.138.119.82
+Connecting to cmshcalweb01.cern.ch|137.138.119.82|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: http://cmshcalweb01.cern.ch/DetDiag/Local_HTML/DQM_Hcal_R000227072_0/ [following]
+--2015-01-27 09:33:47--  http://cmshcalweb01.cern.ch/DetDiag/Local_HTML/DQM_Hcal_R000227072_0/
+Connecting to cmshcalweb01.cern.ch|137.138.119.82|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 694 [text/html]
+Saving to: `DQM_Hcal_R000227072_0'
+
+     0K                                                       100% 60.7M=0s
+
+2015-01-27 09:33:47 (60.7 MB/s) - `DQM_Hcal_R000227072_0' saved [694/694]
+
+cat: index.html: No such file or directory
+rm: cannot remove `index.html': No such file or directory
+mv: cannot stat `/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/LED_227072/index_draft.html': No such file or directory
+Error in <TFile::TFile>: file '/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos'/LED_'227072'.root does not exist
+Error in <TFile::TFile>: file '/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos'/LED_'135074'.root does not exist
+
+ *** Break *** segmentation violation
+
+
+
+===========================================================
+There was a crash.
+This is the entire stack trace of all threads:
+===========================================================
+#0  0x00002aff5f61561e in waitpid () from /lib64/libc.so.6
+#1  0x00002aff5f5a7609 in do_system () from /lib64/libc.so.6
+#2  0x00002aff5b96381c in TUnixSystem::StackTrace() () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libCore.so
+#3  0x00002aff5b966003 in TUnixSystem::DispatchSignals(ESignals) () from /cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib/libCore.so
+#4  <signal handler called>
+#5  0x000000000040343a in main ()
+===========================================================
+
+
+The lines below might hint at the cause of the crash.
+If they do not help you then please submit a bug report at
+http://root.cern.ch/bugs. Please post the ENTIRE stack trace
+from above as an attachment in addition to anything else
+that might help us fixing this issue.
+===========================================================
+#5  0x000000000040343a in main ()
+===========================================================
+
+
+--2015-01-27 11:32:17--  http://cmshcalweb01.cern.ch/DetDiag/Local_HTML/DQM_Hcal_R000227072_0
+Resolving cmshcalweb01.cern.ch... 137.138.119.82
+Connecting to cmshcalweb01.cern.ch|137.138.119.82|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: http://cmshcalweb01.cern.ch/DetDiag/Local_HTML/DQM_Hcal_R000227072_0/ [following]
+--2015-01-27 11:32:17--  http://cmshcalweb01.cern.ch/DetDiag/Local_HTML/DQM_Hcal_R000227072_0/
+Connecting to cmshcalweb01.cern.ch|137.138.119.82|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 694 [text/html]
+Saving to: `DQM_Hcal_R000227072_0'
+
+     0K                                                       100% 56.1M=0s
+
+2015-01-27 11:32:17 (56.1 MB/s) - `DQM_Hcal_R000227072_0' saved [694/694]
+
+cat: index.html: No such file or directory
+rm: cannot remove `index.html': No such file or directory
+mv: cannot stat `/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/LED_227072/index_draft.html': No such file or directory
+--2015-01-27 13:17:51--  http://cmshcalweb01.cern.ch/DetDiag/Local_HTML/DQM_Hcal_R000227072_0
+Resolving cmshcalweb01.cern.ch... 137.138.119.82
+Connecting to cmshcalweb01.cern.ch|137.138.119.82|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: http://cmshcalweb01.cern.ch/DetDiag/Local_HTML/DQM_Hcal_R000227072_0/ [following]
+--2015-01-27 13:17:51--  http://cmshcalweb01.cern.ch/DetDiag/Local_HTML/DQM_Hcal_R000227072_0/
+Connecting to cmshcalweb01.cern.ch|137.138.119.82|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 694 [text/html]
+Saving to: `DQM_Hcal_R000227072_0'
+
+     0K                                                       100% 99.4M=0s
+
+2015-01-27 13:17:51 (99.4 MB/s) - `DQM_Hcal_R000227072_0' saved [694/694]
+
+cat: index.html: No such file or directory
+rm: cannot remove `index.html': No such file or directory
+mv: cannot stat `/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/LED_227072/index_draft.html': No such file or directory
+--2015-01-27 13:41:59--  http://cmshcalweb01.cern.ch/DetDiag/Local_HTML/DQM_Hcal_R000227072_0
+Resolving cmshcalweb01.cern.ch... 137.138.119.82
+Connecting to cmshcalweb01.cern.ch|137.138.119.82|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: http://cmshcalweb01.cern.ch/DetDiag/Local_HTML/DQM_Hcal_R000227072_0/ [following]
+--2015-01-27 13:41:59--  http://cmshcalweb01.cern.ch/DetDiag/Local_HTML/DQM_Hcal_R000227072_0/
+Connecting to cmshcalweb01.cern.ch|137.138.119.82|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 694 [text/html]
+Saving to: `DQM_Hcal_R000227072_0'
+
+     0K                                                       100% 1293G=0s
+
+2015-01-27 13:41:59 (1293 GB/s) - `DQM_Hcal_R000227072_0' saved [694/694]
+
+cat: index.html: No such file or directory
+rm: cannot remove `index.html': No such file or directory
+mv: cannot stat `/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/LED_227072/index_draft.html': No such file or directory
+mv: cannot stat `/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/LED_227072/index_draft.html': No such file or directory

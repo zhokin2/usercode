@@ -1,0 +1,19 @@
+ Start CMS run 
+/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/biglib/slc6_amd64_gcc472:/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/lib/slc6_amd64_gcc472:/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/biglib/slc6_amd64_gcc472:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/lib/slc6_amd64_gcc472:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/external/llvm/3.2-cms2/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/external/gcc/4.7.2-cms/lib64:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/external/gcc/4.7.2-cms/lib:/opt/d-cache/dcap/lib:/opt/d-cache/dcap/lib64:/usr/lib64
+----- Begin Fatal Exception 22-Mar-2015 15:59:14 CET-----------------------
+An exception of category 'ConfigFileReadError' occurred while
+   [0] Processing the python configuration file named remoteMonitoring_LASER_cfg.py
+Exception Message:
+python encountered the error: <type 'exceptions.IOError'>
+[Errno 2] No such file or directory: 'remoteMonitoring_LASER_cfg.py'
+----- End Fatal Exception -------------------------------------------------
+ After CMS run 
+total 7408
+-rw-r--r--. 1 kodolova zh 1962880 Mar 22 15:56 LogEleMapdb.h
+-rw-r--r--. 1 kodolova zh  149868 Mar 22 15:56 RemoteMonitoringMAP.cc
+-rwxr-xr-x. 1 kodolova zh 5410374 Mar 22 16:02 RemoteMonitoringMAP.cc.exe
+-rwxr-xr-x. 1 kodolova zh     272 Mar 22 15:56 compile.csh
+-rw-r--r--. 1 kodolova zh   49381 Mar 22 15:56 runlist.tmp
+ Start copy png 
+cp: No match.
+cp: No match.

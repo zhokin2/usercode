@@ -1,0 +1,2 @@
+./RemoteMonitoringMAP.cc.exe: Command not found.
+mv: cannot stat `/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/LED_232116/index_draft.html': No such file or directory
