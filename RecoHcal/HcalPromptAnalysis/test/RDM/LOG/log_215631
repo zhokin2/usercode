@@ -1,0 +1,306 @@
+ Start CMS run 
+/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21_STABLE/biglib/slc6_amd64_gcc472:/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21_STABLE/lib/slc6_amd64_gcc472:/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21_STABLE/external/slc6_amd64_gcc472/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/biglib/slc6_amd64_gcc472:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/lib/slc6_amd64_gcc472:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/cms/cmssw/CMSSW_5_3_21/external/slc6_amd64_gcc472/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/external/llvm/3.2-cms2/lib:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/external/gcc/4.7.2-cms/lib64:/cvmfs/cms.cern.ch/slc6_amd64_gcc472/external/gcc/4.7.2-cms/lib:/opt/d-cache/dcap/lib:/opt/d-cache/dcap/lib64:/usr/lib64
+RUN = 215631
+Input file = /store/group/dpg_hcal/comm_hcal/LS1/USC_215631.root
+Output file = /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/LED_215631.root
+ Look on parameters you booked:
+ recordNtuples_ = 0
+ maxNeventsInNtuple_ = 1
+ recordHistoes_ = 1
+ studyRunDependenceHist_ = 1
+ studyCapIDErrorsHist_ = 1
+ studyRMSshapeHist_ = 1
+ studyRatioShapeHist_ = 1
+ studyTSmaxShapeHist_ = 1
+ studyTSmeanShapeHist_ = 1
+ studyDiffAmplHist_ = 1
+ studyCalibCellsHist_ = 1
+ studyADCAmplHist_ = 1
+ studyPedestalsHist_ = 1
+ studyPedestalCorrelations_ = 1
+ useADCmassive_ = 1
+ useADCfC_ = 0
+ useADCcounts_ = 0
+ usePedestalSubtraction_ = 0
+ usecontinuousnumbering_ = 1
+ ratioHBMin_ = 0.05
+ ratioHBMax_ = 0.95
+ ratioHEMin_ = 0.05
+ ratioHEMax_ = 0.95
+ ratioHFMin_ = 0.1
+ ratioHFMax_ = 0.95
+ ratioHOMin_ = 0.1
+ ratioHOMax_ = 0.7
+ flagtoaskrunsorls_ = 0
+ flagtodefinebadchannel_ = 0
+ howmanybinsonplots_ = 25
+ splashesUpperLimit_ = 5000
+ rmsHBMin_ = 0.2
+ rmsHBMax_ = 4.5
+ rmsHEMin_ = 1.2
+ rmsHEMax_ = 4
+ rmsHFMin_ = 0.5
+ rmsHFMax_ = 4.2
+ rmsHOMin_ = 2.2
+ rmsHOMax_ = 3.6
+ ADCAmplHBMin_ = 0
+ ADCAmplHEMin_ = 0
+ ADCAmplHOMin_ = 0
+ ADCAmplHFMin_ = 0
+ ADCAmplHBMax_ = 170
+ ADCAmplHEMax_ = 170
+ ADCAmplHOMax_ = 350
+ ADCAmplHFMax_ = 120
+ pedestalwHBMax_ = 0.1
+ pedestalwHEMax_ = 0.1
+ pedestalwHFMax_ = 0.4
+ pedestalwHOMax_ = 0.1
+ pedestalHBMax_ = 0.1
+ pedestalHEMax_ = 0.6
+ pedestalHFMax_ = 0.8
+ pedestalHOMax_ = 0.1
+ calibrADCHBMin_ = 1000
+ calibrADCHEMin_ = 1000
+ calibrADCHOMin_ = 1000
+ calibrADCHFMin_ = 100
+ calibrADCHBMax_ = 1e+08
+ calibrADCHEMax_ = 1e+08
+ calibrADCHOMax_ = 1e+08
+ calibrADCHFMax_ = 1e+08
+ calibrRatioHBMin_ = 0.76
+ calibrRatioHEMin_ = 0.76
+ calibrRatioHOMin_ = 0.85
+ calibrRatioHFMin_ = 0.5
+ calibrRatioHBMax_ = 0.94
+ calibrRatioHEMax_ = 0.94
+ calibrRatioHOMax_ = 0.99
+ calibrRatioHFMax_ = 0.8
+ calibrTSmaxHBMin_ = 0.5
+ calibrTSmaxHEMin_ = 0.5
+ calibrTSmaxHOMin_ = 0.5
+ calibrTSmaxHFMin_ = 0.5
+ calibrTSmaxHBMax_ = 8.5
+ calibrTSmaxHEMax_ = 8.5
+ calibrTSmaxHOMax_ = 8.5
+ calibrTSmaxHFMax_ = 9.5
+ calibrTSmeanHBMin_ = 1
+ calibrTSmeanHEMin_ = 1
+ calibrTSmeanHOMin_ = 1
+ calibrTSmeanHFMin_ = 1
+ calibrTSmeanHBMax_ = 5.5
+ calibrTSmeanHEMax_ = 5.5
+ calibrTSmeanHOMax_ = 3.5
+ calibrTSmeanHFMax_ = 5.2
+ calibrWidthHBMin_ = 1
+ calibrWidthHEMin_ = 1
+ calibrWidthHOMin_ = 0.5
+ calibrWidthHFMin_ = 0.2
+ calibrWidthHBMax_ = 2.3
+ calibrWidthHEMax_ = 2.3
+ calibrWidthHOMax_ = 3
+ calibrWidthHFMax_ = 2.3
+ TSpeakHBMin_ = 0
+ TSpeakHBMax_ = 9.9
+ TSpeakHEMin_ = 0
+ TSpeakHEMax_ = 9.9
+ TSpeakHFMin_ = 0
+ TSpeakHFMax_ = 9.9
+ TSpeakHOMin_ = 0
+ TSpeakHOMax_ = 9.9
+ TSmeanHBMin_ = 1.5
+ TSmeanHBMax_ = 8
+ TSmeanHEMin_ = 2.5
+ TSmeanHEMax_ = 7
+ TSmeanHFMin_ = 1.5
+ TSmeanHFMax_ = 8
+ TSmeanHOMin_ = 2.5
+ TSmeanHOMax_ = 6.5
+ ---------***********************------------- 
+ New Run =  215631 runcounter =  1
+ ------- 
+ --------------------------------------- 
+ for Run = 215631 with runcounter = 1 #ev = 151972
+ #LS =  1 #LS10 =  0 Last LS =  1
+ --------------------------------------------- 
+===== full number of events =  151972
+===== possible max number of events in ntuple(each 50th recorded) =  3039
+===== but limited by maxNeventsInNtuple  =  1
+===== full number of events*HBHEdigis =  0
+===== full number of events*HFdigis =  0
+===== full number of events*HOdigis =  0
+===== Start writing user histograms =====
+===== Finish writing user histograms and ntuple =====
+===== Start writing Channel MAP =====
+===== Finish writing Channel MAP =====
+ After CMS run 
+total 9876
+-rw-r--r--. 1 kodolova zh   17224 Mar 27 13:20 CorrelationsMapPedestalVsfullAmplitudeHB.png
+-rw-r--r--. 1 kodolova zh   17224 Mar 27 13:20 CorrelationsMapPedestalVsfullAmplitudeHE.png
+-rw-r--r--. 1 kodolova zh   16844 Mar 27 13:20 CorrelationsMapPedestalVsfullAmplitudeHF.png
+-rw-r--r--. 1 kodolova zh   16901 Mar 27 13:20 CorrelationsMapPedestalVsfullAmplitudeHO.png
+-rw-r--r--. 1 kodolova zh    7185 Mar 27 13:20 HB.html
+-rw-r--r--. 1 kodolova zh    3337 Mar 27 13:20 HB_Calib.html
+-rw-r--r--. 1 kodolova zh    1762 Mar 27 13:20 HB_Drift.html
+-rw-r--r--. 1 kodolova zh    1908 Mar 27 13:20 HB_Pedestals.html
+-rw-r--r--. 1 kodolova zh    1072 Mar 27 13:20 HB_Shapes.html
+-rw-r--r--. 1 kodolova zh    3279 Mar 27 13:20 HB_Tile.html
+-rw-r--r--. 1 kodolova zh    7185 Mar 27 13:20 HE.html
+-rw-r--r--. 1 kodolova zh    1804 Mar 27 13:20 HELP.html
+-rw-r--r--. 1 kodolova zh    3337 Mar 27 13:20 HE_Calib.html
+-rw-r--r--. 1 kodolova zh    1762 Mar 27 13:20 HE_Drift.html
+-rw-r--r--. 1 kodolova zh    1908 Mar 27 13:20 HE_Pedestals.html
+-rw-r--r--. 1 kodolova zh    1072 Mar 27 13:20 HE_Shapes.html
+-rw-r--r--. 1 kodolova zh    3281 Mar 27 13:20 HE_Tile.html
+-rw-r--r--. 1 kodolova zh    7186 Mar 27 13:20 HF.html
+-rw-r--r--. 1 kodolova zh    3331 Mar 27 13:20 HF_Calib.html
+-rw-r--r--. 1 kodolova zh    1762 Mar 27 13:20 HF_Drift.html
+-rw-r--r--. 1 kodolova zh    1908 Mar 27 13:20 HF_Pedestals.html
+-rw-r--r--. 1 kodolova zh    1072 Mar 27 13:20 HF_Shapes.html
+-rw-r--r--. 1 kodolova zh    3283 Mar 27 13:20 HF_Tile.html
+-rw-r--r--. 1 kodolova zh    7184 Mar 27 13:20 HO.html
+-rw-r--r--. 1 kodolova zh    3339 Mar 27 13:20 HO_Calib.html
+-rw-r--r--. 1 kodolova zh    1762 Mar 27 13:20 HO_Drift.html
+-rw-r--r--. 1 kodolova zh    1908 Mar 27 13:20 HO_Pedestals.html
+-rw-r--r--. 1 kodolova zh    1072 Mar 27 13:20 HO_Shapes.html
+-rw-r--r--. 1 kodolova zh    3281 Mar 27 13:20 HO_Tile.html
+-rw-r--r--. 1 kodolova zh   16077 Mar 27 13:20 Hist43TStoAllTSCalibHB.png
+-rw-r--r--. 1 kodolova zh   16070 Mar 27 13:20 Hist43TStoAllTSCalibHE.png
+-rw-r--r--. 1 kodolova zh   15527 Mar 27 13:20 Hist43TStoAllTSCalibHF.png
+-rw-r--r--. 1 kodolova zh   15370 Mar 27 13:20 Hist43TStoAllTSCalibHO.png
+-rw-r--r--. 1 kodolova zh   14350 Mar 27 13:20 Hist43TStoAllTSHB.png
+-rw-r--r--. 1 kodolova zh   14134 Mar 27 13:20 Hist43TStoAllTSHE.png
+-rw-r--r--. 1 kodolova zh   11248 Mar 27 13:20 Hist43TStoAllTSHF.png
+-rw-r--r--. 1 kodolova zh   10997 Mar 27 13:20 Hist43TStoAllTSHO.png
+-rw-r--r--. 1 kodolova zh   17554 Mar 27 13:20 HistAmplCalibHB.png
+-rw-r--r--. 1 kodolova zh   17549 Mar 27 13:20 HistAmplCalibHE.png
+-rw-r--r--. 1 kodolova zh   14749 Mar 27 13:20 HistAmplCalibHF.png
+-rw-r--r--. 1 kodolova zh   17623 Mar 27 13:20 HistAmplCalibHO.png
+-rw-r--r--. 1 kodolova zh   26054 Mar 27 13:20 HistAmplDriftDepthHB.png
+-rw-r--r--. 1 kodolova zh   36005 Mar 27 13:20 HistAmplDriftDepthHE.png
+-rw-r--r--. 1 kodolova zh   26000 Mar 27 13:20 HistAmplDriftDepthHF.png
+-rw-r--r--. 1 kodolova zh   16201 Mar 27 13:20 HistAmplDriftDepthHO.png
+-rw-r--r--. 1 kodolova zh   13594 Mar 27 13:20 HistAmplHB.png
+-rw-r--r--. 1 kodolova zh   17698 Mar 27 13:20 HistAmplHE.png
+-rw-r--r--. 1 kodolova zh   17275 Mar 27 13:20 HistAmplHF.png
+-rw-r--r--. 1 kodolova zh   18139 Mar 27 13:20 HistAmplHO.png
+-rw-r--r--. 1 kodolova zh    8568 Mar 27 13:20 HistBadTSshapesHB.png
+-rw-r--r--. 1 kodolova zh    8568 Mar 27 13:20 HistBadTSshapesHE.png
+-rw-r--r--. 1 kodolova zh    8568 Mar 27 13:20 HistBadTSshapesHF.png
+-rw-r--r--. 1 kodolova zh    8568 Mar 27 13:20 HistBadTSshapesHO.png
+-rw-r--r--. 1 kodolova zh    8568 Mar 27 13:20 HistGoodTSshapesHB.png
+-rw-r--r--. 1 kodolova zh    8568 Mar 27 13:20 HistGoodTSshapesHE.png
+-rw-r--r--. 1 kodolova zh    8568 Mar 27 13:20 HistGoodTSshapesHF.png
+-rw-r--r--. 1 kodolova zh    8568 Mar 27 13:20 HistGoodTSshapesHO.png
+-rw-r--r--. 1 kodolova zh   16505 Mar 27 13:20 HistMaxPosCalibHB.png
+-rw-r--r--. 1 kodolova zh   16496 Mar 27 13:20 HistMaxPosCalibHE.png
+-rw-r--r--. 1 kodolova zh   16775 Mar 27 13:20 HistMaxPosCalibHF.png
+-rw-r--r--. 1 kodolova zh   16567 Mar 27 13:20 HistMaxPosCalibHO.png
+-rw-r--r--. 1 kodolova zh   15864 Mar 27 13:20 HistMaxPosHB.png
+-rw-r--r--. 1 kodolova zh   15856 Mar 27 13:20 HistMaxPosHE.png
+-rw-r--r--. 1 kodolova zh   13905 Mar 27 13:20 HistMaxPosHF.png
+-rw-r--r--. 1 kodolova zh   13678 Mar 27 13:20 HistMaxPosHO.png
+-rw-r--r--. 1 kodolova zh   16205 Mar 27 13:20 HistMeanPosCalibHB.png
+-rw-r--r--. 1 kodolova zh   16197 Mar 27 13:20 HistMeanPosCalibHE.png
+-rw-r--r--. 1 kodolova zh   16738 Mar 27 13:20 HistMeanPosCalibHF.png
+-rw-r--r--. 1 kodolova zh   16574 Mar 27 13:20 HistMeanPosCalibHO.png
+-rw-r--r--. 1 kodolova zh   14707 Mar 27 13:20 HistMeanPosHB.png
+-rw-r--r--. 1 kodolova zh   14103 Mar 27 13:20 HistMeanPosHE.png
+-rw-r--r--. 1 kodolova zh   15500 Mar 27 13:20 HistMeanPosHF.png
+-rw-r--r--. 1 kodolova zh   15110 Mar 27 13:20 HistMeanPosHO.png
+-rw-r--r--. 1 kodolova zh   36283 Mar 27 13:20 HistPedestalWidthsHB.png
+-rw-r--r--. 1 kodolova zh   36254 Mar 27 13:20 HistPedestalWidthsHE.png
+-rw-r--r--. 1 kodolova zh   38946 Mar 27 13:20 HistPedestalWidthsHF.png
+-rw-r--r--. 1 kodolova zh   36433 Mar 27 13:20 HistPedestalWidthsHO.png
+-rw-r--r--. 1 kodolova zh   31665 Mar 27 13:20 HistPedestalsHB.png
+-rw-r--r--. 1 kodolova zh   35744 Mar 27 13:20 HistPedestalsHE.png
+-rw-r--r--. 1 kodolova zh   35481 Mar 27 13:20 HistPedestalsHF.png
+-rw-r--r--. 1 kodolova zh   30538 Mar 27 13:20 HistPedestalsHO.png
+-rw-r--r--. 1 kodolova zh   16301 Mar 27 13:20 HistRMSCalibHB.png
+-rw-r--r--. 1 kodolova zh   16296 Mar 27 13:20 HistRMSCalibHE.png
+-rw-r--r--. 1 kodolova zh   15615 Mar 27 13:20 HistRMSCalibHF.png
+-rw-r--r--. 1 kodolova zh   16518 Mar 27 13:20 HistRMSCalibHO.png
+-rw-r--r--. 1 kodolova zh   15546 Mar 27 13:20 HistRMSHB.png
+-rw-r--r--. 1 kodolova zh   14754 Mar 27 13:20 HistRMSHE.png
+-rw-r--r--. 1 kodolova zh   14038 Mar 27 13:20 HistRMSHF.png
+-rw-r--r--. 1 kodolova zh   14140 Mar 27 13:20 HistRMSHO.png
+-rw-r--r--. 1 kodolova zh 1962880 Mar 27 13:18 LogEleMapdb.h
+-rw-r--r--. 1 kodolova zh    5065 Mar 27 13:20 MAP.html
+-rw-r--r--. 1 kodolova zh   13903 Mar 27 13:20 MAP.png
+-rw-r--r--. 1 kodolova zh   13498 Mar 27 13:20 MAPHB.png
+-rw-r--r--. 1 kodolova zh   17624 Mar 27 13:20 MAPHE.png
+-rw-r--r--. 1 kodolova zh   13439 Mar 27 13:20 MAPHF.png
+-rw-r--r--. 1 kodolova zh    8712 Mar 27 13:20 MAPHO.png
+-rw-r--r--. 1 kodolova zh    8124 Mar 27 13:20 MapRate43TStoAllTSCalibHB.png
+-rw-r--r--. 1 kodolova zh    8054 Mar 27 13:20 MapRate43TStoAllTSCalibHE.png
+-rw-r--r--. 1 kodolova zh    8049 Mar 27 13:20 MapRate43TStoAllTSCalibHF.png
+-rw-r--r--. 1 kodolova zh    8180 Mar 27 13:20 MapRate43TStoAllTSCalibHO.png
+-rw-r--r--. 1 kodolova zh   13498 Mar 27 13:20 MapRate43TStoAllTSHB.png
+-rw-r--r--. 1 kodolova zh   17624 Mar 27 13:20 MapRate43TStoAllTSHE.png
+-rw-r--r--. 1 kodolova zh   13439 Mar 27 13:20 MapRate43TStoAllTSHF.png
+-rw-r--r--. 1 kodolova zh    8712 Mar 27 13:20 MapRate43TStoAllTSHO.png
+-rw-r--r--. 1 kodolova zh   13498 Mar 27 13:20 MapRateAmpl1HB.png
+-rw-r--r--. 1 kodolova zh   17624 Mar 27 13:20 MapRateAmpl1HE.png
+-rw-r--r--. 1 kodolova zh   13439 Mar 27 13:20 MapRateAmpl1HF.png
+-rw-r--r--. 1 kodolova zh    8712 Mar 27 13:20 MapRateAmpl1HO.png
+-rw-r--r--. 1 kodolova zh   22239 Mar 27 13:20 MapRateAmpl2HB.png
+-rw-r--r--. 1 kodolova zh   27026 Mar 27 13:20 MapRateAmpl2HE.png
+-rw-r--r--. 1 kodolova zh   21107 Mar 27 13:20 MapRateAmpl2HF.png
+-rw-r--r--. 1 kodolova zh   11894 Mar 27 13:20 MapRateAmpl2HO.png
+-rw-r--r--. 1 kodolova zh    8124 Mar 27 13:20 MapRateAmplCalibHB.png
+-rw-r--r--. 1 kodolova zh    8054 Mar 27 13:20 MapRateAmplCalibHE.png
+-rw-r--r--. 1 kodolova zh    8049 Mar 27 13:20 MapRateAmplCalibHF.png
+-rw-r--r--. 1 kodolova zh    8180 Mar 27 13:20 MapRateAmplCalibHO.png
+-rw-r--r--. 1 kodolova zh   12902 Mar 27 13:20 MapRateAmplDriftHB.png
+-rw-r--r--. 1 kodolova zh   17506 Mar 27 13:20 MapRateAmplDriftHE.png
+-rw-r--r--. 1 kodolova zh   12839 Mar 27 13:20 MapRateAmplDriftHF.png
+-rw-r--r--. 1 kodolova zh    7975 Mar 27 13:20 MapRateAmplDriftHO.png
+-rw-r--r--. 1 kodolova zh   13498 Mar 27 13:20 MapRateAmplHB.png
+-rw-r--r--. 1 kodolova zh   17624 Mar 27 13:20 MapRateAmplHE.png
+-rw-r--r--. 1 kodolova zh   13439 Mar 27 13:20 MapRateAmplHF.png
+-rw-r--r--. 1 kodolova zh    8712 Mar 27 13:20 MapRateAmplHO.png
+-rw-r--r--. 1 kodolova zh    8131 Mar 27 13:20 MapRateCapCalibHB.png
+-rw-r--r--. 1 kodolova zh    8083 Mar 27 13:20 MapRateCapCalibHE.png
+-rw-r--r--. 1 kodolova zh    8070 Mar 27 13:20 MapRateCapCalibHF.png
+-rw-r--r--. 1 kodolova zh    8214 Mar 27 13:20 MapRateCapCalibHO.png
+-rw-r--r--. 1 kodolova zh   13498 Mar 27 13:20 MapRateCapIDHB.png
+-rw-r--r--. 1 kodolova zh   17624 Mar 27 13:20 MapRateCapIDHE.png
+-rw-r--r--. 1 kodolova zh   13439 Mar 27 13:20 MapRateCapIDHF.png
+-rw-r--r--. 1 kodolova zh    8712 Mar 27 13:20 MapRateCapIDHO.png
+-rw-r--r--. 1 kodolova zh    8124 Mar 27 13:20 MapRateMaxPosCalibHB.png
+-rw-r--r--. 1 kodolova zh    8054 Mar 27 13:20 MapRateMaxPosCalibHE.png
+-rw-r--r--. 1 kodolova zh    8049 Mar 27 13:20 MapRateMaxPosCalibHF.png
+-rw-r--r--. 1 kodolova zh    8180 Mar 27 13:20 MapRateMaxPosCalibHO.png
+-rw-r--r--. 1 kodolova zh   13498 Mar 27 13:20 MapRateMaxPosHB.png
+-rw-r--r--. 1 kodolova zh   17624 Mar 27 13:20 MapRateMaxPosHE.png
+-rw-r--r--. 1 kodolova zh   13439 Mar 27 13:20 MapRateMaxPosHF.png
+-rw-r--r--. 1 kodolova zh    8712 Mar 27 13:20 MapRateMaxPosHO.png
+-rw-r--r--. 1 kodolova zh    8124 Mar 27 13:20 MapRateMeanPosCalibHB.png
+-rw-r--r--. 1 kodolova zh    8054 Mar 27 13:20 MapRateMeanPosCalibHE.png
+-rw-r--r--. 1 kodolova zh    8049 Mar 27 13:20 MapRateMeanPosCalibHF.png
+-rw-r--r--. 1 kodolova zh    8180 Mar 27 13:20 MapRateMeanPosCalibHO.png
+-rw-r--r--. 1 kodolova zh   13498 Mar 27 13:20 MapRateMeanPosHB.png
+-rw-r--r--. 1 kodolova zh   17624 Mar 27 13:20 MapRateMeanPosHE.png
+-rw-r--r--. 1 kodolova zh   13439 Mar 27 13:20 MapRateMeanPosHF.png
+-rw-r--r--. 1 kodolova zh    8712 Mar 27 13:20 MapRateMeanPosHO.png
+-rw-r--r--. 1 kodolova zh   13498 Mar 27 13:20 MapRatePedHB.png
+-rw-r--r--. 1 kodolova zh   17624 Mar 27 13:20 MapRatePedHE.png
+-rw-r--r--. 1 kodolova zh   13439 Mar 27 13:20 MapRatePedHF.png
+-rw-r--r--. 1 kodolova zh    8712 Mar 27 13:20 MapRatePedHO.png
+-rw-r--r--. 1 kodolova zh   13498 Mar 27 13:20 MapRatePedWidthsHB.png
+-rw-r--r--. 1 kodolova zh   17624 Mar 27 13:20 MapRatePedWidthsHE.png
+-rw-r--r--. 1 kodolova zh   13439 Mar 27 13:20 MapRatePedWidthsHF.png
+-rw-r--r--. 1 kodolova zh    8712 Mar 27 13:20 MapRatePedWidthsHO.png
+-rw-r--r--. 1 kodolova zh    8124 Mar 27 13:20 MapRateRMSCalibHB.png
+-rw-r--r--. 1 kodolova zh    8054 Mar 27 13:20 MapRateRMSCalibHE.png
+-rw-r--r--. 1 kodolova zh    8049 Mar 27 13:20 MapRateRMSCalibHF.png
+-rw-r--r--. 1 kodolova zh    8180 Mar 27 13:20 MapRateRMSCalibHO.png
+-rw-r--r--. 1 kodolova zh   13498 Mar 27 13:20 MapRateRMSHB.png
+-rw-r--r--. 1 kodolova zh   17624 Mar 27 13:20 MapRateRMSHE.png
+-rw-r--r--. 1 kodolova zh   13439 Mar 27 13:20 MapRateRMSHF.png
+-rw-r--r--. 1 kodolova zh    8712 Mar 27 13:20 MapRateRMSHO.png
+-rw-r--r--. 1 kodolova zh  157340 Mar 27 13:05 RemoteMonitoringMAP.cc
+-rwxr-xr-x. 1 kodolova zh 5418022 Mar 27 13:20 RemoteMonitoringMAP.cc.exe
+-rwxr-xr-x. 1 kodolova zh     272 Mar 27 13:05 compile.csh
+-rw-r--r--. 1 kodolova zh   24797 Mar 27 13:05 remoteMonitoring_cfg.py
+-rw-r--r--. 1 kodolova zh   77579 Mar 27 13:05 runlist.tmp
+ Start copy png 
