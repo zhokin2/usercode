@@ -21,8 +21,8 @@ ls * >> &log_${2}.txt
 
 ### Copy output files to EOS
  
-cmsStage log_${2}.txt /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Logs/
-cmsStage Global.root /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Global_${2}.root
+cmsStage -f log_${2}.txt /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Logs/
+cmsStage -f Global.root /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Global_${2}.root
 
 ## rm all unnesecery
 
