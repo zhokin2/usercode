@@ -32,13 +32,14 @@ using namespace std;
     gStyle->SetOptStat(0);
     gStyle->SetOptTitle(1);
 // ok change
-               if(argc<2) return 1;
+               if(argc<3) return 1;
                char fname[300];
                char refname[300];
+               char runtypeC[300];
                sprintf(fname,"%s",argv[1]);
                sprintf(refname,"%s",argv[2]);
-
-               std::cout<<fname<<" "<<refname<<std::endl;
+               sprintf(runtypeC,"%s",argv[3]);
+               std::cout<<fname<<" "<<refname<<" "<<runtypeC<<std::endl;
 // ok change
 
 
@@ -46,6 +47,7 @@ using namespace std;
 // Connect the input files, parameters and get the 2-d histogram in memory
 //    TFile *hfile= new TFile("GlobalHist.root", "READ");
     string promt = (string) fname;
+    string runtype = (string) runtypeC;
     string runnumber ="";
     for (unsigned int i=promt.size()-11; i<promt.size()-5 ; i++) runnumber += fname[i];
     string refrunnumber ="";
@@ -54,16 +56,88 @@ using namespace std;
     
     TFile *hfile= new TFile( fname, "READ");
     TFile *hreffile= new TFile(refname, "READ");
-     //CUTS:    [test][subdetector]                                  ADC amplitude  Am      Width  for Wm             Ratio cut for Rm             TS mean for TNm           TS max  for TXm
-    double MIN_M[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},       {0, 40.,70.,40.,40.}, {0, 0.7, 0.7, 0.1, 0.1},  {0, 0.45, 0.6, 0.20, 0.16}, {0, 1.0, 1.0, 1.0, 1.0}, {0, 1.5, 1.5, 0.5, 0.5}};
-    double MAX_M[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 3000,3000,3000,3000}, {0, 2.5, 2.2, 3.1, 3.1}, {0, 0.95, 0.95, 1.04, 1.02}, {0, 6.0, 5.2, 4.9, 5.6}, {0, 6.5, 6.5, 8.5, 8.5}};                    
-    double MIN_C[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},{0, 1000.,1000.,1000.,100.}, {0, 1.3, 1.3, 0.7, 0.3}, {0, 0.76 , 0.76, 0.85, 0.5}, {0, 2.4, 2.4, 1.5, 3.5}, {0, 1.5, 1.5, 1.5, 3.5}};
-    double MAX_C[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 1E20,1E20,1E20,1E20},{0, 1.9, 1.9, 1.65, 1.5},   {0, 0.94, 0.94, 1.0, 0.8}, {0, 3.7, 3.7, 2.7, 4.5}, {0, 2.5, 2.5, 2.5, 4.5}};                    
-    double porog[5] = {0., 2., 2., 2., 2.}; // Cut for GS test in pro cents
-//    double porog[5] = {0., 200., 200., 100., 100.}; // Cut for GS test in pro cents
-    double Pedest[2][5] = {{0.,0.1,0.6,0.1,0.8},{0.,0.1,0.1,0.1,0.4}};//Cuts for Pedestal  and pedestal  Width
+    double MIN_M[7][5];
+    double MAX_M[7][5];  
+    double MIN_C[7][5];
+    double MAX_C[7][5];
+    double porog[5];
+    double Pedest[2][5];
+
+    if (runtype=="LED") 
+    {
+       //CUTS:    [test][subdetector]                                  ADC amplitude  Am      Width  for Wm             Ratio cut for Rm             TS mean for TNm           TS max  for TXm
+       double MIN_M_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},       {0, 40.,70.,40.,40.}, {0, 0.7, 0.7, 0.1, 0.1},  {0, 0.70, 0.6, 0.20, 0.16}, {0, 1.0, 1.0, 1.0, 1.0}, {0, 1.5, 1.5, 0.5, 0.5}};
+       double MAX_M_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 3000,3000,3000,3000}, {0, 2.5, 2.5, 3.1, 3.1}, {0, 0.94, 0.95, 1.00, 1.00}, {0, 6.0, 5.2, 5.6, 4.9}, {0, 6.5, 6.5, 8.5, 8.5}};                    
+       double MIN_C_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},{0, 1000.,1000.,1000.,100.}, {0, 1.3, 1.3, 0.7, 0.3}, {0, 0.76 , 0.76, 0.85, 0.5}, {0, 2.4, 2.4, 1.5, 3.5}, {0, 1.5, 1.5, 1.5, 3.5}};
+       double MAX_C_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 1E20,1E20,1E20,1E20},{0, 1.9, 1.9, 1.65, 1.5},   {0, 0.94, 0.94, 0.99, 0.8}, {0, 3.7, 3.7, 2.7, 4.5}, {0, 2.5, 2.5, 2.5, 4.5}};                    
+       double porog_LED[5] = {0., 2., 2., 2., 2.}; // Cut for GS test in pro cents
+       double Pedest_LED[2][5] = {{0.,0.1,0.6,0.1,0.8},{0.,0.1,0.1,0.1,0.4}};//Cuts for Pedestal  and pedestal  Width
+       for (int i=0;i<=4;i++) 
+           for (int j=0;j<=6;j++) {
+               MIN_M[i][j]=MIN_M_LED[i][j];
+               MAX_M[i][j]=MAX_M_LED[i][j];
+               MIN_C[i][j]=MIN_C_LED[i][j];
+               MAX_C[i][j]=MAX_C_LED[i][j];
+           }
+       for (int i=0;i<=4;i++) {
+            porog[i]=porog_LED[i];
+            Pedest[0][i]=Pedest_LED[0][i];
+            Pedest[1][i]=Pedest_LED[1][i];
+       }
+    }
+
+    if (runtype=="LASER") 
+    {
+       //CUTS:    [test][subdetector]                                  ADC amplitude  Am      Width  for Wm             Ratio cut for Rm             TS mean for TNm           TS max  for TXm
+       double MIN_M_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},       {0, 10.,10.,10.,10.}, {0, 0.5, 0.5, 0.1, 0.1},  {0, 0.1, 0.1, 0.10, 0.10},  {0, 1.0, 1.0, 1.0, 1.0}, {0, 0.0, 0.0, 0.0, 0.0}};
+       double MAX_M_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 3500,3500,3500,3500}, {0, 4.0, 4.0, 4.5, 4.5}, {0, 1.00, 1.00, 1.00, 1.00}, {0, 8.5, 7.0, 8.5, 6.5}, {0, 9.9, 9.9, 9.9, 9.9}};                    
+       double MIN_C_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},{0, 1000.,1000.,1000.,100.}, {0, 1.3, 1.3, 0.7, 0.3}, {0, 0.76 , 0.76, 0.85, 0.5}, {0, 2.4, 2.4, 1.5, 3.5}, {0, 1.5, 1.5, 1.5, 3.5}};
+       double MAX_C_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 1E20,1E20,1E20,1E20},{0, 1.9, 1.9, 1.65, 1.5},   {0, 0.94, 0.94, 1.0, 0.8}, {0, 3.7, 3.7, 2.7, 4.5}, {0, 2.5, 2.5, 2.5, 4.5}};                    
+       double porog_LASER[5] = {0., 2., 2., 2., 2.}; // Cut for GS test in pro cents
+//     double porog_LASER[5] = {0., 200., 200., 100., 100.}; // Cut for GS test in pro cents
+       double Pedest_LASER[2][5] = {{0.,0.1,0.6,0.1,0.8},{0.,0.1,0.1,0.1,0.4}};//Cuts for Pedestal  and pedestal  Width 
+       for (int i=0;i<=4;i++) 
+           for (int j=0;j<=6;j++) {
+               MIN_M[i][j]=MIN_M_LASER[i][j];
+               MAX_M[i][j]=MAX_M_LASER[i][j];
+               MIN_C[i][j]=MIN_C_LASER[i][j];
+               MAX_C[i][j]=MAX_C_LASER[i][j];
+           }
+       for (int i=0;i<=4;i++) {
+            porog[i]=porog_LASER[i];
+            Pedest[0][i]=Pedest_LASER[0][i];
+            Pedest[1][i]=Pedest_LASER[1][i];      
+       }
+    }
+    if (runtype=="PEDESTAL") 
+    {
+       //CUTS:    [test][subdetector]                                  ADC amplitude  Am      Width  for Wm             Ratio cut for Rm             TS mean for TNm           TS max  for TXm
+       double MIN_M_PEDESTAL[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},           {0, 0.,0.,0.,0.}, {0, 0.2, 1.2, 2.2, 0.5}, {0, 0.05, 0.05, 0.10, 0.10}, {0, 1.5, 2.5, 2.5, 1.5}, {0, 0.0, 0.0, 0.0, 0.0}};
+       double MAX_M_PEDESTAL[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 170.,170.,350.,120.}, {0, 4.5, 4.0, 3.6, 4.2}, {0, 0.95, 0.95, 0.70, 0.95}, {0, 8.0, 7.0, 6.5, 8.0}, {0, 9.9, 9.9, 9.9, 9.9}};                    
+       double MIN_C_PEDESTAL[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},{0, 1000.,1000.,1000.,100.}, {0, 1.3, 1.3, 0.7, 0.3}, {0, 0.76 , 0.76, 0.85, 0.5}, {0, 2.4, 2.4, 1.5, 3.5}, {0, 1.5, 1.5, 1.5, 3.5}};
+       double MAX_C_PEDESTAL[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 1E20,1E20,1E20,1E20},{0, 1.9, 1.9, 1.65, 1.5},   {0, 0.94, 0.94, 1.0, 0.8}, {0, 3.7, 3.7, 2.7, 4.5}, {0, 2.5, 2.5, 2.5, 4.5}};                    
+       double porog_PEDESTAL[5] = {0., 2., 2., 2., 2.}; // Cut for GS test in pro cents
+//     double porog_PEDESTAL[5] = {0., 200., 200., 100., 100.}; // Cut for GS test in pro cents
+       double Pedest_PEDESTAL[2][5] = {{0.,0.1,0.6,0.1,0.8},{0.,0.1,0.1,0.1,0.4}};//Cuts for Pedestal  and pedestal  Width
+       for (int i=0;i<=4;i++) 
+           for (int j=0;j<=6;j++) {
+               MIN_M[i][j]=MIN_M_PEDESTAL[i][j];
+               MAX_M[i][j]=MAX_M_PEDESTAL[i][j];
+               MIN_C[i][j]=MIN_C_PEDESTAL[i][j];
+               MAX_C[i][j]=MAX_C_PEDESTAL[i][j];
+           }
+       for (int i=0;i<=4;i++) {
+            porog[i]=porog_PEDESTAL[i];
+            Pedest[0][i]=Pedest_PEDESTAL[0][i];
+            Pedest[1][i]=Pedest_PEDESTAL[1][i];
+       }
+   }
+
+
 //======================================================================
 
+cout<< endl;
+cout<< MIN_M[2][1] << endl;
 
 
 //======================================================================
