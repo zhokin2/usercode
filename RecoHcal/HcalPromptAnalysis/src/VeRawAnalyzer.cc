@@ -168,6 +168,8 @@ private:
   int flagtodefinebadchannel_;
   int howmanybinsonplots_;
   int splashesUpperLimit_;
+
+  int flagabortgaprejected_;
   int bcnrejectedlow_;
   int bcnrejectedhigh_;
 
@@ -1586,7 +1588,8 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   useADCcounts_=iConfig.getUntrackedParameter<bool>("useADCcounts");
   usePedestalSubtraction_=iConfig.getUntrackedParameter<bool>("usePedestalSubtraction");
   usecontinuousnumbering_=iConfig.getUntrackedParameter<bool>("usecontinuousnumbering");
-  //
+  // 
+  flagabortgaprejected_ = iConfig.getParameter<int>("flagabortgaprejected");//
   bcnrejectedlow_ = iConfig.getParameter<int>("bcnrejectedlow");//
   bcnrejectedhigh_ = iConfig.getParameter<int>("bcnrejectedhigh");//
   //
@@ -1799,6 +1802,7 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   std::cout<<" flagtodefinebadchannel_ = " <<flagtodefinebadchannel_ << std::endl;
   std::cout<<" howmanybinsonplots_ = " <<howmanybinsonplots_ << std::endl;
   std::cout<<" splashesUpperLimit_ = " <<splashesUpperLimit_ << std::endl;
+  std::cout<<" flagabortgaprejected_ = " <<flagabortgaprejected_ << std::endl;
   std::cout<<" bcnrejectedlow_ = " <<bcnrejectedlow_ << std::endl;
   std::cout<<" bcnrejectedhigh_ = " <<bcnrejectedhigh_ << std::endl;
   //  std::cout<<" nbadchannels1_ = " <<nbadchannels1_ << std::endl;   
@@ -1938,6 +1942,7 @@ VeRawAnalyzer::~VeRawAnalyzer()
 void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup){
 
   if(verbosity > 0) std::cout<<" Start analyze "<<std::endl;    
+  if(verbosity > 0) std::cout<<" Start analyze "<<std::endl;    
 
   nevent++;
   nevent50 = nevent/50;
@@ -1947,12 +1952,11 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   //  timestamp= iEvent.time().value(); // timestamp ?
   int bcn = iEvent.bunchCrossing();
   if(verbosity > 0) std::cout  <<  " bcn =  "  << bcn  <<  endl;
-
-  if(bcn>=bcnrejectedlow_ && bcn<=bcnrejectedhigh_) {
-    //  if(bcn>=3446 && bcn<=3564) {
-  }
-  else {
-
+  if(verbosity > 0) std::cout  <<  " Run =  "  << Run  <<  " bcn =  "  << bcn  <<  " LS =  "  << lumi  <<  " event =  "  << Nevent  <<  endl;
+  //  if(verbosity == -10234) std::cout  <<  " Run =  "  << Run  <<  " bcn =  "  << bcn  <<  " LS =  "  << lumi  <<  " event =  "  << Nevent  <<  endl;
+  int outabortgap = 1;
+  if(bcn >= bcnrejectedlow_ && bcn <= bcnrejectedhigh_ ) outabortgap = 0; //  if(bcn>=3446 && bcn<=3564) 
+  if((flagabortgaprejected_ == 1 && outabortgap == 1) || (flagabortgaprejected_ == 0 && outabortgap == 0) ) {
   //////
   // // // // // // to get counters:
 

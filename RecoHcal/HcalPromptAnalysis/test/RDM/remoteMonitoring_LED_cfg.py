@@ -119,9 +119,9 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   ratioHEMin = cms.double(0.60),
                                   ratioHEMax = cms.double(0.95),
                                   ratioHFMin = cms.double(0.16),
-                                  ratioHFMax = cms.double(1.00),
+                                  ratioHFMax = cms.double(1.02),
                                   ratioHOMin = cms.double(0.20),
-                                  ratioHOMax = cms.double(1.00),
+                                  ratioHOMax = cms.double(1.04),
                                   # -54 for  BAD HBHEHF channels from study on RMS of shapes
                                   #Verbosity = cms.untracked.int32(-54),
                                   rmsHBMin = cms.double(0.7),
@@ -247,6 +247,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   howmanybinsonplots = cms.int32(25),
                                   #
                                   #
+                                  flagabortgaprejected = cms.int32(1),
                                   bcnrejectedlow = cms.int32(3446),
                                   bcnrejectedhigh= cms.int32(3564),
                                   #
