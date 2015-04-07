@@ -1951,12 +1951,18 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   lumi=iEvent.luminosityBlock(); // lumi section
   //  timestamp= iEvent.time().value(); // timestamp ?
   int bcn = iEvent.bunchCrossing();
-  if(verbosity > 0) std::cout  <<  " bcn =  "  << bcn  <<  endl;
-  if(verbosity > 0) std::cout  <<  " Run =  "  << Run  <<  " bcn =  "  << bcn  <<  " LS =  "  << lumi  <<  " event =  "  << Nevent  <<  endl;
-  //  if(verbosity == -10234) std::cout  <<  " Run =  "  << Run  <<  " bcn =  "  << bcn  <<  " LS =  "  << lumi  <<  " event =  "  << Nevent  <<  endl;
+  if(verbosity > 0 && (
+     (lumi == 71 && bcn == 753 && Nevent == 128) ||
+     (lumi == 76 && bcn == 753 && Nevent == 138) ||
+     (lumi == 82 && bcn == 753 && Nevent == 144) ||
+     (lumi == 82 && bcn == 757 && Nevent == 145) ||
+     (lumi == 89 && bcn == 753 && Nevent == 162) ||
+     (lumi == 89 && bcn == 757 && Nevent == 163) )
+     ) std::cout  <<  "************** Run =  "  << Run  <<  " bcn =  "  << bcn  <<  " LS =  "  << lumi  <<  " event =  "  << Nevent  <<  endl;
+     if(verbosity > 0 ) std::cout  <<  " Run =  "  << Run  <<  " bcn =  "  << bcn  <<  " LS =  "  << lumi  <<  " event =  "  << Nevent  <<  endl;
   int outabortgap = 1;
   if(bcn >= bcnrejectedlow_ && bcn <= bcnrejectedhigh_ ) outabortgap = 0; //  if(bcn>=3446 && bcn<=3564) 
-  if((flagabortgaprejected_ == 1 && outabortgap == 1) || (flagabortgaprejected_ == 0 && outabortgap == 0) ) {
+  if((flagabortgaprejected_ == 1 && outabortgap == 1) || (flagabortgaprejected_ == 0 && outabortgap == 0) || (flagabortgaprejected_ == 2 ) ) {
   //////
   // // // // // // to get counters:
 

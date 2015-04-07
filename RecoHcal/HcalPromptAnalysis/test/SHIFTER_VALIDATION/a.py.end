@@ -227,7 +227,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #howmanybinsonplots = cms.int32(3600),
                                   #howmanybinsonplots = cms.int32(150),
                                   #
-                                  #
+                                  # =1 all except abort-gap; =0 only abort-gap; =2 all;
                                   flagabortgaprejected = cms.int32(1),
                                   bcnrejectedlow = cms.int32(3446),
                                   bcnrejectedhigh= cms.int32(3564),
