@@ -1,0 +1,227 @@
+Sender: LSF System <lsfadmin@b6e709d498.cern.ch>
+Subject: Job 637302667: </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21_STABLE/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNew.csh 237562 2015-03-22_14_15_47 225529 1000 PEDESTAL> in cluster batch Done
+
+Job </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21_STABLE/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNew.csh 237562 2015-03-22_14_15_47 225529 1000 PEDESTAL> was submitted from host <lxplus0063.cern.ch> by user <kodolova> in cluster <batch>.
+Job was executed on host(s) <b6e709d498.cern.ch>, in queue <8nh>, as user <kodolova> in cluster <batch>.
+</afs/cern.ch/user/k/kodolova> was used as the home directory.
+</afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21_STABLE/src/RecoHcal/HcalPromptAnalysis/test/RDM> was used as the working directory.
+Started at Fri Mar 27 11:34:02 2015
+Results reported at Fri Mar 27 11:44:29 2015
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21_STABLE/src/RecoHcal/HcalPromptAnalysis/test/RDM/HcalRemoteMonitoringNewNew.csh 237562 2015-03-22_14_15_47 225529 1000 PEDESTAL
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :    114.42 sec.
+    Max Memory :      1374 MB
+    Max Swap   :      1563 MB
+
+    Max Processes  :        10
+    Max Threads    :        13
+
+The output (if any) follows:
+
+@(#)CERN job starter $Date: 2010/06/23 14:22:16 $
+Working directory is </pool/lsf/kodolova/637302667> on <b6e709d498.cern.ch>
+
+/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/PEDESTAL_237562.root /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/PEDESTAL_225529.root
+Error: No such HO, Eta=15, Phi=4, Depth=4 in database
+Error: No such HO, Eta=15, Phi=6, Depth=4 in database
+Error: No such HO, Eta=15, Phi=7, Depth=4 in database
+Error: No such HO, Eta=15, Phi=8, Depth=4 in database
+Error: No such HO, Eta=15, Phi=10, Depth=4 in database
+Error: No such HO, Eta=15, Phi=12, Depth=4 in database
+Error: No such HO, Eta=15, Phi=13, Depth=4 in database
+Error: No such HO, Eta=15, Phi=15, Depth=4 in database
+Error: No such HO, Eta=15, Phi=17, Depth=4 in database
+Error: No such HO, Eta=15, Phi=22, Depth=4 in database
+Error: No such HO, Eta=15, Phi=23, Depth=4 in database
+Error: No such HO, Eta=15, Phi=24, Depth=4 in database
+Error: No such HO, Eta=15, Phi=29, Depth=4 in database
+Error: No such HO, Eta=15, Phi=30, Depth=4 in database
+Error: No such HO, Eta=15, Phi=33, Depth=4 in database
+Error: No such HO, Eta=15, Phi=34, Depth=4 in database
+Error: No such HO, Eta=15, Phi=39, Depth=4 in database
+Error: No such HO, Eta=15, Phi=41, Depth=4 in database
+Error: No such HO, Eta=15, Phi=52, Depth=4 in database
+Error: No such HO, Eta=15, Phi=57, Depth=4 in database
+Error: No such HO, Eta=15, Phi=58, Depth=4 in database
+Error: No such HO, Eta=15, Phi=59, Depth=4 in database
+Error: No such Eta=15, Phi=4, Depth=4 in database
+Error: No such Eta=15, Phi=6, Depth=4 in database
+Error: No such Eta=15, Phi=7, Depth=4 in database
+Error: No such Eta=15, Phi=8, Depth=4 in database
+Error: No such Eta=15, Phi=10, Depth=4 in database
+Error: No such Eta=15, Phi=12, Depth=4 in database
+Error: No such Eta=15, Phi=13, Depth=4 in database
+Error: No such Eta=15, Phi=15, Depth=4 in database
+Error: No such Eta=15, Phi=17, Depth=4 in database
+Error: No such Eta=15, Phi=22, Depth=4 in database
+Error: No such Eta=15, Phi=23, Depth=4 in database
+Error: No such Eta=15, Phi=24, Depth=4 in database
+Error: No such Eta=15, Phi=29, Depth=4 in database
+Error: No such Eta=15, Phi=30, Depth=4 in database
+Error: No such Eta=15, Phi=33, Depth=4 in database
+Error: No such Eta=15, Phi=34, Depth=4 in database
+Error: No such Eta=15, Phi=39, Depth=4 in database
+Error: No such Eta=15, Phi=41, Depth=4 in database
+Error: No such Eta=15, Phi=52, Depth=4 in database
+Error: No such Eta=15, Phi=57, Depth=4 in database
+Error: No such Eta=15, Phi=58, Depth=4 in database
+Error: No such Eta=15, Phi=59, Depth=4 in database
+CorrelationsMapPedestalVsfullAmplitudeHB.png
+CorrelationsMapPedestalVsfullAmplitudeHE.png
+CorrelationsMapPedestalVsfullAmplitudeHF.png
+CorrelationsMapPedestalVsfullAmplitudeHO.png
+Hist43TStoAllTSCalibHB.png
+Hist43TStoAllTSCalibHE.png
+Hist43TStoAllTSCalibHF.png
+Hist43TStoAllTSCalibHO.png
+Hist43TStoAllTSHB.png
+Hist43TStoAllTSHE.png
+Hist43TStoAllTSHF.png
+Hist43TStoAllTSHO.png
+HistAmplCalibHB.png
+HistAmplCalibHE.png
+HistAmplCalibHF.png
+HistAmplCalibHO.png
+HistAmplDriftDepthHB.png
+HistAmplDriftDepthHE.png
+HistAmplDriftDepthHF.png
+HistAmplDriftDepthHO.png
+HistAmplHB.png
+HistAmplHE.png
+HistAmplHF.png
+HistAmplHO.png
+HistBadTSshapesHB.png
+HistBadTSshapesHE.png
+HistBadTSshapesHF.png
+HistBadTSshapesHO.png
+HistGoodTSshapesHB.png
+HistGoodTSshapesHE.png
+HistGoodTSshapesHF.png
+HistGoodTSshapesHO.png
+HistMaxPosCalibHB.png
+HistMaxPosCalibHE.png
+HistMaxPosCalibHF.png
+HistMaxPosCalibHO.png
+HistMaxPosHB.png
+HistMaxPosHE.png
+HistMaxPosHF.png
+HistMaxPosHO.png
+HistMeanPosCalibHB.png
+HistMeanPosCalibHE.png
+HistMeanPosCalibHF.png
+HistMeanPosCalibHO.png
+HistMeanPosHB.png
+HistMeanPosHE.png
+HistMeanPosHF.png
+HistMeanPosHO.png
+HistPedestalWidthsHB.png
+HistPedestalWidthsHE.png
+HistPedestalWidthsHF.png
+HistPedestalWidthsHO.png
+HistPedestalsHB.png
+HistPedestalsHE.png
+HistPedestalsHF.png
+HistPedestalsHO.png
+HistRMSCalibHB.png
+HistRMSCalibHE.png
+HistRMSCalibHF.png
+HistRMSCalibHO.png
+HistRMSHB.png
+HistRMSHE.png
+HistRMSHF.png
+HistRMSHO.png
+MAP.png
+MAPHB.png
+MAPHE.png
+MAPHF.png
+MAPHO.png
+MapRate43TStoAllTSCalibHB.png
+MapRate43TStoAllTSCalibHE.png
+MapRate43TStoAllTSCalibHF.png
+MapRate43TStoAllTSCalibHO.png
+MapRate43TStoAllTSHB.png
+MapRate43TStoAllTSHE.png
+MapRate43TStoAllTSHF.png
+MapRate43TStoAllTSHO.png
+MapRateAmpl1HB.png
+MapRateAmpl1HE.png
+MapRateAmpl1HF.png
+MapRateAmpl1HO.png
+MapRateAmpl2HB.png
+MapRateAmpl2HE.png
+MapRateAmpl2HF.png
+MapRateAmpl2HO.png
+MapRateAmplCalibHB.png
+MapRateAmplCalibHE.png
+MapRateAmplCalibHF.png
+MapRateAmplCalibHO.png
+MapRateAmplDriftHB.png
+MapRateAmplDriftHE.png
+MapRateAmplDriftHF.png
+MapRateAmplDriftHO.png
+MapRateAmplHB.png
+MapRateAmplHE.png
+MapRateAmplHF.png
+MapRateAmplHO.png
+MapRateCapCalibHB.png
+MapRateCapCalibHE.png
+MapRateCapCalibHF.png
+MapRateCapCalibHO.png
+MapRateCapIDHB.png
+MapRateCapIDHE.png
+MapRateCapIDHF.png
+MapRateCapIDHO.png
+MapRateMaxPosCalibHB.png
+MapRateMaxPosCalibHE.png
+MapRateMaxPosCalibHF.png
+MapRateMaxPosCalibHO.png
+MapRateMaxPosHB.png
+MapRateMaxPosHE.png
+MapRateMaxPosHF.png
+MapRateMaxPosHO.png
+MapRateMeanPosCalibHB.png
+MapRateMeanPosCalibHE.png
+MapRateMeanPosCalibHF.png
+MapRateMeanPosCalibHO.png
+MapRateMeanPosHB.png
+MapRateMeanPosHE.png
+MapRateMeanPosHF.png
+MapRateMeanPosHO.png
+MapRatePedHB.png
+MapRatePedHE.png
+MapRatePedHF.png
+MapRatePedHO.png
+MapRatePedWidthsHB.png
+MapRatePedWidthsHE.png
+MapRatePedWidthsHF.png
+MapRatePedWidthsHO.png
+MapRateRMSCalibHB.png
+MapRateRMSCalibHE.png
+MapRateRMSCalibHF.png
+MapRateRMSCalibHO.png
+MapRateRMSHB.png
+MapRateRMSHE.png
+MapRateRMSHF.png
+MapRateRMSHO.png
+
+Job finished at Fri Mar 27 11:44:03 CET 2015 on node 
+ under linux version Scientific Linux CERN SLC release 6.6 (Carbon)
+
+CERN statistics: This process used approximately : 0:04:51 KSI2K hours (291 KSI2K seconds)
+                 This process corresponds to     : 0:18:55 HS06  hours (1135 HS06  seconds)
+
+
+PS:
+
+Read file </afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21_STABLE/src/RecoHcal/HcalPromptAnalysis/test/RDM/LOG1/ebatchlog_237562.log> for stderr output of this job.
+
