@@ -119,7 +119,7 @@ public:
   ~VeRawAnalyzer();
   virtual void beginJob();
   virtual void analyze(const edm::Event&, const edm::EventSetup&);
-  virtual void endJob() ;
+  virtual void endJob(const edm::EventSetup&) ;
   
 private:
 edm::EDGetTokenT<HcalCalibDigiCollection> tok_calib_;
@@ -7210,7 +7210,7 @@ int VeRawAnalyzer::getRBX(int& kdet, int& keta, int& kphi){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ------------ other methods -----------------------------
-void VeRawAnalyzer::endJob(){   
+void VeRawAnalyzer::endJob(const edm::EventSetup& iSetup){   
   
   cout  <<  " --------------------------------------- "  <<  endl;
   cout<<" for Run = "<<run0<<" with runcounter = "<< runcounter <<" #ev = "<<eventcounter<<endl;
@@ -8409,13 +8409,18 @@ void VeRawAnalyzer::endJob(){
   std::cout << "===== Finish writing user histograms and ntuple =====" << std::endl;
   ///////////////////////
   
-  /*
+  
 
-  if (MAPcreation>0) {
+ if (MAPcreation>0) {
     std::cout << "===== Start writing Channel MAP =====" << std::endl;    
     MAPfile.open(MAPOutputFileName);
+
+    edm::ESHandle<HcalTopology> topo;
+    iSetup.get<IdealGeometryRecord>().get(topo);
+
     HcalLogicalMapGenerator gen;
-    HcalLogicalMap lmap(gen.createMap());
+    HcalLogicalMap lmap=gen.createMap(&(*topo)); 
+  
     HcalElectronicsMap emap=lmap.generateHcalElectronicsMap();
     std::string subdet =""; 
                      
@@ -8709,7 +8714,7 @@ void VeRawAnalyzer::endJob(){
     MAPfile.close(); 
     std::cout << "===== Finish writing Channel MAP =====" << std::endl;  
   }
-  */
+  
 
 }
 
