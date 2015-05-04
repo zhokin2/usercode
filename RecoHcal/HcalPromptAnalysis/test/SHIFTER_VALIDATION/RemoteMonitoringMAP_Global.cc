@@ -98,6 +98,10 @@ int main(int argc, char *argv[])
   TH1F *hist_SumADC0[5][5];   // 1d  histogramm for TS shape subdet, depth -> test 43
   TH1F *hist_SumADC1[5][5];   // 1d  histogramm for TS shape subdet, depth -> test 43
 
+  TH1F *hist_BXnbad[5][5];// 1d  histogramm for BX subdet, depth -> test 51
+  TH1F *hist_BXnbad0[5][5];// 1d  histogramm for BX shape subdet, depth -> test 51
+
+
   Map_SUB[1][1] = (TH2F*)hfile->Get("h_mapDepth1_HB");
   Map_SUB[1][2] = (TH2F*)hfile->Get("h_mapDepth2_HB");   
   Map_SUB[2][1] = (TH2F*)hfile->Get("h_mapDepth1_HE");
@@ -1460,6 +1464,68 @@ int main(int argc, char *argv[])
           if (sub==4) {cHB->Print("Hist_SumADC_HF1.png"); cHB->Clear();} 
   }// end sub
 
+
+ //+++++++++++++++++++++++++++++++++++  
+//Test 51 BX dependence   
+//++++++++++++++++++++++++++++++++++++
+
+  hist_BXnbad[1][1] = (TH1F*)hfile->Get("h_bcnnbadchannels_depth1_HB");
+  hist_BXnbad[1][2] = (TH1F*)hfile->Get("h_bcnnbadchannels_depth2_HB");
+  hist_BXnbad[2][1] = (TH1F*)hfile->Get("h_bcnnbadchannels_depth1_HE");
+  hist_BXnbad[2][2] = (TH1F*)hfile->Get("h_bcnnbadchannels_depth2_HE");
+  hist_BXnbad[2][3] = (TH1F*)hfile->Get("h_bcnnbadchannels_depth3_HE");
+  hist_BXnbad[3][4] = (TH1F*)hfile->Get("h_bcnnbadchannels_depth4_HO");
+  hist_BXnbad[4][1] = (TH1F*)hfile->Get("h_bcnnbadchannels_depth1_HF");
+  hist_BXnbad[4][2] = (TH1F*)hfile->Get("h_bcnnbadchannels_depth2_HF");
+
+  hist_BXnbad0[1][1] = (TH1F*)hfile->Get("h_bcnbadrate0_depth1_HB");
+  hist_BXnbad0[1][2] = (TH1F*)hfile->Get("h_bcnbadrate0_depth2_HB");
+  hist_BXnbad0[2][1] = (TH1F*)hfile->Get("h_bcnbadrate0_depth1_HE");
+  hist_BXnbad0[2][2] = (TH1F*)hfile->Get("h_bcnbadrate0_depth2_HE");
+  hist_BXnbad0[2][3] = (TH1F*)hfile->Get("h_bcnbadrate0_depth3_HE");
+  hist_BXnbad0[3][4] = (TH1F*)hfile->Get("h_bcnbadrate0_depth1_HO");
+  hist_BXnbad0[4][1] = (TH1F*)hfile->Get("h_bcnbadrate0_depth1_HF");
+  hist_BXnbad0[4][2] = (TH1F*)hfile->Get("h_bcnbadrate0_depth2_HF");
+
+  for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
+       if (sub==1) cHB->Divide(2,1);
+       if (sub==2) cHE->Divide(3,1);
+       if (sub==3) cONE->Divide(1,1);
+       if (sub==4) cHB->Divide(2,1);
+       int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+       int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+       for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depths 
+      	   if (sub==1) cHB->cd(k); 
+           if (sub==2) cHE->cd(k);
+	   if (sub==3) cONE->cd(k-3);
+	   if (sub==4) cHB->cd(k);  
+           hist_BXnbad[sub][k]->Divide(hist_BXnbad[sub][k],hist_BXnbad0[sub][k], 1, 1, "B"); 
+           gPad->SetGridy();
+           gPad->SetGridx();
+           gPad->SetLogy();
+           if (sub==1) sprintf(str,"HB, Depth%d \b", k);
+           if (sub==2) sprintf(str,"HE, Depth%d \b", k);
+           if (sub==3) sprintf(str,"HO, Depth%d \b", k);
+           if (sub==4) sprintf(str,"HF, Depth%d \b", k);  
+           hist_BXnbad[sub][k]->SetTitle(str);
+           hist_BXnbad[sub][k]->SetXTitle("BX number\b");
+           hist_BXnbad[sub][k]->SetYTitle("Rate of Bad channels\b");
+           hist_BXnbad[sub][k]->SetLineWidth(4);
+           hist_BXnbad[sub][k]->Draw("L");
+//         hist_BXnbad[sub][k]->GetYaxis()->SetRangeUser(0, 72.);
+         hist_BXnbad[sub][k]->GetYaxis()->SetRangeUser(0.0001, 1.);
+           if (sub==1) {cHB->Modified(); cHB->Update();} 
+           if (sub==2) {cHE->Modified(); cHE->Update();}
+           if (sub==3) {cONE->Modified();cONE->Update();}
+           if (sub==4) {cHB->Modified(); cHB->Update();} 
+       }//end depth    
+       if (sub==1) {cHB->Print("Hist_BX_CapID_HB.png"); cHB->Clear();} 
+       if (sub==2) {cHE->Print("Hist_BX_CapID_HE.png"); cHE->Clear();}
+       if (sub==3) {cONE->Print("Hist_BX_CapID_HO.png"); cONE->Clear();}
+       if (sub==4) {cHB->Print("Hist_BX_CapID_HF.png"); cHB->Clear();}
+  }// end sub   
+
+
 //======================================================================
 
 //======================================================================
@@ -1673,11 +1739,11 @@ int main(int argc, char *argv[])
   int ind = 0;
   
   for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-     ofstream htmlFileT,htmlFileC, htmlFileD,htmlFileP,htmlFileS ;
-     if (sub==1) {htmlFileT.open("HB_Tile.html"); htmlFileC.open("HB_Calib.html");htmlFileD.open("HB_Drift.html");htmlFileP.open("HB_Pedestals.html");htmlFileS.open("HB_Shapes.html");}
-     if (sub==2) {htmlFileT.open("HE_Tile.html"); htmlFileC.open("HE_Calib.html");htmlFileD.open("HE_Drift.html");htmlFileP.open("HE_Pedestals.html");htmlFileS.open("HE_Shapes.html");}
-     if (sub==3) {htmlFileT.open("HO_Tile.html"); htmlFileC.open("HO_Calib.html");htmlFileD.open("HO_Drift.html");htmlFileP.open("HO_Pedestals.html");htmlFileS.open("HO_Shapes.html");}
-     if (sub==4) {htmlFileT.open("HF_Tile.html"); htmlFileC.open("HF_Calib.html");htmlFileD.open("HF_Drift.html");htmlFileP.open("HF_Pedestals.html");htmlFileS.open("HF_Shapes.html");}
+     ofstream htmlFileT, htmlFileC, htmlFileD, htmlFileP, htmlFileS, htmlFileBX  ;
+     if (sub==1) {htmlFileT.open("HB_Tile.html"); htmlFileC.open("HB_Calib.html");htmlFileD.open("HB_Drift.html");htmlFileP.open("HB_Pedestals.html");htmlFileS.open("HB_Shapes.html"); htmlFileBX.open("HB_BXs.html");}
+     if (sub==2) {htmlFileT.open("HE_Tile.html"); htmlFileC.open("HE_Calib.html");htmlFileD.open("HE_Drift.html");htmlFileP.open("HE_Pedestals.html");htmlFileS.open("HE_Shapes.html"); htmlFileBX.open("HE_BXs.html");}
+     if (sub==3) {htmlFileT.open("HO_Tile.html"); htmlFileC.open("HO_Calib.html");htmlFileD.open("HO_Drift.html");htmlFileP.open("HO_Pedestals.html");htmlFileS.open("HO_Shapes.html"); htmlFileBX.open("HO_BXs.html");}
+     if (sub==4) {htmlFileT.open("HF_Tile.html"); htmlFileC.open("HF_Calib.html");htmlFileD.open("HF_Drift.html");htmlFileP.open("HF_Pedestals.html");htmlFileS.open("HF_Shapes.html"); htmlFileBX.open("HF_BXs.html");}
  
 // Megatile channels   
      htmlFileT << "</html><html xmlns=\"http://www.w3.org/1999/xhtml\">"<< std::endl;
@@ -2051,6 +2117,10 @@ int main(int argc, char *argv[])
      if(sub==3) htmlFileP<< "<img src=\"CorrelationsMapPedestalVsfullAmplitudeHO.png\" />" <<std::endl;
      if(sub==4) htmlFileP<< "<img src=\"CorrelationsMapPedestalVsfullAmplitudeHF.png\" />" <<std::endl;
      htmlFileP << "<br>"<< std::endl;
+
+     htmlFileP << "</body> " << std::endl;
+     htmlFileP << "</html> " << std::endl;
+     htmlFileP.close(); 
  
 // TSs Shapes:
 
@@ -2073,7 +2143,7 @@ int main(int argc, char *argv[])
      if (sub==2) htmlFileS << "<h1> ADC Shape for HE, RUN = "<< runnumber <<" </h1>"<< std::endl;
      if (sub==3) htmlFileS << "<h1> ADC Shape for HO, RUN = "<< runnumber <<" </h1>"<< std::endl;
      if (sub==4) htmlFileS << "<h1> ADC Shape for HF, RUN = "<< runnumber <<" </h1>"<< std::endl; 
-     htmlFileP << "<br>"<< std::endl;
+     htmlFileS << "<br>"<< std::endl;
         
      htmlFileS << "<h2> 1.Mean ADC Shape </h3>"<< std::endl;
      htmlFileS << "<h3> 1.A. ADC shape averaged over all good channels, depth and events.</h3>"<< std::endl; 
@@ -2126,9 +2196,48 @@ int main(int argc, char *argv[])
      if (sub==2) htmlFileS << " <img src=\"Hist_SumADC_HE1.png\" />" << std::endl;
      if (sub==3) htmlFileS << " <img src=\"Hist_SumADC_HO1.png\" />" << std::endl;
      if (sub==4) htmlFileS << " <img src=\"Hist_SumADC_HF1.png\" />" << std::endl;
+    
+     htmlFileS << "</body> " << std::endl;
+     htmlFileS << "</html> " << std::endl;
+     htmlFileS.close(); 
 
 
-     htmlFileS.close();
+// BXs:
+
+     htmlFileBX << "</html><html xmlns=\"http://www.w3.org/1999/xhtml\">"<< std::endl;
+     htmlFileBX << "<head>"<< std::endl;
+     htmlFileBX << "<meta http-equiv=\"Content-Type\" content=\"text/html\"/>"<< std::endl;
+     htmlFileBX << "<title> Remote Monitoring Tool Global</title>"<< std::endl;
+     htmlFileBX << "<style type=\"text/css\">"<< std::endl;
+     htmlFileBX << " body,td{ background-color: #FFFFCC; font-family: arial, arial ce, helvetica; font-size: 12px; }"<< std::endl;
+     htmlFileBX << "   td.s0 { font-family: arial, arial ce, helvetica; }"<< std::endl;
+     htmlFileBX << "   td.s1 { font-family: arial, arial ce, helvetica; font-weight: bold; background-color: #FFC169; text-align: center;}"<< std::endl;
+     htmlFileBX << "   td.s2 { font-family: arial, arial ce, helvetica; background-color: #eeeeee; }"<< std::endl;
+     htmlFileBX << "   td.s3 { font-family: arial, arial ce, helvetica; background-color: #d0d0d0; }"<< std::endl;
+     htmlFileBX << "   td.s4 { font-family: arial, arial ce, helvetica; background-color: #FFC169; }"<< std::endl;
+     htmlFileBX << "</style>"<< std::endl;
+     htmlFileBX << "<body>"<< std::endl;
+
+          
+     if (sub==1) htmlFileBX << "<h1> Bunch Crossing distributions for HB, RUN = "<< runnumber <<" </h1>"<< std::endl; 
+     if (sub==2) htmlFileBX << "<h1> Bunch Crossing distributions for HE, RUN = "<< runnumber <<" </h1>"<< std::endl;
+     if (sub==3) htmlFileBX << "<h1> Bunch Crossing distributions for HO, RUN = "<< runnumber <<" </h1>"<< std::endl;
+     if (sub==4) htmlFileBX << "<h1> Bunch Crossing distributions for HF, RUN = "<< runnumber <<" </h1>"<< std::endl; 
+     htmlFileBX << "<br>"<< std::endl;
+        
+     htmlFileBX << "<h2> 1.BX dependence of Bad channels </h3>"<< std::endl;
+     htmlFileBX << "<h3> 1.A. BX dependence of Bad channels with CapID errors for each depth.</h3>"<< std::endl; 
+//     htmlFileBX << "<h4> Legend: Bins less "<<Pedest[0][sub]<<" correpond to bad Pedestals </h4>"<< std::endl; 
+     if (sub==1) htmlFileBX << " <img src=\"Hist_BX_CapID_HB.png\" />" << std::endl;
+     if (sub==2) htmlFileBX << " <img src=\"Hist_BX_CapID_HE.png\" />" << std::endl;    
+     if (sub==3) htmlFileBX << " <img src=\"Hist_BX_CapID_HO.png\" />" << std::endl;
+     if (sub==4) htmlFileBX << " <img src=\"Hist_BX_CapID_HF.png\" />" << std::endl;
+     htmlFileBX << "<br>"<< std::endl;
+
+     htmlFileBX << "</body> " << std::endl;
+     htmlFileBX << "</html> " << std::endl;
+     htmlFileBX.close(); 
+
   }// end sub
 
 //======================================================================
@@ -2183,6 +2292,7 @@ int main(int argc, char *argv[])
 //       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HB_Drift.html\">Gain Stability</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HB_Pedestals.html\">Pedestals</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HB_Shapes.html\">ADC Shapes</a></td>"<< std::endl;
+       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HB_BXs.html\">Bunch X</a></td>"<< std::endl;
      }
      if (sub==2) {
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HE_Tile.html\">Megatile Channels</a></td>"<< std::endl;
@@ -2190,6 +2300,7 @@ int main(int argc, char *argv[])
 //       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HE_Drift.html\">Gain Stability</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HE_Pedestals.html\">Pedestals</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HE_Shapes.html\">ADC Shapes</a></td>"<< std::endl;
+       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HE_BXs.html\">Bunch X</a></td>"<< std::endl;
      } 
      if (sub==3) {
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HO_Tile.html\">Megatile Channels</a></td>"<< std::endl;
@@ -2197,6 +2308,7 @@ int main(int argc, char *argv[])
 //       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HO_Drift.html\">Gain Stability</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HO_Pedestals.html\">Pedestals</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HO_Shapes.html\">ADC Shapes</a></td>"<< std::endl;
+       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HO_BXs.html\">Bunch X</a></td>"<< std::endl;
      } 
      if (sub==4) {
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HF_Tile.html\">Megatile Channels</a></td>"<< std::endl;
@@ -2204,6 +2316,7 @@ int main(int argc, char *argv[])
 //       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HF_Drift.html\">Gain Stability</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HF_Pedestals.html\">Pedestals</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HF_Shapes.html\">ADC Shapes</a></td>"<< std::endl;
+       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HF_BXs.html\">Bunch X</a></td>"<< std::endl;
 
      }  
      

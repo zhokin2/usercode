@@ -65,15 +65,15 @@ using namespace std;
 
     if (runtype=="LED") 
     {
-       //CUTS:    [test][subdetector]                                  ADC amplitude  Am      Width  for Wm             Ratio cut for Rm             TS mean for TNm           TS max  for TXm
+       //CUTS:    [test][subdetector]                                       ADC amplitude  Am      Width  for Wm             Ratio cut for Rm             TS mean for TNm           TS max  for TXm
        double MIN_M_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},       {0, 40.,70.,40.,40.}, {0, 0.7, 0.7, 0.1, 0.1},  {0, 0.70, 0.6, 0.20, 0.16}, {0, 1.0, 1.0, 1.0, 1.0}, {0, 1.5, 1.5, 0.5, 0.5}};
        double MAX_M_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 3000,3000,3000,3000}, {0, 2.5, 2.5, 3.1, 3.1}, {0, 0.94, 0.95, 1.00, 1.00}, {0, 6.0, 5.2, 5.6, 4.9}, {0, 6.5, 6.5, 8.5, 8.5}};                    
        double MIN_C_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},{0, 1000.,1000.,1000.,100.}, {0, 1.3, 1.3, 0.7, 0.3}, {0, 0.76 , 0.76, 0.85, 0.5}, {0, 2.4, 2.4, 1.5, 3.5}, {0, 1.5, 1.5, 1.5, 3.5}};
-       double MAX_C_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 1E20,1E20,1E20,1E20},{0, 1.9, 1.9, 1.65, 1.5},   {0, 0.94, 0.94, 0.99, 0.8}, {0, 3.7, 3.7, 2.7, 4.5}, {0, 2.5, 2.5, 2.5, 4.5}};                    
+       double MAX_C_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 1E20,1E20,1E20,1E20},{0, 1.9, 1.9, 1.65, 1.5},  {0, 0.94, 0.94, 0.99, 0.8}, {0, 3.7, 3.7, 2.7, 4.5}, {0, 2.5, 2.5, 2.5, 4.5}};                    
        double porog_LED[5] = {0., 2., 2., 2., 2.}; // Cut for GS test in pro cents
        double Pedest_LED[2][5] = {{0.,0.1,0.6,0.1,0.8},{0.,0.1,0.1,0.1,0.4}};//Cuts for Pedestal  and pedestal  Width
-       for (int i=0;i<=4;i++) 
-           for (int j=0;j<=6;j++) {
+       for (int i=0;i<=6;i++) 
+           for (int j=0;j<=4;j++) {
                MIN_M[i][j]=MIN_M_LED[i][j];
                MAX_M[i][j]=MAX_M_LED[i][j];
                MIN_C[i][j]=MIN_C_LED[i][j];
@@ -89,15 +89,15 @@ using namespace std;
     if (runtype=="LASER") 
     {
        //CUTS:    [test][subdetector]                                  ADC amplitude  Am      Width  for Wm             Ratio cut for Rm             TS mean for TNm           TS max  for TXm
-       double MIN_M_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},       {0, 10.,10.,10.,10.}, {0, 0.5, 0.5, 0.1, 0.1},  {0, 0.1, 0.1, 0.10, 0.10},  {0, 1.0, 1.0, 1.0, 1.0}, {0, 0.0, 0.0, 0.0, 0.0}};
+       double MIN_M_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},       {0, 10.,10.,10.,10.}, {0, 0.5, 0.5, 0.1, 0.1},   {0, 0.1, 0.1, 0.10, 0.10}, {0, 1.0, 1.0, 1.0, 1.0}, {0, 0.0, 0.0, 0.0, 0.0}};
        double MAX_M_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 3500,3500,3500,3500}, {0, 4.0, 4.0, 4.5, 4.5}, {0, 1.00, 1.00, 1.00, 1.00}, {0, 8.5, 7.0, 8.5, 6.5}, {0, 9.9, 9.9, 9.9, 9.9}};                    
        double MIN_C_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},{0, 1000.,1000.,1000.,100.}, {0, 1.3, 1.3, 0.7, 0.3}, {0, 0.76 , 0.76, 0.85, 0.5}, {0, 2.4, 2.4, 1.5, 3.5}, {0, 1.5, 1.5, 1.5, 3.5}};
        double MAX_C_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 1E20,1E20,1E20,1E20},{0, 1.9, 1.9, 1.65, 1.5},   {0, 0.94, 0.94, 1.0, 0.8}, {0, 3.7, 3.7, 2.7, 4.5}, {0, 2.5, 2.5, 2.5, 4.5}};                    
        double porog_LASER[5] = {0., 2., 2., 2., 2.}; // Cut for GS test in pro cents
 //     double porog_LASER[5] = {0., 200., 200., 100., 100.}; // Cut for GS test in pro cents
        double Pedest_LASER[2][5] = {{0.,0.1,0.6,0.1,0.8},{0.,0.1,0.1,0.1,0.4}};//Cuts for Pedestal  and pedestal  Width 
-       for (int i=0;i<=4;i++) 
-           for (int j=0;j<=6;j++) {
+       for (int i=0;i<=6;i++) 
+           for (int j=0;j<=4;j++) {
                MIN_M[i][j]=MIN_M_LASER[i][j];
                MAX_M[i][j]=MAX_M_LASER[i][j];
                MIN_C[i][j]=MIN_C_LASER[i][j];
@@ -119,8 +119,8 @@ using namespace std;
        double porog_PEDESTAL[5] = {0., 2., 2., 2., 2.}; // Cut for GS test in pro cents
 //     double porog_PEDESTAL[5] = {0., 200., 200., 100., 100.}; // Cut for GS test in pro cents
        double Pedest_PEDESTAL[2][5] = {{0.,0.1,0.6,0.1,0.8},{0.,0.1,0.1,0.1,0.4}};//Cuts for Pedestal  and pedestal  Width
-       for (int i=0;i<=4;i++) 
-           for (int j=0;j<=6;j++) {
+       for (int i=0;i<=6;i++) 
+           for (int j=0;j<=4;j++) {
                MIN_M[i][j]=MIN_M_PEDESTAL[i][j];
                MAX_M[i][j]=MAX_M_PEDESTAL[i][j];
                MIN_C[i][j]=MIN_C_PEDESTAL[i][j];
@@ -1395,7 +1395,7 @@ cout<< MIN_M[2][1] << endl;
       hist_ADC_All[sub]->SetTitle(str);
       hist_ADC_All[sub]->Draw("");
       // hist_ADC_All[sub]->GetYaxis()->SetRangeUser(0, 72.);
-      // hist_ADC_All[sub]->GetZaxis()->SetRangeUser(0.0001, 1.);
+      hist_ADC_All[sub]->GetXaxis()->SetRangeUser(0.000, 1000.);
       cONE->Modified(); cONE->Update();
       if (sub==1) {cONE->Print("Hist_ADC_HB_All.png"); cONE->Clear();} 
       if (sub==2) {cONE->Print("Hist_ADC_HE_All.png"); cONE->Clear();}
@@ -1428,7 +1428,7 @@ cout<< MIN_M[2][1] << endl;
               hist_ADC_DS[sub][k]->SetTitle(str);
               hist_ADC_DS[sub][k]->Draw("");
            // hist_ADC_DS[sub][k]->GetYaxis()->SetRangeUser(0, 72.);
-           // hist_ADC_DS[sub][k]->GetZaxis()->SetRangeUser(0.0001, 1.);
+              hist_ADC_DS[sub][k]->GetXaxis()->SetRangeUser(0.000, 1000.);
               if (sub==1) {cHB->Modified(); cHB->Update();} 
               if (sub==2) {cHE->Modified(); cHE->Update();}
               if (sub==3) {cONE->Modified();cONE->Update();}
@@ -2106,7 +2106,7 @@ cout<< MIN_M[2][1] << endl;
      if (sub==3)  htmlFileD << " <img src=\"MapRateAmpl2HO.png\" />" << std::endl;  
      if (sub==4)  htmlFileD << " <img src=\"MapRateAmpl2HF.png\" />" << std::endl;   
      htmlFileD << "<br>"<< std::endl; 
-     htmlFileD << "<h3> 1.C. Relative difference between Current run and Current run distribution over all events, channels for each depth.</h3>"<< std::endl;
+     htmlFileD << "<h3> 1.C. Relative difference between Current and Reference run distribution over all events, channels for each depth.</h3>"<< std::endl;
      htmlFileD << "<h4>  Legend: Bins less -"<<porog[sub]<<"% and more +"<<porog[sub]<<"% correpond to bad relative difference position </h4>"<< std::endl;
      if (sub==1)  htmlFileD << " <img src=\"HistAmplDriftDepthHB.png\" />" << std::endl; 
      if (sub==2)  htmlFileD << " <img src=\"HistAmplDriftDepthHE.png\" />" << std::endl; 
@@ -2241,7 +2241,7 @@ cout<< MIN_M[2][1] << endl;
      if (sub==2) htmlFileS << " <img src=\"Hist_ADC_HE_DS.png\" />" << std::endl;
      if (sub==3) htmlFileS << " <img src=\"Hist_ADC_HO_DS.png\" />" << std::endl;
      if (sub==4) htmlFileS << " <img src=\"Hist_ADC_HF_DS.png\" />" << std::endl;
-
+/*
      htmlFileS << "<h2> 3. ADC Sum in Time Slice </h3>"<< std::endl;
      htmlFileS << "<h3> 3.A. ADC Sum over all channels histogrammed over all events for each depth separately. </h3>"<< std::endl; 
 //     htmlFileS << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
@@ -2263,7 +2263,7 @@ cout<< MIN_M[2][1] << endl;
      if (sub==2) htmlFileS << " <img src=\"Hist_SumADC_HE1.png\" />" << std::endl;
      if (sub==3) htmlFileS << " <img src=\"Hist_SumADC_HO1.png\" />" << std::endl;
      if (sub==4) htmlFileS << " <img src=\"Hist_SumADC_HF1.png\" />" << std::endl;
-
+*/
      htmlFileS.close();
   }// end sub
 

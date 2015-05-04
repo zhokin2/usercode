@@ -7,9 +7,9 @@ HistoDir='/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos'
 # print usage info
 if [[ "$1" == "" ]]; then
   echo "Usage:"
-  echo "  $0 [file]"
+  echo "  $0 [file] [comment]"
   echo "    [file] - file with run numbers"
-  echo "example: ./GLOBAL.sh Run_List.txt"
+  echo "example: ./GLOBAL.sh Run_List.txt TestRuns"
   exit
 fi
 
@@ -104,7 +104,7 @@ date=''
 #date=$(ls --full-time $fullSrc |grep `basename $i` |awk '{print $6}')
 
 # extract run type, data, time and number of events
-type='GLOBAL'
+type='Cosmic'
 
 echo 'RUN Date = '$date
 echo 'RUN Type = '$type
@@ -123,6 +123,7 @@ echo '<td class="s'$raw'" align="center"><a href="'$WebSite'/CMT/GLOBAL_'$runnum
 echo '<td class="s'$raw'" align="center"><a href="'$WebSite'/GlobalRMT/GLOBAL_'$runnumber'/MAP.html">RMT_'$runnumber'</a></td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">0 Tl</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">0 TeV</td>'>> index_draft.html
+echo '<td class="s'$raw'" align="center">'$2'</td>'>> index_draft.html
 echo '</tr>'>> index_draft.html
 prev=$i
 
