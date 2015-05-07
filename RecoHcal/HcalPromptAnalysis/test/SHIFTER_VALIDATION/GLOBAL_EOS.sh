@@ -85,14 +85,17 @@ cat _runlist_
 
 #making table
 
+
 # print header to index.html 
 echo `cat header_GLOBAL_EOS.txt`> index_draft.html
 
 #extract run numners
 for i in $(cat _runlist_); do
+ 
 #runnumber=$(echo $i | sed -e 's/[^0-9]*//g')
 #runnumber=$(echo $i | awk -F 'run' '{print $2}'| awk -F '.' '{print $1}')
-runnumber=$i
+runnumber=${i}
+#if [[ "$runnumber" > 243400 ]] ; then
 let "k = k + 1"
 echo
 echo
@@ -100,14 +103,65 @@ echo
 echo 'RUN number = '$runnumber
 
 # extract the date of file
-date=''
-#date=$(ls --full-time $fullSrc |grep `basename $i` |awk '{print $6}')
+date=`./das_client.py --query="run=${i} | grep run.start_time" | grep 20`
+
+date_end=`./das_client.py --query="run=${i} | grep run.end_time" | grep 20`
+
+./das_client.py --query="run=${i} | grep run.duration"  > tmp
+D=`cat tmp`
+echo ${D} > tmp
+D=`cat tmp | awk  '{print $13}' `
+
+./das_client.py --query="run=${i} | grep run.beam_e"  > tmp
+E=`cat tmp`
+echo ${E} > tmp
+E=`cat tmp | awk  '{print $13}' `
+
+./das_client.py --query="run=${i} | grep run.bfield"  > tmp
+B=`cat tmp`
+echo ${B} > tmp
+B=`cat tmp | awk  '{print $13}' `
+
+./das_client.py --query="run=${i} | grep run.nlumis"  > tmp
+nL=`cat tmp`
+echo ${nL} > tmp
+nL=`cat tmp | awk  '{print $13}' `
+
+./das_client.py --query="run=${i} | grep run.lhcFill" > tmp
+Fill=`cat tmp`
+echo ${Fill} > tmp
+Fill=`cat tmp | awk  '{print $13}' `
+
+./das_client.py --query="run=${i} | grep run.delivered_lumi" > tmp
+dLumi=`cat tmp`
+echo ${dLumi} > tmp
+dLumi=`cat tmp | awk  '{print $13}' `
+
+rm tmp
 
 # extract run type, data, time and number of events
 type='Cosmic'
+commentariy=''
+#cat runs_info
 
-echo 'RUN Date = '$date
+#  for j in $(cat runs_info); do
+#    echo $j
+#    k= `echo $j | awk  '{print $1}'`
+#    if [[ "$runnumber" == "$k" ]] ; then
+#      type= `echo $i | awk  '{print $2}'`
+#      commentariy=`echo $i | awk  '{print $3}'`
+#    fi
+#  done
+
 echo 'RUN Type = '$type
+echo 'RUN Date = '$date
+echo 'RUN Duration = '$D
+echo 'RUN Energy = '$E
+echo 'RUN Magnet field = '$B
+echo 'RUN LS number = '$nL
+echo 'RUN LHC Fill = '$Fill
+echo 'RUN Delivered Luminocity = '$dLumi
+echo 'RUN Comment = '$commentariy
 
 
 #adding entry to list of file index_draft.html
@@ -116,18 +170,19 @@ echo '<tr>'>> index_draft.html
 echo '<td class="s1" align="center">'$k'</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$runnumber'</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$type'</td>'>> index_draft.html
-echo '<td class="s'$raw'" align="center">'$Nevents'</td>'>> index_draft.html
+echo '<td class="s'$raw'" align="center">'$nL'</td>'>> index_draft.html
+echo '<td class="s'$raw'" align="center">'$Fill'</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$date'</td>'>> index_draft.html
-echo '<td class="s'$raw'" align="center">'$time'</td>'>> index_draft.html
+echo '<td class="s'$raw'" align="center">'$D'</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center"><a href="'$WebSite'/CMT/GLOBAL_'$runnumber'/LumiList.html">CMT_'$runnumber'</a></td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center"><a href="'$WebSite'/GlobalRMT/GLOBAL_'$runnumber'/MAP.html">RMT_'$runnumber'</a></td>'>> index_draft.html
-echo '<td class="s'$raw'" align="center">0 Tl</td>'>> index_draft.html
-echo '<td class="s'$raw'" align="center">0 TeV</td>'>> index_draft.html
-echo '<td class="s'$raw'" align="center">'$2'</td>'>> index_draft.html
+echo '<td class="s'$raw'" align="center">'$B' Tl</td>'>> index_draft.html
+echo '<td class="s'$raw'" align="center">'$E' GeV</td>'>> index_draft.html
+echo '<td class="s'$raw'" align="center">'$commentariy'</td>'>> index_draft.html
 echo '</tr>'>> index_draft.html
 prev=$i
 
-
+#fi
 done
 
 

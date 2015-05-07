@@ -28,9 +28,10 @@
 <td class="s4" align="center">#</td>
 <td class="s1" align="center">Run Number</td>
 <td class="s1" align="center">Run Type</td>
-<td class="s1" align="center">Num. of events</td>
+<td class="s1" align="center">Num. of LSs</td>
+<td class="s1" align="center">LHC Fill</td>
 <td class="s1" align="center">Run Date</td>
-<td class="s1" align="center">Run Time</td>
+<td class="s1" align="center">Run Duration</td>
 <td class="s1" align="center">Link to CM tool</td>
 <td class="s1" align="center">Link to RM tool</td>
 <td class="s1" align="center">Magnetic Field</td>
