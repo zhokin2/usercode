@@ -6,7 +6,8 @@ setenv MYWORKDIR `pwd`
 #setenv SCRIPTDIR ${SRC}/SHIFTER_VALIDATION/ 
 setenv SRC ${3}
 setenv SCRIPTDIR ${3}
-setenv SCRAM_ARCH slc6_amd64_gcc472
+##setenv SCRAM_ARCH slc6_amd64_gcc472
+setenv SCRAM_ARCH slc6_amd64_gcc491
 
 ### Environment
 cd ${SRC}
@@ -21,8 +22,8 @@ ls * >> &log_${2}.txt
 
 ### Copy output files to EOS
  
-cmsStage log_${2}.txt /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Logs/
-cmsStage Global.root /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Global_${2}.root
+cmsStage -f log_${2}.txt /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Logs/
+cmsStage -f Global.root /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Global_${2}.root
 
 ## rm all unnesecery
 
