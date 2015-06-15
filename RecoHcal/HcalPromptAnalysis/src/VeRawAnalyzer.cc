@@ -119,7 +119,8 @@ public:
   ~VeRawAnalyzer();
   virtual void beginJob();
   virtual void analyze(const edm::Event&, const edm::EventSetup&);
-  virtual void endJob(const edm::EventSetup&) ;
+  //  virtual void endJob(const edm::EventSetup&) ;
+  virtual void endJob() ;
   
 private:
 edm::EDGetTokenT<HcalCalibDigiCollection> tok_calib_;
@@ -7210,7 +7211,8 @@ int VeRawAnalyzer::getRBX(int& kdet, int& keta, int& kphi){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ------------ other methods -----------------------------
-void VeRawAnalyzer::endJob(const edm::EventSetup& iSetup){   
+void VeRawAnalyzer::endJob(){   
+  //void VeRawAnalyzer::endJob(const edm::EventSetup& iSetup){   
   
   cout  <<  " --------------------------------------- "  <<  endl;
   cout<<" for Run = "<<run0<<" with runcounter = "<< runcounter <<" #ev = "<<eventcounter<<endl;
@@ -8410,7 +8412,7 @@ void VeRawAnalyzer::endJob(const edm::EventSetup& iSetup){
   ///////////////////////
   
   
-
+  /*
  if (MAPcreation>0) {
     std::cout << "===== Start writing Channel MAP =====" << std::endl;    
     MAPfile.open(MAPOutputFileName);
@@ -8715,7 +8717,7 @@ void VeRawAnalyzer::endJob(const edm::EventSetup& iSetup){
     std::cout << "===== Finish writing Channel MAP =====" << std::endl;  
   }
   
-
+  */
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
