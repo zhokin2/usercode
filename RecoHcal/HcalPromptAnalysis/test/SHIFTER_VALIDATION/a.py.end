@@ -363,7 +363,7 @@ process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
     file = cms.untracked.string('')
 )
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'GR_P_V50', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, 'GR_P_V54', '')
 
 #process.hcalDigis.InputLabel = "hltFEDSelector"
 
