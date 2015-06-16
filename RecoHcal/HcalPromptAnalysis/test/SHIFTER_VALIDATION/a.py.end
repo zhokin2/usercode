@@ -1,18 +1,6 @@
-    ),
-    secondaryFileNames = cms.untracked.vstring()
+   )
 )
 
-process.options = cms.untracked.PSet(
-#        SkipEvent = cms.untracked.vstring('ProductNotFound')
-)
-
-# Production Info
-process.configurationMetadata = cms.untracked.PSet(
-    annotation = cms.untracked.string('Reconstruction.py nevts:10'),
-    name = cms.untracked.string('Applications'),
-    version = cms.untracked.string('$Revision: 1.19 $')
-)
-###########################################################################################################3
 process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #
                                   Verbosity = cms.untracked.int32(0),
@@ -362,19 +350,17 @@ process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
     dump = cms.untracked.vstring(''),
     file = cms.untracked.string('')
 )
-from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'GR_P_V54', '')
+process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
+process.hcalDigis.FilterDataQuality = cms.bool(False)
+##process.hcalDigis.InputLabel = "hltFEDSelector"
+process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+process.GlobalTag.globaltag = 'GR_P_V41::All'
+process.es_prefer_GlobalTag = cms.ESPrefer('PoolDBESSource','GlobalTag')
 
-#process.hcalDigis.InputLabel = "hltFEDSelector"
-
-# Path and EndPath definitions
-process.raw2digi_step = cms.Path(process.RawToDigi)
 process.ana = cms.Path(process.Analyzer)
 process.hcalDigis_step = cms.Path(process.hcalDigis)
-process.hcalDigis.FilterDataQuality = cms.bool(False)
-
-# Schedule definition
 process.schedule = cms.Schedule(process.hcalDigis_step,process.ana)
+#process.p = cms.Path(process.hcalDigis*process.Analyzer)
 
 process.MessageLogger = cms.Service("MessageLogger",
      categories   = cms.untracked.vstring(''),
@@ -382,6 +368,7 @@ process.MessageLogger = cms.Service("MessageLogger",
      debugModules = cms.untracked.vstring('*'),
      cout = cms.untracked.PSet(
          threshold = cms.untracked.string('WARNING'),
-	 WARNING = cms.untracked.PSet(limit = cms.untracked.int32(0))
+         WARNING = cms.untracked.PSet(limit = cms.untracked.int32(0))
      )
  )
+
