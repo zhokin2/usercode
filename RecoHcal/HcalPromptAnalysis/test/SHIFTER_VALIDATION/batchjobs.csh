@@ -18,15 +18,16 @@ cd ${MYWORKDIR}
 cp ${SRC}/PYTHON_${1}/Reco_${2}_cfg.py .
 ### Run CMSSW
 cmsRun Reco_${2}_cfg.py > &log_${2}
-ls * >> &log_${2}.txt
+ls -l * >> &log_${2}
 
 ### Copy output files to EOS
  
-cmsStage -f log_${2}.txt /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Logs/
+cmsStage -f log_${2} /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Logs/
+cmsStage -f LogEleMapdb.h /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/MAP/LogEleMapdb_${2}.h
+cp log_${2} /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_7_4_5_STABLE/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION
 cmsStage -f Global.root /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Global_${2}.root
 
 ## rm all unnesecery
-
-rm log_${2}.txt 
+#rm log_${2} 
 rm Global.root
 
