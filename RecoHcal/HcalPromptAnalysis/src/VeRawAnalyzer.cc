@@ -21,6 +21,7 @@ Implementation:
 #include <iosfwd>
 #include <bitset>
 #include <memory>
+
 //#include "TFile.h"
 //#include "TH1F.h"
 //#include "TH2F.h"
@@ -119,8 +120,9 @@ public:
   ~VeRawAnalyzer();
   virtual void beginJob();
   virtual void analyze(const edm::Event&, const edm::EventSetup&);
-  //  virtual void endJob(const edm::EventSetup&) ;
   virtual void endJob() ;
+  virtual void beginRun( const edm::Run& r, const edm::EventSetup& iSetup);
+  virtual void endRun( const edm::Run& r, const edm::EventSetup& iSetup);
   
 private:
 edm::EDGetTokenT<HcalCalibDigiCollection> tok_calib_;
@@ -1963,6 +1965,8 @@ VeRawAnalyzer::~VeRawAnalyzer()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ------------ method called to for each event  ------------
 void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup){
+
+//    std::cout<<" Start analyze "<<std::endl;
 
   if(verbosity > 0) std::cout<<" Start analyze "<<std::endl;    
 
@@ -7211,8 +7215,323 @@ int VeRawAnalyzer::getRBX(int& kdet, int& keta, int& kphi){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ------------ other methods -----------------------------
+void VeRawAnalyzer::beginRun( const edm::Run& r, const edm::EventSetup& iSetup)
+{
+
+}
+
+
+void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
+{
+ 
+ if (MAPcreation>0) {
+    std::cout << "===== Start writing Channel MAP =====" << std::endl;    
+    MAPfile.open(MAPOutputFileName);
+
+    edm::ESHandle<HcalTopology> topo;
+    iSetup.get<IdealGeometryRecord>().get(topo);
+
+    HcalLogicalMapGenerator gen;
+    HcalLogicalMap lmap=gen.createMap(&(*topo)); 
+  
+    HcalElectronicsMap emap=lmap.generateHcalElectronicsMap();
+    std::string subdet =""; 
+                     
+ 
+//    MAPfile << "#ifndef LogEleMapdb_h" << std::endl;
+    MAPfile << "#define LogEleMapdb_h" << std::endl;
+    MAPfile << "#include <algorithm>" << std::endl;
+    MAPfile << "#include <iostream>" << std::endl;
+    MAPfile << "#include <vector>" << std::endl;
+    MAPfile << "#include <string>" << std::endl;
+    MAPfile << "#include <sstream>" << std::endl;
+
+    MAPfile <<  std::endl;
+    
+    MAPfile << "struct Cell {" << std::endl;
+    MAPfile << " std::string subdet;" << std::endl;    
+    MAPfile << " int Eta;" << std::endl;             
+    MAPfile << " int Phi;" << std::endl;           
+    MAPfile << " int Depth;" << std::endl;           
+    MAPfile << " std::string RBX;" << std::endl;
+    MAPfile << " int RM;" << std::endl;             
+    MAPfile << " int Pixel;" << std::endl;
+    MAPfile << " int RMfiber;" << std::endl;
+    MAPfile << " int FiberCh;" << std::endl;
+    MAPfile << " int QIE;" << std::endl;
+    MAPfile << " int ADC;" << std::endl;
+    MAPfile << " int VMECardID;" << std::endl;
+    MAPfile << " int dccID;" << std::endl;
+    MAPfile << " int Spigot;" << std::endl;
+    MAPfile << " int FiberIndex;" << std::endl;
+    MAPfile << " int HtrSlot;" << std::endl;
+    MAPfile << " int HtrTB;" << std::endl;
+    MAPfile <<  std::endl;
+    
+    MAPfile << "// the function check, if \"par\" == \"val\" for this cell" << std::endl;
+    MAPfile << " bool check(const std::string par, const int val) const " << std::endl;
+    MAPfile << " {" << std::endl;
+    MAPfile << "       if (par == \"Eta\")    return (val == Eta);" << std::endl;
+    MAPfile << "  else if (par == \"Phi\")     return (val == Phi);" << std::endl;
+    MAPfile << "  else if (par == \"Depth\")      return (val == Depth);" << std::endl;
+    MAPfile << "  else if (par == \"RM\")     return (val == RM);" << std::endl;
+    MAPfile << "  else if (par == \"Pixel\") return (val == Pixel);" << std::endl;
+    MAPfile << "  else if (par == \"RMfiber\")    return (val == RMfiber);" << std::endl;
+    MAPfile << "  else if (par == \"FiberCh\")    return (val == FiberCh);" << std::endl;
+    MAPfile << "  else if (par == \"QIE\")     return (val == QIE);" << std::endl;
+    MAPfile << "  else if (par == \"ADC\")     return (val == ADC);" << std::endl;
+    MAPfile << "  else if (par == \"VMECardID\")     return (val == VMECardID);" << std::endl;
+    MAPfile << "  else if (par == \"dccID\")     return (val == dccID);" << std::endl;
+    MAPfile << "  else if (par == \"Spigot\")     return (val == Spigot);" << std::endl;
+    MAPfile << "  else if (par == \"FiberIndex\")     return (val == FiberIndex);" << std::endl;
+    MAPfile << "  else if (par == \"HtrSlot\")     return (val == HtrSlot);" << std::endl;
+    MAPfile << "  else if (par == \"HtrTB\")     return (val == HtrTB);" << std::endl;
+    MAPfile << "  else return false;" << std::endl;
+    MAPfile << " }" << std::endl;
+    MAPfile <<  std::endl;
+    
+    MAPfile << " bool check(const std::string par, const std::string val) const" << std::endl;
+    MAPfile << " {" << std::endl;
+    MAPfile << "       if (par == \"subdet\")    return (val == subdet);" << std::endl;
+    MAPfile << "  else if (par == \"RBX\")    return (val == RBX);" << std::endl;
+    MAPfile << "  else return false;" << std::endl;
+    MAPfile << " }" << std::endl;
+
+    MAPfile << "};" << std::endl;
+    MAPfile <<  std::endl;  
+   
+    MAPfile << "const Cell AllCells[] = {" << std::endl; 
+    MAPfile << "//{ SD, Eta, Phi, Depth,     RBX, RM, PIXEL, RMfiber, Fiber Ch., QIE, ADC, VMECrateId, dccid, spigot, fiberIndex, htrSlot, htrTopBottom }" << std::endl;     
+    
+//HB
+        for (int eta= -16;eta<0;eta++) {
+          for (int phi=1;phi<=72;phi++) {
+	     for (int depth=1;depth<=2;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalBarrel,eta,phi,depth); subdet="HB";
+	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+	        HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;		
+		delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta    
+        for (int eta= 1;eta<=16;eta++) {
+          for (int phi=1;phi<=72;phi++) {
+	     for (int depth=1;depth<=2;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalBarrel,eta,phi,depth); subdet="HB";
+	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+	        HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()-1<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;		
+		delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta 
+       
+//HE     	      
+      for (int eta= -20;eta<=-20;eta++) {
+          for (int phi=72;phi<=72;phi++) {
+	     for (int depth=1;depth<=2;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalEndcap,eta,phi,depth); subdet="HE";
+	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+	        HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;		
+		delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta
+
+      for (int eta= -19;eta<=-16;eta++) {
+          for (int phi=72;phi<=72;phi++) {
+	     for (int depth=1;depth<=3;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalEndcap,eta,phi,depth); subdet="HE";
+	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+	        HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;		
+		delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta
+      for (int eta= -29;eta<=-16;eta++) {
+          for (int phi=1;phi<=71;phi++) {
+	     for (int depth=1;depth<=3;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalEndcap,eta,phi,depth); subdet="HE";
+	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+	        HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;		
+		delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta
+        for (int eta= 16;eta<=29;eta++) {
+          for (int phi=1;phi<=72;phi++) {
+	     for (int depth=1;depth<=3;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalEndcap,eta,phi,depth); subdet="HE";
+	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+	        HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;		
+		delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta
+//HF
+ 
+        for (int eta= -41;eta<=-29;eta++) {
+          for (int phi=1;phi<=72;phi+=2) {
+	     for (int depth=1;depth<=2;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalForward,eta,phi,depth); subdet="HF";
+	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+	        HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;		
+		delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta
+        for (int eta= 29;eta<=41 ;eta++) {
+          for (int phi=1;phi<=72;phi+=2) {
+	     for (int depth=1;depth<=2;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalForward,eta,phi,depth); subdet="HF";
+	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+	        HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;		
+		delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta
+
+//HO
+        for (int eta= -15;eta<0;eta++) {
+          for (int phi=1;phi<=72;phi++) {
+	     for (int depth=4;depth<=4;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalOuter,eta,phi,depth); subdet="HO";
+	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+	        HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;		
+		delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta
+        for (int eta= 1;eta<=15;eta++) {
+          for (int phi=1;phi<=72;phi++) {
+	     for (int depth=4;depth<=4;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalOuter,eta,phi,depth); subdet="HO";
+	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+	        HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()-1<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;		
+		delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta
+
+    MAPfile << "};" << std::endl;
+    MAPfile <<  std::endl;
+    
+    MAPfile << "// macro for array length calculation" << std::endl; 
+    MAPfile << "#define DIM(a) (sizeof(a)/sizeof(a[0]))" << std::endl; 
+    MAPfile <<  std::endl;  
+  
+    MAPfile << "// class for cells array managing" << std::endl; 
+    MAPfile << "class CellDB {" << std::endl; 
+    MAPfile << "public:" << std::endl; 
+    MAPfile << "  CellDB()" << std::endl; 
+    MAPfile << "  : cells(AllCells,  AllCells + DIM(AllCells))" << std::endl; 
+    MAPfile << "{}" << std::endl; 
+    MAPfile <<  std::endl;  
+  
+    MAPfile << "// return i-th cell" << std::endl;
+    MAPfile << "Cell operator [] (int i) const {return cells[i];}" << std::endl;
+     
+    MAPfile << "// number of cells in database" << std::endl; 
+    MAPfile << "int size() const {return cells.size();}" << std::endl;
+    MAPfile <<  std::endl; 
+  
+    MAPfile << "// select cells for which \"par\" == \"val\"" << std::endl; 
+    MAPfile << "template<typename T>" << std::endl; 
+    MAPfile << "CellDB find(const std::string par, const T val) const" << std::endl; 
+    MAPfile << "{" << std::endl; 
+    MAPfile << "  std::vector<Cell> s;" << std::endl; 
+    MAPfile << "  for (size_t i = 0; i < cells.size(); ++i)" << std::endl; 
+    MAPfile << "    if (cells[i].check(par, val))" << std::endl; 
+    MAPfile << "    s.push_back(cells[i]);" << std::endl; 
+    MAPfile << "  return CellDB(s);" << std::endl; 
+    MAPfile << "} " << std::endl; 
+    MAPfile <<  std::endl; 
+
+    MAPfile << "private:" << std::endl; 
+    MAPfile << " CellDB( const std::vector<Cell> s)" << std::endl; 
+    MAPfile << " : cells(s)" << std::endl; 
+    MAPfile << "{}" << std::endl; 
+    MAPfile << "std::vector<Cell> cells;" << std::endl; 
+    MAPfile << "};" << std::endl;
+
+       
+    MAPfile.close(); 
+    std::cout << "===== Finish writing Channel MAP =====" << std::endl;  
+  }
+  
+
+}
+
 void VeRawAnalyzer::endJob(){   
-  //void VeRawAnalyzer::endJob(const edm::EventSetup& iSetup){   
   
   cout  <<  " --------------------------------------- "  <<  endl;
   cout<<" for Run = "<<run0<<" with runcounter = "<< runcounter <<" #ev = "<<eventcounter<<endl;
@@ -8411,313 +8730,6 @@ void VeRawAnalyzer::endJob(){
   std::cout << "===== Finish writing user histograms and ntuple =====" << std::endl;
   ///////////////////////
   
-  
-  /*
- if (MAPcreation>0) {
-    std::cout << "===== Start writing Channel MAP =====" << std::endl;    
-    MAPfile.open(MAPOutputFileName);
-
-    edm::ESHandle<HcalTopology> topo;
-    iSetup.get<IdealGeometryRecord>().get(topo);
-
-    HcalLogicalMapGenerator gen;
-    HcalLogicalMap lmap=gen.createMap(&(*topo)); 
-  
-    HcalElectronicsMap emap=lmap.generateHcalElectronicsMap();
-    std::string subdet =""; 
-                     
- 
-//    MAPfile << "#ifndef LogEleMapdb_h" << std::endl;
-    MAPfile << "#define LogEleMapdb_h" << std::endl;
-    MAPfile << "#include <algorithm>" << std::endl;
-    MAPfile << "#include <iostream>" << std::endl;
-    MAPfile << "#include <vector>" << std::endl;
-    MAPfile << "#include <string>" << std::endl;
-    MAPfile << "#include <sstream>" << std::endl;
-
-    MAPfile <<  std::endl;
-    
-    MAPfile << "struct Cell {" << std::endl;
-    MAPfile << " std::string subdet;" << std::endl;    
-    MAPfile << " int Eta;" << std::endl;             
-    MAPfile << " int Phi;" << std::endl;           
-    MAPfile << " int Depth;" << std::endl;           
-    MAPfile << " std::string RBX;" << std::endl;
-    MAPfile << " int RM;" << std::endl;             
-    MAPfile << " int Pixel;" << std::endl;
-    MAPfile << " int RMfiber;" << std::endl;
-    MAPfile << " int FiberCh;" << std::endl;
-    MAPfile << " int QIE;" << std::endl;
-    MAPfile << " int ADC;" << std::endl;
-    MAPfile << " int VMECardID;" << std::endl;
-    MAPfile << " int dccID;" << std::endl;
-    MAPfile << " int Spigot;" << std::endl;
-    MAPfile << " int FiberIndex;" << std::endl;
-    MAPfile << " int HtrSlot;" << std::endl;
-    MAPfile << " int HtrTB;" << std::endl;
-    MAPfile <<  std::endl;
-    
-    MAPfile << "// the function check, if \"par\" == \"val\" for this cell" << std::endl;
-    MAPfile << " bool check(const std::string par, const int val) const " << std::endl;
-    MAPfile << " {" << std::endl;
-    MAPfile << "       if (par == \"Eta\")    return (val == Eta);" << std::endl;
-    MAPfile << "  else if (par == \"Phi\")     return (val == Phi);" << std::endl;
-    MAPfile << "  else if (par == \"Depth\")      return (val == Depth);" << std::endl;
-    MAPfile << "  else if (par == \"RM\")     return (val == RM);" << std::endl;
-    MAPfile << "  else if (par == \"Pixel\") return (val == Pixel);" << std::endl;
-    MAPfile << "  else if (par == \"RMfiber\")    return (val == RMfiber);" << std::endl;
-    MAPfile << "  else if (par == \"FiberCh\")    return (val == FiberCh);" << std::endl;
-    MAPfile << "  else if (par == \"QIE\")     return (val == QIE);" << std::endl;
-    MAPfile << "  else if (par == \"ADC\")     return (val == ADC);" << std::endl;
-    MAPfile << "  else if (par == \"VMECardID\")     return (val == VMECardID);" << std::endl;
-    MAPfile << "  else if (par == \"dccID\")     return (val == dccID);" << std::endl;
-    MAPfile << "  else if (par == \"Spigot\")     return (val == Spigot);" << std::endl;
-    MAPfile << "  else if (par == \"FiberIndex\")     return (val == FiberIndex);" << std::endl;
-    MAPfile << "  else if (par == \"HtrSlot\")     return (val == HtrSlot);" << std::endl;
-    MAPfile << "  else if (par == \"HtrTB\")     return (val == HtrTB);" << std::endl;
-    MAPfile << "  else return false;" << std::endl;
-    MAPfile << " }" << std::endl;
-    MAPfile <<  std::endl;
-    
-    MAPfile << " bool check(const std::string par, const std::string val) const" << std::endl;
-    MAPfile << " {" << std::endl;
-    MAPfile << "       if (par == \"subdet\")    return (val == subdet);" << std::endl;
-    MAPfile << "  else if (par == \"RBX\")    return (val == RBX);" << std::endl;
-    MAPfile << "  else return false;" << std::endl;
-    MAPfile << " }" << std::endl;
-
-    MAPfile << "};" << std::endl;
-    MAPfile <<  std::endl;  
-   
-    MAPfile << "const Cell AllCells[] = {" << std::endl; 
-    MAPfile << "//{ SD, Eta, Phi, Depth,     RBX, RM, PIXEL, RMfiber, Fiber Ch., QIE, ADC, VMECrateId, dccid, spigot, fiberIndex, htrSlot, htrTopBottom }" << std::endl;     
-    
-//HB
-        for (int eta= -16;eta<0;eta++) {
-          for (int phi=1;phi<=72;phi++) {
-	     for (int depth=1;depth<=2;depth++) {
-                HcalDetId *detid=0;
-                detid=new HcalDetId(HcalBarrel,eta,phi,depth); subdet="HB";
-	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-	        HcalElectronicsId emap_entry=emap.lookup(*detid);
-                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
-                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
-                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
-                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
-                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
-                MAPfile << "}," << std::endl;		
-		delete detid;
-             }  //Depth
-          }  //Phi
-       }  //Eta    
-        for (int eta= 1;eta<=16;eta++) {
-          for (int phi=1;phi<=72;phi++) {
-	     for (int depth=1;depth<=2;depth++) {
-                HcalDetId *detid=0;
-                detid=new HcalDetId(HcalBarrel,eta,phi,depth); subdet="HB";
-	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-	        HcalElectronicsId emap_entry=emap.lookup(*detid);
-                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()-1<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
-                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
-                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
-                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
-                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
-                MAPfile << "}," << std::endl;		
-		delete detid;
-             }  //Depth
-          }  //Phi
-       }  //Eta 
-       
-//HE     	      
-      for (int eta= -20;eta<=-20;eta++) {
-          for (int phi=72;phi<=72;phi++) {
-	     for (int depth=1;depth<=2;depth++) {
-                HcalDetId *detid=0;
-                detid=new HcalDetId(HcalEndcap,eta,phi,depth); subdet="HE";
-	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-	        HcalElectronicsId emap_entry=emap.lookup(*detid);
-                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
-                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
-                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
-                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
-                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
-                MAPfile << "}," << std::endl;		
-		delete detid;
-             }  //Depth
-          }  //Phi
-       }  //Eta
-
-      for (int eta= -19;eta<=-16;eta++) {
-          for (int phi=72;phi<=72;phi++) {
-	     for (int depth=1;depth<=3;depth++) {
-                HcalDetId *detid=0;
-                detid=new HcalDetId(HcalEndcap,eta,phi,depth); subdet="HE";
-	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-	        HcalElectronicsId emap_entry=emap.lookup(*detid);
-                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
-                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
-                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
-                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
-                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
-                MAPfile << "}," << std::endl;		
-		delete detid;
-             }  //Depth
-          }  //Phi
-       }  //Eta
-      for (int eta= -29;eta<=-16;eta++) {
-          for (int phi=1;phi<=71;phi++) {
-	     for (int depth=1;depth<=3;depth++) {
-                HcalDetId *detid=0;
-                detid=new HcalDetId(HcalEndcap,eta,phi,depth); subdet="HE";
-	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-	        HcalElectronicsId emap_entry=emap.lookup(*detid);
-                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
-                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
-                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
-                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
-                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
-                MAPfile << "}," << std::endl;		
-		delete detid;
-             }  //Depth
-          }  //Phi
-       }  //Eta
-        for (int eta= 16;eta<=29;eta++) {
-          for (int phi=1;phi<=72;phi++) {
-	     for (int depth=1;depth<=3;depth++) {
-                HcalDetId *detid=0;
-                detid=new HcalDetId(HcalEndcap,eta,phi,depth); subdet="HE";
-	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-	        HcalElectronicsId emap_entry=emap.lookup(*detid);
-                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
-                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
-                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
-                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
-                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
-                MAPfile << "}," << std::endl;		
-		delete detid;
-             }  //Depth
-          }  //Phi
-       }  //Eta
-//HF
- 
-        for (int eta= -41;eta<=-29;eta++) {
-          for (int phi=1;phi<=72;phi+=2) {
-	     for (int depth=1;depth<=2;depth++) {
-                HcalDetId *detid=0;
-                detid=new HcalDetId(HcalForward,eta,phi,depth); subdet="HF";
-	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-	        HcalElectronicsId emap_entry=emap.lookup(*detid);
-                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
-                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
-                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
-                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
-                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
-                MAPfile << "}," << std::endl;		
-		delete detid;
-             }  //Depth
-          }  //Phi
-       }  //Eta
-        for (int eta= 29;eta<=41 ;eta++) {
-          for (int phi=1;phi<=72;phi+=2) {
-	     for (int depth=1;depth<=2;depth++) {
-                HcalDetId *detid=0;
-                detid=new HcalDetId(HcalForward,eta,phi,depth); subdet="HF";
-	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-	        HcalElectronicsId emap_entry=emap.lookup(*detid);
-                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
-                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
-                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
-                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
-                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
-                MAPfile << "}," << std::endl;		
-		delete detid;
-             }  //Depth
-          }  //Phi
-       }  //Eta
-
-//HO
-        for (int eta= -15;eta<0;eta++) {
-          for (int phi=1;phi<=72;phi++) {
-	     for (int depth=4;depth<=4;depth++) {
-                HcalDetId *detid=0;
-                detid=new HcalDetId(HcalOuter,eta,phi,depth); subdet="HO";
-	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-	        HcalElectronicsId emap_entry=emap.lookup(*detid);
-                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
-                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
-                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
-                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
-                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
-                MAPfile << "}," << std::endl;		
-		delete detid;
-             }  //Depth
-          }  //Phi
-       }  //Eta
-        for (int eta= 1;eta<=15;eta++) {
-          for (int phi=1;phi<=72;phi++) {
-	     for (int depth=4;depth<=4;depth++) {
-                HcalDetId *detid=0;
-                detid=new HcalDetId(HcalOuter,eta,phi,depth); subdet="HO";
-	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-	        HcalElectronicsId emap_entry=emap.lookup(*detid);
-                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()-1<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
-                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
-                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
-                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
-                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
-                MAPfile << "}," << std::endl;		
-		delete detid;
-             }  //Depth
-          }  //Phi
-       }  //Eta
-
-    MAPfile << "};" << std::endl;
-    MAPfile <<  std::endl;
-    
-    MAPfile << "// macro for array length calculation" << std::endl; 
-    MAPfile << "#define DIM(a) (sizeof(a)/sizeof(a[0]))" << std::endl; 
-    MAPfile <<  std::endl;  
-  
-    MAPfile << "// class for cells array managing" << std::endl; 
-    MAPfile << "class CellDB {" << std::endl; 
-    MAPfile << "public:" << std::endl; 
-    MAPfile << "  CellDB()" << std::endl; 
-    MAPfile << "  : cells(AllCells,  AllCells + DIM(AllCells))" << std::endl; 
-    MAPfile << "{}" << std::endl; 
-    MAPfile <<  std::endl;  
-  
-    MAPfile << "// return i-th cell" << std::endl;
-    MAPfile << "Cell operator [] (int i) const {return cells[i];}" << std::endl;
-     
-    MAPfile << "// number of cells in database" << std::endl; 
-    MAPfile << "int size() const {return cells.size();}" << std::endl;
-    MAPfile <<  std::endl; 
-  
-    MAPfile << "// select cells for which \"par\" == \"val\"" << std::endl; 
-    MAPfile << "template<typename T>" << std::endl; 
-    MAPfile << "CellDB find(const std::string par, const T val) const" << std::endl; 
-    MAPfile << "{" << std::endl; 
-    MAPfile << "  std::vector<Cell> s;" << std::endl; 
-    MAPfile << "  for (size_t i = 0; i < cells.size(); ++i)" << std::endl; 
-    MAPfile << "    if (cells[i].check(par, val))" << std::endl; 
-    MAPfile << "    s.push_back(cells[i]);" << std::endl; 
-    MAPfile << "  return CellDB(s);" << std::endl; 
-    MAPfile << "} " << std::endl; 
-    MAPfile <<  std::endl; 
-
-    MAPfile << "private:" << std::endl; 
-    MAPfile << " CellDB( const std::vector<Cell> s)" << std::endl; 
-    MAPfile << " : cells(s)" << std::endl; 
-    MAPfile << "{}" << std::endl; 
-    MAPfile << "std::vector<Cell> cells;" << std::endl; 
-    MAPfile << "};" << std::endl;
-
-       
-    MAPfile.close(); 
-    std::cout << "===== Finish writing Channel MAP =====" << std::endl;  
-  }
-  
-  */
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
