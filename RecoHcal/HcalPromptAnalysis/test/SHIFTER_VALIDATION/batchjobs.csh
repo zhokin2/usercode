@@ -24,7 +24,7 @@ ls -l * >> &log_${2}
  
 cmsStage -f log_${2} /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Logs/
 cmsStage -f LogEleMapdb.h /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/MAP/LogEleMapdb_${2}.h
-cp log_${2} /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_7_4_5_STABLE/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION
+##cp log_${2} /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_7_4_5_STABLE/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION
 cmsStage -f Global.root /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Global_${2}.root
 
 ## rm all unnesecery
