@@ -887,7 +887,7 @@ int main(int argc, char *argv[])
 		   HistNumBadChanDepth[test][sub][k]->Draw("L");
 		}	
 	      float min_x[] = {0,10000};
-              float min_y[] = {Cut0[test][sub][k],Cut0[test][sub][k]};
+              float min_y[] = {(float)(Cut0[test][sub][k]),(float)(Cut0[test][sub][k])};
               TGraph* MIN = new TGraph(2, min_x, min_y);
               MIN->SetLineStyle(2);
               MIN->SetLineColor(5);
