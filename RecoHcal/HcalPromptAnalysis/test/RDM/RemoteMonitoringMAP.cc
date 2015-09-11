@@ -388,7 +388,7 @@ using namespace std;
           if (test==6) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 9.);
 	  cONE->Modified(); 
           cONE->Update(); 
-	  float min_x[] = {MIN_M[test][sub],MIN_M[test][sub]};
+	  float min_x[] = {(float)MIN_M[test][sub],(float)MIN_M[test][sub]};
           float min_y[] = {0.,100000000.};
           TGraph* MIN = new TGraph(2, min_x, min_y);
           MIN->SetLineStyle(2);
@@ -397,7 +397,7 @@ using namespace std;
           MIN->SetFillStyle(3005);
           MIN->SetFillColor(2);
           MIN->Draw("L"); 
-          float max_x[] = {MAX_M[test][sub],MAX_M[test][sub]};
+          float max_x[] = {(float)MAX_M[test][sub],(float)MAX_M[test][sub]};
           float max_y[] = {0.,100000000.};
           TGraph* MAX = new TGraph(2, max_x, max_y);
           MAX->SetLineStyle(2);
@@ -739,7 +739,7 @@ using namespace std;
           if (test==16) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 9.);
 	  cONE->Modified(); 
           cONE->Update(); 
-	  float min_x[] = {MIN_C[test-10][sub],MIN_C[test-10][sub]};
+	  float min_x[] = {(float)MIN_C[test-10][sub],(float)MIN_C[test-10][sub]};
           float min_y[] = {0.,100000000.};
           TGraph* MIN = new TGraph(2, min_x, min_y);
           MIN->SetLineStyle(2);
@@ -748,7 +748,7 @@ using namespace std;
           MIN->SetFillStyle(3005);
           MIN->SetFillColor(2);
           MIN->Draw("L"); 
-          float max_x[] = {MAX_C[test-10][sub],MAX_C[test-10][sub]};
+          float max_x[] = {(float)MAX_C[test-10][sub],(float)MAX_C[test-10][sub]};
           float max_y[] = {0.,100000000.};
           TGraph* MAX = new TGraph(2, max_x, max_y);
           MAX->SetLineStyle(2);
@@ -986,7 +986,7 @@ using namespace std;
             if (sub==2) {cHE->Modified(); cHE->Update();}
             if (sub==3) {cONE->Modified();cONE->Update();}
             if (sub==4) {cHB->Modified(); cHB->Update();} 
-	    float min_x[] = {-1*porog[sub],-1*porog[sub]};
+	    float min_x[] = {-1*(float)porog[sub],-1*(float)porog[sub]};
             float min_y[] = {0.,100000000.};
             TGraph* MIN = new TGraph(2, min_x, min_y);
             MIN->SetLineStyle(2);
@@ -995,7 +995,7 @@ using namespace std;
             MIN->SetFillStyle(3005);
             MIN->SetFillColor(2);
             MIN->Draw("L"); 
-            float max_x[] = {porog[sub],porog[sub]};
+            float max_x[] = {(float)porog[sub],(float)porog[sub]};
             float max_y[] = {0.,100000000.};
             TGraph* MAX = new TGraph(2, max_x, max_y);
             MAX->SetLineStyle(2);
@@ -1145,7 +1145,7 @@ using namespace std;
 
 	      cPED->Modified(); 
               cPED->Update(); 
-	      float min_x[] = {Pedest[test-31][sub],Pedest[test-31][sub]};
+	      float min_x[] = {(float)Pedest[test-31][sub],(float)Pedest[test-31][sub]};
               float min_y[] = {0.,100000000.};
               TGraph* MIN = new TGraph(2, min_x, min_y);
               MIN->SetLineStyle(2);
@@ -2370,22 +2370,22 @@ using namespace std;
 	if ((ce.size()>=1)&&(Sub[2][i]==sub)) {
            if (Sub[2][i]==1) {
 	      ce = db.find("subdet", "HB").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}
+	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl; continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HB, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}
 	      }
 	   if (Sub[2][i]==2) {
 	      ce = db.find("subdet", "HE").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}
+	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HE, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}	   
 	      }
 	   if (Sub[2][i]==3) {
 	      ce = db.find("subdet", "HO").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}
+	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HO, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}	   
 	      }	   
 	   if (Sub[2][i]==4) {
 	      ce = db.find("subdet", "HF").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}
+	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HF, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}	   
 	      }	
 	   htmlFile << "<tr>"<< std::endl;
@@ -2484,22 +2484,22 @@ using namespace std;
 	if ((ce.size()>=1)&&(Sub[1][i]==sub)) {
            if (Sub[1][i]==1) {
 	      ce = db.find("subdet", "HB").find("Eta", Eta[1][i]).find("Phi", Phi[1][i]).find("Depth", Depth[1][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}
+	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HB, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}
 	      }
 	   if (Sub[1][i]==2) {
 	      ce = db.find("subdet", "HE").find("Eta", Eta[1][i]).find("Phi", Phi[1][i]).find("Depth", Depth[1][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}
+	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HE, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}	   
 	      }
 	   if (Sub[1][i]==3) {
 	      ce = db.find("subdet", "HO").find("Eta", Eta[1][i]).find("Phi", Phi[1][i]).find("Depth", Depth[1][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}
+	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HO, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}	   
 	      }	   
 	   if (Sub[1][i]==4) {
 	      ce = db.find("subdet", "HF").find("Eta", Eta[1][i]).find("Phi", Phi[1][i]).find("Depth", Depth[1][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}
+	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HF, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}	   
 	      }	
            htmlFile << "<td class=\"s4\" align=\"center\">" << ind+1 <<"</td>"<< std::endl;
@@ -2598,22 +2598,22 @@ using namespace std;
 	if ((ce.size()>=1)&&(Sub[3][i]==sub)) {
            if (Sub[3][i]==1) {
 	      ce = db.find("subdet", "HB").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}
+	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HB, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}
 	      }
 	   if (Sub[3][i]==2) {
 	      ce = db.find("subdet", "HE").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}
+	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HE, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}	   
 	      }
 	   if (Sub[3][i]==3) {
 	      ce = db.find("subdet", "HO").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}
+	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HO, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}	   
 	      }	   
 	   if (Sub[3][i]==4) {
 	      ce = db.find("subdet", "HF").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}
+	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HF, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}	   
 	      }	
            htmlFile << "<td class=\"s4\" align=\"center\">" << ind+1 <<"</td>"<< std::endl;
@@ -2704,11 +2704,13 @@ using namespace std;
      htmlFile << "</body> " << std::endl;
      htmlFile << "</html> " << std::endl; 
      htmlFile.close();
-
+     std::cout<<" ==== End to create HELP.html "<<std::endl;
 //======================================================================
 
 //======================================================================
-// Creating main html file:   
+// Creating main html file:
+     std::cout<<" ==== Start to create MAP.html "<<std::endl;
+   
      htmlFile.open("MAP.html");  
      htmlFile << "</html><html xmlns=\"http://www.w3.org/1999/xhtml\">"<< std::endl;
      htmlFile << "<head>"<< std::endl;
@@ -2717,7 +2719,8 @@ using namespace std;
      htmlFile << "<style type=\"text/css\">"<< std::endl;
      htmlFile << " body,td{ background-color: #FFFFCC; font-family: arial, arial ce, helvetica; font-size: 12px; }"<< std::endl;
      htmlFile << "   td.s0 { font-family: arial, arial ce, helvetica; }"<< std::endl;
-     htmlFile << "   td.s1 { font-family: arial, arial ce, helvetica; font-weight: bold; background-color: #FFC169; text-align: center;}"<< std::endl;
+     htmlFile << "   td.s1 { font-family: arial, arial ce, helvetica; font-weight: bold; background-color: #FFC169; text-align: center;}"
+                                           << std::endl;
      htmlFile << "   td.s2 { font-family: arial, arial ce, helvetica; background-color: #eeeeee; }"<< std::endl;
      htmlFile << "   td.s3 { font-family: arial, arial ce, helvetica; background-color: #d0d0d0; }"<< std::endl;
      htmlFile << "   td.s4 { font-family: arial, arial ce, helvetica; background-color: #FFC169; }"<< std::endl;
@@ -2964,6 +2967,8 @@ using namespace std;
      htmlFile << "</body> " << std::endl;
      htmlFile << "</html> " << std::endl; 
      htmlFile.close();  
+     std::cout<<" ==== MAP.html closed "<<std::endl;
+
 //======================================================================
      
 //======================================================================
