@@ -47,8 +47,8 @@ int main(int argc, char *argv[])
     
     TFile *hfile= new TFile( fname, "READ");
     // Cut [test][sub][depth]
-    double Cut0[7][5][5]={{{0.,0.,0.,0.,0.}, {0.,2.,1.0,0.,0.},{0.,2.,2.,1.,0.},{0.,0.,0.,0.,3.},{0.,2.,2.,0.,0.}},  //CapID
-                          {{0.,0.,0.,0.,0.},   {0.,7.,8.,0.,0.}, {0.,7.,9.,8.,0.},{0.,0.,0.,0.,7.},{0.,4.,15.,0.,0.}},  //Amplitude   
+    double Cut0[7][5][5]={{{0.,0.,0.,0.,0.}, {0.,1.,1.0,0.,0.},{0.,1.,1.,1.,0.},{0.,0.,0.,0.,1.},{0.,1.,1.,0.,0.}},  //CapID
+                          {{0.,0.,0.,0.,0.},   {0.,7.,8.,0.,0.}, {0.,1.6,1.6,1.6,0.},{0.,0.,0.,0.,7.},{0.,15.,15.,0.,0.}},  //Amplitude   
 			  {{0.,0.,0.,0.,0.},   {0.,3.,3.,0.,0.},    {0.,3.,3.,3.,0.},{0.,0.,0.,0.,3.},{0.,2.,2.,0.,0.}}, //Width
 			  {{0.,0.,0.,0.,0.}, {0.,0.4,0.4,0.,0.}, {0.,0.4,0.4,0.4,0.},{0.,0.,0.,0.,0.4},{0.,0.8,0.8,0.,0.}}, //Ratio
 			  {{0.,0.,0.,0.,0.}, {0.,4.7,4.7,0.,0.}, {0.,4.8,4.8,5.0,0.},{0.,0.,0.,0.,4.8},{0.,4.0,4.0,0.,0.}}, //TSn
@@ -201,7 +201,9 @@ int main(int argc, char *argv[])
       H_NumBadChanDepth[5][3][4] = (TH1F*)hfile->Get("h_sumTSmaxALS6");
       
       H_NumBadChanDepth[5][4][1] = (TH1F*)hfile->Get("h_sumTSmaxALS7");
-      H_NumBadChanDepth[5][4][2] = (TH1F*)hfile->Get("h_sumTSmaxALS8");                     
+      H_NumBadChanDepth[5][4][2] = (TH1F*)hfile->Get("h_sumTSmaxALS8");
+
+    gStyle->SetOptStat(110000);                     
                             
     for (int test=1;test<=5;test++) { //Test: 0, 
         for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
@@ -275,6 +277,7 @@ int main(int argc, char *argv[])
          }// end sub 
      }//end test	          
       
+    gStyle->SetOptStat(0);
 //================================================================================================================================ 
  
  
@@ -499,8 +502,12 @@ int main(int argc, char *argv[])
 	        if (sub==3) cONE->cd(k-3);
 	        if (sub==4) cHB->cd(k);            
 		MapNumBadChanDepth[test][sub][k]->Divide(MapNumBadChanDepth[test][sub][k],MapNumChanDepth[test][sub][k], 1, 1, "B");
-
-//		if (!((k==1)&&(sub==1)))  MapNumBadChanFull[test]->Add(MapNumBadChanDepth[test][sub][k]);
+                for (int x=1;x<=MapNumBadChanFull[test]->GetXaxis()->GetNbins();x++) {
+                   for (int y=1;y<=MapNumBadChanFull[test]->GetYaxis()->GetNbins(); y++) {
+	               double ccc1 =  MapNumBadChanDepth[test][sub][k]->GetBinContent(x,y);
+		       MapNumBadChanFull[test]->SetBinContent(x,y,MapNumBadChanFull[test]->GetBinContent(x,y) + ccc1);
+                   }//end y
+                }//esnd x
   		    
                 if (k == 1) MapNumBadChanDepth[test][sub][k]->SetTitle("Depth 1\b");
 		if (k == 2) MapNumBadChanDepth[test][sub][k]->SetTitle("Depth 2\b");
@@ -866,6 +873,12 @@ int main(int argc, char *argv[])
 //                gPad->SetLogy();      
 
 	        HistNumBadChanDepth[test][sub][k]->Divide(HistNumBadChanDepth[test][sub][k],HistNumChanDepth[test][sub][k], 1, 1, "B");	
+
+                for (int x=1;x<=HistNumBadChanFull[test]->GetXaxis()->GetNbins();x++) {
+	               double ccc1 =  HistNumBadChanDepth[test][sub][k]->GetBinContent(x);
+		       HistNumBadChanFull[test]->SetBinContent(x,HistNumBadChanFull[test]->GetBinContent(x) + ccc1);
+                }//esnd x
+
                 if (k == 1) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 1\b");
 		if (k == 2) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 2\b");
 		if (k == 3) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 3\b");
@@ -1328,8 +1341,8 @@ int main(int argc, char *argv[])
               htmlFile << "<br>"<< std::endl; 
        
        
-       	       if (test ==0) htmlFile << "<h2> 2a.  Number of bad channels per event distribution oin Run</h2>"<< std::endl;
-	       if (test ==0) htmlFile << "<h3> Legends:   </h3>"<< std::endl;
+       	       if (test ==0) htmlFile << "<h2> 2a.  Number of bad channels per event distribution in Run</h2>"<< std::endl;
+	       if (test ==0) htmlFile << "<h3> Legends: dots correspond to BAD LS candidates.  </h3>"<< std::endl;
 	       if (test ==0){
                     if (sub==1) htmlFile << " <img src=\"HistNBadChsHB.png\" />" << std::endl; 
                     if (sub==2) htmlFile << " <img src=\"HistNBadChsHE.png\" />" << std::endl; 
@@ -1337,14 +1350,15 @@ int main(int argc, char *argv[])
                     if (sub==4) htmlFile << " <img src=\"HistNBadChsHF.png\" />" << std::endl;
                }       
 	      
-	      if (test !=0) htmlFile << "<h2> 2. Estimator averaged over all events in the RUN for entries in overflow for corresponding histogram above </h2>"<< std::endl;
+//	      if (test !=0) htmlFile << "<h2> 2. Estimator averaged over all events in the RUN for entries in overflow for corresponding histogram above </h2>"<< std::endl;
+              if (test !=0) htmlFile << "<h2> 2. Estimator averaged over all events in the RUN </h2>"<< std::endl;
 	      if (test ==0) htmlFile << "<h2> 2b. Averaged number of bad channels for each LS </h2>"<< std::endl;
-              if (test !=0) htmlFile << "<h3> Channel legend: white - good, other colour - bad.  </h3>"<< std::endl;
+//              if (test !=0) htmlFile << "<h3> Channel legend: white - good, other colour - bad.  </h3>"<< std::endl;
 	      if (test ==0) {
-                 if (sub==1) htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: <td class=\"s6\" align=\"center\">"<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2).</td></h3>"<< std::endl;
-                 if (sub==2) htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3).</h3>"<< std::endl;
-	         if (sub==3) htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][4]<<" (Depth4)</h3>"<< std::endl;
-                 if (sub==4) htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2).</h3>"<< std::endl;
+                 if (sub==1) htmlFile << "<h3> Legends: dots selected with following cuts: <td class=\"s6\" align=\"center\">"<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2) correspond BAD LS.</td></h3>"<< std::endl;
+                 if (sub==2) htmlFile << "<h3> Legends: dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3) correspond BAD LS.</h3>"<< std::endl;
+	         if (sub==3) htmlFile << "<h3> Legends: dots selected with following cuts: "<<Cut0[test][sub][4]<<" (Depth4) correspond BAD LS.</h3>"<< std::endl;
+                 if (sub==4) htmlFile << "<h3> Legends: dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2) correspond BAD LS.</h3>"<< std::endl;
               }
               if (test==0){
                   if (sub==1) htmlFile << " <img src=\"HistNBCMNHB.png\" />" << std::endl; 
@@ -1394,10 +1408,10 @@ int main(int argc, char *argv[])
                   htmlFile << "<h3> Legend: dots correspond to BAD LS candidates.</h3>"<< std::endl;
               }
               if (test !=0){
-                 if (sub==1) htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: <td class=\"s6\" align=\"center\">"<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2).</td></h3>"<< std::endl;
-                 if (sub==2) htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3).</h3>"<< std::endl;
-	         if (sub==3) htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][4]<<" (Depth4)</h3>"<< std::endl;
-                 if (sub==4) htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2).</h3>"<< std::endl;
+                 if (sub==1) htmlFile << "<h3> Legends:  dots selected with following cuts: <td class=\"s6\" align=\"center\">"<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2) correspond BAD LS.</td></h3>"<< std::endl;
+                 if (sub==2) htmlFile << "<h3> Legends:  dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3) correspond BAD LS. </h3>"<< std::endl;
+	         if (sub==3) htmlFile << "<h3> Legends:  dots selected with following cuts: "<<Cut0[test][sub][4]<<" (Depth4) correspond BAD LS. </h3>"<< std::endl;
+                 if (sub==4) htmlFile << "<h3> Legends:  dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2) correspond BAD LS. </h3>"<< std::endl;
               }
               if (test==0){
                   if (sub==1) htmlFile << " <img src=\"HistPortHB.png\" />" << std::endl; 
@@ -1438,19 +1452,19 @@ int main(int argc, char *argv[])
               htmlFile << "<br>"<< std::endl;            
               if (sub==1) { 
 	          htmlFile << "<h2> 4.Lumisection Status for HB </h2>"<< std::endl;
-	          htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: <td class=\"s6\" align=\"center\">"<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2).</td></h3>"<< std::endl;
+	          htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: <td class=\"s6\" align=\"center\">"<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2). </td></h3>"<< std::endl;
 	      }  
               if (sub==2) {
 	          htmlFile << "<h2> 4.Lumisection Status for HE </h2>"<< std::endl;
-		  htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3).</h3>"<< std::endl;
+		  htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3). </h3>"<< std::endl;
               }
 	      if (sub==3) {
 	         htmlFile << "<h2> 4.Lumisection Status for HO </h2>"<< std::endl;
-		 htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][4]<<" (Depth4)</h3>"<< std::endl;
+		 htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][4]<<" (Depth4). </h3>"<< std::endl;
 	      }
               if (sub==4) {
 	          htmlFile << "<h2> 4.Lumisection Status for HF </h2>"<< std::endl; 
-	          htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2).</h3>"<< std::endl;
+	          htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2). </h3>"<< std::endl;
 	      }	  	      
 	      htmlFile << "<br>"<< std::endl;
               htmlFile << "<table>"<< std::endl;        
