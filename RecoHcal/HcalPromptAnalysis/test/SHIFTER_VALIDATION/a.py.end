@@ -232,8 +232,8 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #=0-CapIdErr, =1-Ratio, =2-Width, =3-TSmax, =4-TSmean, =5-adcAmplitud
                                   flagtodefinebadchannel = cms.int32(0),
                                   #how many bins you want on the plots:better to choice (#LS+1)
-                                  howmanybinsonplots = cms.int32(80),
-                                  #howmanybinsonplots = cms.int32(2600),
+                                  #howmanybinsonplots = cms.int32(80),
+                                  howmanybinsonplots = cms.int32(2600),
                                   #
                                   #
                                   flagabortgaprejected = cms.int32(1),
