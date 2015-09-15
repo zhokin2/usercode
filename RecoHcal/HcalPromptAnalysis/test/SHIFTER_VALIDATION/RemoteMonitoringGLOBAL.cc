@@ -306,7 +306,7 @@ int main(int argc, char *argv[])
       MapNumBadChanDepth[0][4][1] = (TH2F*)hfile->Get("h_mapDepth1Error_HF");
       MapNumBadChanDepth[0][4][2] = (TH2F*)hfile->Get("h_mapDepth2Error_HF");  
      
-      MapNumBadChanFull[0] = (TH2F*)hfile->Get("h_mapDepth1Error_HB");  
+      MapNumBadChanFull[0] = (TH2F*) MapNumBadChanDepth[0][1][1]->Clone();  
       
       
       MapNumChanDepth[0][1][1] = (TH2F*)hfile->Get("h_mapDepth1_HB");     
@@ -321,7 +321,7 @@ int main(int argc, char *argv[])
       MapNumChanDepth[0][4][1] = (TH2F*)hfile->Get("h_mapDepth1_HF");     
       MapNumChanDepth[0][4][2] = (TH2F*)hfile->Get("h_mapDepth2_HF");
       
-      MapNumChanFull[0] = (TH2F*)hfile->Get("h_mapDepth1_HB"); 
+      MapNumChanFull[0] = (TH2F*) MapNumChanDepth[0][1][1]->Clone();
 
       
  //+++++++++++++++++++++++++++++  
@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
       MapNumBadChanDepth[1][4][1] = (TH2F*)hfile->Get("h_2DsumADCAmplLS6");
       MapNumBadChanDepth[1][4][2] = (TH2F*)hfile->Get("h_2DsumADCAmplLS7");  
      
-      MapNumBadChanFull[1] = (TH2F*)hfile->Get("h_2DsumADCAmplLS1");  
+      MapNumBadChanFull[1] = (TH2F*) MapNumBadChanDepth[1][1][1]->Clone();  
       
       
       MapNumChanDepth[1][1][1] = (TH2F*)hfile->Get("h_2D0sumADCAmplLS1");     
@@ -356,7 +356,7 @@ int main(int argc, char *argv[])
       MapNumChanDepth[1][4][1] = (TH2F*)hfile->Get("h_2D0sumADCAmplLS6");     
       MapNumChanDepth[1][4][2] = (TH2F*)hfile->Get("h_2D0sumADCAmplLS7");
       
-      MapNumChanFull[1] = (TH2F*)hfile->Get("h_2D0sumADCAmplLS1"); 
+      MapNumChanFull[1] = (TH2F*) MapNumChanDepth[1][1][1]->Clone();
            
 //+++++++++++++++++++++++++++++  
 // Width  
@@ -374,7 +374,7 @@ int main(int argc, char *argv[])
       MapNumBadChanDepth[2][4][1] = (TH2F*)hfile->Get("h_2DsumAmplitudeLS6");
       MapNumBadChanDepth[2][4][2] = (TH2F*)hfile->Get("h_2DsumAmplitudeLS7");    
       
-      MapNumBadChanFull[2] = (TH2F*)hfile->Get("h_2DsumAmplitudeLS1");
+      MapNumBadChanFull[2] = (TH2F*) MapNumBadChanDepth[2][1][1]->Clone(); 
       
       MapNumChanDepth[2][1][1] = (TH2F*)hfile->Get("h_2D0sumAmplitudeLS1");     
       MapNumChanDepth[2][1][2] = (TH2F*)hfile->Get("h_2D0sumAmplitudeLS2"); 
@@ -388,7 +388,7 @@ int main(int argc, char *argv[])
       MapNumChanDepth[2][4][1] = (TH2F*)hfile->Get("h_2D0sumAmplitudeLS6");     
       MapNumChanDepth[2][4][2] = (TH2F*)hfile->Get("h_2D0sumAmplitudeLS7");
       
-      MapNumChanFull[2] = (TH2F*)hfile->Get("h_2D0sumAmplitudeLS1");
+      MapNumChanFull[2] = (TH2F*) MapNumChanDepth[2][1][1]->Clone();
       
 //+++++++++++++++++++++++++++++  
 // Ratio   
@@ -406,7 +406,7 @@ int main(int argc, char *argv[])
       MapNumBadChanDepth[3][4][1] = (TH2F*)hfile->Get("h_2DsumAmplLS6");
       MapNumBadChanDepth[3][4][2] = (TH2F*)hfile->Get("h_2DsumAmplLS7"); 
       
-      MapNumBadChanFull[3] = (TH2F*)hfile->Get("h_2DsumAmplLS1");   
+      MapNumBadChanFull[3] = (TH2F*) MapNumBadChanDepth[3][1][1]->Clone(); 
       
       
       MapNumChanDepth[3][1][1] = (TH2F*)hfile->Get("h_2D0sumAmplLS1");     
@@ -421,7 +421,7 @@ int main(int argc, char *argv[])
       MapNumChanDepth[3][4][1] = (TH2F*)hfile->Get("h_2D0sumAmplLS6");     
       MapNumChanDepth[3][4][2] = (TH2F*)hfile->Get("h_2D0sumAmplLS7");
       
-      MapNumChanFull[3] = (TH2F*)hfile->Get("h_2D0sumAmplLS1");
+      MapNumChanFull[3] = (TH2F*) MapNumChanDepth[3][1][1]->Clone();
       
 //+++++++++++++++++++++++++++++  
 // Tmean   
@@ -439,7 +439,7 @@ int main(int argc, char *argv[])
       MapNumBadChanDepth[4][4][1] = (TH2F*)hfile->Get("h_2DsumTSmeanALS6");
       MapNumBadChanDepth[4][4][2] = (TH2F*)hfile->Get("h_2DsumTSmeanALS7");
       
-      MapNumBadChanFull[4] = (TH2F*)hfile->Get("h_2DsumTSmeanALS1");    
+      MapNumBadChanFull[4] = (TH2F*) MapNumBadChanDepth[4][1][1]->Clone();  
       
       
       MapNumChanDepth[4][1][1] = (TH2F*)hfile->Get("h_2D0sumTSmeanALS1");     
@@ -454,7 +454,7 @@ int main(int argc, char *argv[])
       MapNumChanDepth[4][4][1] = (TH2F*)hfile->Get("h_2D0sumTSmeanALS6");     
       MapNumChanDepth[4][4][2] = (TH2F*)hfile->Get("h_2D0sumTSmeanALS7");
       
-      MapNumChanFull[4] = (TH2F*)hfile->Get("h_2D0sumTSmeanALS1"); 
+      MapNumChanFull[4] = (TH2F*) MapNumChanDepth[4][1][1]->Clone(); 
       
 //+++++++++++++++++++++++++++++  
 // Tmax   
@@ -472,7 +472,7 @@ int main(int argc, char *argv[])
       MapNumBadChanDepth[5][4][1] = (TH2F*)hfile->Get("h_2DsumTSmaxALS6");
       MapNumBadChanDepth[5][4][2] = (TH2F*)hfile->Get("h_2DsumTSmaxALS7"); 
       
-      MapNumBadChanFull[5] = (TH2F*)hfile->Get("h_2DsumTSmaxALS1");   
+      MapNumBadChanFull[5] = (TH2F*) MapNumBadChanDepth[5][1][1]->Clone();   
            
       MapNumChanDepth[5][1][1] = (TH2F*)hfile->Get("h_2D0sumTSmaxALS1");     
       MapNumChanDepth[5][1][2] = (TH2F*)hfile->Get("h_2D0sumTSmaxALS2"); 
@@ -486,7 +486,7 @@ int main(int argc, char *argv[])
       MapNumChanDepth[5][4][1] = (TH2F*)hfile->Get("h_2D0sumTSmaxALS6");     
       MapNumChanDepth[5][4][2] = (TH2F*)hfile->Get("h_2D0sumTSmaxALS7");
       
-      MapNumChanFull[5] = (TH2F*)hfile->Get("h_2D0sumTSmaxALS1");
+      MapNumChanFull[5] = (TH2F*) MapNumChanDepth[5][1][1]->Clone(); 
                   
       int LSnumber = 0;
       
@@ -611,7 +611,7 @@ int main(int argc, char *argv[])
       HistNumBadChanDepth[0][4][1] = (TH1F*)hfile->Get("h_runnbadchannels_depth1_HF");
       HistNumBadChanDepth[0][4][2] = (TH1F*)hfile->Get("h_runnbadchannels_depth2_HF");    
        
-      HistNumBadChanFull[0] = (TH1F*)hfile->Get("h_runnbadchannels_depth1_HB");
+      HistNumBadChanFull[0] = (TH1F*) HistNumBadChanDepth[0][1][1]->Clone();
       
       HistCutNumBadChanDepth[0][1][1] = (TH1F*)hfile->Get("h_runnbadchannels_depth1_HB");
       HistCutNumBadChanDepth[0][1][2] = (TH1F*)hfile->Get("h_runnbadchannels_depth2_HB");
@@ -655,7 +655,7 @@ int main(int argc, char *argv[])
       HistNumBadChanDepth[1][4][1] = (TH1F*)hfile->Get("h_sumADCAmplperLS6");
       HistNumBadChanDepth[1][4][2] = (TH1F*)hfile->Get("h_sumADCAmplperLS7");
       
-      HistNumBadChanFull[1] = (TH1F*)hfile->Get("h_sumADCAmplperLS1");    
+      HistNumBadChanFull[1] = (TH1F*) HistNumBadChanDepth[1][1][1]->Clone();
       
       HistCutNumBadChanDepth[1][1][1] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS1");
       HistCutNumBadChanDepth[1][1][2] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS2");
@@ -699,7 +699,7 @@ int main(int argc, char *argv[])
       HistNumBadChanDepth[2][4][1] = (TH1F*)hfile->Get("h_sumAmplitudeperLS6");
       HistNumBadChanDepth[2][4][2] = (TH1F*)hfile->Get("h_sumAmplitudeperLS7");    
        
-      HistNumBadChanFull[2] = (TH1F*)hfile->Get("h_sumAmplitudeperLS1");    
+      HistNumBadChanFull[2] = (TH1F*) HistNumBadChanDepth[2][1][1]->Clone();  
       
       HistCutNumBadChanDepth[2][1][1] = (TH1F*)hfile->Get("h_sumCutAmplitudeperLS1");
       HistCutNumBadChanDepth[2][1][2] = (TH1F*)hfile->Get("h_sumCutAmplitudeperLS2");
@@ -742,7 +742,7 @@ int main(int argc, char *argv[])
       HistNumBadChanDepth[3][4][1] = (TH1F*)hfile->Get("h_sumAmplperLS6");
       HistNumBadChanDepth[3][4][2] = (TH1F*)hfile->Get("h_sumAmplperLS7");    
       
-      HistNumBadChanFull[3] = (TH1F*)hfile->Get("h_sumAmplperLS1");
+      HistNumBadChanFull[3] = (TH1F*) HistNumBadChanDepth[3][1][1]->Clone();
       
       HistCutNumBadChanDepth[3][1][1] = (TH1F*)hfile->Get("h_sumCutAmplperLS1");
       HistCutNumBadChanDepth[3][1][2] = (TH1F*)hfile->Get("h_sumCutAmplperLS2");
@@ -785,7 +785,7 @@ int main(int argc, char *argv[])
       HistNumBadChanDepth[4][4][1] = (TH1F*)hfile->Get("h_sumTSmeanAperLS6");
       HistNumBadChanDepth[4][4][2] = (TH1F*)hfile->Get("h_sumTSmeanAperLS7");    
             
-      HistNumBadChanFull[4] = (TH1F*)hfile->Get("h_sumTSmeanAperLS1");
+      HistNumBadChanFull[4] = (TH1F*) HistNumBadChanDepth[4][1][1]->Clone();
       
       HistCutNumBadChanDepth[4][1][1] = (TH1F*)hfile->Get("h_sumCutTSmeanAperLS1");
       HistCutNumBadChanDepth[4][1][2] = (TH1F*)hfile->Get("h_sumCutTSmeanAperLS2");
@@ -828,7 +828,7 @@ int main(int argc, char *argv[])
       HistNumBadChanDepth[5][4][1] = (TH1F*)hfile->Get("h_sumTSmaxAperLS6");
       HistNumBadChanDepth[5][4][2] = (TH1F*)hfile->Get("h_sumTSmaxAperLS7");    
       
-      HistNumBadChanFull[5] = (TH1F*)hfile->Get("h_sumTSmaxAperLS1");
+      HistNumBadChanFull[5] = (TH1F*) HistNumBadChanDepth[5][1][1]->Clone();
       
       HistCutNumBadChanDepth[5][1][1] = (TH1F*)hfile->Get("h_sumCutTSmaxAperLS1");
       HistCutNumBadChanDepth[5][1][2] = (TH1F*)hfile->Get("h_sumCutTSmaxAperLS2");
