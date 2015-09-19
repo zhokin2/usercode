@@ -103,41 +103,22 @@ echo
 echo 'RUN number = '$runnumber
 
 # extract the date of file
-date=`./das_client.py --query="run=${i} | grep run.start_time" | grep 20`
+./das_client.py --query="run=${i} | grep run.beam_e,run.bfield,run.nlumis,run.lhcFill,run.delivered_lumi,run.duration,run.start_time,run.end_time" --limit=0 > tmp
 
-date_end=`./das_client.py --query="run=${i} | grep run.end_time" | grep 20`
-
-./das_client.py --query="run=${i} | grep run.duration"  > tmp
-D=`cat tmp`
-echo ${D} > tmp
-D=`cat tmp | awk  '{print $13}' `
-
-./das_client.py --query="run=${i} | grep run.beam_e"  > tmp
-E=`cat tmp`
-echo ${E} > tmp
-E=`cat tmp | awk  '{print $13}' `
-
-./das_client.py --query="run=${i} | grep run.bfield"  > tmp
-B=`cat tmp`
-echo ${B} > tmp
-B=`cat tmp | awk  '{print $13}' `
-
-./das_client.py --query="run=${i} | grep run.nlumis"  > tmp
-nL=`cat tmp`
-echo ${nL} > tmp
-nL=`cat tmp | awk  '{print $13}' `
-
-./das_client.py --query="run=${i} | grep run.lhcFill" > tmp
-Fill=`cat tmp`
-echo ${Fill} > tmp
-Fill=`cat tmp | awk  '{print $13}' `
-
-./das_client.py --query="run=${i} | grep run.delivered_lumi" > tmp
-dLumi=`cat tmp`
-echo ${dLumi} > tmp
-dLumi=`cat tmp | awk  '{print $13}' `
-
+#cat tmp
+date=`cat tmp | awk '{print $7" "$8}'`
+date_end=`cat tmp | awk '{print $9" "$10}'`
+E=`cat tmp | awk '{print $1}'`
+B=`cat tmp | awk '{print $2}'`
+nL=`cat tmp | awk '{print $3}'`
+Fill=`cat tmp | awk '{print $4}'`
+dLumi=`cat tmp | awk '{print $5}'`
+D=`cat tmp | awk '{print $6}'`
 rm tmp
+
+#cmsLs $HistoDir/Global_$i.root | awk '{print $3" "$4}'
+
+Date_obr=`cmsLs $HistoDir/Global_$i.root | awk '{print $3" "$4}'`
 
 # extract run type, data, time and number of events
 type='Cosmic'
@@ -154,13 +135,15 @@ commentariy=''
 #  done
 
 #echo 'RUN Type = '$type
-echo 'RUN Date = '$date
+echo 'RUN Start Date = '$date
 echo 'RUN Duration = '$D
+echo 'RUN End Date = '$date_end
 echo 'RUN Energy = '$E
 echo 'RUN Magnet field = '$B
 echo 'RUN LS number = '$nL
 echo 'RUN LHC Fill = '$Fill
-echo 'RUN Delivered Luminocity = '$dLumi
+echo 'RUN Delivered Luminosity = '$dLumi
+echo 'RUN Date processing = '$Date_obr
 #echo 'RUN Comment = '$commentariy
 
 
@@ -174,10 +157,13 @@ echo '<td class="s'$raw'" align="center">'$nL'</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$Fill'</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$date'</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$D'</td>'>> index_draft.html
+echo '<td class="s'$raw'" align="center">'$date_end'</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center"><a href="'$WebSite'/CMT/GLOBAL_'$runnumber'/LumiList.html">CMT_'$runnumber'</a></td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center"><a href="'$WebSite'/GlobalRMT/GLOBAL_'$runnumber'/MAP.html">RMT_'$runnumber'</a></td>'>> index_draft.html
-echo '<td class="s'$raw'" align="center">'$B' Tl</td>'>> index_draft.html
+echo '<td class="s'$raw'" align="center">'$B' T</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$E' GeV</td>'>> index_draft.html
+echo '<td class="s'$raw'" align="center">'$dLumi' /nb</td>'>> index_draft.html
+echo '<td class="s'$raw'" align="center">'$Date_obr' /nb</td>'>> index_draft.html
 #echo '<td class="s'$raw'" align="center">'$commentariy'</td>'>> index_draft.html
 echo '</tr>'>> index_draft.html
 prev=$i
