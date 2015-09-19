@@ -29,10 +29,13 @@
 <td class="s1" align="center">Run Number</td>
 <td class="s1" align="center">Num. of LSs</td>
 <td class="s1" align="center">LHC Fill</td>
-<td class="s1" align="center">Run Date</td>
+<td class="s1" align="center">Run Start Date</td>
 <td class="s1" align="center">Run Duration</td>
+<td class="s1" align="center">Run End Date</td>
 <td class="s1" align="center">Link to CM tool</td>
 <td class="s1" align="center">Link to RM tool</td>
 <td class="s1" align="center">Magnetic Field</td>
 <td class="s1" align="center">LHC Energy</td>
+<td class="s1" align="center">Delivered Luminosity</td>
+<td class="s1" align="center">Ran Processing Date</td>
 </tr>
