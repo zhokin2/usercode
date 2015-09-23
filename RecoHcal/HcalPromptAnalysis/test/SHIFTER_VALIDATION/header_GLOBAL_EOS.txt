@@ -36,6 +36,5 @@
 <td class="s1" align="center">Link to RM tool</td>
 <td class="s1" align="center">Magnetic Field</td>
 <td class="s1" align="center">LHC Energy</td>
-<td class="s1" align="center">Delivered Luminosity</td>
 <td class="s1" align="center">Ran Processing Date</td>
 </tr>
