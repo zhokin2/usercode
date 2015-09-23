@@ -3884,7 +3884,7 @@ void VeRawAnalyzer::beginJob()
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // fullAmplitude:
-    h_ADCAmpl_HF = new TH1F("h_ADCAmpl_HF"," ", 100, 0.,1500.);
+    h_ADCAmpl_HF = new TH1F("h_ADCAmpl_HF"," ", 100, 0.,3000.);
     h_mapDepth1ADCAmpl225_HF = new TH2F("h_mapDepth1ADCAmpl225_HF"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth2ADCAmpl225_HF = new TH2F("h_mapDepth2ADCAmpl225_HF"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth1ADCAmpl_HF = new TH2F("h_mapDepth1ADCAmpl_HF"," ", 82, -41., 41., 72, 0., 72.);
@@ -3918,8 +3918,8 @@ void VeRawAnalyzer::beginJob()
     
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // fullAmplitude:
-//    h_ADCAmpl_HO = new TH1F("h_ADCAmpl_HO"," ", 100, 0.,1000.);
-    h_ADCAmpl_HO = new TH1F("h_ADCAmpl_HO"," ", 100, 0.,10000.);
+//    h_ADCAmpl_HO = new TH1F("h_ADCAmpl_HO"," ", 100, 0.,10000.);
+    h_ADCAmpl_HO = new TH1F("h_ADCAmpl_HO"," ", 100, 0.,3000.);
     h_mapDepth4ADCAmpl225_HO = new TH2F("h_mapDepth4ADCAmpl225_HO"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth4ADCAmpl_HO = new TH2F("h_mapDepth4ADCAmpl_HO"," ", 82, -41., 41., 72, 0., 72.);
     h_TSmeanA_HO = new TH1F("h_TSmeanA_HO"," ", 100, 0.,10.);
