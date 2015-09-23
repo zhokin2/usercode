@@ -162,7 +162,7 @@ echo '<td class="s'$raw'" align="center"><a href="'$WebSite'/CMT/GLOBAL_'$runnum
 echo '<td class="s'$raw'" align="center"><a href="'$WebSite'/GlobalRMT/GLOBAL_'$runnumber'/MAP.html">RMT_'$runnumber'</a></td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$B' T</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$E' GeV</td>'>> index_draft.html
-echo '<td class="s'$raw'" align="center">'$dLumi' /nb</td>'>> index_draft.html
+#echo '<td class="s'$raw'" align="center">'$dLumi' /nb</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$Date_obr' /nb</td>'>> index_draft.html
 #echo '<td class="s'$raw'" align="center">'$commentariy'</td>'>> index_draft.html
 echo '</tr>'>> index_draft.html
