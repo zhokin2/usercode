@@ -251,6 +251,15 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   bcnrejectedlow = cms.int32(3446),
                                   bcnrejectedhigh= cms.int32(3564),
                                   #
+                                  # flag cpu time reducing
+                                  #=0-all plots, =1-optimized number of plots
+                                  flagcpuoptimization = cms.int32(1),
+                                  #
+                                  # flag for ask type of Normalization for CMT estimators:
+                                  #=0-normalizationOn#evOfLS;   =1-averageVariable-normalizationOn#entriesInLS;
+                                  flagestimatornormalization = cms.int32(1),
+                                  #
+                                  #
                                   # cuts on Nbadchannels to see LS dependences:
                                   # Verbosity = cms.untracked.int32(-77),
                                   # to select abnormal events,for which Nbcs > this limits
