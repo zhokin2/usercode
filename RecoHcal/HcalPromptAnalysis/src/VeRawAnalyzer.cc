@@ -2015,6 +2015,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 //     (lumi == 89 && bcn == 757 && Nevent == 163)  
 //     ) std::cout  <<  " Run =  "  << Run  <<  " bcn =  "  << bcn  <<  " LS =  "  << lumi  <<  " event =  "  << Nevent  <<  endl;
    if(verbosity > 0 ) std::cout  <<  " Run =  "  << Run  <<  " bcn =  "  << bcn  <<  " LS =  "  << lumi  <<  " event =  "  << Nevent  <<  endl;
+
   int outabortgap = 1;
   if(bcn >= bcnrejectedlow_ && bcn <= bcnrejectedhigh_ ) outabortgap = 0; //  if(bcn>=3446 && bcn<=3564) 
 
@@ -2055,7 +2056,6 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   }//else
   ++eventcounter;
 
-  if (verbosity == -7778 ) std::cout << " ls0 = " <<ls0 << " lumi = " <<lumi << " run0 = " <<run0 << " nevcounter00 = " <<nevcounter00 << std::endl;
   // to get new LS:
 
   if(ls0 != lumi) {
@@ -3525,26 +3525,28 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     for(int k1 = 0; k1<4; k1++) {
       for(int k2 = 0; k2<82; k2++) {
 	for(int k3 = 0; k3<72; k3++) {
-	  ////////////////////////////////////////////////////////////////  for zgain.C script:
 	  int k2plot = k2-41;
-	  if(signal[k1][k2][k3]>0.) {
-	    if(k1==0) {
-	      h_FullSignal3D_HB->Fill(double(k2plot), double(k3), signal[k1][k2][k3]);
-	      h_FullSignal3D0_HB->Fill(double(k2plot), double(k3), 1.);    
+	  if(flagcpuoptimization_== 0 ) {
+	    ////////////////////////////////////////////////////////////////  for zgain.C script:
+	    if(signal[k1][k2][k3]>0.) {
+	      if(k1==0) {
+		h_FullSignal3D_HB->Fill(double(k2plot), double(k3), signal[k1][k2][k3]);
+		h_FullSignal3D0_HB->Fill(double(k2plot), double(k3), 1.);    
+	      }
+	      if(k1==1) {
+		h_FullSignal3D_HE->Fill(double(k2plot), double(k3), signal[k1][k2][k3]);
+		h_FullSignal3D0_HE->Fill(double(k2plot), double(k3), 1.);    
+	      }
+	      if(k1==2) {
+		h_FullSignal3D_HO->Fill(double(k2plot), double(k3), signal[k1][k2][k3]);
+		h_FullSignal3D0_HO->Fill(double(k2plot), double(k3), 1.);    
+	      }
+	      if(k1==3) {
+		h_FullSignal3D_HF->Fill(double(k2plot), double(k3), signal[k1][k2][k3]);
+		h_FullSignal3D0_HF->Fill(double(k2plot), double(k3), 1.);    
+	      }
 	    }
-	    if(k1==1) {
-	      h_FullSignal3D_HE->Fill(double(k2plot), double(k3), signal[k1][k2][k3]);
-	      h_FullSignal3D0_HE->Fill(double(k2plot), double(k3), 1.);    
-	    }
-	    if(k1==2) {
-	      h_FullSignal3D_HO->Fill(double(k2plot), double(k3), signal[k1][k2][k3]);
-	      h_FullSignal3D0_HO->Fill(double(k2plot), double(k3), 1.);    
-	    }
-	    if(k1==3) {
-	      h_FullSignal3D_HF->Fill(double(k2plot), double(k3), signal[k1][k2][k3]);
-	      h_FullSignal3D0_HF->Fill(double(k2plot), double(k3), 1.);    
-	    }
-	  }
+	  }// optimization
 	  ////////////////////////////////////////////////////////////////
 
 	  ////////////////////////////////////////////////////////////////  for zcalib.C script:
@@ -3585,40 +3587,41 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	  int kkk3  = kk3;
 	  kkk3 -=1;
 	  	  
-	  double GetRMSOverNormalizedSignal =-1.;
-	  if(signal[k1][k2][k3]>0.&& calib0[k1][kkk2][kkk3]>0.) {
-	    GetRMSOverNormalizedSignal = signal[k1][k2][k3]/calib0[k1][kkk2][kkk3];
-	    if(k1==0) {
-	      h_GetRMSOverNormalizedSignal_HB->Fill(GetRMSOverNormalizedSignal,1.);
-	      h_mapGetRMSOverNormalizedSignal_HB->Fill(double(k2plot),double(k3),GetRMSOverNormalizedSignal);
-	      h_mapGetRMSOverNormalizedSignal0_HB->Fill(double(k2plot),double(k3),1.);
+	  if(flagcpuoptimization_== 0 ) {
+	    double GetRMSOverNormalizedSignal =-1.;
+	    if(signal[k1][k2][k3]>0.&& calib0[k1][kkk2][kkk3]>0.) {
+	      GetRMSOverNormalizedSignal = signal[k1][k2][k3]/calib0[k1][kkk2][kkk3];
+	      if(k1==0) {
+		h_GetRMSOverNormalizedSignal_HB->Fill(GetRMSOverNormalizedSignal,1.);
+		h_mapGetRMSOverNormalizedSignal_HB->Fill(double(k2plot),double(k3),GetRMSOverNormalizedSignal);
+		h_mapGetRMSOverNormalizedSignal0_HB->Fill(double(k2plot),double(k3),1.);
+	      }
+	      if(k1==1) {
+		h_GetRMSOverNormalizedSignal_HE->Fill(GetRMSOverNormalizedSignal,1.);
+		h_mapGetRMSOverNormalizedSignal_HE->Fill(double(k2plot),double(k3),GetRMSOverNormalizedSignal);
+		h_mapGetRMSOverNormalizedSignal0_HE->Fill(double(k2plot),double(k3),1.);
+	      }
+	      if(k1==2) {
+		h_GetRMSOverNormalizedSignal_HO->Fill(GetRMSOverNormalizedSignal,1.);
+		h_mapGetRMSOverNormalizedSignal_HO->Fill(double(k2plot),double(k3),GetRMSOverNormalizedSignal);
+		h_mapGetRMSOverNormalizedSignal0_HO->Fill(double(k2plot),double(k3),1.);
+	      }
+	      if(k1==3) {
+		h_GetRMSOverNormalizedSignal_HF->Fill(GetRMSOverNormalizedSignal,1.);
+		h_mapGetRMSOverNormalizedSignal_HF->Fill(double(k2plot),double(k3),GetRMSOverNormalizedSignal);
+		h_mapGetRMSOverNormalizedSignal0_HF->Fill(double(k2plot),double(k3),1.);
+	      }
 	    }
-	    if(k1==1) {
-	      h_GetRMSOverNormalizedSignal_HE->Fill(GetRMSOverNormalizedSignal,1.);
-	      h_mapGetRMSOverNormalizedSignal_HE->Fill(double(k2plot),double(k3),GetRMSOverNormalizedSignal);
-	      h_mapGetRMSOverNormalizedSignal0_HE->Fill(double(k2plot),double(k3),1.);
+	    // 
+	    GetRMSOverNormalizedSignal =-1.;
+	    if(signal3[k1][k2][k3]>0.&& calib3[k1][kkk2][kkk3]>0.) {
+	      GetRMSOverNormalizedSignal = signal3[k1][k2][k3]/calib3[k1][kkk2][kkk3];
+	      if(k1==0) h_GetRMSOverNormalizedSignal3_HB->Fill(GetRMSOverNormalizedSignal,1.);    
+	      if(k1==1) h_GetRMSOverNormalizedSignal3_HE->Fill(GetRMSOverNormalizedSignal,1.);    
+	      if(k1==2) h_GetRMSOverNormalizedSignal3_HO->Fill(GetRMSOverNormalizedSignal,1.);    
+	      if(k1==3) h_GetRMSOverNormalizedSignal3_HF->Fill(GetRMSOverNormalizedSignal,1.);  
 	    }
-	    if(k1==2) {
-	      h_GetRMSOverNormalizedSignal_HO->Fill(GetRMSOverNormalizedSignal,1.);
-	      h_mapGetRMSOverNormalizedSignal_HO->Fill(double(k2plot),double(k3),GetRMSOverNormalizedSignal);
-	      h_mapGetRMSOverNormalizedSignal0_HO->Fill(double(k2plot),double(k3),1.);
-	    }
-	    if(k1==3) {
-	      h_GetRMSOverNormalizedSignal_HF->Fill(GetRMSOverNormalizedSignal,1.);
-	      h_mapGetRMSOverNormalizedSignal_HF->Fill(double(k2plot),double(k3),GetRMSOverNormalizedSignal);
-	      h_mapGetRMSOverNormalizedSignal0_HF->Fill(double(k2plot),double(k3),1.);
-	    }
-	  }
-	  // 
-	  GetRMSOverNormalizedSignal =-1.;
-	  if(signal3[k1][k2][k3]>0.&& calib3[k1][kkk2][kkk3]>0.) {
-	    GetRMSOverNormalizedSignal = signal3[k1][k2][k3]/calib3[k1][kkk2][kkk3];
-	    if(k1==0) h_GetRMSOverNormalizedSignal3_HB->Fill(GetRMSOverNormalizedSignal,1.);    
-	    if(k1==1) h_GetRMSOverNormalizedSignal3_HE->Fill(GetRMSOverNormalizedSignal,1.);    
-	    if(k1==2) h_GetRMSOverNormalizedSignal3_HO->Fill(GetRMSOverNormalizedSignal,1.);    
-	    if(k1==3) h_GetRMSOverNormalizedSignal3_HF->Fill(GetRMSOverNormalizedSignal,1.);  
-	  }
-
+	  }//optimization
 	  ////////////////////////////////////////////////////////////////  for zcalib....C script:
 	  if(signal[k1][k2][k3]>0.) {
 	    // ADC
@@ -7434,15 +7437,18 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
   /////////////////////////////////////////////////////////////////
   
   
+  if (verbosity == -7778 ) std::cout << "endRUN: ls0 = " <<ls0 << " lumi = " <<lumi << " run0 = " <<run0 << " nevcounter0 = " <<nevcounter0 << " nevcounter = " <<nevcounter << std::endl;
   /////////////////////////////// -------------------------------------------------------------------to take into account last LS in Run
+
   if(usecontinuousnumbering_) { lscounterM1 = lscounter - 1; }
   else {lscounterM1 = ls0; }
+
   if(ls0 != -1) h_nevents_per_eachRealLS->Fill( float(lscounterM1) ,float(nevcounter) );//
   h_nevents_per_LS->Fill(float(nevcounter) );
   h_nevents_per_LSzoom->Fill(float(nevcounter) );
-  if(nevcounter0 != 0 || nevcounter > 99999 ) {  
-    if(nevcounter > 99999 ) nevcounter0 = 1;
-    
+  
+  nevcounter0 = nevcounter;
+  if( nevcounter0 != 0 ) {
     ///////  int sub= cell.subdet();  1-HB, 2-HE, 3-HO, 4-HF
     ////////////            k0(sub): =0 HB; =1 HE; =2 HO; =3 HF;
     ////////////         k1(depth-1): = 0 - 3 or depth: = 1 - 4;
@@ -7454,7 +7460,6 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	    int ieta = k2-41;
 	    
 	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator0
-	    if (verbosity == -81 ) std::cout << "sumEstimator0 = " <<sumEstimator0[k0][k1][k2][k3]<< std::endl;
 	    if(sumEstimator0[k0][k1][k2][k3] != 0. ) {
 	      
 	      // fill histoes:
@@ -7539,7 +7544,6 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	    }//if(sumEstimator0[k0][k1][k2][k3] != 0.
 	    
 	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator1
-	    if (verbosity == -81 ) std::cout << "sumEstimator1 = " <<sumEstimator1[k0][k1][k2][k3]<< std::endl;
 	    if(sumEstimator1[k0][k1][k2][k3] != 0. ) {
 	      
 	      // fill histoes:
@@ -7553,8 +7557,6 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      if(k0==0) {
 		// HBdepth1
 		if(k1+1  ==1) {
-	  	  if (verbosity == -5555 && k2==55&&k3==17) std::cout << "***sumEstimator1= "  << sumEstimator1[k0][k1][k2][k3] << "sum0Estimator= "  << sum0Estimator[k0][k1][k2][k3] <<" nevcounter0= " << nevcounter0 <<" bbbc= " << bbbc << std::endl;
-		  
 		  h_sumADCAmplLS1copy1->Fill(bbbc/bbb1);
 		  h_sumADCAmplLS1copy2->Fill(bbbc/bbb1);
 		  h_sumADCAmplLS1copy3->Fill(bbbc/bbb1);
@@ -7628,7 +7630,6 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      if(k0==3) {
 		// HBdepth1
 		if(k1+1  ==1) {
-	  	  if (verbosity == -7777 ) std::cout << "HF***sumEstimator1= "  << sumEstimator1[k0][k1][k2][k3] << "sum0Estimator= "  << sum0Estimator[k0][k1][k2][k3] <<" nevcounter0= " << nevcounter0 <<" bbbc= " << bbbc << std::endl;
 		  h_sumADCAmplLS6->Fill(bbbc/bbb1);
 		  if(bbbc > lsdep_estimator1_HFdepth1_  ) h_2DsumADCAmplLS6->Fill(double(ieta), double(k3), bbbc);
 		  if(bbbc > 2.*lsdep_estimator1_HFdepth1_  ) h_2DsumADCAmplLS6_LSselected->Fill(double(ieta), double(k3), bbbc);
@@ -7673,7 +7674,6 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 
 
 	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator2
-	    if (verbosity == -81 ) std::cout << "sumEstimator2 = " <<sumEstimator2[k0][k1][k2][k3]<< std::endl;
 	    if(sumEstimator2[k0][k1][k2][k3] != 0. ) {
 
 	      // fill histoes:
@@ -7778,7 +7778,6 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 
 
 	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator3
-	    if (verbosity == -81 ) std::cout << "sumEstimator3 = " <<sumEstimator3[k0][k1][k2][k3]<< std::endl;
 	    if(sumEstimator3[k0][k1][k2][k3] != 0. ) {
 
 	      // fill histoes:
@@ -7883,7 +7882,6 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 
 
 	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator4
-	    if (verbosity == -81 ) std::cout << "sumEstimator4 = " <<sumEstimator4[k0][k1][k2][k3]<< std::endl;
 	    if(sumEstimator4[k0][k1][k2][k3] != 0. ) {
 
 	      // fill histoes:
@@ -7962,7 +7960,6 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 
 		}
 		if(k1+1  ==2) {
-		  if (verbosity == -79 &&  k2==40 && k3 == 50 && lscounterM1 == 76) std::cout << "======>>>>>   nevcounter0=  " << nevcounter0 <<" bbbc= " << bbbc <<" lscounterM1= " << lscounterM1 <<" nevcounter= " << nevcounter <<" sumEstimator4= " << (double)sumEstimator4[k0][k1][k2][k3] << std::endl;
 		  h_sumAmplitudeLS7->Fill(bbbc/bbb1);
 		  if(bbbc>lsdep_estimator4_HFdepth2_   )h_2DsumAmplitudeLS7->Fill(double(ieta),double(k3),bbbc);
 		  h_2D0sumAmplitudeLS7->Fill(double(ieta), double(k3), bbb1);
@@ -7989,7 +7986,6 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 
 
 	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator5
-	    if (verbosity == -81 ) std::cout << "sumEstimator5 = " <<sumEstimator5[k0][k1][k2][k3]<< std::endl;
 	    if(sumEstimator5[k0][k1][k2][k3] != 0. ) {
 
 	      // fill histoes:
@@ -8098,20 +8094,31 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	}//for  
       }//for  
     }//for 
-    
-  }//if(nevcounter0 != 0)
 
-    /////////////////////////////// -------------------------------------------------------------------
- if (MAPcreation>0) {
+
+  }//if( nevcounter0 != 0 )    
+  /////////////////////////////// -------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+  if (MAPcreation>0) {
     std::cout << "===== Start writing Channel MAP =====" << std::endl;    
     MAPfile.open(MAPOutputFileName);
-
+    
     edm::ESHandle<HcalTopology> topo;
     iSetup.get<IdealGeometryRecord>().get(topo);
-
+    
     HcalLogicalMapGenerator gen;
     HcalLogicalMap lmap=gen.createMap(&(*topo)); 
-  
+    
     HcalElectronicsMap emap=lmap.generateHcalElectronicsMap();
     std::string subdet =""; 
                      
