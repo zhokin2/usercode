@@ -6618,10 +6618,10 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
     // ------------ to get signal in TS: -2 max +1  ------------
 
 
-    if(ts_with_max_signal > -1 && ts_with_max_signal < 10) ampl = tool[ts_with_max_signal];
-    if(ts_with_max_signal+2 > -1 && ts_with_max_signal+2 < 10) ampl += tool[ts_with_max_signal+2];
-    if(ts_with_max_signal+1 > -1 && ts_with_max_signal+1 < 10) ampl += tool[ts_with_max_signal+1];
-    if(ts_with_max_signal-1 > -1 && ts_with_max_signal-1 < 10) ampl += tool[ts_with_max_signal-1];
+    if(ts_with_max_signal > -1 && ts_with_max_signal < 4) ampl = tool[ts_with_max_signal];
+    if(ts_with_max_signal+2 > -1 && ts_with_max_signal+2 < 4) ampl += tool[ts_with_max_signal+2];
+    if(ts_with_max_signal+1 > -1 && ts_with_max_signal+1 < 4) ampl += tool[ts_with_max_signal+1];
+    if(ts_with_max_signal-1 > -1 && ts_with_max_signal-1 < 4) ampl += tool[ts_with_max_signal-1];
 
     //  if(ts_with_max_signal+1 > -1 && ts_with_max_signal+1 < 10) ampl += tool[ts_with_max_signal+1];
     //  if(ts_with_max_signal-1 > -1 && ts_with_max_signal-1 < 10) ampl += tool[ts_with_max_signal-1];
