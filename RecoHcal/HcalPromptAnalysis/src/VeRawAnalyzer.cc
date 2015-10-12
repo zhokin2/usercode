@@ -11,8 +11,8 @@ Implementation:
 <Notes on implementation>
 */
 //
-// $Id: VeRawAnalyzer.cc,v 1.10 2013/04/28 19:01:16 dtlisov Exp $
-//
+// $Id: VeRawAnalyzer.cc,v 1.10 2013/04/28 19:01:16 dtlisov Exp $ 
+// h_mapDepth1ADCAmpl12_HF
 
 // system include files
 #include <fstream> 
@@ -896,6 +896,17 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH1F*    h_sumCutADCAmplperLS6         ;
   TH2F*    h_2D0sumADCAmplLS6         ;
   TH1F*    h_sum0ADCAmplperLS6         ;
+
+  TH1F*    h_sumADCAmplperLS6_P1         ;
+  TH1F*    h_sum0ADCAmplperLS6_P1         ;
+  TH1F*    h_sumADCAmplperLS6_P2         ;
+  TH1F*    h_sum0ADCAmplperLS6_P2         ;
+  TH1F*    h_sumADCAmplperLS6_M1         ;
+  TH1F*    h_sum0ADCAmplperLS6_M1         ;
+  TH1F*    h_sumADCAmplperLS6_M2         ;
+  TH1F*    h_sum0ADCAmplperLS6_M2         ;
+
+
   
   TH1F*    h_sumADCAmplLS7         ;
   TH2F*    h_2DsumADCAmplLS7         ;
@@ -2303,8 +2314,31 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		  h_2D0sumADCAmplLS6->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS6->Fill( float(lscounterM1) ,bbbc);
 		  if(bbbc > lsdep_estimator1_HFdepth1_  ) h_sumCutADCAmplperLS6->Fill( float(lscounterM1) ,bbbc); 
+
 		  h_sum0ADCAmplperLS6->Fill( float(lscounterM1) ,bbb1);
 
+		  if(ieta>0 ){
+		    if(k3<36) {
+		      h_sumADCAmplperLS6_P1->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS6_P1->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    else {
+		      h_sumADCAmplperLS6_P2->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS6_P2->Fill( float(lscounterM1) ,bbb1);
+		    }
+		  }
+		  else {
+		    if(k3<36) {
+		      h_sumADCAmplperLS6_M1->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS6_M1->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    else {
+		      h_sumADCAmplperLS6_M2->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS6_M2->Fill( float(lscounterM1) ,bbb1);
+		    }
+		  }
+		  
+		  
 		}
 		if(k1+1  ==2) {
 		  h_sumADCAmplLS7->Fill(bbbc/bbb1);
@@ -2315,7 +2349,32 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		  h_2D0sumADCAmplLS7->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS7->Fill( float(lscounterM1) ,bbbc);
 		  if(bbbc > lsdep_estimator1_HFdepth2_  ) h_sumCutADCAmplperLS7->Fill( float(lscounterM1) ,bbbc); 
+
 		  h_sum0ADCAmplperLS7->Fill( float(lscounterM1) ,bbb1);
+
+
+		  if(ieta>0 ){
+		    if(k3<36) {
+		      h_sumADCAmplperLS6_P1->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS6_P1->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    else {
+		      h_sumADCAmplperLS6_P2->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS6_P2->Fill( float(lscounterM1) ,bbb1);
+		    }
+		  }
+		  else {
+		    if(k3<36) {
+		      h_sumADCAmplperLS6_M1->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS6_M1->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    else {
+		      h_sumADCAmplperLS6_M2->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS6_M2->Fill( float(lscounterM1) ,bbb1);
+		    }
+		  }
+
+
 
 		}
 	      }
@@ -4019,7 +4078,8 @@ void VeRawAnalyzer::beginJob()
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // fullAmplitude:
-    h_ADCAmpl_HF = new TH1F("h_ADCAmpl_HF"," ", 100, 0.,3000.);
+//    h_ADCAmpl_HF = new TH1F("h_ADCAmpl_HF"," ", 100, 0.,3000.);
+    h_ADCAmpl_HF = new TH1F("h_ADCAmpl_HF"," ", 100, -300.,3300.);
     h_mapDepth1ADCAmpl225_HF = new TH2F("h_mapDepth1ADCAmpl225_HF"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth2ADCAmpl225_HF = new TH2F("h_mapDepth2ADCAmpl225_HF"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth1ADCAmpl_HF = new TH2F("h_mapDepth1ADCAmpl_HF"," ", 82, -41., 41., 72, 0., 72.);
@@ -4384,6 +4444,17 @@ void VeRawAnalyzer::beginJob()
     h_sumCutADCAmplperLS8  = new TH1F("h_sumCutADCAmplperLS8"," ",     bac, 1.,bac2);
     h_2D0sumADCAmplLS8    = new TH2F("h_2D0sumADCAmplLS8"," ",    82, -41., 41., 72, 0., 72.);
     h_sum0ADCAmplperLS8  = new TH1F("h_sum0ADCAmplperLS8"," ",     bac, 1.,bac2);
+
+
+    h_sumADCAmplperLS6_P1  = new TH1F("h_sumADCAmplperLS6_P1"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS6_P1  = new TH1F("h_sum0ADCAmplperLS6_P1"," ",     bac, 1.,bac2);
+    h_sumADCAmplperLS6_P2  = new TH1F("h_sumADCAmplperLS6_P2"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS6_P2  = new TH1F("h_sum0ADCAmplperLS6_P2"," ",     bac, 1.,bac2);
+    h_sumADCAmplperLS6_M1  = new TH1F("h_sumADCAmplperLS6_M1"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS6_M1  = new TH1F("h_sum0ADCAmplperLS6_M1"," ",     bac, 1.,bac2);
+    h_sumADCAmplperLS6_M2  = new TH1F("h_sumADCAmplperLS6_M2"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS6_M2  = new TH1F("h_sum0ADCAmplperLS6_M2"," ",     bac, 1.,bac2);
+
 
     // for estimator2:
 //    float est2 = 6.;
@@ -5622,9 +5693,11 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
     double difpedestal3 = 0.;
 
     double amplitude = 0.;
+    double absamplitude = 0.;
     double amplitude345 = 0.;
     double ampl = 0.;
     double timew = 0.;
+    double timeww = 0.;
     double max_signal = -100.;
     int ts_with_max_signal = -100;
     int c0=0;
@@ -5709,6 +5782,8 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	ts_with_max_signal = ii;
       }
       amplitude+=ampldefault;// fC
+      absamplitude+=abs(ampldefault);// fC
+
       if(ii ==3 || ii==4 || ii==5) amplitude345+=ampldefault;  
 
 
@@ -5797,7 +5872,8 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
   //////      
 	}//flagcpuoptimization
       if (verbosity == -22) std::cout << "fillDigiAmplitude    amplitude = " << amplitude << std::endl;
-      timew += (ii+1)*ampldefault;
+      timew += (ii+1)*abs(ampldefault);
+      timeww += (ii+1)*ampldefault;
     }//for 1
     amplitudechannel[sub-1][mdepth-1][ieta+41][iphi] += amplitude;// 0-82 ; 0-71
 
@@ -5845,7 +5921,9 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 
     
     double aveamplitude = 0.;
-    if(amplitude >0 && timew >0)  aveamplitude = timew/amplitude;// average_TS +1
+    double aveamplitudew = 0.;
+    if(absamplitude >0 && timew >0)  aveamplitude = timew/absamplitude;// average_TS +1
+    if(amplitude >0 && timeww >0)  aveamplitudew = timeww/amplitude;// average_TS +1
     
     double rmsamp = 0.;
     // and CapIdErrors:
@@ -5857,7 +5935,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
     int capid=0;
     if (verbosity == -222) std::cout << "* TSsize = " <<TSsize<< "* tool[0] = " <<tool[0]  << std::endl;
     for (int ii=0; ii<TSsize; ii++) {  
-      double aaaaaa = (ii+1)-aveamplitude;
+      double aaaaaa = (ii+1)-aveamplitudew;
       double aaaaaa2 = aaaaaa*aaaaaa;
       double ampldefault = tool[ii];
       rmsamp+=(aaaaaa2*ampldefault);// fC
@@ -6479,8 +6557,10 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
     double pedestalw2 = 0.;
     double pedestalw3 = 0.;
     double amplitude = 0.;
+    double absamplitude = 0.;
     double ampl = 0.;
     double timew = 0.;
+    double timeww = 0.;
     double max_signal = -100.;
     int ts_with_max_signal = -100;
     int c0=0;
@@ -6552,6 +6632,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
 	ts_with_max_signal = ii;
       }
       amplitude+=ampldefault;// fC
+      absamplitude+=abs(ampldefault);// fC
       ///////////////////////////////////
 
       if(flagcpuoptimization_== 0 ) {
@@ -6602,7 +6683,8 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
   //////      
 	}     
       if (verbosity == -51) std::cout << "fillDigiAmplitudeHF  amplitude = " << amplitude << std::endl;
-      timew += (ii+1)*ampldefault;
+      timew += (ii+1)*abs(ampldefault);
+      timeww += (ii+1)*ampldefault;
     }//for 1
     amplitudechannel[sub-1][mdepth-1][ieta+41][iphi] += amplitude;// 0-82 ; 0-71
 
@@ -6650,7 +6732,9 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
 
     
     double aveamplitude = 0.;
-    if(amplitude >0 && timew >0)  aveamplitude = timew/amplitude;// average_TS +1
+    double aveamplitudew = 0.;
+    if(absamplitude >0 && timew >0)  aveamplitude = timew/absamplitude;// average_TS +1
+    if(amplitude >0 && timeww >0)  aveamplitudew = timeww/amplitude;// average_TS +1
 
     double rmsamp = 0.;
     // and CapIdErrors:
@@ -6661,7 +6745,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
     int lastcapid=0;
     int capid=0;
     for (int ii=0; ii<TSsize; ii++) {  
-      double aaaaaa = (ii+1)-aveamplitude;
+      double aaaaaa = (ii+1)-aveamplitudew;
       double aaaaaa2 = aaaaaa*aaaaaa;
       double ampldefault = tool[ii];
       rmsamp+=(aaaaaa2*ampldefault);// fC
@@ -6975,8 +7059,10 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
     double pedestalw2 = 0.;
     double pedestalw3 = 0.;
     double amplitude = 0.;
+    double absamplitude = 0.;
     double ampl = 0.;
     double timew = 0.;
+    double timeww = 0.;
     double max_signal = -100.;
     int ts_with_max_signal = -100;
     int c0=0;
@@ -7047,7 +7133,10 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
 	max_signal = ampldefault;
 	ts_with_max_signal = ii;
       }
-      amplitude+=ampldefault;// fC
+      amplitude+=ampldefault;
+      absamplitude+=abs(ampldefault);
+
+
       ///////////////////////////////////////////
       if(flagcpuoptimization_== 0 ) {
       if(sub == 3 )  h_ADC_HO->Fill(ampldefault, 1.);
@@ -7088,7 +7177,8 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
       }     
       
       if (verbosity == -22) std::cout << "fillDigiAmplitudeHO  amplitude = " << amplitude << std::endl;
-      timew += (ii+1)*ampldefault;
+      timew += (ii+1)*abs(ampldefault);
+      timeww += (ii+1)*ampldefault;
     }//for 1
     amplitudechannel[sub-1][mdepth-1][ieta+41][iphi] += amplitude;// 0-82 ; 0-71
 
@@ -7135,7 +7225,9 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
 
     
     double aveamplitude = 0.;
-    if(amplitude >0 && timew >0)  aveamplitude = timew/amplitude;// average_TS +1
+    double aveamplitudew = 0.;
+    if(absamplitude >0 && timew >0)  aveamplitude = timew/absamplitude;// average_TS +1
+    if(amplitude >0 && timeww >0)  aveamplitudew = timeww/amplitude;// average_TS +1
 
     double rmsamp = 0.;
     // and CapIdErrors:
@@ -7146,7 +7238,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
     int lastcapid=0;
     int capid=0;
     for (int ii=0; ii<TSsize; ii++) {  
-      double aaaaaa = (ii+1)-aveamplitude;
+      double aaaaaa = (ii+1)-aveamplitudew;
       double aaaaaa2 = aaaaaa*aaaaaa;
       double ampldefault = tool[ii];
       rmsamp+=(aaaaaa2*ampldefault);// fC
@@ -8975,6 +9067,18 @@ void VeRawAnalyzer::endJob(){
     h_sumCutADCAmplperLS6->Write();
     h_2D0sumADCAmplLS6->Write();
     h_sum0ADCAmplperLS6->Write();
+
+
+    h_sumADCAmplperLS6_P1 ->Write();
+    h_sum0ADCAmplperLS6_P1 ->Write(); 
+    h_sumADCAmplperLS6_P2  ->Write(); 
+    h_sum0ADCAmplperLS6_P2 ->Write(); 
+    h_sumADCAmplperLS6_M1  ->Write(); 
+    h_sum0ADCAmplperLS6_M1  ->Write();
+    h_sumADCAmplperLS6_M2   ->Write();
+    h_sum0ADCAmplperLS6_M2  ->Write();
+
+
     
     h_sumADCAmplLS7->Write();
     h_2DsumADCAmplLS7->Write();
