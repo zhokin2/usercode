@@ -1141,6 +1141,11 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH1F*    h_sumCutAmplperLS6         ;
   TH2F*    h_2D0sumAmplLS6         ;
   TH1F*    h_sum0AmplperLS6         ;
+
+  TH1F*        h_RatioOccupancy_HFP         ;
+  TH1F*        h_RatioOccupancy_HFM         ;
+
+
   
   TH1F*    h_sumAmplLS7         ;
   TH2F*    h_2DsumAmplLS7         ;
@@ -2123,11 +2128,19 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     ///////  int sub= cell.subdet();  1-HB, 2-HE, 3-HO, 4-HF
     ////////////            k0(sub): =0 HB; =1 HE; =2 HO; =3 HF;
     ////////////         k1(depth-1): = 0 - 3 or depth: = 1 - 4;
+    int pnnbins=0;
+    int pcountall=0;
+    int pcountmin=0;
+    int pnnmin=999999999;
+    int mcountall=0;
+    int mcountmin=0;
+    int mnnbins=0;
+    int mnnmin=999999999;
+
     for(int k0 = 0; k0<4; k0++) {
       for(int k1 = 0; k1<4; k1++) {
-	for(int k2 = 0; k2<82; k2++) {
-	  for(int k3 = 0; k3<72; k3++) {
-	    //	    if(badchannels[k0][k1][k2][k3] !=0) ++nbadchannels;
+	for(int k3 = 0; k3<72; k3++) {
+	  for(int k2 = 0; k2<82; k2++) {
 	    int ieta = k2-41;
 	    
 	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator0
@@ -2316,8 +2329,8 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		  if(bbbc > lsdep_estimator1_HFdepth1_  ) h_sumCutADCAmplperLS6->Fill( float(lscounterM1) ,bbbc); 
 
 		  h_sum0ADCAmplperLS6->Fill( float(lscounterM1) ,bbb1);
-
-		  if(ieta>0 ){
+		  /////////////////////////////////////////////////////////
+ 		  if(ieta>0 ){
 		    if(k3<36) {
 		      h_sumADCAmplperLS6_P1->Fill( float(lscounterM1) ,bbbc);
 		      h_sum0ADCAmplperLS6_P1->Fill( float(lscounterM1) ,bbb1);
@@ -2326,6 +2339,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		      h_sumADCAmplperLS6_P2->Fill( float(lscounterM1) ,bbbc);
 		      h_sum0ADCAmplperLS6_P2->Fill( float(lscounterM1) ,bbb1);
 		    }
+		  ////////////////////////////// P
+		    if(bbbc/bbb1> 40.) {
+		      pcountall += bbb1 ;
+		      pcountmin += bbb1;
+		    }
+		  //////////////////////////////
+
 		  }
 		  else {
 		    if(k3<36) {
@@ -2336,7 +2356,15 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		      h_sumADCAmplperLS6_M2->Fill( float(lscounterM1) ,bbbc);
 		      h_sum0ADCAmplperLS6_M2->Fill( float(lscounterM1) ,bbb1);
 		    }
+		  ////////////////////////////// M
+		    if(bbbc/bbb1> 40.) {
+		      mcountall += bbb1 ;
+		      mcountmin += bbb1;
+		    }
+		  //////////////////////////////
+
 		  }
+		  /////////////////////////////////////////////////////////
 		  
 		  
 		}
@@ -2819,11 +2847,37 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	    
 	    
 	    
-	  }//for  
-	}//for  
-      }//for  
-    }//for 
+	  }//for k2
+
+	if(pcountmin> 0) {
+//	  cout<<" HF+    - pcountmin = "<<   pcountmin    <<" pcountall  = "<<   pcountall    <<endl;
+	  if(pcountmin < pnnmin ) pnnmin = pcountmin;
+	  pcountmin=0;
+	  pnnbins++;
+	}
+	if(mcountmin> 0) {
+//	  cout<<" HF-    - mcountmin = "<<   mcountmin    <<" mcountall  = "<<   mcountall    <<endl;
+	  if(mcountmin < mnnmin ) mnnmin = mcountmin;
+	  mcountmin=0;
+	  mnnbins++;
+	}
+
+	}//for k3
+      }//for k1
+    }//for k0
     
+    //      cout<<" HF+    - pcountall = "<<   pcountall    <<" pnnmin= "<<   pnnmin    <<" pnnbins= "<<   pnnbins    <<" Ave= "<<   pcountall/pnnbins    <<endl;
+    float patiooccupancy =  0.;
+    if(pcountall != 0 ) patiooccupancy =  (float)pnnmin*mnnbins/pcountall;
+    //   if(pnnmin > 0.) cout<<" HF+    - pcountall/pnnbins/pnnmin = "<<   (float)pcountall/pnnbins/pnnmin    <<" patiooccupancy = "<<   patiooccupancy    <<endl;
+     h_RatioOccupancy_HFM->Fill( float(lscounterM1) ,patiooccupancy); 
+    //      cout<<" HF-    - mcountall = "<<   mcountall    <<" mnnmin= "<<   mnnmin    <<" mnnbins= "<<   mnnbins    <<" Ave= "<<   mcountall/mnnbins    <<endl;
+    float matiooccupancy =  0.;
+    if(mcountall != 0 ) matiooccupancy =  (float)mnnmin*mnnbins/mcountall;
+    //   if(mnnmin > 0.) cout<<" HF-    - mcountall/mnnbins/mnnmin = "<<   (float)mcountall/mnnbins/mnnmin    <<" matiooccupancy = "<<   matiooccupancy    <<endl;
+     h_RatioOccupancy_HFP->Fill( float(lscounterM1) ,matiooccupancy); 
+     
+
     
     if (verbosity == -5555 ) std::cout << "********************** My NULLing " << std::endl;
     for(int k0 = 0; k0<4; k0++) {
@@ -4682,6 +4736,9 @@ void VeRawAnalyzer::beginJob()
     h_sumCutAmplperLS6  = new TH1F("h_sumCutAmplperLS6"," ",     bac, 1.,bac2);
     h_2D0sumAmplLS6    = new TH2F("h_2D0sumAmplLS6"," ",    82, -41., 41., 72, 0., 72.);
     h_sum0AmplperLS6  = new TH1F("h_sum0AmplperLS6"," ",     bac, 1.,bac2);
+
+    h_RatioOccupancy_HFP  = new TH1F("h_RatioOccupancy_HFP"," ",     bac, 1.,bac2);
+    h_RatioOccupancy_HFM  = new TH1F("h_RatioOccupancy_HFM"," ",     bac, 1.,bac2);
 
     h_sumAmplLS7   = new TH1F("h_sumAmplLS7"," ",      100,  0.0,lsdep_estimator5_HFdepth2_);
     h_2DsumAmplLS7    = new TH2F("h_2DsumAmplLS7"," ",    82, -41., 41., 72, 0., 72.);
@@ -9313,6 +9370,10 @@ void VeRawAnalyzer::endJob(){
     h_sumCutAmplperLS6->Write();
     h_2D0sumAmplLS6->Write();
     h_sum0AmplperLS6->Write();
+
+    h_RatioOccupancy_HFP->Write();
+    h_RatioOccupancy_HFM->Write();
+
     
     h_sumAmplLS7->Write();
     h_2DsumAmplLS7->Write();
