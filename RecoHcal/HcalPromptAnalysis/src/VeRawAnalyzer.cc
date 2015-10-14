@@ -1528,6 +1528,19 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH2F* h_mapGetRMSOverNormalizedSignal0_HF;
   TH2F* h_mapGetRMSOverNormalizedSignal_HO;
   TH2F* h_mapGetRMSOverNormalizedSignal0_HO;
+
+
+
+  TH2F* h_2D0sumErrorBLS6;
+  TH1F*  h_sumErrorBLS6;
+  TH1F* h_sumErrorBperLS6 ;
+  TH1F* h_sum0ErrorBperLS6;
+  TH2F* h_2D0sumErrorBLS7;
+  TH1F*  h_sumErrorBLS7;
+  TH1F* h_sumErrorBperLS7 ;
+  TH1F* h_sum0ErrorBperLS7;
+  
+
   /////////////////////////////////////////////
   // for ROOT
   // Readouts
@@ -1569,6 +1582,7 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   double sumEstimator3[4][4][82][72];
   double sumEstimator4[4][4][82][72];
   double sumEstimator5[4][4][82][72];
+  double sumEstimator6[4][4][82][72];
   double sum0Estimator[4][4][82][72];
 
   double amplitudechannel[4][4][82][72];
@@ -1993,6 +2007,7 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
 	  sumEstimator3[k0][k1][k2][k3] = 0.;
 	  sumEstimator4[k0][k1][k2][k3] = 0.;
 	  sumEstimator5[k0][k1][k2][k3] = 0.;
+	  sumEstimator6[k0][k1][k2][k3] = 0.;
 	  sum0Estimator[k0][k1][k2][k3] = 0.;
 	}//for  
       }//for  
@@ -2043,8 +2058,47 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 //    if( ((flagabortgaprejected_ == 1 && outabortgap == 1) || (flagabortgaprejected_ == 0 && outabortgap == 0) || flagabortgaprejected_ == 2) && lumi >=112 && lumi<=118) {
 
 
-    //////
+   //////
     // // // // // // to get counters:
+    
+    /*
+	// Get The Info you need
+    // int bcn = iEvent.bunchCrossing();
+	// int sourceId = amc13h->sourceId();
+	int bx = iEvent.bunchId();
+	unsigned int orn = amc13h->orbitNumber();
+	int l1a = amc13h->l1aNumber();
+	int namc = amc13h->NAMC();
+	// int amc13version = amc13h->AMC13FormatVersion();for (int iamc=0; iamc<namc; iamc++)
+	{
+	// Get the info for that AMC13
+	int slot = amc13h->AMCSlot(iamc);
+	int crate = amc13h->AMCId(iamc)&0xFF;
+	// int amcsize = amc13h->AMCSize(iamc)/1000;
+	
+	//	_mes["uTCA_CratesVSslots"].Fill(slot, crate);
+	HcalUHTRData uhtr(amc13h->AMCPayload(iamc), amc13h->AMCSize(iamc));
+	for (HcalUHTRData::const_iterator iuhtr=uhtr.begin(); iuhtr!=uhtr.end();
+	++iuhtr)
+	{
+	if (!iuhtr.isHeader())
+	continue;
+	
+	// Flavor determines what kind of data this uhtr contains
+	// tp, regular digi, upgrade qie digis, etc..
+	if (iuhtr.flavor()==hcaldqm::constants::UTCA_DATAFLAVOR)
+	{
+	// get the Info you need
+	int fiber = (iuhtr.channelid()>>2)&0x1F;
+	int fibchannel = iuhtr.channelid()&0x3;
+	uint32_t l1a_uhtr = uhtr.l1ANumber();
+	uint32_t bx_uhtr = uhtr.bunchNumber();
+	uint32_t orn_uhtr = uhtr.orbitNumber();
+	int32_t dbcn = bx_uhtr - bx;
+	int32_t dorn = orn_uhtr - orn;
+	int32_t devn = l1a_uhtr-l1a;
+	}}}
+*/
 
   //////
   // to get runcounter:
@@ -2845,7 +2899,43 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	      }
 	    }//if(sumEstimator5[k0][k1][k2][k3] != 0.
 	    
-	    
+	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator6
+	    if (verbosity == -81 ) std::cout << "sumEstimator6 = " <<sumEstimator6[k0][k1][k2][k3]<< std::endl;
+	    if(sumEstimator6[k0][k1][k2][k3] != 0. ) {
+	      
+	      // fill histoes:
+	      double bbbc=0.;
+	      if(flagestimatornormalization_ == 0 ) bbbc = sumEstimator6[k0][k1][k2][k3]/nevcounter0;
+	      if(flagestimatornormalization_ == 1 ) bbbc = sumEstimator6[k0][k1][k2][k3]/sum0Estimator[k0][k1][k2][k3];
+	      double bbb1=1.;
+	      if(flagestimatornormalization_ == 2 ) {bbbc = sumEstimator6[k0][k1][k2][k3]; bbb1 = sum0Estimator[k0][k1][k2][k3];}
+	      
+	      // HF:
+	      if(k0==3) {
+		// HBdepth1
+		if(k1+1  ==1) {
+		  h_sumErrorBLS6->Fill(bbbc/bbb1);
+		  h_2D0sumErrorBLS6->Fill(double(ieta), double(k3), bbb1);
+
+		  h_sumErrorBperLS6->Fill( float(lscounterM1) ,bbbc);
+		  h_sum0ErrorBperLS6->Fill( float(lscounterM1) ,bbb1);
+		  
+		}
+		if(k1+1  ==2) {
+		  h_sumErrorBLS7->Fill(bbbc/bbb1);
+		  h_2D0sumErrorBLS7->Fill(double(ieta), double(k3), bbb1);
+
+		  h_sumErrorBperLS7->Fill( float(lscounterM1) ,bbbc);
+		  h_sum0ErrorBperLS7->Fill( float(lscounterM1) ,bbb1);
+
+
+		}
+	      }
+
+	    }//if(sumEstimator6[k0][k1][k2][k3] != 0.
+
+
+	    /////////////////////////////////////////////////////////////////////	    
 	    
 	  }//for k2
 
@@ -2866,6 +2956,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       }//for k1
     }//for k0
     
+    //   cout<<"=============================== lscounterM1 = "<<   (float)lscounterM1    <<endl;
     //      cout<<" HF+    - pcountall = "<<   pcountall    <<" pnnmin= "<<   pnnmin    <<" pnnbins= "<<   pnnbins    <<" Ave= "<<   pcountall/pnnbins    <<endl;
     float patiooccupancy =  0.;
     if(pcountall != 0 ) patiooccupancy =  (float)pnnmin*mnnbins/pcountall;
@@ -2891,6 +2982,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	    sumEstimator3[k0][k1][k2][k3] = 0.;
 	    sumEstimator4[k0][k1][k2][k3] = 0.;
 	    sumEstimator5[k0][k1][k2][k3] = 0.;
+	    sumEstimator6[k0][k1][k2][k3] = 0.;
 	    sum0Estimator[k0][k1][k2][k3] = 0.;
 	  }//for  
 	}//for  
@@ -4690,6 +4782,10 @@ void VeRawAnalyzer::beginJob()
     h_2D0sumAmplitudeLS8    = new TH2F("h_2D0sumAmplitudeLS8"," ",    82, -41., 41., 72, 0., 72.);
     h_sum0AmplitudeperLS8  = new TH1F("h_sum0AmplitudeperLS8"," ",     bac, 1.,bac2);
 
+
+
+
+
     // for estimator5:
     //  float est5 = 0.6;
     //  float est51= 1.0;
@@ -4753,6 +4849,16 @@ void VeRawAnalyzer::beginJob()
     h_sumCutAmplperLS8  = new TH1F("h_sumCutAmplperLS8"," ",     bac, 1.,bac2);
     h_2D0sumAmplLS8    = new TH2F("h_2D0sumAmplLS8"," ",    82, -41., 41., 72, 0., 72.);
     h_sum0AmplperLS8  = new TH1F("h_sum0AmplperLS8"," ",     bac, 1.,bac2);
+
+    // for estimator6:
+    h_sumErrorBLS6   = new TH1F("h_sumErrorBLS6"," ",      10,  0.,10.);
+    h_sumErrorBperLS6  = new TH1F("h_sumErrorBperLS6"," ",     bac, 1.,bac2);
+    h_sum0ErrorBperLS6  = new TH1F("h_sum0ErrorBperLS6"," ",     bac, 1.,bac2);
+    h_2D0sumErrorBLS6    = new TH2F("h_2D0sumErrorBLS6"," ",    82, -41., 41., 72, 0., 72.);
+    h_sumErrorBLS7   = new TH1F("h_sumErrorBLS7"," ",      10,  0.,10.);
+    h_sumErrorBperLS7  = new TH1F("h_sumErrorBperLS7"," ",     bac, 1.,bac2);
+    h_sum0ErrorBperLS7  = new TH1F("h_sum0ErrorBperLS7"," ",     bac, 1.,bac2);
+    h_2D0sumErrorBLS7    = new TH2F("h_2D0sumErrorBLS7"," ",    82, -41., 41., 72, 0., 72.);
 
 
 
@@ -6625,8 +6731,13 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
     int c2=0;
     int c3=0;
     int c4=0;
+    double errorBtype = 0.;  
+
+    //  TSsize=digiItr->size();
     //    int TSsize = 10;
     int TSsize = 4;
+    //     if((*digiItr).size() >  4) std::cout << "TSsize HF > 4 and = " <<(*digiItr).size()<< std::endl;
+    if((*digiItr).size() >  TSsize) errorBtype = 1.; 
     ////// 
     for (int ii=0; ii<TSsize; ii++) {  
       double ampldefault = 0.;
@@ -6869,12 +6980,13 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
     
 
 
-    ///////////////////////////////////////Digis
+    ///////////////////////////////////////Digis : over all digiHits
 
     sum0Estimator[sub-1][mdepth-1][ieta+41][iphi] += 1.;
 
-
-
+    //      for Error B-type
+    sumEstimator6[sub-1][mdepth-1][ieta+41][iphi] += errorBtype;
+    
 
     //      sumEstimator0[sub-1][mdepth-1][ieta+41][iphi] += pedestalw0;//Sig_Pedestals	
     sumEstimator0[sub-1][mdepth-1][ieta+41][iphi] += pedestal0;//    Pedestals	
@@ -8238,6 +8350,41 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	    }//if(sumEstimator5[k0][k1][k2][k3] != 0.
 	    
 	    
+	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator6
+	    if (verbosity == -81 ) std::cout << "sumEstimator6 = " <<sumEstimator6[k0][k1][k2][k3]<< std::endl;
+	    if(sumEstimator6[k0][k1][k2][k3] != 0. ) {
+	      
+	      // fill histoes:
+	      double bbbc=0.;
+	      if(flagestimatornormalization_ == 0 ) bbbc = sumEstimator6[k0][k1][k2][k3]/nevcounter0;
+	      if(flagestimatornormalization_ == 1 ) bbbc = sumEstimator6[k0][k1][k2][k3]/sum0Estimator[k0][k1][k2][k3];
+	      double bbb1=1.;
+	      if(flagestimatornormalization_ == 2 ) {bbbc = sumEstimator6[k0][k1][k2][k3]; bbb1 = sum0Estimator[k0][k1][k2][k3];}
+	      
+	      // HF:
+	      if(k0==3) {
+		// HBdepth1
+		if(k1+1  ==1) {
+		  h_sumErrorBLS6->Fill(bbbc/bbb1);
+		  h_2D0sumErrorBLS6->Fill(double(ieta), double(k3), bbb1);
+
+		  h_sumErrorBperLS6->Fill( float(lscounterM1) ,bbbc);
+		  h_sum0ErrorBperLS6->Fill( float(lscounterM1) ,bbb1);
+		  
+		}
+		if(k1+1  ==2) {
+		  h_sumErrorBLS7->Fill(bbbc/bbb1);
+		  h_2D0sumErrorBLS7->Fill(double(ieta), double(k3), bbb1);
+
+		  h_sumErrorBperLS7->Fill( float(lscounterM1) ,bbbc);
+		  h_sum0ErrorBperLS7->Fill( float(lscounterM1) ,bbb1);
+
+
+		}
+	      }
+
+	    }//if(sumEstimator6[k0][k1][k2][k3] != 0.
+
 	    
 	  }//for  
 	}//for  
@@ -9327,6 +9474,18 @@ void VeRawAnalyzer::endJob(){
     h_2D0sumAmplitudeLS8->Write();
     h_sum0AmplitudeperLS8->Write();
     
+
+    // for estimator6:
+    h_sumErrorBLS6->Write();
+    h_sumErrorBperLS6->Write();
+    h_sum0ErrorBperLS6->Write();
+    h_2D0sumErrorBLS6->Write();
+    h_sumErrorBLS7->Write();
+    h_sumErrorBperLS7->Write();
+    h_sum0ErrorBperLS7->Write();
+    h_2D0sumErrorBLS7->Write();
+
+
     // for estimator5:
     h_sumAmplLS1->Write();
     h_2DsumAmplLS1->Write();
