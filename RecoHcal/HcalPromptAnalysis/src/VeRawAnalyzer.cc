@@ -2394,7 +2394,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		      h_sum0ADCAmplperLS6_P2->Fill( float(lscounterM1) ,bbb1);
 		    }
 		  ////////////////////////////// P
-		    if(bbbc/bbb1> 40.) {
+		    if(bbbc/bbb1> 30.) {
 		      pcountall += bbb1 ;
 		      pcountmin += bbb1;
 		    }
@@ -2411,7 +2411,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		      h_sum0ADCAmplperLS6_M2->Fill( float(lscounterM1) ,bbb1);
 		    }
 		  ////////////////////////////// M
-		    if(bbbc/bbb1> 40.) {
+		    if(bbbc/bbb1> 30.) {
 		      mcountall += bbb1 ;
 		      mcountmin += bbb1;
 		    }
