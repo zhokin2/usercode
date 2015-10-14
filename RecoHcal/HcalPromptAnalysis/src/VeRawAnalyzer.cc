@@ -1532,10 +1532,12 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
 
 
   TH2F* h_2D0sumErrorBLS6;
+  TH2F* h_2DsumErrorBLS6;
   TH1F*  h_sumErrorBLS6;
   TH1F* h_sumErrorBperLS6 ;
   TH1F* h_sum0ErrorBperLS6;
   TH2F* h_2D0sumErrorBLS7;
+  TH2F* h_2DsumErrorBLS7;
   TH1F*  h_sumErrorBLS7;
   TH1F* h_sumErrorBperLS7 ;
   TH1F* h_sum0ErrorBperLS7;
@@ -2915,6 +2917,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		// HBdepth1
 		if(k1+1  ==1) {
 		  h_sumErrorBLS6->Fill(bbbc/bbb1);
+		  h_2DsumErrorBLS6->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumErrorBLS6->Fill(double(ieta), double(k3), bbb1);
 
 		  h_sumErrorBperLS6->Fill( float(lscounterM1) ,bbbc);
@@ -2923,6 +2926,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		}
 		if(k1+1  ==2) {
 		  h_sumErrorBLS7->Fill(bbbc/bbb1);
+		  h_2DsumErrorBLS7->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumErrorBLS7->Fill(double(ieta), double(k3), bbb1);
 
 		  h_sumErrorBperLS7->Fill( float(lscounterM1) ,bbbc);
@@ -4855,10 +4859,12 @@ void VeRawAnalyzer::beginJob()
     h_sumErrorBperLS6  = new TH1F("h_sumErrorBperLS6"," ",     bac, 1.,bac2);
     h_sum0ErrorBperLS6  = new TH1F("h_sum0ErrorBperLS6"," ",     bac, 1.,bac2);
     h_2D0sumErrorBLS6    = new TH2F("h_2D0sumErrorBLS6"," ",    82, -41., 41., 72, 0., 72.);
+    h_2DsumErrorBLS6    = new TH2F("h_2DsumErrorBLS6"," ",    82, -41., 41., 72, 0., 72.);
     h_sumErrorBLS7   = new TH1F("h_sumErrorBLS7"," ",      10,  0.,10.);
     h_sumErrorBperLS7  = new TH1F("h_sumErrorBperLS7"," ",     bac, 1.,bac2);
     h_sum0ErrorBperLS7  = new TH1F("h_sum0ErrorBperLS7"," ",     bac, 1.,bac2);
     h_2D0sumErrorBLS7    = new TH2F("h_2D0sumErrorBLS7"," ",    82, -41., 41., 72, 0., 72.);
+    h_2DsumErrorBLS7    = new TH2F("h_2DsumErrorBLS7"," ",    82, -41., 41., 72, 0., 72.);
 
 
 
@@ -8367,6 +8373,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 		if(k1+1  ==1) {
 		  h_sumErrorBLS6->Fill(bbbc/bbb1);
 		  h_2D0sumErrorBLS6->Fill(double(ieta), double(k3), bbb1);
+		  h_2DsumErrorBLS6->Fill(double(ieta), double(k3), bbbc);
 
 		  h_sumErrorBperLS6->Fill( float(lscounterM1) ,bbbc);
 		  h_sum0ErrorBperLS6->Fill( float(lscounterM1) ,bbb1);
@@ -8375,6 +8382,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 		if(k1+1  ==2) {
 		  h_sumErrorBLS7->Fill(bbbc/bbb1);
 		  h_2D0sumErrorBLS7->Fill(double(ieta), double(k3), bbb1);
+		  h_2DsumErrorBLS7->Fill(double(ieta), double(k3), bbbc);
 
 		  h_sumErrorBperLS7->Fill( float(lscounterM1) ,bbbc);
 		  h_sum0ErrorBperLS7->Fill( float(lscounterM1) ,bbb1);
@@ -9480,10 +9488,12 @@ void VeRawAnalyzer::endJob(){
     h_sumErrorBperLS6->Write();
     h_sum0ErrorBperLS6->Write();
     h_2D0sumErrorBLS6->Write();
+    h_2DsumErrorBLS6->Write();
     h_sumErrorBLS7->Write();
     h_sumErrorBperLS7->Write();
     h_sum0ErrorBperLS7->Write();
     h_2D0sumErrorBLS7->Write();
+    h_2DsumErrorBLS7->Write();
 
 
     // for estimator5:
