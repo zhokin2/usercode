@@ -215,6 +215,19 @@ TO IDENTIFY: see color different bins in eta-phi space
       
 TO IDENTIFY: see deep gaps( not one bin)
 
+
+
+      /////////////////////////////////////////////////////////////////////////////////////////////////
+      c1->cd(3);
+      TH2F *Cefz225= (TH2F*)hfile1->Get("h_RatioOccupancy_HFM");
+...
+      c1->cd(4);
+      TH2F *Cefz225= (TH2F*)hfile1->Get("h_RatioOccupancy_HFP");
+...
+
+
+
+
 3. Dlya <A> vs LS po 4-m kvadrantam P1, P2, M1, M2:
 
       TH1F *twod3= (TH1F*)hfile1->Get("h_sumADCAmplperLS6_P1" );
