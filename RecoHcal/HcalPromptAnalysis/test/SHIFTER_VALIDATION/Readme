@@ -1,4 +1,76 @@
-1. For  2D and  1D plots with Amplitude:
+1. For <A> vs LS over 4 kvadrants P1, P2, M1, M2:
+
+      TH1F *twod3= (TH1F*)hfile1->Get("h_sumADCAmplperLS6_P1" );
+      TH1F *twod2= (TH1F*)hfile1->Get("h_sum0ADCAmplperLS6_P1");
+      twod3->Sumw2();
+      twod2->Sumw2();
+      if(twod2->IsA()->InheritsFrom("TH1F")){
+	TH1F* ERT1 = (TH1F*)twod3->Clone("ERT1");
+	ERT1->Divide(twod3,twod2, 1, 1, "B");
+	ERT1->Sumw2();
+      ERT1->SetMarkerStyle(20);
+      ERT1->SetMarkerSize(0.4);
+      ERT1->SetXTitle("<A>(ev.in LS & ch.) - HF P1     -    iLS \b");
+      ERT1->SetMarkerColor(2);
+      ERT1->SetLineColor(0);
+      ERT1->Draw("Error");
+... -> do similar for h_sumADCAmplperLS6_P2,h_sumADCAmplperLS6_M1, M2...
+
+(use different colors)
+      }
+TO IDENTIFY: max difference between dependencies to be higher 2. It's main plot for errors-A (early plots only for confirmation)
+
+2. For Error of Type-B: (here HFdepth1)
+
+      c1->cd(1);
+      TH2F *twod1= (TH2F*)hfile1->Get("h_2DsumErrorBLS6");
+      TH2F *twod0= (TH2F*)hfile1->Get("h_2D0sumErrorBLS6");
+      twod1->Sumw2();
+      twod0->Sumw2();
+      if(twod0->IsA()->InheritsFrom("TH2F")){
+	TH2F* Cefz6= (TH2F*)twod1->Clone("Cefz6");
+	Cefz6->Divide(twod1,twod0, 1, 1, "B");
+	Cefz6->Sumw2();
+      }
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      Cefz6->SetMarkerStyle(20);
+      Cefz6->SetMarkerSize(0.4);
+      Cefz6->GetZaxis()->SetLabelSize(0.08);
+      Cefz6->SetXTitle("#eta \b");
+      Cefz6->SetYTitle("#phi \b");
+      Cefz6->SetZTitle("<ErrorB>  - HF Depth1 \b");
+      Cefz6->SetMarkerColor(2);
+      Cefz6->SetLineColor(2);
+      Cefz6->Draw("COLZ");
+
+      c1->cd(2);
+      TH1F *twod3= (TH1F*)hfile1->Get("h_sumErrorBperLS6");
+      TH1F *twod2= (TH1F*)hfile1->Get("h_sum0ErrorBperLS6");
+      twod3->Sumw2();
+      twod2->Sumw2();
+      gPad->SetGridy();
+      gPad->SetLogy();
+      if(twod2->IsA()->InheritsFrom("TH1F")){
+	TH1F* Rate2 = (TH1F*)twod3->Clone("Rate2");
+	Rate2->Divide(twod3,twod2, 1, 1, "B");
+	Rate2->Sumw2();
+      }
+      Rate2->SetMarkerStyle(20);
+      Rate2->SetMarkerSize(0.8);
+      Rate2->SetXTitle("<ErrorB>(ev.in LS & ch.) - HF depth1 -    iLS \b");
+      Rate2->SetMarkerColor(2);
+      Rate2->SetLineColor(0);
+      Rate2->Draw("Error");
+
+TO IDENTIFY: define error-B as digi-collection size != 4;
+(usually, proportion of events affected by errors-B per LS is too low 
+-> do we need to certify whole LSs as BAD)
+
+
+
+3. For  2D and  1D plots with Amplitude:
       c1->cd(1);
       TH2F *twod1= (TH2F*)hfile1->Get("h_mapDepth1ADCAmpl_HF");
       TH2F *twod0= (TH2F*)hfile1->Get("h_mapDepth1_HF");
@@ -86,7 +158,7 @@ TO IDENTIFY: see color different bins in eta-phi space
 
 
 
-2.For occupancy plots:
+4.For occupancy plots:
 
       TH2F *twod1= (TH2F*)hfile1->Get("h_mapDepth1ADCAmpl_HF");
       TH2F *twod0= (TH2F*)hfile1->Get("h_mapDepth1_HF");
@@ -232,65 +304,3 @@ TO IDENTIFY: see deep gaps( not one bin)
 
 
 
-3. For <A> vs LS over 4 kvadrants P1, P2, M1, M2:
-
-      TH1F *twod3= (TH1F*)hfile1->Get("h_sumADCAmplperLS6_P1" );
-      TH1F *twod2= (TH1F*)hfile1->Get("h_sum0ADCAmplperLS6_P1");
-      twod3->Sumw2();
-      twod2->Sumw2();
-      if(twod2->IsA()->InheritsFrom("TH1F")){
-	TH1F* ERT1 = (TH1F*)twod3->Clone("ERT1");
-	ERT1->Divide(twod3,twod2, 1, 1, "B");
-	ERT1->Sumw2();
-...
-(use different colors)
-      }
-TO IDENTIFY: max difference between dependencies to be higher 2. It's main plot for errors-A (early plots only for confirmation)
-
-4. For Error of Type-B:
-
-      c1->cd(1);
-      TH2F *twod1= (TH2F*)hfile1->Get("h_2DsumErrorBLS6");
-      TH2F *twod0= (TH2F*)hfile1->Get("h_2D0sumErrorBLS6");
-      twod1->Sumw2();
-      twod0->Sumw2();
-      if(twod0->IsA()->InheritsFrom("TH2F")){
-	TH2F* Cefz6= (TH2F*)twod1->Clone("Cefz6");
-	Cefz6->Divide(twod1,twod0, 1, 1, "B");
-	Cefz6->Sumw2();
-      }
-      gPad->SetGridy();
-      gPad->SetGridx();
-      gPad->SetLogz();
-      Cefz6->SetMarkerStyle(20);
-      Cefz6->SetMarkerSize(0.4);
-      Cefz6->GetZaxis()->SetLabelSize(0.08);
-      Cefz6->SetXTitle("#eta \b");
-      Cefz6->SetYTitle("#phi \b");
-      Cefz6->SetZTitle("<ErrorB>  - HF Depth1 \b");
-      Cefz6->SetMarkerColor(2);
-      Cefz6->SetLineColor(2);
-      Cefz6->Draw("COLZ");
-
-      c1->cd(2);
-      TH1F *twod3= (TH1F*)hfile1->Get("h_sumErrorBperLS6");
-      TH1F *twod2= (TH1F*)hfile1->Get("h_sum0ErrorBperLS6");
-      twod3->Sumw2();
-      twod2->Sumw2();
-      gPad->SetGridy();
-      gPad->SetLogy();
-      if(twod2->IsA()->InheritsFrom("TH1F")){
-	TH1F* Rate2 = (TH1F*)twod3->Clone("Rate2");
-	Rate2->Divide(twod3,twod2, 1, 1, "B");
-	Rate2->Sumw2();
-      }
-      Rate2->SetMarkerStyle(20);
-      Rate2->SetMarkerSize(0.8);
-      Rate2->SetXTitle("<ErrorB>(ev.in LS & ch.) - HF depth1 -    iLS \b");
-      Rate2->SetMarkerColor(2);
-      Rate2->SetLineColor(0);
-      Rate2->Draw("Error");
-
-TO IDENTIFY: define error-B as digi-collection size > 4
-usually, proportion of events affected by errors-B per LS is too low 
--> do we need to certify whole LSs as BAD
