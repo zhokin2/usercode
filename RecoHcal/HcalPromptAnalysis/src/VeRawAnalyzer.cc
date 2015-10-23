@@ -692,7 +692,7 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH2F* h_mapDepth3_HE;
 
   /////////////////////////////////////////////
-  
+  /*
   TH1F* h_GetRMSOverNormalizedSignal_HB;
   TH1F* h_GetRMSOverNormalizedSignal_HE;
   TH1F* h_GetRMSOverNormalizedSignal_HO;
@@ -710,7 +710,7 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH2F* h_FullSignal3D0_HO;
   TH2F* h_FullSignal3D_HF;
   TH2F* h_FullSignal3D0_HF;
-
+*/
   /////////////////////////////////////////////
   TH2F* h_mapCapCalib047_HB;
   TH2F* h_mapCapCalib047_HE;
@@ -1323,7 +1323,7 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH1F*  h_shape0_bad_channels_HO;
   TH1F*  h_shape_good_channels_HO;
   TH1F*  h_shape0_good_channels_HO;
-
+  /*
   TH1F*  h_sumamplitude_depth1_HB;
   TH1F*  h_sumamplitude_depth2_HB;
   TH1F*  h_sumamplitude_depth1_HE;
@@ -1449,7 +1449,7 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
     TH1F*  h_ADC_HOdepth4_TS7;
     TH1F*  h_ADC_HOdepth4_TS8;
     TH1F*  h_ADC_HOdepth4_TS9;
-
+*/
 
 
   TH2F* h_mapDepth1Ped0_HB;
@@ -3341,6 +3341,8 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   ///////////////////////////////////////////////  for : sumamplitudesubdet.C script:
   //////////// k0(sub): =0 HB; =1 HE; =2 HO; =3 HF;
   //////////// k1(depth-1): = 0 - 3 or depth: = 1 - 4;
+
+    /*
   for(int k0 = 0; k0<4; k0++) {
     for(int k1 = 0; k1<4; k1++) {
       double sumamplitudesubdet = 0.;	
@@ -3350,6 +3352,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	}//k3
       }//k2
       //////////
+
       if(k0 == 0 && k1 == 0) h_sumamplitude_depth1_HB->Fill(sumamplitudesubdet);
       if(k0 == 0 && k1 == 1) h_sumamplitude_depth2_HB->Fill(sumamplitudesubdet);
       if(k0 == 1 && k1 == 0) h_sumamplitude_depth1_HE->Fill(sumamplitudesubdet);
@@ -3379,7 +3382,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       //////////
     }//k1
   }//k0
-  
+*/
   
   ////////////
   } 
@@ -3737,6 +3740,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	  int k2plot = k2-41;
 	  if(flagcpuoptimization_== 0 ) {
 	    ////////////////////////////////////////////////////////////////  for zgain.C script:
+	    /*
 	    if(signal[k1][k2][k3]>0.) {
 	      if(k1==0) {
 		h_FullSignal3D_HB->Fill(double(k2plot), double(k3), signal[k1][k2][k3]);
@@ -3755,6 +3759,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		h_FullSignal3D0_HF->Fill(double(k2plot), double(k3), 1.);    
 	      }
 	    }
+*/
 	  }// optimization
 	  ////////////////////////////////////////////////////////////////
 
@@ -3797,6 +3802,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	  kkk3 -=1;
 	  	  
 	  if(flagcpuoptimization_== 0 ) {
+	    /*
 	    double GetRMSOverNormalizedSignal =-1.;
 	    if(signal[k1][k2][k3]>0.&& calib0[k1][kkk2][kkk3]>0.) {
 	      GetRMSOverNormalizedSignal = signal[k1][k2][k3]/calib0[k1][kkk2][kkk3];
@@ -3830,6 +3836,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	      if(k1==2) h_GetRMSOverNormalizedSignal3_HO->Fill(GetRMSOverNormalizedSignal,1.);    
 	      if(k1==3) h_GetRMSOverNormalizedSignal3_HF->Fill(GetRMSOverNormalizedSignal,1.);  
 	    }
+*/
 	  }//optimization
 	  ////////////////////////////////////////////////////////////////  for zcalib....C script:
 	  if(signal[k1][k2][k3]>0.) {
@@ -4367,7 +4374,7 @@ void VeRawAnalyzer::beginJob()
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    
+    /*  
     float m7=2;
     float m8=3;
     float m9=5;
@@ -4388,6 +4395,7 @@ void VeRawAnalyzer::beginJob()
     h_FullSignal3D0_HO = new TH2F("h_FullSignal3D0_HO"," ", 82, -41., 41., 72, 0., 72.);
     h_FullSignal3D_HF = new TH2F("h_FullSignal3D_HF"," ",   82, -41., 41., 72, 0., 72.);
     h_FullSignal3D0_HF = new TH2F("h_FullSignal3D0_HF"," ", 82, -41., 41., 72, 0., 72.);
+*/
     //////////////////////////////////////////////////////////////////////////////////////////////////
     h_ADCCalib_HB       = new TH1F("h_ADCCalib_HB"," ",      100, 10.,10000.);
     h_ADCCalib1_HB       = new TH1F("h_ADCCalib1_HB"," ",      100, 0.1,100.1);
@@ -5123,6 +5131,8 @@ void VeRawAnalyzer::beginJob()
     h_shape0_good_channels_HO = new TH1F("h_shape0_good_channels_HO"," ", 10, 0., 10.);
 
     //    if(flagcpuoptimization_== 0 ) {
+
+    /*
 				   int spl= 1000;
 				   float spls=5000;
 				   h_sumamplitude_depth1_HB = new TH1F("h_sumamplitude_depth1_HB"," ", spl, 0.,spls);
@@ -5153,7 +5163,7 @@ void VeRawAnalyzer::beginJob()
 				   h_sumamplitude_depth1_HF1 = new TH1F("h_sumamplitude_depth1_HF1"," ", spl1, 0.,spls1);
 				   h_sumamplitude_depth2_HF1 = new TH1F("h_sumamplitude_depth2_HF1"," ", spl1, 0.,spls1);
 				   h_sumamplitude_depth4_HO1 = new TH1F("h_sumamplitude_depth4_HO1"," ", spl1, 0.,spls1);
-				   
+
 				   int eall= 1000;
 				   float eall1=splashesUpperLimit_;
 				   
@@ -5252,6 +5262,7 @@ void VeRawAnalyzer::beginJob()
 				   h_ADC_HOdepth4_TS7 = new TH1F("h_ADC_HOdepth4_TS7"," ", each, 0.,each1);  
 				   h_ADC_HOdepth4_TS8 = new TH1F("h_ADC_HOdepth4_TS8"," ", each, 0.,each1); 
 				   h_ADC_HOdepth4_TS9 = new TH1F("h_ADC_HOdepth4_TS9"," ", each, 0.,each1); 
+*/
 				   //				   }
     
     h_Amplitude_forCapIdErrors_HB1 = new TH1F("h_Amplitude_forCapIdErrors_HB1"," ", 100, 0.,30000.);
@@ -5957,6 +5968,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 
 
       if(flagcpuoptimization_== 0 ) {
+	/*
       // if(ii == 0 ) amplitude0+=ampldefault;// fC    
       // if(ii == 1 ) amplitude1+=ampldefault;// fC  
       //  
@@ -6038,6 +6050,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	if(sub == 2 && mdepth == 2 )  h_ADC_HEdepth2_TS9->Fill(ampldefault, 1.);
 	if(sub == 2 && mdepth == 3 )  h_ADC_HEdepth3_TS9->Fill(ampldefault, 1.);
       }
+*/
   //////      
 	}//flagcpuoptimization
       if (verbosity == -22) std::cout << "fillDigiAmplitude    amplitude = " << amplitude << std::endl;
@@ -6810,6 +6823,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
       ///////////////////////////////////
 
       if(flagcpuoptimization_== 0 ) {
+	/*
 	if(sub == 4 )  h_ADC_HF->Fill(ampldefault, 1.);
       //  
 	if(sub == 4 && mdepth == 1 )  h_ADC_HFdepth1->Fill(ampldefault, 1.);
@@ -6854,6 +6868,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
 	if(sub == 4 && mdepth == 1 )  h_ADC_HFdepth1_TS9->Fill(ampldefault, 1.);
 	if(sub == 4 && mdepth == 2 )  h_ADC_HFdepth2_TS9->Fill(ampldefault, 1.);
       }
+*/
   //////      
 	}     
       if (verbosity == -51) std::cout << "fillDigiAmplitudeHF  amplitude = " << amplitude << std::endl;
@@ -7314,6 +7329,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
 
       ///////////////////////////////////////////
       if(flagcpuoptimization_== 0 ) {
+	/*
       if(sub == 3 )  h_ADC_HO->Fill(ampldefault, 1.);
       //  
       if(sub == 3 && mdepth == 4 )  h_ADC_HOdepth4->Fill(ampldefault, 1.);
@@ -7348,6 +7364,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
       if(ii == 9 ) {
 	if(sub == 3 && mdepth == 4 )  h_ADC_HOdepth4_TS9->Fill(ampldefault, 1.);
       }
+*/
   //////      
       }     
       
@@ -9017,7 +9034,7 @@ void VeRawAnalyzer::endJob(){
     h_mapDepth3_HE->Write();
     
     ///////////////////////
-    
+    /*  
     h_GetRMSOverNormalizedSignal_HB->Write();
     h_GetRMSOverNormalizedSignal_HE->Write();
     h_GetRMSOverNormalizedSignal_HO->Write();
@@ -9035,7 +9052,7 @@ void VeRawAnalyzer::endJob(){
     h_FullSignal3D0_HO->Write();
     h_FullSignal3D_HF->Write();
     h_FullSignal3D0_HF->Write();
-
+*/
 
     h_nbadchannels_depth1_HB->Write();
     h_runnbadchannels_depth1_HB->Write();
@@ -9798,7 +9815,7 @@ void VeRawAnalyzer::endJob(){
     h_shape0_bad_channels_HO->Write();
     h_shape_good_channels_HO->Write();
     h_shape0_good_channels_HO->Write();
-
+    /*
     h_sumamplitude_depth1_HB->Write();
     h_sumamplitude_depth2_HB->Write();
     h_sumamplitude_depth1_HE->Write();
@@ -9825,7 +9842,7 @@ void VeRawAnalyzer::endJob(){
     h_sumamplitude_depth1_HF1->Write();
     h_sumamplitude_depth2_HF1->Write();
     h_sumamplitude_depth4_HO1->Write();
-    
+
     h_ADC_HB->Write();
     h_ADC_HE->Write();
     h_ADC_HF->Write();
@@ -9924,7 +9941,7 @@ void VeRawAnalyzer::endJob(){
     h_ADC_HOdepth4_TS8->Write();
     h_ADC_HOdepth4_TS9->Write();
 
-
+*/
     h_bcnnbadchannels_depth1_HB->Write();
     h_bcnnbadchannels_depth2_HB->Write();
     h_bcnnbadchannels_depth1_HE->Write();
