@@ -129,8 +129,9 @@ edm::EDGetTokenT<HcalCalibDigiCollection> tok_calib_;
 edm::EDGetTokenT<HBHEDigiCollection> tok_hbhe_;
 edm::EDGetTokenT<HODigiCollection> tok_ho_;
 edm::EDGetTokenT<HFDigiCollection> tok_hf_;  
+
   ////////////////////////////////////
-  
+  // simple test
   ////////////////////////////////////
   double dR(double eta1, double phi1, double eta2, double phi2);
   double phi12(double phi1, double en1, double phi2, double en2);
