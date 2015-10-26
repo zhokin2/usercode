@@ -1,5 +1,6 @@
 1. For <A> vs LS over 4 kvadrants P1, P2, M1, M2:
 
+      c1->cd(1);
       TH1F *twod3= (TH1F*)hfile1->Get("h_sumADCAmplperLS6_P1" );
       TH1F *twod2= (TH1F*)hfile1->Get("h_sum0ADCAmplperLS6_P1");
       twod3->Sumw2();
@@ -18,6 +19,39 @@
 
 (use different colors)
       }
+
+      c1->cd(2);
+      TH1F* diff = new TH1F("diff","", 100, -5., 5.);
+      int nx = ERT1->GetXaxis()->GetNbins();
+      for (int i=1;i<=nx;i++) {
+	double ccc1 =  ERT1->GetBinContent(i);
+	double ccc2 =  ERT2->GetBinContent(i);
+	double ccc3 =  ERT3->GetBinContent(i);
+	double ccc4 =  ERT4->GetBinContent(i);
+	if(ccc1 > 0. ) {
+	  double delta = ccc1-ccc2;
+	  delta = fabs(delta);
+	  if(fabs(ccc1-ccc3) > delta ) delta=fabs(ccc1-ccc3);
+	  if(fabs(ccc1-ccc4) > delta ) delta=fabs(ccc1-ccc4);
+	  if(fabs(ccc2-ccc3) > delta ) delta=fabs(ccc2-ccc3);
+	  if(fabs(ccc2-ccc4) > delta ) delta=fabs(ccc2-ccc4);
+	  if(fabs(ccc3-ccc4) > delta ) delta=fabs(ccc3-ccc4);
+	  
+	  diff->Fill(delta);
+	}
+      }
+      diff->SetMarkerStyle(20);
+      diff->SetMarkerSize(0.4);
+      diff->SetXTitle("max difference \b");
+      diff->SetMarkerColor(2);
+      diff->SetLineColor(0);
+      //    diff->SetMaximum(110.);
+      //    diff->SetMinimum(30.0);
+      gPad->SetGridy();
+      gPad->SetLogy();
+      diff->Draw("Error");
+
+
 TO IDENTIFY: max difference between dependencies to be higher 2. It's main plot for errors-A (other plots only for confirmation)
 
 2. For Error of Type-B: (here HFdepth1)
