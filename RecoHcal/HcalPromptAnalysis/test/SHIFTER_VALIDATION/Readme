@@ -21,7 +21,7 @@
       }
 
       c1->cd(2);
-      TH1F* diff = new TH1F("diff","", 100, -5., 5.);
+      TH1F* diff = new TH1F("diff","", 100, 0., 4.);
       int nx = ERT1->GetXaxis()->GetNbins();
       for (int i=1;i<=nx;i++) {
 	double ccc1 =  ERT1->GetBinContent(i);
