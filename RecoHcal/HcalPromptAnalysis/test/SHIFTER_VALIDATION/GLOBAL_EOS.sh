@@ -8,47 +8,115 @@ eos='/afs/cern.ch/project/eos/installation/0.3.84-aquamarine/bin/eos.select'
 # print usage info
 if [[ "$1" == "" ]]; then
   echo "Usage:"
-  echo "  $0 [file] [comment]"
-  echo "    [file] - file with run numbers"
-  echo "example: ./GLOBAL.sh Run_List.txt TestRuns"
-  exit
+  echo "  $0 file [comment] [-ignore-file] [-das-cache]"
+  echo "    file  -- a file with run numbers"
+  echo "    comment  -- add a comment line (instead of spaces use '_')"
+  echo "    -ignore-file   -- skips production of run html pages. Produces"
+  echo "                      only the global page. File name is not needed."
+  echo "    -das-cache   -- whether to save DAS information locally for a reuse"
+  echo
+  echo "example: ./GLOBAL.sh Run_List.txt"
+  exit 1
 fi
 
 cmsenv 2>/dev/null
 if [ $? == 0 ] ; then
     eval `scramv1 runtime -sh`
 fi
-echo "using eos command `ls ${eos}`"
+temp_var=`ls ${eos}`
+status="$?"
+echo "using eos command <${temp_var}>"
+if [ ! ${status} -eq 0 ] ; then
+    echo "failed to find eos command"
+    # exit 1
+fi
 
 
+# create log directory
+LOG_DIR="dir-Logs"
+if [ ! -d ${LOG_DIR} ] ; then mkdir ${LOG_DIR}; fi
+rm -f ${LOG_DIR}/*
+
+
+# Process arguments and set the flags
+fileName=$1
+comment=$2
+if [ ${#comment} -gt 0 ] && [ "${comment:0:1}" == "-" ] ; then comment=""; fi
+ignoreFile=0
 debug=0
-DEBUG_DIR="dir-debug/"
-if [ "$1" == "-debug2" ] ; then
-    #echo "-debug2 detected"
-    debug=2
-    shift 1
-elif [ "$1" == "-debug" ] ; then
-    #echo "-debug detected"
-    debug=1
-    #rm -rf ${DEBUG_DIR}/*
-    if [ ! -d ${DEBUG_DIR} ] ; then mkdir ${DEBUG_DIR}; fi
-    shift 1
-fi
-if [ ${debug} -gt 0 ] ; then
-    echo -e "\n\tDEBUG MODE=${debug} detected\n"
-fi
+dasCache=0
+DAS_DIR="d-DAS-info"
 
+for a in $@ ; do
+    if [ "$a" == "-ignore-file" ] ; then
+	echo " ** file will be ignored"
+	fileName=""
+	ignoreFile=1
+    elif [ "$a" == "-das-cache" ] ; then
+	echo " ** DAS cache ${DAS_DIR} enabled"
+	dasCache=1
+	if [ ! -d ${DAS_DIR} ] ; then mkdir ${DAS_DIR}; fi
+    else
+	temp_var=${a/-debug/}
+	if [ ${#a} -gt ${#temp_var} ] ; then
+	    debug=${temp_var}
+	    echo " ** debug detected (debug=${debug})"
+	fi
+    fi
+done
+
+# Obtain the runList from a file, if needed
 runList=""
-if [ ${#1} -gt 0 ] ; then
-  if [ -s $1 ] ; then
-      runList=`cat $1`
+if [ ${#fileName} -gt 0 ] ; then
+  if [ -s ${fileName} ] ; then
+      runList=`cat ${fileName}`
   else
-      echo "<$1> does not seem to be a valid file"
+      echo "<${fileName}> does not seem to be a valid file"
       exit 2
   fi
 else
-    echo " no file provided"
+    if [ ${ignoreFile} -eq 0 ] ; then
+	echo " ! no file provided"
+    fi
+    echo " ! will produce only the global html page"
 fi
+
+
+# Check the runList and correct the correctables
+# Replace ',' and ';' by empty spaces
+runList=`echo "${runList}" | sed 'sk,k\ kg' | sed 'sk;k\ kg'`
+ok=1
+for r in ${runList} ; do
+    if [ ! ${#r} -eq 6 ] ; then
+	echo "run numbers are expected to be of length 6. Check <$r>"
+	ok=0
+    fi
+    debug_loc=0
+    if [ "$r" -eq "$r" ] 2>/dev/null ; then
+	if [ ${debug_loc} -eq 1 ] ; then echo "run variable <$r> is a number (ok)"; fi
+    else
+	echo "error: run variable <$r> is not an integer number"
+	ok=0
+    fi
+done
+
+echo "Tested `wc -w <<< "${runList}"` runs from file ${fileName}"
+if [ ${ok} -eq 0 ] ; then
+    echo "errors in the file ${fileName} with run numbers"
+    exit 3
+else
+    if [ ${#fileName} -gt 0 ] ; then
+	echo "run numbers in ${fileName} verified ok"
+    fi
+fi
+
+comment=`echo ${comment} | sed sk\_k\ kg`
+if [ ${#comment} -gt 0 ] ; then
+    echo "comment \"${comment}\" will be added to the pages"
+fi
+
+if [ ${debug} -eq 3 ] ; then exit; fi
+
 
 echo 
 echo 
@@ -60,8 +128,10 @@ echo -e "list complete\n"
 #processing
 
 for i in ${runList} ; do
+    runnumber=$i
 
-runnumber=$i
+    logFile="${LOG_DIR}/log_${runnumber}.out"
+    rm -f ${logFile}
 
 # if [[ "$runnumber" > 233890 ]] ; then
     echo 
@@ -69,43 +139,123 @@ runnumber=$i
     echo
     echo  "Run for processing $runnumber"
     echo  "file=root://eoscms//cms/$HistoDir/Global_$runnumber.root"
-    xrdcp root://eoscms//eos/cms/$HistoDir/Global_$runnumber.root Global_$runnumber.root 
+    if [ ! -s Global_${runnumber}.root ] ; then
+	xrdcp root://eoscms//eos/cms/$HistoDir/Global_$runnumber.root Global_$runnumber.root
+	status="$?"
+	if [ ! ${status} -eq 0 ] ; then
+	    echo "failed to get file Global_${runnumber}.root"
+	    exit 2
+	fi
+    fi
     
     #CMT processing
-    ./RemoteMonitoringGLOBAL.cc.exe Global_$runnumber.root
-    cmsMkdir $WebDir/CMT/GLOBAL_$runnumber
-    cmsStage -f HELP.html $WebDir/CMT
+    echo -e "\nRemoteMonitoringGLOBAL\n" >> ${logFile}
+    ./RemoteMonitoringGLOBAL.cc.exe Global_$runnumber.root 2>&1 | tee -a ${logFile}
+    if [ ! $? -eq 0 ] ; then
+	echo "GLOBAL processing failed"
+	exit 2
+    fi
+
+    if [ ! -s HELP.html ] ; then
+	echo "GLOBAL failure was not detected. HELP.html is missing"
+	exit 2
+    fi
+
+
+    local_WebDir=dir-CMT-GLOBAL_${runnumber}
+    rm -rf ${local_WebDir}
+    if [ ! -d ${local_WebDir} ] ; then mkdir ${local_WebDir}; fi
     for j in $(ls -r *.html); do
-       cat $j | sed 's#cms-cpt-software.web.cern.ch\/cms-cpt-software\/General\/Validation\/SVSuite#cms-conddb-dev.cern.ch\/eosweb\/hcal#g'> tmp.html
-       cmsStage -f tmp.html $WebDir/CMT/GLOBAL_$runnumber/$j
-       rm tmp.html
+	cat $j | sed 's#cms-cpt-software.web.cern.ch\/cms-cpt-software\/General\/Validation\/SVSuite#cms-conddb-dev.cern.ch\/eosweb\/hcal#g' \
+	    > ${local_WebDir}/$j
     done
-    for j in $(ls -r *.png); do
-       cmsStage -f $j $WebDir/CMT/GLOBAL_$runnumber
-    done 
-\
+    cp *.png ${local_WebDir}
+    cp HELP.html ${local_WebDir}
+    files=`cd ${local_WebDir}; ls`
+    #echo "CMT files=${files}"
+
+    if [ ${debug} -eq 0 ] ; then
+	cmsMkdir $WebDir/CMT/GLOBAL_$runnumber
+	if [ ! $? -eq 0 ] ; then
+	    echo "CMT cmsMkdir failed"
+	    exit 2
+	fi
+	for f in ${files} ; do
+	    echo "cmsStage -f ${local_WebDir}/${f} $WebDir/CMT/GLOBAL_$runnumber/${f}"
+	    cmsStage -f ${local_WebDir}/${f} $WebDir/CMT/GLOBAL_$runnumber/${f}
+	    if [ ! $? -eq 0 ] ; then
+		echo "CMT cmsStage failed for ${f}"
+		exit 2
+	    fi
+	done
+    else
+        # debuging
+	echo "debugging: files are not copied to EOS"
+    fi
+
     rm *.html
     rm *.png    
 
     #RMT processing
-    ./RemoteMonitoringMAP_Global.cc.exe Global_$runnumber.root Global_$runnumber.root
-    cmsMkdir $WebDir/GlobalRMT/GLOBAL_$runnumber
-    cmsStage -f HELP.html $WebDir/GlobalRMT
+    echo -e "\nRemoteMonitoringMAP_Global\n" >> ${logFile}
+    ./RemoteMonitoringMAP_Global.cc.exe Global_$runnumber.root Global_$runnumber.root 2>&1 | tee -a ${logFile}
+    if [ ! $? -eq 0 ] ; then
+	echo "MAP_Global processing failed"
+	exit 2
+    fi
+
+    if [ ! -s HELP.html ] ; then
+	echo "MAP_Global failure was not detected. HELP.html is missing"
+	exit 2
+    fi
+
+    local_WebDir=dir-RMT-GLOBAL_${runnumber}
+    rm -rf ${local_WebDir}
+    if [ ! -d ${local_WebDir} ] ; then mkdir ${local_WebDir}; fi
     for j in $(ls -r *.html); do
-       cat $j | sed 's#cms-cpt-software.web.cern.ch\/cms-cpt-software\/General\/Validation\/SVSuite#cms-conddb-dev.cern.ch\/eosweb\/hcal#g'> tmp.html
-       cmsStage -f tmp.html $WebDir/GlobalRMT/GLOBAL_$runnumber/$j
-       rm tmp.html
+	cat $j | sed 's#cms-cpt-software.web.cern.ch\/cms-cpt-software\/General\/Validation\/SVSuite#cms-conddb-dev.cern.ch\/eosweb\/hcal#g' \
+		> ${local_WebDir}/$j
     done
-    for j in $(ls -r *.png); do
-       cmsStage -f $j $WebDir/GlobalRMT/GLOBAL_$runnumber
-    done 
+    cp *.png ${local_WebDir}
+    cp HELP.html ${local_WebDir}
+    files=`cd ${local_WebDir}; ls`
+    #echo "RMT files=${files}"
+
+    if [ ${debug} -eq 0 ] ; then
+	cmsMkdir $WebDir/RMT/GLOBAL_$runnumber
+	if [ ! $? -eq 0 ] ; then
+	    echo "RMT cmsMkdir failed"
+	    exit 2
+	fi
+	for f in ${files} ; do
+	    echo "cmsStage -f ${local_WebDir}/${f} $WebDir/RMT/GLOBAL_$runnumber/${f}"
+	    cmsStage -f ${local_WebDir}/${f} $WebDir/RMT/GLOBAL_$runnumber/${f}
+	    if [ ! $? -eq 0 ] ; then
+		echo "RMT cmsStage failed for ${f}"
+		exit 2
+	    fi
+	done
+    else
+        # debuging
+	echo "debugging: files are not copied to EOS"
+    fi
 
     rm *.html
     rm *.png
-   
+
 #fi
 
 done
+
+if [ ${debug} -eq 2 ] ; then
+    echo "debug=2 skipping web page creation"
+    exit 2
+fi
+
+
+# #  #  # # # # # # # # # # #####
+# Create global web page
+#
 
 echo "Get list of files in ${HistoDir}"
 #cmsLs $HistoDir | grep root | awk  '{print $5}' | awk -F / '{print $10}' > rtmp
@@ -116,18 +266,24 @@ echo "Get list of files in ${HistoDir}"
 
 histoFiles=`${eos} ls $HistoDir | grep root | awk -F '_' '{print $2}' | awk -F '.' '{print $1}'`
 echo -e '\n\nRun numbers on EOS:'
-runList=`echo $histoFiles | tee _runlist_`
-echo "${runList}"
+runListEOS=`echo $histoFiles | tee _runlist_`
+echo "${runListEOS}"
 echo -e "list complete\n"
 
 #making table
 
 # print header to index.html 
-echo `cat header_GLOBAL_EOS.txt`> index_draft.html
+if [ ${#comment} -eq 0 ] ; then
+    echo `cat header_GLOBAL_EOS.txt` > index_draft.html
+else
+    echo `head -n -1 header_GLOBAL_EOS.txt` > index_draft.html
+    echo -e "<td class=\"s1\" align=\"center\">Comment</td>\n</tr>\n" \
+	>> index_draft.html
+fi
 
 #extract run numbers
 k=0
-for i in ${runList} ; do
+for i in ${runListEOS} ; do
  
 #runnumber=$(echo $i | sed -e 's/[^0-9]*//g')
 #runnumber=$(echo $i | awk -F 'run' '{print $2}'| awk -F '.' '{print $1}')
@@ -140,18 +296,20 @@ echo
 echo 'RUN number = '$runnumber
 
 # extract the date of file
+dasInfo=${DAS_DIR}/das_${runnumber}.txt
 got=0
-if [ ${debug} -eq 2 ] ; then
+if [ ${dasCache} -eq 1 ] ; then
     rm -f tmp
-    cp ${DEBUG_DIR}/das_${runnumber}.txt tmp
-    if [ -s tmp ] ; then
+    if [ -s ${dasInfo} ] ; then
+	cp ${dasInfo} tmp
 	got=1
     else
-	echo "failed to use ${DEBUG_DIR} contents for ${runnumber}"
+	echo "no ${dasInfo} found. Will use das_client.py"
     fi
 fi
 if [ ${got} -eq 0 ] ; then
     ./das_client.py --query="run=${i} | grep run.beam_e,run.bfield,run.nlumis,run.lhcFill,run.delivered_lumi,run.duration,run.start_time,run.end_time" --limit=0 > tmp
+    if [ ${dasCache} -eq 1 ] ; then cp tmp ${dasInfo}; fi
 fi
 
 #cat tmp
@@ -163,7 +321,6 @@ nL=`cat tmp | awk '{print $3}'`
 Fill=`cat tmp | awk '{print $4}'`
 dLumi=`cat tmp | awk '{print $5}'`
 D=`cat tmp | awk '{print $6}'`
-if [ ${debug} -eq 1 ] ; then cp tmp ${DEBUG_DIR}/das_${runnumber}.txt; fi
 rm tmp
 
 #echo 'ver 1'
@@ -219,7 +376,14 @@ echo '<td class="s'$raw'" align="center">'$B' T</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$E' GeV</td>'>> index_draft.html
 #echo '<td class="s'$raw'" align="center">'$dLumi' /nb</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$Date_obr' /nb</td>'>> index_draft.html
-#echo '<td class="s'$raw'" align="center">'$commentariy'</td>'>> index_draft.html
+if [ ${#comment} -gt 0 ] ; then
+    #echo "runList=${runList}, check ${runnumber}"
+    temp_var=${runList/${runnumber}/}
+    if [ ${#temp_var} -lt ${#runList} ] ; then
+	echo "adding a commentary for this run"
+	echo "<td class=\"s${raw}\" align=\"center\">${comment}</td>" >> index_draft.html
+    fi
+fi
 echo '</tr>'>> index_draft.html
 prev=$i
 
@@ -230,21 +394,30 @@ done
 # print footer to index.html 
 echo `cat footer.txt`>> index_draft.html
 
-cmsStage -f index_draft.html $WebDir/CMT/index.html
-status="$?"
+
+status=0
+if [ ${debug} -gt 0 ] ; then
+    echo "debug=${debug}. No upload to eos"
+    status=-1
+else
+    cmsStage -f index_draft.html $WebDir/CMT/index.html
+    status="$?"
 #rm index_draft.html
+fi
 
 # delete temp files
 
-rm *.root
-rm _runlist_
+if [ ${debug} -eq 0 ] ; then
+    rm -f *.root
+    rm -f _runlist_
+fi
 
-echo "script done"
-
-# check exit code
+# check eos-upload exit code
 if [[ "${status}" == "0" ]]; then
   echo "Successfully uploaded!"
 else
   echo "ERROR: Uploading failed"
   exit 1
 fi
+
+echo "script done"

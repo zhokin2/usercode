@@ -21,8 +21,10 @@
 #include "TFile.h"
 #include "TLine.h"
 #include "TGraph.h"
+#include <TPaveText.h>
 
 using namespace std;
+//inline void HERE(const char *msg) { std::cout << msg << std::endl; }
 
 
 int main(int argc, char *argv[])
@@ -1463,7 +1465,249 @@ int main(int argc, char *argv[])
 //======================================================================
 
 //======================================================================
+/// Special tests for HF
+// For  2D and  1D plots with Amplitude. Produces ChkErrA_HFx.png
+
+  for (int depth=1; depth<=2; depth++) {
+    TH2F *h2Ceff= NULL;
+    TH2F *h2Diffe= NULL;
+    TH1F* h1diffADCAmpl= NULL;
+
+    cHE->Clear();
+    cHE->Divide(3,1);
+    cHE->cd(1);
+
+    // h_mapDepth1ADCAmpl_HF div h_mapDepth1_HF
+    TString hname1= Form("h_mapDepth%dADCAmpl_HF",depth);
+    TString hname0= Form("h_mapDepth%d_HF",depth);
+    TH2F *twod1= (TH2F*)hfile->Get(hname1);
+    TH2F *twod0= (TH2F*)hfile->Get(hname0);
+    if (!twod1 || !twod0) {
+      TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+      ptext->AddText("Missing histo");
+      std::cout << "specHF test: failed to load " << hname1 << " and/or "
+		<< hname0 << "\n";
+      if (!twod1) ptext->AddText(hname1);
+      if (!twod0) ptext->AddText(hname0);
+      ptext->Draw();
+      continue;
+    }
+    else {
+      h2Ceff = (TH2F*)twod1->Clone(Form("Ceff_HF%d",depth));
+      h2Ceff->SetTitle(Form("HF Depth %d. (No cut) \b",depth));
+      h2Ceff->Divide(twod1,twod0, 1, 1, "B");
+
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h2Ceff->SetMarkerStyle(20);
+      h2Ceff->SetMarkerSize(0.4);
+      //h2Ceff->GetZaxis()->SetLabelSize(0.08);
+      h2Ceff->SetXTitle("#eta \b");
+      h2Ceff->SetYTitle("#phi \b");
+      h2Ceff->SetZTitle("h_mapDepth1ADCAmpl_HF \b");
+      h2Ceff->SetMarkerColor(2);
+      h2Ceff->SetLineColor(2);
+      h2Ceff->Draw("COLZ");
+    }
+
+    cHE->cd(2);
+    ///////////////////////////////////////
+    if (h2Ceff) {
+      // TO IDENTIFY: see red bins in eta-phi space (applied cut on Aij: <20 || >3000
+      h2Diffe = (TH2F*)h2Ceff->Clone(Form("Diffe_Depth%d_HF",depth));
+      h2Diffe->SetTitle(Form("HF Depth %d. Cut avg(ADCAmpl) > 20 \b",depth));
+      int nx = h2Ceff->GetXaxis()->GetNbins();
+      int ny = h2Ceff->GetYaxis()->GetNbins();
+      for (int i=1;i<=nx;i++) {
+	for (int j=1;j<=ny;j++) {
+	  double ccc1 =  h2Ceff->GetBinContent(i,j)   ;
+	  h2Diffe->SetBinContent(i,j,0.);
+	  if(ccc1 > 20.)  h2Diffe->SetBinContent(i,j,ccc1);
+	}
+      }
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h2Diffe->SetMarkerStyle(20);
+      h2Diffe->SetMarkerSize(0.4);
+      //h2Diffe->GetZaxis()->SetLabelSize(0.08);
+      h2Diffe->SetXTitle("#eta \b");
+      h2Diffe->SetYTitle("#phi \b");
+      h2Diffe->SetZTitle("<ADCAmpl> bigger 20.- HF Depth1 \b");
+      h2Diffe->SetMarkerColor(2);
+      h2Diffe->SetLineColor(2);
+      h2Diffe->Draw("COLZ");
+    }
+    // To IDENTIFY: see color different bins in eta-phi space
+
+    cHE->cd(3);
+    if (h2Ceff) {
+      h1diffADCAmpl = new TH1F(Form("diffADCAmpl_Depth%d_HF",depth),"",
+			       100, -20.,200.);
+      h1diffADCAmpl->SetTitle(Form("HF Depth %d \b",depth));
+      int nx = h2Ceff->GetXaxis()->GetNbins();
+      int ny = h2Ceff->GetYaxis()->GetNbins();
+      for (int i=1;i<=nx;i++) {
+	for (int j=1;j<=ny;j++) {
+	  if(h2Ceff->GetBinContent(i,j) !=0 ) {
+	    double ccc1 =  h2Ceff->GetBinContent(i,j) ;
+	    h1diffADCAmpl->Fill(ccc1);
+	  }
+	}
+      }
+      gPad->SetLogy();
+      h1diffADCAmpl->SetMarkerStyle(20);
+      h1diffADCAmpl->SetMarkerSize(0.4);
+      h1diffADCAmpl->GetYaxis()->SetLabelSize(0.04);
+      h1diffADCAmpl->SetXTitle("<ADCAmpl> in each cell \b");
+      h1diffADCAmpl->SetMarkerColor(2);
+      h1diffADCAmpl->SetLineColor(2);
+      h1diffADCAmpl->Draw("");
+    }
+    cHE->Update();
+    cHE->Print(Form("ChkErrA_HF%d.png",depth));
+    cHE->Clear();
+    if (h2Ceff) delete h2Ceff;
+    if (h2Diffe) delete h2Diffe;
+    if (h1diffADCAmpl) delete h1diffADCAmpl;
+  } // depth
+
+//======================================================================
+/// Special tests for HF
+// For occupancy plots. Produces OccPlots_HFx.png (x=1)
+
+  std::vector<TString> specOccMessages;
+
+  // only 1 depth!!!
+  for (int depth=1; depth<=1; depth++) {
+    TH2F *h2Ceff= NULL;
+    TH2F *h2Diffe= NULL;
+    TH1F* h1diffADCAmpl= NULL;
+
+    cPED->Clear();
+    cPED->Divide(2,2);
+
+    // h_mapDepth1ADCAmpl_HF div h_mapDepth1_HF
+    TString hname1= Form("h_mapDepth%dADCAmpl_HF",depth);
+    TString hname0= Form("h_mapDepth%d_HF",depth);
+    TH2F *twod1= (TH2F*)hfile->Get(hname1);
+    TH2F *twod0= (TH2F*)hfile->Get(hname0);
+    std::vector<TH1F*> hV;
+    if (!twod1 || !twod0) {
+      cPED->cd(1);
+      TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+      ptext->AddText("Missing histo");
+      std::cout << "specHF test (occ): failed to load " << hname1 << " and/or "
+		<< hname0 << "\n";
+      if (!twod1) ptext->AddText(hname1);
+      if (!twod0) ptext->AddText(hname0);
+      ptext->Draw();
+      continue;
+    }
+    else {
+      TH2F *h2Cefz= (TH2F*)twod1->Clone(Form("h2Cefz_%d",depth));
+      int nx= h2Cefz->GetNbinsX();
+      int ny= h2Cefz->GetNbinsY();
+
+      const int specCount=4;
+      const TString specHNames[specCount] = { "h_mapDepth1_HF",
+					      "h_mapDepth1_HF",
+					      "h_RatioOccupancy_HFM",
+					      "h_RatioOccupancy_HFP" };
+      const TString specCaseNames[specCount] = { "HF-", "HF+", "RatioOcc_HFM", "RatioOcc_HFP" };
+
+      for (int iSpec=0; iSpec<specCount; iSpec++) {
+	cPED->cd(iSpec+1);
+
+	TString hName=specHNames[iSpec];
+	TH2F *h2Cefz225= (TH2F*)hfile->Get(hName);
+	if (!h2Cefz225) {
+	  TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+	  ptext->AddText("Missing histo");
+	  std::cout << "specHF test (occ): failed to load " << hName << "\n";
+	  ptext->AddText(hName);
+	  ptext->Draw();
+	  continue;
+	}
+
+	TH1F* ADCAmplperLS  = new TH1F(Form("ADCAmplperLS_%d",iSpec),"",72, 1.,73.);
+	ADCAmplperLS->SetDirectory(0);
+	hV.push_back(ADCAmplperLS);
+
+	int ncountall=0;
+	int ncountmin=0;
+	int nnnmin=100000000;
+	int nnnbins=0;
+	for (int j=1;j<=ny;j++) {
+	  //	cout<<" " << specCaseNames[iSpec] << "  ****************   j = "<<   j    <<endl;
+	  for (int i=1;i<=nx;i++) {
+	    if ((iSpec==0) && (i>=42)) continue; // HF-
+	    if ((iSpec==1) && (i< 42)) continue; // HF+
+	    //	    if(h2Cefz->GetBinContent(i,j) > 0.) cout<<" i = "<<i<<" j = "<<j<<"  BinContent= "<<    h2Cefz->GetBinContent(i,j)    <<endl;
+
+	    // no cuts - take all
+	    //	    	    if(h2Cefz->GetBinContent(i,j)> -10.) {
+	    // cut on RMS:
+	    //	    if(h2Cefz->GetBinContent(i,j)> 1.) {
+	    // cut on Amplitude
+	    if(h2Cefz->GetBinContent(i,j)> 20.) {
+	      double ccc1 =  h2Cefz225->GetBinContent(i,j);
+	      if(ccc1>0.) {
+		ADCAmplperLS ->Fill(float(j), ccc1);
+		ncountall += ccc1 ;
+		ncountmin += ccc1;
+	      }
+	    }
+	  }
+	}
+	if(ncountmin> 0) {
+	  //	  cout<< specCaseNames[iSpec] << "     - ncountmin = "<<   ncountmin    <<" ncountall  = "<<   ncountall    <<endl;
+	  if(ncountmin < nnnmin ) nnnmin = ncountmin;
+	  ncountmin=0;
+	  nnnbins++;
+	}
+	//      cout<<" " << specCaseNames[iSpec] << "    - ncountall = "<<   ncountall    <<" nnnmin= "<<   nnnmin    <<" nnnbins= "<<   nnnbins    <<" Ave= "<<   ncountall/nnnbins    <<endl;
+	TString msg= specCaseNames[iSpec];
+	if(nnnmin > 0.) {
+	  cout<< " " << specCaseNames[iSpec] << "    - ncountall/nnnbins/nnnmin = "<<   (float)ncountall/nnnbins/nnnmin    <<endl;
+	  msg.Append(Form("    - ncountall/nnnbins/nnnmin = %f (calculated from %d/%d/%d)",(float)ncountall/nnnbins/nnnmin,ncountall,nnnbins,nnnmin ));
+	}
+	else msg.Append(" no warning");
+	specOccMessages.push_back(msg);
+
+	//      gPad->SetLogy();
+	ADCAmplperLS ->SetMarkerStyle(20);
+	ADCAmplperLS ->SetMarkerSize(0.4);
+	ADCAmplperLS ->GetYaxis()->SetLabelSize(0.04);
+	//      ADCAmplperLS ->SetXTitle("<ADCAmpl> per LS HB1 \b");
+	ADCAmplperLS ->SetMarkerColor(2);
+	ADCAmplperLS ->SetLineColor(4);
+	//      ADCAmplperLS ->SetMaximum(30.0);
+	//      ADCAmplperLS ->SetMinimum(25.0);
+	ADCAmplperLS->SetXTitle(Form("Hits vs Phi for  %s  cut:A>20 \b",specCaseNames[iSpec].Data()));
+	ADCAmplperLS ->Draw();
+      } // iSpec
+    }  // twod0 and twod1 are ok
+
+    cPED->Update();
+    cPED->Print(Form("OccPlots_HF%d.png",depth));
+    cPED->Clear();
+
+    // clean-up
+    if (twod1) delete twod1;
+    //if (twod0) delete twod0;// do not delete - sometimes causes trouble later
+    for (unsigned int i=0; i<hV.size(); i++) {
+      if (hV[i]) delete hV[i];
+    }
+  } // dummy loop on depth
+
+  std::cout << "Special errors done" << std::endl;
+
+
+//======================================================================
 /// Prepare maps of good/bad channels:
+
 
     TH2F *Map_ALL = new TH2F("Map_All","Map_all", 82, -41, 40, 72, 0, 71);             
     int nx = Map_ALL->GetXaxis()->GetNbins();
@@ -1482,7 +1726,7 @@ int main(int argc, char *argv[])
     int flag_W = 0;
     int flag_B = 0;
     int flag_P = 0;
-    
+
     for (int i=1;i<=nx;i++) {  //Eta
        for (int j=1;j<=ny;j++) {	// Phi  
           for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
@@ -1493,7 +1737,7 @@ int main(int argc, char *argv[])
 	     }	
           }
        }
-    }   	  
+    }
 
     for (int i=1;i<=nx;i++) {  //Eta
        for (int j=1;j<=ny;j++) {	// Phi  
@@ -1610,9 +1854,9 @@ int main(int argc, char *argv[])
 	  }//end Sub 	  	  
        }//end Phi
     }//end Eta 
-                   
+
 // subdet maps
-  for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
+  for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
        if (sub==1) cHB->Divide(2,1);
        if (sub==2) cHE->Divide(3,1);
        if (sub==3) cONE->Divide(1,1);
@@ -1648,7 +1892,7 @@ int main(int argc, char *argv[])
        if (sub==3) {cONE->Print("MAPHO.png"); cONE->Clear();}
        if (sub==4) {cHB->Print("MAPHF.png"); cHB->Clear();} 
   }
-  
+
 // ALL SubDet  
   gStyle->SetOptTitle(0);
   TCanvas *cmain = new TCanvas("cmain","MAP",800,800);
@@ -1672,7 +1916,7 @@ int main(int argc, char *argv[])
   std::string raw_class, raw_class1, raw_class2, raw_class3;  
   int ind = 0;
   
-  for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
+  for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
      ofstream htmlFileT,htmlFileC, htmlFileD,htmlFileP,htmlFileS ;
      if (sub==1) {htmlFileT.open("HB_Tile.html"); htmlFileC.open("HB_Calib.html");htmlFileD.open("HB_Drift.html");htmlFileP.open("HB_Pedestals.html");htmlFileS.open("HB_Shapes.html");}
      if (sub==2) {htmlFileT.open("HE_Tile.html"); htmlFileC.open("HE_Calib.html");htmlFileD.open("HE_Drift.html");htmlFileP.open("HE_Pedestals.html");htmlFileS.open("HE_Shapes.html");}
@@ -2136,7 +2380,7 @@ int main(int argc, char *argv[])
 //======================================================================
 // Creating subdet  html pages:
   
-  for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
+  for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
      ofstream htmlFile;
      if (sub==1) htmlFile.open("HB.html");
      if (sub==2) htmlFile.open("HE.html");
@@ -2171,6 +2415,19 @@ int main(int argc, char *argv[])
      if (sub==3) htmlFile << "<h1> HCAL OUTER, RUN = "<< runnumber <<" </h1>"<< std::endl;
      if (sub==4) htmlFile << "<h1> HCAL FORWARD, RUN = "<< runnumber <<" </h1>"<< std::endl; 
      htmlFile << "<br>"<< std::endl;
+     htmlFile << "<a name=\"Top\"></a>\n";
+     htmlFile << "<b>Contents:<br>\n";
+     htmlFile << "1. <a href=\"#AnalysisResults\">Analysis results</a><br>\n";
+     htmlFile << "2. <a href=\"#Status\">Status</a><br>\n";
+     htmlFile << "2A. <a href=\"#ChannelMap\">Channel map</a><br>\n";
+     htmlFile << "2B. <a href=\"#BadChannels\">List of bad channels</a><br>\n";
+     htmlFile << "2C. <a href=\"#BadPedestals\">List of channels with bad pedestals</a><br>\n";
+     if (sub==4) {
+       htmlFile << "2D. <a href=\"#ErrorA\">Cross check for error A</a><br>\n";
+       htmlFile << "2E. <a href=\"#Occupancy\">Occupancy plots</a><br>\n";
+     }
+
+     htmlFile << "<a name=\"AnalysisResults\"></a>\n";
      if (sub==1) htmlFile << "<h2> 1. Analysis results for HB</h2>"<< std::endl;   
      if (sub==2) htmlFile << "<h2> 1. Analysis results for HE</h2>"<< std::endl;
      if (sub==3) htmlFile << "<h2> 1. Analysis results for HO</h2>"<< std::endl;
@@ -2210,10 +2467,12 @@ int main(int argc, char *argv[])
      htmlFile << "</tr>"<< std::endl;
      htmlFile << "</table>"<< std::endl;
      htmlFile << "<br>"<< std::endl;   
+     htmlFile << "<a name=\"Status\"></a>\n";
      if (sub==1) htmlFile << "<h2> 2.Status HB over all criteria </h2>"<< std::endl;
      if (sub==2) htmlFile << "<h2> 2.Status HE over all criteria </h2>"<< std::endl;
      if (sub==3) htmlFile << "<h2> 2.Status HO over all criteria </h2>"<< std::endl;
      if (sub==4) htmlFile << "<h2> 2.Status HF over all criteria </h2>"<< std::endl;
+     htmlFile << "<a name=\"ChannelMap\"></a>\n";
      htmlFile << "<h3> 2.A.Channel map for each Depth </h3>"<< std::endl;
      htmlFile << "<h4> Channel legend: green - good, red - bad (rate of failures at least 0.1), yellow - at least 2% gain drift, white - not applicable or out of range </h4>"<< std::endl;
      if (sub==1) htmlFile << " <img src=\"MAPHB.png\" />" << std::endl;      
@@ -2221,9 +2480,11 @@ int main(int argc, char *argv[])
      if (sub==3) htmlFile << " <img src=\"MAPHO.png\" />" << std::endl;      
      if (sub==4) htmlFile << " <img src=\"MAPHF.png\" />" << std::endl;      
      htmlFile << "<br>"<< std::endl;
+     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
      
 //     htmlFile << "<h3> 2.B.List of Bad channels (rate > 0.1) and its rates for each RMT criteria (for GS - %) </h3>"<< std::endl;
 
+     htmlFile << "<a name=\"BadChannels\"></a>\n";
      htmlFile << "<h3> 2.B.List of Bad channels (rate > 0.1) and its rates for each RMT criteria </h3>"<< std::endl;
 
      //htmlFile << "  <td><a href=\"HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
@@ -2341,6 +2602,8 @@ int main(int argc, char *argv[])
      } 
      htmlFile << "</table>" << std::endl;
      htmlFile << "<br>"<< std::endl;
+     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+
 /*     
      htmlFile << "<h3> 2.C.List of Gain unstable channels and its value in % (for other criterias - rate)</h3>"<< std::endl;
      htmlFile << "<table>"<< std::endl;         
@@ -2457,6 +2720,7 @@ int main(int argc, char *argv[])
  */    
      
 //     htmlFile << "<h3> 2.D.List of channels with Bad Pedestals (rate > 0.1) and its rates (for GS - %)</h3>"<< std::endl;
+     htmlFile << "<a name=\"BadPedestals\"></a>\n";
      htmlFile << "<h3> 2.C.List of channels with Bad Pedestals (rate > 0.1) and its rates </h3>"<< std::endl;
      htmlFile << "<table>"<< std::endl;         
      htmlFile << "<tr>";
@@ -2567,8 +2831,30 @@ int main(int argc, char *argv[])
            ind+=1;
 	}
      } 
-     htmlFile << "</table>" << std::endl;  
-       
+     htmlFile << "</table><br>" << std::endl;
+     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+
+
+     if (sub==4) {
+       htmlFile << "<a name=\"ErrorA\"></a>\n";
+       htmlFile << "<h2> 2D. Cross check for error A</h2>\n";
+       htmlFile << " <img src=\"ChkErrA_HF1.png\" /><br><br>\n";
+       htmlFile << " <img src=\"ChkErrA_HF2.png\" /><br>\n";
+       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+
+       htmlFile << "<a name=\"Occupancy\"></a>\n";
+       htmlFile << "<h2> 2E. Occupancy plots</h2>\n";
+       htmlFile << "TO IDENTIFY: see deep gaps( not one bin)<br>\n";
+       htmlFile << " <img src=\"OccPlots_HF1.png\" /><br><br>\n";
+       //htmlFile << " <img src=\"OccPlots_HF2.png\" /><br>\n";
+       for (unsigned int i=0; i<specOccMessages.size(); i++) {
+	 htmlFile << specOccMessages[i] << "<br>\n";
+       }
+       htmlFile << "<br>\n";
+       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+     }
+
+
      htmlFile << "</body> " << std::endl;
      htmlFile << "</html> " << std::endl;
      htmlFile.close();
