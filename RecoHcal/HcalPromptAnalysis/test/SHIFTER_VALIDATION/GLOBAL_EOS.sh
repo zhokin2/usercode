@@ -196,7 +196,9 @@ for i in ${runList} ; do
     rm *.html
     rm *.png    
 
-    #RMT processing
+
+
+    #GlobalRMT processing
     echo -e "\nRemoteMonitoringMAP_Global\n" >> ${logFile}
     ./RemoteMonitoringMAP_Global.cc.exe Global_$runnumber.root Global_$runnumber.root 2>&1 | tee -a ${logFile}
     if [ ! $? -eq 0 ] ; then
@@ -209,7 +211,7 @@ for i in ${runList} ; do
 	exit 2
     fi
 
-    local_WebDir=dir-RMT-GLOBAL_${runnumber}
+    local_WebDir=dir-GlobalRMT-GLOBAL_${runnumber}
     rm -rf ${local_WebDir}
     if [ ! -d ${local_WebDir} ] ; then mkdir ${local_WebDir}; fi
     for j in $(ls -r *.html); do
@@ -219,19 +221,19 @@ for i in ${runList} ; do
     cp *.png ${local_WebDir}
     cp HELP.html ${local_WebDir}
     files=`cd ${local_WebDir}; ls`
-    #echo "RMT files=${files}"
+    #echo "GlobalRMT files=${files}"
 
     if [ ${debug} -eq 0 ] ; then
-	cmsMkdir $WebDir/RMT/GLOBAL_$runnumber
+	cmsMkdir $WebDir/GlobalRMT/GLOBAL_$runnumber
 	if [ ! $? -eq 0 ] ; then
-	    echo "RMT cmsMkdir failed"
+	    echo "GlobalRMT cmsMkdir failed"
 	    exit 2
 	fi
 	for f in ${files} ; do
-	    echo "cmsStage -f ${local_WebDir}/${f} $WebDir/RMT/GLOBAL_$runnumber/${f}"
-	    cmsStage -f ${local_WebDir}/${f} $WebDir/RMT/GLOBAL_$runnumber/${f}
+	    echo "cmsStage -f ${local_WebDir}/${f} $WebDir/GlobalRMT/GLOBAL_$runnumber/${f}"
+	    cmsStage -f ${local_WebDir}/${f} $WebDir/GlobalRMT/GLOBAL_$runnumber/${f}
 	    if [ ! $? -eq 0 ] ; then
-		echo "RMT cmsStage failed for ${f}"
+		echo "GlobalRMT cmsStage failed for ${f}"
 		exit 2
 	    fi
 	done
