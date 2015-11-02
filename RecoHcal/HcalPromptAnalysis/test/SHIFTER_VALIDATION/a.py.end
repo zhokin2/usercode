@@ -60,8 +60,8 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #studyTSmaxShapeHist = cms.untracked.bool(False),
                                   #
                                   ##scripts: zcalib....C
-                                  studyCalibCellsHist = cms.untracked.bool(True),
-                                  #studyCalibCellsHist = cms.untracked.bool(False),
+                                  #studyCalibCellsHist = cms.untracked.bool(True),
+                                  studyCalibCellsHist = cms.untracked.bool(False),
                                   #
                                   ##scripts: zdifampl.C
                                   studyDiffAmplHist = cms.untracked.bool(True),
