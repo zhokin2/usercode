@@ -252,8 +252,8 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   bcnrejectedhigh= cms.int32(3564),
                                   #
                                   # flag cpu time reducing
-                                  #=0-all plots, =1-optimized number of plots
-                                  flagcpuoptimization = cms.int32(1),
+                                  #=0-all plots, =1-optimized number of plots (for Global runs)
+                                  flagcpuoptimization = cms.int32(0),
                                   #
                                   # flag for ask type of Normalization for CMT estimators:
                                   #=0-normalizationOn#evOfLS;   =1-averageVariable-normalizationOn#entriesInLS;
