@@ -3130,29 +3130,36 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       
       //////////////////////////////////////  for ztsmaxa.C,zratio34.C,zrms.C & zdifampl.C scripts:
       if(recordHistoes_) fillDigiAmplitudeHF(digi); 
-  if(verbosity > 0 ) std::cout  <<  " 5  "  <<  endl;
+      if(verbosity > 0 ) std::cout  <<  " 5  "  <<  endl;
       ///////////////////
-      int iphi  = phi-1;
-      int ieta  = eta;
-      if(ieta > 0) ieta -= 1;
-      if (verbosity == -13) std::cout<<"******************   HFDigiCollection nTS= "<<nTS<<std::endl;
-//      double amplitude = 0.; 
-      if(nTS<=numOfTS) for(int i=0;i<nTS;i++) {
-	TS_data[i]=adc2fC[digi->sample(i).adc()];
-	//	if(TS_data[i] < 10. ) TS_data[i] = 0.;
-//	amplitude += TS_data[i];
-	if(studyCalibCellsHist_) signal[3][ieta+41][iphi] += TS_data[i];
-	if(i>1&&i<6) signal3[3][ieta+41][iphi] += TS_data[i];
-	if (verbosity == -13) {
-	  cout<< "HF phi= " << phi << " eta= " << eta << endl;
-	  cout<< "HF iphi= " << iphi << " ieta= " << ieta << endl;
-	  cout<< "HF TS0= " << adc2fC[digi->sample(0).adc()] 
-	      << " TS1= " << adc2fC[digi->sample(1).adc()] 
-	      << " TS2= " << adc2fC[digi->sample(2).adc()] 
-	      << " TS3= " << adc2fC[digi->sample(3).adc()] 
-	      << " TS4= " << adc2fC[digi->sample(4).adc()] 
-	      << " TS5= " << adc2fC[digi->sample(5).adc()] << endl;
-	}// for
+
+      if(recordHistoes_ && studyCalibCellsHist_) {
+	int iphi  = phi-1;
+	int ieta  = eta;
+	if(ieta > 0) ieta -= 1;
+	if (verbosity == -13) std::cout<<"******************   HFDigiCollection nTS= "<<nTS<<std::endl;
+	//      double amplitude = 0.; 
+	if(nTS<=numOfTS) for(int i=0;i<nTS;i++) {
+	  TS_data[i]=adc2fC[digi->sample(i).adc()];
+	  //	if(TS_data[i] < 10. ) TS_data[i] = 0.;
+	  //	amplitude += TS_data[i];
+	  signal[3][ieta+41][iphi] += TS_data[i];
+	  if(i>1&&i<6) signal3[3][ieta+41][iphi] += TS_data[i];
+	  if (verbosity == -13) {
+	    cout<< "HF phi= " << phi << " eta= " << eta << endl;
+	    cout<< "HF iphi= " << iphi << " ieta= " << ieta << endl;
+	    cout<< "HF TS0= " << adc2fC[digi->sample(0).adc()] 
+		<< " TS1= " << adc2fC[digi->sample(1).adc()] 
+		<< " TS2= " << adc2fC[digi->sample(2).adc()] 
+		<< " TS3= " << adc2fC[digi->sample(3).adc()] 
+		<< " TS4= " << adc2fC[digi->sample(4).adc()] 
+		<< " TS5= " << adc2fC[digi->sample(5).adc()] << endl;
+	  }// for
+
+	}//if(recordHistoes_ && studyCalibCellsHist_) 
+	
+	
+	
       }//if(hf.isValid
 
 //      if(studyDiffAmplHist_) {
@@ -3165,7 +3172,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 //      if(depth==2) h_mapDepth2_HF->Fill(double(ieta), double(iphi), 1.);    
 //      if(eta == 29&&phi==1 && verbosity > 0) std::cout<<" 29 eta HF "<<depth<<std::endl; 
    
-    }   
+    }// for
   }
 
   /////////////////////////////////////////////// HBHEDigiCollection
@@ -3323,18 +3330,20 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       if(recordHistoes_) fillDigiAmplitudeHO(digi); 
       
       ///////////////////
-      int iphi  = phi-1;
-      int ieta  = eta;
-      if(ieta > 0) ieta -= 1;
-//      double amplitude = 0;
-      if(nTS<=numOfTS) for(int i=0;i<nTS;i++) {
-	TS_data[i]=adc2fC[digi->sample(i).adc()];
-//	amplitude += TS_data[i];
-	if(studyCalibCellsHist_) signal[2][ieta+41][iphi] += TS_data[i];
-	if(i>1&&i<6) signal3[2][ieta+41][iphi] += TS_data[i];
-      }//if for
-
-   
+      if(recordHistoes_ && studyCalibCellsHist_) {
+	int iphi  = phi-1;
+	int ieta  = eta;
+	if(ieta > 0) ieta -= 1;
+	//      double amplitude = 0;
+	if(nTS<=numOfTS) for(int i=0;i<nTS;i++) {
+	  TS_data[i]=adc2fC[digi->sample(i).adc()];
+	  //	amplitude += TS_data[i];
+	  signal[2][ieta+41][iphi] += TS_data[i];
+	  if(i>1&&i<6) signal3[2][ieta+41][iphi] += TS_data[i];
+	}//if for
+      }//if(recordHistoes_ && studyCalibCellsHist_) 
+      
+      
     }//for HODigiCollection
   }//ho.isValid(
 
@@ -3803,7 +3812,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	  kkk3 -=1;
 	  	  
 	  if(flagcpuoptimization_== 0 ) {
-	    /*
+	    
 	    double GetRMSOverNormalizedSignal =-1.;
 	    if(signal[k1][k2][k3]>0.&& calib0[k1][kkk2][kkk3]>0.) {
 	      GetRMSOverNormalizedSignal = signal[k1][k2][k3]/calib0[k1][kkk2][kkk3];
@@ -3837,7 +3846,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	      if(k1==2) h_GetRMSOverNormalizedSignal3_HO->Fill(GetRMSOverNormalizedSignal,1.);    
 	      if(k1==3) h_GetRMSOverNormalizedSignal3_HF->Fill(GetRMSOverNormalizedSignal,1.);  
 	    }
-*/
+
 	  }//optimization
 	  ////////////////////////////////////////////////////////////////  for zcalib....C script:
 	  if(signal[k1][k2][k3]>0.) {
