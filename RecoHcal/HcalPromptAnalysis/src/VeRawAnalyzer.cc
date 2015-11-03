@@ -41,7 +41,7 @@ using namespace std;
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
 using namespace edm;
-// this is to retrieve HCAL digi's
+// this is to retrieve HCAL digi's  
 
 #include "DataFormats/HcalDetId/interface/HcalElectronicsId.h"
 #include "DataFormats/HcalDetId/interface/HcalGenericDetId.h"
@@ -1543,6 +1543,13 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH1F* h_sumErrorBperLS7 ;
   TH1F* h_sum0ErrorBperLS7;
   
+  TH1F* h_averoccupancy_HB;
+  TH1F* h_averoccupancy_HE;
+  TH1F* h_averoccupancy_HF;
+  TH1F* h_averoccupancy_HO;
+
+
+
 
   /////////////////////////////////////////////
   // for ROOT
@@ -1607,7 +1614,13 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   int lscounterrun10 ;
   int nevcounter0 ;
   int nevcounter00 ;
- 
+  double averoccupancy_HB;
+  double averoccupancy_HE;
+  double averoccupancy_HF;
+  double averoccupancy_HO;
+
+
+
   TTree*    myTree;
   TFile*    hOutputFile;
   ofstream MAPfile;
@@ -2017,6 +2030,13 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
     }//for  
   }//for  
   
+
+  averoccupancy_HB = 0.;
+  averoccupancy_HE = 0.;
+  averoccupancy_HF = 0.;
+  averoccupancy_HO = 0.;
+
+
 }
 
 VeRawAnalyzer::~VeRawAnalyzer()
@@ -2994,6 +3014,21 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       }//for  
     }//for 
     
+
+    averoccupancy_HB /= float(nevcounter0);
+    h_averoccupancy_HB->Fill( float(lscounterM1) ,averoccupancy_HB);
+    averoccupancy_HE /= float(nevcounter0);
+    h_averoccupancy_HE->Fill( float(lscounterM1) ,averoccupancy_HE);
+    averoccupancy_HF /= float(nevcounter0);
+    h_averoccupancy_HF->Fill( float(lscounterM1) ,averoccupancy_HF);
+    averoccupancy_HO /= float(nevcounter0);
+    h_averoccupancy_HO->Fill( float(lscounterM1) ,averoccupancy_HO);
+
+    averoccupancy_HB = 0.;
+    averoccupancy_HE = 0.;
+    averoccupancy_HF = 0.;
+    averoccupancy_HO = 0.;
+    
     
   }//if(nevcounter0 != 0)
   
@@ -3817,27 +3852,28 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	    if(signal[k1][k2][k3]>0.&& calib0[k1][kkk2][kkk3]>0.) {
 	      GetRMSOverNormalizedSignal = signal[k1][k2][k3]/calib0[k1][kkk2][kkk3];
 	      if(k1==0) {
-		h_GetRMSOverNormalizedSignal_HB->Fill(GetRMSOverNormalizedSignal,1.);
+		//		h_GetRMSOverNormalizedSignal_HB->Fill(GetRMSOverNormalizedSignal,1.);
 		h_mapGetRMSOverNormalizedSignal_HB->Fill(double(k2plot),double(k3),GetRMSOverNormalizedSignal);
 		h_mapGetRMSOverNormalizedSignal0_HB->Fill(double(k2plot),double(k3),1.);
 	      }
 	      if(k1==1) {
-		h_GetRMSOverNormalizedSignal_HE->Fill(GetRMSOverNormalizedSignal,1.);
+		//		h_GetRMSOverNormalizedSignal_HE->Fill(GetRMSOverNormalizedSignal,1.);
 		h_mapGetRMSOverNormalizedSignal_HE->Fill(double(k2plot),double(k3),GetRMSOverNormalizedSignal);
 		h_mapGetRMSOverNormalizedSignal0_HE->Fill(double(k2plot),double(k3),1.);
 	      }
 	      if(k1==2) {
-		h_GetRMSOverNormalizedSignal_HO->Fill(GetRMSOverNormalizedSignal,1.);
+		//		h_GetRMSOverNormalizedSignal_HO->Fill(GetRMSOverNormalizedSignal,1.);
 		h_mapGetRMSOverNormalizedSignal_HO->Fill(double(k2plot),double(k3),GetRMSOverNormalizedSignal);
 		h_mapGetRMSOverNormalizedSignal0_HO->Fill(double(k2plot),double(k3),1.);
 	      }
 	      if(k1==3) {
-		h_GetRMSOverNormalizedSignal_HF->Fill(GetRMSOverNormalizedSignal,1.);
+		//		h_GetRMSOverNormalizedSignal_HF->Fill(GetRMSOverNormalizedSignal,1.);
 		h_mapGetRMSOverNormalizedSignal_HF->Fill(double(k2plot),double(k3),GetRMSOverNormalizedSignal);
 		h_mapGetRMSOverNormalizedSignal0_HF->Fill(double(k2plot),double(k3),1.);
 	      }
 	    }
 	    // 
+	    /*
 	    GetRMSOverNormalizedSignal =-1.;
 	    if(signal3[k1][k2][k3]>0.&& calib3[k1][kkk2][kkk3]>0.) {
 	      GetRMSOverNormalizedSignal = signal3[k1][k2][k3]/calib3[k1][kkk2][kkk3];
@@ -3846,6 +3882,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	      if(k1==2) h_GetRMSOverNormalizedSignal3_HO->Fill(GetRMSOverNormalizedSignal,1.);    
 	      if(k1==3) h_GetRMSOverNormalizedSignal3_HF->Fill(GetRMSOverNormalizedSignal,1.);  
 	    }
+*/
 
 	  }//optimization
 	  ////////////////////////////////////////////////////////////////  for zcalib....C script:
@@ -4884,7 +4921,12 @@ void VeRawAnalyzer::beginJob()
     h_2D0sumErrorBLS7    = new TH2F("h_2D0sumErrorBLS7"," ",    82, -41., 41., 72, 0., 72.);
     h_2DsumErrorBLS7    = new TH2F("h_2DsumErrorBLS7"," ",    82, -41., 41., 72, 0., 72.);
 
-
+    // for OCCUPANCY :
+    h_averoccupancy_HB  = new TH1F("h_averoccupancy_HB"," ",     bac, 1.,bac2);
+    h_averoccupancy_HE  = new TH1F("h_averoccupancy_HE"," ",     bac, 1.,bac2);
+    h_averoccupancy_HF  = new TH1F("h_averoccupancy_HF"," ",     bac, 1.,bac2);
+    h_averoccupancy_HO  = new TH1F("h_averoccupancy_HO"," ",     bac, 1.,bac2);
+    
 
     h_pedestal0_HB  = new TH1F("h_pedestal0_HB"," ", 100, 0.,10.);
     h_pedestal1_HB  = new TH1F("h_pedestal1_HB"," ", 100, 0.,10.);
@@ -5292,6 +5334,11 @@ void VeRawAnalyzer::beginJob()
     h_Amplitude_notCapIdErrors_HF1 = new TH1F("h_Amplitude_notCapIdErrors_HF1"," ", 100, 0.,30000.);
     h_Amplitude_notCapIdErrors_HF2 = new TH1F("h_Amplitude_notCapIdErrors_HF2"," ", 100, 0.,30000.);
     h_Amplitude_notCapIdErrors_HO4 = new TH1F("h_Amplitude_notCapIdErrors_HO4"," ", 100, 0.,30000.);
+
+
+
+
+
 
     ////////////////////////////////////////////////////////////////////////////////////
   }//if(recordHistoes_
@@ -6394,6 +6441,8 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	  if (verbosity == -56) std::cout << "***BAD HB channels from ADCAmpl: "  <<" ieta= " << ieta <<" iphi= " << iphi <<" amplitude= " << amplitude << std::endl;
 	}// if
 
+	if(amplitude > 50. ) averoccupancy_HB += 1.;
+
 	// for averaged values:
 	if(mdepth==1) h_mapDepth1ADCAmpl_HB->Fill(double(ieta), double(iphi), amplitude);
 	if(mdepth==2) h_mapDepth2ADCAmpl_HB->Fill(double(ieta), double(iphi), amplitude);
@@ -6593,6 +6642,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	  if(mdepth==3) h_mapDepth3ADCAmpl225_HE->Fill(double(ieta), double(iphi), 1.);
 	  if (verbosity == -56) std::cout << "***BAD HE channels from ADCAmpl: "  <<" ieta= " << ieta <<" iphi= " << iphi <<" amplitude= " << amplitude << std::endl;
 	}// if
+	if(amplitude > 80. ) averoccupancy_HE += 1.;
 	// for averaged values:
 	if(mdepth==1) h_mapDepth1ADCAmpl_HE->Fill(double(ieta), double(iphi), amplitude);
 	if(mdepth==2) h_mapDepth2ADCAmpl_HE->Fill(double(ieta), double(iphi), amplitude);
@@ -7104,6 +7154,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
 	  if(mdepth==2) h_mapDepth2ADCAmpl225_HF->Fill(double(ieta), double(iphi), 1.);
 	  if (verbosity == -51) std::cout << "***BAD HF channels from ADCAmpl: "  <<" ieta= " << ieta <<" iphi= " << iphi <<" amplitude= " << amplitude << std::endl;
 	}// if
+	if(amplitude > 80. ) averoccupancy_HF += 1.;
 	// for averaged values:
 	if(mdepth==1) h_mapDepth1ADCAmpl_HF->Fill(double(ieta), double(iphi), amplitude);
 	if(mdepth==2) h_mapDepth2ADCAmpl_HF->Fill(double(ieta), double(iphi), amplitude);
@@ -7580,6 +7631,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
 	  if(mdepth==4) h_mapDepth4ADCAmpl225_HO->Fill(double(ieta), double(iphi), 1.);
 	  if (verbosity == -56) std::cout << "***BAD HO channels from ADCAmpl: "  <<" ieta= " << ieta <<" iphi= " << iphi <<" amplitude= " << amplitude << std::endl;
 	}// if
+	if(amplitude > 110.) averoccupancy_HO += 1.;
 	// for averaged values:
 	if(mdepth==4) h_mapDepth4ADCAmpl_HO->Fill(double(ieta), double(iphi), amplitude);
 	if(mdepth==4) h_mapDepth4ADCAmpl12_HO->Fill(double(ieta), double(iphi), ampl);
@@ -9988,7 +10040,11 @@ void VeRawAnalyzer::endJob(){
     h_Amplitude_notCapIdErrors_HF2->Write();
     h_Amplitude_notCapIdErrors_HO4->Write();
 
-
+    h_averoccupancy_HB->Write();;
+    h_averoccupancy_HE->Write();;
+    h_averoccupancy_HF->Write();;
+    h_averoccupancy_HO->Write();;
+    
 
     ///////////////////////
   }//if
