@@ -138,15 +138,17 @@ for i in ${runList} ; do
     echo 
     echo
     echo  "Run for processing $runnumber"
+    echo  "always copy root file from /eos !!!"
     echo  "file=root://eoscms//cms/$HistoDir/Global_$runnumber.root"
-    if [ ! -s Global_${runnumber}.root ] ; then
+# always copy root file from /eos !!!
+##    if [ ! -s Global_${runnumber}.root ] ; then
 	xrdcp root://eoscms//eos/cms/$HistoDir/Global_$runnumber.root Global_$runnumber.root
 	status="$?"
 	if [ ! ${status} -eq 0 ] ; then
 	    echo "failed to get file Global_${runnumber}.root"
 	    exit 2
 	fi
-    fi
+##    fi
     
     #CMT processing
     echo -e "\nRemoteMonitoringGLOBAL\n" >> ${logFile}
