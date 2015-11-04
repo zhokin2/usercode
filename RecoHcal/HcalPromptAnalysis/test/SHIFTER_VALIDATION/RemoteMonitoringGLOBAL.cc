@@ -205,10 +205,10 @@ int main(int argc, char *argv[])
       H_NumBadChanDepth[5][2][2] = (TH1F*)hfile->Get("h_sumTSmaxALS4"); 
       H_NumBadChanDepth[5][2][3] = (TH1F*)hfile->Get("h_sumTSmaxALS5");
       
-      H_NumBadChanDepth[5][3][4] = (TH1F*)hfile->Get("h_sumTSmaxALS6");
+      H_NumBadChanDepth[5][3][4] = (TH1F*)hfile->Get("h_sumTSmaxALS8");
       
-      H_NumBadChanDepth[5][4][1] = (TH1F*)hfile->Get("h_sumTSmaxALS7");
-      H_NumBadChanDepth[5][4][2] = (TH1F*)hfile->Get("h_sumTSmaxALS8");
+      H_NumBadChanDepth[5][4][1] = (TH1F*)hfile->Get("h_sumTSmaxALS6");
+      H_NumBadChanDepth[5][4][2] = (TH1F*)hfile->Get("h_sumTSmaxALS7");
 
     gStyle->SetOptStat(110000);                     
                             
