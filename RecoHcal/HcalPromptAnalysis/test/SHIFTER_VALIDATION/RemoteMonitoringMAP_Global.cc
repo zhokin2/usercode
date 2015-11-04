@@ -1236,7 +1236,7 @@ int main(int argc, char *argv[])
   }// end sub      
     
   
-
+  /*
  //+++++++++++++++++++++++++++++++++++  
 //Test 42 ADC in TS distributions   
 //++++++++++++++++++++++++++++++++++++
@@ -1461,7 +1461,7 @@ int main(int argc, char *argv[])
           if (sub==3) {cONE->Print("Hist_SumADC_HO1.png"); cONE->Clear();}
           if (sub==4) {cHB->Print("Hist_SumADC_HF1.png"); cHB->Clear();} 
   }// end sub
-
+*/
 //======================================================================
 
 //======================================================================
