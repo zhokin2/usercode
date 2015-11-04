@@ -142,7 +142,8 @@ for i in ${runList} ; do
     echo  "file=root://eoscms//cms/$HistoDir/Global_$runnumber.root"
 # always copy root file from /eos !!!
 ##    if [ ! -s Global_${runnumber}.root ] ; then
-	xrdcp root://eoscms//eos/cms/$HistoDir/Global_$runnumber.root Global_$runnumber.root
+##	xrdcp root://eoscms//eos/cms/$HistoDir/Global_$runnumber.root Global_$runnumber.root
+	xrdcp -f root://eoscms//eos/cms/$HistoDir/Global_$runnumber.root Global_$runnumber.root
 	status="$?"
 	if [ ! ${status} -eq 0 ] ; then
 	    echo "failed to get file Global_${runnumber}.root"
