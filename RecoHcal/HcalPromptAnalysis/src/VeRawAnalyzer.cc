@@ -898,6 +898,24 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH2F*    h_2D0sumADCAmplLS6         ;
   TH1F*    h_sum0ADCAmplperLS6         ;
 
+  TH1F*    h_sumADCAmplperLS1_P1         ;
+  TH1F*    h_sum0ADCAmplperLS1_P1         ;
+  TH1F*    h_sumADCAmplperLS1_P2         ;
+  TH1F*    h_sum0ADCAmplperLS1_P2         ;
+  TH1F*    h_sumADCAmplperLS1_M1         ;
+  TH1F*    h_sum0ADCAmplperLS1_M1         ;
+  TH1F*    h_sumADCAmplperLS1_M2         ;
+  TH1F*    h_sum0ADCAmplperLS1_M2         ;
+
+  TH1F*    h_sumADCAmplperLS3_P1         ;
+  TH1F*    h_sum0ADCAmplperLS3_P1         ;
+  TH1F*    h_sumADCAmplperLS3_P2         ;
+  TH1F*    h_sum0ADCAmplperLS3_P2         ;
+  TH1F*    h_sumADCAmplperLS3_M1         ;
+  TH1F*    h_sum0ADCAmplperLS3_M1         ;
+  TH1F*    h_sumADCAmplperLS3_M2         ;
+  TH1F*    h_sum0ADCAmplperLS3_M2         ;
+
   TH1F*    h_sumADCAmplperLS6_P1         ;
   TH1F*    h_sum0ADCAmplperLS6_P1         ;
   TH1F*    h_sumADCAmplperLS6_P2         ;
@@ -906,6 +924,15 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH1F*    h_sum0ADCAmplperLS6_M1         ;
   TH1F*    h_sumADCAmplperLS6_M2         ;
   TH1F*    h_sum0ADCAmplperLS6_M2         ;
+
+  TH1F*    h_sumADCAmplperLS8_P1         ;
+  TH1F*    h_sum0ADCAmplperLS8_P1         ;
+  TH1F*    h_sumADCAmplperLS8_P2         ;
+  TH1F*    h_sum0ADCAmplperLS8_P2         ;
+  TH1F*    h_sumADCAmplperLS8_M1         ;
+  TH1F*    h_sum0ADCAmplperLS8_M1         ;
+  TH1F*    h_sumADCAmplperLS8_M2         ;
+  TH1F*    h_sum0ADCAmplperLS8_M2         ;
 
 
   
@@ -1143,6 +1170,12 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH2F*    h_2D0sumAmplLS6         ;
   TH1F*    h_sum0AmplperLS6         ;
 
+  TH1F*        h_RatioOccupancy_HBP         ;
+  TH1F*        h_RatioOccupancy_HBM         ;
+  TH1F*        h_RatioOccupancy_HEP         ;
+  TH1F*        h_RatioOccupancy_HEM         ;
+  TH1F*        h_RatioOccupancy_HOP         ;
+  TH1F*        h_RatioOccupancy_HOM         ;
   TH1F*        h_RatioOccupancy_HFP         ;
   TH1F*        h_RatioOccupancy_HFM         ;
 
@@ -1532,6 +1565,33 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
 
 
 
+  TH2F* h_2D0sumErrorBLS1;
+  TH2F* h_2DsumErrorBLS1;
+  TH1F*  h_sumErrorBLS1;
+  TH1F* h_sumErrorBperLS1 ;
+  TH1F* h_sum0ErrorBperLS1;
+  TH2F* h_2D0sumErrorBLS2;
+  TH2F* h_2DsumErrorBLS2;
+  TH1F*  h_sumErrorBLS2;
+  TH1F* h_sumErrorBperLS2 ;
+  TH1F* h_sum0ErrorBperLS2;
+  
+  TH2F* h_2D0sumErrorBLS3;
+  TH2F* h_2DsumErrorBLS3;
+  TH1F*  h_sumErrorBLS3;
+  TH1F* h_sumErrorBperLS3 ;
+  TH1F* h_sum0ErrorBperLS3;
+  TH2F* h_2D0sumErrorBLS4;
+  TH2F* h_2DsumErrorBLS4;
+  TH1F*  h_sumErrorBLS4;
+  TH1F* h_sumErrorBperLS4 ;
+  TH1F* h_sum0ErrorBperLS4;
+  TH2F* h_2D0sumErrorBLS5;
+  TH2F* h_2DsumErrorBLS5;
+  TH1F*  h_sumErrorBLS5;
+  TH1F* h_sumErrorBperLS5 ;
+  TH1F* h_sum0ErrorBperLS5;
+  
   TH2F* h_2D0sumErrorBLS6;
   TH2F* h_2DsumErrorBLS6;
   TH1F*  h_sumErrorBLS6;
@@ -1542,6 +1602,12 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH1F*  h_sumErrorBLS7;
   TH1F* h_sumErrorBperLS7 ;
   TH1F* h_sum0ErrorBperLS7;
+  
+  TH2F* h_2D0sumErrorBLS8;
+  TH2F* h_2DsumErrorBLS8;
+  TH1F*  h_sumErrorBLS8;
+  TH1F* h_sumErrorBperLS8 ;
+  TH1F* h_sum0ErrorBperLS8;
   
   TH1F* h_averoccupancy_HB;
   TH1F* h_averoccupancy_HE;
@@ -1762,7 +1828,7 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   lsdep_estimator1_HBdepth2_ = iConfig.getParameter<double>("lsdep_estimator1_HBdepth2");
   lsdep_estimator1_HEdepth1_ = iConfig.getParameter<double>("lsdep_estimator1_HEdepth1");
   lsdep_estimator1_HEdepth2_ = iConfig.getParameter<double>("lsdep_estimator1_HEdepth2");
-  lsdep_estimator1_HEdepth3_ = iConfig.getParameter<double>("lsdep_estimator1_HEdepth2");
+  lsdep_estimator1_HEdepth3_ = iConfig.getParameter<double>("lsdep_estimator1_HEdepth3");
   lsdep_estimator1_HFdepth1_ = iConfig.getParameter<double>("lsdep_estimator1_HFdepth1");
   lsdep_estimator1_HFdepth2_ = iConfig.getParameter<double>("lsdep_estimator1_HFdepth2");
   lsdep_estimator1_HOdepth4_ = iConfig.getParameter<double>("lsdep_estimator1_HOdepth4");
@@ -1771,7 +1837,7 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   lsdep_estimator2_HBdepth2_ = iConfig.getParameter<double>("lsdep_estimator2_HBdepth2");
   lsdep_estimator2_HEdepth1_ = iConfig.getParameter<double>("lsdep_estimator2_HEdepth1");
   lsdep_estimator2_HEdepth2_ = iConfig.getParameter<double>("lsdep_estimator2_HEdepth2");
-  lsdep_estimator2_HEdepth3_ = iConfig.getParameter<double>("lsdep_estimator2_HEdepth2");
+  lsdep_estimator2_HEdepth3_ = iConfig.getParameter<double>("lsdep_estimator2_HEdepth3");
   lsdep_estimator2_HFdepth1_ = iConfig.getParameter<double>("lsdep_estimator2_HFdepth1");
   lsdep_estimator2_HFdepth2_ = iConfig.getParameter<double>("lsdep_estimator2_HFdepth2");
   lsdep_estimator2_HOdepth4_ = iConfig.getParameter<double>("lsdep_estimator2_HOdepth4");
@@ -1780,7 +1846,7 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   lsdep_estimator3_HBdepth2_ = iConfig.getParameter<double>("lsdep_estimator3_HBdepth2");
   lsdep_estimator3_HEdepth1_ = iConfig.getParameter<double>("lsdep_estimator3_HEdepth1");
   lsdep_estimator3_HEdepth2_ = iConfig.getParameter<double>("lsdep_estimator3_HEdepth2");
-  lsdep_estimator3_HEdepth3_ = iConfig.getParameter<double>("lsdep_estimator3_HEdepth2");
+  lsdep_estimator3_HEdepth3_ = iConfig.getParameter<double>("lsdep_estimator3_HEdepth3");
   lsdep_estimator3_HFdepth1_ = iConfig.getParameter<double>("lsdep_estimator3_HFdepth1");
   lsdep_estimator3_HFdepth2_ = iConfig.getParameter<double>("lsdep_estimator3_HFdepth2");
   lsdep_estimator3_HOdepth4_ = iConfig.getParameter<double>("lsdep_estimator3_HOdepth4");
@@ -1789,7 +1855,7 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   lsdep_estimator4_HBdepth2_ = iConfig.getParameter<double>("lsdep_estimator4_HBdepth2");
   lsdep_estimator4_HEdepth1_ = iConfig.getParameter<double>("lsdep_estimator4_HEdepth1");
   lsdep_estimator4_HEdepth2_ = iConfig.getParameter<double>("lsdep_estimator4_HEdepth2");
-  lsdep_estimator4_HEdepth3_ = iConfig.getParameter<double>("lsdep_estimator4_HEdepth2");
+  lsdep_estimator4_HEdepth3_ = iConfig.getParameter<double>("lsdep_estimator4_HEdepth3");
   lsdep_estimator4_HFdepth1_ = iConfig.getParameter<double>("lsdep_estimator4_HFdepth1");
   lsdep_estimator4_HFdepth2_ = iConfig.getParameter<double>("lsdep_estimator4_HFdepth2");
   lsdep_estimator4_HOdepth4_ = iConfig.getParameter<double>("lsdep_estimator4_HOdepth4");
@@ -1798,7 +1864,7 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   lsdep_estimator5_HBdepth2_ = iConfig.getParameter<double>("lsdep_estimator5_HBdepth2");
   lsdep_estimator5_HEdepth1_ = iConfig.getParameter<double>("lsdep_estimator5_HEdepth1");
   lsdep_estimator5_HEdepth2_ = iConfig.getParameter<double>("lsdep_estimator5_HEdepth2");
-  lsdep_estimator5_HEdepth3_ = iConfig.getParameter<double>("lsdep_estimator5_HEdepth2");
+  lsdep_estimator5_HEdepth3_ = iConfig.getParameter<double>("lsdep_estimator5_HEdepth3");
   lsdep_estimator5_HFdepth1_ = iConfig.getParameter<double>("lsdep_estimator5_HFdepth1");
   lsdep_estimator5_HFdepth2_ = iConfig.getParameter<double>("lsdep_estimator5_HFdepth2");
   lsdep_estimator5_HOdepth4_ = iConfig.getParameter<double>("lsdep_estimator5_HOdepth4");
@@ -2254,14 +2320,46 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     ///////  int sub= cell.subdet();  1-HB, 2-HE, 3-HO, 4-HF
     ////////////            k0(sub): =0 HB; =1 HE; =2 HO; =3 HF;
     ////////////         k1(depth-1): = 0 - 3 or depth: = 1 - 4;
-    int pnnbins=0;
-    int pcountall=0;
-    int pcountmin=0;
-    int pnnmin=999999999;
-    int mcountall=0;
-    int mcountmin=0;
-    int mnnbins=0;
-    int mnnmin=999999999;
+    int pcountall1 = 0;
+    int pcountall3 = 0;
+    int pcountall6 = 0;
+    int pcountall8 = 0;
+
+    int pcountmin1 = 0;
+    int pcountmin3 = 0;
+    int pcountmin6 = 0;
+    int pcountmin8 = 0;
+
+    int mcountall1 = 0;
+    int mcountall3 = 0;
+    int mcountall6 = 0;
+    int mcountall8 = 0;
+
+    int mcountmin1 = 0;
+    int mcountmin3 = 0;
+    int mcountmin6 = 0;
+    int mcountmin8 = 0;
+
+
+    int pnnbins1 = 0;
+    int pnnbins3 = 0;
+    int pnnbins6 = 0;
+    int pnnbins8 = 0;
+
+    int pnnmin1 = 999999999;
+    int pnnmin3 = 999999999;
+    int pnnmin6 = 999999999;
+    int pnnmin8 = 999999999;
+
+    int mnnbins1 = 0;
+    int mnnbins3 = 0;
+    int mnnbins6 = 0;
+    int mnnbins8 = 0;
+
+    int mnnmin1 = 999999999;
+    int mnnmin3 = 999999999;
+    int mnnmin6 = 999999999;
+    int mnnmin8 = 999999999;
 
     for(int k0 = 0; k0<4; k0++) {
       for(int k1 = 0; k1<4; k1++) {
@@ -2385,8 +2483,43 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		  h_sumADCAmplperLS1->Fill( float(lscounterM1) ,bbbc);
 		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth1_ ) h_sumCutADCAmplperLS1->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS1->Fill( float(lscounterM1) ,bbb1);
-
+		  if(ieta>0 ){
+		    if(k3<36) {
+		      h_sumADCAmplperLS1_P1->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS1_P1->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    else {
+		      h_sumADCAmplperLS1_P2->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS1_P2->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    ////////////////////////////// P
+		    if(bbbc/bbb1> 20.) {
+		      pcountall1 += bbb1 ;
+		      pcountmin1 += bbb1;
+		    }
+		    //////////////////////////////
+		    
+		  }
+		  else {
+		    if(k3<36) {
+		      h_sumADCAmplperLS1_M1->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS1_M1->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    else {
+		      h_sumADCAmplperLS1_M2->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS1_M2->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    ////////////////////////////// M
+		    if(bbbc/bbb1> 20.) {
+		      mcountall1 += bbb1 ;
+		      mcountmin1 += bbb1;
+		    }
+		    //////////////////////////////
+		    
+		  }
+		  
 		}
+		// HBdepth2
 		if(k1+1  ==2) {
 		  h_sumADCAmplLS2->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth2_  ) h_2DsumADCAmplLS2->Fill(double(ieta), double(k3), bbbc);
@@ -2397,12 +2530,32 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		  h_sumADCAmplperLS2->Fill( float(lscounterM1) ,bbbc);
 		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth2_  ) h_sumCutADCAmplperLS2->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS2->Fill( float(lscounterM1) ,bbb1);
+		  if(ieta>0 ){
+		    if(k3<36) {
+		      h_sumADCAmplperLS1_P1->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS1_P1->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    else {
+		      h_sumADCAmplperLS1_P2->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS1_P2->Fill( float(lscounterM1) ,bbb1);
+		    }
+		  }
+		  else {
+		    if(k3<36) {
+		      h_sumADCAmplperLS1_M1->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS1_M1->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    else {
+		      h_sumADCAmplperLS1_M2->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS1_M2->Fill( float(lscounterM1) ,bbb1);
+		    }
+		  }
 
 		}
 	      }
 	      // HE:
 	      if(k0==1) {
-		// HBdepth1
+		// HEdepth1
 		if(k1+1  ==1) {
 		  h_sumADCAmplLS3->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth1_  ) h_2DsumADCAmplLS3->Fill(double(ieta), double(k3), bbbc);
@@ -2413,8 +2566,41 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		  h_sumADCAmplperLS3->Fill( float(lscounterM1) ,bbbc);
 		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth1_  ) h_sumCutADCAmplperLS3->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS3->Fill( float(lscounterM1) ,bbb1);
+		  if(ieta>0 ){
+		    if(k3<36) {
+		      h_sumADCAmplperLS3_P1->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS3_P1->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    else {
+		      h_sumADCAmplperLS3_P2->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS3_P2->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    ////////////////////////////// P
+		    if(bbbc/bbb1> 20.) {
+		      pcountall3 += bbb1 ;
+		      pcountmin3 += bbb1;
+		    }
+		    //////////////////////////////
+		  }
+		  else {
+		    if(k3<36) {
+		      h_sumADCAmplperLS3_M1->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS3_M1->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    else {
+		      h_sumADCAmplperLS3_M2->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS3_M2->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    ////////////////////////////// M
+		    if(bbbc/bbb1> 20.) {
+		      mcountall3 += bbb1 ;
+		      mcountmin3 += bbb1;
+		    }
+		    //////////////////////////////
+		  }
 
 		}
+		// HEdepth2
 		if(k1+1  ==2) {
 		  h_sumADCAmplLS4->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth2_  ) h_2DsumADCAmplLS4->Fill(double(ieta), double(k3), bbbc);
@@ -2425,8 +2611,29 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		  h_sumADCAmplperLS4->Fill( float(lscounterM1) ,bbbc);
 		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth2_  ) h_sumCutADCAmplperLS4->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS4->Fill( float(lscounterM1) ,bbb1);
+		  if(ieta>0 ){
+		    if(k3<36) {
+		      h_sumADCAmplperLS3_P1->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS3_P1->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    else {
+		      h_sumADCAmplperLS3_P2->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS3_P2->Fill( float(lscounterM1) ,bbb1);
+		    }
+		  }
+		  else {
+		    if(k3<36) {
+		      h_sumADCAmplperLS3_M1->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS3_M1->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    else {
+		      h_sumADCAmplperLS3_M2->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS3_M2->Fill( float(lscounterM1) ,bbb1);
+		    }
+		  }
 
 		}
+		// HEdepth3
 		if(k1+1  ==3) {
 		  h_sumADCAmplLS5->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth3_  ) h_2DsumADCAmplLS5->Fill(double(ieta), double(k3), bbbc);
@@ -2437,12 +2644,32 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		  h_sumADCAmplperLS5->Fill( float(lscounterM1) ,bbbc);
 		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth3_  ) h_sumCutADCAmplperLS5->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS5->Fill( float(lscounterM1) ,bbb1);
+		  if(ieta>0 ){
+		    if(k3<36) {
+		      h_sumADCAmplperLS3_P1->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS3_P1->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    else {
+		      h_sumADCAmplperLS3_P2->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS3_P2->Fill( float(lscounterM1) ,bbb1);
+		    }
+		  }
+		  else {
+		    if(k3<36) {
+		      h_sumADCAmplperLS3_M1->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS3_M1->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    else {
+		      h_sumADCAmplperLS3_M2->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS3_M2->Fill( float(lscounterM1) ,bbb1);
+		    }
+		  }
 
 		}
 	      }
 	      // HF:
 	      if(k0==3) {
-		// HBdepth1
+		// HFdepth1
 		if(k1+1  ==1) {
 	  	  if (verbosity == -7777 ) std::cout << "HF***sumEstimator1= "  << sumEstimator1[k0][k1][k2][k3] << "sum0Estimator= "  << sum0Estimator[k0][k1][k2][k3] <<" nevcounter0= " << nevcounter0 <<" bbbc= " << bbbc << std::endl;
 		  h_sumADCAmplLS6->Fill(bbbc/bbb1);
@@ -2453,9 +2680,9 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		  h_2D0sumADCAmplLS6->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS6->Fill( float(lscounterM1) ,bbbc);
 		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth1_  ) h_sumCutADCAmplperLS6->Fill( float(lscounterM1) ,bbbc); 
-
 		  h_sum0ADCAmplperLS6->Fill( float(lscounterM1) ,bbb1);
-		  /////////////////////////////////////////////////////////
+
+		  ///////////////////////////////////////////////////////// error-A
  		  if(ieta>0 ){
 		    if(k3<36) {
 		      h_sumADCAmplperLS6_P1->Fill( float(lscounterM1) ,bbbc);
@@ -2467,8 +2694,8 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		    }
 		  ////////////////////////////// P
 		    if(bbbc/bbb1> 20.) {
-		      pcountall += bbb1 ;
-		      pcountmin += bbb1;
+		      pcountall6 += bbb1 ;
+		      pcountmin6 += bbb1;
 		    }
 		  //////////////////////////////
 
@@ -2484,8 +2711,8 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		    }
 		  ////////////////////////////// M
 		    if(bbbc/bbb1> 20.) {
-		      mcountall += bbb1 ;
-		      mcountmin += bbb1;
+		      mcountall6 += bbb1 ;
+		      mcountmin6 += bbb1;
 		    }
 		  //////////////////////////////
 
@@ -2494,6 +2721,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		  
 		  
 		}
+		// HFdepth2
 		if(k1+1  ==2) {
 		  h_sumADCAmplLS7->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth2_  ) h_2DsumADCAmplLS7->Fill(double(ieta), double(k3), bbbc);
@@ -2503,7 +2731,6 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		  h_2D0sumADCAmplLS7->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS7->Fill( float(lscounterM1) ,bbbc);
 		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth2_  ) h_sumCutADCAmplperLS7->Fill( float(lscounterM1) ,bbbc); 
-
 		  h_sum0ADCAmplperLS7->Fill( float(lscounterM1) ,bbb1);
 
 
@@ -2534,7 +2761,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	      }
 	      // HO:
 	      if(k0==2) {
-		// HBdepth1
+		// HOdepth4
 		if(k1+1  ==4) {
 		  h_sumADCAmplLS8->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 > lsdep_estimator1_HOdepth4_  ) h_2DsumADCAmplLS8->Fill(double(ieta), double(k3), bbbc);
@@ -2545,6 +2772,43 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		  h_sumADCAmplperLS8->Fill( float(lscounterM1) ,bbbc);
 		  if(bbbc/bbb1 > lsdep_estimator1_HOdepth4_  ) h_sumCutADCAmplperLS8->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS8->Fill( float(lscounterM1) ,bbb1);
+
+		  ///////////////////////////////////////////////////////// error-A
+ 		  if(ieta>0 ){
+		    if(k3<36) {
+		      h_sumADCAmplperLS8_P1->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS8_P1->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    else {
+		      h_sumADCAmplperLS8_P2->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS8_P2->Fill( float(lscounterM1) ,bbb1);
+		    }
+		  ////////////////////////////// P
+		    if(bbbc/bbb1> 20.) {
+		      pcountall8 += bbb1 ;
+		      pcountmin8 += bbb1;
+		    }
+		  //////////////////////////////
+
+		  }
+		  else {
+		    if(k3<36) {
+		      h_sumADCAmplperLS8_M1->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS8_M1->Fill( float(lscounterM1) ,bbb1);
+		    }
+		    else {
+		      h_sumADCAmplperLS8_M2->Fill( float(lscounterM1) ,bbbc);
+		      h_sum0ADCAmplperLS8_M2->Fill( float(lscounterM1) ,bbb1);
+		    }
+		  ////////////////////////////// M
+		    if(bbbc/bbb1> 20.) {
+		      mcountall8 += bbb1 ;
+		      mcountmin8 += bbb1;
+		    }
+		  //////////////////////////////
+
+		  }
+		  /////////////////////////////////////////////////////////
 
 		}
 	      }
@@ -2905,7 +3169,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	      }
 	      // HE:
 	      if(k0==1) {
-		// HBdepth1
+		// HEdepth1
 		if(k1+1  ==1) {
 		  h_sumAmplLS3->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1>lsdep_estimator5_HEdepth1_  )h_2DsumAmplLS3->Fill(double(ieta),double(k3),bbbc);
@@ -2936,7 +3200,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	      }
 	      // HF:
 	      if(k0==3) {
-		// HBdepth1
+		// HFdepth1
 		if(k1+1  ==1) {
 		  h_sumAmplLS6->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1>lsdep_estimator5_HFdepth1_  )h_2DsumAmplLS6->Fill(double(ieta),double(k3),bbbc);
@@ -2958,7 +3222,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	      }
 	      // HO:
 	      if(k0==2) {
-		// HBdepth1
+		// HOdepth4
 		if(k1+1  ==4) {
 		  h_sumAmplLS8->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1>lsdep_estimator5_HOdepth4_  )h_2DsumAmplLS8->Fill(double(ieta),double(k3),bbbc);
@@ -2971,7 +3235,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	      }
 	    }//if(sumEstimator5[k0][k1][k2][k3] != 0.
 	    
-	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator6
+	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator6 (Error-B)
 	    if (verbosity == -81 ) std::cout << "sumEstimator6 = " <<sumEstimator6[k0][k1][k2][k3]<< std::endl;
 	    if(sumEstimator6[k0][k1][k2][k3] != 0. ) {
 	      
@@ -2982,30 +3246,79 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	      double bbb1=1.;
 	      if(flagestimatornormalization_ == 2 ) {bbbc = sumEstimator6[k0][k1][k2][k3]; bbb1 = sum0Estimator[k0][k1][k2][k3];}
 	      
+	      // HB:
+	      if(k0==0) {
+		// HBdepth1
+		if(k1+1  ==1) {
+		  h_sumErrorBLS1->Fill(bbbc/bbb1);
+		  h_2DsumErrorBLS1->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumErrorBLS1->Fill(double(ieta), double(k3), bbb1);
+		  h_sumErrorBperLS1->Fill( float(lscounterM1) ,bbbc);
+		  h_sum0ErrorBperLS1->Fill( float(lscounterM1) ,bbb1);
+		}
+		if(k1+1  ==2) {
+		  h_sumErrorBLS2->Fill(bbbc/bbb1);
+		  h_2DsumErrorBLS2->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumErrorBLS2->Fill(double(ieta), double(k3), bbb1);
+		  h_sumErrorBperLS2->Fill( float(lscounterM1) ,bbbc);
+		  h_sum0ErrorBperLS2->Fill( float(lscounterM1) ,bbb1);
+		}
+	      }
+	      // HE:
+	      if(k0==1) {
+		// HEdepth1
+		if(k1+1  ==1) {
+		  h_sumErrorBLS3->Fill(bbbc/bbb1);
+		  h_2DsumErrorBLS3->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumErrorBLS3->Fill(double(ieta), double(k3), bbb1);
+		  h_sumErrorBperLS3->Fill( float(lscounterM1) ,bbbc);
+		  h_sum0ErrorBperLS3->Fill( float(lscounterM1) ,bbb1);
+		}
+		if(k1+1  ==2) {
+		  h_sumErrorBLS4->Fill(bbbc/bbb1);
+		  h_2DsumErrorBLS4->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumErrorBLS4->Fill(double(ieta), double(k3), bbb1);
+		  h_sumErrorBperLS4->Fill( float(lscounterM1) ,bbbc);
+		  h_sum0ErrorBperLS4->Fill( float(lscounterM1) ,bbb1);
+		}
+		if(k1+1  ==3) {
+		  h_sumErrorBLS5->Fill(bbbc/bbb1);
+		  h_2DsumErrorBLS5->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumErrorBLS5->Fill(double(ieta), double(k3), bbb1);
+		  h_sumErrorBperLS5->Fill( float(lscounterM1) ,bbbc);
+		  h_sum0ErrorBperLS5->Fill( float(lscounterM1) ,bbb1);
+		}
+	      }
 	      // HF:
 	      if(k0==3) {
-		// HBdepth1
+		// HFdepth1
 		if(k1+1  ==1) {
 		  h_sumErrorBLS6->Fill(bbbc/bbb1);
 		  h_2DsumErrorBLS6->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumErrorBLS6->Fill(double(ieta), double(k3), bbb1);
-
 		  h_sumErrorBperLS6->Fill( float(lscounterM1) ,bbbc);
 		  h_sum0ErrorBperLS6->Fill( float(lscounterM1) ,bbb1);
-		  
 		}
 		if(k1+1  ==2) {
 		  h_sumErrorBLS7->Fill(bbbc/bbb1);
 		  h_2DsumErrorBLS7->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumErrorBLS7->Fill(double(ieta), double(k3), bbb1);
-
 		  h_sumErrorBperLS7->Fill( float(lscounterM1) ,bbbc);
 		  h_sum0ErrorBperLS7->Fill( float(lscounterM1) ,bbb1);
-
-
 		}
 	      }
-
+	      // HO:
+	      if(k0==2) {
+		// HOdepth4
+		if(k1+1  ==4) {
+		  h_sumErrorBLS8->Fill(bbbc/bbb1);
+		  h_2DsumErrorBLS8->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumErrorBLS8->Fill(double(ieta), double(k3), bbb1);
+		  h_sumErrorBperLS8->Fill( float(lscounterM1) ,bbbc);
+		  h_sum0ErrorBperLS8->Fill( float(lscounterM1) ,bbb1);
+		}
+	      }
+	      ///
 	    }//if(sumEstimator6[k0][k1][k2][k3] != 0.
 
 
@@ -3013,34 +3326,124 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	    
 	  }//for k2
 
-	if(pcountmin> 0) {
-//	  cout<<" HF+    - pcountmin = "<<   pcountmin    <<" pcountall  = "<<   pcountall    <<endl;
-	  if(pcountmin < pnnmin ) pnnmin = pcountmin;
-	  pcountmin=0;
-	  pnnbins++;
-	}
-	if(mcountmin> 0) {
-//	  cout<<" HF-    - mcountmin = "<<   mcountmin    <<" mcountall  = "<<   mcountall    <<endl;
-	  if(mcountmin < mnnmin ) mnnmin = mcountmin;
-	  mcountmin=0;
-	  mnnbins++;
-	}
 
+	  // occupancy distributions for error-A:
+	  // HB
+	  if(k0 == 0 && k1 == 0) {
+	    if(pcountmin1> 0) {
+	      //	  cout<<" HB+    - pcountmin1 = "<<   pcountmin1    <<" pcountall1 = "<<   pcountall1   <<endl;
+	      if(pcountmin1 < pnnmin1 ) pnnmin1 = pcountmin1;
+	      pcountmin1=0;
+	      pnnbins1++;
+	    }
+	    if(mcountmin1> 0) {
+	      //	  cout<<" HB-    - mcountmin1 = "<<   mcountmin1    <<" mcountall1 = "<<   mcountall1   <<endl;
+	      if(mcountmin1 < mnnmin1 ) mnnmin1 = mcountmin1;
+	      mcountmin1=0;
+	      mnnbins1++;
+	    }
+	  }//
+	  // HE
+	  if(k0 == 1 && k1 == 0) {
+	    if(pcountmin3> 0) {
+	      //	  cout<<" HE+    - pcountmin3 = "<<   pcountmin3    <<" pcountall3 = "<<   pcountall3   <<endl;
+	      if(pcountmin3 < pnnmin3 ) pnnmin3 = pcountmin3;
+	      pcountmin3=0;
+	      pnnbins3++;
+	    }
+	    if(mcountmin3> 0) {
+	      //	  cout<<" HE-    - mcountmin3 = "<<   mcountmin3    <<" mcountall3 = "<<   mcountall3   <<endl;
+	      if(mcountmin3 < mnnmin3 ) mnnmin3 = mcountmin3;
+	      mcountmin3=0;
+	      mnnbins3++;
+	    }
+	  }//
+	  // HO
+	  if(k0 == 2 && k1 == 3) {
+	    if(pcountmin8> 0) {
+	      //	  cout<<" HO+    - pcountmin8 = "<<   pcountmin8    <<" pcountall8 = "<<   pcountall8   <<endl;
+	      if(pcountmin8 < pnnmin8 ) pnnmin8 = pcountmin8;
+	      pcountmin8=0;
+	      pnnbins8++;
+	    }
+	    if(mcountmin8> 0) {
+	      //	  cout<<" HO-    - mcountmin8 = "<<   mcountmin8    <<" mcountall8 = "<<   mcountall8   <<endl;
+	      if(mcountmin8 < mnnmin8 ) mnnmin8 = mcountmin8;
+	      mcountmin8=0;
+	      mnnbins8++;
+	    }
+	  }//
+	  // HF
+	  if(k0 == 3 && k1 == 0) {
+	    if(pcountmin6> 0) {
+	      //	  cout<<" HF+    - pcountmin6 = "<<   pcountmin6    <<" pcountall6 = "<<   pcountall6   <<endl;
+	      if(pcountmin6 < pnnmin6 ) pnnmin6 = pcountmin6;
+	      pcountmin6=0;
+	      pnnbins6++;
+	    }
+	    if(mcountmin6> 0) {
+	      //	  cout<<" HF-    - mcountmin6 = "<<   mcountmin6    <<" mcountall6 = "<<   mcountall6   <<endl;
+	      if(mcountmin6 < mnnmin6 ) mnnmin6 = mcountmin6;
+	      mcountmin6=0;
+	      mnnbins6++;
+	    }
+	  }//
+	  
 	}//for k3
       }//for k1
     }//for k0
+    ///////  int sub= cell.subdet();  1-HB, 2-HE, 3-HO, 4-HF
+    ////////////            k0(sub): =0 HB; =1 HE; =2 HO; =3 HF;
+    ////////////         k1(depth-1): = 0 - 3 or depth: = 1 - 4;
     
     //   cout<<"=============================== lscounterM1 = "<<   (float)lscounterM1    <<endl;
-    //      cout<<" HF+    - pcountall = "<<   pcountall    <<" pnnmin= "<<   pnnmin    <<" pnnbins= "<<   pnnbins    <<" Ave= "<<   pcountall/pnnbins    <<endl;
-    float patiooccupancy =  0.;
-    if(pcountall != 0 ) patiooccupancy =  (float)pnnmin*mnnbins/pcountall;
-    //   if(pnnmin > 0.) cout<<" HF+    - pcountall/pnnbins/pnnmin = "<<   (float)pcountall/pnnbins/pnnmin    <<" patiooccupancy = "<<   patiooccupancy    <<endl;
-     h_RatioOccupancy_HFM->Fill( float(lscounterM1) ,patiooccupancy); 
-    //      cout<<" HF-    - mcountall = "<<   mcountall    <<" mnnmin= "<<   mnnmin    <<" mnnbins= "<<   mnnbins    <<" Ave= "<<   mcountall/mnnbins    <<endl;
-    float matiooccupancy =  0.;
-    if(mcountall != 0 ) matiooccupancy =  (float)mnnmin*mnnbins/mcountall;
-    //   if(mnnmin > 0.) cout<<" HF-    - mcountall/mnnbins/mnnmin = "<<   (float)mcountall/mnnbins/mnnmin    <<" matiooccupancy = "<<   matiooccupancy    <<endl;
-     h_RatioOccupancy_HFP->Fill( float(lscounterM1) ,matiooccupancy); 
+
+    //      cout<<" HB+    - pcountall1 = "<<   pcountall1    <<" pnnmin1= "<<   pnnmin1    <<" pnnbins1= "<<   pnnbins1    <<" Ave= "<<   pcountall/pnnbins1    <<endl;
+    float patiooccupancy1=  0.;
+    if(pcountall1 != 0 ) patiooccupancy1 =  (float)pnnmin1*mnnbins1/pcountall1;
+    //   if(pnnmin1 > 0.) cout<<" HB+  - pcountall1/pnnbins1/pnnmin1 = "<<   (float)pcountall1/pnnbins1/pnnmin1    <<" patiooccupancy1 = "<<   patiooccupancy1 <<endl;
+     h_RatioOccupancy_HBM->Fill( float(lscounterM1) ,patiooccupancy1); 
+    //      cout<<" HB-    - mcountall1 = "<<   mcountall1    <<" mnnmin1= "<<   mnnmin1    <<" mnnbins1= "<<   mnnbins1    <<" Ave= "<<   mcountall1/mnnbins1    <<endl;
+    float matiooccupancy1=  0.;
+    if(mcountall1 != 0 ) matiooccupancy1=  (float)mnnmin1*mnnbins1/mcountall1;
+    //   if(mnnmin1 > 0.) cout<<" HB-    - mcountall1/mnnbins1/mnnmin1 = "<<   (float)mcountall1/mnnbins1/mnnmin1    <<" matiooccupancy1 = "<<   matiooccupancy1 <<endl;
+     h_RatioOccupancy_HBP->Fill( float(lscounterM1) ,matiooccupancy1); 
+     
+
+    //      cout<<" HE+    - pcountall3 = "<<   pcountall3    <<" pnnmin3= "<<   pnnmin3    <<" pnnbins3= "<<   pnnbins3    <<" Ave= "<<   pcountal3/pnnbins3    <<endl;
+    float patiooccupancy3=  0.;
+    if(pcountall3 != 0 ) patiooccupancy3 =  (float)pnnmin3*mnnbins3/pcountall3;
+    //   if(pnnmin3 > 0.) cout<<" HE+  - pcountall3/pnnbins3/pnnmin3 = "<<   (float)pcountall3/pnnbins3/pnnmin3    <<" patiooccupancy3 = "<<   patiooccupancy3 <<endl;
+     h_RatioOccupancy_HEM->Fill( float(lscounterM1) ,patiooccupancy3); 
+    //      cout<<" HE-    - mcountall3 = "<<   mcountall3    <<" mnnmin3= "<<   mnnmin3    <<" mnnbins3= "<<   mnnbins3    <<" Ave= "<<   mcountall3/mnnbins3    <<endl;
+    float matiooccupancy3=  0.;
+    if(mcountall3 != 0 ) matiooccupancy3=  (float)mnnmin3*mnnbins3/mcountall3;
+    //   if(mnnmin3 > 0.) cout<<" HE-    - mcountall3/mnnbins3/mnnmin3 = "<<   (float)mcountall3/mnnbins3/mnnmin3    <<" matiooccupancy3 = "<<   matiooccupancy3 <<endl;
+     h_RatioOccupancy_HEP->Fill( float(lscounterM1) ,matiooccupancy3); 
+     
+
+    //      cout<<" HF+    - pcountall6 = "<<   pcountall6    <<" pnnmin6= "<<   pnnmin6    <<" pnnbins6= "<<   pnnbins6    <<" Ave= "<<   pcountal6/pnnbins6    <<endl;
+    float patiooccupancy6=  0.;
+    if(pcountall6 != 0 ) patiooccupancy6 =  (float)pnnmin6*mnnbins6/pcountall6;
+    //   if(pnnmin6 > 0.) cout<<" HF+  - pcountall6/pnnbins6/pnnmin6 = "<<   (float)pcountall6/pnnbins6/pnnmin6    <<" patiooccupancy6 = "<<   patiooccupancy6 <<endl;
+     h_RatioOccupancy_HFM->Fill( float(lscounterM1) ,patiooccupancy6); 
+    //      cout<<" HF-    - mcountall6 = "<<   mcountall6    <<" mnnmin6= "<<   mnnmin6    <<" mnnbins6= "<<   mnnbins6    <<" Ave= "<<   mcountall6/mnnbins6    <<endl;
+    float matiooccupancy6=  0.;
+    if(mcountall6 != 0 ) matiooccupancy6=  (float)mnnmin6*mnnbins6/mcountall6;
+    //   if(mnnmin6 > 0.) cout<<" HF-    - mcountall6/mnnbins6/mnnmin6 = "<<   (float)mcountall6/mnnbins6/mnnmin6    <<" matiooccupancy6 = "<<   matiooccupancy6 <<endl;
+     h_RatioOccupancy_HFP->Fill( float(lscounterM1) ,matiooccupancy6); 
+     
+
+    //      cout<<" HO+    - pcountall8 = "<<   pcountall8    <<" pnnmin8= "<<   pnnmin8    <<" pnnbins8= "<<   pnnbins8    <<" Ave= "<<   pcountal8/pnnbins8    <<endl;
+    float patiooccupancy8=  0.;
+    if(pcountall8 != 0 ) patiooccupancy8 =  (float)pnnmin8*mnnbins8/pcountall8;
+    //   if(pnnmin8 > 0.) cout<<" HO+  - pcountall8/pnnbins8/pnnmin8 = "<<   (float)pcountall8/pnnbins8/pnnmin8    <<" patiooccupancy8 = "<<   patiooccupancy8 <<endl;
+     h_RatioOccupancy_HOM->Fill( float(lscounterM1) ,patiooccupancy8); 
+    //      cout<<" HO-    - mcountall8 = "<<   mcountall8    <<" mnnmin8= "<<   mnnmin8    <<" mnnbins8= "<<   mnnbins8    <<" Ave= "<<   mcountall8/mnnbins8    <<endl;
+    float matiooccupancy8=  0.;
+    if(mcountall8 != 0 ) matiooccupancy8=  (float)mnnmin8*mnnbins8/mcountall8;
+    //   if(mnnmin8 > 0.) cout<<" HO-    - mcountall8/mnnbins8/mnnmin8 = "<<   (float)mcountall8/mnnbins8/mnnmin8    <<" matiooccupancy8 = "<<   matiooccupancy8 <<endl;
+     h_RatioOccupancy_HOP->Fill( float(lscounterM1) ,matiooccupancy8); 
      
 
     
@@ -4815,7 +5218,27 @@ void VeRawAnalyzer::beginJob()
     h_2D0sumADCAmplLS8    = new TH2F("h_2D0sumADCAmplLS8"," ",    82, -41., 41., 72, 0., 72.);
     h_sum0ADCAmplperLS8  = new TH1F("h_sum0ADCAmplperLS8"," ",     bac, 1.,bac2);
 
+    // error-A for HB( depth1 only) 
+    h_sumADCAmplperLS1_P1  = new TH1F("h_sumADCAmplperLS1_P1"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS1_P1  = new TH1F("h_sum0ADCAmplperLS1_P1"," ",     bac, 1.,bac2);
+    h_sumADCAmplperLS1_P2  = new TH1F("h_sumADCAmplperLS1_P2"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS1_P2  = new TH1F("h_sum0ADCAmplperLS1_P2"," ",     bac, 1.,bac2);
+    h_sumADCAmplperLS1_M1  = new TH1F("h_sumADCAmplperLS1_M1"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS1_M1  = new TH1F("h_sum0ADCAmplperLS1_M1"," ",     bac, 1.,bac2);
+    h_sumADCAmplperLS1_M2  = new TH1F("h_sumADCAmplperLS1_M2"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS1_M2  = new TH1F("h_sum0ADCAmplperLS1_M2"," ",     bac, 1.,bac2);
 
+    // error-A for HE( depth1 only)
+    h_sumADCAmplperLS3_P1  = new TH1F("h_sumADCAmplperLS3_P1"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS3_P1  = new TH1F("h_sum0ADCAmplperLS3_P1"," ",     bac, 1.,bac2);
+    h_sumADCAmplperLS3_P2  = new TH1F("h_sumADCAmplperLS3_P2"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS3_P2  = new TH1F("h_sum0ADCAmplperLS3_P2"," ",     bac, 1.,bac2);
+    h_sumADCAmplperLS3_M1  = new TH1F("h_sumADCAmplperLS3_M1"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS3_M1  = new TH1F("h_sum0ADCAmplperLS3_M1"," ",     bac, 1.,bac2);
+    h_sumADCAmplperLS3_M2  = new TH1F("h_sumADCAmplperLS3_M2"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS3_M2  = new TH1F("h_sum0ADCAmplperLS3_M2"," ",     bac, 1.,bac2);
+
+    // error-A for HF( depth1 only)
     h_sumADCAmplperLS6_P1  = new TH1F("h_sumADCAmplperLS6_P1"," ",     bac, 1.,bac2);
     h_sum0ADCAmplperLS6_P1  = new TH1F("h_sum0ADCAmplperLS6_P1"," ",     bac, 1.,bac2);
     h_sumADCAmplperLS6_P2  = new TH1F("h_sumADCAmplperLS6_P2"," ",     bac, 1.,bac2);
@@ -4824,6 +5247,16 @@ void VeRawAnalyzer::beginJob()
     h_sum0ADCAmplperLS6_M1  = new TH1F("h_sum0ADCAmplperLS6_M1"," ",     bac, 1.,bac2);
     h_sumADCAmplperLS6_M2  = new TH1F("h_sumADCAmplperLS6_M2"," ",     bac, 1.,bac2);
     h_sum0ADCAmplperLS6_M2  = new TH1F("h_sum0ADCAmplperLS6_M2"," ",     bac, 1.,bac2);
+
+    // error-A for HO( depth4 only)
+    h_sumADCAmplperLS8_P1  = new TH1F("h_sumADCAmplperLS8_P1"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS8_P1  = new TH1F("h_sum0ADCAmplperLS8_P1"," ",     bac, 1.,bac2);
+    h_sumADCAmplperLS8_P2  = new TH1F("h_sumADCAmplperLS8_P2"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS8_P2  = new TH1F("h_sum0ADCAmplperLS8_P2"," ",     bac, 1.,bac2);
+    h_sumADCAmplperLS8_M1  = new TH1F("h_sumADCAmplperLS8_M1"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS8_M1  = new TH1F("h_sum0ADCAmplperLS8_M1"," ",     bac, 1.,bac2);
+    h_sumADCAmplperLS8_M2  = new TH1F("h_sumADCAmplperLS8_M2"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS8_M2  = new TH1F("h_sum0ADCAmplperLS8_M2"," ",     bac, 1.,bac2);
 
 
     // for estimator2:
@@ -5057,6 +5490,12 @@ void VeRawAnalyzer::beginJob()
     h_2D0sumAmplLS6    = new TH2F("h_2D0sumAmplLS6"," ",    82, -41., 41., 72, 0., 72.);
     h_sum0AmplperLS6  = new TH1F("h_sum0AmplperLS6"," ",     bac, 1.,bac2);
 
+    h_RatioOccupancy_HBP  = new TH1F("h_RatioOccupancy_HBP"," ",     bac, 1.,bac2);
+    h_RatioOccupancy_HBM  = new TH1F("h_RatioOccupancy_HBM"," ",     bac, 1.,bac2);
+    h_RatioOccupancy_HEP  = new TH1F("h_RatioOccupancy_HEP"," ",     bac, 1.,bac2);
+    h_RatioOccupancy_HEM  = new TH1F("h_RatioOccupancy_HEM"," ",     bac, 1.,bac2);
+    h_RatioOccupancy_HOP  = new TH1F("h_RatioOccupancy_HOP"," ",     bac, 1.,bac2);
+    h_RatioOccupancy_HOM  = new TH1F("h_RatioOccupancy_HOM"," ",     bac, 1.,bac2);
     h_RatioOccupancy_HFP  = new TH1F("h_RatioOccupancy_HFP"," ",     bac, 1.,bac2);
     h_RatioOccupancy_HFM  = new TH1F("h_RatioOccupancy_HFM"," ",     bac, 1.,bac2);
 
@@ -5075,6 +5514,33 @@ void VeRawAnalyzer::beginJob()
     h_sum0AmplperLS8  = new TH1F("h_sum0AmplperLS8"," ",     bac, 1.,bac2);
 
     // for estimator6:
+    h_sumErrorBLS1   = new TH1F("h_sumErrorBLS1"," ",      10,  0.,10.);
+    h_sumErrorBperLS1  = new TH1F("h_sumErrorBperLS1"," ",     bac, 1.,bac2);
+    h_sum0ErrorBperLS1  = new TH1F("h_sum0ErrorBperLS1"," ",     bac, 1.,bac2);
+    h_2D0sumErrorBLS1    = new TH2F("h_2D0sumErrorBLS1"," ",    82, -41., 41., 72, 0., 72.);
+    h_2DsumErrorBLS1    = new TH2F("h_2DsumErrorBLS1"," ",    82, -41., 41., 72, 0., 72.);
+    h_sumErrorBLS2   = new TH1F("h_sumErrorBLS2"," ",      10,  0.,10.);
+    h_sumErrorBperLS2  = new TH1F("h_sumErrorBperLS2"," ",     bac, 1.,bac2);
+    h_sum0ErrorBperLS2  = new TH1F("h_sum0ErrorBperLS2"," ",     bac, 1.,bac2);
+    h_2D0sumErrorBLS2    = new TH2F("h_2D0sumErrorBLS2"," ",    82, -41., 41., 72, 0., 72.);
+    h_2DsumErrorBLS2    = new TH2F("h_2DsumErrorBLS2"," ",    82, -41., 41., 72, 0., 72.);
+
+    h_sumErrorBLS3   = new TH1F("h_sumErrorBLS3"," ",      10,  0.,10.);
+    h_sumErrorBperLS3  = new TH1F("h_sumErrorBperLS3"," ",     bac, 1.,bac2);
+    h_sum0ErrorBperLS3  = new TH1F("h_sum0ErrorBperLS3"," ",     bac, 1.,bac2);
+    h_2D0sumErrorBLS3    = new TH2F("h_2D0sumErrorBLS3"," ",    82, -41., 41., 72, 0., 72.);
+    h_2DsumErrorBLS3    = new TH2F("h_2DsumErrorBLS3"," ",    82, -41., 41., 72, 0., 72.);
+    h_sumErrorBLS4   = new TH1F("h_sumErrorBLS4"," ",      10,  0.,10.);
+    h_sumErrorBperLS4  = new TH1F("h_sumErrorBperLS4"," ",     bac, 1.,bac2);
+    h_sum0ErrorBperLS4  = new TH1F("h_sum0ErrorBperLS4"," ",     bac, 1.,bac2);
+    h_2D0sumErrorBLS4    = new TH2F("h_2D0sumErrorBLS4"," ",    82, -41., 41., 72, 0., 72.);
+    h_2DsumErrorBLS4    = new TH2F("h_2DsumErrorBLS4"," ",    82, -41., 41., 72, 0., 72.);
+    h_sumErrorBLS5   = new TH1F("h_sumErrorBLS5"," ",      10,  0.,10.);
+    h_sumErrorBperLS5  = new TH1F("h_sumErrorBperLS5"," ",     bac, 1.,bac2);
+    h_sum0ErrorBperLS5  = new TH1F("h_sum0ErrorBperLS5"," ",     bac, 1.,bac2);
+    h_2D0sumErrorBLS5    = new TH2F("h_2D0sumErrorBLS5"," ",    82, -41., 41., 72, 0., 72.);
+    h_2DsumErrorBLS5    = new TH2F("h_2DsumErrorBLS5"," ",    82, -41., 41., 72, 0., 72.);
+
     h_sumErrorBLS6   = new TH1F("h_sumErrorBLS6"," ",      10,  0.,10.);
     h_sumErrorBperLS6  = new TH1F("h_sumErrorBperLS6"," ",     bac, 1.,bac2);
     h_sum0ErrorBperLS6  = new TH1F("h_sum0ErrorBperLS6"," ",     bac, 1.,bac2);
@@ -5085,6 +5551,12 @@ void VeRawAnalyzer::beginJob()
     h_sum0ErrorBperLS7  = new TH1F("h_sum0ErrorBperLS7"," ",     bac, 1.,bac2);
     h_2D0sumErrorBLS7    = new TH2F("h_2D0sumErrorBLS7"," ",    82, -41., 41., 72, 0., 72.);
     h_2DsumErrorBLS7    = new TH2F("h_2DsumErrorBLS7"," ",    82, -41., 41., 72, 0., 72.);
+
+    h_sumErrorBLS8   = new TH1F("h_sumErrorBLS8"," ",      10,  0.,10.);
+    h_sumErrorBperLS8  = new TH1F("h_sumErrorBperLS8"," ",     bac, 1.,bac2);
+    h_sum0ErrorBperLS8  = new TH1F("h_sum0ErrorBperLS8"," ",     bac, 1.,bac2);
+    h_2D0sumErrorBLS8    = new TH2F("h_2D0sumErrorBLS8"," ",    82, -41., 41., 72, 0., 72.);
+    h_2DsumErrorBLS8    = new TH2F("h_2DsumErrorBLS8"," ",    82, -41., 41., 72, 0., 72.);
 
     // for averOCCUPANCY :
     h_averoccupancy_HB  = new TH1F("h_averoccupancy_HB"," ",     bac, 1.,bac2);
@@ -6129,10 +6601,18 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
     int c2=0;
     int c3=0;
     int c4=0;
+    double errorBtype = 0.;  
+
+    //  TSsize=digiItr->size();
+    //    int TSsize = 10;
     int TSsize = 10;
-    TSsize=digiItr->size();
-    if(TSsize>10) std::cout << "TSsize HBHE >10 and = " <<TSsize<< std::endl;
-    if(TSsize<10) std::cout << "TSsize HBHE <10 and = " <<TSsize<< std::endl;
+    //     if((*digiItr).size() !=  10) std::cout << "TSsize HBHE != 10 and = " <<(*digiItr).size()<< std::endl;
+    if((*digiItr).size() !=  TSsize) errorBtype = 1.; 
+
+//    TSsize=digiItr->size();
+//    if(TSsize>10) std::cout << "TSsize HBHE >10 and = " <<TSsize<< std::endl;
+//    if(TSsize<10) std::cout << "TSsize HBHE <10 and = " <<TSsize<< std::endl;
+//
     //    for (int ii=0; ii<digiItr->size(); ii++) {  
     for (int ii=0; ii<TSsize; ii++) {  
       double ampldefault = 0.;
@@ -6508,10 +6988,12 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
     
     
 
-    ///////////////////////////////////////Digis
+    ///////////////////////////////////////Digis : over all digiHits
 
     sum0Estimator[sub-1][mdepth-1][ieta+41][iphi] += 1.;
 
+    //      for Error B-type
+    sumEstimator6[sub-1][mdepth-1][ieta+41][iphi] += errorBtype;
 
 
     //    sumEstimator0[sub-1][mdepth-1][ieta+41][iphi] += pedestalw0;//Sig_Pedestals
@@ -7002,8 +7484,8 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
     //  TSsize=digiItr->size();
     //    int TSsize = 10;
     int TSsize = 4;
-    //     if((*digiItr).size() >  4) std::cout << "TSsize HF > 4 and = " <<(*digiItr).size()<< std::endl;
-    if((*digiItr).size() >  TSsize) errorBtype = 1.; 
+    //     if((*digiItr).size() !=  4) std::cout << "TSsize HF != 4 and = " <<(*digiItr).size()<< std::endl;
+    if((*digiItr).size() !=  TSsize) errorBtype = 1.; 
     ////// 
     for (int ii=0; ii<TSsize; ii++) {  
       double ampldefault = 0.;
@@ -7508,7 +7990,14 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
     int c2=0;
     int c3=0;
     int c4=0;
+    double errorBtype = 0.;  
+
+    //  TSsize=digiItr->size();
+    //    int TSsize = 10;
     int TSsize = 10;
+    //     if((*digiItr).size() !=  10) std::cout << "TSsize HO != 10 and = " <<(*digiItr).size()<< std::endl;
+    if((*digiItr).size() !=  TSsize) errorBtype = 1.; 
+
     //////  
     for (int ii=0; ii<TSsize; ii++) {  
       double ampldefault = 0.;
@@ -7742,9 +8231,12 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
     
     
     
-    ///////////////////////////////////////Digis
+    ///////////////////////////////////////Digis : over all digiHits
 
     sum0Estimator[sub-1][mdepth-1][ieta+41][iphi] += 1.;
+
+    //      for Error B-type
+    sumEstimator6[sub-1][mdepth-1][ieta+41][iphi] += errorBtype;
 
 
     //      sumEstimator0[sub-1][mdepth-1][ieta+41][iphi] += pedestalw0;//Sig_Pedestals	
@@ -7824,6 +8316,18 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
 	if(mdepth==4) h_mapDepth4ADCAmpl12_HO->Fill(double(ieta), double(iphi), ampl);
 
 	if(amplitude > forallestimators_amplitude_bigger_) sumEstimator1[sub-1][mdepth-1][ieta+41][iphi] += amplitude;
+	/*
+	// to avoid high amplitude peaks of tiny bad channels
+	if(amplitude > forallestimators_amplitude_bigger_ && amplitude  <18000) {
+	  if(amplitude>990&&amplitude<1020) {
+	  }
+	  else {
+	    sumEstimator1[sub-1][mdepth-1][ieta+41][iphi] += amplitude;
+	  }
+	}
+*/	
+
+
       }//if(studyADCAmplHist_
       ///////////////////////////////
 
@@ -8623,7 +9127,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	    }//if(sumEstimator5[k0][k1][k2][k3] != 0.
 	    
 	    
-	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator6 ErrorB in HF
+	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator6 (Error-B)
 	    if (verbosity == -81 ) std::cout << "sumEstimator6 = " <<sumEstimator6[k0][k1][k2][k3]<< std::endl;
 	    if(sumEstimator6[k0][k1][k2][k3] != 0. ) {
 	      
@@ -8634,33 +9138,83 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      double bbb1=1.;
 	      if(flagestimatornormalization_ == 2 ) {bbbc = sumEstimator6[k0][k1][k2][k3]; bbb1 = sum0Estimator[k0][k1][k2][k3];}
 	      
-	      // HF:
-	      if(k0==3) {
+	      // HB:
+	      if(k0==0) {
 		// HBdepth1
 		if(k1+1  ==1) {
+		  h_sumErrorBLS1->Fill(bbbc/bbb1);
+		  h_2DsumErrorBLS1->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumErrorBLS1->Fill(double(ieta), double(k3), bbb1);
+		  h_sumErrorBperLS1->Fill( float(lscounterM1) ,bbbc);
+		  h_sum0ErrorBperLS1->Fill( float(lscounterM1) ,bbb1);
+		}
+		if(k1+1  ==2) {
+		  h_sumErrorBLS2->Fill(bbbc/bbb1);
+		  h_2DsumErrorBLS2->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumErrorBLS2->Fill(double(ieta), double(k3), bbb1);
+		  h_sumErrorBperLS2->Fill( float(lscounterM1) ,bbbc);
+		  h_sum0ErrorBperLS2->Fill( float(lscounterM1) ,bbb1);
+		}
+	      }
+	      // HE:
+	      if(k0==1) {
+		// HEdepth1
+		if(k1+1  ==1) {
+		  h_sumErrorBLS3->Fill(bbbc/bbb1);
+		  h_2DsumErrorBLS3->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumErrorBLS3->Fill(double(ieta), double(k3), bbb1);
+		  h_sumErrorBperLS3->Fill( float(lscounterM1) ,bbbc);
+		  h_sum0ErrorBperLS3->Fill( float(lscounterM1) ,bbb1);
+		}
+		if(k1+1  ==2) {
+		  h_sumErrorBLS4->Fill(bbbc/bbb1);
+		  h_2DsumErrorBLS4->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumErrorBLS4->Fill(double(ieta), double(k3), bbb1);
+		  h_sumErrorBperLS4->Fill( float(lscounterM1) ,bbbc);
+		  h_sum0ErrorBperLS4->Fill( float(lscounterM1) ,bbb1);
+		}
+		if(k1+1  ==3) {
+		  h_sumErrorBLS5->Fill(bbbc/bbb1);
+		  h_2DsumErrorBLS5->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumErrorBLS5->Fill(double(ieta), double(k3), bbb1);
+		  h_sumErrorBperLS5->Fill( float(lscounterM1) ,bbbc);
+		  h_sum0ErrorBperLS5->Fill( float(lscounterM1) ,bbb1);
+		}
+	      }
+	      // HF:
+	      if(k0==3) {
+		// HFdepth1
+		if(k1+1  ==1) {
 		  h_sumErrorBLS6->Fill(bbbc/bbb1);
-		  h_2D0sumErrorBLS6->Fill(double(ieta), double(k3), bbb1);
 		  h_2DsumErrorBLS6->Fill(double(ieta), double(k3), bbbc);
-
+		  h_2D0sumErrorBLS6->Fill(double(ieta), double(k3), bbb1);
 		  h_sumErrorBperLS6->Fill( float(lscounterM1) ,bbbc);
 		  h_sum0ErrorBperLS6->Fill( float(lscounterM1) ,bbb1);
-		  
 		}
 		if(k1+1  ==2) {
 		  h_sumErrorBLS7->Fill(bbbc/bbb1);
-		  h_2D0sumErrorBLS7->Fill(double(ieta), double(k3), bbb1);
 		  h_2DsumErrorBLS7->Fill(double(ieta), double(k3), bbbc);
-
+		  h_2D0sumErrorBLS7->Fill(double(ieta), double(k3), bbb1);
 		  h_sumErrorBperLS7->Fill( float(lscounterM1) ,bbbc);
 		  h_sum0ErrorBperLS7->Fill( float(lscounterM1) ,bbb1);
-
-
 		}
 	      }
-
+	      // HO:
+	      if(k0==2) {
+		// HOdepth4
+		if(k1+1  ==4) {
+		  h_sumErrorBLS8->Fill(bbbc/bbb1);
+		  h_2DsumErrorBLS8->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumErrorBLS8->Fill(double(ieta), double(k3), bbb1);
+		  h_sumErrorBperLS8->Fill( float(lscounterM1) ,bbbc);
+		  h_sum0ErrorBperLS8->Fill( float(lscounterM1) ,bbb1);
+		}
+	      }
+	      ///
 	    }//if(sumEstimator6[k0][k1][k2][k3] != 0.
-
 	    
+	      ///
+	      ///
 	  }//for  
 	}//for  
       }//for  
@@ -9548,6 +10102,24 @@ void VeRawAnalyzer::endJob(){
     h_sum0ADCAmplperLS6->Write();
 
 
+    h_sumADCAmplperLS1_P1 ->Write();
+    h_sum0ADCAmplperLS1_P1 ->Write(); 
+    h_sumADCAmplperLS1_P2  ->Write(); 
+    h_sum0ADCAmplperLS1_P2 ->Write(); 
+    h_sumADCAmplperLS1_M1  ->Write(); 
+    h_sum0ADCAmplperLS1_M1  ->Write();
+    h_sumADCAmplperLS1_M2   ->Write();
+    h_sum0ADCAmplperLS1_M2  ->Write();
+
+    h_sumADCAmplperLS3_P1 ->Write();
+    h_sum0ADCAmplperLS3_P1 ->Write(); 
+    h_sumADCAmplperLS3_P2  ->Write(); 
+    h_sum0ADCAmplperLS3_P2 ->Write(); 
+    h_sumADCAmplperLS3_M1  ->Write(); 
+    h_sum0ADCAmplperLS3_M1  ->Write();
+    h_sumADCAmplperLS3_M2   ->Write();
+    h_sum0ADCAmplperLS3_M2  ->Write();
+
     h_sumADCAmplperLS6_P1 ->Write();
     h_sum0ADCAmplperLS6_P1 ->Write(); 
     h_sumADCAmplperLS6_P2  ->Write(); 
@@ -9556,6 +10128,15 @@ void VeRawAnalyzer::endJob(){
     h_sum0ADCAmplperLS6_M1  ->Write();
     h_sumADCAmplperLS6_M2   ->Write();
     h_sum0ADCAmplperLS6_M2  ->Write();
+
+    h_sumADCAmplperLS8_P1 ->Write();
+    h_sum0ADCAmplperLS8_P1 ->Write(); 
+    h_sumADCAmplperLS8_P2  ->Write(); 
+    h_sum0ADCAmplperLS8_P2 ->Write(); 
+    h_sumADCAmplperLS8_M1  ->Write(); 
+    h_sum0ADCAmplperLS8_M1  ->Write();
+    h_sumADCAmplperLS8_M2   ->Write();
+    h_sum0ADCAmplperLS8_M2  ->Write();
 
 
     
@@ -9751,6 +10332,33 @@ void VeRawAnalyzer::endJob(){
     
 
     // for estimator6:
+    h_sumErrorBLS1->Write();
+    h_sumErrorBperLS1->Write();
+    h_sum0ErrorBperLS1->Write();
+    h_2D0sumErrorBLS1->Write();
+    h_2DsumErrorBLS1->Write();
+    h_sumErrorBLS2->Write();
+    h_sumErrorBperLS2->Write();
+    h_sum0ErrorBperLS2->Write();
+    h_2D0sumErrorBLS2->Write();
+    h_2DsumErrorBLS2->Write();
+
+    h_sumErrorBLS3->Write();
+    h_sumErrorBperLS3->Write();
+    h_sum0ErrorBperLS3->Write();
+    h_2D0sumErrorBLS3->Write();
+    h_2DsumErrorBLS3->Write();
+    h_sumErrorBLS4->Write();
+    h_sumErrorBperLS4->Write();
+    h_sum0ErrorBperLS4->Write();
+    h_2D0sumErrorBLS4->Write();
+    h_2DsumErrorBLS4->Write();
+    h_sumErrorBLS5->Write();
+    h_sumErrorBperLS5->Write();
+    h_sum0ErrorBperLS5->Write();
+    h_2D0sumErrorBLS5->Write();
+    h_2DsumErrorBLS5->Write();
+
     h_sumErrorBLS6->Write();
     h_sumErrorBperLS6->Write();
     h_sum0ErrorBperLS6->Write();
@@ -9761,6 +10369,12 @@ void VeRawAnalyzer::endJob(){
     h_sum0ErrorBperLS7->Write();
     h_2D0sumErrorBLS7->Write();
     h_2DsumErrorBLS7->Write();
+
+    h_sumErrorBLS8->Write();
+    h_sumErrorBperLS8->Write();
+    h_sum0ErrorBperLS8->Write();
+    h_2D0sumErrorBLS8->Write();
+    h_2DsumErrorBLS8->Write();
 
 
     // for estimator5:
@@ -9807,6 +10421,12 @@ void VeRawAnalyzer::endJob(){
     h_2D0sumAmplLS6->Write();
     h_sum0AmplperLS6->Write();
 
+    h_RatioOccupancy_HBP->Write();
+    h_RatioOccupancy_HBM->Write();
+    h_RatioOccupancy_HEP->Write();
+    h_RatioOccupancy_HEM->Write();
+    h_RatioOccupancy_HOP->Write();
+    h_RatioOccupancy_HOM->Write();
     h_RatioOccupancy_HFP->Write();
     h_RatioOccupancy_HFM->Write();
 
