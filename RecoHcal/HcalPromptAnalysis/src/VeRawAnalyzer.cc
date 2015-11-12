@@ -2784,7 +2784,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		      h_sum0ADCAmplperLS8_P2->Fill( float(lscounterM1) ,bbb1);
 		    }
 		  ////////////////////////////// P
-		    if(bbbc/bbb1> 20.) {
+		    if(bbbc/bbb1> 90.) {
 		      pcountall8 += bbb1 ;
 		      pcountmin8 += bbb1;
 		    }
@@ -2801,7 +2801,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		      h_sum0ADCAmplperLS8_M2->Fill( float(lscounterM1) ,bbb1);
 		    }
 		  ////////////////////////////// M
-		    if(bbbc/bbb1> 20.) {
+		    if(bbbc/bbb1> 90.) {
 		      mcountall8 += bbb1 ;
 		      mcountmin8 += bbb1;
 		    }
@@ -3498,18 +3498,26 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     aversumamplitude_HO = 0.;
     
     //------------------------------------------------------
+    maxxSUM1 /= float(nevcounter0);// ONLY FOR AVERAGE-AMPLITUDE
     h_maxxSUMAmpl_HB->Fill( float(lscounterM1) ,maxxSUM1);
+    maxxSUM2 /= float(nevcounter0);// ONLY FOR AVERAGE-AMPLITUDE
     h_maxxSUMAmpl_HE->Fill( float(lscounterM1) ,maxxSUM2);
+    maxxSUM3 /= float(nevcounter0);// ONLY FOR AVERAGE-AMPLITUDE
     h_maxxSUMAmpl_HO->Fill( float(lscounterM1) ,maxxSUM3);
+    maxxSUM4 /= float(nevcounter0);// ONLY FOR AVERAGE-AMPLITUDE
     h_maxxSUMAmpl_HF->Fill( float(lscounterM1) ,maxxSUM4);
     maxxSUM1 = 0.;
     maxxSUM2 = 0.;
     maxxSUM3 = 0.;
     maxxSUM4 = 0.;
     //------------------------------------------------------
+    maxxOCCUP1 /= float(nevcounter0);// ONLY FOR AVERAGE-occupancy
     h_maxxOCCUP_HB->Fill( float(lscounterM1) ,maxxOCCUP1);
+    maxxOCCUP2 /= float(nevcounter0);// ONLY FOR AVERAGE-occupancy
     h_maxxOCCUP_HE->Fill( float(lscounterM1) ,maxxOCCUP2);
+    maxxOCCUP3 /= float(nevcounter0);// ONLY FOR AVERAGE-occupancy
     h_maxxOCCUP_HO->Fill( float(lscounterM1) ,maxxOCCUP3);
+    maxxOCCUP4 /= float(nevcounter0);// ONLY FOR AVERAGE-occupancy
     h_maxxOCCUP_HF->Fill( float(lscounterM1) ,maxxOCCUP4);
     maxxOCCUP1 = 0.;
     maxxOCCUP2 = 0.;
@@ -3882,64 +3890,113 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   for(int k0 = 0; k0<4; k0++) {
     int sumofchannels = 0;
     double sumamplitudesubdet = 0.;	
+    int sumofchannels0 = 0;
+    double sumamplitudesubdet0 = 0.;	
 
 
 
     //  for(int k1 = 0; k1<4; k1++) {
       for(int k2 = 0; k2<82; k2++) {
 	for(int k3 = 0; k3<72; k3++) {
+
 	  // HB
-	  if( k0 == 0 ) h_sumamplitudechannel_HB->Fill(amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3]);
-	  if( k0 == 0 && (                                            amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3]       >      80.) ) {
-	    sumamplitudesubdet += amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3];
-	    sumofchannels++;
+	  if( k0 == 0 ) {
+	    double sumamplitudechannel_HB = amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3];
+	    h_sumamplitudechannel_HB->Fill(sumamplitudechannel_HB);
+	    if( sumamplitudechannel_HB   >      80.) {
+	      sumamplitudesubdet += sumamplitudechannel_HB;
+	      sumofchannels++;
+	    }
+	    else {
+	      if( sumamplitudechannel_HB   >  0.) {
+		sumamplitudesubdet0 += sumamplitudechannel_HB;
+		sumofchannels0++;
+	      }
+	    }
 	  }//
 	  // HE
-	  if( k0 == 1 ) h_sumamplitudechannel_HE->Fill(amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3]+amplitudechannel[k0][2][k2][k3]);
-	  if( k0 == 1 && (                amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3]+amplitudechannel[k0][2][k2][k3]       >      200.)) {
-	    sumamplitudesubdet += amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3]+amplitudechannel[k0][2][k2][k3];
-	    sumofchannels++;
+	  if( k0 == 1 ) {
+	    double sumamplitudechannel_HE = amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3]+amplitudechannel[k0][2][k2][k3];
+	    h_sumamplitudechannel_HE->Fill(sumamplitudechannel_HE);
+	    if( sumamplitudechannel_HE   >     200.) {
+	      sumamplitudesubdet += sumamplitudechannel_HE;
+	      sumofchannels++;
+	    }
+	    else {
+	      if( sumamplitudechannel_HE   >  0.) {
+		sumamplitudesubdet0 += sumamplitudechannel_HE;
+		sumofchannels0++;
+	      }
+	    }
 	  }//
 	  // HO
-	  if( k0 == 2 ) h_sumamplitudechannel_HO->Fill(amplitudechannel[k0][3][k2][k3]);
-	  if( k0 == 2 && (                                                                  amplitudechannel[k0][3][k2][k3]       >           1200.)) {
-	    sumamplitudesubdet += amplitudechannel[k0][3][k2][k3];
-	    sumofchannels++;
+	  if( k0 == 2 ) {
+	    double sumamplitudechannel_HO = amplitudechannel[k0][3][k2][k3];
+	    h_sumamplitudechannel_HO->Fill(sumamplitudechannel_HO);
+	    if( sumamplitudechannel_HO   >    1200.) {
+	      sumamplitudesubdet += sumamplitudechannel_HO;
+	      sumofchannels++;
+	    }
+	    else {
+	      if( sumamplitudechannel_HO   >  0.) {
+		sumamplitudesubdet0 += sumamplitudechannel_HO;
+		sumofchannels0++;
+	      }
+	    }
 	  }//
 	  // HF
-	  if( k0 == 3 ) h_sumamplitudechannel_HF->Fill(amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3]);
-	  if( k0 == 3 && (                                       amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3]       >           600.)) {
-	    sumamplitudesubdet += amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3];
-	    sumofchannels++;
+	  if( k0 == 3 ) {
+	    double sumamplitudechannel_HF = amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3];
+	    h_sumamplitudechannel_HF->Fill(sumamplitudechannel_HF);
+	    if( sumamplitudechannel_HF   >     600.) {
+	      sumamplitudesubdet += sumamplitudechannel_HF;
+	      sumofchannels++;
+	    }
+	    else {
+	      if( sumamplitudechannel_HF   >  0.) {
+		sumamplitudesubdet0 += sumamplitudechannel_HF;
+		sumofchannels0++;
+	      }
+	    }
 	  }//
+	  
+
 	  
 	}//k3
       }//k2
       //  }//k1
 
       if( k0 == 0 ) { 
-	if( sumamplitudesubdet > maxxSUM1) maxxSUM1 = sumamplitudesubdet;
-	if( sumofchannels > maxxOCCUP1) maxxOCCUP1 = sumofchannels;
+	//	if( sumamplitudesubdet > maxxSUM1) maxxSUM1 = sumamplitudesubdet;
+	//	if( sumofchannels > maxxOCCUP1) maxxOCCUP1 = sumofchannels;
 	averoccupancy_HB+=sumofchannels;
 	aversumamplitude_HB+=sumamplitudesubdet;
+	maxxOCCUP1+=sumofchannels0;
+	maxxSUM1+=sumamplitudesubdet0;
       }//HB
       if( k0 == 1 ) { 
-	if( sumamplitudesubdet > maxxSUM2) maxxSUM2 = sumamplitudesubdet;
-	if( sumofchannels > maxxOCCUP2) maxxOCCUP2 = sumofchannels;
+	//	if( sumamplitudesubdet > maxxSUM2) maxxSUM2 = sumamplitudesubdet;
+	//	if( sumofchannels > maxxOCCUP2) maxxOCCUP2 = sumofchannels;
 	averoccupancy_HE+=sumofchannels;
 	aversumamplitude_HE+=sumamplitudesubdet;
+	maxxOCCUP2+=sumofchannels0;
+	maxxSUM2+=sumamplitudesubdet0;
       }//HE
       if( k0 == 2 ) { 
-	if( sumamplitudesubdet > maxxSUM3) maxxSUM3 = sumamplitudesubdet;
-	if( sumofchannels > maxxOCCUP3) maxxOCCUP3 = sumofchannels;
+	//	if( sumamplitudesubdet > maxxSUM3) maxxSUM3 = sumamplitudesubdet;
+	//	if( sumofchannels > maxxOCCUP3) maxxOCCUP3 = sumofchannels;
 	averoccupancy_HO+=sumofchannels;
 	aversumamplitude_HO+=sumamplitudesubdet;
+	maxxOCCUP3+=sumofchannels0;
+	maxxSUM3+=sumamplitudesubdet0;
       }//HO
       if( k0 == 3 ) { 
-	if( sumamplitudesubdet > maxxSUM4) maxxSUM4 = sumamplitudesubdet;
-	if( sumofchannels > maxxOCCUP4) maxxOCCUP4 = sumofchannels;
+	//	if( sumamplitudesubdet > maxxSUM4) maxxSUM4 = sumamplitudesubdet;
+	//	if( sumofchannels > maxxOCCUP4) maxxOCCUP4 = sumofchannels;
 	averoccupancy_HF+=sumofchannels;
 	aversumamplitude_HF+=sumamplitudesubdet;
+	maxxOCCUP4+=sumofchannels0;
+	maxxSUM4+=sumamplitudesubdet0;
       }//HF
       
   }//k0
@@ -5570,17 +5627,19 @@ void VeRawAnalyzer::beginJob()
     h_aversumamplitude_HF  = new TH1F("h_aversumamplitude_HF"," ",     bac, 1.,bac2);
     h_aversumamplitude_HO  = new TH1F("h_aversumamplitude_HO"," ",     bac, 1.,bac2);
     
-    // for maxxSUMAmplitude
+    // for SUMAmplitude
     h_sumamplitudechannel_HB  = new TH1F("h_sumamplitudechannel_HB"," ",      100,  0., 2000.);
     h_sumamplitudechannel_HE  = new TH1F("h_sumamplitudechannel_HE"," ",      100,  0., 3000.);
     h_sumamplitudechannel_HF  = new TH1F("h_sumamplitudechannel_HF"," ",      100,  0., 7000.);
     h_sumamplitudechannel_HO  = new TH1F("h_sumamplitudechannel_HO"," ",      100,  0.,10000.);
+
+    // for maxxSUMAmplitude OR aversumamplitude_WITH_ELSE-CUT
     h_maxxSUMAmpl_HB = new TH1F("h_maxxSUMAmpl_HB"," ",     bac, 1.,bac2);
     h_maxxSUMAmpl_HE = new TH1F("h_maxxSUMAmpl_HE"," ",     bac, 1.,bac2);
     h_maxxSUMAmpl_HF = new TH1F("h_maxxSUMAmpl_HF"," ",     bac, 1.,bac2);
     h_maxxSUMAmpl_HO = new TH1F("h_maxxSUMAmpl_HO"," ",     bac, 1.,bac2);
 
-    // for maxxOCCUP
+    // for maxxOCCUP OR aversumamplitude_WITH_ELSE-CUT
     h_maxxOCCUP_HB = new TH1F("h_maxxOCCUP_HB"," ",     bac, 1.,bac2);
     h_maxxOCCUP_HE = new TH1F("h_maxxOCCUP_HE"," ",     bac, 1.,bac2);
     h_maxxOCCUP_HF = new TH1F("h_maxxOCCUP_HF"," ",     bac, 1.,bac2);
