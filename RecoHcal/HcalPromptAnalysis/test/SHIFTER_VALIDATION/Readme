@@ -350,3 +350,60 @@ h_RatioOccupancy_HOP
 
 
 
+5. Estimators (per LS) based on total Amplitude of each sub-detsctor: HB, HE, HF, HO.
+
+a) channel amplitude summed over channels of each sub-detector and then averaged over events of LS:
+( cuts on Ai-"channel Amplitude": Ai_HB>80; Ai_HE>200; Ai_HF>600; Ai_HO>1200 )
+      c1->cd(1);
+      TH1F *aaaaaa1= (TH1F*)hfile1->Get("h_aversumamplitude_HB");
+      gPad->SetGridx();
+      aaaaaa1->SetMarkerStyle(20);
+      aaaaaa1->SetMarkerSize(0.8);
+      aaaaaa1->GetYaxis()->SetLabelSize(0.04);
+      aaaaaa1->SetXTitle("aversumamplitude per LS  HB    \b");
+      aaaaaa1->SetMarkerColor(4);
+      aaaaaa1->SetLineColor(0);
+      aaaaaa1->SetMinimum(0.8);
+      aaaaaa1->Draw("Error");
+
+
+b) corresponding to a) occupancies:
+       c1->cd(1);
+      TH1F *aaaaaa1= (TH1F*)hfile1->Get("h_averoccupancy_HB");
+      gPad->SetGridx();
+      aaaaaa1->SetMarkerStyle(20);
+      aaaaaa1->SetMarkerSize(0.8);
+      aaaaaa1->GetYaxis()->SetLabelSize(0.04);
+      aaaaaa1->SetXTitle("averoccupancy per LS  HB    \b");
+      aaaaaa1->SetMarkerColor(4);
+      aaaaaa1->SetLineColor(0);
+      aaaaaa1->Draw("Error");
+ 
+c) channel amplitude summed over channels of each sub-detector and then averaged over events of LS:
+( cuts on Ai-"channel Amplitude": Ai_HB<80; Ai_HE<200; Ai_HF<600; Ai_HO<1200 )
+
+      c1->cd(1);
+      TH1F *aaaaaa1= (TH1F*)hfile1->Get("h_maxxSUMAmpl_HB");
+      gPad->SetGridx();
+      aaaaaa1->SetMarkerStyle(20);
+      aaaaaa1->SetMarkerSize(0.8);
+      aaaaaa1->GetYaxis()->SetLabelSize(0.04);
+      aaaaaa1->SetXTitle("SumA of low A channels per LS  HB    \b");
+      aaaaaa1->SetMarkerColor(4);
+      aaaaaa1->SetLineColor(0);
+      aaaaaa1->SetMinimum(0.8);
+      aaaaaa1->Draw("Error");
+
+d) corresponding to c) occupancies:
+       c1->cd(1);
+      c1->cd(1);
+      TH1F *aaaaaa1= (TH1F*)hfile1->Get("h_maxxOCCUP_HB");
+      gPad->SetGridx();
+      aaaaaa1->SetMarkerStyle(20);
+      aaaaaa1->SetMarkerSize(0.8);
+      aaaaaa1->GetYaxis()->SetLabelSize(0.04);
+      aaaaaa1->SetXTitle("Occup. of low A channels per LS  HB    \b");
+      aaaaaa1->SetMarkerColor(4);
+      aaaaaa1->SetLineColor(0);
+      aaaaaa1->SetMinimum(0.8);
+      aaaaaa1->Draw("Error");
