@@ -6662,18 +6662,14 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
     int c4=0;
     double errorBtype = 0.;  
 
-    //  TSsize=digiItr->size();
     //    int TSsize = 10;
     int TSsize = 10;
     //     if((*digiItr).size() !=  10) std::cout << "TSsize HBHE != 10 and = " <<(*digiItr).size()<< std::endl;
     if((*digiItr).size() !=  TSsize) errorBtype = 1.; 
-
-//    TSsize=digiItr->size();
-//    if(TSsize>10) std::cout << "TSsize HBHE >10 and = " <<TSsize<< std::endl;
-//    if(TSsize<10) std::cout << "TSsize HBHE <10 and = " <<TSsize<< std::endl;
+    TSsize=digiItr->size();
 //
-    //    for (int ii=0; ii<digiItr->size(); ii++) {  
     for (int ii=0; ii<TSsize; ii++) {  
+      //  for (int ii=0; ii<digiItr->size(); ii++) {  
       double ampldefault = 0.;
       double ampldefault0 = 0.;
       double ampldefault1 = 0.;
@@ -7540,13 +7536,15 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
     int c4=0;
     double errorBtype = 0.;  
 
-    //  TSsize=digiItr->size();
     //    int TSsize = 10;
     int TSsize = 4;
     //     if((*digiItr).size() !=  4) std::cout << "TSsize HF != 4 and = " <<(*digiItr).size()<< std::endl;
     if((*digiItr).size() !=  TSsize) errorBtype = 1.; 
+    TSsize=digiItr->size();
+    
     ////// 
     for (int ii=0; ii<TSsize; ii++) {  
+      //  for (int ii=0; ii<digiItr->size(); ii++) {  
       double ampldefault = 0.;
       double ampldefault0 = 0.;
       double ampldefault1 = 0.;
@@ -8051,13 +8049,14 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
     int c4=0;
     double errorBtype = 0.;  
 
-    //  TSsize=digiItr->size();
     //    int TSsize = 10;
     int TSsize = 10;
     //     if((*digiItr).size() !=  10) std::cout << "TSsize HO != 10 and = " <<(*digiItr).size()<< std::endl;
     if((*digiItr).size() !=  TSsize) errorBtype = 1.; 
+    TSsize=digiItr->size();
 
     //////  
+    //  for (int ii=0; ii<digiItr->size(); ii++) {  
     for (int ii=0; ii<TSsize; ii++) {  
       double ampldefault = 0.;
       double ampldefault0 = 0.;
