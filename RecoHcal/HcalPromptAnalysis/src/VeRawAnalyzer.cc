@@ -2320,20 +2320,20 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     ///////  int sub= cell.subdet();  1-HB, 2-HE, 3-HO, 4-HF
     ////////////            k0(sub): =0 HB; =1 HE; =2 HO; =3 HF;
     ////////////         k1(depth-1): = 0 - 3 or depth: = 1 - 4;
-    int pcountall1 = 0;
-    int pcountall3 = 0;
-    int pcountall6 = 0;
-    int pcountall8 = 0;
+    unsigned long int pcountall1 = 0;
+    unsigned long int pcountall3 = 0;
+    unsigned long int pcountall6 = 0;
+    unsigned long int pcountall8 = 0;
 
     int pcountmin1 = 0;
     int pcountmin3 = 0;
     int pcountmin6 = 0;
     int pcountmin8 = 0;
 
-    int mcountall1 = 0;
-    int mcountall3 = 0;
-    int mcountall6 = 0;
-    int mcountall8 = 0;
+    unsigned long int mcountall1 = 0;
+    unsigned long int mcountall3 = 0;
+    unsigned long int mcountall6 = 0;
+    unsigned long int mcountall8 = 0;
 
     int mcountmin1 = 0;
     int mcountmin3 = 0;
@@ -2576,7 +2576,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		      h_sum0ADCAmplperLS3_P2->Fill( float(lscounterM1) ,bbb1);
 		    }
 		    ////////////////////////////// P
-		    if(bbbc/bbb1> 20.) {
+		    if(bbbc/bbb1> 20. && k3%2 == 0) {
 		      pcountall3 += bbb1 ;
 		      pcountmin3 += bbb1;
 		    }
@@ -2592,7 +2592,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		      h_sum0ADCAmplperLS3_M2->Fill( float(lscounterM1) ,bbb1);
 		    }
 		    ////////////////////////////// M
-		    if(bbbc/bbb1> 20.) {
+		    if(bbbc/bbb1> 20. && k3%2 == 0) {
 		      mcountall3 += bbb1 ;
 		      mcountmin3 += bbb1;
 		    }
