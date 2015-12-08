@@ -1,4 +1,5 @@
-1. 
+1. Error-A type (done by Andrius: a) only ) 
+
 a) For <A> vs LS over 4 kvadrants P1, P2, M1, M2:
    (HB - P1,...;     HE - P3,...;   HF - P6,... ;    HO - P8,... ; )
       c1->cd(1);
@@ -57,7 +58,8 @@ b)
 TO IDENTIFY: max difference between dependencies to be within 0.8-2.4(HF) 
 It's main plot for errors-A (other plots only for confirmation)
 
-2. For Error of Type-B:
+2. For Error of Type-B (all done by Andrius):
+
 a) (HBdepth1->h_2DsumErrorBLS1,  HBdepth2->h_2DsumErrorBLS2,  
 HEdepth1->h_2DsumErrorBLS3,HEdepth2->h_2DsumErrorBLS4,HEdepth3->h_2DsumErrorBLS5, 
 HFdepth1->h_2DsumErrorBLS6,HFdepth2->h_2DsumErrorBLS7,
@@ -112,7 +114,7 @@ TO IDENTIFY: define error-B as digi-collection size != 4 for HF (or !=10 for any
 
 
 
-3. For  2D and  1D plots with Amplitude:
+3. For  2D and  1D plots with average Amplitude (all(HFonly) done by Andrius, except item d) )
 a)
       c1->cd(1);
       TH2F *twod1= (TH2F*)hfile1->Get("h_mapDepth1ADCAmpl_HF");
@@ -137,7 +139,7 @@ a)
       Ceff->SetLineColor(2);
       Ceff->Draw("COLZ");
             
-TO IDENTIFY: see red bins in eta-phi space (applied cut on Aij: <20 || >3000 for HF)
+TO IDENTIFY: see color-different bins in eta-phi space
 
 
 
@@ -201,10 +203,36 @@ c) channel Amplitude averaged over events of run:
 
 
 
+d) for  2D plot with Amplitude: (to be done for 8 sub-detectors HBdepth1...HOdepth4)
+
+      c1->cd(1);
+      TH2F *twod1= (TH2F*)hfile1->Get("h_mapDepth1ADCAmpl225Copy_HF");
+      TH2F *twod0= (TH2F*)hfile1->Get("h_mapDepth1_HF");
+      twod1->Sumw2();
+      twod0->Sumw2();
+      if(twod0->IsA()->InheritsFrom("TH2F")){
+	TH2F* Ceff = (TH2F*)twod1->Clone("Ceff");
+	Ceff->Divide(twod1,twod0, 1, 1, "B");
+	Ceff->Sumw2();
+      }
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      Ceff->SetMarkerStyle(20);
+      Ceff->SetMarkerSize(0.4);
+      Ceff->GetZaxis()->SetLabelSize(0.08);
+      Ceff->SetXTitle("#eta \b");
+      Ceff->SetYTitle("#phi \b");
+      Ceff->SetZTitle("h_mapDepth1ADCAmpl_HF \b");
+      Ceff->SetMarkerColor(2);
+      Ceff->SetLineColor(2);
+      Ceff->Draw("COLZ");
+            
+TO IDENTIFY: see red bins in eta-phi space (applied cut on Aij: <20 )
+
 4.For occupancy plots:
 
-
-a)
+a) skip this item
       TH2F *twod1= (TH2F*)hfile1->Get("h_mapDepth1ADCAmpl_HF");
       TH2F *twod0= (TH2F*)hfile1->Get("h_mapDepth1_HF");
       twod1->Sumw2();
@@ -274,7 +302,7 @@ a)
       ADCAmplperLS->SetXTitle(" #hits vs Phi for  HF-  cut:A>20\\b");
       ADCAmplperLS ->Draw();
       
-b)
+b)    skip this item
       c1->cd(2);
       TH1F* ADCAmplperLS2  = new TH1F("ADCAmplperLS2 ","", 72, 1.,73.);
       TH2F* Diffe_Depth1_HF = (TH2F*)Cefz225->Clone("h_mapDepth1_HF ");
