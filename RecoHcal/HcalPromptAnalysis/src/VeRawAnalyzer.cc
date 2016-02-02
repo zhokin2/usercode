@@ -712,6 +712,7 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH1F* h_GetRMSOverNormalizedSignal3_HE;
   TH1F* h_GetRMSOverNormalizedSignal3_HO;
   TH1F* h_GetRMSOverNormalizedSignal3_HF;
+*/
 
   TH2F* h_FullSignal3D_HB;
   TH2F* h_FullSignal3D0_HB;
@@ -721,7 +722,7 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH2F* h_FullSignal3D0_HO;
   TH2F* h_FullSignal3D_HF;
   TH2F* h_FullSignal3D0_HF;
-*/
+
   /////////////////////////////////////////////
   TH2F* h_mapCapCalib047_HB;
   TH2F* h_mapCapCalib047_HE;
@@ -4420,7 +4421,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	  int k2plot = k2-41;
 	  if(flagcpuoptimization_== 0 ) {
 	    ////////////////////////////////////////////////////////////////  for zgain.C script:
-	    /*
+	    
 	    if(signal[k1][k2][k3]>0.) {
 	      if(k1==0) {
 		h_FullSignal3D_HB->Fill(double(k2plot), double(k3), signal[k1][k2][k3]);
@@ -4439,7 +4440,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		h_FullSignal3D0_HF->Fill(double(k2plot), double(k3), 1.);    
 	      }
 	    }
-*/
+
 	  }// optimization
 	  ////////////////////////////////////////////////////////////////
 
@@ -5076,7 +5077,7 @@ void VeRawAnalyzer::beginJob()
     h_GetRMSOverNormalizedSignal3_HE = new TH1F("h_GetRMSOverNormalizedSignal3_HE"," ", 100, 0.,m7);
     h_GetRMSOverNormalizedSignal3_HO = new TH1F("h_GetRMSOverNormalizedSignal3_HO"," ", 100, 0.,m8);
     h_GetRMSOverNormalizedSignal3_HF = new TH1F("h_GetRMSOverNormalizedSignal3_HF"," ", 100, 0.,m9);
-
+*/
     h_FullSignal3D_HB = new TH2F("h_FullSignal3D_HB"," ",   82, -41., 41., 72, 0., 72.);
     h_FullSignal3D0_HB = new TH2F("h_FullSignal3D0_HB"," ", 82, -41., 41., 72, 0., 72.);
     h_FullSignal3D_HE = new TH2F("h_FullSignal3D_HE"," ",   82, -41., 41., 72, 0., 72.);
@@ -5085,7 +5086,7 @@ void VeRawAnalyzer::beginJob()
     h_FullSignal3D0_HO = new TH2F("h_FullSignal3D0_HO"," ", 82, -41., 41., 72, 0., 72.);
     h_FullSignal3D_HF = new TH2F("h_FullSignal3D_HF"," ",   82, -41., 41., 72, 0., 72.);
     h_FullSignal3D0_HF = new TH2F("h_FullSignal3D0_HF"," ", 82, -41., 41., 72, 0., 72.);
-*/
+
     //////////////////////////////////////////////////////////////////////////////////////////////////
     h_ADCCalib_HB       = new TH1F("h_ADCCalib_HB"," ",      100, 10.,10000.);
     h_ADCCalib1_HB       = new TH1F("h_ADCCalib1_HB"," ",      100, 0.1,100.1);
@@ -9954,6 +9955,7 @@ void VeRawAnalyzer::endJob(){
     h_GetRMSOverNormalizedSignal3_HE->Write();
     h_GetRMSOverNormalizedSignal3_HO->Write();
     h_GetRMSOverNormalizedSignal3_HF->Write();
+*/
 
     h_FullSignal3D_HB->Write();
     h_FullSignal3D0_HB->Write();
@@ -9963,7 +9965,6 @@ void VeRawAnalyzer::endJob(){
     h_FullSignal3D0_HO->Write();
     h_FullSignal3D_HF->Write();
     h_FullSignal3D0_HF->Write();
-*/
 
     h_nbadchannels_depth1_HB->Write();
     h_runnbadchannels_depth1_HB->Write();
