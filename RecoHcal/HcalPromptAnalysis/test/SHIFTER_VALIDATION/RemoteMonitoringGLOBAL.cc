@@ -28,8 +28,7 @@ using namespace std;
 int copyContents(TH1F **hDest, TString hname, TString htitle,
 		 const TH1F *hSrc, int lastBin);
 
-
-// -----------------------------------------------------
+// -----------------------------------------------------   
 
 int main(int argc, char *argv[])
 {
@@ -1188,13 +1187,15 @@ int main(int argc, char *argv[])
          }// end sub 
 
 
-//======================================================================
+//====================================================================== done by Andrius for HF:
 // Special test of errors type A and B in HF
 
   int flagErrAB_HF[2];
   flagErrAB_HF[0]=-1;
   flagErrAB_HF[1]=-1;
+  double avedelta = 0.;
   int lastLumiBin=-1;
+  int LSofFirstErrB = -1;
   {
     const int specCountA=4;
     const int specColors[specCountA] = { 1, 2, 3, 4 };
@@ -1207,12 +1208,13 @@ int main(int argc, char *argv[])
     std::vector<TH1F*> hV;
     THStack *hs= new THStack("hs","ADCAmplerLS6");
     cHB->Clear();
-    cHB->cd();
+    //    cHB->cd();
+    cHB->Divide(2,1);
+    cHB->cd(1);
 
+    ///////////////////////////////////////////////////////////////////////////
     for (int i=0; i<specCountA; i++) {
-      if (1) std::cout << "errA_HF test: get histos for i=" << i
-		       << " " << hnames[i][0]
-		       << " and " << hnames[i][1] << "\n";
+      if (1) std::cout << "debugger: errA_HF : get histos for i=" << i  << " " << hnames[i][0] << " and " << hnames[i][1] << "\n";
       TH1F *h1= (TH1F*)hfile->Get(hnames[i][0]);
       TH1F *h0= (TH1F*)hfile->Get(hnames[i][1]);
       if (!h1 || !h0) {
@@ -1260,36 +1262,67 @@ int main(int argc, char *argv[])
       delete h1;
       delete h0;
       if (hERT1!=hERT1orig) delete hERT1orig;
-    }
-
-    hs->Draw("LPE1 nostack"); cHB->Update(); // activate the axes
-    hs->GetXaxis()->SetTitle("<ADCAmpl> per LS HF: black-P1, red-P2,green-M1,blue-M2");
-    //hs->GetYaxis()->SetTitle("<ADCAmpl>");
+    } /////////////////////////////////////////////////////////////////////////
+    hs->Draw("LPE1 nostack"); 
+    cHB->Update(); // activate the axes
+    hs->GetXaxis()->SetTitle("<A> per LS: black-P1, red-P2,green-M1,blue-M2");
     hs->Draw("LPE1 nostack");
-    gPad->SetGridx();
     gPad->SetGridy();
+    /////////////////////////////////////////////////////////////////////////////////////////
+
+    // AZ corrections 04.02.2016
+    cHB->cd(2);
+    TH1F* diff = new TH1F("diff","", 100, 0., 4.);
+
+    if (int(hV.size())==specCountA) {
+      flagErrAB_HF[0]=0;// If we have the expected number of histograms, set the flag
+      double sumdelta = 0.;
+      int nnndelta = 0;
+      for (int ibin=1; ibin<=hV[0]->GetNbinsX(); ibin++) {
+	double delta = 0.; 
+	double maxdelta = 0.; 
+	for (unsigned int i=0; i<hV.size(); i++) {
+	  const TH1F* hi= hV[i];
+	  for (unsigned int j=1; j<hV.size(); j++) {
+	    const TH1F* hj= hV[j];
+	    delta = fabs(hi->GetBinContent(ibin) - hj->GetBinContent(ibin));
+	    if(delta > maxdelta) maxdelta=delta;
+	  }//for
+	}//for
+	if(maxdelta> 0.) {
+	  diff->Fill(maxdelta);
+	  sumdelta+=maxdelta;
+	  nnndelta++;
+	}
+      }//for ibin
+      //      avedelta = sumdelta/hV[0]->GetNbinsX();
+      avedelta = sumdelta/nnndelta;
+      std::cout << "******************>>>>>>      ErrA_HF:  avedelta = " << avedelta <<std::endl;
+      if (avedelta>2.4 || (avedelta<0.8 && avedelta>0.)) {
+	flagErrAB_HF[0]=1;
+      }//if
+    }//hV.size
+    diff->SetMarkerStyle(20);
+    diff->SetMarkerSize(0.8);
+    diff->SetXTitle("max difference \b");
+    diff->SetMarkerColor(2);
+    diff->SetLineColor(0);
+    gPad->SetGridx();
+    gPad->SetLogy();
+    diff->Draw("Error");
+    /////////////////////////////////////////////////////////////////////////
     cHB->Update();
     cHB->Print("HistErrA_HF.png");
     cHB->Clear();
-
-    // If we have the expected number of histograms, set the flag
-    if (int(hV.size())==specCountA) {
-      flagErrAB_HF[0]=0;
-      for (unsigned int i=0; i<hV.size(); i++) {
-	const TH1F* hi= hV[i];
-	for (unsigned int j=1; j<hV.size(); j++) {
-	  const TH1F *hj= hV[j];
-	  for (int ibin=1; ibin<=hi->GetNbinsX(); ibin++) {
-	    if (fabs(hi->GetBinContent(ibin) - hj->GetBinContent(ibin))>2.) {
-	      flagErrAB_HF[0]=1;
-	    }
-	  }
-	}
-      }
-    }
+    /////////////////////////////////////////////////////////////////////////
+    
     // clean-up
     for (unsigned int i=0; i<hV.size(); i++) delete hV[i];
   } // ErrorA in HF
+
+
+  /////////////////////////
+
 
   { // errors type B
     const int specCountB=4;
@@ -1311,8 +1344,7 @@ int main(int argc, char *argv[])
       TString hname0= hnames[2*depth-2][1];
       TH2F *twod1= (TH2F*)hfile->Get(hname1);
       TH2F *twod0= (TH2F*)hfile->Get(hname0);
-      if (1) std::cout << "errB_HF depth=" << depth << ". get 2D histos "
-		       << hname1 << " and " << hname0 << "\n";
+      if (1) std::cout << "debugger: errB_HF depth=" << depth << ". get 2D histos "  << hname1 << " and " << hname0 << "\n";
       if (!twod1 || !twod0) {
 	TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
 	ptext->AddText("Missing histos");
@@ -1337,7 +1369,7 @@ int main(int argc, char *argv[])
 	h2Cefz6->SetTitle(Form("Depth %d \b",depth));
 	h2Cefz6->SetMarkerStyle(20);
 	h2Cefz6->SetMarkerSize(0.4);
-	h2Cefz6->GetZaxis()->SetLabelSize(0.08);
+	//	h2Cefz6->GetZaxis()->SetLabelSize(0.04);
 	h2Cefz6->SetXTitle("#eta \b");
 	h2Cefz6->SetYTitle("#phi \b");
 	h2Cefz6->SetZTitle(Form("<ErrorB>  - HF Depth%d \b",depth));
@@ -1370,8 +1402,9 @@ int main(int argc, char *argv[])
 	ptext->Draw();
       }
       else {
+	gPad->SetGridx();
 	gPad->SetGridy();
-	gPad->SetLogy();
+	//	gPad->SetLogy();
 	hRate2orig = (TH1F*)h1->Clone(Form("Rate2orig_%d",depth));
 	hRate2orig->Divide(h1,h0, 1, 1, "B");
 
@@ -1387,10 +1420,25 @@ int main(int argc, char *argv[])
 	hRate2->SetTitle(Form("Depth %d \b",depth));
 	hRate2->SetMarkerStyle(20);
 	hRate2->SetMarkerSize(0.8);
+	//	hRate2->GetZaxis()->SetLabelSize(0.04);
 	hRate2->SetXTitle(Form("<ErrorB>(ev.in LS & ch.) - HF depth%d -    iLS \b",depth));
 	hRate2->SetMarkerColor(2);
 	hRate2->SetLineColor(0);
 	hRate2->Draw("Error");
+
+
+	if(LSofFirstErrB == -1) {
+	  int nx = hRate2->GetXaxis()->GetNbins();
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  hRate2->GetBinContent(i);
+	    if(ccc1>0.) {
+	      cout<<"****************>>>>>>>>>>> ErrB_HF bad LS start at iLS = "<<i<<" with rate = "<< ccc1 <<endl;
+	      LSofFirstErrB = i;
+	      break;
+	    }
+	  }
+	}	
+	
 
 	delete h1;
 	delete h0;
@@ -1574,8 +1622,8 @@ int main(int argc, char *argv[])
                     if (sub==4) htmlFile << " <img src=\"HistNBadChsHF.png\" />" << std::endl;
                }       
 	      
-//	      if (test !=0) htmlFile << "<h2> 2. Estimator averaged over all events in the RUN for entries in overflow for corresponding histogram above </h2>"<< std::endl;
-              if (test !=0) htmlFile << "<h2> 2. Estimator averaged over all events in the RUN </h2>"<< std::endl;
+	      if (test !=0) htmlFile << "<h2> 2. Estimator averaged over all events in the RUN for entries in overflow and underflow of corresponding histogram above </h2>"<< std::endl;
+//              if (test !=0) htmlFile << "<h2> 2. Estimator averaged over all events in the RUN </h2>"<< std::endl;
 	      if (test ==0) htmlFile << "<h2> 2b. Averaged number of bad channels for each LS </h2>"<< std::endl;
 //              if (test !=0) htmlFile << "<h3> Channel legend: white - good, other colour - bad.  </h3>"<< std::endl;
 	      if (test ==0) {
@@ -1675,23 +1723,27 @@ int main(int argc, char *argv[])
               }	     	    	      
               htmlFile << "<br>"<< std::endl;
 
-	      // Special section for the HF
+	      // Special section for the HF (Andrius)
 	      int flagSpecHF=0;
 	      if ((test==1) && (sub==4)) {
 		flagSpecHF+=1;
 		htmlFile << "<h2> 4. Error type A & B</h2>\n";
 		htmlFile << "<h2> 4a. Error type A</h2>\n";
-		htmlFile << "<h3>Max difference between the dependencies should be &gt;2 (early plots only for confirmation).</h3>\n";
+		htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.8-2.4 (p-p collisions) </h3>\n";
 		htmlFile << " <img src=\"HistErrA_HF.png\" />\n";
 		htmlFile << "<br>\n";
+		if (flagErrAB_HF[0]==-1) htmlFile<<"test was not possible\n";
+		else if (flagErrAB_HF[0]==0) htmlFile<<"Fine:NoErrorA_HF(=Mean of max difference " << avedelta  << "  is within 0.8-2.4) \n";
+		else if (flagErrAB_HF[0]==1) htmlFile<<"<font color=\"red\">ErrorA_HF is available once Mean of max difference " << avedelta  << " is out 0.8-2.4 (p-p collisions)</font>\n";
+		else htmlFile<<"auto-interpretation is not available\n";
+
+
 		htmlFile << "<h2> 4b. Error type B\n";
-		htmlFile << "<h3>Error B if the digi-collection size !=4. (Usually, proportion of events affected by errors-B per LS is too low<br>-&gt;do we need to certify whole LSs as BAD)</h3>\n";
+		htmlFile << "<h3> ErrorB: digi-collection size !=4. </h3>\n";
 		htmlFile << " <img src=\"HistErrB_HF_1.png\" />\n<br>\n";
 		htmlFile << " <img src=\"HistErrB_HF_2.png\" />\n<br>\n";
-		if (flagErrAB_HF[0]==-1) htmlFile<<"test was not possible\n";
-		else if (flagErrAB_HF[0]==0) htmlFile<<"test passed\n";
-		else if (flagErrAB_HF[0]==1) htmlFile<<"<font color=\"red\">test failed</font>\n";
-		else htmlFile<<"auto-interpretation is not available\n";
+		htmlFile << "<br>\n";
+		htmlFile <<" if Error type B is available, it start since:    " << LSofFirstErrB  << "  LS \n";
 		htmlFile << "<br>\n";
 	      }
 
