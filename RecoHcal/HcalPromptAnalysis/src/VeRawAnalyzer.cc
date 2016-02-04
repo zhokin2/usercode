@@ -7,7 +7,7 @@
    
 Description: <one line class summary>
 
-Implementation:
+Implementation:                  
 <Notes on implementation>
 */
 //
@@ -2486,13 +2486,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		  h_sumADCAmplLS1copy4->Fill(bbbc/bbb1);
 		  h_sumADCAmplLS1copy5->Fill(bbbc/bbb1);
 		  h_sumADCAmplLS1->Fill(bbbc/bbb1);
-		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth1_ ) h_2DsumADCAmplLS1->Fill(double(ieta), double(k3), bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth1_  || bbbc/bbb1 < 0. ) h_2DsumADCAmplLS1->Fill(double(ieta), double(k3), bbbc);
 		  if(bbbc/bbb1 > 2.*lsdep_estimator1_HBdepth1_ ) h_2DsumADCAmplLS1_LSselected->Fill(double(ieta), double(k3), bbbc);
 //		  if( ( lscounterM1 == 734 || lscounterM1 == 758 || lscounterM1 == 759 || lscounterM1 == 853 || lscounterM1 == 1436 ) ) h_2DsumADCAmplLS1_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		  if( ( lscounterM1 == 504 || lscounterM1 == 867 ) ) h_2DsumADCAmplLS1_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumADCAmplLS1->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS1->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth1_ ) h_sumCutADCAmplperLS1->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth1_  || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS1->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS1->Fill( float(lscounterM1) ,bbb1);
 		  if(ieta>0 ){
 		    if(k3<36) {
@@ -2533,13 +2533,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		// HBdepth2
 		if(k1+1  ==2) {
 		  h_sumADCAmplLS2->Fill(bbbc/bbb1);
-		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth2_  ) h_2DsumADCAmplLS2->Fill(double(ieta), double(k3), bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth2_   || bbbc/bbb1 < 0. ) h_2DsumADCAmplLS2->Fill(double(ieta), double(k3), bbbc);
 		  if(bbbc/bbb1 > 2.*lsdep_estimator1_HBdepth2_  ) h_2DsumADCAmplLS2_LSselected->Fill(double(ieta), double(k3), bbbc);
 //		  if( ( lscounterM1 == 734 || lscounterM1 == 758 || lscounterM1 == 759 || lscounterM1 == 853 || lscounterM1 == 1436 ) ) h_2DsumADCAmplLS2_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		  if( ( lscounterM1 == 504 || lscounterM1 == 867 ) ) h_2DsumADCAmplLS2_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumADCAmplLS2->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS2->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth2_  ) h_sumCutADCAmplperLS2->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth2_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS2->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS2->Fill( float(lscounterM1) ,bbb1);
 		  if(ieta>0 ){
 		    if(k3<36) {
@@ -2569,13 +2569,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		// HEdepth1
 		if(k1+1  ==1) {
 		  h_sumADCAmplLS3->Fill(bbbc/bbb1);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth1_  ) h_2DsumADCAmplLS3->Fill(double(ieta), double(k3), bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth1_   || bbbc/bbb1 < 0. ) h_2DsumADCAmplLS3->Fill(double(ieta), double(k3), bbbc);
 		  if(bbbc/bbb1 > 2.*lsdep_estimator1_HEdepth1_  ) h_2DsumADCAmplLS3_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 146 || lscounterM1 == 515 ) ) h_2DsumADCAmplLS3_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 504 || lscounterM1 == 867 ) ) h_2DsumADCAmplLS3_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumADCAmplLS3->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS3->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth1_  ) h_sumCutADCAmplperLS3->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth1_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS3->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS3->Fill( float(lscounterM1) ,bbb1);
 		  if(ieta>0 ){
 		    if(k3<36) {
@@ -2614,13 +2614,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		// HEdepth2
 		if(k1+1  ==2) {
 		  h_sumADCAmplLS4->Fill(bbbc/bbb1);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth2_  ) h_2DsumADCAmplLS4->Fill(double(ieta), double(k3), bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth2_   || bbbc/bbb1 < 0. ) h_2DsumADCAmplLS4->Fill(double(ieta), double(k3), bbbc);
 		  if(bbbc/bbb1 > 2.*lsdep_estimator1_HEdepth2_  ) h_2DsumADCAmplLS4_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 146 || lscounterM1 == 515 ) ) h_2DsumADCAmplLS4_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 504 || lscounterM1 == 867 ) ) h_2DsumADCAmplLS4_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumADCAmplLS4->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS4->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth2_  ) h_sumCutADCAmplperLS4->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth2_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS4->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS4->Fill( float(lscounterM1) ,bbb1);
 		  if(ieta>0 ){
 		    if(k3<36) {
@@ -2647,13 +2647,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		// HEdepth3
 		if(k1+1  ==3) {
 		  h_sumADCAmplLS5->Fill(bbbc/bbb1);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth3_  ) h_2DsumADCAmplLS5->Fill(double(ieta), double(k3), bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth3_   || bbbc/bbb1 < 0. ) h_2DsumADCAmplLS5->Fill(double(ieta), double(k3), bbbc);
 		  if(bbbc/bbb1 > 2.*lsdep_estimator1_HEdepth3_  ) h_2DsumADCAmplLS5_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 146 || lscounterM1 == 515 ) ) h_2DsumADCAmplLS5_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 504 || lscounterM1 == 867 ) ) h_2DsumADCAmplLS5_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumADCAmplLS5->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS5->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth3_  ) h_sumCutADCAmplperLS5->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth3_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS5->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS5->Fill( float(lscounterM1) ,bbb1);
 		  if(ieta>0 ){
 		    if(k3<36) {
@@ -2684,13 +2684,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		if(k1+1  ==1) {
 	  	  if (verbosity == -7777 ) std::cout << "HF***sumEstimator1= "  << sumEstimator1[k0][k1][k2][k3] << "sum0Estimator= "  << sum0Estimator[k0][k1][k2][k3] <<" nevcounter0= " << nevcounter0 <<" bbbc= " << bbbc << std::endl;
 		  h_sumADCAmplLS6->Fill(bbbc/bbb1);
-		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth1_  ) h_2DsumADCAmplLS6->Fill(double(ieta), double(k3), bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth1_ || bbbc/bbb1 < 0. ) h_2DsumADCAmplLS6->Fill(double(ieta), double(k3), bbbc);
 		  if(bbbc/bbb1 > 2.*lsdep_estimator1_HFdepth1_  ) h_2DsumADCAmplLS6_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 1810 ) ) h_2DsumADCAmplLS6_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 504 || lscounterM1 == 867 ) ) h_2DsumADCAmplLS6_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumADCAmplLS6->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS6->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth1_  ) h_sumCutADCAmplperLS6->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth1_  || bbbc/bbb1 < 0.  ) h_sumCutADCAmplperLS6->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS6->Fill( float(lscounterM1) ,bbb1);
 
 		  ///////////////////////////////////////////////////////// error-A
@@ -2735,13 +2735,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		// HFdepth2
 		if(k1+1  ==2) {
 		  h_sumADCAmplLS7->Fill(bbbc/bbb1);
-		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth2_  ) h_2DsumADCAmplLS7->Fill(double(ieta), double(k3), bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth2_   || bbbc/bbb1 < 0. ) h_2DsumADCAmplLS7->Fill(double(ieta), double(k3), bbbc);
 		  if(bbbc/bbb1 > 2.*lsdep_estimator1_HFdepth2_  ) h_2DsumADCAmplLS7_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 1810 ) ) h_2DsumADCAmplLS7_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 504 || lscounterM1 == 867 ) ) h_2DsumADCAmplLS7_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumADCAmplLS7->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS7->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth2_  ) h_sumCutADCAmplperLS7->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth2_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS7->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS7->Fill( float(lscounterM1) ,bbb1);
 
 
@@ -2775,13 +2775,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		// HOdepth4
 		if(k1+1  ==4) {
 		  h_sumADCAmplLS8->Fill(bbbc/bbb1);
-		  if(bbbc/bbb1 > lsdep_estimator1_HOdepth4_  ) h_2DsumADCAmplLS8->Fill(double(ieta), double(k3), bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HOdepth4_   || bbbc/bbb1 < 0. ) h_2DsumADCAmplLS8->Fill(double(ieta), double(k3), bbbc);
 		  if(bbbc/bbb1 > 2.*lsdep_estimator1_HOdepth4_  ) h_2DsumADCAmplLS8_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		  if( ( lscounterM1 == 14 ) ) h_2DsumADCAmplLS8_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		  if( ( lscounterM1 == 504 || lscounterM1 == 867 ) ) h_2DsumADCAmplLS8_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumADCAmplLS8->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS8->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HOdepth4_  ) h_sumCutADCAmplperLS8->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HOdepth4_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS8->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS8->Fill( float(lscounterM1) ,bbb1);
 
 		  ///////////////////////////////////////////////////////// error-A
