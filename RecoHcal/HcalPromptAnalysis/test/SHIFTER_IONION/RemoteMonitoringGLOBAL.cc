@@ -1732,10 +1732,10 @@ int main(int argc, char *argv[])
 		htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.8-2.4 (p-p collisions) </h3>\n";
 		htmlFile << " <img src=\"HistErrA_HF.png\" />\n";
 		htmlFile << "<br>\n";
-		if (flagErrAB_HF[0]==-1) htmlFile<<"test was not possible\n";
-		else if (flagErrAB_HF[0]==0) htmlFile<<"Fine:NoErrorA_HF(=Mean of max difference " << avedelta  << "  is within 0.8-2.4) \n";
-		else if (flagErrAB_HF[0]==1) htmlFile<<"<font color=\"red\">ErrorA_HF is available once Mean of max difference " << avedelta  << " is out 0.8-2.4 (p-p collisions)</font>\n";
-		else htmlFile<<"auto-interpretation is not available\n";
+		if (flagErrAB_HF[0]==-1) htmlFile<<"<h3>test was not possible</h3>\n";
+		else if (flagErrAB_HF[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HF(=Mean of max difference " << avedelta  << "  is within 0.8-2.4) </h3>\n";
+		else if (flagErrAB_HF[0]==1) htmlFile<<"<<h3>font color=\"red\">ErrorA_HF is available once Mean of max difference " << avedelta  << " is out 0.8-2.4 (p-p collisions)</font></h3>\n";
+		else htmlFile<<"<h3>auto-interpretation is not available</h3>\n";
 
 
 		htmlFile << "<h2> 4b. Error type B\n";
@@ -1743,7 +1743,7 @@ int main(int argc, char *argv[])
 		htmlFile << " <img src=\"HistErrB_HF_1.png\" />\n<br>\n";
 		htmlFile << " <img src=\"HistErrB_HF_2.png\" />\n<br>\n";
 		htmlFile << "<br>\n";
-		htmlFile <<" if Error type B is available, it start since:    " << LSofFirstErrB  << "  LS \n";
+		htmlFile <<"<h3> if Error type B is available, it start from:    " << LSofFirstErrB  << "  LS </h3>\n";
 		htmlFile << "<br>\n";
 	      }
 
