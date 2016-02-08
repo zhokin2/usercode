@@ -1,15 +1,3 @@
-1. errA to be added in CMT site for HBHEHO as HF
-
-2. errB to be added in CMT site for HBHEHO as HF
- (HBdepth1->h_2DsumErrorBLS1,  HBdepth2->h_2DsumErrorBLS2,  
-HEdepth1->h_2DsumErrorBLS3,HEdepth2->h_2DsumErrorBLS4,HEdepth3->h_2DsumErrorBLS5, 
-HOdepth4->h_2DsumErrorBLS8)
-
-
-3. errA with averagedA to be added in GlobalRMT site for HBHEHO as HF
-
-4. occupancy plots to be added in GlobalRMT site for HBHEHO as HF
-
 5. Estimators (per LS) based on total Amplitude of each sub-detsctor: HB, HE, HF, HO.
 
 a) channel amplitude summed over channels of each sub-detector and then averaged over events of LS:
