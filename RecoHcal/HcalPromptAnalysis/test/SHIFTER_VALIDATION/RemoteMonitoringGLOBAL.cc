@@ -24,7 +24,7 @@
 #include <TPaveText.h>
 
 using namespace std;
-//inline void HERE(const char *msg) { std::cout << msg << std::endl; }
+//inline void HERE(const char *msg) { std::cout << msg << std::endl; }    
 int copyContents(TH1F **hDest, TString hname, TString htitle,
 		 const TH1F *hSrc, int lastBin);
 
@@ -980,7 +980,7 @@ int main(int argc, char *argv[])
 	 cONE->cd(1);	 
 	 HistNumBadChanFull[test]->SetMarkerStyle(20);
          HistNumBadChanFull[test]->SetMarkerSize(0.8);
-	 HistNumBadChanFull[test]->SetTitle("All subdetectors\b");
+	 HistNumBadChanFull[test]->SetTitle("Averaged estimator for whole Hcal \b");
 	 HistNumBadChanFull[test]->SetXTitle("LS \b");
 	 if (test == 0) HistNumBadChanFull[test]->SetYTitle("<Number of bad channels> \b");
 	 if (test != 0) HistNumBadChanFull[test]->SetYTitle("Averaged estimator \b");
@@ -1187,15 +1187,830 @@ int main(int argc, char *argv[])
          }// end sub 
 
 
+//====================================================================== HB                    :
+//====================================================================== HB                    :
+//====================================================================== HB                    :
+// Special test of errors type A and B in HB
+// AZ 08.02.2016
+
+  int flagErrAB_HB[2];
+  flagErrAB_HB[0]=-1;
+  flagErrAB_HB[1]=-1;
+  double avedelta_HB = 0.;
+  int lastLumiBin_HB=-1;
+  int LSofFirstErrB_HB = -1;
+  {
+    const int specCountA=4;
+    const int specColors[specCountA] = { 1, 2, 3, 4 };
+    const TString hnames[specCountA][2] =
+      { { "h_sumADCAmplperLS1_P1", "h_sum0ADCAmplperLS1_P1" },
+	{ "h_sumADCAmplperLS1_P2", "h_sum0ADCAmplperLS1_P2" },
+	{ "h_sumADCAmplperLS1_M1", "h_sum0ADCAmplperLS1_M1" },
+	{ "h_sumADCAmplperLS1_M2", "h_sum0ADCAmplperLS1_M2" } };
+
+    std::vector<TH1F*> hV;
+    THStack *hs= new THStack("hs","ADCAmplerLS1");
+    cHB->Clear();
+    //    cHB->cd();
+    cHB->Divide(2,1);
+    cHB->cd(1);
+
+    ///////////////////////////////////////////////////////////////////////////
+    for (int i=0; i<specCountA; i++) {
+      if (1) std::cout << "debugger: errA_HB : get histos for i=" << i  << " " << hnames[i][0] << " and " << hnames[i][1] << "\n";
+      TH1F *h1= (TH1F*)hfile->Get(hnames[i][0]);
+      TH1F *h0= (TH1F*)hfile->Get(hnames[i][1]);
+      if (!h1 || !h0) {
+	TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+	ptext->AddText("Missing histo");
+	if (!h1) {
+	  std::cout << "\tfailed to get " << hnames[i][0] << "\n";
+	  ptext->AddText(hnames[i][0]);
+	}
+	if (!h0) {
+	  std::cout << "\tfailed to get " << hnames[i][1] << "\n";
+	  ptext->AddText(hnames[i][1]);
+	}
+	ptext->Draw();
+	continue;
+      }
+      TH1F *hERT1orig= (TH1F*)h1->Clone(Form("ERT1orig_%d",i));
+      hERT1orig->Divide(h1, h0, 1,1, "B");
+
+      if ((lastLumiBin_HB<0) && (i==0)) {
+	for (int ibin=hERT1orig->GetNbinsX(); ibin>=1; ibin--) {
+	  if (hERT1orig->GetBinContent(ibin)==0) lastLumiBin_HB=ibin;
+	  else break;
+	}
+	lastLumiBin_HB+=3; // show more bins
+	if (lastLumiBin_HB >= hERT1orig->GetNbinsX()) lastLumiBin_HB=-1;
+      }
+      TH1F *hERT1=NULL;
+      if (lastLumiBin_HB>1) {
+	if (!copyContents(&hERT1,Form("ERT1_%d",i),"", hERT1orig,lastLumiBin_HB)) {
+	  std::cout << "code failed"<<std::endl;
+	  gSystem->Exit(1);
+	}
+      }
+      else hERT1=hERT1orig;
+
+      hERT1->GetXaxis()->SetTitle("<ADCAmpl> per LS HB: black-P1, red-P2,green-M1,blue-M2");
+      hV.push_back(hERT1);
+      hERT1->SetMarkerStyle(20);
+      hERT1->SetMarkerSize(0.4);
+      hERT1->SetXTitle("<A>(ev.in LS & ch.) - HB P1     -    iLS \b");
+      hERT1->SetMarkerColor(specColors[i]);
+      hERT1->SetLineColor(0);
+      hs->Add(hERT1);
+      delete h1;
+      delete h0;
+      if (hERT1!=hERT1orig) delete hERT1orig;
+    } /////////////////////////////////////////////////////////////////////////
+    hs->Draw("LPE1 nostack"); 
+    cHB->Update(); // activate the axes
+    hs->GetXaxis()->SetTitle("<A> per LS: black-P1, red-P2,green-M1,blue-M2");
+    hs->Draw("LPE1 nostack");
+    gPad->SetGridy();
+    /////////////////////////////////////////////////////////////////////////////////////////
+
+    // AZ corrections 08.02.2016
+    cHB->cd(2);
+    TH1F* diff = new TH1F("diff","", 100, 0., 4.);
+
+    if (int(hV.size())==specCountA) {
+      flagErrAB_HB[0]=0;// If we have the expected number of histograms, set the flag
+      double sumdelta = 0.;
+      int nnndelta = 0;
+      for (int ibin=1; ibin<=hV[0]->GetNbinsX(); ibin++) {
+	double delta = 0.; 
+	double maxdelta = 0.; 
+	for (unsigned int i=0; i<hV.size(); i++) {
+	  const TH1F* hi= hV[i];
+	  for (unsigned int j=1; j<hV.size(); j++) {
+	    const TH1F* hj= hV[j];
+	    delta = fabs(hi->GetBinContent(ibin) - hj->GetBinContent(ibin));
+	    if(delta > maxdelta) maxdelta=delta;
+	  }//for
+	}//for
+	if(maxdelta> 0.) {
+	  diff->Fill(maxdelta);
+	  sumdelta+=maxdelta;
+	  nnndelta++;
+	}
+      }//for ibin
+      //      avedelta_HB = sumdelta/hV[0]->GetNbinsX();
+      avedelta_HB = sumdelta/nnndelta;
+      std::cout << "******************>>>>>>      ErrA_HB:  avedelta_HB = " << avedelta_HB <<std::endl;
+      if (avedelta_HB>1.6 || (avedelta_HB<0.1 && avedelta_HB>0.)) {
+	flagErrAB_HB[0]=1;
+      }//if
+    }//hV.size
+    diff->SetMarkerStyle(20);
+    diff->SetMarkerSize(0.8);
+    diff->SetXTitle("max difference \b");
+    diff->SetMarkerColor(2);
+    diff->SetLineColor(0);
+    gPad->SetGridx();
+    gPad->SetLogy();
+    diff->Draw("Error");
+    /////////////////////////////////////////////////////////////////////////
+    cHB->Update();
+    cHB->Print("HistErrA_HB.png");
+    cHB->Clear();
+    /////////////////////////////////////////////////////////////////////////
+    
+    // clean-up
+    if (diff) delete diff;
+    for (unsigned int i=0; i<hV.size(); i++) delete hV[i];
+  } // ErrorA in HB
+
+
+  ///////////////////////////////////////////////////////////////////////// errors B:
+
+
+  { // errors type B
+    const int specCountB=4;
+    const TString hnames[specCountB][2] =
+      { { "h_2DsumErrorBLS1", "h_2D0sumErrorBLS1" },
+	{ "h_sumErrorBperLS1", "h_sum0ErrorBperLS1" },
+	{ "h_2DsumErrorBLS2", "h_2D0sumErrorBLS2" },
+	{ "h_sumErrorBperLS2", "h_sum0ErrorBperLS2" } };
+
+    for (int depth=1; depth<=2; depth++) {
+
+      cHB->Clear();
+      cHB->Divide(2,1);
+      cHB->cd(1);
+
+      TH1F *hRate2orig= NULL;
+      TH2F *h2Cefz6= NULL;
+      TString hname1= hnames[2*depth-2][0];
+      TString hname0= hnames[2*depth-2][1];
+      TH2F *twod1= (TH2F*)hfile->Get(hname1);
+      TH2F *twod0= (TH2F*)hfile->Get(hname0);
+      if (1) std::cout << "debugger: errB_HB depth=" << depth << ". get 2D histos "  << hname1 << " and " << hname0 << "\n";
+      if (!twod1 || !twod0) {
+	TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+	ptext->AddText("Missing histos");
+	if (!twod1) {
+	  std::cout << "\tfailed to get " << hname1 << "\n";
+	  ptext->AddText(hname1);
+	}
+	if (!twod0) {
+	  std::cout << "\tfailed to get " << hname0 << "\n";
+	  ptext->AddText(hname0);
+	}
+	ptext->Draw();
+      }
+      else {
+	h2Cefz6= (TH2F*)twod1->Clone(Form("Cefz6_%d",depth));
+	h2Cefz6->SetTitle(Form("HB Depth %d \b",depth));
+	h2Cefz6->Divide(twod1,twod0, 1, 1, "B");
+
+	gPad->SetGridy();
+	gPad->SetGridx();
+	gPad->SetLogz();
+	h2Cefz6->SetTitle(Form("Depth %d \b",depth));
+	h2Cefz6->SetMarkerStyle(20);
+	h2Cefz6->SetMarkerSize(0.4);
+	//	h2Cefz6->GetZaxis()->SetLabelSize(0.04);
+	h2Cefz6->SetXTitle("#eta \b");
+	h2Cefz6->SetYTitle("#phi \b");
+	h2Cefz6->SetZTitle(Form("<ErrorB>  - HB Depth%d \b",depth));
+	h2Cefz6->SetMarkerColor(2);
+	h2Cefz6->SetLineColor(2);
+	h2Cefz6->Draw("COLZ");
+
+	delete twod1;
+	delete twod0;
+      } // histos ok
+
+      cHB->cd(2);
+      hname1=hnames[2*depth-1][0];
+      hname0=hnames[2*depth-1][1];
+      TH1F *h1= (TH1F*)hfile->Get(hname1);
+      TH1F *h0= (TH1F*)hfile->Get(hname0);
+      if (1) std::cout << "errB_HB depth=" << depth << ". get 2D histos "
+		       << hname1 << " and " << hname0 << "\n";
+      if (!h1 || !h0) {
+	TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+	ptext->AddText("Missing histo");
+	if (!h1) {
+	  std::cout << "\tfailed to get " << hname1 << "\n";
+	  ptext->AddText(hname1);
+	}
+	if (!h0) {
+	  std::cout << "\tfailed to get " << hname0 << "\n";
+	  ptext->AddText(hname0);
+	}
+	ptext->Draw();
+      }
+      else {
+	gPad->SetGridx();
+	gPad->SetGridy();
+	//	gPad->SetLogy();
+	hRate2orig = (TH1F*)h1->Clone(Form("Rate2orig_%d",depth));
+	hRate2orig->Divide(h1,h0, 1, 1, "B");
+
+	TH1F* hRate2=NULL;
+	if (lastLumiBin_HB>1) {
+	  if (!copyContents(&hRate2,Form("Rate2_%d",depth),"",hRate2orig,lastLumiBin_HB)) {
+	    std::cout << "code failed" << std::endl;
+	    gSystem->Exit(1);
+	  }
+	}
+	else hRate2=hRate2orig;
+
+	hRate2->SetTitle(Form("Depth %d \b",depth));
+	hRate2->SetMarkerStyle(20);
+	hRate2->SetMarkerSize(0.8);
+	//	hRate2->GetZaxis()->SetLabelSize(0.04);
+	hRate2->SetXTitle(Form("<ErrorB>(ev.in LS & ch.) - HB depth%d -    iLS \b",depth));
+	hRate2->SetMarkerColor(2);
+	hRate2->SetLineColor(0);
+	hRate2->Draw("Error");
+
+
+	if(LSofFirstErrB_HB == -1) {
+	  int nx = hRate2->GetXaxis()->GetNbins();
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  hRate2->GetBinContent(i);
+	    if(ccc1>0.) {
+	      cout<<"****************>>>>>>>>>>> ErrB_HB bad LS start at iLS = "<<i<<" with rate = "<< ccc1 <<endl;
+	      LSofFirstErrB_HB = i;
+	      break;
+	    }
+	  }
+	}	
+	
+
+	delete h1;
+	delete h0;
+	if (hRate2!=hRate2orig) { delete hRate2orig; hRate2orig=hRate2; }
+      }
+
+      cHB->Update();
+      cHB->Print(Form("HistErrB_HB_%d.png",depth));
+      cHB->Clear();
+      if (h2Cefz6) delete h2Cefz6;
+      if (hRate2orig) delete hRate2orig;
+    }
+  } // ErrorsB in HB
+
+
+//====================================================================== HE                    :
+//====================================================================== HE                    :
+//====================================================================== HE                    :
+// Special test of errors type A and B in HE
+// AZ 08.02.2016
+
+  int flagErrAB_HE[2];
+  flagErrAB_HE[0]=-1;
+  flagErrAB_HE[1]=-1;
+  double avedelta_HE = 0.;
+  int lastLumiBin_HE=-1;
+  int LSofFirstErrB_HE = -1;
+  {
+    const int specCountA=4;
+    const int specColors[specCountA] = { 1, 2, 3, 4 };
+    const TString hnames[specCountA][2] =
+      { { "h_sumADCAmplperLS3_P1", "h_sum0ADCAmplperLS3_P1" },
+	{ "h_sumADCAmplperLS3_P2", "h_sum0ADCAmplperLS3_P2" },
+	{ "h_sumADCAmplperLS3_M1", "h_sum0ADCAmplperLS3_M1" },
+	{ "h_sumADCAmplperLS3_M2", "h_sum0ADCAmplperLS3_M2" } };
+
+    std::vector<TH1F*> hV;
+    THStack *hs= new THStack("hs","ADCAmplerLS1");
+    cHB->Clear();
+    //    cHB->cd();
+    cHB->Divide(2,1);
+    cHB->cd(1);
+
+    ///////////////////////////////////////////////////////////////////////////
+    for (int i=0; i<specCountA; i++) {
+      if (1) std::cout << "debugger: errA_HE : get histos for i=" << i  << " " << hnames[i][0] << " and " << hnames[i][1] << "\n";
+      TH1F *h1= (TH1F*)hfile->Get(hnames[i][0]);
+      TH1F *h0= (TH1F*)hfile->Get(hnames[i][1]);
+      if (!h1 || !h0) {
+	TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+	ptext->AddText("Missing histo");
+	if (!h1) {
+	  std::cout << "\tfailed to get " << hnames[i][0] << "\n";
+	  ptext->AddText(hnames[i][0]);
+	}
+	if (!h0) {
+	  std::cout << "\tfailed to get " << hnames[i][1] << "\n";
+	  ptext->AddText(hnames[i][1]);
+	}
+	ptext->Draw();
+	continue;
+      }
+      TH1F *hERT1orig= (TH1F*)h1->Clone(Form("ERT1orig_%d",i));
+      hERT1orig->Divide(h1, h0, 1,1, "B");
+
+      if ((lastLumiBin_HE<0) && (i==0)) {
+	for (int ibin=hERT1orig->GetNbinsX(); ibin>=1; ibin--) {
+	  if (hERT1orig->GetBinContent(ibin)==0) lastLumiBin_HE=ibin;
+	  else break;
+	}
+	lastLumiBin_HE+=3; // show more bins
+	if (lastLumiBin_HE >= hERT1orig->GetNbinsX()) lastLumiBin_HE=-1;
+      }
+      TH1F *hERT1=NULL;
+      if (lastLumiBin_HE>1) {
+	if (!copyContents(&hERT1,Form("ERT1_%d",i),"", hERT1orig,lastLumiBin_HE)) {
+	  std::cout << "code failed"<<std::endl;
+	  gSystem->Exit(1);
+	}
+      }
+      else hERT1=hERT1orig;
+
+      hERT1->GetXaxis()->SetTitle("<ADCAmpl> per LS HE: black-P1, red-P2,green-M1,blue-M2");
+      hV.push_back(hERT1);
+      hERT1->SetMarkerStyle(20);
+      hERT1->SetMarkerSize(0.4);
+      hERT1->SetXTitle("<A>(ev.in LS & ch.) - HE P1     -    iLS \b");
+      hERT1->SetMarkerColor(specColors[i]);
+      hERT1->SetLineColor(0);
+      hs->Add(hERT1);
+      delete h1;
+      delete h0;
+      if (hERT1!=hERT1orig) delete hERT1orig;
+    } /////////////////////////////////////////////////////////////////////////
+    hs->Draw("LPE1 nostack"); 
+    cHB->Update(); // activate the axes
+    hs->GetXaxis()->SetTitle("<A> per LS: black-P1, red-P2,green-M1,blue-M2");
+    hs->Draw("LPE1 nostack");
+    gPad->SetGridy();
+    /////////////////////////////////////////////////////////////////////////////////////////
+
+    // AZ corrections 08.02.2016
+    cHB->cd(2);
+    TH1F* diff = new TH1F("diff","", 100, 0., 4.);
+
+    if (int(hV.size())==specCountA) {
+      flagErrAB_HE[0]=0;// If we have the expected number of histograms, set the flag
+      double sumdelta = 0.;
+      int nnndelta = 0;
+      for (int ibin=1; ibin<=hV[0]->GetNbinsX(); ibin++) {
+	double delta = 0.; 
+	double maxdelta = 0.; 
+	for (unsigned int i=0; i<hV.size(); i++) {
+	  const TH1F* hi= hV[i];
+	  for (unsigned int j=1; j<hV.size(); j++) {
+	    const TH1F* hj= hV[j];
+	    delta = fabs(hi->GetBinContent(ibin) - hj->GetBinContent(ibin));
+	    if(delta > maxdelta) maxdelta=delta;
+	  }//for
+	}//for
+	if(maxdelta> 0.) {
+	  diff->Fill(maxdelta);
+	  sumdelta+=maxdelta;
+	  nnndelta++;
+	}
+      }//for ibin
+      //      avedelta_HE = sumdelta/hV[0]->GetNbinsX();
+      avedelta_HE = sumdelta/nnndelta;
+      std::cout << "******************>>>>>>      ErrA_HE:  avedelta_HE = " << avedelta_HE <<std::endl;
+      if (avedelta_HE>1.8 || (avedelta_HE<0.2 && avedelta_HE>0.)) {
+	flagErrAB_HE[0]=1;
+      }//if
+    }//hV.size
+    diff->SetMarkerStyle(20);
+    diff->SetMarkerSize(0.8);
+    diff->SetXTitle("max difference \b");
+    diff->SetMarkerColor(2);
+    diff->SetLineColor(0);
+    gPad->SetGridx();
+    gPad->SetLogy();
+    diff->Draw("Error");
+    /////////////////////////////////////////////////////////////////////////
+    cHB->Update();
+    cHB->Print("HistErrA_HE.png");
+    cHB->Clear();
+    /////////////////////////////////////////////////////////////////////////
+    
+    // clean-up
+    if (diff) delete diff;
+    for (unsigned int i=0; i<hV.size(); i++) delete hV[i];
+  } // ErrorA in HE
+
+
+  ///////////////////////////////////////////////////////////////////////// errors B:
+
+
+  { // errors type B
+    const int specCountB=6;
+    const TString hnames[specCountB][2] =
+      { { "h_2DsumErrorBLS3", "h_2D0sumErrorBLS3" },
+	{ "h_sumErrorBperLS3", "h_sum0ErrorBperLS3" },
+	{ "h_2DsumErrorBLS4", "h_2D0sumErrorBLS4" },
+	{ "h_sumErrorBperLS4", "h_sum0ErrorBperLS4" },
+	{ "h_2DsumErrorBLS5", "h_2D0sumErrorBLS5" },
+	{ "h_sumErrorBperLS5", "h_sum0ErrorBperLS5" } };
+
+    for (int depth=1; depth<=3; depth++) {
+
+      cHB->Clear();
+      cHB->Divide(2,1);
+      cHB->cd(1);
+
+      TH1F *hRate2orig= NULL;
+      TH2F *h2Cefz6= NULL;
+      TString hname1= hnames[2*depth-2][0];
+      TString hname0= hnames[2*depth-2][1];
+      TH2F *twod1= (TH2F*)hfile->Get(hname1);
+      TH2F *twod0= (TH2F*)hfile->Get(hname0);
+      if (1) std::cout << "debugger: errB_HE depth=" << depth << ". get 2D histos "  << hname1 << " and " << hname0 << "\n";
+      if (!twod1 || !twod0) {
+	TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+	ptext->AddText("Missing histos");
+	if (!twod1) {
+	  std::cout << "\tfailed to get " << hname1 << "\n";
+	  ptext->AddText(hname1);
+	}
+	if (!twod0) {
+	  std::cout << "\tfailed to get " << hname0 << "\n";
+	  ptext->AddText(hname0);
+	}
+	ptext->Draw();
+      }
+      else {
+	h2Cefz6= (TH2F*)twod1->Clone(Form("Cefz6_%d",depth));
+	h2Cefz6->SetTitle(Form("HE Depth %d \b",depth));
+	h2Cefz6->Divide(twod1,twod0, 1, 1, "B");
+
+	gPad->SetGridy();
+	gPad->SetGridx();
+	gPad->SetLogz();
+	h2Cefz6->SetTitle(Form("Depth %d \b",depth));
+	h2Cefz6->SetMarkerStyle(20);
+	h2Cefz6->SetMarkerSize(0.4);
+	//	h2Cefz6->GetZaxis()->SetLabelSize(0.04);
+	h2Cefz6->SetXTitle("#eta \b");
+	h2Cefz6->SetYTitle("#phi \b");
+	h2Cefz6->SetZTitle(Form("<ErrorB>  - HE Depth%d \b",depth));
+	h2Cefz6->SetMarkerColor(2);
+	h2Cefz6->SetLineColor(2);
+	h2Cefz6->Draw("COLZ");
+
+	delete twod1;
+	delete twod0;
+      } // histos ok
+
+      cHB->cd(2);
+      hname1=hnames[2*depth-1][0];
+      hname0=hnames[2*depth-1][1];
+      TH1F *h1= (TH1F*)hfile->Get(hname1);
+      TH1F *h0= (TH1F*)hfile->Get(hname0);
+      if (1) std::cout << "errB_HE depth=" << depth << ". get 2D histos "
+		       << hname1 << " and " << hname0 << "\n";
+      if (!h1 || !h0) {
+	TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+	ptext->AddText("Missing histo");
+	if (!h1) {
+	  std::cout << "\tfailed to get " << hname1 << "\n";
+	  ptext->AddText(hname1);
+	}
+	if (!h0) {
+	  std::cout << "\tfailed to get " << hname0 << "\n";
+	  ptext->AddText(hname0);
+	}
+	ptext->Draw();
+      }
+      else {
+	gPad->SetGridx();
+	gPad->SetGridy();
+	//	gPad->SetLogy();
+	hRate2orig = (TH1F*)h1->Clone(Form("Rate2orig_%d",depth));
+	hRate2orig->Divide(h1,h0, 1, 1, "B");
+
+	TH1F* hRate2=NULL;
+	if (lastLumiBin_HE>1) {
+	  if (!copyContents(&hRate2,Form("Rate2_%d",depth),"",hRate2orig,lastLumiBin_HE)) {
+	    std::cout << "code failed" << std::endl;
+	    gSystem->Exit(1);
+	  }
+	}
+	else hRate2=hRate2orig;
+
+	hRate2->SetTitle(Form("Depth %d \b",depth));
+	hRate2->SetMarkerStyle(20);
+	hRate2->SetMarkerSize(0.8);
+	//	hRate2->GetZaxis()->SetLabelSize(0.04);
+	hRate2->SetXTitle(Form("<ErrorB>(ev.in LS & ch.) - HE depth%d -    iLS \b",depth));
+	hRate2->SetMarkerColor(2);
+	hRate2->SetLineColor(0);
+	hRate2->Draw("Error");
+
+
+	if(LSofFirstErrB_HE == -1) {
+	  int nx = hRate2->GetXaxis()->GetNbins();
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  hRate2->GetBinContent(i);
+	    if(ccc1>0.) {
+	      cout<<"****************>>>>>>>>>>> ErrB_HE bad LS start at iLS = "<<i<<" with rate = "<< ccc1 <<endl;
+	      LSofFirstErrB_HE = i;
+	      break;
+	    }
+	  }
+	}	
+	
+
+	delete h1;
+	delete h0;
+	if (hRate2!=hRate2orig) { delete hRate2orig; hRate2orig=hRate2; }
+      }
+
+      cHB->Update();
+      cHB->Print(Form("HistErrB_HE_%d.png",depth));
+      cHB->Clear();
+      if (h2Cefz6) delete h2Cefz6;
+      if (hRate2orig) delete hRate2orig;
+    }
+  } // ErrorsB in HE
+
+
+//====================================================================== HO                    :
+//====================================================================== HO                    :
+//====================================================================== HO                    :
+// Special test of errors type A and B in HO
+// AZ 08.02.2016
+
+  int flagErrAB_HO[2];
+  flagErrAB_HO[0]=-1;
+  flagErrAB_HO[1]=-1;
+  double avedelta_HO = 0.;
+  int lastLumiBin_HO=-1;
+  int LSofFirstErrB_HO = -1;
+  {
+    const int specCountA=4;
+    const int specColors[specCountA] = { 1, 2, 3, 4 };
+    const TString hnames[specCountA][2] =
+      { { "h_sumADCAmplperLS8_P1", "h_sum0ADCAmplperLS8_P1" },
+	{ "h_sumADCAmplperLS8_P2", "h_sum0ADCAmplperLS8_P2" },
+	{ "h_sumADCAmplperLS8_M1", "h_sum0ADCAmplperLS8_M1" },
+	{ "h_sumADCAmplperLS8_M2", "h_sum0ADCAmplperLS8_M2" } };
+
+    std::vector<TH1F*> hV;
+    THStack *hs= new THStack("hs","ADCAmplerLS1");
+    cHB->Clear();
+    //    cHB->cd();
+    cHB->Divide(2,1);
+    cHB->cd(1);
+
+    ///////////////////////////////////////////////////////////////////////////
+    for (int i=0; i<specCountA; i++) {
+      if (1) std::cout << "debugger: errA_HO : get histos for i=" << i  << " " << hnames[i][0] << " and " << hnames[i][1] << "\n";
+      TH1F *h1= (TH1F*)hfile->Get(hnames[i][0]);
+      TH1F *h0= (TH1F*)hfile->Get(hnames[i][1]);
+      if (!h1 || !h0) {
+	TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+	ptext->AddText("Missing histo");
+	if (!h1) {
+	  std::cout << "\tfailed to get " << hnames[i][0] << "\n";
+	  ptext->AddText(hnames[i][0]);
+	}
+	if (!h0) {
+	  std::cout << "\tfailed to get " << hnames[i][1] << "\n";
+	  ptext->AddText(hnames[i][1]);
+	}
+	ptext->Draw();
+	continue;
+      }
+      TH1F *hoRT1orig= (TH1F*)h1->Clone(Form("ERT1orig_%d",i));
+      hoRT1orig->Divide(h1, h0, 1,1, "B");
+
+      if ((lastLumiBin_HO<0) && (i==0)) {
+	for (int ibin=hoRT1orig->GetNbinsX(); ibin>=1; ibin--) {
+	  if (hoRT1orig->GetBinContent(ibin)==0) lastLumiBin_HO=ibin;
+	  else break;
+	}
+	lastLumiBin_HO+=3; // show more bins
+	if (lastLumiBin_HO >= hoRT1orig->GetNbinsX()) lastLumiBin_HO=-1;
+      }
+      TH1F *hoRT1=NULL;
+      if (lastLumiBin_HO>1) {
+	if (!copyContents(&hoRT1,Form("ERT1_%d",i),"", hoRT1orig,lastLumiBin_HO)) {
+	  std::cout << "code failed"<<std::endl;
+	  gSystem->Exit(1);
+	}
+      }
+      else hoRT1=hoRT1orig;
+
+      hoRT1->GetXaxis()->SetTitle("<ADCAmpl> per LS HO: black-P1, red-P2,green-M1,blue-M2");
+      hV.push_back(hoRT1);
+      hoRT1->SetMarkerStyle(20);
+      hoRT1->SetMarkerSize(0.4);
+      hoRT1->SetXTitle("<A>(ev.in LS & ch.) - HO P1     -    iLS \b");
+      hoRT1->SetMarkerColor(specColors[i]);
+      hoRT1->SetLineColor(0);
+      hs->Add(hoRT1);
+      delete h1;
+      delete h0;
+      if (hoRT1!=hoRT1orig) delete hoRT1orig;
+    } /////////////////////////////////////////////////////////////////////////
+    hs->Draw("LPE1 nostack"); 
+    cHB->Update(); // activate tho axes
+    hs->GetXaxis()->SetTitle("<A> per LS: black-P1, red-P2,green-M1,blue-M2");
+    hs->Draw("LPE1 nostack");
+    gPad->SetGridy();
+    /////////////////////////////////////////////////////////////////////////////////////////
+
+    // AZ corrections 08.02.2016
+    cHB->cd(2);
+    TH1F* diff = new TH1F("diff","", 100, 0., 4.);
+
+    if (int(hV.size())==specCountA) {
+      flagErrAB_HO[0]=0;// If we have tho expected number of histograms, set tho flag
+      double sumdelta = 0.;
+      int nnndelta = 0;
+      for (int ibin=1; ibin<=hV[0]->GetNbinsX(); ibin++) {
+	double delta = 0.; 
+	double maxdelta = 0.; 
+	for (unsigned int i=0; i<hV.size(); i++) {
+	  const TH1F* hi= hV[i];
+	  for (unsigned int j=1; j<hV.size(); j++) {
+	    const TH1F* hj= hV[j];
+	    delta = fabs(hi->GetBinContent(ibin) - hj->GetBinContent(ibin));
+	    if(delta > maxdelta) maxdelta=delta;
+	  }//for
+	}//for
+	if(maxdelta> 0.) {
+	  diff->Fill(maxdelta);
+	  sumdelta+=maxdelta;
+	  nnndelta++;
+	}
+      }//for ibin
+      //      avedelta_HO = sumdelta/hV[0]->GetNbinsX();
+      avedelta_HO = sumdelta/nnndelta;
+      std::cout << "******************>>>>>>      ErrA_HO:  avedelta_HO = " << avedelta_HO <<std::endl;
+      if (avedelta_HO>1.5 || (avedelta_HO<0.1 && avedelta_HO>0.)) {
+	flagErrAB_HO[0]=1;
+      }//if
+    }//hV.size
+    diff->SetMarkerStyle(20);
+    diff->SetMarkerSize(0.8);
+    diff->SetXTitle("max difference \b");
+    diff->SetMarkerColor(2);
+    diff->SetLineColor(0);
+    gPad->SetGridx();
+    gPad->SetLogy();
+    diff->Draw("Error");
+    /////////////////////////////////////////////////////////////////////////
+    cHB->Update();
+    cHB->Print("HistErrA_HO.png");
+    cHB->Clear();
+    /////////////////////////////////////////////////////////////////////////
+    
+    // clean-up
+    if (diff) delete diff;
+    for (unsigned int i=0; i<hV.size(); i++) delete hV[i];
+  } // ErrorA in HO
+
+
+  ///////////////////////////////////////////////////////////////////////// errors B:
+
+
+  { // errors type B
+    const int specCountB=2;
+    const TString hnames[specCountB][2] =
+      { { "h_2DsumErrorBLS8", "h_2D0sumErrorBLS8" },
+	{ "h_sumErrorBperLS8", "h_sum0ErrorBperLS8" } };
+
+    for (int depth=4; depth<=4; depth++) {
+
+      cHB->Clear();
+      cHB->Divide(2,1);
+      cHB->cd(1);
+
+      TH1F *hRate2orig= NULL;
+      TH2F *h2Cefz6= NULL;
+      TString hname1= hnames[2*depth-8][0];
+      TString hname0= hnames[2*depth-8][1];
+      TH2F *twod1= (TH2F*)hfile->Get(hname1);
+      TH2F *twod0= (TH2F*)hfile->Get(hname0);
+      if (1) std::cout << "debugger: errB_HO depth=" << depth << ". get 2D histos "  << hname1 << " and " << hname0 << "\n";
+      if (!twod1 || !twod0) {
+	TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+	ptext->AddText("Missing histos");
+	if (!twod1) {
+	  std::cout << "\tfailed to get " << hname1 << "\n";
+	  ptext->AddText(hname1);
+	}
+	if (!twod0) {
+	  std::cout << "\tfailed to get " << hname0 << "\n";
+	  ptext->AddText(hname0);
+	}
+	ptext->Draw();
+      }
+      else {
+	h2Cefz6= (TH2F*)twod1->Clone(Form("Cefz6_%d",depth));
+	h2Cefz6->SetTitle(Form("HO Depth %d \b",depth));
+	h2Cefz6->Divide(twod1,twod0, 1, 1, "B");
+
+	gPad->SetGridy();
+	gPad->SetGridx();
+	gPad->SetLogz();
+	h2Cefz6->SetTitle(Form("Depth %d \b",depth));
+	h2Cefz6->SetMarkerStyle(20);
+	h2Cefz6->SetMarkerSize(0.4);
+	//	h2Cefz6->GetZaxis()->SetLabelSize(0.04);
+	h2Cefz6->SetXTitle("#eta \b");
+	h2Cefz6->SetYTitle("#phi \b");
+	h2Cefz6->SetZTitle(Form("<ErrorB>  - HO Depth%d \b",depth));
+	h2Cefz6->SetMarkerColor(2);
+	h2Cefz6->SetLineColor(2);
+	h2Cefz6->Draw("COLZ");
+
+	delete twod1;
+	delete twod0;
+      } // histos ok
+
+      cHB->cd(2);
+      hname1=hnames[2*depth-7][0];
+      hname0=hnames[2*depth-7][1];
+      TH1F *h1= (TH1F*)hfile->Get(hname1);
+      TH1F *h0= (TH1F*)hfile->Get(hname0);
+      if (1) std::cout << "errB_HO depth=" << depth << ". get 2D histos "
+		       << hname1 << " and " << hname0 << "\n";
+      if (!h1 || !h0) {
+	TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+	ptext->AddText("Missing histo");
+	if (!h1) {
+	  std::cout << "\tfailed to get " << hname1 << "\n";
+	  ptext->AddText(hname1);
+	}
+	if (!h0) {
+	  std::cout << "\tfailed to get " << hname0 << "\n";
+	  ptext->AddText(hname0);
+	}
+	ptext->Draw();
+      }
+      else {
+	gPad->SetGridx();
+	gPad->SetGridy();
+	//	gPad->SetLogy();
+	hRate2orig = (TH1F*)h1->Clone(Form("Rate2orig_%d",depth));
+	hRate2orig->Divide(h1,h0, 1, 1, "B");
+
+	TH1F* hRate2=NULL;
+	if (lastLumiBin_HO>1) {
+	  if (!copyContents(&hRate2,Form("Rate2_%d",depth),"",hRate2orig,lastLumiBin_HO)) {
+	    std::cout << "code failed" << std::endl;
+	    gSystem->Exit(1);
+	  }
+	}
+	else hRate2=hRate2orig;
+
+	hRate2->SetTitle(Form("Depth %d \b",depth));
+	hRate2->SetMarkerStyle(20);
+	hRate2->SetMarkerSize(0.8);
+	//	hRate2->GetZaxis()->SetLabelSize(0.04);
+	hRate2->SetXTitle(Form("<ErrorB>(ev.in LS & ch.) - HO depth%d -    iLS \b",depth));
+	hRate2->SetMarkerColor(2);
+	hRate2->SetLineColor(0);
+	hRate2->Draw("Error");
+
+
+	if(LSofFirstErrB_HO == -1) {
+	  int nx = hRate2->GetXaxis()->GetNbins();
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  hRate2->GetBinContent(i);
+	    if(ccc1>0.) {
+	      cout<<"****************>>>>>>>>>>> ErrB_HO bad LS start at iLS = "<<i<<" with rate = "<< ccc1 <<endl;
+	      LSofFirstErrB_HO = i;
+	      break;
+	    }
+	  }
+	}	
+	
+
+	delete h1;
+	delete h0;
+	if (hRate2!=hRate2orig) { delete hRate2orig; hRate2orig=hRate2; }
+      }
+
+      cHB->Update();
+      cHB->Print(Form("HistErrB_HO_%d.png",depth));
+      cHB->Clear();
+      if (h2Cefz6) delete h2Cefz6;
+      if (hRate2orig) delete hRate2orig;
+    }
+  } // ErrorsB in HO
+
+
+//====================================================================== done by Andrius for HF:
+//====================================================================== done by Andrius for HF:
 //====================================================================== done by Andrius for HF:
 // Special test of errors type A and B in HF
 
   int flagErrAB_HF[2];
   flagErrAB_HF[0]=-1;
   flagErrAB_HF[1]=-1;
-  double avedelta = 0.;
-  int lastLumiBin=-1;
-  int LSofFirstErrB = -1;
+  double avedelta_HF = 0.;
+  int lastLumiBin_HF=-1;
+  int LSofFirstErrB_HF = -1;
   {
     const int specCountA=4;
     const int specColors[specCountA] = { 1, 2, 3, 4 };
@@ -1234,17 +2049,17 @@ int main(int argc, char *argv[])
       TH1F *hERT1orig= (TH1F*)h1->Clone(Form("ERT1orig_%d",i));
       hERT1orig->Divide(h1, h0, 1,1, "B");
 
-      if ((lastLumiBin<0) && (i==0)) {
+      if ((lastLumiBin_HF<0) && (i==0)) {
 	for (int ibin=hERT1orig->GetNbinsX(); ibin>=1; ibin--) {
-	  if (hERT1orig->GetBinContent(ibin)==0) lastLumiBin=ibin;
+	  if (hERT1orig->GetBinContent(ibin)==0) lastLumiBin_HF=ibin;
 	  else break;
 	}
-	lastLumiBin+=3; // show more bins
-	if (lastLumiBin >= hERT1orig->GetNbinsX()) lastLumiBin=-1;
+	lastLumiBin_HF+=3; // show more bins
+	if (lastLumiBin_HF >= hERT1orig->GetNbinsX()) lastLumiBin_HF=-1;
       }
       TH1F *hERT1=NULL;
-      if (lastLumiBin>1) {
-	if (!copyContents(&hERT1,Form("ERT1_%d",i),"", hERT1orig,lastLumiBin)) {
+      if (lastLumiBin_HF>1) {
+	if (!copyContents(&hERT1,Form("ERT1_%d",i),"", hERT1orig,lastLumiBin_HF)) {
 	  std::cout << "code failed"<<std::endl;
 	  gSystem->Exit(1);
 	}
@@ -1295,10 +2110,10 @@ int main(int argc, char *argv[])
 	  nnndelta++;
 	}
       }//for ibin
-      //      avedelta = sumdelta/hV[0]->GetNbinsX();
-      avedelta = sumdelta/nnndelta;
-      std::cout << "******************>>>>>>      ErrA_HF:  avedelta = " << avedelta <<std::endl;
-      if (avedelta>2.4 || (avedelta<0.8 && avedelta>0.)) {
+      //      avedelta_HF = sumdelta/hV[0]->GetNbinsX();
+      avedelta_HF = sumdelta/nnndelta;
+      std::cout << "******************>>>>>>      ErrA_HF:  avedelta_HF = " << avedelta_HF <<std::endl;
+      if (avedelta_HF>2.4 || (avedelta_HF<0.8 && avedelta_HF>0.)) {
 	flagErrAB_HF[0]=1;
       }//if
     }//hV.size
@@ -1317,10 +2132,12 @@ int main(int argc, char *argv[])
     /////////////////////////////////////////////////////////////////////////
     
     // clean-up
+    if (diff) delete diff;
     for (unsigned int i=0; i<hV.size(); i++) delete hV[i];
   } // ErrorA in HF
 
 
+  ////////////////////////////////////////////////////////// errors B:
   /////////////////////////
 
 
@@ -1409,8 +2226,8 @@ int main(int argc, char *argv[])
 	hRate2orig->Divide(h1,h0, 1, 1, "B");
 
 	TH1F* hRate2=NULL;
-	if (lastLumiBin>1) {
-	  if (!copyContents(&hRate2,Form("Rate2_%d",depth),"",hRate2orig,lastLumiBin)) {
+	if (lastLumiBin_HF>1) {
+	  if (!copyContents(&hRate2,Form("Rate2_%d",depth),"",hRate2orig,lastLumiBin_HF)) {
 	    std::cout << "code failed" << std::endl;
 	    gSystem->Exit(1);
 	  }
@@ -1427,13 +2244,13 @@ int main(int argc, char *argv[])
 	hRate2->Draw("Error");
 
 
-	if(LSofFirstErrB == -1) {
+	if(LSofFirstErrB_HF == -1) {
 	  int nx = hRate2->GetXaxis()->GetNbins();
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  hRate2->GetBinContent(i);
 	    if(ccc1>0.) {
 	      cout<<"****************>>>>>>>>>>> ErrB_HF bad LS start at iLS = "<<i<<" with rate = "<< ccc1 <<endl;
-	      LSofFirstErrB = i;
+	      LSofFirstErrB_HF = i;
 	      break;
 	    }
 	  }
@@ -1723,45 +2540,110 @@ int main(int argc, char *argv[])
               }	     	    	      
               htmlFile << "<br>"<< std::endl;
 
-	      // Special section for the HF (Andrius)
-	      int flagSpecHF=0;
-	      if ((test==1) && (sub==4)) {
-		flagSpecHF+=1;
-		htmlFile << "<h2> 4. Error type A & B</h2>\n";
-		htmlFile << "<h2> 4a. Error type A</h2>\n";
-		htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.8-2.4 (p-p collisions) </h3>\n";
-		htmlFile << " <img src=\"HistErrA_HF.png\" />\n";
-		htmlFile << "<br>\n";
-		if (flagErrAB_HF[0]==-1) htmlFile<<"<h3>test was not possible</h3>\n";
-		else if (flagErrAB_HF[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HF(=Mean of max difference " << avedelta  << "  is within 0.8-2.4) </h3>\n";
-		else if (flagErrAB_HF[0]==1) htmlFile<<"<<h3>font color=\"red\">ErrorA_HF is available once Mean of max difference " << avedelta  << " is out 0.8-2.4 (p-p collisions)</font></h3>\n";
-		else htmlFile<<"<h3>auto-interpretation is not available</h3>\n";
+	      // Special section 
+	      //	      int flagSpecHF=0;
+	      if (test==1) {
 
 
-		htmlFile << "<h2> 4b. Error type B\n";
-		htmlFile << "<h3> ErrorB: digi-collection size !=4. </h3>\n";
-		htmlFile << " <img src=\"HistErrB_HF_1.png\" />\n<br>\n";
-		htmlFile << " <img src=\"HistErrB_HF_2.png\" />\n<br>\n";
-		htmlFile << "<br>\n";
-		htmlFile <<"<h3> if Error type B is available, it start from:    " << LSofFirstErrB  << "  LS </h3>\n";
-		htmlFile << "<br>\n";
-	      }
 
+		if (sub==1) {
+		  htmlFile << "<h2> 4. Error type A & B</h2>\n";
+		  htmlFile << "<h2> 4a. Error type A</h2>\n";
+		  htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.1-1.6 (p-p collisions) </h3>\n";
+		  htmlFile << " <img src=\"HistErrA_HB.png\" />\n";
+		  htmlFile << "<br>\n";
+		  if (flagErrAB_HB[0]==-1) htmlFile<<"<h3>test was not possible</h3>\n";
+		  else if (flagErrAB_HB[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HB (Mean of max difference " << avedelta_HB  << "  is within 0.1-1.6) </h3>\n";
+		  else if (flagErrAB_HB[0]==1) htmlFile<<"<<h3> ErrorA_HB is available once Mean of max difference " << avedelta_HB  << " is out 0.1-1.6 (p-p collisions)</font></h3>\n";
+		  else htmlFile<<"<h3>auto-interpretation is not available</h3>\n";
+		  htmlFile << "<h2> 4b. Error type B\n";
+		  htmlFile << "<h3> ErrorB: digi-collection size !=10.</h3>\n";
+		  htmlFile << " <img src=\"HistErrB_HB_1.png\" />\n<br>\n";
+		  htmlFile << " <img src=\"HistErrB_HB_2.png\" />\n<br>\n";
+		  htmlFile << "<br>\n";
+		  htmlFile <<"<h3> if Error type B is available, it start from:    " << LSofFirstErrB_HB  << "  LS </h3>\n";
+		  htmlFile << "<br>\n";
+		}
+
+
+
+		if (sub==2) {
+		  htmlFile << "<h2> 4. Error type A & B</h2>\n";
+		  htmlFile << "<h2> 4a. Error type A</h2>\n";
+		  htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.2-1.8 (p-p collisions) </h3>\n";
+		  htmlFile << " <img src=\"HistErrA_HE.png\" />\n";
+		  htmlFile << "<br>\n";
+		  if (flagErrAB_HE[0]==-1) htmlFile<<"<h3>test was not possible</h3>\n";
+		  else if (flagErrAB_HE[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HE (Mean of max difference " << avedelta_HE  << "  is within 0.2-1.8) </h3>\n";
+		  else if (flagErrAB_HE[0]==1) htmlFile<<"<<h3> ErrorA_HE is available once Mean of max difference " << avedelta_HE  << " is out 0.2-1.8 (p-p collisions)</font></h3>\n";
+		  else htmlFile<<"<h3>auto-interpretation is not available</h3>\n";
+		  htmlFile << "<h2> 4b. Error type B\n";
+		  htmlFile << "<h3> ErrorB: digi-collection size !=10.</h3>\n";
+		  htmlFile << " <img src=\"HistErrB_HE_1.png\" />\n<br>\n";
+		  htmlFile << " <img src=\"HistErrB_HE_2.png\" />\n<br>\n";
+		  htmlFile << " <img src=\"HistErrB_HE_3.png\" />\n<br>\n";
+		  htmlFile << "<br>\n";
+		  htmlFile <<"<h3> if Error type B is available, it start from:    " << LSofFirstErrB_HE  << "  LS </h3>\n";
+		  htmlFile << "<br>\n";
+		}
+
+
+		if (sub==3) {
+		  htmlFile << "<h2> 4. Error type A & B</h2>\n";
+		  htmlFile << "<h2> 4a. Error type A</h2>\n";
+		  htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.1-1.5 (p-p collisions) </h3>\n";
+		  htmlFile << " <img src=\"HistErrA_HO.png\" />\n";
+		  htmlFile << "<br>\n";
+		  if (flagErrAB_HO[0]==-1) htmlFile<<"<h3>test was not possible</h3>\n";
+		  else if (flagErrAB_HO[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HO (Mean of max difference " << avedelta_HO  << "  is within 0.1-1.5) </h3>\n";
+		  else if (flagErrAB_HO[0]==1) htmlFile<<"<<h3> ErrorA_HO is available once Mean of max difference " << avedelta_HO  << " is out 0.1-1.5 (p-p collisions)</font></h3>\n";
+		  else htmlFile<<"<h3>auto-interpretation is not available</h3>\n";
+		  htmlFile << "<h2> 4b. Error type B\n";
+		  htmlFile << "<h3> ErrorB: digi-collection size !=4. </h3>\n";
+		  htmlFile << " <img src=\"HistErrB_HO_4.png\" />\n<br>\n";
+		  htmlFile << "<br>\n";
+		  htmlFile <<"<h3> if Error type B is available, it start from:    " << LSofFirstErrB_HO  << "  LS </h3>\n";
+		  htmlFile << "<br>\n";
+		}
+
+
+		if (sub==4) {
+		  //		flagSpecHF+=1;
+		  htmlFile << "<h2> 4. Error type A & B</h2>\n";
+		  htmlFile << "<h2> 4a. Error type A</h2>\n";
+		  htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.8-2.4 (p-p collisions) </h3>\n";
+		  htmlFile << " <img src=\"HistErrA_HF.png\" />\n";
+		  htmlFile << "<br>\n";
+		  if (flagErrAB_HF[0]==-1) htmlFile<<"<h3>test was not possible</h3>\n";
+		  else if (flagErrAB_HF[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HF (Mean of max difference " << avedelta_HF  << "  is within 0.8-2.4) </h3>\n";
+		  else if (flagErrAB_HF[0]==1) htmlFile<<"<<h3> ErrorA_HF is available once Mean of max difference " << avedelta_HF  << " is out 0.8-2.4 (p-p collisions)</font></h3>\n";
+		  else htmlFile<<"<h3>auto-interpretation is not available</h3>\n";
+		  htmlFile << "<h2> 4b. Error type B\n";
+		  htmlFile << "<h3> ErrorB: digi-collection size !=4. </h3>\n";
+		  htmlFile << " <img src=\"HistErrB_HF_1.png\" />\n<br>\n";
+		  htmlFile << " <img src=\"HistErrB_HF_2.png\" />\n<br>\n";
+		  htmlFile << "<br>\n";
+		  htmlFile <<"<h3> if Error type B is available, it start from:    " << LSofFirstErrB_HF  << "  LS </h3>\n";
+		  htmlFile << "<br>\n";
+		}
+	      }//test=1 Amplitude
+	      
 	      // Continue with common sections
               if (sub==1) { 
-	          htmlFile << "<h2> 4.Lumisection Status for HB </h2>"<< std::endl;
+	          htmlFile << "<h2> 5.Lumisection Status for HB </h2>"<< std::endl;
 	          htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: <td class=\"s6\" align=\"center\">"<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2). </td></h3>"<< std::endl;
 	      }  
               if (sub==2) {
-	          htmlFile << "<h2> 4.Lumisection Status for HE </h2>"<< std::endl;
+	          htmlFile << "<h2> 5.Lumisection Status for HE </h2>"<< std::endl;
 		  htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3). </h3>"<< std::endl;
               }
 	      if (sub==3) {
-		htmlFile << Form("<h2> %d.Lumisection Status for HO </h2>",4+flagSpecHF)<< std::endl;
+		//		htmlFile << Form("<h2> %d.Lumisection Status for HO </h2>",4+flagSpecHF)<< std::endl;
+	          htmlFile << "<h2> 5.Lumisection Status for HO </h2>"<< std::endl;
 		 htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][4]<<" (Depth4). </h3>"<< std::endl;
 	      }
               if (sub==4) {
-	          htmlFile << "<h2> 4.Lumisection Status for HF </h2>"<< std::endl; 
+	          htmlFile << "<h2> 5.Lumisection Status for HF </h2>"<< std::endl; 
 	          htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2). </h3>"<< std::endl;
 	      }	  	      
 	      htmlFile << "<br>"<< std::endl;
@@ -1833,7 +2715,7 @@ int main(int argc, char *argv[])
      if (test==4) htmlFile << "<h1> TIMING MEAN, GLOBAL RUN = "<< runnumber <<" </h1>"<< std::endl;
      if (test==5) htmlFile << "<h1> TIMING MAX, GLOBAL RUN = "<< runnumber <<" </h1>"<< std::endl;  
      htmlFile << "<br>"<< std::endl;
-     htmlFile << "<h2> 1.  Map of bad channels with this criterion for whole HCAL </h2>"<< std::endl; 
+     htmlFile << "<h2> 1.  Map of suspicious channels with A-criterion for whole HCAL </h2>"<< std::endl; 
      htmlFile << "<h3> Channel legend: white - good, other colour - bad.  </h3>"<< std::endl;  
      htmlFile << "<br>"<< std::endl;      
      if (test==0) htmlFile << " <img src=\"MapCapIdError.png\" />" << std::endl;
@@ -1843,7 +2725,7 @@ int main(int argc, char *argv[])
      if (test==4) htmlFile << " <img src=\"MapTmean.png\" />" << std::endl;   
      if (test==5) htmlFile << " <img src=\"MapTmax.png\" />" << std::endl;         
      htmlFile << "<br>"<< std::endl;
-     htmlFile << "<h2> 2.  Average value for whole HCAL in each LS</h2>"<< std::endl;   
+     htmlFile << "<h2> 2.  Average Amplitude (estimator) per LS for whole HCAL </h2>"<< std::endl;   
      htmlFile << "<br>"<< std::endl;      
      if (test==0) htmlFile << " <img src=\"HistCapID.png\" />" << std::endl; 
      if (test==1) htmlFile << " <img src=\"HistADCAmpl.png\" />" << std::endl;      
