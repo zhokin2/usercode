@@ -1466,7 +1466,376 @@ int main(int argc, char *argv[])
 */
 //======================================================================
 
-//======================================================================
+//===============================================================================  err A HB
+/// errA with average Amplitudes for HF
+// For  2D and  1D plots with Amplitude. Produces ChkErrA_HFx.png
+
+  for (int depth=1; depth<=2; depth++) {
+    TH2F *h2Ceff= NULL;
+    TH2F *h2Diffe= NULL;
+    //    TH1F* h1diffADCAmpl= NULL;
+    TH2F *h3Ceff= NULL;
+    
+    cHE->Clear();
+    cHE->Divide(3,1);
+    
+    cHE->cd(1);
+    // h_mapDepth1ADCAmpl_HB div h_mapDepth1_HB
+    TString hname1= Form("h_mapDepth%dADCAmpl_HB",depth);
+    TString hname0= Form("h_mapDepth%d_HB",depth);
+    TH2F *twod1= (TH2F*)hfile->Get(hname1);
+    TH2F *twod0= (TH2F*)hfile->Get(hname0);
+    if (!twod1 || !twod0) {
+      TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+      ptext->AddText("Missing histo");
+      std::cout << "specHB test: failed to load " << hname1 << " and/or "
+		<< hname0 << "\n";
+      if (!twod1) ptext->AddText(hname1);
+      if (!twod0) ptext->AddText(hname0);
+      ptext->Draw();
+      continue;
+    }
+    else {
+    // To IDENTIFY: see color different bins in eta-phi space
+      h2Ceff = (TH2F*)twod1->Clone(Form("Ceff_HB%d",depth));
+      h2Ceff->SetTitle(Form("HB Depth %d. (No cut) \b",depth));
+      h2Ceff->Divide(twod1,twod0, 1, 1, "B");
+
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h2Ceff->SetMarkerStyle(20);
+      h2Ceff->SetMarkerSize(0.4);
+      //h2Ceff->GetZaxis()->SetLabelSize(0.08);
+      h2Ceff->SetXTitle("#eta \b");
+      h2Ceff->SetYTitle("#phi \b");
+      h2Ceff->SetZTitle("h_mapDepth1ADCAmpl_HB \b");
+      h2Ceff->SetMarkerColor(2);
+      h2Ceff->SetLineColor(2);
+      h2Ceff->Draw("COLZ");
+    }
+
+    cHE->cd(2);
+    ///////////////////////////////////////
+    if (h2Ceff) {
+      // TO IDENTIFY: see red bins in eta-phi space 
+      h2Diffe = (TH2F*)h2Ceff->Clone(Form("Diffe_Depth%d_HB",depth));
+      h2Diffe->SetTitle(Form("HB Depth %d. Cut avg(ADCAmpl) > 25 \b",depth));
+      int nx = h2Ceff->GetXaxis()->GetNbins();
+      int ny = h2Ceff->GetYaxis()->GetNbins();
+      for (int i=1;i<=nx;i++) {
+	for (int j=1;j<=ny;j++) {
+	  double ccc1 =  h2Ceff->GetBinContent(i,j)   ;
+	  h2Diffe->SetBinContent(i,j,0.);
+	  if(ccc1 > 25.)  h2Diffe->SetBinContent(i,j,ccc1);
+	}
+      }
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h2Diffe->SetMarkerStyle(20);
+      h2Diffe->SetMarkerSize(0.4);
+      //h2Diffe->GetZaxis()->SetLabelSize(0.08);
+      h2Diffe->SetXTitle("#eta \b");
+      h2Diffe->SetYTitle("#phi \b");
+      h2Diffe->SetZTitle("<ADCAmpl> bigger 25.- HB Depth1 \b");
+      h2Diffe->SetMarkerColor(2);
+      h2Diffe->SetLineColor(2);
+      h2Diffe->Draw("COLZ");
+    }
+
+    cHE->cd(3);
+    TString hname3= Form("h_mapDepth%dADCAmpl225Copy_HB",depth);
+    TH2F *twod3= (TH2F*)hfile->Get(hname3);
+    if (!twod3 || !twod0) {
+      TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+      ptext->AddText("Missing histo");
+      std::cout << "specHB test: failed to load " << hname3 << " and/or "
+		<< hname0 << "\n";
+      if (!twod3) ptext->AddText(hname3);
+      if (!twod0) ptext->AddText(hname0);
+      ptext->Draw();
+      continue;
+    }
+    else {
+    // To IDENTIFY: see color different bins in eta-phi space
+      h3Ceff = (TH2F*)twod3->Clone(Form("CeffA_HB%d",depth));
+      h3Ceff->SetTitle(Form("HB Depth %d. \b",depth));
+      h3Ceff->Divide(twod3,twod0, 1, 1, "B");
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h3Ceff->SetMarkerStyle(20);
+      h3Ceff->SetMarkerSize(0.4);
+//      h3Ceff->GetZaxis()->SetLabelSize(0.08);
+      h3Ceff->SetXTitle("#eta \b");
+      h3Ceff->SetYTitle("#phi \b");
+      h3Ceff->SetZTitle("HB channel Amplitude \b");
+      h3Ceff->SetMarkerColor(2);
+      h3Ceff->SetLineColor(2);
+      h3Ceff->Draw("COLZ");
+    }
+
+    cHE->Update();
+    cHE->Print(Form("ChkErrA_HB%d.png",depth));
+    cHE->Clear();
+
+    if (h2Ceff) delete h2Ceff;
+    if (h2Diffe) delete h2Diffe;
+    //    if (h1diffADCAmpl) delete h1diffADCAmpl;
+    //  if (twod0) delete twod0;// do not delete - sometimes causes trouble later
+    if (twod1) delete twod1;
+    if (twod3) delete twod3;
+    if (h3Ceff) delete h3Ceff;
+  } // depth
+
+//===============================================================================  err A HE
+/// errA with average Amplitudes for HF
+// For  2D and  1D plots with Amplitude. Produces ChkErrA_HFx.png
+
+  for (int depth=1; depth<=3; depth++) {
+    TH2F *h2Ceff= NULL;
+    TH2F *h2Diffe= NULL;
+    //    TH1F* h1diffADCAmpl= NULL;
+    TH2F *h3Ceff= NULL;
+    
+    cHE->Clear();
+    cHE->Divide(3,1);
+    
+    cHE->cd(1);
+    // h_mapDepth1ADCAmpl_HE div h_mapDepth1_HE
+    TString hname1= Form("h_mapDepth%dADCAmpl_HE",depth);
+    TString hname0= Form("h_mapDepth%d_HE",depth);
+    TH2F *twod1= (TH2F*)hfile->Get(hname1);
+    TH2F *twod0= (TH2F*)hfile->Get(hname0);
+    if (!twod1 || !twod0) {
+      TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+      ptext->AddText("Missing histo");
+      std::cout << "specHE test: failed to load " << hname1 << " and/or "
+		<< hname0 << "\n";
+      if (!twod1) ptext->AddText(hname1);
+      if (!twod0) ptext->AddText(hname0);
+      ptext->Draw();
+      continue;
+    }
+    else {
+    // To IDENTIFY: see color different bins in eta-phi space
+      h2Ceff = (TH2F*)twod1->Clone(Form("Ceff_HE%d",depth));
+      h2Ceff->SetTitle(Form("HE Depth %d. (No cut) \b",depth));
+      h2Ceff->Divide(twod1,twod0, 1, 1, "B");
+
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h2Ceff->SetMarkerStyle(20);
+      h2Ceff->SetMarkerSize(0.4);
+      //h2Ceff->GetZaxis()->SetLabelSize(0.08);
+      h2Ceff->SetXTitle("#eta \b");
+      h2Ceff->SetYTitle("#phi \b");
+      h2Ceff->SetZTitle("h_mapDepth1ADCAmpl_HE \b");
+      h2Ceff->SetMarkerColor(2);
+      h2Ceff->SetLineColor(2);
+      h2Ceff->Draw("COLZ");
+    }
+
+    cHE->cd(2);
+    ///////////////////////////////////////
+    if (h2Ceff) {
+      // TO IDENTIFY: see red bins in eta-phi space 
+      h2Diffe = (TH2F*)h2Ceff->Clone(Form("Diffe_Depth%d_HE",depth));
+      h2Diffe->SetTitle(Form("HE Depth %d. Cut avg(ADCAmpl) > 33 \b",depth));
+      int nx = h2Ceff->GetXaxis()->GetNbins();
+      int ny = h2Ceff->GetYaxis()->GetNbins();
+      for (int i=1;i<=nx;i++) {
+	for (int j=1;j<=ny;j++) {
+	  double ccc1 =  h2Ceff->GetBinContent(i,j)   ;
+	  h2Diffe->SetBinContent(i,j,0.);
+	  if(ccc1 > 20.)  h2Diffe->SetBinContent(i,j,ccc1);
+	}
+      }
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h2Diffe->SetMarkerStyle(20);
+      h2Diffe->SetMarkerSize(0.4);
+      //h2Diffe->GetZaxis()->SetLabelSize(0.08);
+      h2Diffe->SetXTitle("#eta \b");
+      h2Diffe->SetYTitle("#phi \b");
+      h2Diffe->SetZTitle("<ADCAmpl> bigger 33.- HE Depth1 \b");
+      h2Diffe->SetMarkerColor(2);
+      h2Diffe->SetLineColor(2);
+      h2Diffe->Draw("COLZ");
+    }
+
+    cHE->cd(3);
+    TString hname3= Form("h_mapDepth%dADCAmpl225Copy_HE",depth);
+    TH2F *twod3= (TH2F*)hfile->Get(hname3);
+    if (!twod3 || !twod0) {
+      TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+      ptext->AddText("Missing histo");
+      std::cout << "specHE test: failed to load " << hname3 << " and/or "
+		<< hname0 << "\n";
+      if (!twod3) ptext->AddText(hname3);
+      if (!twod0) ptext->AddText(hname0);
+      ptext->Draw();
+      continue;
+    }
+    else {
+    // To IDENTIFY: see color different bins in eta-phi space
+      h3Ceff = (TH2F*)twod3->Clone(Form("CeffA_HE%d",depth));
+      h3Ceff->SetTitle(Form("HE Depth %d. \b",depth));
+      h3Ceff->Divide(twod3,twod0, 1, 1, "B");
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h3Ceff->SetMarkerStyle(20);
+      h3Ceff->SetMarkerSize(0.4);
+//      h3Ceff->GetZaxis()->SetLabelSize(0.08);
+      h3Ceff->SetXTitle("#eta \b");
+      h3Ceff->SetYTitle("#phi \b");
+      h3Ceff->SetZTitle("HE channel Amplitude \b");
+      h3Ceff->SetMarkerColor(2);
+      h3Ceff->SetLineColor(2);
+      h3Ceff->Draw("COLZ");
+    }
+
+    cHE->Update();
+    cHE->Print(Form("ChkErrA_HE%d.png",depth));
+    cHE->Clear();
+
+    if (h2Ceff) delete h2Ceff;
+    if (h2Diffe) delete h2Diffe;
+    //    if (h1diffADCAmpl) delete h1diffADCAmpl;
+    //  if (twod0) delete twod0;// do not delete - sometimes causes trouble later
+    if (twod1) delete twod1;
+    if (twod3) delete twod3;
+    if (h3Ceff) delete h3Ceff;
+  } // depth
+
+//===============================================================================  err A HO
+/// errA with average Amplitudes for HF
+// For  2D and  1D plots with Amplitude. Produces ChkErrA_HFx.png
+
+  for (int depth=4; depth<=4; depth++) {
+    TH2F *h2Ceff= NULL;
+    TH2F *h2Diffe= NULL;
+    //    TH1F* h1diffADCAmpl= NULL;
+    TH2F *h3Ceff= NULL;
+    
+    cHE->Clear();
+    cHE->Divide(3,1);
+    
+    cHE->cd(1);
+    // h_mapDepth1ADCAmpl_HO div h_mapDepth1_HO
+    TString hname1= Form("h_mapDepth%dADCAmpl_HO",depth);
+    TString hname0= Form("h_mapDepth%d_HO",depth);
+    TH2F *twod1= (TH2F*)hfile->Get(hname1);
+    TH2F *twod0= (TH2F*)hfile->Get(hname0);
+    if (!twod1 || !twod0) {
+      TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+      ptext->AddText("Missing histo");
+      std::cout << "specHO test: failed to load " << hname1 << " and/or "
+		<< hname0 << "\n";
+      if (!twod1) ptext->AddText(hname1);
+      if (!twod0) ptext->AddText(hname0);
+      ptext->Draw();
+      continue;
+    }
+    else {
+    // To IDENTIFY: see color different bins in eta-phi space
+      h2Ceff = (TH2F*)twod1->Clone(Form("Ceff_HO%d",depth));
+      h2Ceff->SetTitle(Form("HO Depth %d. (No cut) \b",depth));
+      h2Ceff->Divide(twod1,twod0, 1, 1, "B");
+
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h2Ceff->SetMarkerStyle(20);
+      h2Ceff->SetMarkerSize(0.4);
+      //h2Ceff->GetZaxis()->SetLabelSize(0.08);
+      h2Ceff->SetXTitle("#eta \b");
+      h2Ceff->SetYTitle("#phi \b");
+      h2Ceff->SetZTitle("h_mapDepth1ADCAmpl_HO \b");
+      h2Ceff->SetMarkerColor(2);
+      h2Ceff->SetLineColor(2);
+      h2Ceff->Draw("COLZ");
+    }
+
+    cHE->cd(2);
+    ///////////////////////////////////////
+    if (h2Ceff) {
+      // TO IDENTIFY: see red bins in eta-phi space (applied cut on Aij: <20 || >3000
+      h2Diffe = (TH2F*)h2Ceff->Clone(Form("Diffe_Depth%d_HO",depth));
+      h2Diffe->SetTitle(Form("HO Depth %d. Cut avg(ADCAmpl) > 80 \b",depth));
+      int nx = h2Ceff->GetXaxis()->GetNbins();
+      int ny = h2Ceff->GetYaxis()->GetNbins();
+      for (int i=1;i<=nx;i++) {
+	for (int j=1;j<=ny;j++) {
+	  double ccc1 =  h2Ceff->GetBinContent(i,j)   ;
+	  h2Diffe->SetBinContent(i,j,0.);
+	  if(ccc1 > 20.)  h2Diffe->SetBinContent(i,j,ccc1);
+	}
+      }
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h2Diffe->SetMarkerStyle(20);
+      h2Diffe->SetMarkerSize(0.4);
+      //h2Diffe->GetZaxis()->SetLabelSize(0.08);
+      h2Diffe->SetXTitle("#eta \b");
+      h2Diffe->SetYTitle("#phi \b");
+      h2Diffe->SetZTitle("<ADCAmpl> bigger 80.- HO Depth1 \b");
+      h2Diffe->SetMarkerColor(2);
+      h2Diffe->SetLineColor(2);
+      h2Diffe->Draw("COLZ");
+    }
+
+    cHE->cd(3);
+    TString hname3= Form("h_mapDepth%dADCAmpl225Copy_HO",depth);
+    TH2F *twod3= (TH2F*)hfile->Get(hname3);
+    if (!twod3 || !twod0) {
+      TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+      ptext->AddText("Missing histo");
+      std::cout << "specHO test: failed to load " << hname3 << " and/or "
+		<< hname0 << "\n";
+      if (!twod3) ptext->AddText(hname3);
+      if (!twod0) ptext->AddText(hname0);
+      ptext->Draw();
+      continue;
+    }
+    else {
+    // To IDENTIFY: see color different bins in eta-phi space
+      h3Ceff = (TH2F*)twod3->Clone(Form("CeffA_HO%d",depth));
+      h3Ceff->SetTitle(Form("HO Depth %d. \b",depth));
+      h3Ceff->Divide(twod3,twod0, 1, 1, "B");
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h3Ceff->SetMarkerStyle(20);
+      h3Ceff->SetMarkerSize(0.4);
+//      h3Ceff->GetZaxis()->SetLabelSize(0.08);
+      h3Ceff->SetXTitle("#eta \b");
+      h3Ceff->SetYTitle("#phi \b");
+      h3Ceff->SetZTitle("HO channel Amplitude \b");
+      h3Ceff->SetMarkerColor(2);
+      h3Ceff->SetLineColor(2);
+      h3Ceff->Draw("COLZ");
+    }
+
+    cHE->Update();
+    cHE->Print(Form("ChkErrA_HO%d.png",depth));
+    cHE->Clear();
+
+    if (h2Ceff) delete h2Ceff;
+    if (h2Diffe) delete h2Diffe;
+    //    if (h1diffADCAmpl) delete h1diffADCAmpl;
+    //  if (twod0) delete twod0;// do not delete - sometimes causes trouble later
+    if (twod1) delete twod1;
+    if (twod3) delete twod3;
+    if (h3Ceff) delete h3Ceff;
+  } // depth
+
+//===============================================================================  err A HF
 /// errA with average Amplitudes for HF
 // For  2D and  1D plots with Amplitude. Produces ChkErrA_HFx.png
 
@@ -1613,16 +1982,215 @@ int main(int argc, char *argv[])
     if (twod3) delete twod3;
     if (h3Ceff) delete h3Ceff;
   } // depth
+
   std::cout << "************>>>   average Amplitudes done" << std::endl;
-
-//======================================================================
-/// Special tests for HF
-// For occupancy plots. Produces OccPlots_HFx.png (x=1)
-
+//////////////////////////////////////////////////////////////////////////////////// Special tests:
+//===============================================================================   err B HB
+// For occupancy plots. Produces OccPlots_HBx.png (x=1)
     {
       cHB->Clear();
       cHB->Divide(2,1);
+      /////////
+      cHB->cd(1);
+      TH2F *occhbm= (TH2F*)hfile->Get("h_RatioOccupancy_HBM");
+      int maxbins = 0;
+      int nx = occhbm->GetXaxis()->GetNbins();
+      for (int i=1;i<=nx;i++) {
+	double ccc1 =  occhbm->GetBinContent(i);
+	//	if(ccc1>0.) cout<<"  iLS = "<<i<<" ccc1= "<<ccc1<<endl;
+	//	if(ccc1>0.) maxbins++;
+	if(ccc1>0.) {maxbins = i; if(i>maxbins) maxbins = i;}
+      }
+      cout<<"HB maxbins(=LS)=     "<< maxbins <<endl;
+      TH1F* uyhbm = new TH1F("uyhbm","", maxbins, 1., maxbins+1.);
+      for (int i=1;i<=nx;i++) {
+	double ccc1 =  occhbm->GetBinContent(i);
+	//	  if(ccc1>0.)	  cout<<" depth1_HB iLS = "<<i<<" <As> per LS= "<<ccc1<<endl;
+	if(ccc1>0.) uyhbm->Fill(float(i), ccc1);
+      }
+      //      gPad->SetLogy();
+      uyhbm->SetMarkerStyle(20);
+      uyhbm->SetMarkerSize(0.6);
+      uyhbm->GetYaxis()->SetLabelSize(0.04);
+      uyhbm->SetXTitle("min/av occupancy - HBM \b");
+      uyhbm->SetMarkerColor(2);
+      uyhbm->SetLineColor(0);
+      uyhbm->SetMaximum(1.0);
+      uyhbm->SetMinimum(0.2);
+      gPad->SetGridy();
+      uyhbm->Draw("Error");
+      /////////
+      cHB->cd(2);
+      TH2F *occhbp= (TH2F*)hfile->Get("h_RatioOccupancy_HBP");
+      TH1F* uyhbp = new TH1F("uyhbp","", maxbins, 1., maxbins+1.);
+      for (int i=1;i<=nx;i++) {
+	double ccc1 =  occhbp->GetBinContent(i);
+	//	  if(ccc1>0.)	  cout<<" depth1_HB iLS = "<<i<<" <As> per LS= "<<ccc1<<endl;
+	if(ccc1>0.) uyhbp->Fill(float(i), ccc1);
+      }
+      //      gPad->SetLogy();
+      uyhbp->SetMarkerStyle(20);
+      uyhbp->SetMarkerSize(0.6);
+      uyhbp->GetYaxis()->SetLabelSize(0.04);
+      uyhbp->SetXTitle("min/av occupancy - HBP \b");
+      uyhbp->SetMarkerColor(2);
+      uyhbp->SetLineColor(0);
+      uyhbp->SetMaximum(1.0);
+      uyhbp->SetMinimum(0.2);
+      gPad->SetGridy();
+      uyhbp->Draw("Error");
+      /////////
       
+      /////////
+      cHB->Update();
+      cHB->Print(Form("OccPlots_HB.png"));
+      cHB->Clear();
+      
+      // clean-up
+      if (occhbm) delete occhbm;
+      if (uyhbm) delete uyhbm;
+      if (occhbp) delete occhbp;
+      if (uyhbp) delete uyhbp;
+    }     
+//===============================================================================   err B HE
+// For occupancy plots. Produces OccPlots_HEx.png (x=1)
+    {
+      cHB->Clear();
+      cHB->Divide(2,1);
+      /////////
+      cHB->cd(1);
+      TH2F *occhem= (TH2F*)hfile->Get("h_RatioOccupancy_HEM");
+      int maxbins = 0;
+      int nx = occhem->GetXaxis()->GetNbins();
+      for (int i=1;i<=nx;i++) {
+	double ccc1 =  occhem->GetBinContent(i);
+	//	if(ccc1>0.) cout<<"  iLS = "<<i<<" ccc1= "<<ccc1<<endl;
+	//	if(ccc1>0.) maxbins++;
+	if(ccc1>0.) {maxbins = i; if(i>maxbins) maxbins = i;}
+      }
+      cout<<"HE maxbins(=LS)=     "<< maxbins <<endl;
+      TH1F* uyhem = new TH1F("uyhem","", maxbins, 1., maxbins+1.);
+      for (int i=1;i<=nx;i++) {
+	double ccc1 =  occhem->GetBinContent(i);
+	//	  if(ccc1>0.)	  cout<<" depth1_HE iLS = "<<i<<" <As> per LS= "<<ccc1<<endl;
+	if(ccc1>0.) uyhem->Fill(float(i), ccc1);
+      }
+      //      gPad->SetLogy();
+      uyhem->SetMarkerStyle(20);
+      uyhem->SetMarkerSize(0.6);
+      uyhem->GetYaxis()->SetLabelSize(0.04);
+      uyhem->SetXTitle("min/av occupancy - HEM \b");
+      uyhem->SetMarkerColor(2);
+      uyhem->SetLineColor(0);
+      uyhem->SetMaximum(1.0);
+      uyhem->SetMinimum(0.2);
+      gPad->SetGridy();
+      uyhem->Draw("Error");
+      /////////
+      cHB->cd(2);
+      TH2F *occhep= (TH2F*)hfile->Get("h_RatioOccupancy_HEP");
+      TH1F* uyhep = new TH1F("uyhep","", maxbins, 1., maxbins+1.);
+      for (int i=1;i<=nx;i++) {
+	double ccc1 =  occhep->GetBinContent(i);
+	//	  if(ccc1>0.)	  cout<<" depth1_HE iLS = "<<i<<" <As> per LS= "<<ccc1<<endl;
+	if(ccc1>0.) uyhep->Fill(float(i), ccc1);
+      }
+      //      gPad->SetLogy();
+      uyhep->SetMarkerStyle(20);
+      uyhep->SetMarkerSize(0.6);
+      uyhep->GetYaxis()->SetLabelSize(0.04);
+      uyhep->SetXTitle("min/av occupancy - HEP \b");
+      uyhep->SetMarkerColor(2);
+      uyhep->SetLineColor(0);
+      uyhep->SetMaximum(1.0);
+      uyhep->SetMinimum(0.2);
+      gPad->SetGridy();
+      uyhep->Draw("Error");
+      /////////
+      
+      /////////
+      cHB->Update();
+      cHB->Print(Form("OccPlots_HE.png"));
+      cHB->Clear();
+      
+      // clean-up
+      if (occhem) delete occhem;
+      if (uyhem) delete uyhem;
+      if (occhep) delete occhep;
+      if (uyhep) delete uyhep;
+    }     
+//===============================================================================   err B HO
+// For occupancy plots. Produces OccPlots_HOx.png (x=1)
+    {
+      cHB->Clear();
+      cHB->Divide(2,1);
+      /////////
+      cHB->cd(1);
+      TH2F *occhom= (TH2F*)hfile->Get("h_RatioOccupancy_HOM");
+      int maxbins = 0;
+      int nx = occhom->GetXaxis()->GetNbins();
+      for (int i=1;i<=nx;i++) {
+	double ccc1 =  occhom->GetBinContent(i);
+	//	if(ccc1>0.) cout<<"  iLS = "<<i<<" ccc1= "<<ccc1<<endl;
+	//	if(ccc1>0.) maxbins++;
+	if(ccc1>0.) {maxbins = i; if(i>maxbins) maxbins = i;}
+      }
+      cout<<"HO maxbins(=LS)=     "<< maxbins <<endl;
+      TH1F* uyhom = new TH1F("uyhom","", maxbins, 1., maxbins+1.);
+      for (int i=1;i<=nx;i++) {
+	double ccc1 =  occhom->GetBinContent(i);
+	//	  if(ccc1>0.)	  cout<<" depth1_HO iLS = "<<i<<" <As> per LS= "<<ccc1<<endl;
+	if(ccc1>0.) uyhom->Fill(float(i), ccc1);
+      }
+      //      gPad->SetLogy();
+      uyhom->SetMarkerStyle(20);
+      uyhom->SetMarkerSize(0.6);
+      uyhom->GetYaxis()->SetLabelSize(0.04);
+      uyhom->SetXTitle("min/av occupancy - HOM \b");
+      uyhom->SetMarkerColor(2);
+      uyhom->SetLineColor(0);
+      uyhom->SetMaximum(1.0);
+      uyhom->SetMinimum(0.2);
+      gPad->SetGridy();
+      uyhom->Draw("Error");
+      /////////
+      cHB->cd(2);
+      TH2F *occhop= (TH2F*)hfile->Get("h_RatioOccupancy_HOP");
+      TH1F* uyhop = new TH1F("uyhop","", maxbins, 1., maxbins+1.);
+      for (int i=1;i<=nx;i++) {
+	double ccc1 =  occhop->GetBinContent(i);
+	//	  if(ccc1>0.)	  cout<<" depth1_HO iLS = "<<i<<" <As> per LS= "<<ccc1<<endl;
+	if(ccc1>0.) uyhop->Fill(float(i), ccc1);
+      }
+      //      gPad->SetLogy();
+      uyhop->SetMarkerStyle(20);
+      uyhop->SetMarkerSize(0.6);
+      uyhop->GetYaxis()->SetLabelSize(0.04);
+      uyhop->SetXTitle("min/av occupancy - HOP \b");
+      uyhop->SetMarkerColor(2);
+      uyhop->SetLineColor(0);
+      uyhop->SetMaximum(1.0);
+      uyhop->SetMinimum(0.2);
+      gPad->SetGridy();
+      uyhop->Draw("Error");
+      /////////
+      
+      /////////
+      cHB->Update();
+      cHB->Print(Form("OccPlots_HO.png"));
+      cHB->Clear();
+      
+      // clean-up
+      if (occhom) delete occhom;
+      if (uyhom) delete uyhom;
+      if (occhop) delete occhop;
+      if (uyhop) delete uyhop;
+    }     
+//===============================================================================   err B HF
+// For occupancy plots. Produces OccPlots_HFx.png (x=1)
+    {
+      cHB->Clear();
+      cHB->Divide(2,1);
       /////////
       cHB->cd(1);
       TH2F *occhfm= (TH2F*)hfile->Get("h_RatioOccupancy_HFM");
@@ -1685,9 +2253,11 @@ int main(int argc, char *argv[])
       if (occhfp) delete occhfp;
       if (uyhfp) delete uyhfp;
     }     
-    std::cout << "************>>>   occupancy plots done" << std::endl;
-    
 
+
+
+    std::cout << "************>>>   occupancy plots done" << std::endl;
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //======================================================================
 /// Prepare maps of good/bad channels:
 
@@ -2410,6 +2980,7 @@ int main(int argc, char *argv[])
      if (sub==3) htmlFile << "<h1> HCAL OUTER, RUN = "<< runnumber <<" </h1>"<< std::endl;
      if (sub==4) htmlFile << "<h1> HCAL FORWARD, RUN = "<< runnumber <<" </h1>"<< std::endl; 
      htmlFile << "<br>"<< std::endl;
+
      htmlFile << "<a name=\"Top\"></a>\n";
      htmlFile << "<b>Contents:<br>\n";
      htmlFile << "1. <a href=\"#AnalysisResults\">Analysis results</a><br>\n";
@@ -2417,11 +2988,11 @@ int main(int argc, char *argv[])
      htmlFile << "2A. <a href=\"#ChannelMap\">Channel map</a><br>\n";
      htmlFile << "2B. <a href=\"#BadChannels\">List of bad channels</a><br>\n";
      htmlFile << "2C. <a href=\"#BadPedestals\">List of channels with bad pedestals</a><br>\n";
-     if (sub==4) {
-       htmlFile << "2D. <a href=\"#ErrorA\">Cross check for error A</a><br>\n";
-       htmlFile << "2E. <a href=\"#Occupancy\">Occupancy plots</a><br>\n";
-     }
-
+     //   if (sub==4) {
+     htmlFile << "2D. <a href=\"#ErrorA\">Cross check for error A</a><br>\n";
+     htmlFile << "2E. <a href=\"#Occupancy\">Occupancy plots</a><br>\n";
+     //   }
+     
      htmlFile << "<a name=\"AnalysisResults\"></a>\n";
      if (sub==1) htmlFile << "<h2> 1. Analysis results for HB</h2>"<< std::endl;   
      if (sub==2) htmlFile << "<h2> 1. Analysis results for HE</h2>"<< std::endl;
@@ -2829,12 +3400,67 @@ int main(int argc, char *argv[])
      htmlFile << "</table><br>" << std::endl;
      htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 
+     //HB:
+     if (sub==1) {
+       htmlFile << "<a name=\"ErrorA\"></a>\n";
+
+       htmlFile << "<h2> 2D. Cross check to see 2D pattern of channels with error A:   </h2>\n";
+       htmlFile << "<h2> 1) with average channel Amplitudes(No cut), 2) with average channel Amplitudes(<A> >25), 3) with channel Amplitude (A<35);  </h2>\n";
+       htmlFile << " <img src=\"ChkErrA_HB1.png\" /><br><br>\n";
+       htmlFile << " <img src=\"ChkErrA_HB2.png\" /><br>\n";
+       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+
+       htmlFile << "<a name=\"Occupancy\"></a>\n";
+       htmlFile << "<h2> 2E. Plots of min/ave ratio for occupancy distributions with Amplitude bigger 25 (HBM:neg.eta;HBP:pos.eta) </h2>\n";
+       htmlFile << "<h2> TO IDENTIFY A-type errors: for most of LSs the ratio to be lower 0.6 at least for HF- or HF+ </h2>\n";
+       htmlFile << "<h2> For runs without A-type errors: for most of LSs the ratio is higher 0.6 and is the same for HF- and HF+ </h2>\n";
+       htmlFile << " <img src=\"OccPlots_HB.png\" /><br><br>\n";
+       htmlFile << "<br>\n";
+       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+     }
+     //HE:
+     if (sub==2) {
+       htmlFile << "<a name=\"ErrorA\"></a>\n";
+
+       htmlFile << "<h2> 2D. Cross check to see 2D pattern of channels with error A:   </h2>\n";
+       htmlFile << "<h2> 1) with average channel Amplitudes(No cut), 2) with average channel Amplitudes(<A> >35), 3) with channel Amplitude (A<40);  </h2>\n";
+       htmlFile << " <img src=\"ChkErrA_HE1.png\" /><br><br>\n";
+       htmlFile << " <img src=\"ChkErrA_HE2.png\" /><br>\n";
+       htmlFile << " <img src=\"ChkErrA_HE3.png\" /><br>\n";
+       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+
+       htmlFile << "<a name=\"Occupancy\"></a>\n";
+       htmlFile << "<h2> 2E. Plots of min/ave ratio for occupancy distributions with Amplitude bigger 35 (HEM:neg.eta;HEP:pos.eta) </h2>\n";
+       htmlFile << "<h2> TO IDENTIFY A-type errors: for most of LSs the ratio to be lower 0.8 at least for HF- or HF+ </h2>\n";
+       htmlFile << "<h2> For runs without A-type errors: for most of LSs the ratio is higher 0.8 and is the same for HF- and HF+ </h2>\n";
+       htmlFile << " <img src=\"OccPlots_HE.png\" /><br><br>\n";
+       htmlFile << "<br>\n";
+       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+     }
+     //HO:
+     if (sub==3) {
+       htmlFile << "<a name=\"ErrorA\"></a>\n";
+
+       htmlFile << "<h2> 2D. Cross check to see 2D pattern of channels with error A:   </h2>\n";
+       htmlFile << "<h2> 1) with average channel Amplitudes(No cut), 2) with average channel Amplitudes(<A> >80), 3) with channel Amplitude (A<100);  </h2>\n";
+       //       htmlFile << "<h2> 2D. Cross check for error A</h2>\n";
+       htmlFile << " <img src=\"ChkErrA_HO4.png\" /><br><br>\n";
+       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+
+       htmlFile << "<a name=\"Occupancy\"></a>\n";
+       htmlFile << "<h2> 2E. Plots of min/ave ratio for occupancy distributions with Amplitude bigger 80 (HOM:neg.eta;HOP:pos.eta) </h2>\n";
+       htmlFile << "<h2> TO IDENTIFY A-type errors: for most of LSs the ratio to be lower 0.8 at least for HF- or HF+ </h2>\n";
+       htmlFile << "<h2> For runs without A-type errors: for most of LSs the ratio is higher 0.8 and is the same for HF- and HF+ </h2>\n";
+       htmlFile << " <img src=\"OccPlots_HO.png\" /><br><br>\n";
+       htmlFile << "<br>\n";
+       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+     }
      //HF:
      if (sub==4) {
        htmlFile << "<a name=\"ErrorA\"></a>\n";
 
        htmlFile << "<h2> 2D. Cross check to see 2D pattern of channels with error A:   </h2>\n";
-       htmlFile << "<h2> 1) with average channel Amplitudes(No cut), 2) with average channel Amplitudes(<A> >20), 3) with channel Amplitude (A>20);  </h2>\n";
+       htmlFile << "<h2> 1) with average channel Amplitudes(No cut), 2) with average channel Amplitudes(<A> >20), 3) with channel Amplitude (A<20);  </h2>\n";
        //       htmlFile << "<h2> 2D. Cross check for error A</h2>\n";
        htmlFile << " <img src=\"ChkErrA_HF1.png\" /><br><br>\n";
        htmlFile << " <img src=\"ChkErrA_HF2.png\" /><br>\n";
@@ -2842,12 +3468,18 @@ int main(int argc, char *argv[])
 
        htmlFile << "<a name=\"Occupancy\"></a>\n";
        htmlFile << "<h2> 2E. Plots of min/ave ratio for occupancy distributions with Amplitude bigger 20 (HFM:neg.eta;HFP:pos.eta) </h2>\n";
-       htmlFile << "<h2> TO IDENTIFY A-type errors: ratio to be lower 0.8 at least for HF- or HF+ </h2>\n";
-       htmlFile << "<h2> For runs without A-type errors:     Ratio is higher 0.8 and is the same for HF- and HF+ </h2>\n";
+       htmlFile << "<h2> TO IDENTIFY A-type errors: for most of LSs the ratio to be lower 0.8 at least for HF- or HF+ </h2>\n";
+       htmlFile << "<h2> For runs without A-type errors: for most of LSs the ratio is higher 0.8 and is the same for HF- and HF+ </h2>\n";
        htmlFile << " <img src=\"OccPlots_HF.png\" /><br><br>\n";
        htmlFile << "<br>\n";
        htmlFile << "<a href=\"#Top\">to top</a><br>\n";
      }
+
+
+
+
+
+
      htmlFile << "</body> " << std::endl;
      htmlFile << "</html> " << std::endl;
      htmlFile.close();
