@@ -7,7 +7,7 @@
    
 Description: <one line class summary>
 
-Implementation:                  
+Implementation:                                                           
 <Notes on implementation>
 */
 //
@@ -28,7 +28,7 @@ Implementation:
 //#include "TTree.h"
 
 using namespace std;
-// user include files 
+// user include files     h_RatioOccupancy_HBM
 
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
@@ -511,6 +511,7 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
 
   /////////////////////////////////////////////
   TH1F* h_ADCAmpl_HF;
+  TH1F* h_ADCAmplZoom1_HF;
   TH2F* h_mapDepth1ADCAmpl_HF;
   TH2F* h_mapDepth2ADCAmpl_HF;
   TH2F* h_mapDepth1ADCAmpl225_HF;
@@ -543,6 +544,7 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   TH2F* h_mapDepth2_HF;
   /////////////////////////////////////////////
   TH1F* h_ADCAmpl_HO;
+  TH1F* h_ADCAmplZoom1_HO;
   TH1F* h_ADCAmpl_HO_copy;
   TH2F* h_mapDepth4ADCAmpl_HO;
   TH2F* h_mapDepth4ADCAmpl225_HO;
@@ -657,6 +659,7 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
 
   /////////////////////////////////////////////
   TH1F* h_ADCAmpl_HE;
+  TH1F* h_ADCAmplZoom1_HE;
   TH2F* h_mapDepth1ADCAmpl_HE;
   TH2F* h_mapDepth2ADCAmpl_HE;
   TH2F* h_mapDepth3ADCAmpl_HE;
@@ -2504,7 +2507,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		      h_sum0ADCAmplperLS1_P2->Fill( float(lscounterM1) ,bbb1);
 		    }
 		    ////////////////////////////// P
-		    if(bbbc/bbb1> 20.) {
+		    if(bbbc/bbb1> 25.) {
 		      pcountall1 += bbb1 ;
 		      pcountmin1 += bbb1;
 		    }
@@ -2521,7 +2524,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		      h_sum0ADCAmplperLS1_M2->Fill( float(lscounterM1) ,bbb1);
 		    }
 		    ////////////////////////////// M
-		    if(bbbc/bbb1> 20.) {
+		    if(bbbc/bbb1> 25.) {
 		      mcountall1 += bbb1 ;
 		      mcountmin1 += bbb1;
 		    }
@@ -2587,7 +2590,9 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		      h_sum0ADCAmplperLS3_P2->Fill( float(lscounterM1) ,bbb1);
 		    }
 		    ////////////////////////////// P
-		    if(bbbc/bbb1> 20. && k3%2 == 0) {
+		    //		    if(bbbc/bbb1> 25. ) {
+		    if(bbbc/bbb1> 15. && k3%2 == 0) {
+		    //if(bbbc/bbb1> 30. && k3%2 != 0) {
 		      pcountall3 += bbb1 ;
 		      pcountmin3 += bbb1;
 		    }
@@ -2603,7 +2608,9 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		      h_sum0ADCAmplperLS3_M2->Fill( float(lscounterM1) ,bbb1);
 		    }
 		    ////////////////////////////// M
-		    if(bbbc/bbb1> 20. && k3%2 == 0) {
+		    //		    if(bbbc/bbb1> 25. ) {
+		    if(bbbc/bbb1> 15. && k3%2 == 0) {
+		    //if(bbbc/bbb1> 30. && k3%2 != 0) {
 		      mcountall3 += bbb1 ;
 		      mcountmin3 += bbb1;
 		    }
@@ -2795,7 +2802,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		      h_sum0ADCAmplperLS8_P2->Fill( float(lscounterM1) ,bbb1);
 		    }
 		  ////////////////////////////// P
-		    if(bbbc/bbb1> 90.) {
+		    if(bbbc/bbb1> 80.) {
 		      pcountall8 += bbb1 ;
 		      pcountmin8 += bbb1;
 		    }
@@ -2812,7 +2819,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		      h_sum0ADCAmplperLS8_M2->Fill( float(lscounterM1) ,bbb1);
 		    }
 		  ////////////////////////////// M
-		    if(bbbc/bbb1> 90.) {
+		    if(bbbc/bbb1> 80.) {
 		      mcountall8 += bbb1 ;
 		      mcountmin8 += bbb1;
 		    }
@@ -4836,7 +4843,7 @@ void VeRawAnalyzer::beginJob()
 
 
     h_ADCAmplZoom_HB = new TH1F("h_ADCAmplZoom_HB"," ", 100, 0.,400.);
-    h_ADCAmplZoom1_HB = new TH1F("h_ADCAmplZoom1_HB"," ", 100, 0.,100.);
+    h_ADCAmplZoom1_HB = new TH1F("h_ADCAmplZoom1_HB"," ", 100, -20.,80.);
     h_ADCAmpl_HB = new TH1F("h_ADCAmpl_HB"," ", 100, 10.,3000.);
     h_mapDepth1ADCAmpl225_HB = new TH2F("h_mapDepth1ADCAmpl225_HB"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth2ADCAmpl225_HB = new TH2F("h_mapDepth2ADCAmpl225_HB"," ", 82, -41., 41., 72, 0., 72.);
@@ -4874,6 +4881,7 @@ void VeRawAnalyzer::beginJob()
     //////////////////////////////////////////////////////////////////////////////////////////////
     // fullAmplitude:
 //    h_ADCAmpl_HE = new TH1F("h_ADCAmpl_HE"," ", 100, -20.,100.);
+    h_ADCAmplZoom1_HE = new TH1F("h_ADCAmplZoom1_HE"," ", 100, -20.,80.);
     h_ADCAmpl_HE = new TH1F("h_ADCAmpl_HE"," ", 100, 0.,3000.);
     h_mapDepth1ADCAmpl225_HE = new TH2F("h_mapDepth1ADCAmpl225_HE"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth2ADCAmpl225_HE = new TH2F("h_mapDepth2ADCAmpl225_HE"," ", 82, -41., 41., 72, 0., 72.);
@@ -4924,6 +4932,7 @@ void VeRawAnalyzer::beginJob()
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // fullAmplitude:
 //    h_ADCAmpl_HF = new TH1F("h_ADCAmpl_HF"," ", 100, 0.,3000.);
+    h_ADCAmplZoom1_HF = new TH1F("h_ADCAmplZoom1_HF"," ", 100, -20.,80.);
     h_ADCAmpl_HF = new TH1F("h_ADCAmpl_HF"," ", 100, -300.,3300.);
     h_mapDepth1ADCAmpl225_HF = new TH2F("h_mapDepth1ADCAmpl225_HF"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth2ADCAmpl225_HF = new TH2F("h_mapDepth2ADCAmpl225_HF"," ", 82, -41., 41., 72, 0., 72.);
@@ -4961,6 +4970,7 @@ void VeRawAnalyzer::beginJob()
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // fullAmplitude:
     h_ADCAmpl_HO = new TH1F("h_ADCAmpl_HO"," ", 100, 0.,3000.);
+    h_ADCAmplZoom1_HO = new TH1F("h_ADCAmplZoom1_HO"," ", 100, -20.,280.);
     h_ADCAmpl_HO_copy = new TH1F("h_ADCAmpl_HO_copy"," ", 100, 0.,30000.);
     h_mapDepth4ADCAmpl225_HO = new TH2F("h_mapDepth4ADCAmpl225_HO"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth4ADCAmpl225Copy_HO = new TH2F("h_mapDepth4ADCAmpl225Copy_HO"," ", 82, -41., 41., 72, 0., 72.);
@@ -7185,7 +7195,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	}// if
 
 	//	if(amplitude >400.) averoccupancy_HB += 1.;
-	if(amplitude < 20.) {
+	if(amplitude < 35.) {
 	  if(mdepth==1) h_mapDepth1ADCAmpl225Copy_HB->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==2) h_mapDepth2ADCAmpl225Copy_HB->Fill(double(ieta), double(iphi), 1.);
 	}// if
@@ -7382,6 +7392,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
       //   //   //   //   //   //   //   //   //  HE       ADCAmpl:
       if(studyADCAmplHist_) {
 	h_ADCAmpl_HE->Fill(amplitude,1.);
+	h_ADCAmplZoom1_HE->Fill(amplitude,1.);
 	if(amplitude < ADCAmplHEMin_  || amplitude > ADCAmplHEMax_) {
 	  if(studyRunDependenceHist_ && flagtodefinebadchannel_==5) ++badchannels[sub-1][mdepth-1][ieta+41][iphi];// 0-82 ; 0-71
 	  if(mdepth==1) h_mapDepth1ADCAmpl225_HE->Fill(double(ieta), double(iphi), 1.);
@@ -7391,7 +7402,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	}// if
 	//	if(amplitude > 700.) averoccupancy_HE += 1.;
 
-	if(amplitude < 20.) {
+	if(amplitude < 40.) {
 	  if(mdepth==1) h_mapDepth1ADCAmpl225Copy_HE->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==2) h_mapDepth2ADCAmpl225Copy_HE->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==3) h_mapDepth3ADCAmpl225Copy_HE->Fill(double(ieta), double(iphi), 1.);
@@ -7905,6 +7916,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
       //   //   //   //   //   //   //   //   //  HF       ADCAmpl:
       if(studyADCAmplHist_) {
 	h_ADCAmpl_HF->Fill(amplitude,1.);
+	h_ADCAmplZoom1_HF->Fill(amplitude,1.);
 	if(amplitude < ADCAmplHFMin_  || amplitude > ADCAmplHFMax_) {
 	  if(studyRunDependenceHist_ && flagtodefinebadchannel_==5) ++badchannels[sub-1][mdepth-1][ieta+41][iphi];// 0-82 ; 0-71
 	  if(mdepth==1) h_mapDepth1ADCAmpl225_HF->Fill(double(ieta), double(iphi), 1.);
@@ -8398,6 +8410,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
       //   //   //   //   //   //   //   //   //  HO       ADCAmpl:
       if(studyADCAmplHist_) {
 	h_ADCAmpl_HO->Fill(amplitude,1.);
+	h_ADCAmplZoom1_HO->Fill(amplitude,1.);
 	h_ADCAmpl_HO_copy->Fill(amplitude,1.);
 	if(amplitude < ADCAmplHOMin_  || amplitude > ADCAmplHOMax_) {
 	  if(studyRunDependenceHist_ && flagtodefinebadchannel_==5) ++badchannels[sub-1][mdepth-1][ieta+41][iphi];// 0-82 ; 0-71
@@ -8406,7 +8419,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
 	}// if
 	//	if(amplitude >2000.) averoccupancy_HO += 1.;
 
-	if(amplitude < 20.) {
+	if(amplitude < 100.) {
 	  if(mdepth==4) h_mapDepth4ADCAmpl225Copy_HO->Fill(double(ieta), double(iphi), 1.);
 	}// if
 	
@@ -9836,6 +9849,7 @@ void VeRawAnalyzer::endJob(){
     h_mapDepth4ADCAmpl225Copy_HO->Write();
     ///////////////////////
     h_ADCAmpl_HF->Write();
+    h_ADCAmplZoom1_HF->Write();
     h_mapDepth1ADCAmpl225_HF->Write();
     h_mapDepth2ADCAmpl225_HF->Write();
     h_mapDepth1ADCAmpl_HF->Write();
@@ -9873,6 +9887,7 @@ void VeRawAnalyzer::endJob(){
 
     ///////////////////////
     h_ADCAmpl_HO->Write();
+    h_ADCAmplZoom1_HO->Write();
     h_ADCAmpl_HO_copy->Write();
     h_mapDepth4ADCAmpl225_HO->Write();
     h_mapDepth4ADCAmpl_HO->Write();
@@ -9897,6 +9912,7 @@ void VeRawAnalyzer::endJob(){
 
     //////////////////////////////////////////    
     h_ADCAmpl_HE->Write();
+    h_ADCAmplZoom1_HE->Write();
     h_mapDepth1ADCAmpl225_HE->Write();
     h_mapDepth2ADCAmpl225_HE->Write();
     h_mapDepth3ADCAmpl225_HE->Write();
