@@ -24,7 +24,7 @@
 #include <TPaveText.h>
 
 using namespace std;
-//inline void HERE(const char *msg) { std::cout << msg << std::endl; }    
+//inline void HERE(const char *msg) { std::cout << msg << std::endl; }    kfitq
 int copyContents(TH1F **hDest, TString hname, TString htitle,
 		 const TH1F *hSrc, int lastBin);
 
@@ -54,7 +54,8 @@ int main(int argc, char *argv[])
     TFile *hfile= new TFile( fname, "READ");
     // Cut [test][sub][depth]
     double Cut0[7][5][5]={{{0.,0.,0.,0.,0.}, {0.,1.,1.0,0.,0.},  {0.,1.,1.,1.,0.},   {0.,0.,0.,0.,1.}, {0.,1.,1.,0.,0.}},  //CapID
-                          {{0.,0.,0.,0.,0.}, {0.,11.,13.,0.,0.}, {0.,25.,6.,30.,0.}, {0.,0.,0.,0.,28.}, {0.,80.,40.,0.,0.}},  //Amplitude   
+	            //old {{0.,0.,0.,0.,0.}, {0.,11.,13.,0.,0.}, {0.,25., 6.,30.,0.}, {0.,0.,0.,0., 28.}, {0.,80.,40.,0.,0.}},  //Amplitude  0,HB,HE,HO,HF depthes 
+                          {{0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.}, {0.,45.,40.,65.,0.}, {0.,0.,0.,0.,100.}, {0.,55.,40.,0.,0.}},  //Amplitude  0,HB,HE,HO,HF depthes 
 			  {{0.,0.,0.,0.,0.}, {0.,3.,3.,0.,0.},   {0.,3.,3.,3.,0.},   {0.,0.,0.,0.,3.}, {0.,2.,2.,0.,0.}}, //Width
 			  {{0.,0.,0.,0.,0.}, {0.,0.4,0.4,0.,0.}, {0.,0.4,0.4,0.4,0.},{0.,0.,0.,0.,0.4},{0.,0.8,0.8,0.,0.}}, //Ratio
 			  {{0.,0.,0.,0.,0.}, {0.,4.7,4.7,0.,0.}, {0.,4.8,4.8,5.0,0.},{0.,0.,0.,0.,4.8},{0.,4.0,4.0,0.,0.}}, //TSn
@@ -85,7 +86,6 @@ int main(int argc, char *argv[])
       cHB->Divide(2,1);
       cHB->cd(1);
       TH1F *LumLum= (TH1F*)hfile->Get("h_lsnumber_per_eachLS");
-
       int MaxLum= LumLum->GetBinContent(LumLum->GetMaximumBin());
       gPad->SetGridy();
       gPad->SetGridx();
@@ -494,7 +494,6 @@ int main(int argc, char *argv[])
       
       MapNumChanFull[5] = (TH2F*) MapNumChanDepth[5][1][1]->Clone(); 
                   
-      int LSnumber = 0;
       
     for (int test=0;test<=5;test++) { //Test: 0, 
         for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
@@ -508,12 +507,13 @@ int main(int argc, char *argv[])
 	        if (sub==3) cONE->cd(k-3);
 	        if (sub==4) cHB->cd(k);            
 		MapNumBadChanDepth[test][sub][k]->Divide(MapNumBadChanDepth[test][sub][k],MapNumChanDepth[test][sub][k], 1, 1, "B");
+
                 for (int x=1;x<=MapNumBadChanFull[test]->GetXaxis()->GetNbins();x++) {
                    for (int y=1;y<=MapNumBadChanFull[test]->GetYaxis()->GetNbins(); y++) {
 	               double ccc1 =  MapNumBadChanDepth[test][sub][k]->GetBinContent(x,y);
 		       MapNumBadChanFull[test]->SetBinContent(x,y,MapNumBadChanFull[test]->GetBinContent(x,y) + ccc1);
                    }//end y
-                }//esnd x
+                }//end x
   		    
                 if (k == 1) MapNumBadChanDepth[test][sub][k]->SetTitle("Depth 1\b");
 		if (k == 2) MapNumBadChanDepth[test][sub][k]->SetTitle("Depth 2\b");
@@ -575,7 +575,9 @@ int main(int argc, char *argv[])
          MapNumBadChanFull[test]->SetTitle("All subdetectors\b");
 	 MapNumBadChanFull[test]->SetXTitle("#eta \b");
          MapNumBadChanFull[test]->SetYTitle("#phi \b");
-         MapNumBadChanFull[test]->SetZTitle("Average estimator \b");
+         if (test==0) MapNumBadChanFull[test]->SetZTitle("Average Nbcs \b");
+         if (test!=0) MapNumBadChanFull[test]->SetZTitle("Average estimator \b");
+	 //	 MapNumBadChanFull[test]->GetZaxis()->SetLabelSize(0.008);
 	 MapNumBadChanFull[test]->SetTitleOffset(0.75,"Z");
 	 MapNumBadChanFull[test]->Draw("COLZ");
          MapNumBadChanFull[test]->GetYaxis()->SetRangeUser(0, 72.);
@@ -644,6 +646,7 @@ int main(int argc, char *argv[])
       HistNumChanDepth[0][4][1] = (TH1F*)hfile->Get("h_runbadrate0_depth1_HF");     
       HistNumChanDepth[0][4][2] = (TH1F*)hfile->Get("h_runbadrate0_depth2_HF");
                                                            
+      HistNumChanFull[0] = (TH1F*) HistNumChanDepth[0][1][1]->Clone();
       
  //+++++++++++++++++++++++++++++  
 // ADC Amplitude   
@@ -688,6 +691,9 @@ int main(int argc, char *argv[])
       HistNumChanDepth[1][4][1] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS6");     
       HistNumChanDepth[1][4][2] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS7");
            
+      HistNumChanFull[1] = (TH1F*) HistNumChanDepth[1][1][1]->Clone();
+      // just initialization of [6] massive for alternative <A> calculation
+      HistNumChanFull[6] = (TH1F*) HistNumChanDepth[1][1][1]->Clone();
 
 //+++++++++++++++++++++++++++++  
 // Width  
@@ -732,6 +738,7 @@ int main(int argc, char *argv[])
       HistNumChanDepth[2][4][1] = (TH1F*)hfile->Get("h_sum0AmplitudeperLS6");     
       HistNumChanDepth[2][4][2] = (TH1F*)hfile->Get("h_sum0AmplitudeperLS7");
       
+      HistNumChanFull[2] = (TH1F*) HistNumChanDepth[2][1][1]->Clone();
 //+++++++++++++++++++++++++++++  
 // Ratio   
 //+++++++++++++++++++++++++++++  
@@ -775,6 +782,7 @@ int main(int argc, char *argv[])
       HistNumChanDepth[3][4][1] = (TH1F*)hfile->Get("h_sum0AmplperLS6");     
       HistNumChanDepth[3][4][2] = (TH1F*)hfile->Get("h_sum0AmplperLS7");
       
+      HistNumChanFull[3] = (TH1F*) HistNumChanDepth[3][1][1]->Clone();
 //+++++++++++++++++++++++++++++  
 // Tmean   
 //+++++++++++++++++++++++++++++  
@@ -818,6 +826,7 @@ int main(int argc, char *argv[])
       HistNumChanDepth[4][4][1] = (TH1F*)hfile->Get("h_sum0TSmeanAperLS6");     
       HistNumChanDepth[4][4][2] = (TH1F*)hfile->Get("h_sum0TSmeanAperLS7");
       
+      HistNumChanFull[4] = (TH1F*) HistNumChanDepth[4][1][1]->Clone();
 //+++++++++++++++++++++++++++++  
 // Tmax   
 //+++++++++++++++++++++++++++++  
@@ -860,31 +869,45 @@ int main(int argc, char *argv[])
       
       HistNumChanDepth[5][4][1] = (TH1F*)hfile->Get("h_sum0TSmaxAperLS6");     
       HistNumChanDepth[5][4][2] = (TH1F*)hfile->Get("h_sum0TSmaxAperLS7");
+
+      HistNumChanFull[5] = (TH1F*) HistNumChanDepth[5][1][1]->Clone();
                   
-      LSnumber = 0;
       
     for (int test=0;test<=5;test++) { //Test: 0, 
         for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-            if (sub==1) cHB->Divide(2,1);
+            if (sub==1) cHE->Divide(2,1);
             if (sub==2) cHE->Divide(3,1);
-            if (sub==3) cONE->Divide(1,1);
-            if (sub==4) cHB->Divide(2,1);
+            if (sub==3) cHB->Divide(1,1);
+            if (sub==4) cHE->Divide(2,1);
             for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
-                if (sub==1) cHB->cd(k); 
+                if (sub==1) cHE->cd(k); 
                 if (sub==2) cHE->cd(k);
-	        if (sub==3) cONE->cd(k-3);
-	        if (sub==4) cHB->cd(k);
+	        if (sub==3) cHB->cd(k-3);
+	        if (sub==4) cHE->cd(k);
 		gPad->SetGridy();
                 gPad->SetGridx();
 //                gPad->SetLogy();      
+		
+		if(sub==1 && k== 1 ) {} else {
+		  // use "else" because ...Full[test] are filled by estimastor for sub==1 && k== 1 at initialization of ...Full[test] variables
+		  for (int x=1;x<=HistNumBadChanFull[test]->GetXaxis()->GetNbins();x++) {
+		    double ccc1 =  HistNumBadChanDepth[test][sub][k]->GetBinContent(x);
+		    HistNumBadChanFull[test]->SetBinContent(x,HistNumBadChanFull[test]->GetBinContent(x) + ccc1);
+		    double ccc2 =  HistNumChanDepth[test][sub][k]->GetBinContent(x);
+		    HistNumChanFull[test]->SetBinContent(x,HistNumChanFull[test]->GetBinContent(x) + ccc2);
+		  }}//end x
 
+		// !!!!!!     change the sense of HistNumBadChanDepth: now it's averaged values(estimators)
 	        HistNumBadChanDepth[test][sub][k]->Divide(HistNumBadChanDepth[test][sub][k],HistNumChanDepth[test][sub][k], 1, 1, "B");	
+		//		int myMaxLum= HistNumBadChanDepth[test][sub][k]->GetBinContent(HistNumBadChanDepth[test][sub][k]->GetMaximumBin());
+		//		cout<<"********************>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>     myMaxLum = "<<myMaxLum<<"        MaxLum = "<<MaxLum<<endl;
+		HistNumBadChanDepth[test][sub][k]->GetXaxis()->SetRangeUser(0, MaxLum);
 
-                for (int x=1;x<=HistNumBadChanFull[test]->GetXaxis()->GetNbins();x++) {
-	               double ccc1 =  HistNumBadChanDepth[test][sub][k]->GetBinContent(x);
-		       HistNumBadChanFull[test]->SetBinContent(x,HistNumBadChanFull[test]->GetBinContent(x) + ccc1);
-                }//esnd x
 
+		//   //    //   //   //   //   //   //   //   //   //   //   //   //   //   //   //  //
+		HistNumBadChanDepth[test][sub][k]->SetMarkerStyle(20);
+		HistNumBadChanDepth[test][sub][k]->SetMarkerSize(0.4);
+		HistNumBadChanDepth[test][sub][k]->GetYaxis()->SetLabelSize(0.04);
                 if (k == 1) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 1\b");
 		if (k == 2) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 2\b");
 		if (k == 3) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 3\b");
@@ -892,115 +915,172 @@ int main(int argc, char *argv[])
 		HistNumBadChanDepth[test][sub][k]->SetXTitle("LS \b");
 		if (test == 0) HistNumBadChanDepth[test][sub][k]->SetYTitle("<Number of bad channels> \b");
 		if (test != 0) HistNumBadChanDepth[test][sub][k]->SetYTitle("Averaged estimator \b");
-                if (MaxLum<=1000){
-		   HistNumBadChanDepth[test][sub][k]->SetMarkerStyle(20);
-                   HistNumBadChanDepth[test][sub][k]->SetMarkerSize(0.5);	
-		   HistNumBadChanDepth[test][sub][k]->SetMarkerColor(2);
-                   HistNumBadChanDepth[test][sub][k]->SetLineColor(0);
-                   HistNumBadChanDepth[test][sub][k]->GetXaxis()->SetRangeUser(0, MaxLum);
-		   HistNumBadChanDepth[test][sub][k]->Draw("P");
-		}
-		else{
-                   HistNumBadChanDepth[test][sub][k]->SetLineColor(2);
-                   HistNumBadChanDepth[test][sub][k]->GetXaxis()->SetRangeUser(0, MaxLum);
-		   HistNumBadChanDepth[test][sub][k]->Draw("L");
-		}	
-	      float min_x[] = {0,10000};
-              float min_y[] = {(float)(Cut0[test][sub][k]),(float)(Cut0[test][sub][k])};
-              TGraph* MIN = new TGraph(2, min_x, min_y);
-              MIN->SetLineStyle(2);
-              MIN->SetLineColor(5);
-              MIN->SetLineWidth(2 + 100*100);
-              MIN->SetFillStyle(3005);
-              MIN->SetFillColor(5);
-              MIN->Draw("L");
-/*	       
-	        if (HistNumChanDepth[test][sub][k]->IsA()->InheritsFrom("TH1F"))
-	            HistCutNumBadChanDepth[test][sub][k]->Divide(HistCutNumBadChanDepth[test][sub][k],HistNumChanDepth[test][sub][k], 1, 1, "B");
-                HistCutNumBadChanDepth[test][sub][k]->SetMarkerStyle(20);
-                HistCutNumBadChanDepth[test][sub][k]->SetMarkerSize(0.5);		
-                HistCutNumBadChanDepth[test][sub][k]->SetMarkerColor(2);
-                HistCutNumBadChanDepth[test][sub][k]->SetLineColor(0);
-//		HistCutNumBadChanDepth[test][sub][k]->Draw("SameE");
-*/				
-                int nx = HistNumBadChanDepth[test][sub][k]->GetXaxis()->GetNbins();
-                if ((test==0)&&(sub==1)&&(k==1)) {
-		   for (int i=1;i<=nx;i++) {
-//	               double ccc1 =  HistNumBadChanDepth[test][sub][k]->GetBinContent(i);
-	               if(HistNumBadChanDepth[test][sub][k]->GetBinContent(i)>0) {
-//	                  cout<<"depth1_HB iLS = "<<i<<" <Nbcs> per iLS= "<<ccc1<<endl;
-		          LSnumber+=1;
-	               }
-	           }
-               } 
-	       	if (sub==1) { cHB->Modified();} 
+		HistNumBadChanDepth[test][sub][k]->SetMarkerColor(2);
+		HistNumBadChanDepth[test][sub][k]->SetLineColor(0);
+		gPad->SetGridx();
+		HistNumBadChanDepth[test][sub][k]->Draw("Error");
+		/*
+		  if (k == 1) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 1\b");
+		  if (k == 2) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 2\b");
+		  if (k == 3) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 3\b");
+		  if (k == 4) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 4\b");
+		  HistNumBadChanDepth[test][sub][k]->SetXTitle("LS \b");
+		  if (test == 0) HistNumBadChanDepth[test][sub][k]->SetYTitle("<Number of bad channels> \b");
+		  if (test != 0) HistNumBadChanDepth[test][sub][k]->SetYTitle("Averaged estimator \b");
+		  
+		  if (MaxLum<=1000){
+		  HistNumBadChanDepth[test][sub][k]->SetMarkerStyle(20);
+		  HistNumBadChanDepth[test][sub][k]->SetMarkerSize(0.5);	
+		  HistNumBadChanDepth[test][sub][k]->SetMarkerColor(2);
+		  HistNumBadChanDepth[test][sub][k]->SetLineColor(0);
+		  HistNumBadChanDepth[test][sub][k]->GetXaxis()->SetRangeUser(0, MaxLum);
+		  HistNumBadChanDepth[test][sub][k]->Draw("P");
+		  }
+		  else{
+		  HistNumBadChanDepth[test][sub][k]->SetLineColor(2);
+		  HistNumBadChanDepth[test][sub][k]->GetXaxis()->SetRangeUser(0, MaxLum);
+		  HistNumBadChanDepth[test][sub][k]->Draw("L");
+		  }	
+		*/
+		float min_x[] = {0,10000};
+		float min_y[] = {(float)(Cut0[test][sub][k]),(float)(Cut0[test][sub][k])};
+		TGraph* MIN = new TGraph(2, min_x, min_y);
+		MIN->SetLineStyle(2);
+		MIN->SetLineColor(5);
+		MIN->SetLineWidth(2 + 100*100);
+		MIN->SetFillStyle(3005);
+		MIN->SetFillColor(5);
+		gPad->SetGridy();
+                gPad->SetGridx();
+		MIN->Draw("L");
+
+ 
+	       	if (sub==1) { cHE->Modified();} 
                 if (sub==2) { cHE->Modified();}
-                if (sub==3) { cONE->Modified();}
-                if (sub==4) { cHB->Modified();} 
-	    }    
+                if (sub==3) { cHB->Modified();}
+                if (sub==4) { cHE->Modified();} 
+
+	    }    // k loop
+
 	    if (test==0){ 
-	        if (sub==1) {cHB->Print("HistNBCMNHB.png"); cHB->Clear();} 
+	        if (sub==1) {cHE->Print("HistNBCMNHB.png"); cHE->Clear();} 
                 if (sub==2) {cHE->Print("HistNBCMNHE.png"); cHE->Clear();}
-                if (sub==3) {cONE->Print("HistNBCMNHO.png"); cONE->Clear();}
-                if (sub==4) {cHB->Print("HistNBCMNHF.png"); cHB->Clear();}  
+                if (sub==3) {cHB->Print("HistNBCMNHO.png"); cHB->Clear();}
+                if (sub==4) {cHE->Print("HistNBCMNHF.png"); cHE->Clear();}  
 	    } 
 	    
 	    if (test==1){ 
-	        if (sub==1) {cHB->Print("HistADCamplHB.png"); cHB->Clear();} 
+	        if (sub==1) {cHE->Print("HistADCamplHB.png"); cHE->Clear();} 
                 if (sub==2) {cHE->Print("HistADCamplHE.png"); cHE->Clear();}
-                if (sub==3) {cONE->Print("HistADCamplHO.png"); cONE->Clear();}
-                if (sub==4) {cHB->Print("HistADCamplHF.png"); cHB->Clear();}  
+                if (sub==3) {cHB->Print("HistADCamplHO.png"); cHB->Clear();}
+                if (sub==4) {cHE->Print("HistADCamplHF.png"); cHE->Clear();}  
 	    } 
 	    if (test==2){ 
-	        if (sub==1) {cHB->Print("HistWidthHB.png"); cHB->Clear();} 
+	        if (sub==1) {cHE->Print("HistWidthHB.png"); cHE->Clear();} 
                 if (sub==2) {cHE->Print("HistWidthHE.png"); cHE->Clear();}
-                if (sub==3) {cONE->Print("HistWidthHO.png"); cONE->Clear();}
-                if (sub==4) {cHB->Print("HistWidthHF.png"); cHB->Clear();}  
+                if (sub==3) {cHB->Print("HistWidthHO.png"); cHB->Clear();}
+                if (sub==4) {cHE->Print("HistWidthHF.png"); cHE->Clear();}  
 	    } 
 	    if (test==3){ 
-	        if (sub==1) {cHB->Print("HistRatioHB.png"); cHB->Clear();} 
+	        if (sub==1) {cHE->Print("HistRatioHB.png"); cHE->Clear();} 
                 if (sub==2) {cHE->Print("HistRatioHE.png"); cHE->Clear();}
-                if (sub==3) {cONE->Print("HistRatioHO.png"); cONE->Clear();}
-                if (sub==4) {cHB->Print("HistRatioHF.png"); cHB->Clear();}  
+                if (sub==3) {cHB->Print("HistRatioHO.png"); cHB->Clear();}
+                if (sub==4) {cHE->Print("HistRatioHF.png"); cHE->Clear();}  
 	    } 
 	    if (test==4){ 
-	        if (sub==1) {cHB->Print("HistTmeanHB.png"); cHB->Clear();} 
+	        if (sub==1) {cHE->Print("HistTmeanHB.png"); cHE->Clear();} 
                 if (sub==2) {cHE->Print("HistTmeanHE.png"); cHE->Clear();}
-                if (sub==3) {cONE->Print("HistTmeanHO.png"); cONE->Clear();}
-                if (sub==4) {cHB->Print("HistTmeanHF.png"); cHB->Clear();}  
+                if (sub==3) {cHB->Print("HistTmeanHO.png"); cHB->Clear();}
+                if (sub==4) {cHE->Print("HistTmeanHF.png"); cHE->Clear();}  
 	    } 
 	    if (test==5){ 
-	        if (sub==1) {cHB->Print("HistTmaxHB.png"); cHB->Clear();} 
+	        if (sub==1) {cHE->Print("HistTmaxHB.png"); cHE->Clear();} 
                 if (sub==2) {cHE->Print("HistTmaxHE.png"); cHE->Clear();}
-                if (sub==3) {cONE->Print("HistTmaxHO.png"); cONE->Clear();}
-                if (sub==4) {cHB->Print("HistTmaxHF.png"); cHB->Clear();}  
-	    } 	    	   	                  
-         }// end sub 
-         cONE->Divide(1,1);
-	 cONE->cd(1);	 
-	 HistNumBadChanFull[test]->SetMarkerStyle(20);
-         HistNumBadChanFull[test]->SetMarkerSize(0.8);
-	 HistNumBadChanFull[test]->SetTitle("Averaged estimator for whole Hcal \b");
-	 HistNumBadChanFull[test]->SetXTitle("LS \b");
-	 if (test == 0) HistNumBadChanFull[test]->SetYTitle("<Number of bad channels> \b");
-	 if (test != 0) HistNumBadChanFull[test]->SetYTitle("Averaged estimator \b");
-         if (MaxLum<=1000){
-	    HistNumBadChanFull[test]->SetMarkerColor(1);
-            HistNumBadChanFull[test]->SetLineColor(0);
-            HistNumBadChanFull[test]->Draw("P"); 
-	 }
-	 else {
-            HistNumBadChanFull[test]->SetLineColor(1);
-            HistNumBadChanFull[test]->Draw("L"); 
-	 }	  
-         if (test==0) {cONE->Print("HistCapID.png"); cONE->Clear();}
-         if (test==1) {cONE->Print("HistADCAmpl.png"); cONE->Clear();}
-         if (test==2) {cONE->Print("HistWidth.png"); cONE->Clear();}
-         if (test==3) {cONE->Print("HistRatio.png"); cONE->Clear();}
-	 if (test==4) {cONE->Print("HistTmean.png"); cONE->Clear();}
-	 if (test==5) {cONE->Print("HistTmax.png"); cONE->Clear();}	
-		      
-     }//end test	          
+                if (sub==3) {cHB->Print("HistTmaxHO.png"); cHB->Clear();}
+                if (sub==4) {cHE->Print("HistTmaxHF.png"); cHE->Clear();}  
+	    } 
+	}// end sub 
+	/////////////////////////////////////////////
+	if(test==1){
+	  for (int x=1;x<=HistNumChanFull[6]->GetXaxis()->GetNbins();x++) {
+	    
+	    HistNumChanFull[6]->SetBinContent(x,0.0 );
+	    for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
+	      for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
+		double ccc1 =  HistNumBadChanDepth[test][sub][k]->GetBinContent(x);
+		HistNumChanFull[6]->SetBinContent(x,HistNumChanFull[6]->GetBinContent(x) + ccc1);
+	      }
+	    }
+	    HistNumChanFull[6]->SetBinContent(x, (HistNumChanFull[6]->GetBinContent(x))/8.   );
+	  }
+	}
+	////////////  //////   //////  //////  ////// //////
+	if (test!=1) {cHB->Divide(1,1);cHB->cd(1);}else {cHE->Divide(2,1);cHE->cd(1);}
+	HistNumBadChanFull[test]->Divide(HistNumBadChanFull[test],HistNumChanFull[test], 1, 1, "B");	
+	TH1F* kfitq = new TH1F("kfitq","", MaxLum, 1., MaxLum+1.);
+	int nx = kfitq->GetXaxis()->GetNbins();
+	for (int i=1;i<=nx;i++) {
+	  double ccc1 =  HistNumBadChanFull[test]->GetBinContent(i);
+	  if(ccc1>0.) kfitq->Fill(float(i), ccc1);
+	}
+	kfitq->SetMarkerStyle(20);
+	kfitq->SetMarkerSize(0.4);
+	kfitq->GetYaxis()->SetLabelSize(0.04);
+	if(test == 0) kfitq->SetTitle("Average Nbch for whole Hcal \b");
+	if(test != 0) kfitq->SetTitle("Averaged estimator for whole Hcal \b");
+	kfitq->SetXTitle("LS \b");
+	if (test == 0) kfitq->SetYTitle("<Number of bad channels> \b");
+	if (test != 0) kfitq->SetYTitle("Averaged estimator \b");
+	kfitq->SetMarkerColor(2);
+	kfitq->SetLineColor(0);
+	gPad->SetGridx();
+	kfitq->Draw("Error");
+	/* 
+	   HistNumBadChanFull[test]->SetMarkerStyle(20);
+	   HistNumBadChanFull[test]->SetMarkerSize(0.8);
+	   HistNumBadChanFull[test]->SetTitle("Averaged estimator for whole Hcal \b");
+	   HistNumBadChanFull[test]->SetXTitle("LS \b");
+	   if (test == 0) HistNumBadChanFull[test]->SetYTitle("<Number of bad channels> \b");
+	   if (test != 0) HistNumBadChanFull[test]->SetYTitle("Averaged estimator \b");
+	   if (MaxLum<=1000){
+	   HistNumBadChanFull[test]->SetMarkerColor(1);
+	   HistNumBadChanFull[test]->SetLineColor(0);
+	   HistNumBadChanFull[test]->Draw("P"); 
+	   }
+	   else {
+	   HistNumBadChanFull[test]->SetLineColor(1);
+	   HistNumBadChanFull[test]->Draw("L"); 
+	   }
+	*/
+	if(test == 1) {
+	  cHE->cd(2);
+	  TH1F* lpuio = new TH1F("lpuio","", MaxLum, 1., MaxLum+1.);
+	  int nx = lpuio->GetXaxis()->GetNbins();
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  HistNumChanFull[6]->GetBinContent(i);
+	    if(ccc1>0.) lpuio->Fill(float(i), ccc1);
+	  }
+	  lpuio->SetMarkerStyle(20);
+	  lpuio->SetMarkerSize(0.4);
+	  lpuio->GetYaxis()->SetLabelSize(0.04);
+	  lpuio->SetTitle("Mean of Averaged Amplitudes over all Hcal sub-detectors \b");
+	  lpuio->SetXTitle("LS \b");
+	  lpuio->SetYTitle("Mean of Averaged estimator \b");
+	  lpuio->SetMarkerColor(2);
+	  lpuio->SetLineColor(0);
+	  gPad->SetGridx();
+	  lpuio->Draw("Error");
+	}
+	if (test==0) {cHB->Print("HistCapID.png"); cHB->Clear();}
+	if (test==1) {cHE->Print("HistADCAmpl.png"); cHE->Clear();}
+	if (test==2) {cHB->Print("HistWidth.png"); cHB->Clear();}
+	if (test==3) {cHB->Print("HistRatio.png"); cHB->Clear();}
+	if (test==4) {cHB->Print("HistTmean.png"); cHB->Clear();}
+	if (test==5) {cHB->Print("HistTmax.png"); cHB->Clear();}
+	
+    // clean-up
+    if (kfitq) delete kfitq;
+    }//end test	          
       
 //================================================================================================================================ 
  
@@ -2093,6 +2173,7 @@ int main(int argc, char *argv[])
       flagErrAB_HF[0]=0;// If we have the expected number of histograms, set the flag
       double sumdelta = 0.;
       int nnndelta = 0;
+      std::cout << "********   GetNbinsX  = " << hV[0]->GetNbinsX() <<std::endl;
       for (int ibin=1; ibin<=hV[0]->GetNbinsX(); ibin++) {
 	double delta = 0.; 
 	double maxdelta = 0.; 
@@ -2104,6 +2185,7 @@ int main(int argc, char *argv[])
 	    if(delta > maxdelta) maxdelta=delta;
 	  }//for
 	}//for
+	//	std::cout << "*****      ibin = " << ibin << " nnndelta= " << nnndelta << " maxdelta= " << maxdelta <<std::endl;
 	if(maxdelta> 0.) {
 	  diff->Fill(maxdelta);
 	  sumdelta+=maxdelta;
@@ -2112,7 +2194,7 @@ int main(int argc, char *argv[])
       }//for ibin
       //      avedelta_HF = sumdelta/hV[0]->GetNbinsX();
       avedelta_HF = sumdelta/nnndelta;
-      std::cout << "******************>>>>>>      ErrA_HF:  avedelta_HF = " << avedelta_HF <<std::endl;
+      //      std::cout << "******************>>>>>>      ErrA_HF:  avedelta_HF = " << avedelta_HF << " Npoints for comparison= " << nnndelta <<std::endl;
       if (avedelta_HF>2.4 || (avedelta_HF<0.8 && avedelta_HF>0.)) {
 	flagErrAB_HF[0]=1;
       }//if
@@ -2130,17 +2212,12 @@ int main(int argc, char *argv[])
     cHB->Print("HistErrA_HF.png");
     cHB->Clear();
     /////////////////////////////////////////////////////////////////////////
-    
     // clean-up
     if (diff) delete diff;
     for (unsigned int i=0; i<hV.size(); i++) delete hV[i];
   } // ErrorA in HF
-
-
   ////////////////////////////////////////////////////////// errors B:
   /////////////////////////
-
-
   { // errors type B
     const int specCountB=4;
     const TString hnames[specCountB][2] =
@@ -2150,11 +2227,9 @@ int main(int argc, char *argv[])
 	{ "h_sumErrorBperLS7", "h_sum0ErrorBperLS7" } };
 
     for (int depth=1; depth<=2; depth++) {
-
       cHB->Clear();
       cHB->Divide(2,1);
       cHB->cd(1);
-
       TH1F *hRate2orig= NULL;
       TH2F *h2Cefz6= NULL;
       TString hname1= hnames[2*depth-2][0];
@@ -2193,11 +2268,9 @@ int main(int argc, char *argv[])
 	h2Cefz6->SetMarkerColor(2);
 	h2Cefz6->SetLineColor(2);
 	h2Cefz6->Draw("COLZ");
-
 	delete twod1;
 	delete twod0;
       } // histos ok
-
       cHB->cd(2);
       hname1=hnames[2*depth-1][0];
       hname0=hnames[2*depth-1][1];
@@ -2233,7 +2306,6 @@ int main(int argc, char *argv[])
 	  }
 	}
 	else hRate2=hRate2orig;
-
 	hRate2->SetTitle(Form("Depth %d \b",depth));
 	hRate2->SetMarkerStyle(20);
 	hRate2->SetMarkerSize(0.8);
@@ -2242,8 +2314,6 @@ int main(int argc, char *argv[])
 	hRate2->SetMarkerColor(2);
 	hRate2->SetLineColor(0);
 	hRate2->Draw("Error");
-
-
 	if(LSofFirstErrB_HF == -1) {
 	  int nx = hRate2->GetXaxis()->GetNbins();
 	  for (int i=1;i<=nx;i++) {
@@ -2255,13 +2325,10 @@ int main(int argc, char *argv[])
 	    }
 	  }
 	}	
-	
-
 	delete h1;
 	delete h0;
 	if (hRate2!=hRate2orig) { delete hRate2orig; hRate2orig=hRate2; }
       }
-
       cHB->Update();
       cHB->Print(Form("HistErrB_HF_%d.png",depth));
       cHB->Clear();
@@ -2270,7 +2337,913 @@ int main(int argc, char *argv[])
     }
   } // ErrorsB in HF
 
+  /////////////////  Cross-check A-errors & Occupancies:
 
+
+
+//===============================================================================  err A HB
+/// errA with average Amplitudes 
+// For  2D and  1D plots with Amplitude. Produces ChkErrA_HBx.png
+
+  for (int depth=1; depth<=2; depth++) {
+    TH2F *h2Ceff= NULL;
+    TH2F *h2Diffe= NULL;
+    //    TH1F* h1diffADCAmpl= NULL;
+    TH2F *h3Ceff= NULL;
+    
+    cHE->Clear();
+    cHE->Divide(3,1);
+    
+    cHE->cd(1);
+    // h_mapDepth1ADCAmpl_HB div h_mapDepth1_HB
+    TString hname1= Form("h_mapDepth%dADCAmpl_HB",depth);
+    TString hname0= Form("h_mapDepth%d_HB",depth);
+    TH2F *twod1= (TH2F*)hfile->Get(hname1);
+    TH2F *twod0= (TH2F*)hfile->Get(hname0);
+    if (!twod1 || !twod0) {
+      TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+      ptext->AddText("Missing histo");
+      std::cout << "specHB test: failed to load " << hname1 << " and/or "
+		<< hname0 << "\n";
+      if (!twod1) ptext->AddText(hname1);
+      if (!twod0) ptext->AddText(hname0);
+      ptext->Draw();
+      continue;
+    }
+    else {
+    // To IDENTIFY: see color different bins in eta-phi space
+      h2Ceff = (TH2F*)twod1->Clone(Form("Ceff_HB%d",depth));
+      h2Ceff->SetTitle(Form("HB Depth %d. (No cut) \b",depth));
+      h2Ceff->Divide(twod1,twod0, 1, 1, "B");
+
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h2Ceff->SetMarkerStyle(20);
+      h2Ceff->SetMarkerSize(0.4);
+      //h2Ceff->GetZaxis()->SetLabelSize(0.08);
+      h2Ceff->SetXTitle("#eta \b");
+      h2Ceff->SetYTitle("#phi \b");
+      h2Ceff->SetZTitle("h_mapDepth1ADCAmpl_HB \b");
+      h2Ceff->SetMarkerColor(2);
+      h2Ceff->SetLineColor(2);
+      h2Ceff->Draw("COLZ");
+    }
+
+    cHE->cd(2);
+    ///////////////////////////////////////
+    if (h2Ceff) {
+      // TO IDENTIFY: see red bins in eta-phi space 
+      h2Diffe = (TH2F*)h2Ceff->Clone(Form("Diffe_Depth%d_HB",depth));
+      h2Diffe->SetTitle(Form("HB Depth %d. Cut avg(ADCAmpl) > 25 \b",depth));
+      int nx = h2Ceff->GetXaxis()->GetNbins();
+      int ny = h2Ceff->GetYaxis()->GetNbins();
+      for (int i=1;i<=nx;i++) {
+	for (int j=1;j<=ny;j++) {
+	  double ccc1 =  h2Ceff->GetBinContent(i,j)   ;
+	  h2Diffe->SetBinContent(i,j,0.);
+	  if(ccc1 > 25.)  h2Diffe->SetBinContent(i,j,ccc1);
+	}
+      }
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h2Diffe->SetMarkerStyle(20);
+      h2Diffe->SetMarkerSize(0.4);
+      //h2Diffe->GetZaxis()->SetLabelSize(0.08);
+      h2Diffe->SetXTitle("#eta \b");
+      h2Diffe->SetYTitle("#phi \b");
+      h2Diffe->SetZTitle("<ADCAmpl> bigger 25.- HB Depth1 \b");
+      h2Diffe->SetMarkerColor(2);
+      h2Diffe->SetLineColor(2);
+      h2Diffe->Draw("COLZ");
+    }
+
+    cHE->cd(3);
+    TString hname3= Form("h_mapDepth%dADCAmpl225Copy_HB",depth);
+    TH2F *twod3= (TH2F*)hfile->Get(hname3);
+    if (!twod3 || !twod0) {
+      TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+      ptext->AddText("Missing histo");
+      std::cout << "specHB test: failed to load " << hname3 << " and/or "
+		<< hname0 << "\n";
+      if (!twod3) ptext->AddText(hname3);
+      if (!twod0) ptext->AddText(hname0);
+      ptext->Draw();
+      continue;
+    }
+    else {
+    // To IDENTIFY: see color different bins in eta-phi space
+      h3Ceff = (TH2F*)twod3->Clone(Form("CeffA_HB%d",depth));
+      h3Ceff->SetTitle(Form("HB Depth %d. \b",depth));
+      h3Ceff->Divide(twod3,twod0, 1, 1, "B");
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h3Ceff->SetMarkerStyle(20);
+      h3Ceff->SetMarkerSize(0.4);
+//      h3Ceff->GetZaxis()->SetLabelSize(0.08);
+      h3Ceff->SetXTitle("#eta \b");
+      h3Ceff->SetYTitle("#phi \b");
+      h3Ceff->SetZTitle("HB channel Amplitude \b");
+      h3Ceff->SetMarkerColor(2);
+      h3Ceff->SetLineColor(2);
+      h3Ceff->Draw("COLZ");
+    }
+
+    cHE->Update();
+    cHE->Print(Form("ChkErrA_HB%d.png",depth));
+    cHE->Clear();
+
+    if (h2Ceff) delete h2Ceff;
+    if (h2Diffe) delete h2Diffe;
+    //    if (h1diffADCAmpl) delete h1diffADCAmpl;
+    //  if (twod0) delete twod0;// do not delete - sometimes causes trouble later
+    if (twod1) delete twod1;
+    if (twod3) delete twod3;
+    if (h3Ceff) delete h3Ceff;
+  } // depth
+
+//===============================================================================  err A HE
+/// errA with average Amplitudes
+// For  2D and  1D plots with Amplitude. Produces ChkErrA_HEx.png
+
+  for (int depth=1; depth<=3; depth++) {
+    TH2F *h2Ceff= NULL;
+    TH2F *h2Diffe= NULL;
+    //    TH1F* h1diffADCAmpl= NULL;
+    TH2F *h3Ceff= NULL;
+    
+    cHE->Clear();
+    cHE->Divide(3,1);
+    
+    cHE->cd(1);
+    // h_mapDepth1ADCAmpl_HE div h_mapDepth1_HE
+    TString hname1= Form("h_mapDepth%dADCAmpl_HE",depth);
+    TString hname0= Form("h_mapDepth%d_HE",depth);
+    TH2F *twod1= (TH2F*)hfile->Get(hname1);
+    TH2F *twod0= (TH2F*)hfile->Get(hname0);
+    if (!twod1 || !twod0) {
+      TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+      ptext->AddText("Missing histo");
+      std::cout << "specHE test: failed to load " << hname1 << " and/or "
+		<< hname0 << "\n";
+      if (!twod1) ptext->AddText(hname1);
+      if (!twod0) ptext->AddText(hname0);
+      ptext->Draw();
+      continue;
+    }
+    else {
+    // To IDENTIFY: see color different bins in eta-phi space
+      h2Ceff = (TH2F*)twod1->Clone(Form("Ceff_HE%d",depth));
+      h2Ceff->SetTitle(Form("HE Depth %d. (No cut) \b",depth));
+      h2Ceff->Divide(twod1,twod0, 1, 1, "B");
+
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h2Ceff->SetMarkerStyle(20);
+      h2Ceff->SetMarkerSize(0.4);
+      //h2Ceff->GetZaxis()->SetLabelSize(0.08);
+      h2Ceff->SetXTitle("#eta \b");
+      h2Ceff->SetYTitle("#phi \b");
+      h2Ceff->SetZTitle("h_mapDepth1ADCAmpl_HE \b");
+      h2Ceff->SetMarkerColor(2);
+      h2Ceff->SetLineColor(2);
+      h2Ceff->Draw("COLZ");
+    }
+
+    cHE->cd(2);
+    ///////////////////////////////////////
+    if (h2Ceff) {
+      // TO IDENTIFY: see red bins in eta-phi space 
+      h2Diffe = (TH2F*)h2Ceff->Clone(Form("Diffe_Depth%d_HE",depth));
+      h2Diffe->SetTitle(Form("HE Depth %d. Cut avg(ADCAmpl) > 33 \b",depth));
+      int nx = h2Ceff->GetXaxis()->GetNbins();
+      int ny = h2Ceff->GetYaxis()->GetNbins();
+      for (int i=1;i<=nx;i++) {
+	for (int j=1;j<=ny;j++) {
+	  double ccc1 =  h2Ceff->GetBinContent(i,j)   ;
+	  h2Diffe->SetBinContent(i,j,0.);
+	  if(ccc1 > 20.)  h2Diffe->SetBinContent(i,j,ccc1);
+	}
+      }
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h2Diffe->SetMarkerStyle(20);
+      h2Diffe->SetMarkerSize(0.4);
+      //h2Diffe->GetZaxis()->SetLabelSize(0.08);
+      h2Diffe->SetXTitle("#eta \b");
+      h2Diffe->SetYTitle("#phi \b");
+      h2Diffe->SetZTitle("<ADCAmpl> bigger 33.- HE Depth1 \b");
+      h2Diffe->SetMarkerColor(2);
+      h2Diffe->SetLineColor(2);
+      h2Diffe->Draw("COLZ");
+    }
+
+    cHE->cd(3);
+    TString hname3= Form("h_mapDepth%dADCAmpl225Copy_HE",depth);
+    TH2F *twod3= (TH2F*)hfile->Get(hname3);
+    if (!twod3 || !twod0) {
+      TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+      ptext->AddText("Missing histo");
+      std::cout << "specHE test: failed to load " << hname3 << " and/or "
+		<< hname0 << "\n";
+      if (!twod3) ptext->AddText(hname3);
+      if (!twod0) ptext->AddText(hname0);
+      ptext->Draw();
+      continue;
+    }
+    else {
+    // To IDENTIFY: see color different bins in eta-phi space
+      h3Ceff = (TH2F*)twod3->Clone(Form("CeffA_HE%d",depth));
+      h3Ceff->SetTitle(Form("HE Depth %d. \b",depth));
+      h3Ceff->Divide(twod3,twod0, 1, 1, "B");
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h3Ceff->SetMarkerStyle(20);
+      h3Ceff->SetMarkerSize(0.4);
+//      h3Ceff->GetZaxis()->SetLabelSize(0.08);
+      h3Ceff->SetXTitle("#eta \b");
+      h3Ceff->SetYTitle("#phi \b");
+      h3Ceff->SetZTitle("HE channel Amplitude \b");
+      h3Ceff->SetMarkerColor(2);
+      h3Ceff->SetLineColor(2);
+      h3Ceff->Draw("COLZ");
+    }
+
+    cHE->Update();
+    cHE->Print(Form("ChkErrA_HE%d.png",depth));
+    cHE->Clear();
+
+    if (h2Ceff) delete h2Ceff;
+    if (h2Diffe) delete h2Diffe;
+    //    if (h1diffADCAmpl) delete h1diffADCAmpl;
+    //  if (twod0) delete twod0;// do not delete - sometimes causes trouble later
+    if (twod1) delete twod1;
+    if (twod3) delete twod3;
+    if (h3Ceff) delete h3Ceff;
+  } // depth
+
+//===============================================================================  err A HO
+/// errA with average Amplitudes
+// For  2D and  1D plots with Amplitude. Produces ChkErrA_HOx.png
+
+  for (int depth=4; depth<=4; depth++) {
+    TH2F *h2Ceff= NULL;
+    TH2F *h2Diffe= NULL;
+    //    TH1F* h1diffADCAmpl= NULL;
+    TH2F *h3Ceff= NULL;
+    
+    cHE->Clear();
+    cHE->Divide(3,1);
+    
+    cHE->cd(1);
+    // h_mapDepth1ADCAmpl_HO div h_mapDepth1_HO
+    TString hname1= Form("h_mapDepth%dADCAmpl_HO",depth);
+    TString hname0= Form("h_mapDepth%d_HO",depth);
+    TH2F *twod1= (TH2F*)hfile->Get(hname1);
+    TH2F *twod0= (TH2F*)hfile->Get(hname0);
+    if (!twod1 || !twod0) {
+      TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+      ptext->AddText("Missing histo");
+      std::cout << "specHO test: failed to load " << hname1 << " and/or "
+		<< hname0 << "\n";
+      if (!twod1) ptext->AddText(hname1);
+      if (!twod0) ptext->AddText(hname0);
+      ptext->Draw();
+      continue;
+    }
+    else {
+    // To IDENTIFY: see color different bins in eta-phi space
+      h2Ceff = (TH2F*)twod1->Clone(Form("Ceff_HO%d",depth));
+      h2Ceff->SetTitle(Form("HO Depth %d. (No cut) \b",depth));
+      h2Ceff->Divide(twod1,twod0, 1, 1, "B");
+
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h2Ceff->SetMarkerStyle(20);
+      h2Ceff->SetMarkerSize(0.4);
+      //h2Ceff->GetZaxis()->SetLabelSize(0.08);
+      h2Ceff->SetXTitle("#eta \b");
+      h2Ceff->SetYTitle("#phi \b");
+      h2Ceff->SetZTitle("h_mapDepth1ADCAmpl_HO \b");
+      h2Ceff->SetMarkerColor(2);
+      h2Ceff->SetLineColor(2);
+      h2Ceff->Draw("COLZ");
+    }
+
+    cHE->cd(2);
+    ///////////////////////////////////////
+    if (h2Ceff) {
+      // TO IDENTIFY: see red bins in eta-phi space (applied cut on Aij: <20 || >3000
+      h2Diffe = (TH2F*)h2Ceff->Clone(Form("Diffe_Depth%d_HO",depth));
+      h2Diffe->SetTitle(Form("HO Depth %d. Cut avg(ADCAmpl) > 80 \b",depth));
+      int nx = h2Ceff->GetXaxis()->GetNbins();
+      int ny = h2Ceff->GetYaxis()->GetNbins();
+      for (int i=1;i<=nx;i++) {
+	for (int j=1;j<=ny;j++) {
+	  double ccc1 =  h2Ceff->GetBinContent(i,j)   ;
+	  h2Diffe->SetBinContent(i,j,0.);
+	  if(ccc1 > 20.)  h2Diffe->SetBinContent(i,j,ccc1);
+	}
+      }
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h2Diffe->SetMarkerStyle(20);
+      h2Diffe->SetMarkerSize(0.4);
+      //h2Diffe->GetZaxis()->SetLabelSize(0.08);
+      h2Diffe->SetXTitle("#eta \b");
+      h2Diffe->SetYTitle("#phi \b");
+      h2Diffe->SetZTitle("<ADCAmpl> bigger 80.- HO Depth1 \b");
+      h2Diffe->SetMarkerColor(2);
+      h2Diffe->SetLineColor(2);
+      h2Diffe->Draw("COLZ");
+    }
+
+    cHE->cd(3);
+    TString hname3= Form("h_mapDepth%dADCAmpl225Copy_HO",depth);
+    TH2F *twod3= (TH2F*)hfile->Get(hname3);
+    if (!twod3 || !twod0) {
+      TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+      ptext->AddText("Missing histo");
+      std::cout << "specHO test: failed to load " << hname3 << " and/or "
+		<< hname0 << "\n";
+      if (!twod3) ptext->AddText(hname3);
+      if (!twod0) ptext->AddText(hname0);
+      ptext->Draw();
+      continue;
+    }
+    else {
+    // To IDENTIFY: see color different bins in eta-phi space
+      h3Ceff = (TH2F*)twod3->Clone(Form("CeffA_HO%d",depth));
+      h3Ceff->SetTitle(Form("HO Depth %d. \b",depth));
+      h3Ceff->Divide(twod3,twod0, 1, 1, "B");
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h3Ceff->SetMarkerStyle(20);
+      h3Ceff->SetMarkerSize(0.4);
+//      h3Ceff->GetZaxis()->SetLabelSize(0.08);
+      h3Ceff->SetXTitle("#eta \b");
+      h3Ceff->SetYTitle("#phi \b");
+      h3Ceff->SetZTitle("HO channel Amplitude \b");
+      h3Ceff->SetMarkerColor(2);
+      h3Ceff->SetLineColor(2);
+      h3Ceff->Draw("COLZ");
+    }
+
+    cHE->Update();
+    cHE->Print(Form("ChkErrA_HO%d.png",depth));
+    cHE->Clear();
+
+    if (h2Ceff) delete h2Ceff;
+    if (h2Diffe) delete h2Diffe;
+    //    if (h1diffADCAmpl) delete h1diffADCAmpl;
+    //  if (twod0) delete twod0;// do not delete - sometimes causes trouble later
+    if (twod1) delete twod1;
+    if (twod3) delete twod3;
+    if (h3Ceff) delete h3Ceff;
+  } // depth
+
+//===============================================================================  err A HF
+/// errA with average Amplitudes 
+// For  2D and  1D plots with Amplitude. Produces ChkErrA_HFx.png
+
+  for (int depth=1; depth<=2; depth++) {
+    TH2F *h2Ceff= NULL;
+    TH2F *h2Diffe= NULL;
+    //    TH1F* h1diffADCAmpl= NULL;
+    TH2F *h3Ceff= NULL;
+    
+    cHE->Clear();
+    cHE->Divide(3,1);
+    
+    cHE->cd(1);
+    // h_mapDepth1ADCAmpl_HF div h_mapDepth1_HF
+    TString hname1= Form("h_mapDepth%dADCAmpl_HF",depth);
+    TString hname0= Form("h_mapDepth%d_HF",depth);
+    TH2F *twod1= (TH2F*)hfile->Get(hname1);
+    TH2F *twod0= (TH2F*)hfile->Get(hname0);
+    if (!twod1 || !twod0) {
+      TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+      ptext->AddText("Missing histo");
+      std::cout << "specHF test: failed to load " << hname1 << " and/or "
+		<< hname0 << "\n";
+      if (!twod1) ptext->AddText(hname1);
+      if (!twod0) ptext->AddText(hname0);
+      ptext->Draw();
+      continue;
+    }
+    else {
+    // To IDENTIFY: see color different bins in eta-phi space
+      h2Ceff = (TH2F*)twod1->Clone(Form("Ceff_HF%d",depth));
+      h2Ceff->SetTitle(Form("HF Depth %d. (No cut) \b",depth));
+      h2Ceff->Divide(twod1,twod0, 1, 1, "B");
+
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h2Ceff->SetMarkerStyle(20);
+      h2Ceff->SetMarkerSize(0.4);
+      //h2Ceff->GetZaxis()->SetLabelSize(0.08);
+      h2Ceff->SetXTitle("#eta \b");
+      h2Ceff->SetYTitle("#phi \b");
+      h2Ceff->SetZTitle("h_mapDepth1ADCAmpl_HF \b");
+      h2Ceff->SetMarkerColor(2);
+      h2Ceff->SetLineColor(2);
+      h2Ceff->Draw("COLZ");
+    }
+
+    cHE->cd(2);
+    ///////////////////////////////////////
+    if (h2Ceff) {
+      // TO IDENTIFY: see red bins in eta-phi space (applied cut on Aij: <20 || >3000
+      h2Diffe = (TH2F*)h2Ceff->Clone(Form("Diffe_Depth%d_HF",depth));
+      h2Diffe->SetTitle(Form("HF Depth %d. Cut avg(ADCAmpl) > 20 \b",depth));
+      int nx = h2Ceff->GetXaxis()->GetNbins();
+      int ny = h2Ceff->GetYaxis()->GetNbins();
+      for (int i=1;i<=nx;i++) {
+	for (int j=1;j<=ny;j++) {
+	  double ccc1 =  h2Ceff->GetBinContent(i,j)   ;
+	  h2Diffe->SetBinContent(i,j,0.);
+	  if(ccc1 > 20.)  h2Diffe->SetBinContent(i,j,ccc1);
+	}
+      }
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h2Diffe->SetMarkerStyle(20);
+      h2Diffe->SetMarkerSize(0.4);
+      //h2Diffe->GetZaxis()->SetLabelSize(0.08);
+      h2Diffe->SetXTitle("#eta \b");
+      h2Diffe->SetYTitle("#phi \b");
+      h2Diffe->SetZTitle("<ADCAmpl> bigger 20.- HF Depth1 \b");
+      h2Diffe->SetMarkerColor(2);
+      h2Diffe->SetLineColor(2);
+      h2Diffe->Draw("COLZ");
+    }
+
+    cHE->cd(3);
+    /*
+    if (h2Ceff) {
+      h1diffADCAmpl = new TH1F(Form("diffADCAmpl_Depth%d_HF",depth),"",
+			       100, -20.,200.);
+      h1diffADCAmpl->SetTitle(Form("HF Depth %d \b",depth));
+      int nx = h2Ceff->GetXaxis()->GetNbins();
+      int ny = h2Ceff->GetYaxis()->GetNbins();
+      for (int i=1;i<=nx;i++) {
+	for (int j=1;j<=ny;j++) {
+	  if(h2Ceff->GetBinContent(i,j) !=0 ) {
+	    double ccc1 =  h2Ceff->GetBinContent(i,j) ;
+	    h1diffADCAmpl->Fill(ccc1);
+	  }
+	}
+      }
+      gPad->SetLogy();
+      h1diffADCAmpl->SetMarkerStyle(20);
+      h1diffADCAmpl->SetMarkerSize(0.4);
+      h1diffADCAmpl->GetYaxis()->SetLabelSize(0.04);
+      h1diffADCAmpl->SetXTitle("<ADCAmpl> in each cell \b");
+      h1diffADCAmpl->SetMarkerColor(2);
+      h1diffADCAmpl->SetLineColor(2);
+      h1diffADCAmpl->Draw("");
+    }
+    */
+    TString hname3= Form("h_mapDepth%dADCAmpl225Copy_HF",depth);
+    TH2F *twod3= (TH2F*)hfile->Get(hname3);
+    if (!twod3 || !twod0) {
+      TPaveText *ptext= new TPaveText(0.05,0.85,0.95,0.95);
+      ptext->AddText("Missing histo");
+      std::cout << "specHF test: failed to load " << hname3 << " and/or "
+		<< hname0 << "\n";
+      if (!twod3) ptext->AddText(hname3);
+      if (!twod0) ptext->AddText(hname0);
+      ptext->Draw();
+      continue;
+    }
+    else {
+    // To IDENTIFY: see color different bins in eta-phi space
+      h3Ceff = (TH2F*)twod3->Clone(Form("CeffA_HF%d",depth));
+      h3Ceff->SetTitle(Form("HF Depth %d. \b",depth));
+      h3Ceff->Divide(twod3,twod0, 1, 1, "B");
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogz();
+      h3Ceff->SetMarkerStyle(20);
+      h3Ceff->SetMarkerSize(0.4);
+//      h3Ceff->GetZaxis()->SetLabelSize(0.08);
+      h3Ceff->SetXTitle("#eta \b");
+      h3Ceff->SetYTitle("#phi \b");
+      h3Ceff->SetZTitle("HF channel Amplitude \b");
+      h3Ceff->SetMarkerColor(2);
+      h3Ceff->SetLineColor(2);
+      h3Ceff->Draw("COLZ");
+    }
+
+    cHE->Update();
+    cHE->Print(Form("ChkErrA_HF%d.png",depth));
+    cHE->Clear();
+
+    if (h2Ceff) delete h2Ceff;
+    if (h2Diffe) delete h2Diffe;
+    //    if (h1diffADCAmpl) delete h1diffADCAmpl;
+    //  if (twod0) delete twod0;// do not delete - sometimes causes trouble later
+    if (twod1) delete twod1;
+    if (twod3) delete twod3;
+    if (h3Ceff) delete h3Ceff;
+  } // depth
+
+  std::cout << "************>>>   average Amplitudes done" << std::endl;
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////// Special tests:
+//===============================================================================   occupancyHB
+// For occupancy plots. Produces OccPlots_HBx.png (x=1)
+  int mymaxbins = MaxLum;
+  {
+    cHB->Clear();
+      cHB->Divide(2,1);
+      /////////
+      cHB->cd(1);
+      TH2F *occhbm= (TH2F*)hfile->Get("h_RatioOccupancy_HBM");
+      TH1F* uyhbm = new TH1F("uyhbm","", mymaxbins, 1., mymaxbins+1.);
+      for (int i=1;i<=occhbm->GetXaxis()->GetNbins();i++) {
+	double ccc1 =  occhbm->GetBinContent(i);
+	//	  if(ccc1>0.)	  cout<<" depth1_HB iLS = "<<i<<" <As> per LS= "<<ccc1<<endl;
+	if(ccc1>0.) uyhbm->Fill(float(i), ccc1);
+      }
+      //      gPad->SetLogy();
+      uyhbm->SetMarkerStyle(20);
+      uyhbm->SetMarkerSize(0.6);
+      uyhbm->GetYaxis()->SetLabelSize(0.04);
+      uyhbm->SetXTitle("min/av occupancy - HBM \b");
+      uyhbm->SetMarkerColor(2);
+      uyhbm->SetLineColor(0);
+      uyhbm->SetMaximum(1.0);
+      uyhbm->SetMinimum(0.2);
+      gPad->SetGridy();
+      uyhbm->Draw("Error");
+      /////////
+      cHB->cd(2);
+      TH2F *occhbp= (TH2F*)hfile->Get("h_RatioOccupancy_HBP");
+      TH1F* uyhbp = new TH1F("uyhbp","", mymaxbins, 1., mymaxbins+1.);
+      for (int i=1;i<=occhbp->GetXaxis()->GetNbins();i++) {
+	double ccc1 =  occhbp->GetBinContent(i);
+	//	  if(ccc1>0.)	  cout<<" depth1_HB iLS = "<<i<<" <As> per LS= "<<ccc1<<endl;
+	if(ccc1>0.) uyhbp->Fill(float(i), ccc1);
+      }
+      //      gPad->SetLogy();
+      uyhbp->SetMarkerStyle(20);
+      uyhbp->SetMarkerSize(0.6);
+      uyhbp->GetYaxis()->SetLabelSize(0.04);
+      uyhbp->SetXTitle("min/av occupancy - HBP \b");
+      uyhbp->SetMarkerColor(2);
+      uyhbp->SetLineColor(0);
+      uyhbp->SetMaximum(1.0);
+      uyhbp->SetMinimum(0.2);
+      gPad->SetGridy();
+      uyhbp->Draw("Error");
+      /////////
+      
+      /////////
+      cHB->Update();
+      cHB->Print(Form("OccPlots_HB.png"));
+      cHB->Clear();
+      
+      // clean-up
+      if (occhbm) delete occhbm;
+      if (uyhbm) delete uyhbm;
+      if (occhbp) delete occhbp;
+      if (uyhbp) delete uyhbp;
+    }     
+//===============================================================================   occupancyHE
+// For occupancy plots. Produces OccPlots_HEx.png (x=1)
+    {
+      cHB->Clear();
+      cHB->Divide(2,1);
+      /////////
+      cHB->cd(1);
+      TH2F *occhem= (TH2F*)hfile->Get("h_RatioOccupancy_HEM");
+      TH1F* uyhem = new TH1F("uyhem","", mymaxbins, 1., mymaxbins+1.);
+      for (int i=1;i<=occhem->GetXaxis()->GetNbins();i++) {
+	double ccc1 =  occhem->GetBinContent(i);
+	//	  if(ccc1>0.)	  cout<<" depth1_HE iLS = "<<i<<" <As> per LS= "<<ccc1<<endl;
+	if(ccc1>0.) uyhem->Fill(float(i), ccc1);
+      }
+      //      gPad->SetLogy();
+      uyhem->SetMarkerStyle(20);
+      uyhem->SetMarkerSize(0.6);
+      uyhem->GetYaxis()->SetLabelSize(0.04);
+      uyhem->SetXTitle("min/av occupancy - HEM \b");
+      uyhem->SetMarkerColor(2);
+      uyhem->SetLineColor(0);
+      uyhem->SetMaximum(1.0);
+      uyhem->SetMinimum(0.2);
+      gPad->SetGridy();
+      uyhem->Draw("Error");
+      /////////
+      cHB->cd(2);
+      TH2F *occhep= (TH2F*)hfile->Get("h_RatioOccupancy_HEP");
+      TH1F* uyhep = new TH1F("uyhep","", mymaxbins, 1., mymaxbins+1.);
+      for (int i=1;i<=occhep->GetXaxis()->GetNbins();i++) {
+	double ccc1 =  occhep->GetBinContent(i);
+	//	  if(ccc1>0.)	  cout<<" depth1_HE iLS = "<<i<<" <As> per LS= "<<ccc1<<endl;
+	if(ccc1>0.) uyhep->Fill(float(i), ccc1);
+      }
+      //      gPad->SetLogy();
+      uyhep->SetMarkerStyle(20);
+      uyhep->SetMarkerSize(0.6);
+      uyhep->GetYaxis()->SetLabelSize(0.04);
+      uyhep->SetXTitle("min/av occupancy - HEP \b");
+      uyhep->SetMarkerColor(2);
+      uyhep->SetLineColor(0);
+      uyhep->SetMaximum(1.0);
+      uyhep->SetMinimum(0.2);
+      gPad->SetGridy();
+      uyhep->Draw("Error");
+      /////////
+      
+      /////////
+      cHB->Update();
+      cHB->Print(Form("OccPlots_HE.png"));
+      cHB->Clear();
+      
+      // clean-up
+      if (occhem) delete occhem;
+      if (uyhem) delete uyhem;
+      if (occhep) delete occhep;
+      if (uyhep) delete uyhep;
+    }     
+//===============================================================================   occupancyHO
+// For occupancy plots. Produces OccPlots_HOx.png (x=1)
+    {
+      cHB->Clear();
+      cHB->Divide(2,1);
+      /////////
+      cHB->cd(1);
+      TH2F *occhom= (TH2F*)hfile->Get("h_RatioOccupancy_HOM");
+      TH1F* uyhom = new TH1F("uyhom","", mymaxbins, 1., mymaxbins+1.);
+      for (int i=1;i<=occhom->GetXaxis()->GetNbins();i++) {
+	double ccc1 =  occhom->GetBinContent(i);
+	//	  if(ccc1>0.)	  cout<<" depth1_HO iLS = "<<i<<" <As> per LS= "<<ccc1<<endl;
+	if(ccc1>0.) uyhom->Fill(float(i), ccc1);
+      }
+      //      gPad->SetLogy();
+      uyhom->SetMarkerStyle(20);
+      uyhom->SetMarkerSize(0.6);
+      uyhom->GetYaxis()->SetLabelSize(0.04);
+      uyhom->SetXTitle("min/av occupancy - HOM \b");
+      uyhom->SetMarkerColor(2);
+      uyhom->SetLineColor(0);
+      uyhom->SetMaximum(1.0);
+      uyhom->SetMinimum(0.2);
+      gPad->SetGridy();
+      uyhom->Draw("Error");
+      /////////
+      cHB->cd(2);
+      TH2F *occhop= (TH2F*)hfile->Get("h_RatioOccupancy_HOP");
+      TH1F* uyhop = new TH1F("uyhop","", mymaxbins, 1., mymaxbins+1.);
+      for (int i=1;i<=occhop->GetXaxis()->GetNbins();i++) {
+	double ccc1 =  occhop->GetBinContent(i);
+	//	  if(ccc1>0.)	  cout<<" depth1_HO iLS = "<<i<<" <As> per LS= "<<ccc1<<endl;
+	if(ccc1>0.) uyhop->Fill(float(i), ccc1);
+      }
+      //      gPad->SetLogy();
+      uyhop->SetMarkerStyle(20);
+      uyhop->SetMarkerSize(0.6);
+      uyhop->GetYaxis()->SetLabelSize(0.04);
+      uyhop->SetXTitle("min/av occupancy - HOP \b");
+      uyhop->SetMarkerColor(2);
+      uyhop->SetLineColor(0);
+      uyhop->SetMaximum(1.0);
+      uyhop->SetMinimum(0.2);
+      gPad->SetGridy();
+      uyhop->Draw("Error");
+      /////////
+      
+      /////////
+      cHB->Update();
+      cHB->Print(Form("OccPlots_HO.png"));
+      cHB->Clear();
+      
+      // clean-up
+      if (occhom) delete occhom;
+      if (uyhom) delete uyhom;
+      if (occhop) delete occhop;
+      if (uyhop) delete uyhop;
+    }     
+//===============================================================================   occupancyHF   
+// For occupancy plots. Produces OccPlots_HFx.png (x=1)
+    {
+      cHB->Clear();
+      cHB->Divide(2,1);
+      /////////
+      cHB->cd(1);
+      TH2F *occhfm= (TH2F*)hfile->Get("h_RatioOccupancy_HFM");
+      TH1F* uyhfm = new TH1F("uyhfm","", mymaxbins, 1., mymaxbins+1.);
+      for (int i=1;i<=occhfm->GetXaxis()->GetNbins();i++) {
+	double ccc1 =  occhfm->GetBinContent(i);
+	//	  if(ccc1>0.)	  cout<<" depth1_HF iLS = "<<i<<" <As> per LS= "<<ccc1<<endl;
+	if(ccc1>0.) uyhfm->Fill(float(i), ccc1);
+      }
+      //      gPad->SetLogy();
+      uyhfm->SetMarkerStyle(20);
+      uyhfm->SetMarkerSize(0.6);
+      uyhfm->GetYaxis()->SetLabelSize(0.04);
+      uyhfm->SetXTitle("min/av occupancy - HFM \b");
+      uyhfm->SetMarkerColor(2);
+      uyhfm->SetLineColor(0);
+      uyhfm->SetMaximum(1.0);
+      uyhfm->SetMinimum(0.2);
+      gPad->SetGridy();
+      uyhfm->Draw("Error");
+      /////////
+      cHB->cd(2);
+      TH2F *occhfp= (TH2F*)hfile->Get("h_RatioOccupancy_HFP");
+      TH1F* uyhfp = new TH1F("uyhfp","", mymaxbins, 1., mymaxbins+1.);
+      for (int i=1;i<=occhfp->GetXaxis()->GetNbins();i++) {
+	double ccc1 =  occhfp->GetBinContent(i);
+	//	  if(ccc1>0.)	  cout<<" depth1_HF iLS = "<<i<<" <As> per LS= "<<ccc1<<endl;
+	if(ccc1>0.) uyhfp->Fill(float(i), ccc1);
+      }
+      //      gPad->SetLogy();
+      uyhfp->SetMarkerStyle(20);
+      uyhfp->SetMarkerSize(0.6);
+      uyhfp->GetYaxis()->SetLabelSize(0.04);
+      uyhfp->SetXTitle("min/av occupancy - HFP \b");
+      uyhfp->SetMarkerColor(2);
+      uyhfp->SetLineColor(0);
+      uyhfp->SetMaximum(1.0);
+      uyhfp->SetMinimum(0.2);
+      gPad->SetGridy();
+      uyhfp->Draw("Error");
+      /////////
+      
+      /////////
+      cHB->Update();
+      cHB->Print(Form("OccPlots_HF.png"));
+      cHB->Clear();
+      
+      // clean-up
+      if (occhfm) delete occhfm;
+      if (uyhfm) delete uyhfm;
+      if (occhfp) delete occhfp;
+      if (uyhfp) delete uyhfp;
+    }     
+    std::cout << "************>>>   occupancy plots done" << std::endl;
+
+
+
+
+
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /// Summed Amplitude Plots:
+  //*************************                        *****     Signal                   *****
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>start Summed Amplitude Plots "<<endl;
+  int maxbins = MaxLum;
+  cout<<">>>>   maxbins =     "<< maxbins <<endl;
+  TH1F *SummedAmplitudeHisto[4];    // 1d histogramm for subdet
+  SummedAmplitudeHisto[0] = (TH1F*)hfile->Get("h_aversumamplitude_HB");
+  SummedAmplitudeHisto[1] = (TH1F*)hfile->Get("h_aversumamplitude_HE");
+  SummedAmplitudeHisto[2] = (TH1F*)hfile->Get("h_aversumamplitude_HO");
+  SummedAmplitudeHisto[3] = (TH1F*)hfile->Get("h_aversumamplitude_HF");
+  TH1F *SummedAmplitudeOccupancyHisto[4];    // 1d histogramm for subdet
+  SummedAmplitudeOccupancyHisto[0] = (TH1F*)hfile->Get("h_averoccupancy_HB");
+  SummedAmplitudeOccupancyHisto[1] = (TH1F*)hfile->Get("h_averoccupancy_HE");
+  SummedAmplitudeOccupancyHisto[2] = (TH1F*)hfile->Get("h_averoccupancy_HO");
+  SummedAmplitudeOccupancyHisto[3] = (TH1F*)hfile->Get("h_averoccupancy_HF");
+  for (int sub=0; sub<4; sub++) {
+    cHB->Clear();
+    cHB->Divide(2,1);
+    cHB->cd(1);
+    TH1F* kslpq = new TH1F("kslpq","", maxbins, 1., maxbins+1.);
+    //    cout<<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   sub =     "<< sub <<endl;
+    for (int i=1;i<=kslpq->GetXaxis()->GetNbins();i++) {
+      double ccc1 =  SummedAmplitudeHisto[sub]->GetBinContent(i);
+      //      	  if(ccc1>0.)	  cout<<"  iLS = "<<i<<"  LS= "<<ccc1<<endl;
+      if(ccc1>0.) kslpq->Fill(float(i), ccc1);
+    }
+    //      gPad->SetLogy();
+    kslpq->SetMarkerStyle(20);
+    kslpq->SetMarkerSize(0.8);
+    kslpq->GetYaxis()->SetLabelSize(0.04);
+    kslpq->SetXTitle("SumA of channels w/ signal per LS \b");
+    kslpq->SetMarkerColor(2);
+    kslpq->SetLineColor(0);
+    //  kslpq->SetMinimum(0.8);
+    gPad->SetGridx();
+    kslpq->Draw("Error");
+    /////////
+    cHB->cd(2);
+    TH1F* pqmks = new TH1F("pqmks","", maxbins, 1., maxbins+1.);
+    for (int i=1;i<=pqmks->GetXaxis()->GetNbins();i++) {
+      double ccc1 =  SummedAmplitudeOccupancyHisto[sub]->GetBinContent(i);
+      //	  if(ccc1>0.)	  cout<<"  iLS = "<<i<<"  LS= "<<ccc1<<endl;
+      if(ccc1>0.) pqmks->Fill(float(i), ccc1);
+    }
+    //      gPad->SetLogy();
+    pqmks->SetMarkerStyle(20);
+    pqmks->SetMarkerSize(0.8);
+    pqmks->GetYaxis()->SetLabelSize(0.04);
+    pqmks->SetXTitle("Occupancy of channels w/ signal per LS  \b");
+    pqmks->SetMarkerColor(4);
+    pqmks->SetLineColor(0);
+    //  pqmks->SetMinimum(0.8);
+    gPad->SetGridx();
+    pqmks->Draw("Error");
+    cHB->Update();
+    if(sub==0)  cHB->Print("SummedAmplitudesSignal_HB.png");
+    if(sub==1)  cHB->Print("SummedAmplitudesSignal_HE.png");
+    if(sub==2)  cHB->Print("SummedAmplitudesSignal_HO.png");
+    if(sub==3)  cHB->Print("SummedAmplitudesSignal_HF.png");
+    cHB->Clear();
+    if (kslpq) delete kslpq;
+    if (pqmks) delete pqmks;
+  }//for    
+  // clean-up
+  //for (unsigned int i=0; i<4; i++) {delete SummedAmplitudeHisto[i];delete SummedAmplitudeOccupancyHisto[i];}
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /// Summed Amplitude Plots:
+  //*************************                        *****     NoSignal                   *****
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>start Summed Amplitude Plots NoSignal "<<endl;
+  TH1F *NoSignalSummedAmplitudeHisto[4];    // 1d histogramm for subdet
+  NoSignalSummedAmplitudeHisto[0] = (TH1F*)hfile->Get("h_maxxSUMAmpl_HB");
+  NoSignalSummedAmplitudeHisto[1] = (TH1F*)hfile->Get("h_maxxSUMAmpl_HE");
+  NoSignalSummedAmplitudeHisto[2] = (TH1F*)hfile->Get("h_maxxSUMAmpl_HO");
+  NoSignalSummedAmplitudeHisto[3] = (TH1F*)hfile->Get("h_maxxSUMAmpl_HF");
+  TH1F *NoSignalSummedAmplitudeOccupancyHisto[4];    // 1d histogramm for subdet
+  NoSignalSummedAmplitudeOccupancyHisto[0] = (TH1F*)hfile->Get("h_maxxOCCUP_HB");
+  NoSignalSummedAmplitudeOccupancyHisto[1] = (TH1F*)hfile->Get("h_maxxOCCUP_HE");
+  NoSignalSummedAmplitudeOccupancyHisto[2] = (TH1F*)hfile->Get("h_maxxOCCUP_HO");
+  NoSignalSummedAmplitudeOccupancyHisto[3] = (TH1F*)hfile->Get("h_maxxOCCUP_HF");
+  for (int sub=0; sub<4; sub++) {
+    cHB->Clear();
+    cHB->Divide(2,1);
+    
+    cHB->cd(1);
+    TH1F* kslpq = new TH1F("kslpq","", maxbins, 1., maxbins+1.);
+    for (int i=1;i<=kslpq->GetXaxis()->GetNbins();i++) {
+      double ccc1 =  NoSignalSummedAmplitudeHisto[sub]->GetBinContent(i);
+      //	  if(ccc1>0.)	  cout<<"  iLS = "<<i<<"  LS= "<<ccc1<<endl;
+      if(ccc1>0.) kslpq->Fill(float(i), ccc1);
+    }
+    //      gPad->SetLogy();
+    kslpq->SetMarkerStyle(20);
+    kslpq->SetMarkerSize(0.8);
+    kslpq->GetYaxis()->SetLabelSize(0.04);
+    kslpq->SetXTitle("SumA of channels w/o signal per LS \b");
+    kslpq->SetMarkerColor(2);
+    kslpq->SetLineColor(0);
+    //  kslpq->SetMinimum(0.8);
+    gPad->SetGridx();
+    kslpq->Draw("Error");
+    /////////
+    cHB->cd(2);
+    TH1F* pqmks = new TH1F("pqmks","", maxbins, 1., maxbins+1.);
+    for (int i=1;i<=pqmks->GetXaxis()->GetNbins();i++) {
+      double ccc1 =  NoSignalSummedAmplitudeOccupancyHisto[sub]->GetBinContent(i);
+      //	  if(ccc1>0.)	  cout<<"  iLS = "<<i<<"  LS= "<<ccc1<<endl;
+      if(ccc1>0.) pqmks->Fill(float(i), ccc1);
+    }
+    //      gPad->SetLogy();
+    pqmks->SetMarkerStyle(20);
+    pqmks->SetMarkerSize(0.8);
+    pqmks->GetYaxis()->SetLabelSize(0.04);
+    pqmks->SetXTitle("Occupancy of channels w/o signal per LS  \b");
+    pqmks->SetMarkerColor(4);
+    pqmks->SetLineColor(0);
+    //  pqmks->SetMinimum(0.8);
+    gPad->SetGridx();
+    pqmks->Draw("Error");
+    cHB->Update();
+    if(sub==0)  cHB->Print("NoSignalSummedAmplitudes_HB.png");
+    if(sub==1)  cHB->Print("NoSignalSummedAmplitudes_HE.png");
+    if(sub==2)  cHB->Print("NoSignalSummedAmplitudes_HO.png");
+    if(sub==3)  cHB->Print("NoSignalSummedAmplitudes_HF.png");
+    cHB->Clear();
+    if (kslpq) delete kslpq;
+    if (pqmks) delete pqmks;
+  }//for    
+  // clean-up
+  //for (unsigned int i=0; i<4; i++) {delete NoSignalSummedAmplitudeHisto[i];delete NoSignalSummedAmplitudeOccupancyHisto[i];}
+  //////////
+  
+//====================================================================================================================
+
+//=====================================================================================================
+
+//=====================================================================================
 
 //======================================================================
 // Creating each test kind for each subdet html pages:
@@ -2370,446 +3343,563 @@ int main(int argc, char *argv[])
               if (sub==4) htmlFile << "<h1> Maximum bin timing estimator for HF, RUN = "<< runnumber <<" </h1>"<< std::endl; 
            }     
           
+
+           if (test == 1) {
+	     htmlFile << "<a name=\"Top\"></a>\n";
+	     htmlFile << "<b>Contents:<br>\n";
+	     htmlFile << "1. <a href=\"#Aij\">A_ij_LS (averaged over events in LS) </a><br>\n";
+	     htmlFile << "2. <a href=\"#OverflowAij\">A_ij_LS in overflow & underflow</a><br>\n";
+	     htmlFile << "3. <a href=\"#MainEstimator\">Main Estimator !!! </a><br>\n";
+	     htmlFile << "4. <a href=\"#ErrorA\">Error type A </a><br>\n";
+	     htmlFile << "5. <a href=\"#ErrorAaverage\">ErrorA cross check</a><br>\n";
+	     htmlFile << "6. <a href=\"#ErrorAoccupancy\">ErrorA occupancy plots</a><br>\n";
+	     htmlFile << "7. <a href=\"#ErrorB\">Error type B</a><br>\n";
+	     htmlFile << "8. <a href=\"#LSstatus\">LS Status in the table</a><br>\n";
+	   }
+	   
+	   //     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+	   
+	   
            htmlFile << "<br>"<< std::endl;
            if (test==0) {
-	      htmlFile << "<h2> 0. Rate of CapID failures over all events of Run </h2>"<< std::endl;
-              htmlFile << "<h3> Channel legend: white - good, other colour - bad.  </h3>"<< std::endl; 
-                  if (sub==1) htmlFile << " <img src=\"MapCapIdErrorHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"MapCapIdErrorHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"MapCapIdErrorHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"MapCapIdErrorHF.png\" />" << std::endl;
+	     htmlFile << "<h2> 0. Rate of CapID failures over all events of Run </h2>"<< std::endl;
+	     htmlFile << "<h3> Channel legend: white - good, other colour - bad.  </h3>"<< std::endl; 
+	     if (sub==1) htmlFile << " <img src=\"MapCapIdErrorHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"MapCapIdErrorHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"MapCapIdErrorHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"MapCapIdErrorHF.png\" />" << std::endl;
 	   }
-	      if (test !=0) htmlFile << "<h2> 1. Distribution of estimator averaged over events in LS, histogramed over all channels and all LSs </h2>"<< std::endl;
-	      if (test ==0) {
-	          if (sub==1) htmlFile << "<h2> 1.  Average Nbcs for only LS containing events with abnormal number of Bad channels >"<<CutAb[sub][1]<<" (Depth1), "<<CutAb[sub][2] <<" (Depth2).</h2>"<< std::endl;
-                  if (sub==2) htmlFile << "<h2> 1.  Average Nbcs for only LS containing events with abnormal number of Bad channels >"<<CutAb[sub][1]<<" (Depth1), "<<CutAb[sub][2] <<" (Depth2), "<<CutAb[sub][3] <<" (Depth3).</h2>"<< std::endl;
-                  if (sub==3) htmlFile << "<h2> 1.  Average Nbcs for only LS containing events with abnormal number of Bad channels >"<<CutAb[sub][1]<<" (Depth4).</h2>"<< std::endl;
-                  if (sub==4) htmlFile << "<h2> 1.  Average Nbcs for only LS containing events with abnormal number of Bad channels >"<<CutAb[sub][1]<<" (Depth1), "<<CutAb[sub][2] <<" (Depth2).</h2>"<< std::endl;
-              
-	      }
-	      
-	      if (test !=0) htmlFile << "<h3> Legend: Overflow corresponds to BAD LS candidates.</h3>"<< std::endl;
-	      if (test ==0) htmlFile << "<h3> Legend: dots correspond to BAD LS candidates.</h3>"<< std::endl; 
-
-              if (test==0){
-                  if (sub==1) htmlFile << " <img src=\"Hist_CAPID_Abnorm_HB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"Hist_CAPID_Abnorm_HE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"Hist_CAPID_Abnorm_HO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"Hist_CAPID_Abnorm_HF.png\" />" << std::endl;
-              }
-              if (test==1){
-                  if (sub==1) htmlFile << " <img src=\"H_ADCamplHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"H_ADCamplHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"H_ADCamplHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"H_ADCamplHF.png\" />" << std::endl;
-              }
-	      if (test==2){
-                  if (sub==1) htmlFile << " <img src=\"H_WidthHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"H_WidthHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"H_WidthHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"H_WidthHF.png\" />" << std::endl;
-              }
-	      if (test==3){
-                  if (sub==1) htmlFile << " <img src=\"H_RatioHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"H_RatioHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"H_RatioHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"H_RatioHF.png\" />" << std::endl;
-              }
-	      if (test==4){
-                  if (sub==1) htmlFile << " <img src=\"H_TmeanHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"H_TmeanHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"H_TmeanHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"H_TmeanHF.png\" />" << std::endl;
-              }
-	      if (test==5){
-                  if (sub==1) htmlFile << " <img src=\"H_TmaxHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"H_TmaxHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"H_TmaxHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"H_TmaxHF.png\" />" << std::endl;
-              }	 
-              htmlFile << "<br>"<< std::endl; 
-       
-       
-       	       if (test ==0) htmlFile << "<h2> 2a.  Number of bad channels per event distribution in Run</h2>"<< std::endl;
-	       if (test ==0) htmlFile << "<h3> Legends: dots correspond to BAD LS candidates.  </h3>"<< std::endl;
-	       if (test ==0){
-                    if (sub==1) htmlFile << " <img src=\"HistNBadChsHB.png\" />" << std::endl; 
-                    if (sub==2) htmlFile << " <img src=\"HistNBadChsHE.png\" />" << std::endl; 
-                    if (sub==3) htmlFile << " <img src=\"HistNBadChsHO.png\" />" << std::endl; 
-                    if (sub==4) htmlFile << " <img src=\"HistNBadChsHF.png\" />" << std::endl;
-               }       
-	      
-	      if (test !=0) htmlFile << "<h2> 2. Estimator averaged over all events in the RUN for entries in overflow and underflow of corresponding histogram above </h2>"<< std::endl;
-//              if (test !=0) htmlFile << "<h2> 2. Estimator averaged over all events in the RUN </h2>"<< std::endl;
-	      if (test ==0) htmlFile << "<h2> 2b. Averaged number of bad channels for each LS </h2>"<< std::endl;
-//              if (test !=0) htmlFile << "<h3> Channel legend: white - good, other colour - bad.  </h3>"<< std::endl;
-	      if (test ==0) {
-                 if (sub==1) htmlFile << "<h3> Legends: dots selected with following cuts: <td class=\"s6\" align=\"center\">"<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2) correspond BAD LS.</td></h3>"<< std::endl;
-                 if (sub==2) htmlFile << "<h3> Legends: dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3) correspond BAD LS.</h3>"<< std::endl;
-	         if (sub==3) htmlFile << "<h3> Legends: dots selected with following cuts: "<<Cut0[test][sub][4]<<" (Depth4) correspond BAD LS.</h3>"<< std::endl;
-                 if (sub==4) htmlFile << "<h3> Legends: dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2) correspond BAD LS.</h3>"<< std::endl;
-              }
-              if (test==0){
-                  if (sub==1) htmlFile << " <img src=\"HistNBCMNHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"HistNBCMNHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"HistNBCMNHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"HistNBCMNHF.png\" />" << std::endl;
-              }
-              if (test==1){
-                  if (sub==1) htmlFile << " <img src=\"MapADCamplHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"MapADCamplHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"MapADCamplHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"MapADCamplHF.png\" />" << std::endl;
-              }
-	      if (test==2){
-                  if (sub==1) htmlFile << " <img src=\"MapWidthHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"MapWidthHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"MapWidthHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"MapWidthHF.png\" />" << std::endl;
-              }
-	      if (test==3){
-                  if (sub==1) htmlFile << " <img src=\"MapRatioHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"MapRatioHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"MapRatioHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"MapRatioHF.png\" />" << std::endl;
-              }
-	      if (test==4){
-                  if (sub==1) htmlFile << " <img src=\"MapTmeanHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"MapTmeanHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"MapTmeanHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"MapTmeanHF.png\" />" << std::endl;
-              }
-	      if (test==5){
-                  if (sub==1) htmlFile << " <img src=\"MapTmaxHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"MapTmaxHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"MapTmaxHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"MapTmaxHF.png\" />" << std::endl;
-              }	 
-              htmlFile << "<br>"<< std::endl;
+	   if (test == 1) htmlFile << "<a name=\"Aij\"></a>\n";
+	   if (test !=0) htmlFile << "<h2> 1. Distribution of estimator averaged over events in LS, histogramed over all channels and all LSs </h2>"<< std::endl;
+	   if (test ==0) {
+	     if (sub==1) htmlFile << "<h2> 1.  Average Nbcs for only LS containing events with abnormal number of Bad channels >"<<CutAb[sub][1]<<" (Depth1), "<<CutAb[sub][2] <<" (Depth2).</h2>"<< std::endl;
+	     if (sub==2) htmlFile << "<h2> 1.  Average Nbcs for only LS containing events with abnormal number of Bad channels >"<<CutAb[sub][1]<<" (Depth1), "<<CutAb[sub][2] <<" (Depth2), "<<CutAb[sub][3] <<" (Depth3).</h2>"<< std::endl;
+	     if (sub==3) htmlFile << "<h2> 1.  Average Nbcs for only LS containing events with abnormal number of Bad channels >"<<CutAb[sub][1]<<" (Depth4).</h2>"<< std::endl;
+	     if (sub==4) htmlFile << "<h2> 1.  Average Nbcs for only LS containing events with abnormal number of Bad channels >"<<CutAb[sub][1]<<" (Depth1), "<<CutAb[sub][2] <<" (Depth2).</h2>"<< std::endl;
              
-	    	      
-	      if (test !=0) htmlFile << "<h2> 3. Distribution of estimator averaged over events in LS and over all channels for each LS </h2>"<< std::endl;
-	      if (test ==0) {
-	          if (sub==1) htmlFile << "<h2> 3.  Portion of events with Nbcs>"<<CutPo[sub][1]<<" (Depth1), "<<CutPo[sub][2] <<" (Depth2) in each LS.</h2>"<< std::endl;
-                  if (sub==2) htmlFile << "<h2> 3.  Portion of events with Nbcs>"<<CutPo[sub][1]<<" (Depth1), "<<CutPo[sub][2] <<" (Depth2), "<<CutPo[sub][3] <<" (Depth3) in each LS.</h2>"<< std::endl;
-                  if (sub==3) htmlFile << "<h2> 3.  Portion of events with Nbcs>"<<CutPo[sub][1]<<" (Depth4) in each LS.</h2>"<< std::endl;
-                  if (sub==4) htmlFile << "<h2> 3.  Portion of events with Nbcs>"<<CutPo[sub][1]<<" (Depth1), "<<CutPo[sub][2] <<" (Depth2) in each LS.</h2>"<< std::endl;
-                  htmlFile << "<h3> Legend: dots correspond to BAD LS candidates.</h3>"<< std::endl;
-              }
-              if (test !=0){
-                 if (sub==1) htmlFile << "<h3> Legends:  dots selected with following cuts: <td class=\"s6\" align=\"center\">"<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2) correspond BAD LS.</td></h3>"<< std::endl;
-                 if (sub==2) htmlFile << "<h3> Legends:  dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3) correspond BAD LS. </h3>"<< std::endl;
-	         if (sub==3) htmlFile << "<h3> Legends:  dots selected with following cuts: "<<Cut0[test][sub][4]<<" (Depth4) correspond BAD LS. </h3>"<< std::endl;
-                 if (sub==4) htmlFile << "<h3> Legends:  dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2) correspond BAD LS. </h3>"<< std::endl;
-              }
-              if (test==0){
-                  if (sub==1) htmlFile << " <img src=\"HistPortHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"HistPortHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"HistPortHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"HistPortHF.png\" />" << std::endl;
-              }
-              if (test==1){
-                  if (sub==1) htmlFile << " <img src=\"HistADCamplHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"HistADCamplHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"HistADCamplHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"HistADCamplHF.png\" />" << std::endl;
-              }
-	      if (test==2){
-                  if (sub==1) htmlFile << " <img src=\"HistWidthHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"HistWidthHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"HistWidthHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"HistWidthHF.png\" />" << std::endl;
-              }
-	      if (test==3){
-                  if (sub==1) htmlFile << " <img src=\"HistRatioHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"HistRatioHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"HistRatioHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"HistRatioHF.png\" />" << std::endl;
-              }
-	      if (test==4){
-                  if (sub==1) htmlFile << " <img src=\"HistTmeanHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"HistTmeanHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"HistTmeanHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"HistTmeanHF.png\" />" << std::endl;
-              }
-	      if (test==5){
-                  if (sub==1) htmlFile << " <img src=\"HistTmaxHB.png\" />" << std::endl; 
-                  if (sub==2) htmlFile << " <img src=\"HistTmaxHE.png\" />" << std::endl; 
-                  if (sub==3) htmlFile << " <img src=\"HistTmaxHO.png\" />" << std::endl; 
-                  if (sub==4) htmlFile << " <img src=\"HistTmaxHF.png\" />" << std::endl;
-              }	     	    	      
-              htmlFile << "<br>"<< std::endl;
+	   }
+	   
+	   if (test !=0) htmlFile << "<h3> Legend: Overflow corresponds to BAD LS candidates.</h3>"<< std::endl;
+	   if (test ==0) htmlFile << "<h3> Legend: dots correspond to BAD LS candidates.</h3>"<< std::endl; 
+	   
+	   if (test==0){
+	     if (sub==1) htmlFile << " <img src=\"Hist_CAPID_Abnorm_HB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"Hist_CAPID_Abnorm_HE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"Hist_CAPID_Abnorm_HO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"Hist_CAPID_Abnorm_HF.png\" />" << std::endl;
+	   }
+	   if (test==1){
+	     if (sub==1) htmlFile << " <img src=\"H_ADCamplHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"H_ADCamplHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"H_ADCamplHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"H_ADCamplHF.png\" />" << std::endl;
+	   }
+	   if (test==2){
+	     if (sub==1) htmlFile << " <img src=\"H_WidthHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"H_WidthHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"H_WidthHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"H_WidthHF.png\" />" << std::endl;
+	   }
+	   if (test==3){
+	     if (sub==1) htmlFile << " <img src=\"H_RatioHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"H_RatioHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"H_RatioHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"H_RatioHF.png\" />" << std::endl;
+	   }
+	   if (test==4){
+	     if (sub==1) htmlFile << " <img src=\"H_TmeanHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"H_TmeanHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"H_TmeanHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"H_TmeanHF.png\" />" << std::endl;
+	   }
+	   if (test==5){
+	     if (sub==1) htmlFile << " <img src=\"H_TmaxHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"H_TmaxHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"H_TmaxHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"H_TmaxHF.png\" />" << std::endl;
+	   }	 
+	   htmlFile << "<br>"<< std::endl; 
+	   if (test ==1) 	  htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+	   
+	   
+	   if (test ==0) htmlFile << "<h2> 2a.  Number of bad channels per event distribution in Run</h2>"<< std::endl;
+	   if (test ==0) htmlFile << "<h3> Legends: dots correspond to BAD LS candidates.  </h3>"<< std::endl;
+	   if (test ==0){
+	     if (sub==1) htmlFile << " <img src=\"HistNBadChsHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"HistNBadChsHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"HistNBadChsHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"HistNBadChsHF.png\" />" << std::endl;
+	   }       
+	   
+	   if (test == 1) htmlFile << "<a name=\"OverflowAij\"></a>\n";
+	   if (test !=0) htmlFile << "<h2> 2. Estimator averaged over all events in the RUN for entries in overflow and underflow of corresponding histogram above </h2>"<< std::endl;
+	   //              if (test !=0) htmlFile << "<h2> 2. Estimator averaged over all events in the RUN </h2>"<< std::endl;
+	   if (test ==0) htmlFile << "<h2> 2b. Averaged number of bad channels for each LS </h2>"<< std::endl;
+	   //              if (test !=0) htmlFile << "<h3> Channel legend: white - good, other colour - bad.  </h3>"<< std::endl;
+	   if (test ==0) {
+	     if (sub==1) htmlFile << "<h3> Legends: dots selected with following cuts: <td class=\"s6\" align=\"center\">"<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2) correspond BAD LS.</td></h3>"<< std::endl;
+	     if (sub==2) htmlFile << "<h3> Legends: dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3) correspond BAD LS.</h3>"<< std::endl;
+	     if (sub==3) htmlFile << "<h3> Legends: dots selected with following cuts: "<<Cut0[test][sub][4]<<" (Depth4) correspond BAD LS.</h3>"<< std::endl;
+	     if (sub==4) htmlFile << "<h3> Legends: dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2) correspond BAD LS.</h3>"<< std::endl;
+	   }
+	   if (test==0){
+	     if (sub==1) htmlFile << " <img src=\"HistNBCMNHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"HistNBCMNHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"HistNBCMNHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"HistNBCMNHF.png\" />" << std::endl;
+	   }
+	   if (test==1){
+	     if (sub==1) htmlFile << " <img src=\"MapADCamplHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"MapADCamplHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"MapADCamplHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"MapADCamplHF.png\" />" << std::endl;
+	   }
+	   if (test==2){
+	     if (sub==1) htmlFile << " <img src=\"MapWidthHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"MapWidthHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"MapWidthHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"MapWidthHF.png\" />" << std::endl;
+	   }
+	   if (test==3){
+	     if (sub==1) htmlFile << " <img src=\"MapRatioHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"MapRatioHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"MapRatioHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"MapRatioHF.png\" />" << std::endl;
+	   }
+	   if (test==4){
+	     if (sub==1) htmlFile << " <img src=\"MapTmeanHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"MapTmeanHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"MapTmeanHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"MapTmeanHF.png\" />" << std::endl;
+	   }
+	   if (test==5){
+	     if (sub==1) htmlFile << " <img src=\"MapTmaxHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"MapTmaxHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"MapTmaxHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"MapTmaxHF.png\" />" << std::endl;
+	   }	 
+	   htmlFile << "<br>"<< std::endl;
+	   if (test == 1) htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+           
+	   
+	   if (test == 1) htmlFile << "<a name=\"MainEstimator\"></a>\n";
+	   if (test !=0) htmlFile << "<h2> 3. Distribution of estimator averaged over events in LS and over all channels for each LS </h2>"<< std::endl;
+	   if (test ==0) {
+	     if (sub==1) htmlFile << "<h2> 3.  Portion of events with Nbcs>"<<CutPo[sub][1]<<" (Depth1), "<<CutPo[sub][2] <<" (Depth2) in each LS.</h2>"<< std::endl;
+	     if (sub==2) htmlFile << "<h2> 3.  Portion of events with Nbcs>"<<CutPo[sub][1]<<" (Depth1), "<<CutPo[sub][2] <<" (Depth2), "<<CutPo[sub][3] <<" (Depth3) in each LS.</h2>"<< std::endl;
+	     if (sub==3) htmlFile << "<h2> 3.  Portion of events with Nbcs>"<<CutPo[sub][1]<<" (Depth4) in each LS.</h2>"<< std::endl;
+	     if (sub==4) htmlFile << "<h2> 3.  Portion of events with Nbcs>"<<CutPo[sub][1]<<" (Depth1), "<<CutPo[sub][2] <<" (Depth2) in each LS.</h2>"<< std::endl;
+	     htmlFile << "<h3> Legend: dots correspond to BAD LS candidates.</h3>"<< std::endl;
+	   }
+	   if (test !=0){
+	     if (sub==1) htmlFile << "<h3> Legends:  dots selected with following cuts: <td class=\"s6\" align=\"center\">"<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2) correspond BAD LS.</td></h3>"<< std::endl;
+	     if (sub==2) htmlFile << "<h3> Legends:  dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3) correspond BAD LS. </h3>"<< std::endl;
+	     if (sub==3) htmlFile << "<h3> Legends:  dots selected with following cuts: "<<Cut0[test][sub][4]<<" (Depth4) correspond BAD LS. </h3>"<< std::endl;
+	     if (sub==4) htmlFile << "<h3> Legends:  dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2) correspond BAD LS. </h3>"<< std::endl;
+	   }
+	   if (test==0){
+	     if (sub==1) htmlFile << " <img src=\"HistPortHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"HistPortHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"HistPortHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"HistPortHF.png\" />" << std::endl;
+	   }
+	   if (test==1){
+	     if (sub==1) htmlFile << " <img src=\"HistADCamplHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"HistADCamplHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"HistADCamplHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"HistADCamplHF.png\" />" << std::endl;
+	   }
+	   if (test==2){
+	     if (sub==1) htmlFile << " <img src=\"HistWidthHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"HistWidthHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"HistWidthHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"HistWidthHF.png\" />" << std::endl;
+	   }
+	   if (test==3){
+	     if (sub==1) htmlFile << " <img src=\"HistRatioHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"HistRatioHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"HistRatioHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"HistRatioHF.png\" />" << std::endl;
+	   }
+	   if (test==4){
+	     if (sub==1) htmlFile << " <img src=\"HistTmeanHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"HistTmeanHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"HistTmeanHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"HistTmeanHF.png\" />" << std::endl;
+	   }
+	   if (test==5){
+	     if (sub==1) htmlFile << " <img src=\"HistTmaxHB.png\" />" << std::endl; 
+	     if (sub==2) htmlFile << " <img src=\"HistTmaxHE.png\" />" << std::endl; 
+	     if (sub==3) htmlFile << " <img src=\"HistTmaxHO.png\" />" << std::endl; 
+	     if (sub==4) htmlFile << " <img src=\"HistTmaxHF.png\" />" << std::endl;
+	   }	     	    	      
+	   htmlFile << "<br>"<< std::endl;
 
-	      // Special section 
-	      //	      int flagSpecHF=0;
-	      if (test==1) {
+	   if (test==1) {
+	     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+	     htmlFile << "<a name=\"ErrorA\"></a>\n";
+	     
+     //HB:
+	     if (sub==1) {
+	       htmlFile << "<h2> 4. Error type A</h2>\n";
+	       htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.1-1.6 (p-p collisions) </h3>\n";
+	       htmlFile << " <img src=\"HistErrA_HB.png\" />\n";
+	       htmlFile << "<br>\n";
+	       if (flagErrAB_HB[0]==-1) htmlFile<<"<h3>test was not possible</h3>\n";
+	       else if (flagErrAB_HB[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HB (Mean of max difference " << avedelta_HB  << "  is within 0.1-1.6) </h3>\n";
+	       else if (flagErrAB_HB[0]==1) htmlFile<<"<<h3> ErrorA_HB is available once Mean of max difference " << avedelta_HB  << " is out 0.1-1.6 (p-p collisions)</font></h3>\n";
+	       else htmlFile<<"<h3>auto-interpretation is not available</h3>\n";
+	       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 
+       htmlFile << "<a name=\"ErrorAaverage\"></a>\n";
 
+       htmlFile << "<h2> 5. Error type A cross check: see 2D pattern of channels   </h2>\n";
+       htmlFile << "<h2> 1) with average channel Amplitudes(No cut), 2) with average channel Amplitudes(<A> >25), 3) with channel Amplitude (A<35);  </h2>\n";
+       htmlFile << " <img src=\"ChkErrA_HB1.png\" /><br><br>\n";
+       htmlFile << " <img src=\"ChkErrA_HB2.png\" /><br>\n";
+       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 
-		if (sub==1) {
-		  htmlFile << "<h2> 4. Error type A & B</h2>\n";
-		  htmlFile << "<h2> 4a. Error type A</h2>\n";
-		  htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.1-1.6 (p-p collisions) </h3>\n";
-		  htmlFile << " <img src=\"HistErrA_HB.png\" />\n";
-		  htmlFile << "<br>\n";
-		  if (flagErrAB_HB[0]==-1) htmlFile<<"<h3>test was not possible</h3>\n";
-		  else if (flagErrAB_HB[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HB (Mean of max difference " << avedelta_HB  << "  is within 0.1-1.6) </h3>\n";
-		  else if (flagErrAB_HB[0]==1) htmlFile<<"<<h3> ErrorA_HB is available once Mean of max difference " << avedelta_HB  << " is out 0.1-1.6 (p-p collisions)</font></h3>\n";
-		  else htmlFile<<"<h3>auto-interpretation is not available</h3>\n";
-		  htmlFile << "<h2> 4b. Error type B\n";
-		  htmlFile << "<h3> ErrorB: digi-collection size !=10.</h3>\n";
-		  htmlFile << " <img src=\"HistErrB_HB_1.png\" />\n<br>\n";
-		  htmlFile << " <img src=\"HistErrB_HB_2.png\" />\n<br>\n";
-		  htmlFile << "<br>\n";
-		  htmlFile <<"<h3> if Error type B is available, it start from:    " << LSofFirstErrB_HB  << "  LS </h3>\n";
-		  htmlFile << "<br>\n";
-		}
-
-
-
-		if (sub==2) {
-		  htmlFile << "<h2> 4. Error type A & B</h2>\n";
-		  htmlFile << "<h2> 4a. Error type A</h2>\n";
-		  htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.2-1.8 (p-p collisions) </h3>\n";
-		  htmlFile << " <img src=\"HistErrA_HE.png\" />\n";
-		  htmlFile << "<br>\n";
-		  if (flagErrAB_HE[0]==-1) htmlFile<<"<h3>test was not possible</h3>\n";
-		  else if (flagErrAB_HE[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HE (Mean of max difference " << avedelta_HE  << "  is within 0.2-1.8) </h3>\n";
-		  else if (flagErrAB_HE[0]==1) htmlFile<<"<<h3> ErrorA_HE is available once Mean of max difference " << avedelta_HE  << " is out 0.2-1.8 (p-p collisions)</font></h3>\n";
-		  else htmlFile<<"<h3>auto-interpretation is not available</h3>\n";
-		  htmlFile << "<h2> 4b. Error type B\n";
-		  htmlFile << "<h3> ErrorB: digi-collection size !=10.</h3>\n";
-		  htmlFile << " <img src=\"HistErrB_HE_1.png\" />\n<br>\n";
-		  htmlFile << " <img src=\"HistErrB_HE_2.png\" />\n<br>\n";
-		  htmlFile << " <img src=\"HistErrB_HE_3.png\" />\n<br>\n";
-		  htmlFile << "<br>\n";
-		  htmlFile <<"<h3> if Error type B is available, it start from:    " << LSofFirstErrB_HE  << "  LS </h3>\n";
-		  htmlFile << "<br>\n";
-		}
-
-
-		if (sub==3) {
-		  htmlFile << "<h2> 4. Error type A & B</h2>\n";
-		  htmlFile << "<h2> 4a. Error type A</h2>\n";
-		  htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.1-1.5 (p-p collisions) </h3>\n";
-		  htmlFile << " <img src=\"HistErrA_HO.png\" />\n";
-		  htmlFile << "<br>\n";
-		  if (flagErrAB_HO[0]==-1) htmlFile<<"<h3>test was not possible</h3>\n";
-		  else if (flagErrAB_HO[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HO (Mean of max difference " << avedelta_HO  << "  is within 0.1-1.5) </h3>\n";
-		  else if (flagErrAB_HO[0]==1) htmlFile<<"<<h3> ErrorA_HO is available once Mean of max difference " << avedelta_HO  << " is out 0.1-1.5 (p-p collisions)</font></h3>\n";
-		  else htmlFile<<"<h3>auto-interpretation is not available</h3>\n";
-		  htmlFile << "<h2> 4b. Error type B\n";
-		  htmlFile << "<h3> ErrorB: digi-collection size !=4. </h3>\n";
-		  htmlFile << " <img src=\"HistErrB_HO_4.png\" />\n<br>\n";
-		  htmlFile << "<br>\n";
-		  htmlFile <<"<h3> if Error type B is available, it start from:    " << LSofFirstErrB_HO  << "  LS </h3>\n";
-		  htmlFile << "<br>\n";
-		}
-
-
-		if (sub==4) {
-		  //		flagSpecHF+=1;
-		  htmlFile << "<h2> 4. Error type A & B</h2>\n";
-		  htmlFile << "<h2> 4a. Error type A</h2>\n";
-		  htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.8-2.4 (p-p collisions) </h3>\n";
-		  htmlFile << " <img src=\"HistErrA_HF.png\" />\n";
-		  htmlFile << "<br>\n";
-		  if (flagErrAB_HF[0]==-1) htmlFile<<"<h3>test was not possible</h3>\n";
-		  else if (flagErrAB_HF[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HF (Mean of max difference " << avedelta_HF  << "  is within 0.8-2.4) </h3>\n";
-		  else if (flagErrAB_HF[0]==1) htmlFile<<"<<h3> ErrorA_HF is available once Mean of max difference " << avedelta_HF  << " is out 0.8-2.4 (p-p collisions)</font></h3>\n";
-		  else htmlFile<<"<h3>auto-interpretation is not available</h3>\n";
-		  htmlFile << "<h2> 4b. Error type B\n";
-		  htmlFile << "<h3> ErrorB: digi-collection size !=4. </h3>\n";
-		  htmlFile << " <img src=\"HistErrB_HF_1.png\" />\n<br>\n";
-		  htmlFile << " <img src=\"HistErrB_HF_2.png\" />\n<br>\n";
-		  htmlFile << "<br>\n";
-		  htmlFile <<"<h3> if Error type B is available, it start from:    " << LSofFirstErrB_HF  << "  LS </h3>\n";
-		  htmlFile << "<br>\n";
-		}
-	      }//test=1 Amplitude
-	      
-	      // Continue with common sections
-              if (sub==1) { 
-	          htmlFile << "<h2> 5.Lumisection Status for HB </h2>"<< std::endl;
-	          htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: <td class=\"s6\" align=\"center\">"<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2). </td></h3>"<< std::endl;
-	      }  
-              if (sub==2) {
-	          htmlFile << "<h2> 5.Lumisection Status for HE </h2>"<< std::endl;
-		  htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3). </h3>"<< std::endl;
-              }
-	      if (sub==3) {
-		//		htmlFile << Form("<h2> %d.Lumisection Status for HO </h2>",4+flagSpecHF)<< std::endl;
-	          htmlFile << "<h2> 5.Lumisection Status for HO </h2>"<< std::endl;
-		 htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][4]<<" (Depth4). </h3>"<< std::endl;
-	      }
-              if (sub==4) {
-	          htmlFile << "<h2> 5.Lumisection Status for HF </h2>"<< std::endl; 
-	          htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2). </h3>"<< std::endl;
-	      }	  	      
-	      htmlFile << "<br>"<< std::endl;
-              htmlFile << "<table>"<< std::endl;        
-              htmlFile << "<tr>";
-              htmlFile << "<td class=\"s4\" align=\"center\">LS</td>"    << std::endl;
-//              htmlFile << "<td class=\"s1\" align=\"center\">LS</td>"  << std::endl;
-              htmlFile << "<td class=\"s1\" align=\"center\">Number of events</td>"  << std::endl;
-              if (test==0) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< Nbcs > Depth "<< k <<" </td>"  << std::endl;
-              if (test==1) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< A > Depth "<< k <<" </td>"  << std::endl;
-              if (test==2) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< W > Depth "<< k <<" </td>"  << std::endl;
-              if (test==3) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< R > Depth "<< k <<" </td>"  << std::endl;
-              if (test==4) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< TSn > Depth "<< k <<" </td>"  << std::endl;
-              if (test==5) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< TSx > Depth "<< k <<" </td>"  << std::endl;
-              htmlFile << "</tr>"   << std::endl;    
-              ind = 0;              
-	      for (int i=1;i<=MaxLum;i++) {
-                  if ((ind%2)==1)   raw_class="<td class=\"s2\" align=\"center\">";
-                  else              raw_class="<td class=\"s3\" align=\"center\">";              
-	          htmlFile << "<tr>"<< std::endl;
-                  htmlFile << "<td class=\"s4\" align=\"center\">" << i <<"</td>"<< std::endl;
-//                  htmlFile << raw_class<< LumLum->GetBinContent(i)<<"</td>"<< std::endl;
-                  htmlFile << raw_class<< LumiEv->GetBinContent(i)<<"</td>"<< std::endl;	      
-                  for (int k=k_min[sub];k<=k_max[sub]; k++) {	              
-		      if (HistNumBadChanDepth[test][sub][k]->GetBinContent(i) > Cut0[test][sub][k]) 
-		            htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][sub][k]->GetBinContent(i)<<"</td>"<< std::endl;
-	              else  htmlFile << raw_class <<HistNumBadChanDepth[test][sub][k]->GetBinContent(i)<<"</td>"<< std::endl;
-		  }
-	          htmlFile << "</tr>" << std::endl;
-                  ind+=1;
-	      }	                
-              htmlFile << "</table>" << std::endl; 
-           htmlFile.close();	   
-       }// sub
-    }//test
-//===============================================================================
+       htmlFile << "<a name=\"ErrorAoccupancy\"></a>\n";
+       htmlFile << "<h2> 6. Error type A: min/ave ratio for occupancy distributions with Amplitude bigger 25 (HBM:neg.eta;HBP:pos.eta) </h2>\n";
+       htmlFile << "<h2> TO IDENTIFY A-type errors: for most of LSs the ratio to be lower 0.6 at least for HF- or HF+ </h2>\n";
+       htmlFile << "<h2> For runs without A-type errors: for most of LSs the ratio is higher 0.6 and is the same for HF- and HF+ </h2>\n";
+       htmlFile << " <img src=\"OccPlots_HB.png\" /><br><br>\n";
+       htmlFile << "<br>\n";
+       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 
 
-//======================================================================
-// Creating tests  html pages:
- 
- for (int test=0;test<=5;test++) { //Test: 0,   
-     if (test==0) htmlFile.open("CapID_GL.html");
-     if (test==1) htmlFile.open("ADCampl_GL.html");
-     if (test==2) htmlFile.open("Width_GL.html");
-     if (test==3) htmlFile.open("Ratio_GL.html");
-     if (test==4) htmlFile.open("Tmean_GL.html");
-     if (test==5) htmlFile.open("Tmax_GL.html");
-     
-     htmlFile << "</html><html xmlns=\"http://www.w3.org/1999/xhtml\">"<< std::endl;
-     htmlFile << "<head>"<< std::endl;
-     htmlFile << "<meta http-equiv=\"Content-Type\" content=\"text/html\"/>"<< std::endl;
-     htmlFile << "<title> Certificate Monitoring Tool </title>"<< std::endl;
-     htmlFile << "<style type=\"text/css\">"<< std::endl;
-     htmlFile << " body,td{ background-color: #FFFFCC; font-family: arial, arial ce, helvetica; font-size: 12px; }"<< std::endl;
-     htmlFile << "   td.s0 { font-family: arial, arial ce, helvetica; }"<< std::endl;
-     htmlFile << "   td.s1 { font-family: arial, arial ce, helvetica; font-weight: bold; background-color: #FFC169; text-align: center;}"<< std::endl;
-     htmlFile << "   td.s2 { font-family: arial, arial ce, helvetica; background-color: #eeeeee; }"<< std::endl;
-     htmlFile << "   td.s3 { font-family: arial, arial ce, helvetica; background-color: #d0d0d0; }"<< std::endl;
-     htmlFile << "   td.s4 { font-family: arial, arial ce, helvetica; background-color: #FFC169; }"<< std::endl;
-     htmlFile << "   td.s5 { font-family: arial, arial ce, helvetica; background-color: #00FF00; }"<< std::endl;
-     htmlFile << "   td.s6 { font-family: arial, arial ce, helvetica; background-color: #FF0000; }"<< std::endl;
-     htmlFile << "</style>"<< std::endl;
-     htmlFile << "<body>"<< std::endl;
-     if (test==0) htmlFile << "<h1> CAP ID ERRORS, GLOBAL RUN = "<< runnumber <<" </h1>"<< std::endl; 
-     if (test==1) htmlFile << "<h1> ADC AMPLITIDE, GLOBAL RUN = "<< runnumber <<" </h1>"<< std::endl; 
-     if (test==2) htmlFile << "<h1> WIDTH, GLOBAL RUN = "<< runnumber <<" </h1>"<< std::endl;
-     if (test==3) htmlFile << "<h1> RATIO, GLOBAL RUN = "<< runnumber <<" </h1>"<< std::endl;
-     if (test==4) htmlFile << "<h1> TIMING MEAN, GLOBAL RUN = "<< runnumber <<" </h1>"<< std::endl;
-     if (test==5) htmlFile << "<h1> TIMING MAX, GLOBAL RUN = "<< runnumber <<" </h1>"<< std::endl;  
-     htmlFile << "<br>"<< std::endl;
-     htmlFile << "<h2> 1.  Map of suspicious channels with A-criterion for whole HCAL </h2>"<< std::endl; 
-     htmlFile << "<h3> Channel legend: white - good, other colour - bad.  </h3>"<< std::endl;  
-     htmlFile << "<br>"<< std::endl;      
-     if (test==0) htmlFile << " <img src=\"MapCapIdError.png\" />" << std::endl;
-     if (test==1) htmlFile << " <img src=\"MapADCAmpl.png\" />" << std::endl;      
-     if (test==2) htmlFile << " <img src=\"MapWidth.png\" />" << std::endl;      
-     if (test==3) htmlFile << " <img src=\"MapRatio.png\" />" << std::endl;      
-     if (test==4) htmlFile << " <img src=\"MapTmean.png\" />" << std::endl;   
-     if (test==5) htmlFile << " <img src=\"MapTmax.png\" />" << std::endl;         
-     htmlFile << "<br>"<< std::endl;
-     htmlFile << "<h2> 2.  Average Amplitude (estimator) per LS for whole HCAL </h2>"<< std::endl;   
-     htmlFile << "<br>"<< std::endl;      
-     if (test==0) htmlFile << " <img src=\"HistCapID.png\" />" << std::endl; 
-     if (test==1) htmlFile << " <img src=\"HistADCAmpl.png\" />" << std::endl;      
-     if (test==2) htmlFile << " <img src=\"HistWidth.png\" />" << std::endl;      
-     if (test==3) htmlFile << " <img src=\"HistRatio.png\" />" << std::endl;      
-     if (test==4) htmlFile << " <img src=\"HistTmean.png\" />" << std::endl;   
-     if (test==5) htmlFile << " <img src=\"HistTmax.png\" />" << std::endl;         
-     htmlFile << "<br>"<< std::endl;
-     htmlFile << "<h2> 3. Status of subdetectors </h2>"<< std::endl;   
-     htmlFile << "<table width=\"400\">"<< std::endl;
-     htmlFile << "<tr>"<< std::endl;
-     if (test==0){
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_CapID.html\">HB</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_CapID.html\">HE</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_CapID.html\">HO</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_CapID.html\">HF</a></td>"<< std::endl;
-     }
-     if (test==1){
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_ADCampl.html\">HB</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_ADCampl.html\">HE</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_ADCampl.html\">HO</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_ADCampl.html\">HF</a></td>"<< std::endl;
-     }
-     if (test==2){
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_Width.html\">HB</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_Width.html\">HE</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_Width.html\">HO</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_Width.html\">HF</a></td>"<< std::endl;
-     }
-     if (test==3){
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_Ratio.html\">HB</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_Ratio.html\">HE</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_Ratio.html\">HO</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_Ratio.html\">HF</a></td>"<< std::endl;
-     }
-     if (test==4){
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_Tmean.html\">HB</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_Tmean.html\">HE</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_Tmean.html\">HO</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_Tmean.html\">HF</a></td>"<< std::endl;
-     }
-     if (test==5){
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_Tmax.html\">HB</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_Tmax.html\">HE</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_Tmax.html\">HO</a></td>"<< std::endl;
-         htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_Tmax.html\">HF</a></td>"<< std::endl;
-     }
-     
-     htmlFile << "</tr>"<< std::endl;
-     htmlFile << "</table>"<< std::endl;
-     htmlFile << "<br>"<< std::endl;    
 
 
-     htmlFile << "<h2> 4. Candidates for BAD LS</h3>"<< std::endl;
-     htmlFile << "<table>"<< std::endl;     
-     htmlFile << "<tr>";
-     htmlFile << "<td class=\"s4\" align=\"center\">LS</td>"    << std::endl;
-//     htmlFile << "<td class=\"s1\" align=\"center\">LS</td>"  << std::endl;
-     htmlFile << "<td class=\"s1\" align=\"center\">Number of events</td>"  << std::endl;
-     htmlFile << "<td class=\"s1\" align=\"center\">HB Depth 1</td>"<< std::endl;
-     htmlFile << "<td class=\"s1\" align=\"center\">HB Depth 2</td>"  << std::endl;
-     htmlFile << "<td class=\"s1\" align=\"center\">HE Depth 1</td>"   << std::endl;
-     htmlFile << "<td class=\"s1\" align=\"center\">HE Depth 2</td>"   << std::endl;
-     htmlFile << "<td class=\"s1\" align=\"center\">HE Depth 3</td>"   << std::endl;
-     htmlFile << "<td class=\"s1\" align=\"center\">HO Depth 4</td>"   << std::endl;
-     htmlFile << "<td class=\"s1\" align=\"center\">HF Depth 1</td>"   << std::endl;
-     htmlFile << "<td class=\"s1\" align=\"center\">HF Depth 2</td>"   << std::endl;
-     htmlFile << "</tr>"   << std::endl;     
-   
-     ind = 0;
-     
-     for (int i=1;i<=MaxLum;i++) {
-         if ((ind%2)==1)   raw_class="<td class=\"s2\" align=\"center\">";
-         else              raw_class="<td class=\"s3\" align=\"center\">";                    
-         int met =0;
-	 for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-	     for (int k=k_min[sub];k<=k_max[sub]; k++) 
-	        if (HistNumBadChanDepth[test][sub][k]->GetBinContent(i) > Cut0[test][sub][k]) met = 1; 
-	 }
-         if (met==1) {
-	    htmlFile << "<tr>"<< std::endl;
-            htmlFile << "<td class=\"s4\" align=\"center\">" << i <<"</td>"<< std::endl;
-//            htmlFile << raw_class<< LumLum->GetBinContent(i)<<"</td>"<< std::endl;
-            htmlFile << raw_class<< LumiEv->GetBinContent(i)<<"</td>"<< std::endl;	
+	       htmlFile << "<a name=\"ErrorB\"></a>\n";
+	       htmlFile << "<h2> 7. Error type B\n";
+	       htmlFile << "<h3> ErrorB identification: digi-collection size !=10.</h3>\n";
+	       htmlFile << " <img src=\"HistErrB_HB_1.png\" />\n<br>\n";
+	       htmlFile << " <img src=\"HistErrB_HB_2.png\" />\n<br>\n";
+	       htmlFile << "<br>\n";
+	       htmlFile <<"<h3> if Error type B is available, it start from:    " << LSofFirstErrB_HB  << "  LS </h3>\n";
+	       htmlFile << "<br>\n";
+	     }
+	     
+     //HE:
+	     if (sub==2) {
+	       htmlFile << "<h2> 4. Error type A</h2>\n";
+	       htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.2-1.8 (p-p collisions) </h3>\n";
+	       htmlFile << " <img src=\"HistErrA_HE.png\" />\n";
+	       htmlFile << "<br>\n";
+	       if (flagErrAB_HE[0]==-1) htmlFile<<"<h3>test was not possible</h3>\n";
+	       else if (flagErrAB_HE[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HE (Mean of max difference " << avedelta_HE  << "  is within 0.2-1.8) </h3>\n";
+	       else if (flagErrAB_HE[0]==1) htmlFile<<"<<h3> ErrorA_HE is available once Mean of max difference " << avedelta_HE  << " is out 0.2-1.8 (p-p collisions)</font></h3>\n";
+	       else htmlFile<<"<h3>auto-interpretation is not available</h3>\n";
+	       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+
+
+       htmlFile << "<a name=\"ErrorAaverage\"></a>\n";
+
+       htmlFile << "<h2> 5. Error type A cross check: see 2D pattern of channels   </h2>\n";
+       htmlFile << "<h2> 1) with average channel Amplitudes(No cut), 2) with average channel Amplitudes(<A> >35), 3) with channel Amplitude (A<40);  </h2>\n";
+       htmlFile << " <img src=\"ChkErrA_HE1.png\" /><br><br>\n";
+       htmlFile << " <img src=\"ChkErrA_HE2.png\" /><br>\n";
+       htmlFile << " <img src=\"ChkErrA_HE3.png\" /><br>\n";
+       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+
+       htmlFile << "<a name=\"ErrorAoccupancy\"></a>\n";
+       htmlFile << "<h2> 6. Error type A: min/ave ratio for occupancy distributions with Amplitude bigger 35 (HEM:neg.eta;HEP:pos.eta) </h2>\n";
+       htmlFile << "<h2> TO IDENTIFY A-type errors: for most of LSs the ratio to be lower 0.8 at least for HF- or HF+ </h2>\n";
+       htmlFile << "<h2> For runs without A-type errors: for most of LSs the ratio is higher 0.8 and is the same for HF- and HF+ </h2>\n";
+       htmlFile << " <img src=\"OccPlots_HE.png\" /><br><br>\n";
+       htmlFile << "<br>\n";
+       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+
+
+	       htmlFile << "<a name=\"ErrorB\"></a>\n";
+	       htmlFile << "<h2> 7. Error type B\n";
+	       htmlFile << "<h3> ErrorB identification: digi-collection size !=10.</h3>\n";
+	       htmlFile << " <img src=\"HistErrB_HE_1.png\" />\n<br>\n";
+	       htmlFile << " <img src=\"HistErrB_HE_2.png\" />\n<br>\n";
+	       htmlFile << " <img src=\"HistErrB_HE_3.png\" />\n<br>\n";
+	       htmlFile << "<br>\n";
+	       htmlFile <<"<h3> if Error type B is available, it start from:    " << LSofFirstErrB_HE  << "  LS </h3>\n";
+	       htmlFile << "<br>\n";
+	     }
+	     
+     //HO:
+	     if (sub==3) {
+	       htmlFile << "<h2> 4. Error type A</h2>\n";
+	       htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.1-1.5 (p-p collisions) </h3>\n";
+	       htmlFile << " <img src=\"HistErrA_HO.png\" />\n";
+	       htmlFile << "<br>\n";
+	       if (flagErrAB_HO[0]==-1) htmlFile<<"<h3>test was not possible</h3>\n";
+	       else if (flagErrAB_HO[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HO (Mean of max difference " << avedelta_HO  << "  is within 0.1-1.5) </h3>\n";
+	       else if (flagErrAB_HO[0]==1) htmlFile<<"<<h3> ErrorA_HO is available once Mean of max difference " << avedelta_HO  << " is out 0.1-1.5 (p-p collisions)</font></h3>\n";
+	       else htmlFile<<"<h3>auto-interpretation is not available</h3>\n";
+	       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+
+
+
+       htmlFile << "<a name=\"ErrorAaverage\"></a>\n";
+
+       htmlFile << "<h2> 5. Error type A cross check: see 2D pattern of channels   </h2>\n";
+       htmlFile << "<h2> 1) with average channel Amplitudes(No cut), 2) with average channel Amplitudes(<A> >80), 3) with channel Amplitude (A<100);  </h2>\n";
+       //       htmlFile << "<h2> 2D. Cross check for error A</h2>\n";
+       htmlFile << " <img src=\"ChkErrA_HO4.png\" /><br><br>\n";
+       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+
+       htmlFile << "<a name=\"ErrorAoccupancy\"></a>\n";
+       htmlFile << "<h2> 6. Error type A: min/ave ratio for occupancy distributions with Amplitude bigger 80 (HOM:neg.eta;HOP:pos.eta) </h2>\n";
+       htmlFile << "<h2> TO IDENTIFY A-type errors: for most of LSs the ratio to be lower 0.8 at least for HF- or HF+ </h2>\n";
+       htmlFile << "<h2> For runs without A-type errors: for most of LSs the ratio is higher 0.8 and is the same for HF- and HF+ </h2>\n";
+       htmlFile << " <img src=\"OccPlots_HO.png\" /><br><br>\n";
+       htmlFile << "<br>\n";
+       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+
+
+
+
+	       htmlFile << "<a name=\"ErrorB\"></a>\n";
+	       htmlFile << "<h2> 7. Error type B\n";
+	       htmlFile << "<h3> ErrorB identification: digi-collection size !=10. </h3>\n";
+	       htmlFile << " <img src=\"HistErrB_HO_4.png\" />\n<br>\n";
+	       htmlFile << "<br>\n";
+	       htmlFile <<"<h3> if Error type B is available, it start from:    " << LSofFirstErrB_HO  << "  LS </h3>\n";
+	       htmlFile << "<br>\n";
+	     }
+	     
+     //HF:
+	     if (sub==4) {
+	       //		flagSpecHF+=1;
+	       htmlFile << "<h2> 4. Error type A</h2>\n";
+	       htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.8-2.4 (p-p collisions) </h3>\n";
+	       htmlFile << " <img src=\"HistErrA_HF.png\" />\n";
+	       htmlFile << "<br>\n";
+	       if (flagErrAB_HF[0]==-1) htmlFile<<"<h3>test was not possible</h3>\n";
+	       else if (flagErrAB_HF[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HF (Mean of max difference " << avedelta_HF  << "  is within 0.8-2.4) </h3>\n";
+	       else if (flagErrAB_HF[0]==1) htmlFile<<"<<h3> ErrorA_HF is available once Mean of max difference " << avedelta_HF  << " is out 0.8-2.4 (p-p collisions)</font></h3>\n";
+	       else htmlFile<<"<h3>auto-interpretation is not available</h3>\n";
+	       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+
+
+
+       htmlFile << "<a name=\"ErrorAaverage\"></a>\n";
+
+       htmlFile << "<h2> 5. Error type A cross check: see 2D pattern of channels   </h2>\n";
+       htmlFile << "<h2> 1) with average channel Amplitudes(No cut), 2) with average channel Amplitudes(<A> >20), 3) with channel Amplitude (A<20);  </h2>\n";
+       //       htmlFile << "<h2> 2D. Cross check for error A</h2>\n";
+       htmlFile << " <img src=\"ChkErrA_HF1.png\" /><br><br>\n";
+       htmlFile << " <img src=\"ChkErrA_HF2.png\" /><br>\n";
+       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+
+       htmlFile << "<a name=\"ErrorAoccupancy\"></a>\n";
+       htmlFile << "<h2> 6. Error type A: min/ave ratio for occupancy distributions with Amplitude bigger 20 (HFM:neg.eta;HFP:pos.eta) </h2>\n";
+       htmlFile << "<h2> TO IDENTIFY A-type errors: for most of LSs the ratio to be lower 0.8 at least for HF- or HF+ </h2>\n";
+       htmlFile << "<h2> For runs without A-type errors: for most of LSs the ratio is higher 0.8 and is the same for HF- and HF+ </h2>\n";
+       htmlFile << " <img src=\"OccPlots_HF.png\" /><br><br>\n";
+       htmlFile << "<br>\n";
+       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+
+
+
+
+	       htmlFile << "<a name=\"ErrorB\"></a>\n";
+	       htmlFile << "<h2> 7. Error type B\n";
+	       htmlFile << "<h3> ErrorB identification: digi-collection size !=4. </h3>\n";
+	       htmlFile << " <img src=\"HistErrB_HF_1.png\" />\n<br>\n";
+	       htmlFile << " <img src=\"HistErrB_HF_2.png\" />\n<br>\n";
+	       htmlFile << "<br>\n";
+	       htmlFile <<"<h3> if Error type B is available, it start from:    " << LSofFirstErrB_HF  << "  LS </h3>\n";
+	       htmlFile << "<br>\n";
+	     }
+	     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+	     
+	   }//test=1 Amplitude
+	   
+	   if (test == 1) htmlFile << "<a name=\"LSstatus\"></a>\n";
+	   // Continue with common sections
+	   if (sub==1) { 
+	     htmlFile << "<h2> 8.Lumisection Status for HB </h2>"<< std::endl;
+	     htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: <td class=\"s6\" align=\"center\">"<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2). </td></h3>"<< std::endl;
+	   }  
+	   if (sub==2) {
+	     htmlFile << "<h2> 8.Lumisection Status for HE </h2>"<< std::endl;
+	     htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3). </h3>"<< std::endl;
+	   }
+	   if (sub==3) {
+	     //		htmlFile << Form("<h2> %d.Lumisection Status for HO </h2>",4+flagSpecHF)<< std::endl;
+	     htmlFile << "<h2> 8.Lumisection Status for HO </h2>"<< std::endl;
+	     htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][4]<<" (Depth4). </h3>"<< std::endl;
+	   }
+	   if (sub==4) {
+	     htmlFile << "<h2> 8.Lumisection Status for HF </h2>"<< std::endl; 
+	     htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2). </h3>"<< std::endl;
+	   }	  	      
+	   htmlFile << "<br>"<< std::endl;
+	   htmlFile << "<table>"<< std::endl;        
+	   htmlFile << "<tr>";
+	   htmlFile << "<td class=\"s4\" align=\"center\">LS</td>"    << std::endl;
+	   //              htmlFile << "<td class=\"s1\" align=\"center\">LS</td>"  << std::endl;
+	   htmlFile << "<td class=\"s1\" align=\"center\">Number of events</td>"  << std::endl;
+	   if (test==0) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< Nbcs > Depth "<< k <<" </td>"  << std::endl;
+	   if (test==1) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< A > Depth "<< k <<" </td>"  << std::endl;
+	   if (test==2) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< W > Depth "<< k <<" </td>"  << std::endl;
+	   if (test==3) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< R > Depth "<< k <<" </td>"  << std::endl;
+	   if (test==4) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< TSn > Depth "<< k <<" </td>"  << std::endl;
+	   if (test==5) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< TSx > Depth "<< k <<" </td>"  << std::endl;
+	   htmlFile << "</tr>"   << std::endl;    
+	   ind = 0;              
+	   for (int i=1;i<=MaxLum;i++) {
+	     if ((ind%2)==1)   raw_class="<td class=\"s2\" align=\"center\">";
+	     else              raw_class="<td class=\"s3\" align=\"center\">";              
+	     htmlFile << "<tr>"<< std::endl;
+	     htmlFile << "<td class=\"s4\" align=\"center\">" << i <<"</td>"<< std::endl;
+	     //                  htmlFile << raw_class<< LumLum->GetBinContent(i)<<"</td>"<< std::endl;
+	     htmlFile << raw_class<< LumiEv->GetBinContent(i)<<"</td>"<< std::endl;	      
+	     for (int k=k_min[sub];k<=k_max[sub]; k++) {	              
+	       if (HistNumBadChanDepth[test][sub][k]->GetBinContent(i) > Cut0[test][sub][k]) 
+		 htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][sub][k]->GetBinContent(i)<<"</td>"<< std::endl;
+	       else  htmlFile << raw_class <<HistNumBadChanDepth[test][sub][k]->GetBinContent(i)<<"</td>"<< std::endl;
+	     }
+	     htmlFile << "</tr>" << std::endl;
+	     ind+=1;
+	   }	                
+	   htmlFile << "</table>" << std::endl; 
+	   
+	   htmlFile << "<br>"<< std::endl; 
+	   if (test == 1) 	  htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+	   htmlFile << "<br>"<< std::endl; 
+	   
+	   htmlFile.close();	   
+      }// sub main loop
+  } //test main loop
+  //===============================================================================
+  
+  
+  //======================================================================
+  // Creating tests  html pages:
+  
+  for (int test=0;test<=5;test++) { //Test: 0,   
+    if (test==0) htmlFile.open("CapID_GL.html");
+    if (test==1) htmlFile.open("ADCampl_GL.html");
+    if (test==2) htmlFile.open("Width_GL.html");
+    if (test==3) htmlFile.open("Ratio_GL.html");
+    if (test==4) htmlFile.open("Tmean_GL.html");
+    if (test==5) htmlFile.open("Tmax_GL.html");
+    
+    htmlFile << "</html><html xmlns=\"http://www.w3.org/1999/xhtml\">"<< std::endl;
+    htmlFile << "<head>"<< std::endl;
+    htmlFile << "<meta http-equiv=\"Content-Type\" content=\"text/html\"/>"<< std::endl;
+    htmlFile << "<title> Certification Monitoring Tool </title>"<< std::endl;
+    htmlFile << "<style type=\"text/css\">"<< std::endl;
+    htmlFile << " body,td{ background-color: #FFFFCC; font-family: arial, arial ce, helvetica; font-size: 12px; }"<< std::endl;
+    htmlFile << "   td.s0 { font-family: arial, arial ce, helvetica; }"<< std::endl;
+    htmlFile << "   td.s1 { font-family: arial, arial ce, helvetica; font-weight: bold; background-color: #FFC169; text-align: center;}"<< std::endl;
+    htmlFile << "   td.s2 { font-family: arial, arial ce, helvetica; background-color: #eeeeee; }"<< std::endl;
+    htmlFile << "   td.s3 { font-family: arial, arial ce, helvetica; background-color: #d0d0d0; }"<< std::endl;
+    htmlFile << "   td.s4 { font-family: arial, arial ce, helvetica; background-color: #FFC169; }"<< std::endl;
+    htmlFile << "   td.s5 { font-family: arial, arial ce, helvetica; background-color: #00FF00; }"<< std::endl;
+    htmlFile << "   td.s6 { font-family: arial, arial ce, helvetica; background-color: #FF0000; }"<< std::endl;
+    htmlFile << "</style>"<< std::endl;
+    htmlFile << "<body>"<< std::endl;
+    if (test==0) htmlFile << "<h1> CAP ID ERRORS, GLOBAL RUN = "<< runnumber <<" </h1>"<< std::endl; 
+    if (test==1) htmlFile << "<h1> ADC AMPLITIDE, GLOBAL RUN = "<< runnumber <<" </h1>"<< std::endl; 
+    if (test==2) htmlFile << "<h1> WIDTH, GLOBAL RUN = "<< runnumber <<" </h1>"<< std::endl;
+    if (test==3) htmlFile << "<h1> RATIO, GLOBAL RUN = "<< runnumber <<" </h1>"<< std::endl;
+    if (test==4) htmlFile << "<h1> TIMING MEAN, GLOBAL RUN = "<< runnumber <<" </h1>"<< std::endl;
+    if (test==5) htmlFile << "<h1> TIMING MAX, GLOBAL RUN = "<< runnumber <<" </h1>"<< std::endl;  
+    htmlFile << "<br>"<< std::endl;
+    htmlFile << "<h2> 1.  Map of suspicious channels with this criterion for whole HCAL </h2>"<< std::endl; 
+    htmlFile << "<h3> Channel legend: white - good, other colour - bad.  </h3>"<< std::endl;  
+    htmlFile << "<br>"<< std::endl;      
+    if (test==0) htmlFile << " <img src=\"MapCapIdError.png\" />" << std::endl;
+    if (test==1) htmlFile << " <img src=\"MapADCAmpl.png\" />" << std::endl;      
+    if (test==2) htmlFile << " <img src=\"MapWidth.png\" />" << std::endl;      
+    if (test==3) htmlFile << " <img src=\"MapRatio.png\" />" << std::endl;      
+    if (test==4) htmlFile << " <img src=\"MapTmean.png\" />" << std::endl;   
+    if (test==5) htmlFile << " <img src=\"MapTmax.png\" />" << std::endl;         
+    htmlFile << "<br>"<< std::endl;
+    htmlFile << "<h2> 2.  For whole HCAL: </h2>"<< std::endl;   
+    htmlFile << "<br>"<< std::endl;      
+    if (test==0) htmlFile << " <img src=\"HistCapID.png\" />" << std::endl; 
+    if (test==1) htmlFile << " <img src=\"HistADCAmpl.png\" />" << std::endl;      
+    if (test==2) htmlFile << " <img src=\"HistWidth.png\" />" << std::endl;      
+    if (test==3) htmlFile << " <img src=\"HistRatio.png\" />" << std::endl;      
+    if (test==4) htmlFile << " <img src=\"HistTmean.png\" />" << std::endl;   
+    if (test==5) htmlFile << " <img src=\"HistTmax.png\" />" << std::endl;         
+    htmlFile << "<br>"<< std::endl;
+    htmlFile << "<h2> 3. Status of subdetectors </h2>"<< std::endl;   
+    htmlFile << "<table width=\"400\">"<< std::endl;
+    htmlFile << "<tr>"<< std::endl;
+    if (test==0){
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_CapID.html\">HB</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_CapID.html\">HE</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_CapID.html\">HO</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_CapID.html\">HF</a></td>"<< std::endl;
+    }
+    if (test==1){
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_ADCampl.html\">HB</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_ADCampl.html\">HE</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_ADCampl.html\">HO</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_ADCampl.html\">HF</a></td>"<< std::endl;
+    }
+    if (test==2){
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_Width.html\">HB</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_Width.html\">HE</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_Width.html\">HO</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_Width.html\">HF</a></td>"<< std::endl;
+    }
+    if (test==3){
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_Ratio.html\">HB</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_Ratio.html\">HE</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_Ratio.html\">HO</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_Ratio.html\">HF</a></td>"<< std::endl;
+    }
+    if (test==4){
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_Tmean.html\">HB</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_Tmean.html\">HE</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_Tmean.html\">HO</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_Tmean.html\">HF</a></td>"<< std::endl;
+    }
+    if (test==5){
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_Tmax.html\">HB</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_Tmax.html\">HE</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_Tmax.html\">HO</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_Tmax.html\">HF</a></td>"<< std::endl;
+    }
+    
+    htmlFile << "</tr>"<< std::endl;
+    htmlFile << "</table>"<< std::endl;
+    htmlFile << "<br>"<< std::endl;    
+    
+    if (test!=0) htmlFile << "<h2> 4. Table of estimator-values in sub-detectors for ONLY suspicious LSs </h3>"<< std::endl;   
+    if (test==0) htmlFile << "<h2> 4. Table of average Nbcs in sub-detectors for only suspicious LSs </h3>"<< std::endl;
+    htmlFile << "<table>"<< std::endl;     
+    htmlFile << "<tr>";
+    htmlFile << "<td class=\"s4\" align=\"center\">LS</td>"    << std::endl;
+    //     htmlFile << "<td class=\"s1\" align=\"center\">LS</td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">Number of events</td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">HB Depth 1</td>"<< std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">HB Depth 2</td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">HE Depth 1</td>"   << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">HE Depth 2</td>"   << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">HE Depth 3</td>"   << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">HO Depth 4</td>"   << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">HF Depth 1</td>"   << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">HF Depth 2</td>"   << std::endl;
+    htmlFile << "</tr>"   << std::endl;     
+    
+    ind = 0;
+    
+    for (int i=1;i<=MaxLum;i++) {
+      if ((ind%2)==1)   raw_class="<td class=\"s2\" align=\"center\">";
+      else              raw_class="<td class=\"s3\" align=\"center\">";                    
+      int met =0;
+      for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
+	for (int k=k_min[sub];k<=k_max[sub]; k++) 
+	  if (HistNumBadChanDepth[test][sub][k]->GetBinContent(i) > Cut0[test][sub][k]) met = 1; 
+      }
+      if (met==1) {
+	htmlFile << "<tr>"<< std::endl;
+	htmlFile << "<td class=\"s4\" align=\"center\">" << i <<"</td>"<< std::endl;
+	//            htmlFile << raw_class<< LumLum->GetBinContent(i)<<"</td>"<< std::endl;
+	htmlFile << raw_class<< LumiEv->GetBinContent(i)<<"</td>"<< std::endl;	
 	    if (HistNumBadChanDepth[test][1][1]->GetBinContent(i) > Cut0[test][1][1])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][1][1]->GetBinContent(i)<<"</td>"<< std::endl;
 	    else htmlFile <<raw_class<<HistNumBadChanDepth[test][1][1]->GetBinContent(i)<<"</td>"<< std::endl;   
 	    if (HistNumBadChanDepth[test][1][2]->GetBinContent(i) > Cut0[test][1][2])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][1][2]->GetBinContent(i)<<"</td>"<< std::endl;
@@ -2827,121 +3917,255 @@ int main(int argc, char *argv[])
 	    if (HistNumBadChanDepth[test][4][2]->GetBinContent(i) > Cut0[test][4][2])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][4][2]->GetBinContent(i)<<"</td>"<< std::endl;
 	    else htmlFile <<raw_class<<HistNumBadChanDepth[test][4][2]->GetBinContent(i)<<"</td>"<< std::endl;
 	    ind+=1;
-	 }   
-	htmlFile << "</tr>" << std::endl;
-         
-     }		
-
-     htmlFile << "</table>" << std::endl;
-     htmlFile << "<br>"<< std::endl;
-
-     htmlFile << "</body> " << std::endl;
-     htmlFile << "</html> " << std::endl;
-     htmlFile.close();
-  }
+      }   
+      htmlFile << "</tr>" << std::endl;
       
-//======================================================================
-
-
-//======================================================================
-// Creating description html file: 
-     htmlFile.open("HELP.html");  
-     htmlFile << "</html><html xmlns=\"http://www.w3.org/1999/xhtml\">"<< std::endl;
-     htmlFile << "<head>"<< std::endl;
-     htmlFile << "<meta http-equiv=\"Content-Type\" content=\"text/html\"/>"<< std::endl;
-     htmlFile << "<title> Certificate Monitoring Tool </title>"<< std::endl;
-     htmlFile << "<style type=\"text/css\">"<< std::endl;
-     htmlFile << " body,td{ background-color: #FFFFCC; font-family: arial, arial ce, helvetica; font-size: 12px; }"<< std::endl;
-     htmlFile << "   td.s0 { font-family: arial, arial ce, helvetica; }"<< std::endl;
-     htmlFile << "   td.s1 { font-family: arial, arial ce, helvetica; font-weight: bold; background-color: #FFC169; text-align: center;}"<< std::endl;
-     htmlFile << "   td.s2 { font-family: arial, arial ce, helvetica; background-color: #eeeeee; }"<< std::endl;
-     htmlFile << "   td.s3 { font-family: arial, arial ce, helvetica; background-color: #d0d0d0; }"<< std::endl;
-     htmlFile << "   td.s4 { font-family: arial, arial ce, helvetica; background-color: #FFC169; }"<< std::endl;
-     htmlFile << "</style>"<< std::endl;
-     htmlFile << "<body>"<< std::endl;
-     htmlFile << "<h1>  Description of Remote Monitoring Tool criteria for bad channel selection</h1>"<< std::endl;
-     htmlFile << "<br>"<< std::endl;
-     htmlFile << "<h3> -  CAPID Errors assuming we inspect CAPID non-rotation,error & validation bits, and for this criterion - no need to apply any cuts to select bcs.</h3> "<< std::endl;
-     htmlFile << "<br>"<< std::endl;
-     htmlFile << "<h3> - Amplitude is full amplitude collected over all time slices </h3> "<< std::endl;
-     htmlFile << "<h3> - Ratio criterion is where we define as a bad, the channels, for which the signal portion in 4 middle TSs(plus one, minus two around TS with maximal amplitude) is out of some range of reasonable values </h3> "<< std::endl;
-     htmlFile << "<br>"<< std::endl;
-     htmlFile << "<h3> - Width of shape distribution. Width is defined as square root from dispersion. </h3> "<< std::endl;
-     htmlFile << "<br>"<< std::endl;
-     htmlFile << "<h3> - Mean TS time slice position of adc signal. </h3> "<< std::endl;
-     htmlFile << "<br>"<< std::endl;
-     htmlFile << "<h3> - TS number of maximum signal </h3> "<< std::endl;
-     htmlFile << "<br>"<< std::endl; 
-     htmlFile << "<h3>  For more details see https://twiki.cern.ch/twiki/bin/viewauth/CMS/HcalRemoteCertificationMonitoring </h3> "<< std::endl;   
-     htmlFile << "</body> " << std::endl;
-     htmlFile << "</html> " << std::endl; 
-     htmlFile.close();
-
-//======================================================================
-
-//======================================================================
-// Creating main html file: 
+    }		
+    
+    htmlFile << "</table>" << std::endl;
+    htmlFile << "<br>"<< std::endl;
+    
+    htmlFile << "</body> " << std::endl;
+    htmlFile << "</html> " << std::endl;
+    htmlFile.close();
+  }//test
+  //======================================================================
   
-     htmlFile.open("LumiList.html");  
-     htmlFile << "</html><html xmlns=\"http://www.w3.org/1999/xhtml\">"<< std::endl;
-     htmlFile << "<head>"<< std::endl;
-     htmlFile << "<meta http-equiv=\"Content-Type\" content=\"text/html\"/>"<< std::endl;
-     htmlFile << "<title> Certification Monitoring Tool </title>"<< std::endl;
-     htmlFile << "<style type=\"text/css\">"<< std::endl;
-     htmlFile << " body,td{ background-color: #FFFFCC; font-family: arial, arial ce, helvetica; font-size: 12px; }"<< std::endl;
-     htmlFile << "   td.s0 { font-family: arial, arial ce, helvetica; }"<< std::endl;
-     htmlFile << "   td.s1 { font-family: arial, arial ce, helvetica; font-weight: bold; background-color: #FFC169; text-align: center;}"<< std::endl;
-     htmlFile << "   td.s2 { font-family: arial, arial ce, helvetica; background-color: #eeeeee; }"<< std::endl;
-     htmlFile << "   td.s3 { font-family: arial, arial ce, helvetica; background-color: #d0d0d0; }"<< std::endl;
-     htmlFile << "   td.s4 { font-family: arial, arial ce, helvetica; background-color: #FFC169; }"<< std::endl;
-     htmlFile << "   td.s5 { font-family: arial, arial ce, helvetica; background-color: #00FF00; }"<< std::endl;
-     htmlFile << "   td.s6 { font-family: arial, arial ce, helvetica; background-color: #FF0000; }"<< std::endl;
-     
-     htmlFile << "</style>"<< std::endl;
-     htmlFile << "<body>"<< std::endl;
-     
-     htmlFile << "<h1> Certification Monitoring Tool, GLOBAL RUN = "<< runnumber <<". </h1>"<< std::endl;
-     htmlFile << "<br>"<< std::endl; 
-       
-     htmlFile << "<h2> 1. General information </h2>"<< std::endl;   
-     htmlFile << " <img src=\"LumiEvent.png\" />" << std::endl;      
-     htmlFile << "<br>"<< std::endl;
-     
-     
-     htmlFile << "<h2> 2. HCAL status for different criteria </h2>"<< std::endl;   
-     htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
-     htmlFile << "<br>"<< std::endl;
-     htmlFile << "<table width=\"400\">"<< std::endl;
-     htmlFile << "<tr>"<< std::endl;
-     htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/CapID_GL.html\">Cap ID errors</a></td>"<< std::endl;
-     htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
-     htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Width_GL.html\">Width</a></td>"<< std::endl;
-     htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Ratio_GL.html\">Ratio</a></td>"<< std::endl;
-     htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Tmean_GL.html\">TS mean</a></td>"<< std::endl;
-     htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Tmax_GL.html\">TS max</a></td>"<< std::endl;
-     htmlFile << "</tr>"<< std::endl;
-     htmlFile << "</table>"<< std::endl;
-     htmlFile << "<br>"<< std::endl;    
-     htmlFile << "</body> " << std::endl;
-     htmlFile << "</html> " << std::endl; 
-     htmlFile.close();  
-//======================================================================
-     
-//======================================================================
-// Close and delete all possible things:
-    hfile->Close();    
-//  hfile->Delete();
-//  Exit Root
-    gSystem->Exit(0);
-//======================================================================
+  // for summed Amplitudes of each sub-detector
+  htmlFile.open("SummedAmplitudes_GL.html");
+    htmlFile << "</html><html xmlns=\"http://www.w3.org/1999/xhtml\">"<< std::endl;
+    htmlFile << "<head>"<< std::endl;
+    htmlFile << "<meta http-equiv=\"Content-Type\" content=\"text/html\"/>"<< std::endl;
+    htmlFile << "<title> for summed Amplitudes of each sub-detector </title>"<< std::endl;
+    htmlFile << "<style type=\"text/css\">"<< std::endl;
+    htmlFile << " body,td{ background-color: #FFFFCC; font-family: arial, arial ce, helvetica; font-size: 12px; }"<< std::endl;
+    htmlFile << "   td.s0 { font-family: arial, arial ce, helvetica; }"<< std::endl;
+    htmlFile << "   td.s1 { font-family: arial, arial ce, helvetica; font-weight: bold; background-color: #FFC169; text-align: center;}"<< std::endl;
+    htmlFile << "   td.s2 { font-family: arial, arial ce, helvetica; background-color: #eeeeee; }"<< std::endl;
+    htmlFile << "   td.s3 { font-family: arial, arial ce, helvetica; background-color: #d0d0d0; }"<< std::endl;
+    htmlFile << "   td.s4 { font-family: arial, arial ce, helvetica; background-color: #FFC169; }"<< std::endl;
+    htmlFile << "   td.s5 { font-family: arial, arial ce, helvetica; background-color: #00FF00; }"<< std::endl;
+    htmlFile << "   td.s6 { font-family: arial, arial ce, helvetica; background-color: #FF0000; }"<< std::endl;
 
+
+    htmlFile << "</style>"<< std::endl;
+    htmlFile << "<body>"<< std::endl;
+    htmlFile << "<h1> Averaged Summed Amplitudes & corresponding occupancy of each sub-detector in Global Run = "<< runnumber <<" </h1>"<< std::endl;  
+    htmlFile << "<h2> Clarifying on averaged Summed Amplitude (avSA) : </h2>"<< std::endl; 
+    htmlFile << "<h3> Summed Amplitudes (SA) are averaged over all events of each LS: avSA_LS = SUM (SA_eventsInLS) / N_eventsInLS ,</h3>"<< std::endl; 
+    htmlFile << "<h3> where SA = SUM(A_i) ,and means that Amplitude is summed over all sub-detector channels, </h3>"<< std::endl; 
+    htmlFile << "<h3> where A_i = SUM(A_depth) denotes channel amplitude summed over depths;  </h3>"<< std::endl; 
+    htmlFile << "<br>"<< std::endl;
+    htmlFile << "<h3> Apply cuts on A_i to take into account channels with or/and without signal; </h3>"<< std::endl; 
+    htmlFile << "<br>"<< std::endl;
+
+
+    htmlFile << "<h1> 1.  for channels with signal </h1>"<< std::endl; 
+    htmlFile << "<h2> for HB: A_i> 80; </h2>"<< std::endl; 
+    htmlFile << " <img src=\"SummedAmplitudesSignal_HB.png\" />" << std::endl;      
+    htmlFile << "<br>"<< std::endl;
+    htmlFile << "<h2> for HE: A_i> 200;</h2>"<< std::endl; 
+    htmlFile << " <img src=\"SummedAmplitudesSignal_HE.png\" />" << std::endl;      
+    htmlFile << "<br>"<< std::endl;
+    htmlFile << "<h2> for HO: A_i> 1200;</h2>"<< std::endl; 
+    htmlFile << " <img src=\"SummedAmplitudesSignal_HO.png\" />" << std::endl;      
+    htmlFile << "<br>"<< std::endl;
+    htmlFile << "<h2> for HF: A_i> 600;</h2>"<< std::endl; 
+    htmlFile << " <img src=\"SummedAmplitudesSignal_HF.png\" />" << std::endl;      
+    htmlFile << "<br>"<< std::endl;
+
+
+    htmlFile << "<h1> 2.  for channels w/o signal </h1>"<< std::endl; 
+    htmlFile << "<h2> for HB: A_i< 80;</h2>"<< std::endl; 
+    htmlFile << " <img src=\"NoSignalSummedAmplitudes_HB.png\" />" << std::endl;      
+    htmlFile << "<br>"<< std::endl;
+    htmlFile << "<h2> for HE:  A_i< 200;</h2>"<< std::endl; 
+    htmlFile << " <img src=\"NoSignalSummedAmplitudes_HE.png\" />" << std::endl;      
+    htmlFile << "<br>"<< std::endl;
+    htmlFile << "<h2> for HO: A_i< 1200;</h2>"<< std::endl; 
+    htmlFile << " <img src=\"NoSignalSummedAmplitudes_HO.png\" />" << std::endl;      
+    htmlFile << "<br>"<< std::endl;
+    htmlFile << "<h2> for HF: A_i< 600;</h2>"<< std::endl; 
+    htmlFile << " <img src=\"NoSignalSummedAmplitudes_HF.png\" />" << std::endl;      
+    htmlFile << "<br>"<< std::endl;
+    
+    
+    htmlFile << "<h2> 6.Lumisection Status  </h2>"<< std::endl;
+    htmlFile << "<h3> Legends: HBdepth1 red boxes correspond LSs selected with cut: <td class=\"s6\" align=\"center\">"<<Cut0[1][1][1]<< std::endl;
+    htmlFile << "<h3> Legends: HEdepth1 red boxes correspond LSs selected with cut: <td class=\"s6\" align=\"center\">"<<Cut0[1][2][1]<< std::endl;
+    htmlFile << "<h3> Legends: HOdepth4 red boxes correspond LSs selected with cut: <td class=\"s6\" align=\"center\">"<<Cut0[1][3][4]<< std::endl;
+    htmlFile << "<h3> Legends: HFdepth1 red boxes correspond LSs selected with cut: <td class=\"s6\" align=\"center\">"<<Cut0[1][4][1]<< std::endl;
+    htmlFile << "<br>"<< std::endl;
+    // SummedAmplitudeHisto[i]   SummedAmplitudeOccupancyHisto[i]      NoSignalSummedAmplitudeHisto[i]      NoSignalSummedAmplitudeOccupancyHisto[i]; i=0-3;(HF:i=3)
+    htmlFile << "<br>"<< std::endl;
+    htmlFile << "<table>"<< std::endl;        
+    htmlFile << "<tr>";
+    htmlFile << "<td class=\"s4\" align=\"center\">LS</td>"    << std::endl;
+    //              htmlFile << "<td class=\"s1\" align=\"center\">LS</td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">Number of events</td>"  << std::endl;
+    
+    //	   for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< A > Depth "<< k <<" </td>"  << std::endl;
+    //	   for (int sub=1;sub<=4;sub++) htmlFile << "<td class=\"s1\" align=\"center\">< A > Depth1, sub "<< sub <<" </td>"  << std::endl;
+    
+    htmlFile << "<td class=\"s1\" align=\"center\">< A >HB Depth1</td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< A >HE Depth1</td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< A >HO Depth4</td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< A >HF Depth1</td>"  << std::endl;
+    
+    htmlFile << "<td class=\"s1\" align=\"center\">< Summed A >HF (Signal) </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">Occupancy for < Summed A >HF (Signal) </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< Summed A >HF (NoSignal) </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">Occupancy for < Summed A >HF (NoSignal) </td>"  << std::endl;
+    
+    htmlFile << "</tr>"   << std::endl;    
+    
+    ind = 0;              
+    for (int i=1;i<=MaxLum;i++) {
+      if ((ind%2)==1)   raw_class="<td class=\"s2\" align=\"center\">";
+      else              raw_class="<td class=\"s3\" align=\"center\">";              
+      htmlFile << "<tr>"<< std::endl;
+      
+      htmlFile << "<td class=\"s4\" align=\"center\">" << i <<"</td>"<< std::endl;
+      
+      //                  htmlFile << raw_class<< LumLum->GetBinContent(i)<<"</td>"<< std::endl;
+      htmlFile << raw_class<< LumiEv->GetBinContent(i)<<"</td>"<< std::endl;
+      
+      
+      // (test==1)  <Amplitude> 
+      int test=1;
+      //	     for (int k=k_min[sub];k<=k_max[sub]; k++) {	              
+      for (int sub=1;sub<=4; sub++) {	              
+	for (int k=k_min[sub];k<=k_min[sub]; k++) {	              
+	  
+	  if (HistNumBadChanDepth[test][sub][k]->GetBinContent(i) > Cut0[test][sub][k]) 
+	    htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][sub][k]->GetBinContent(i)<<"</td>"<< std::endl;
+	  
+	  else  htmlFile << raw_class <<HistNumBadChanDepth[test][sub][k]->GetBinContent(i)<<"</td>"<< std::endl;
+	}
+      }
+      htmlFile << raw_class <<SummedAmplitudeHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
+      htmlFile << raw_class <<SummedAmplitudeOccupancyHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
+      htmlFile << raw_class <<NoSignalSummedAmplitudeHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
+      htmlFile << raw_class <<NoSignalSummedAmplitudeOccupancyHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
+      
+      htmlFile << "</tr>" << std::endl;
+      ind+=1;
+    }	                
+    htmlFile << "</table>" << std::endl; 
+    
+    
+    
+    htmlFile << "<br>"<< std::endl;      
+    htmlFile << "</body> " << std::endl;
+    htmlFile << "</html> " << std::endl; 
+    htmlFile.close();
+    
+    //======================================================================
+    
+    
+    //======================================================================
+  // Creating description html file: 
+  htmlFile.open("HELP.html");  
+  htmlFile << "</html><html xmlns=\"http://www.w3.org/1999/xhtml\">"<< std::endl;
+  htmlFile << "<head>"<< std::endl;
+  htmlFile << "<meta http-equiv=\"Content-Type\" content=\"text/html\"/>"<< std::endl;
+  htmlFile << "<title> Certification Monitoring Tool </title>"<< std::endl;
+  htmlFile << "<style type=\"text/css\">"<< std::endl;
+  htmlFile << " body,td{ background-color: #FFFFCC; font-family: arial, arial ce, helvetica; font-size: 12px; }"<< std::endl;
+  htmlFile << "   td.s0 { font-family: arial, arial ce, helvetica; }"<< std::endl;
+  htmlFile << "   td.s1 { font-family: arial, arial ce, helvetica; font-weight: bold; background-color: #FFC169; text-align: center;}"<< std::endl;
+  htmlFile << "   td.s2 { font-family: arial, arial ce, helvetica; background-color: #eeeeee; }"<< std::endl;
+  htmlFile << "   td.s3 { font-family: arial, arial ce, helvetica; background-color: #d0d0d0; }"<< std::endl;
+  htmlFile << "   td.s4 { font-family: arial, arial ce, helvetica; background-color: #FFC169; }"<< std::endl;
+  htmlFile << "</style>"<< std::endl;
+  htmlFile << "<body>"<< std::endl;
+  htmlFile << "<h1>  Description of Remote Monitoring Tool criteria for bad channel selection</h1>"<< std::endl;
+  htmlFile << "<br>"<< std::endl;
+  htmlFile << "<h3> -  CAPID Errors assuming we inspect CAPID non-rotation,error & validation bits, and for this criterion - no need to apply any cuts to select bcs.</h3> "<< std::endl;
+  htmlFile << "<br>"<< std::endl;
+  htmlFile << "<h3> - Amplitude is full amplitude collected over all time slices </h3> "<< std::endl;
+  htmlFile << "<h3> - Ratio criterion is where we define as a bad, the channels, for which the signal portion in 4 middle TSs(plus one, minus two around TS with maximal amplitude) is out of some range of reasonable values </h3> "<< std::endl;
+  htmlFile << "<br>"<< std::endl;
+  htmlFile << "<h3> - Width of shape distribution. Width is defined as square root from dispersion. </h3> "<< std::endl;
+  htmlFile << "<br>"<< std::endl;
+  htmlFile << "<h3> - Mean TS time slice position of adc signal. </h3> "<< std::endl;
+  htmlFile << "<br>"<< std::endl;
+  htmlFile << "<h3> - TS number of maximum signal </h3> "<< std::endl;
+  htmlFile << "<br>"<< std::endl; 
+  htmlFile << "<h3>  For more details see https://twiki.cern.ch/twiki/bin/viewauth/CMS/HcalRemoteCertificationMonitoring </h3> "<< std::endl;   
+  htmlFile << "</body> " << std::endl;
+  htmlFile << "</html> " << std::endl; 
+  htmlFile.close();
+  
+  //======================================================================
+  
+  //======================================================================
+  // Creating main html file: 
+  
+  htmlFile.open("LumiList.html");  
+  htmlFile << "</html><html xmlns=\"http://www.w3.org/1999/xhtml\">"<< std::endl;
+  htmlFile << "<head>"<< std::endl;
+  htmlFile << "<meta http-equiv=\"Content-Type\" content=\"text/html\"/>"<< std::endl;
+  htmlFile << "<title> Certification Monitoring Tool </title>"<< std::endl;
+  htmlFile << "<style type=\"text/css\">"<< std::endl;
+  htmlFile << " body,td{ background-color: #FFFFCC; font-family: arial, arial ce, helvetica; font-size: 12px; }"<< std::endl;
+  htmlFile << "   td.s0 { font-family: arial, arial ce, helvetica; }"<< std::endl;
+  htmlFile << "   td.s1 { font-family: arial, arial ce, helvetica; font-weight: bold; background-color: #FFC169; text-align: center;}"<< std::endl;
+  htmlFile << "   td.s2 { font-family: arial, arial ce, helvetica; background-color: #eeeeee; }"<< std::endl;
+  htmlFile << "   td.s3 { font-family: arial, arial ce, helvetica; background-color: #d0d0d0; }"<< std::endl;
+  htmlFile << "   td.s4 { font-family: arial, arial ce, helvetica; background-color: #FFC169; }"<< std::endl;
+  htmlFile << "   td.s5 { font-family: arial, arial ce, helvetica; background-color: #00FF00; }"<< std::endl;
+  htmlFile << "   td.s6 { font-family: arial, arial ce, helvetica; background-color: #FF0000; }"<< std::endl;
+  
+  htmlFile << "</style>"<< std::endl;
+  htmlFile << "<body>"<< std::endl;
+  
+  htmlFile << "<h1> Certification Monitoring Tool, GLOBAL RUN = "<< runnumber <<". </h1>"<< std::endl;
+  htmlFile << "<br>"<< std::endl; 
+
+  //  htmlFile << "<h2> 1. General information </h2>"<< std::endl;   
+  htmlFile << "<h2> 1. General information     (Full number of LS = "<< MaxLum <<" ). </h2>"<< std::endl;   
+  htmlFile << " <img src=\"LumiEvent.png\" />" << std::endl;      
+  htmlFile << "<br>"<< std::endl;
+  
+  
+  htmlFile << "<h2> 2. HCAL status for different criteria </h2>"<< std::endl;   
+  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+  htmlFile << "<br>"<< std::endl;
+  htmlFile << "<table width=\"600\">"<< std::endl;
+  htmlFile << "<tr>"<< std::endl;
+  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/CapID_GL.html\">Cap ID errors</a></td>"<< std::endl;
+  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
+  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Width_GL.html\">Width</a></td>"<< std::endl;
+  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Ratio_GL.html\">Ratio</a></td>"<< std::endl;
+  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Tmean_GL.html\">TS mean</a></td>"<< std::endl;
+  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Tmax_GL.html\">TS max</a></td>"<< std::endl;
+
+  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/SummedAmplitudes_GL.html\">SummedAmplitudes</a></td>"<< std::endl;
+
+  htmlFile << "</tr>"<< std::endl;
+  htmlFile << "</table>"<< std::endl;
+  htmlFile << "<br>"<< std::endl;    
+  htmlFile << "</body> " << std::endl;
+  htmlFile << "</html> " << std::endl; 
+  htmlFile.close();  
+  //======================================================================
+  
+  //======================================================================
+  // Close and delete all possible things:
+  hfile->Close();    
+  //  hfile->Delete();
+  //  Exit Root
+  gSystem->Exit(0);
+  //======================================================================
+  
 }
 
 
 // ------------------------------------------------------------
 
 int copyContents(TH1F **hDest, TString hname, TString htitle,
-		   const TH1F *hSrc, int lastBin)
+		 const TH1F *hSrc, int lastBin)
 {
   if (lastBin > hSrc->GetNbinsX()) {
     std::cout << "copyContents from " << hSrc->GetName() << ": histo has "
@@ -2949,11 +4173,11 @@ int copyContents(TH1F **hDest, TString hname, TString htitle,
 	      << " was requested\n";
     return 0;
   }
-
+  
   (*hDest)= new TH1F(hname,htitle,lastBin,0,lastBin);
   (*hDest)->SetDirectory(0);
   (*hDest)->SetStats(0);
-
+  
   for (int ibin=1; ibin<=lastBin; ibin++) {
     (*hDest)->SetBinContent(ibin, hSrc->GetBinContent(ibin));
     (*hDest)->SetBinError(ibin, hSrc->GetBinError(ibin));
