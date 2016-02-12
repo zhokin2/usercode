@@ -494,7 +494,6 @@ int main(int argc, char *argv[])
       
       MapNumChanFull[5] = (TH2F*) MapNumChanDepth[5][1][1]->Clone(); 
                   
-      int LSnumber = 0;
       
     for (int test=0;test<=5;test++) { //Test: 0, 
         for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
@@ -872,25 +871,22 @@ int main(int argc, char *argv[])
       HistNumChanDepth[5][4][2] = (TH1F*)hfile->Get("h_sum0TSmaxAperLS7");
 
       HistNumChanFull[5] = (TH1F*) HistNumChanDepth[5][1][1]->Clone();
-
                   
-      LSnumber = 0;
       
     for (int test=0;test<=5;test++) { //Test: 0, 
         for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-            if (sub==1) cHB->Divide(2,1);
+            if (sub==1) cHE->Divide(2,1);
             if (sub==2) cHE->Divide(3,1);
-            if (sub==3) cONE->Divide(1,1);
-            if (sub==4) cHB->Divide(2,1);
+            if (sub==3) cHB->Divide(1,1);
+            if (sub==4) cHE->Divide(2,1);
             for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
-                if (sub==1) cHB->cd(k); 
+                if (sub==1) cHE->cd(k); 
                 if (sub==2) cHE->cd(k);
-	        if (sub==3) cONE->cd(k-3);
-	        if (sub==4) cHB->cd(k);
+	        if (sub==3) cHB->cd(k-3);
+	        if (sub==4) cHE->cd(k);
 		gPad->SetGridy();
                 gPad->SetGridx();
 //                gPad->SetLogy();      
-		
 		
 		if(sub==1 && k== 1 ) {} else {
 		  // use "else" because ...Full[test] are filled by estimastor for sub==1 && k== 1 at initialization of ...Full[test] variables
@@ -901,12 +897,17 @@ int main(int argc, char *argv[])
 		    HistNumChanFull[test]->SetBinContent(x,HistNumChanFull[test]->GetBinContent(x) + ccc2);
 		  }}//end x
 
-
-		// sense of HistNumBadChanDepth will be changed!!!!:
+		// !!!!!!     change the sense of HistNumBadChanDepth: now it's averaged values(estimators)
 	        HistNumBadChanDepth[test][sub][k]->Divide(HistNumBadChanDepth[test][sub][k],HistNumChanDepth[test][sub][k], 1, 1, "B");	
+		//		int myMaxLum= HistNumBadChanDepth[test][sub][k]->GetBinContent(HistNumBadChanDepth[test][sub][k]->GetMaximumBin());
+		//		cout<<"********************>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>     myMaxLum = "<<myMaxLum<<"        MaxLum = "<<MaxLum<<endl;
+		HistNumBadChanDepth[test][sub][k]->GetXaxis()->SetRangeUser(0, MaxLum);
 
-		//
 
+		//   //    //   //   //   //   //   //   //   //   //   //   //   //   //   //   //  //
+		HistNumBadChanDepth[test][sub][k]->SetMarkerStyle(20);
+		HistNumBadChanDepth[test][sub][k]->SetMarkerSize(0.4);
+		HistNumBadChanDepth[test][sub][k]->GetYaxis()->SetLabelSize(0.04);
                 if (k == 1) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 1\b");
 		if (k == 2) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 2\b");
 		if (k == 3) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 3\b");
@@ -914,90 +915,91 @@ int main(int argc, char *argv[])
 		HistNumBadChanDepth[test][sub][k]->SetXTitle("LS \b");
 		if (test == 0) HistNumBadChanDepth[test][sub][k]->SetYTitle("<Number of bad channels> \b");
 		if (test != 0) HistNumBadChanDepth[test][sub][k]->SetYTitle("Averaged estimator \b");
-                if (MaxLum<=1000){
-		   HistNumBadChanDepth[test][sub][k]->SetMarkerStyle(20);
-                   HistNumBadChanDepth[test][sub][k]->SetMarkerSize(0.5);	
-		   HistNumBadChanDepth[test][sub][k]->SetMarkerColor(2);
-                   HistNumBadChanDepth[test][sub][k]->SetLineColor(0);
-                   HistNumBadChanDepth[test][sub][k]->GetXaxis()->SetRangeUser(0, MaxLum);
-		   HistNumBadChanDepth[test][sub][k]->Draw("P");
-		}
-		else{
-                   HistNumBadChanDepth[test][sub][k]->SetLineColor(2);
-                   HistNumBadChanDepth[test][sub][k]->GetXaxis()->SetRangeUser(0, MaxLum);
-		   HistNumBadChanDepth[test][sub][k]->Draw("L");
-		}	
-	      float min_x[] = {0,10000};
-              float min_y[] = {(float)(Cut0[test][sub][k]),(float)(Cut0[test][sub][k])};
-              TGraph* MIN = new TGraph(2, min_x, min_y);
-              MIN->SetLineStyle(2);
-              MIN->SetLineColor(5);
-              MIN->SetLineWidth(2 + 100*100);
-              MIN->SetFillStyle(3005);
-              MIN->SetFillColor(5);
-              MIN->Draw("L");
-/*	       
-	        if (HistNumChanDepth[test][sub][k]->IsA()->InheritsFrom("TH1F"))
-	            HistCutNumBadChanDepth[test][sub][k]->Divide(HistCutNumBadChanDepth[test][sub][k],HistNumChanDepth[test][sub][k], 1, 1, "B");
-                HistCutNumBadChanDepth[test][sub][k]->SetMarkerStyle(20);
-                HistCutNumBadChanDepth[test][sub][k]->SetMarkerSize(0.5);		
-                HistCutNumBadChanDepth[test][sub][k]->SetMarkerColor(2);
-                HistCutNumBadChanDepth[test][sub][k]->SetLineColor(0);
-//		HistCutNumBadChanDepth[test][sub][k]->Draw("SameE");
-*/				
-                int nx = HistNumBadChanDepth[test][sub][k]->GetXaxis()->GetNbins();
-                if ((test==0)&&(sub==1)&&(k==1)) {
-		   for (int i=1;i<=nx;i++) {
-//	               double ccc1 =  HistNumBadChanDepth[test][sub][k]->GetBinContent(i);
-	               if(HistNumBadChanDepth[test][sub][k]->GetBinContent(i)>0) {
-//	                  cout<<"depth1_HB iLS = "<<i<<" <Nbcs> per iLS= "<<ccc1<<endl;
-		          LSnumber+=1;
-	               }
-	           }
-               } 
-	       	if (sub==1) { cHB->Modified();} 
+		HistNumBadChanDepth[test][sub][k]->SetMarkerColor(2);
+		HistNumBadChanDepth[test][sub][k]->SetLineColor(0);
+		gPad->SetGridx();
+		HistNumBadChanDepth[test][sub][k]->Draw("Error");
+		/*
+		  if (k == 1) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 1\b");
+		  if (k == 2) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 2\b");
+		  if (k == 3) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 3\b");
+		  if (k == 4) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 4\b");
+		  HistNumBadChanDepth[test][sub][k]->SetXTitle("LS \b");
+		  if (test == 0) HistNumBadChanDepth[test][sub][k]->SetYTitle("<Number of bad channels> \b");
+		  if (test != 0) HistNumBadChanDepth[test][sub][k]->SetYTitle("Averaged estimator \b");
+		  
+		  if (MaxLum<=1000){
+		  HistNumBadChanDepth[test][sub][k]->SetMarkerStyle(20);
+		  HistNumBadChanDepth[test][sub][k]->SetMarkerSize(0.5);	
+		  HistNumBadChanDepth[test][sub][k]->SetMarkerColor(2);
+		  HistNumBadChanDepth[test][sub][k]->SetLineColor(0);
+		  HistNumBadChanDepth[test][sub][k]->GetXaxis()->SetRangeUser(0, MaxLum);
+		  HistNumBadChanDepth[test][sub][k]->Draw("P");
+		  }
+		  else{
+		  HistNumBadChanDepth[test][sub][k]->SetLineColor(2);
+		  HistNumBadChanDepth[test][sub][k]->GetXaxis()->SetRangeUser(0, MaxLum);
+		  HistNumBadChanDepth[test][sub][k]->Draw("L");
+		  }	
+		*/
+		float min_x[] = {0,10000};
+		float min_y[] = {(float)(Cut0[test][sub][k]),(float)(Cut0[test][sub][k])};
+		TGraph* MIN = new TGraph(2, min_x, min_y);
+		MIN->SetLineStyle(2);
+		MIN->SetLineColor(5);
+		MIN->SetLineWidth(2 + 100*100);
+		MIN->SetFillStyle(3005);
+		MIN->SetFillColor(5);
+		gPad->SetGridy();
+                gPad->SetGridx();
+		MIN->Draw("L");
+
+ 
+	       	if (sub==1) { cHE->Modified();} 
                 if (sub==2) { cHE->Modified();}
-                if (sub==3) { cONE->Modified();}
-                if (sub==4) { cHB->Modified();} 
-	    }    
+                if (sub==3) { cHB->Modified();}
+                if (sub==4) { cHE->Modified();} 
+
+	    }    // k loop
+
 	    if (test==0){ 
-	        if (sub==1) {cHB->Print("HistNBCMNHB.png"); cHB->Clear();} 
+	        if (sub==1) {cHE->Print("HistNBCMNHB.png"); cHE->Clear();} 
                 if (sub==2) {cHE->Print("HistNBCMNHE.png"); cHE->Clear();}
-                if (sub==3) {cONE->Print("HistNBCMNHO.png"); cONE->Clear();}
-                if (sub==4) {cHB->Print("HistNBCMNHF.png"); cHB->Clear();}  
+                if (sub==3) {cHB->Print("HistNBCMNHO.png"); cHB->Clear();}
+                if (sub==4) {cHE->Print("HistNBCMNHF.png"); cHE->Clear();}  
 	    } 
 	    
 	    if (test==1){ 
-	        if (sub==1) {cHB->Print("HistADCamplHB.png"); cHB->Clear();} 
+	        if (sub==1) {cHE->Print("HistADCamplHB.png"); cHE->Clear();} 
                 if (sub==2) {cHE->Print("HistADCamplHE.png"); cHE->Clear();}
-                if (sub==3) {cONE->Print("HistADCamplHO.png"); cONE->Clear();}
-                if (sub==4) {cHB->Print("HistADCamplHF.png"); cHB->Clear();}  
+                if (sub==3) {cHB->Print("HistADCamplHO.png"); cHB->Clear();}
+                if (sub==4) {cHE->Print("HistADCamplHF.png"); cHE->Clear();}  
 	    } 
 	    if (test==2){ 
-	        if (sub==1) {cHB->Print("HistWidthHB.png"); cHB->Clear();} 
+	        if (sub==1) {cHE->Print("HistWidthHB.png"); cHE->Clear();} 
                 if (sub==2) {cHE->Print("HistWidthHE.png"); cHE->Clear();}
-                if (sub==3) {cONE->Print("HistWidthHO.png"); cONE->Clear();}
-                if (sub==4) {cHB->Print("HistWidthHF.png"); cHB->Clear();}  
+                if (sub==3) {cHB->Print("HistWidthHO.png"); cHB->Clear();}
+                if (sub==4) {cHE->Print("HistWidthHF.png"); cHE->Clear();}  
 	    } 
 	    if (test==3){ 
-	        if (sub==1) {cHB->Print("HistRatioHB.png"); cHB->Clear();} 
+	        if (sub==1) {cHE->Print("HistRatioHB.png"); cHE->Clear();} 
                 if (sub==2) {cHE->Print("HistRatioHE.png"); cHE->Clear();}
-                if (sub==3) {cONE->Print("HistRatioHO.png"); cONE->Clear();}
-                if (sub==4) {cHB->Print("HistRatioHF.png"); cHB->Clear();}  
+                if (sub==3) {cHB->Print("HistRatioHO.png"); cHB->Clear();}
+                if (sub==4) {cHE->Print("HistRatioHF.png"); cHE->Clear();}  
 	    } 
 	    if (test==4){ 
-	        if (sub==1) {cHB->Print("HistTmeanHB.png"); cHB->Clear();} 
+	        if (sub==1) {cHE->Print("HistTmeanHB.png"); cHE->Clear();} 
                 if (sub==2) {cHE->Print("HistTmeanHE.png"); cHE->Clear();}
-                if (sub==3) {cONE->Print("HistTmeanHO.png"); cONE->Clear();}
-                if (sub==4) {cHB->Print("HistTmeanHF.png"); cHB->Clear();}  
+                if (sub==3) {cHB->Print("HistTmeanHO.png"); cHB->Clear();}
+                if (sub==4) {cHE->Print("HistTmeanHF.png"); cHE->Clear();}  
 	    } 
 	    if (test==5){ 
-	        if (sub==1) {cHB->Print("HistTmaxHB.png"); cHB->Clear();} 
+	        if (sub==1) {cHE->Print("HistTmaxHB.png"); cHE->Clear();} 
                 if (sub==2) {cHE->Print("HistTmaxHE.png"); cHE->Clear();}
-                if (sub==3) {cONE->Print("HistTmaxHO.png"); cONE->Clear();}
-                if (sub==4) {cHB->Print("HistTmaxHF.png"); cHB->Clear();}  
-	    } 	    	   	                  
-         }// end sub 
+                if (sub==3) {cHB->Print("HistTmaxHO.png"); cHB->Clear();}
+                if (sub==4) {cHE->Print("HistTmaxHF.png"); cHE->Clear();}  
+	    } 
+	}// end sub 
 	/////////////////////////////////////////////
 	if(test==1){
 	  for (int x=1;x<=HistNumChanFull[6]->GetXaxis()->GetNbins();x++) {
@@ -1012,7 +1014,7 @@ int main(int argc, char *argv[])
 	    HistNumChanFull[6]->SetBinContent(x, (HistNumChanFull[6]->GetBinContent(x))/8.   );
 	  }
 	}
-	////////////
+	////////////  //////   //////  //////  ////// //////
 	if (test!=1) {cHB->Divide(1,1);cHB->cd(1);}else {cHE->Divide(2,1);cHE->cd(1);}
 	HistNumBadChanFull[test]->Divide(HistNumBadChanFull[test],HistNumChanFull[test], 1, 1, "B");	
 	TH1F* kfitq = new TH1F("kfitq","", MaxLum, 1., MaxLum+1.);
