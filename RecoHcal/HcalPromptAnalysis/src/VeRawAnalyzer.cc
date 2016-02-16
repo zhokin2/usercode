@@ -7,12 +7,12 @@
    
 Description: <one line class summary>
 
-Implementation:              h_maxxSUMAmpl_HB                                             
+Implementation:          
 <Notes on implementation>
 */
 //
 // $Id: VeRawAnalyzer.cc,v 1.10 2013/04/28 19:01:16 dtlisov Exp $ 
-// h_mapDepth1ADCAmpl12_HF
+// 
 
 // system include files
 #include <fstream> 
@@ -28,7 +28,7 @@ Implementation:              h_maxxSUMAmpl_HB
 //#include "TTree.h"
 
 using namespace std;
-// user include files     h_RatioOccupancy_HBM
+// user include files   
 
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
@@ -3916,76 +3916,79 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 
 
     //  for(int k1 = 0; k1<4; k1++) {
-      for(int k2 = 0; k2<82; k2++) {
-	for(int k3 = 0; k3<72; k3++) {
+    for(int k2 = 0; k2<82; k2++) {
+      if (verbosity == -9814 && k0==3) std::cout << "===loop   lscounterM1 =  " <<lscounterM1 <<"k3=70 for   sumamplitudechannel_HF depth1 =  " <<amplitudechannel[k0][0][k2][70] <<"k3=70 for   sumamplitudechannel_HF depth2=  " <<amplitudechannel[k0][1][k2][70] << "   k2 =  " <<k2 << std::endl;
 
-	  // HB
-	  if( k0 == 0 ) {
-	    double sumamplitudechannel_HB = amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3];
-	    h_sumamplitudechannel_HB->Fill(sumamplitudechannel_HB);
-	    if( sumamplitudechannel_HB   >      80.) {
-	      sumamplitudesubdet += sumamplitudechannel_HB;
-	      sumofchannels++;
+      for(int k3 = 0; k3<72; k3++) {
+	
+	// HB
+	if( k0 == 0 ) {
+	  double sumamplitudechannel_HB = amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3];
+	  h_sumamplitudechannel_HB->Fill(sumamplitudechannel_HB);
+	  if( sumamplitudechannel_HB   >      80.) {
+	    sumamplitudesubdet += sumamplitudechannel_HB;
+	    sumofchannels++;
+	  }
+	  else {
+	    if( sumamplitudechannel_HB   >  0.) {
+	      sumamplitudesubdet0 += sumamplitudechannel_HB;
+	      sumofchannels0++;
 	    }
-	    else {
-	      //	      if( sumamplitudechannel_HB   >  0.) {
-		sumamplitudesubdet0 += sumamplitudechannel_HB;
-		sumofchannels0++;
-		//	      }
+	  }
+	}//
+	// HE
+	if( k0 == 1 ) {
+	  double sumamplitudechannel_HE = amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3]+amplitudechannel[k0][2][k2][k3];
+	  h_sumamplitudechannel_HE->Fill(sumamplitudechannel_HE);
+	  if( sumamplitudechannel_HE   >     200.) {
+	    sumamplitudesubdet += sumamplitudechannel_HE;
+	    sumofchannels++;
+	  }
+	  else {
+	    if( sumamplitudechannel_HE   >  0.) {
+	      sumamplitudesubdet0 += sumamplitudechannel_HE;
+	      sumofchannels0++;
 	    }
-	  }//
-	  // HE
-	  if( k0 == 1 ) {
-	    double sumamplitudechannel_HE = amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3]+amplitudechannel[k0][2][k2][k3];
-	    h_sumamplitudechannel_HE->Fill(sumamplitudechannel_HE);
-	    if( sumamplitudechannel_HE   >     200.) {
-	      sumamplitudesubdet += sumamplitudechannel_HE;
-	      sumofchannels++;
+	  }
+	}//
+	// HO
+	if( k0 == 2 ) {
+	  double sumamplitudechannel_HO = amplitudechannel[k0][3][k2][k3];
+	  h_sumamplitudechannel_HO->Fill(sumamplitudechannel_HO);
+	  if( sumamplitudechannel_HO   >    1200.) {
+	    sumamplitudesubdet += sumamplitudechannel_HO;
+	    sumofchannels++;
+	  }
+	  else {
+	    if( sumamplitudechannel_HO   >  0.) {
+	      sumamplitudesubdet0 += sumamplitudechannel_HO;
+	      sumofchannels0++;
 	    }
-	    else {
-	      //	      if( sumamplitudechannel_HE   >  0.) {
-		sumamplitudesubdet0 += sumamplitudechannel_HE;
-		sumofchannels0++;
-		//	      }
-	    }
-	  }//
-	  // HO
-	  if( k0 == 2 ) {
-	    double sumamplitudechannel_HO = amplitudechannel[k0][3][k2][k3];
-	    h_sumamplitudechannel_HO->Fill(sumamplitudechannel_HO);
-	    if( sumamplitudechannel_HO   >    1200.) {
-	      sumamplitudesubdet += sumamplitudechannel_HO;
-	      sumofchannels++;
-	    }
-	    else {
-	      //	      if( sumamplitudechannel_HO   >  0.) {
-		sumamplitudesubdet0 += sumamplitudechannel_HO;
-		sumofchannels0++;
-		//	      }
-	    }
-	  }//
-	  // HF
-	  if( k0 == 3 ) {
-	    double sumamplitudechannel_HF = amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3];
-	    h_sumamplitudechannel_HF->Fill(sumamplitudechannel_HF);
-	    if( sumamplitudechannel_HF   >     600.) {
-	      sumamplitudesubdet += sumamplitudechannel_HF;
-	      sumofchannels++;
-	    }
-	    else {
-	      //	      if( sumamplitudechannel_HF   >  0.) {
-		sumamplitudesubdet0 += sumamplitudechannel_HF;
-		sumofchannels0++;
-		//	      }
-	    }
-	  }//
-	  
+	  }
+	}//
+	// HF
+	if( k0 == 3 ) {
+	  double sumamplitudechannel_HF = amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3];
+	  h_sumamplitudechannel_HF->Fill(sumamplitudechannel_HF);
+	  if( sumamplitudechannel_HF   >     600.) {
+	    sumamplitudesubdet += sumamplitudechannel_HF;
+	    sumofchannels++;
+	  }
+	  else {
+      if (verbosity == -9814 ) std::cout << "===loop   lscounterM1 =  " <<lscounterM1 <<"sumamplitudechannel_HF =  " <<sumamplitudechannel_HF << "   k2 =  " <<k2 << "   k3 =  " <<k3 << "   sumofchannels0 =  " <<sumofchannels0 << std::endl;
 
-	  
-	}//k3
-      }//k2
-      //  }//k1
-
+	    if( sumamplitudechannel_HF   >  0.) {
+	      sumamplitudesubdet0 += sumamplitudechannel_HF;
+	      sumofchannels0++;
+	    }
+	  }
+	}//
+	
+	
+      }//k3
+    }//k2
+    //  }//k1
+    
       if( k0 == 0 ) { 
 	//	if( sumamplitudesubdet > maxxSUM1) maxxSUM1 = sumamplitudesubdet;
 	//	if( sumofchannels > maxxOCCUP1) maxxOCCUP1 = sumofchannels;
@@ -4019,6 +4022,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	maxxOCCUP4+=sumofchannels0;
 	maxxSUM4+=sumamplitudesubdet0;
       }//HF
+      if (verbosity == -9814 && k0==3) std::cout << "===loop   lscounterM1 =  " <<lscounterM1 <<"    sumofchannels0 =  " <<sumofchannels0 <<"    maxxSUM4 =  " <<maxxSUM4 << std::endl;
       
   }//k0
   
@@ -9383,6 +9387,9 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
     maxxSUM2 = 0.;
     maxxSUM3 = 0.;
     maxxSUM4 = 0.;
+      if (verbosity == -9814 ) std::cout << "*******  FINAL       ===loop   lscounterM1 =  " <<lscounterM1 <<"    nevcounter0 =  " <<nevcounter0 <<"    maxxSUM4 =  " <<maxxSUM4 << std::endl;
+
+
     //------------------------------------------------------
     maxxOCCUP1 /= float(nevcounter0);// ONLY FOR AVERAGE-occupancy
     h_maxxOCCUP_HB->Fill( float(lscounterM1) ,maxxOCCUP1);
