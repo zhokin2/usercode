@@ -3205,7 +3205,22 @@ int main(int argc, char *argv[])
     kslpq->SetXTitle("SumA of channels w/o signal per LS \b");
     kslpq->SetMarkerColor(2);
     kslpq->SetLineColor(0);
-    //  kslpq->SetMinimum(0.8);
+    if(sub==0) {
+      kslpq->SetMaximum(20000.);
+      kslpq->SetMinimum(5000.);
+    }
+    else if(sub==1) {
+      kslpq->SetMaximum(40000.);
+      kslpq->SetMinimum(0.);
+    }
+    else if(sub==2) {
+      kslpq->SetMaximum(10000.);
+      kslpq->SetMinimum(15000.);
+    }
+    else if(sub==3) {
+      kslpq->SetMaximum(100000.);
+      kslpq->SetMinimum(0.);
+    }
     gPad->SetGridx();
     kslpq->Draw("Error");
     /////////
@@ -3223,7 +3238,22 @@ int main(int argc, char *argv[])
     pqmks->SetXTitle("Occupancy of channels w/o signal per LS  \b");
     pqmks->SetMarkerColor(4);
     pqmks->SetLineColor(0);
-    //  pqmks->SetMinimum(0.8);
+    if(sub==0) {
+      pqmks->SetMaximum(600.);
+      pqmks->SetMinimum(200.);
+    }
+    else if(sub==1) {
+      pqmks->SetMaximum(600.);
+      pqmks->SetMinimum(0.);
+    }
+    else if(sub==2) {
+      pqmks->SetMaximum(200.);
+      pqmks->SetMinimum(50.);
+    }
+    else if(sub==3) {
+      pqmks->SetMaximum(866.);
+      pqmks->SetMinimum(861.);
+    }
     gPad->SetGridx();
     pqmks->Draw("Error");
     cHB->Update();
