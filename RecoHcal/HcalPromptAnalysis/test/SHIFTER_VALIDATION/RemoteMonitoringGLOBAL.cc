@@ -74,6 +74,8 @@ int main(int argc, char *argv[])
   TCanvas *cHB = new TCanvas("cHB","cHB",1000,500);
   TCanvas *cHE = new TCanvas("cHE","cHE",1500,500);
   TCanvas *cONE = new TCanvas("cONE","cONE",500,500);
+  TCanvas *cFour = new TCanvas("cFour","cFour",1500,1000);
+  TCanvas *cFour1= new TCanvas("cFour1","cFour1",1200,800);
   
 //  char *str = (char*)alloca(10000);
   
@@ -86,7 +88,8 @@ int main(int argc, char *argv[])
       cHB->Divide(2,1);
       cHB->cd(1);
       TH1F *LumLum= (TH1F*)hfile->Get("h_lsnumber_per_eachLS");
-      int MaxLum= LumLum->GetBinContent(LumLum->GetMaximumBin());
+      int MaxLumDanila= LumLum->GetBinContent(LumLum->GetMaximumBin());// old variant of Danila
+      cout<<" MaxLumDanila=     "<< MaxLumDanila <<endl;
       gPad->SetGridy();
       gPad->SetGridx();
       LumLum->SetMarkerStyle(10);
@@ -98,11 +101,15 @@ int main(int argc, char *argv[])
       LumLum->SetMarkerColor(4);
       LumLum->SetLineColor(0);
       LumLum->SetMinimum(0.8);
-      LumLum->GetXaxis()->SetRangeUser(0, MaxLum);
+      LumLum->GetXaxis()->SetRangeUser(0, MaxLumDanila);
       LumLum->Draw("Error");
 
       cHB->cd(2);
       TH1F *LumiEv= (TH1F*)hfile->Get("h_nevents_per_eachRealLS");
+      int MaxLum0= LumiEv->GetBinContent(LumiEv->GetMaximumBin());
+      int MaxLum = 0;for (int i=1;i<=LumiEv->GetXaxis()->GetNbins();i++) {if(LumiEv->GetBinContent(i)) {MaxLum = i; }}
+      cout<<" MaxLum0=     "<< MaxLum0 <<" MaxLum=     "<< MaxLum <<endl;
+
       gPad->SetGridy();
       gPad->SetGridx();
       gPad->SetLogy();
@@ -3113,19 +3120,19 @@ int main(int argc, char *argv[])
   int maxbins = MaxLum;
   cout<<">>>>   maxbins =     "<< maxbins <<endl;
   TH1F *SummedAmplitudeHisto[4];    // 1d histogramm for subdet
-  SummedAmplitudeHisto[0] = (TH1F*)hfile->Get("h_aversumamplitude_HB");
-  SummedAmplitudeHisto[1] = (TH1F*)hfile->Get("h_aversumamplitude_HE");
-  SummedAmplitudeHisto[2] = (TH1F*)hfile->Get("h_aversumamplitude_HO");
-  SummedAmplitudeHisto[3] = (TH1F*)hfile->Get("h_aversumamplitude_HF");
+  SummedAmplitudeHisto[0] = (TH1F*)hfile->Get("h_averSIGNALsumamplitude_HB");
+  SummedAmplitudeHisto[1] = (TH1F*)hfile->Get("h_averSIGNALsumamplitude_HE");
+  SummedAmplitudeHisto[2] = (TH1F*)hfile->Get("h_averSIGNALsumamplitude_HO");
+  SummedAmplitudeHisto[3] = (TH1F*)hfile->Get("h_averSIGNALsumamplitude_HF");
   TH1F *SummedAmplitudeOccupancyHisto[4];    // 1d histogramm for subdet
-  SummedAmplitudeOccupancyHisto[0] = (TH1F*)hfile->Get("h_averoccupancy_HB");
-  SummedAmplitudeOccupancyHisto[1] = (TH1F*)hfile->Get("h_averoccupancy_HE");
-  SummedAmplitudeOccupancyHisto[2] = (TH1F*)hfile->Get("h_averoccupancy_HO");
-  SummedAmplitudeOccupancyHisto[3] = (TH1F*)hfile->Get("h_averoccupancy_HF");
+  SummedAmplitudeOccupancyHisto[0] = (TH1F*)hfile->Get("h_averSIGNALoccupancy_HB");
+  SummedAmplitudeOccupancyHisto[1] = (TH1F*)hfile->Get("h_averSIGNALoccupancy_HE");
+  SummedAmplitudeOccupancyHisto[2] = (TH1F*)hfile->Get("h_averSIGNALoccupancy_HO");
+  SummedAmplitudeOccupancyHisto[3] = (TH1F*)hfile->Get("h_averSIGNALoccupancy_HF");
   for (int sub=0; sub<4; sub++) {
-    cHB->Clear();
-    cHB->Divide(2,1);
-    cHB->cd(1);
+    cHE->Clear();
+    cHE->Divide(2,1);
+    cHE->cd(1);
     TH1F* kslpq = new TH1F("kslpq","", maxbins, 1., maxbins+1.);
     //    cout<<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   sub =     "<< sub <<endl;
     for (int i=1;i<=kslpq->GetXaxis()->GetNbins();i++) {
@@ -3144,7 +3151,7 @@ int main(int argc, char *argv[])
     gPad->SetGridx();
     kslpq->Draw("Error");
     /////////
-    cHB->cd(2);
+    cHE->cd(2);
     TH1F* pqmks = new TH1F("pqmks","", maxbins, 1., maxbins+1.);
     for (int i=1;i<=pqmks->GetXaxis()->GetNbins();i++) {
       double ccc1 =  SummedAmplitudeOccupancyHisto[sub]->GetBinContent(i);
@@ -3161,12 +3168,12 @@ int main(int argc, char *argv[])
     //  pqmks->SetMinimum(0.8);
     gPad->SetGridx();
     pqmks->Draw("Error");
-    cHB->Update();
-    if(sub==0)  cHB->Print("SummedAmplitudesSignal_HB.png");
-    if(sub==1)  cHB->Print("SummedAmplitudesSignal_HE.png");
-    if(sub==2)  cHB->Print("SummedAmplitudesSignal_HO.png");
-    if(sub==3)  cHB->Print("SummedAmplitudesSignal_HF.png");
-    cHB->Clear();
+    cHE->Update();
+    if(sub==0)  cHE->Print("SummedAmplitudesSignal_HB.png");
+    if(sub==1)  cHE->Print("SummedAmplitudesSignal_HE.png");
+    if(sub==2)  cHE->Print("SummedAmplitudesSignal_HO.png");
+    if(sub==3)  cHE->Print("SummedAmplitudesSignal_HF.png");
+    cHE->Clear();
     if (kslpq) delete kslpq;
     if (pqmks) delete pqmks;
   }//for    
@@ -3178,20 +3185,20 @@ int main(int argc, char *argv[])
   //*************************                        *****     NoSignal                   *****
   cout<<">>>>>>>>>>>>>>>>>>>>>>>>start Summed Amplitude Plots NoSignal "<<endl;
   TH1F *NoSignalSummedAmplitudeHisto[4];    // 1d histogramm for subdet
-  NoSignalSummedAmplitudeHisto[0] = (TH1F*)hfile->Get("h_maxxSUMAmpl_HB");
-  NoSignalSummedAmplitudeHisto[1] = (TH1F*)hfile->Get("h_maxxSUMAmpl_HE");
-  NoSignalSummedAmplitudeHisto[2] = (TH1F*)hfile->Get("h_maxxSUMAmpl_HO");
-  NoSignalSummedAmplitudeHisto[3] = (TH1F*)hfile->Get("h_maxxSUMAmpl_HF");
+  NoSignalSummedAmplitudeHisto[0] = (TH1F*)hfile->Get("h_averNOSIGNALsumamplitude_HB");
+  NoSignalSummedAmplitudeHisto[1] = (TH1F*)hfile->Get("h_averNOSIGNALsumamplitude_HE");
+  NoSignalSummedAmplitudeHisto[2] = (TH1F*)hfile->Get("h_averNOSIGNALsumamplitude_HO");
+  NoSignalSummedAmplitudeHisto[3] = (TH1F*)hfile->Get("h_averNOSIGNALsumamplitude_HF");
   TH1F *NoSignalSummedAmplitudeOccupancyHisto[4];    // 1d histogramm for subdet
-  NoSignalSummedAmplitudeOccupancyHisto[0] = (TH1F*)hfile->Get("h_maxxOCCUP_HB");
-  NoSignalSummedAmplitudeOccupancyHisto[1] = (TH1F*)hfile->Get("h_maxxOCCUP_HE");
-  NoSignalSummedAmplitudeOccupancyHisto[2] = (TH1F*)hfile->Get("h_maxxOCCUP_HO");
-  NoSignalSummedAmplitudeOccupancyHisto[3] = (TH1F*)hfile->Get("h_maxxOCCUP_HF");
+  NoSignalSummedAmplitudeOccupancyHisto[0] = (TH1F*)hfile->Get("h_averNOSIGNALoccupancy_HB");
+  NoSignalSummedAmplitudeOccupancyHisto[1] = (TH1F*)hfile->Get("h_averNOSIGNALoccupancy_HE");
+  NoSignalSummedAmplitudeOccupancyHisto[2] = (TH1F*)hfile->Get("h_averNOSIGNALoccupancy_HO");
+  NoSignalSummedAmplitudeOccupancyHisto[3] = (TH1F*)hfile->Get("h_averNOSIGNALoccupancy_HF");
   for (int sub=0; sub<4; sub++) {
-    cHB->Clear();
-    cHB->Divide(2,1);
+    cHE->Clear();
+    cHE->Divide(2,1);
     
-    cHB->cd(1);
+    cHE->cd(1);
     TH1F* kslpq = new TH1F("kslpq","", maxbins, 1., maxbins+1.);
     for (int i=1;i<=kslpq->GetXaxis()->GetNbins();i++) {
       double ccc1 =  NoSignalSummedAmplitudeHisto[sub]->GetBinContent(i);
@@ -3224,7 +3231,7 @@ int main(int argc, char *argv[])
     gPad->SetGridx();
     kslpq->Draw("Error");
     /////////
-    cHB->cd(2);
+    cHE->cd(2);
     TH1F* pqmks = new TH1F("pqmks","", maxbins, 1., maxbins+1.);
     for (int i=1;i<=pqmks->GetXaxis()->GetNbins();i++) {
       double ccc1 =  NoSignalSummedAmplitudeOccupancyHisto[sub]->GetBinContent(i);
@@ -3252,16 +3259,16 @@ int main(int argc, char *argv[])
     }
     else if(sub==3) {
       pqmks->SetMaximum(866.);
-      pqmks->SetMinimum(861.);
+      pqmks->SetMinimum(856.);
     }
     gPad->SetGridx();
     pqmks->Draw("Error");
-    cHB->Update();
-    if(sub==0)  cHB->Print("NoSignalSummedAmplitudes_HB.png");
-    if(sub==1)  cHB->Print("NoSignalSummedAmplitudes_HE.png");
-    if(sub==2)  cHB->Print("NoSignalSummedAmplitudes_HO.png");
-    if(sub==3)  cHB->Print("NoSignalSummedAmplitudes_HF.png");
-    cHB->Clear();
+    cHE->Update();
+    if(sub==0)  cHE->Print("NoSignalSummedAmplitudes_HB.png");
+    if(sub==1)  cHE->Print("NoSignalSummedAmplitudes_HE.png");
+    if(sub==2)  cHE->Print("NoSignalSummedAmplitudes_HO.png");
+    if(sub==3)  cHE->Print("NoSignalSummedAmplitudes_HF.png");
+    cHE->Clear();
     if (kslpq) delete kslpq;
     if (pqmks) delete pqmks;
   }//for    
@@ -3269,11 +3276,207 @@ int main(int argc, char *argv[])
   //for (unsigned int i=0; i<4; i++) {delete NoSignalSummedAmplitudeHisto[i];delete NoSignalSummedAmplitudeOccupancyHisto[i];}
   //////////
   
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+  /// Summed Amplitude Plots:
+  //*************************                        *****     MaxxValues                   *****
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>start Summed Amplitude Plots Maxx "<<endl;
+  TH1F *MaxxSummedAmplitudeHisto[4];    // 1d histogramm for subdet
+  MaxxSummedAmplitudeHisto[0] = (TH1F*)hfile->Get("h_maxxSUMAmpl_HB");
+  MaxxSummedAmplitudeHisto[1] = (TH1F*)hfile->Get("h_maxxSUMAmpl_HE");
+  MaxxSummedAmplitudeHisto[2] = (TH1F*)hfile->Get("h_maxxSUMAmpl_HO");
+  MaxxSummedAmplitudeHisto[3] = (TH1F*)hfile->Get("h_maxxSUMAmpl_HF");
+  TH1F *MaxxSummedAmplitudeOccupancyHisto[4];    // 1d histogramm for subdet
+  MaxxSummedAmplitudeOccupancyHisto[0] = (TH1F*)hfile->Get("h_maxxOCCUP_HB");
+  MaxxSummedAmplitudeOccupancyHisto[1] = (TH1F*)hfile->Get("h_maxxOCCUP_HE");
+  MaxxSummedAmplitudeOccupancyHisto[2] = (TH1F*)hfile->Get("h_maxxOCCUP_HO");
+  MaxxSummedAmplitudeOccupancyHisto[3] = (TH1F*)hfile->Get("h_maxxOCCUP_HF");
+  TH1F *SAmplitudeHisto[4];    // 1d histogramm for subdet
+  SAmplitudeHisto[0] = (TH1F*)hfile->Get("h_eventamplitude_HB");
+  SAmplitudeHisto[1] = (TH1F*)hfile->Get("h_eventamplitude_HE");
+  SAmplitudeHisto[2] = (TH1F*)hfile->Get("h_eventamplitude_HO");
+  SAmplitudeHisto[3] = (TH1F*)hfile->Get("h_eventamplitude_HF");
+  TH1F *OccupancyHisto[4];    // 1d histogramm for subdet
+  OccupancyHisto[0] = (TH1F*)hfile->Get("h_eventoccupancy_HB");
+  OccupancyHisto[1] = (TH1F*)hfile->Get("h_eventoccupancy_HE");
+  OccupancyHisto[2] = (TH1F*)hfile->Get("h_eventoccupancy_HO");
+  OccupancyHisto[3] = (TH1F*)hfile->Get("h_eventoccupancy_HF");
+
+
+  int countamplmaxHB=0;int countamplmaxHE=0;int countamplmaxHO=0;int countamplmaxHF=0;
+  int countoccumaxHB=0;int countoccumaxHE=0;int countoccumaxHO=0;int countoccumaxHF=0;
+  unsigned long int countamplHB=0;unsigned long int countamplHE=0;unsigned long int countamplHO=0;unsigned long int countamplHF=0;
+  unsigned long int countoccuHB=0;unsigned long int countoccuHE=0;unsigned long int countoccuHO=0;unsigned long int countoccuHF=0;
+  for (int sub=0; sub<4; sub++) {
+    cFour->Clear();
+    cFour->Divide(2,2);
+    
+    cFour->cd(1);
+    TH1F* lpqxc = new TH1F("lpqxc","", maxbins, 1., maxbins+1.);
+    for (int i=1;i<=lpqxc->GetXaxis()->GetNbins();i++) {
+      double ccc1 =  MaxxSummedAmplitudeHisto[sub]->GetBinContent(i);
+      //   	  if(ccc1>0.)	  cout<<"111111111111111111111111111  iLS = "<<i<<"  LS= "<<ccc1<<endl;
+      if(ccc1>0.) lpqxc->Fill(float(i), ccc1);
+      if(sub==0 && ccc1> 60000.) countamplmaxHB++;
+      if(sub==1 && ccc1> 60000.) countamplmaxHE++;
+      if(sub==2 && ccc1>150000.) countamplmaxHO++;
+      if(sub==3 && ccc1> 22000.) countamplmaxHF++;
+    }
+    //      gPad->SetLogy();
+    lpqxc->SetMarkerStyle(20);
+    lpqxc->SetMarkerSize(0.8);
+//    lpqxc->GetYaxis()->SetLabelSize(0.08);
+    if(sub==0) lpqxc->SetXTitle("HB: max SA over LS-events per LS \b");
+    if(sub==1) lpqxc->SetXTitle("HE: max SA over LS-events per LS \b");
+    if(sub==2) lpqxc->SetXTitle("HO: max SA over LS-events per LS \b");
+    if(sub==3) lpqxc->SetXTitle("HF: max SA over LS-events per LS \b");
+    lpqxc->SetMarkerColor(2);
+    lpqxc->SetLineColor(0);
+    gPad->SetGridx();
+    lpqxc->Draw("Error");
+
+
+    /////////
+    cFour->cd(2);
+    TH1F* hpzlm = new TH1F("hpzlm","", maxbins, 1., maxbins+1.);
+    for (int i=1;i<=hpzlm->GetXaxis()->GetNbins();i++) {
+      double ccc1 =  MaxxSummedAmplitudeOccupancyHisto[sub]->GetBinContent(i);
+      //     	  if(ccc1>0.)	  cout<<"2222222222222222222222222  iLS = "<<i<<"  LS= "<<ccc1<<endl;
+      if(ccc1>0.) hpzlm->Fill(float(i), ccc1);
+      if(sub==0 && ccc1> 2000.) countoccumaxHB++;
+      if(sub==1 && ccc1> 1200.) countoccumaxHE++;
+      if(sub==2 && ccc1> 2000.) countoccumaxHO++;
+      if(sub==3 && ccc1>  860.) countoccumaxHF++;
+    }
+    //      gPad->SetLogy();
+    hpzlm->SetMarkerStyle(20);
+    hpzlm->SetMarkerSize(0.8);
+//    hpzlm->GetYaxis()->SetLabelSize(0.08);
+    if(sub==0) hpzlm->SetXTitle("HB: max Occupancy over LS-events per LS \b");
+    if(sub==1) hpzlm->SetXTitle("HE: max Occupancy over LS-events per LS \b");
+    if(sub==2) hpzlm->SetXTitle("HO: max Occupancy over LS-events per LS \b");
+    if(sub==3) hpzlm->SetXTitle("HF: max Occupancy over LS-events per LS \b");
+    hpzlm->SetMarkerColor(4);
+    hpzlm->SetLineColor(0);
+    gPad->SetGridx();
+    if(sub==3) {
+      hpzlm->SetMaximum(866.);
+      hpzlm->SetMinimum(856.);
+    }
+    hpzlm->Draw("Error");
+
+    /////////
+    cFour->cd(3);
+    gPad->SetLogy();
+    for (int i=1;i<=SAmplitudeHisto[sub]->GetXaxis()->GetNbins();i++) {
+//      if(sub==0 && i * 800> 60000.) {
+//	cout<<">=>=>>=> countamplHB= "<<countamplHB<<" content = "<<SAmplitudeHisto[sub]->GetBinContent(i)<<" sub= "<<sub<<" i= "<<i<<  endl;
+//	countamplHB+=SAmplitudeHisto[sub]->GetBinContent(i);
+//      }
+      if(sub==0 && i * 800> 60000.) countamplHB+=SAmplitudeHisto[sub]->GetBinContent(i);
+      if(sub==1 && i *1000> 60000.) countamplHE+=SAmplitudeHisto[sub]->GetBinContent(i);
+      if(sub==2 && i *2500>150000.) countamplHO+=SAmplitudeHisto[sub]->GetBinContent(i);
+      if(sub==3 && i *1400> 22000.) countamplHF+=SAmplitudeHisto[sub]->GetBinContent(i);
+    }
+    SAmplitudeHisto[sub]->SetMarkerStyle(20);
+    SAmplitudeHisto[sub]->SetMarkerSize(0.8);
+         if(sub==0) SAmplitudeHisto[sub]->SetTitle("HB event Amplitude\b");
+         if(sub==1) SAmplitudeHisto[sub]->SetTitle("HE event Amplitude\b");
+         if(sub==2) SAmplitudeHisto[sub]->SetTitle("HO event Amplitude\b");
+         if(sub==3) SAmplitudeHisto[sub]->SetTitle("HF event Amplitude\b");
+//    SAmplitudeHisto[sub]->GetYaxis()->SetLabelSize(0.08);
+    SAmplitudeHisto[sub]->SetXTitle("event amplitude \b");
+    SAmplitudeHisto[sub]->SetMarkerColor(2);
+    SAmplitudeHisto[sub]->SetLineColor(2);
+    SAmplitudeHisto[sub]->Draw("");
+    
+    /////////
+    cFour->cd(4);
+    gPad->SetLogy();
+    for (int i=1;i<=OccupancyHisto[sub]->GetXaxis()->GetNbins();i++) {
+      if(sub==0 && i * 30 > 2000.) countoccuHB+=OccupancyHisto[sub]->GetBinContent(i);
+      if(sub==1 && i * 20 > 1200.) countoccuHE+=OccupancyHisto[sub]->GetBinContent(i);
+      if(sub==2 && i * 25 > 2000.) countoccuHO+=OccupancyHisto[sub]->GetBinContent(i);
+      if(sub==3 && i * 10 >  860.) countoccuHF+=OccupancyHisto[sub]->GetBinContent(i);
+    }
+    OccupancyHisto[sub]->SetMarkerStyle(20);
+    OccupancyHisto[sub]->SetMarkerSize(0.8);
+         if(sub==0) OccupancyHisto[sub]->SetTitle("HB event Occupancy\b");
+         if(sub==1) OccupancyHisto[sub]->SetTitle("HE event Occupancy\b");
+         if(sub==2) OccupancyHisto[sub]->SetTitle("HO event Occupancy\b");
+         if(sub==3) OccupancyHisto[sub]->SetTitle("HF event Occupancy\b");
+//    OccupancyHisto[sub]->GetYaxis()->SetLabelSize(0.08);
+    OccupancyHisto[sub]->SetXTitle("event occupancy \b");
+    OccupancyHisto[sub]->SetMarkerColor(4);
+    OccupancyHisto[sub]->SetLineColor(4);
+    OccupancyHisto[sub]->Draw("");
+    
+
+    cFour->Update();
+    if(sub==0)  cFour->Print("MaxxSummedAmplitudes_HB.png");
+    if(sub==1)  cFour->Print("MaxxSummedAmplitudes_HE.png");
+    if(sub==2)  cFour->Print("MaxxSummedAmplitudes_HO.png");
+    if(sub==3)  cFour->Print("MaxxSummedAmplitudes_HF.png");
+    cFour->Clear();
+    if (lpqxc) delete lpqxc;
+    if (hpzlm) delete hpzlm;
+  }//for    
+  //////////
+  cout<<">=>=>>=> countamplmaxHB= "<<countamplmaxHB<<" countamplmaxHE= "<<countamplmaxHE<<" countamplmaxHO= "<<countamplmaxHO<<" countamplmaxHF= "<<countamplmaxHF<<  endl;
+  cout<<">=>=>>=> countoccumaxHB= "<<countoccumaxHB<<" countoccumaxHE= "<<countoccumaxHE<<" countoccumaxHO= "<<countoccumaxHO<<" countoccumaxHF= "<<countoccumaxHF<<  endl;
+  cout<<">=>=>>=> countamplHB= "<<countamplHB<<" countamplHE= "<<countamplHE<<" countamplHO= "<<countamplHO<<" countamplHF= "<<countamplHF<<  endl;
+  cout<<">=>=>>=> countoccuHB= "<<countoccuHB<<" countoccuHE= "<<countoccuHE<<" countoccuHO= "<<countoccuHO<<" countoccuHF= "<<countoccuHF<<  endl;
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+  /// Summed Amplitude Plots:
+  //*************************                        *****     channelsummedA over depths                   *****
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>channelsummedA over depths "<<endl;
+  TH1F *ChannelDepthsummedAmplitudesPlots[4];    // 1d histogramm for subdet
+  ChannelDepthsummedAmplitudesPlots[0] = (TH1F*)hfile->Get("h_sumamplitudechannel_HB");
+  ChannelDepthsummedAmplitudesPlots[1] = (TH1F*)hfile->Get("h_sumamplitudechannel_HE");
+  ChannelDepthsummedAmplitudesPlots[2] = (TH1F*)hfile->Get("h_sumamplitudechannel_HO");
+  ChannelDepthsummedAmplitudesPlots[3] = (TH1F*)hfile->Get("h_sumamplitudechannel_HF");
+
+
+    cFour1->Clear();
+    cFour1->Divide(2,2);
+  for (int sub=0; sub<4; sub++) {
+    
+    if(sub==0)  cFour1->cd(1);
+    if(sub==1)  cFour1->cd(2);
+    if(sub==2)  cFour1->cd(3);
+    if(sub==3)  cFour1->cd(4);
+    gPad->SetLogy();
+    ChannelDepthsummedAmplitudesPlots[sub]->SetMarkerStyle(20);
+    ChannelDepthsummedAmplitudesPlots[sub]->SetMarkerSize(0.8);
+         if(sub==0) ChannelDepthsummedAmplitudesPlots[sub]->SetTitle("HB channel Amplitudes\b");
+         if(sub==1) ChannelDepthsummedAmplitudesPlots[sub]->SetTitle("HE channel Amplitudes\b");
+         if(sub==2) ChannelDepthsummedAmplitudesPlots[sub]->SetTitle("HO channel Amplitudes\b");
+         if(sub==3) ChannelDepthsummedAmplitudesPlots[sub]->SetTitle("HF channel Amplitudes\b");
+//    ChannelDepthsummedAmplitudesPlots[sub]->GetYaxis()->SetLabelSize(0.08);
+    if(sub==0) ChannelDepthsummedAmplitudesPlots[sub]->SetXTitle("HB channel depths summed Amplitudes \b");
+    if(sub==1) ChannelDepthsummedAmplitudesPlots[sub]->SetXTitle("HE channel depths summed Amplitudes \b");
+    if(sub==2) ChannelDepthsummedAmplitudesPlots[sub]->SetXTitle("HO channel depths summed Amplitudes \b");
+    if(sub==3) ChannelDepthsummedAmplitudesPlots[sub]->SetXTitle("HF channel depths summed Amplitudes \b");
+    ChannelDepthsummedAmplitudesPlots[sub]->SetMarkerColor(2);
+    ChannelDepthsummedAmplitudesPlots[sub]->SetLineColor(2);
+    ChannelDepthsummedAmplitudesPlots[sub]->Draw("");
+    
+  }//for    
+    cFour1->Update();
+    cFour1->Print("ChannelDepthsummedAmplitudes.png");
+    cFour1->Clear();
+
+
+  //////////
+  
 //====================================================================================================================
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>> ====================================================================="<<endl;
 
 //=====================================================================================================
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>> =================================================="<<endl;
 
 //=====================================================================================
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>> ================================="<<endl;
 
 //======================================================================
 // Creating each test kind for each subdet html pages:
@@ -3568,10 +3771,12 @@ int main(int argc, char *argv[])
 	   if (test==1) {
 	     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 	     htmlFile << "<a name=\"ErrorA\"></a>\n";
+	     htmlFile << "<h2> 4. Error type A</h2>\n";
+	     htmlFile << "<h3> note: no sence to see plots of this item if max difference is too large(due to very high A of some channels)</h3>\n";
+	     htmlFile << "<br>\n";
 	     
      //HB:
 	     if (sub==1) {
-	       htmlFile << "<h2> 4. Error type A</h2>\n";
 	       htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.1-1.6 (p-p collisions) </h3>\n";
 	       htmlFile << " <img src=\"HistErrA_HB.png\" />\n";
 	       htmlFile << "<br>\n";
@@ -3591,6 +3796,7 @@ int main(int argc, char *argv[])
 
        htmlFile << "<a name=\"ErrorAoccupancy\"></a>\n";
        htmlFile << "<h2> 6. Error type A: min/ave ratio for occupancy distributions with Amplitude bigger 25 (HBM:neg.eta;HBP:pos.eta) </h2>\n";
+       htmlFile << "<h2> FOR CROSS-CHECK OLNY !!!</h2>\n";
        htmlFile << "<h2> TO IDENTIFY A-type errors: for most of LSs the ratio to be lower 0.6 at least for HF- or HF+ </h2>\n";
        htmlFile << "<h2> For runs without A-type errors: for most of LSs the ratio is higher 0.6 and is the same for HF- and HF+ </h2>\n";
        htmlFile << " <img src=\"OccPlots_HB.png\" /><br><br>\n";
@@ -3612,7 +3818,6 @@ int main(int argc, char *argv[])
 	     
      //HE:
 	     if (sub==2) {
-	       htmlFile << "<h2> 4. Error type A</h2>\n";
 	       htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.2-1.8 (p-p collisions) </h3>\n";
 	       htmlFile << " <img src=\"HistErrA_HE.png\" />\n";
 	       htmlFile << "<br>\n";
@@ -3634,6 +3839,7 @@ int main(int argc, char *argv[])
 
        htmlFile << "<a name=\"ErrorAoccupancy\"></a>\n";
        htmlFile << "<h2> 6. Error type A: min/ave ratio for occupancy distributions with Amplitude bigger 35 (HEM:neg.eta;HEP:pos.eta) </h2>\n";
+       htmlFile << "<h2> FOR CROSS-CHECK OLNY !!!</h2>\n";
        htmlFile << "<h2> TO IDENTIFY A-type errors: for most of LSs the ratio to be lower 0.8 at least for HF- or HF+ </h2>\n";
        htmlFile << "<h2> For runs without A-type errors: for most of LSs the ratio is higher 0.8 and is the same for HF- and HF+ </h2>\n";
        htmlFile << " <img src=\"OccPlots_HE.png\" /><br><br>\n";
@@ -3654,7 +3860,6 @@ int main(int argc, char *argv[])
 	     
      //HO:
 	     if (sub==3) {
-	       htmlFile << "<h2> 4. Error type A</h2>\n";
 	       htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.1-1.5 (p-p collisions) </h3>\n";
 	       htmlFile << " <img src=\"HistErrA_HO.png\" />\n";
 	       htmlFile << "<br>\n";
@@ -3676,6 +3881,7 @@ int main(int argc, char *argv[])
 
        htmlFile << "<a name=\"ErrorAoccupancy\"></a>\n";
        htmlFile << "<h2> 6. Error type A: min/ave ratio for occupancy distributions with Amplitude bigger 80 (HOM:neg.eta;HOP:pos.eta) </h2>\n";
+       htmlFile << "<h2> FOR CROSS-CHECK OLNY !!!</h2>\n";
        htmlFile << "<h2> TO IDENTIFY A-type errors: for most of LSs the ratio to be lower 0.8 at least for HF- or HF+ </h2>\n";
        htmlFile << "<h2> For runs without A-type errors: for most of LSs the ratio is higher 0.8 and is the same for HF- and HF+ </h2>\n";
        htmlFile << " <img src=\"OccPlots_HO.png\" /><br><br>\n";
@@ -3697,7 +3903,6 @@ int main(int argc, char *argv[])
      //HF:
 	     if (sub==4) {
 	       //		flagSpecHF+=1;
-	       htmlFile << "<h2> 4. Error type A</h2>\n";
 	       htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.8-2.4 (p-p collisions) </h3>\n";
 	       htmlFile << " <img src=\"HistErrA_HF.png\" />\n";
 	       htmlFile << "<br>\n";
@@ -3720,6 +3925,7 @@ int main(int argc, char *argv[])
 
        htmlFile << "<a name=\"ErrorAoccupancy\"></a>\n";
        htmlFile << "<h2> 6. Error type A: min/ave ratio for occupancy distributions with Amplitude bigger 20 (HFM:neg.eta;HFP:pos.eta) </h2>\n";
+       htmlFile << "<h2> FOR CROSS-CHECK OLNY !!!</h2>\n";
        htmlFile << "<h2> TO IDENTIFY A-type errors: for most of LSs the ratio to be lower 0.8 at least for HF- or HF+ </h2>\n";
        htmlFile << "<h2> For runs without A-type errors: for most of LSs the ratio is higher 0.8 and is the same for HF- and HF+ </h2>\n";
        htmlFile << " <img src=\"OccPlots_HF.png\" /><br><br>\n";
@@ -3986,11 +4192,13 @@ int main(int argc, char *argv[])
     htmlFile << "<h3> where SA = SUM(A_i) ,and means that Amplitude is summed over all sub-detector channels, </h3>"<< std::endl; 
     htmlFile << "<h3> where A_i = SUM(A_depth) denotes channel amplitude summed over depths;  </h3>"<< std::endl; 
     htmlFile << "<br>"<< std::endl;
-    htmlFile << "<h3> Apply cuts on A_i to take into account channels with or/and without signal; </h3>"<< std::endl; 
+    htmlFile << "<h3> Apply cuts on A_i to take into account channels with or/and without a'la Signal: </h3>"<< std::endl; 
+    htmlFile << " <img src=\"ChannelDepthsummedAmplitudes.png\" />" << std::endl;      
     htmlFile << "<br>"<< std::endl;
 
 
     htmlFile << "<h1> 1.  for channels with signal </h1>"<< std::endl; 
+    htmlFile << "<br>"<< std::endl;
     htmlFile << "<h2> for HB: A_i> 80; </h2>"<< std::endl; 
     htmlFile << " <img src=\"SummedAmplitudesSignal_HB.png\" />" << std::endl;      
     htmlFile << "<br>"<< std::endl;
@@ -4006,6 +4214,7 @@ int main(int argc, char *argv[])
 
 
     htmlFile << "<h1> 2.  for channels w/o signal </h1>"<< std::endl; 
+    htmlFile << "<br>"<< std::endl;
     htmlFile << "<h2> for HB: A_i< 80;</h2>"<< std::endl; 
     htmlFile << " <img src=\"NoSignalSummedAmplitudes_HB.png\" />" << std::endl;      
     htmlFile << "<br>"<< std::endl;
@@ -4020,7 +4229,37 @@ int main(int argc, char *argv[])
     htmlFile << "<br>"<< std::endl;
     
     
-    htmlFile << "<h2> 6.Lumisection Status  </h2>"<< std::endl;
+    htmlFile << "<br>"<< std::endl;
+    htmlFile << "<br>"<< std::endl;
+    htmlFile << "<h1> 3. four plots: ---1--->  max SA ---2---> max Occupancy ---3--->  SA ---4---> Occupancy over all events of LS </h1>"<< std::endl; 
+    htmlFile << "<br>"<< std::endl;
+
+    htmlFile << "<h2> for HB: maxSA vs LS, masOccupancy vs LS, SA, Occupancy </h2>"<< std::endl; 
+    htmlFile << " <img src=\"MaxxSummedAmplitudes_HB.png\" />" << std::endl;      
+    htmlFile << "<h2>" " ......(forCut:SAmax>60000) N= "<<countamplmaxHB<< " ...... (forCut:OCCUPmax>2000) N= "<<countoccumaxHB<< " </h2>"<< std::endl; 
+    htmlFile << "<h2>" " ......(forCut:SA>60000) N= "<<countamplHB<< " ...... (forCut:OCCUP>2000) N= "<<countoccuHB<< " </h2>"<< std::endl; 
+    htmlFile << "<br>"<< std::endl;
+
+    htmlFile << "<h2> for HE: maxSA vs LS, masOccupancy vs LS, SA, Occupancy </h2>"<< std::endl; 
+    htmlFile << " <img src=\"MaxxSummedAmplitudes_HE.png\" />" << std::endl;      
+    htmlFile << "<h2>" " ......(forCut:SAmax>60000) N= "<<countamplmaxHE<< " ...... (forCut:OCCUPmax>1200) N= "<<countoccumaxHE<< " </h2>"<< std::endl; 
+    htmlFile << "<h2>" " ......(forCut:SA>60000) N= "<<countamplHE<< " ...... (forCut:OCCUP>1200) N= "<<countoccuHE<< " </h2>"<< std::endl; 
+    htmlFile << "<br>"<< std::endl;
+
+    htmlFile << "<h2> for HO: maxSA vs LS, masOccupancy vs LS, SA, Occupancy </h2>"<< std::endl; 
+    htmlFile << " <img src=\"MaxxSummedAmplitudes_HO.png\" />" << std::endl;      
+    htmlFile << "<h2>" " ......(forCut:SAmax>150000) N= "<<countamplmaxHO<< " ...... (forCut:OCCUPmax>2000) N= "<<countoccumaxHO<< " </h2>"<< std::endl; 
+    htmlFile << "<h2>" " ......(forCut:SA>150000) N= "<<countamplHO<< " ...... (forCut:OCCUP>2000) N= "<<countoccuHO<< " </h2>"<< std::endl; 
+    htmlFile << "<br>"<< std::endl;
+
+    htmlFile << "<h2> for HF: maxSA vs LS, masOccupancy vs LS, SA, Occupancy </h2>"<< std::endl; 
+    htmlFile << " <img src=\"MaxxSummedAmplitudes_HF.png\" />" << std::endl;      
+    htmlFile << "<h2>" " ......(forCut:SAmax>22000) N= "<<countamplmaxHF<< " ...... (forCut:OCCUPmax>860) N= "<<countoccumaxHF<< " </h2>"<< std::endl; 
+    htmlFile << "<h2>" " ......(forCut:SA>22000) N= "<<countamplHF<< " ...... (forCut:OCCUP>860) N= "<<countoccuHF<< " </h2>"<< std::endl; 
+    htmlFile << "<br>"<< std::endl;
+    
+    
+    htmlFile << "<h2> 4.Lumisection Status:  </h2>"<< std::endl;
     htmlFile << "<h3> Legends: HBdepth1 red boxes correspond LSs selected with cut: <td class=\"s6\" align=\"center\">"<<Cut0[1][1][1]<< std::endl;
     htmlFile << "<h3> Legends: HEdepth1 red boxes correspond LSs selected with cut: <td class=\"s6\" align=\"center\">"<<Cut0[1][2][1]<< std::endl;
     htmlFile << "<h3> Legends: HOdepth4 red boxes correspond LSs selected with cut: <td class=\"s6\" align=\"center\">"<<Cut0[1][3][4]<< std::endl;
@@ -4032,20 +4271,28 @@ int main(int argc, char *argv[])
     htmlFile << "<tr>";
     htmlFile << "<td class=\"s4\" align=\"center\">LS</td>"    << std::endl;
     //              htmlFile << "<td class=\"s1\" align=\"center\">LS</td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">Number of events</td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\"> Num.of ev.</td>"  << std::endl;
     
     //	   for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< A > Depth "<< k <<" </td>"  << std::endl;
     //	   for (int sub=1;sub<=4;sub++) htmlFile << "<td class=\"s1\" align=\"center\">< A > Depth1, sub "<< sub <<" </td>"  << std::endl;
     
-    htmlFile << "<td class=\"s1\" align=\"center\">< A >HB Depth1</td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">< A >HE Depth1</td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">< A >HO Depth4</td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">< A >HF Depth1</td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< A >HB Dep1</td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< A >HE Dep1</td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< A >HO Dep4</td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< A >HF Dep1</td>"  << std::endl;
     
-    htmlFile << "<td class=\"s1\" align=\"center\">< Summed A >HF (Signal) </td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">Occupancy for < Summed A >HF (Signal) </td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">< Summed A >HF (NoSignal) </td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">Occupancy for < Summed A >HF (NoSignal) </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< SA >HF (Signal) </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">Occup. HF (Signal) </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< SA >HF (NoSignal) </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">Occup. HF (NoSignal) </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\"> maxSA HB  </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\"> maxOccup. HB </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\"> maxSA HE  </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\"> maxOccup. HE </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\"> maxSA HO  </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\"> maxOccup. HO </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\"> maxSA HF  </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\"> maxOccup. HF </td>"  << std::endl;
     
     htmlFile << "</tr>"   << std::endl;    
     
@@ -4077,6 +4324,14 @@ int main(int argc, char *argv[])
       htmlFile << raw_class <<SummedAmplitudeOccupancyHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
       htmlFile << raw_class <<NoSignalSummedAmplitudeHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
       htmlFile << raw_class <<NoSignalSummedAmplitudeOccupancyHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
+      htmlFile << raw_class <<MaxxSummedAmplitudeHisto[0]->GetBinContent(i)<<"</td>"<< std::endl;	     
+      htmlFile << raw_class <<MaxxSummedAmplitudeOccupancyHisto[0]->GetBinContent(i)<<"</td>"<< std::endl;	     
+      htmlFile << raw_class <<MaxxSummedAmplitudeHisto[1]->GetBinContent(i)<<"</td>"<< std::endl;	     
+      htmlFile << raw_class <<MaxxSummedAmplitudeOccupancyHisto[1]->GetBinContent(i)<<"</td>"<< std::endl;	     
+      htmlFile << raw_class <<MaxxSummedAmplitudeHisto[2]->GetBinContent(i)<<"</td>"<< std::endl;	     
+      htmlFile << raw_class <<MaxxSummedAmplitudeOccupancyHisto[2]->GetBinContent(i)<<"</td>"<< std::endl;	     
+      htmlFile << raw_class <<MaxxSummedAmplitudeHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
+      htmlFile << raw_class <<MaxxSummedAmplitudeOccupancyHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
       
       htmlFile << "</tr>" << std::endl;
       ind+=1;
