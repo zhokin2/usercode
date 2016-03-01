@@ -1623,15 +1623,25 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH1F* h_sumErrorBperLS8 ;
   TH1F* h_sum0ErrorBperLS8;
   
-  TH1F* h_averoccupancy_HB;
-  TH1F* h_averoccupancy_HE;
-  TH1F* h_averoccupancy_HF;
-  TH1F* h_averoccupancy_HO;
+  TH1F* h_averSIGNALoccupancy_HB;
+  TH1F* h_averSIGNALoccupancy_HE;
+  TH1F* h_averSIGNALoccupancy_HF;
+  TH1F* h_averSIGNALoccupancy_HO;
 
-  TH1F*   h_aversumamplitude_HB;
-  TH1F*   h_aversumamplitude_HE;
-  TH1F*   h_aversumamplitude_HF;
-  TH1F*   h_aversumamplitude_HO;
+  TH1F*   h_averSIGNALsumamplitude_HB;
+  TH1F*   h_averSIGNALsumamplitude_HE;
+  TH1F*   h_averSIGNALsumamplitude_HF;
+  TH1F*   h_averSIGNALsumamplitude_HO;
+
+  TH1F* h_averNOSIGNALoccupancy_HB;
+  TH1F* h_averNOSIGNALoccupancy_HE;
+  TH1F* h_averNOSIGNALoccupancy_HF;
+  TH1F* h_averNOSIGNALoccupancy_HO;
+
+  TH1F*   h_averNOSIGNALsumamplitude_HB;
+  TH1F*   h_averNOSIGNALsumamplitude_HE;
+  TH1F*   h_averNOSIGNALsumamplitude_HF;
+  TH1F*   h_averNOSIGNALsumamplitude_HO;
 
   TH1F* h_maxxSUMAmpl_HB;
   TH1F* h_maxxSUMAmpl_HE;
@@ -1647,6 +1657,22 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH1F* h_sumamplitudechannel_HE;
   TH1F* h_sumamplitudechannel_HF;
   TH1F* h_sumamplitudechannel_HO;
+
+  TH1F* h_eventamplitude_HB;
+  TH1F* h_eventamplitude_HE;
+  TH1F* h_eventamplitude_HF;
+  TH1F* h_eventamplitude_HO;
+
+  TH1F* h_eventoccupancy_HB;
+  TH1F* h_eventoccupancy_HE;
+  TH1F* h_eventoccupancy_HF;
+  TH1F* h_eventoccupancy_HO;
+
+  TH2F*    h_2DAtaildepth1_HB;
+  TH2F*    h_2D0Ataildepth1_HB;
+  TH2F*    h_2DAtaildepth2_HB;
+  TH2F*    h_2D0Ataildepth2_HB;
+
 
 
   /////////////////////////////////////////////
@@ -1713,15 +1739,25 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   int nevcounter0 ;
   int nevcounter00 ;
 
-  double averoccupancy_HB;
-  double averoccupancy_HE;
-  double averoccupancy_HF;
-  double averoccupancy_HO;
+  double averSIGNALoccupancy_HB;
+  double averSIGNALoccupancy_HE;
+  double averSIGNALoccupancy_HF;
+  double averSIGNALoccupancy_HO;
 
-  double aversumamplitude_HB;
-  double aversumamplitude_HE;
-  double aversumamplitude_HF;
-  double aversumamplitude_HO;
+  double averSIGNALsumamplitude_HB;
+  double averSIGNALsumamplitude_HE;
+  double averSIGNALsumamplitude_HF;
+  double averSIGNALsumamplitude_HO;
+
+  double averNOSIGNALoccupancy_HB;
+  double averNOSIGNALoccupancy_HE;
+  double averNOSIGNALoccupancy_HF;
+  double averNOSIGNALoccupancy_HO;
+
+  double averNOSIGNALsumamplitude_HB;
+  double averNOSIGNALsumamplitude_HE;
+  double averNOSIGNALsumamplitude_HF;
+  double averNOSIGNALsumamplitude_HO;
 
   double maxxSUM1;
   double maxxSUM2;
@@ -1756,6 +1792,8 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   float TS_data[10];
   float TS_cal[10];
   int numOfLaserEv;
+
+  int testmetka;
   
 };
 
@@ -2145,15 +2183,25 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   }//for  
   
 
-  averoccupancy_HB = 0.;
-  averoccupancy_HE = 0.;
-  averoccupancy_HF = 0.;
-  averoccupancy_HO = 0.;
+  averSIGNALoccupancy_HB = 0.;
+  averSIGNALoccupancy_HE = 0.;
+  averSIGNALoccupancy_HF = 0.;
+  averSIGNALoccupancy_HO = 0.;
 
-  aversumamplitude_HB = 0.;
-  aversumamplitude_HE = 0.;
-  aversumamplitude_HF = 0.;
-  aversumamplitude_HO = 0.;
+  averSIGNALsumamplitude_HB = 0.;
+  averSIGNALsumamplitude_HE = 0.;
+  averSIGNALsumamplitude_HF = 0.;
+  averSIGNALsumamplitude_HO = 0.;
+
+  averNOSIGNALoccupancy_HB = 0.;
+  averNOSIGNALoccupancy_HE = 0.;
+  averNOSIGNALoccupancy_HF = 0.;
+  averNOSIGNALoccupancy_HO = 0.;
+
+  averNOSIGNALsumamplitude_HB = 0.;
+  averNOSIGNALsumamplitude_HE = 0.;
+  averNOSIGNALsumamplitude_HF = 0.;
+  averNOSIGNALsumamplitude_HO = 0.;
 
 
   maxxSUM1 = 0.;
@@ -2165,6 +2213,8 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   maxxOCCUP2 = 0.;
   maxxOCCUP3 = 0.;
   maxxOCCUP4 = 0.;
+
+  testmetka=0;
 
 }
 
@@ -3485,59 +3535,81 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     }//for 
     
 
-    //------------------------------------------------------
-    averoccupancy_HB /= float(nevcounter0);
-    h_averoccupancy_HB->Fill( float(lscounterM1) ,averoccupancy_HB);
-    averoccupancy_HE /= float(nevcounter0);
-    h_averoccupancy_HE->Fill( float(lscounterM1) ,averoccupancy_HE);
-    averoccupancy_HF /= float(nevcounter0);
-    h_averoccupancy_HF->Fill( float(lscounterM1) ,averoccupancy_HF);
-    averoccupancy_HO /= float(nevcounter0);
-    h_averoccupancy_HO->Fill( float(lscounterM1) ,averoccupancy_HO);
+    //------------------------------------------------------                        averSIGNAL
+    averSIGNALoccupancy_HB /= float(nevcounter0);
+    h_averSIGNALoccupancy_HB->Fill( float(lscounterM1) ,averSIGNALoccupancy_HB);
+    averSIGNALoccupancy_HE /= float(nevcounter0);
+    h_averSIGNALoccupancy_HE->Fill( float(lscounterM1) ,averSIGNALoccupancy_HE);
+    averSIGNALoccupancy_HF /= float(nevcounter0);
+    h_averSIGNALoccupancy_HF->Fill( float(lscounterM1) ,averSIGNALoccupancy_HF);
+    averSIGNALoccupancy_HO /= float(nevcounter0);
+    h_averSIGNALoccupancy_HO->Fill( float(lscounterM1) ,averSIGNALoccupancy_HO);
 
-    averoccupancy_HB = 0.;
-    averoccupancy_HE = 0.;
-    averoccupancy_HF = 0.;
-    averoccupancy_HO = 0.;
+    averSIGNALoccupancy_HB = 0.;
+    averSIGNALoccupancy_HE = 0.;
+    averSIGNALoccupancy_HF = 0.;
+    averSIGNALoccupancy_HO = 0.;
     
     //------------------------------------------------------
-    aversumamplitude_HB /= float(nevcounter0);
-    h_aversumamplitude_HB->Fill( float(lscounterM1) ,aversumamplitude_HB);
-    aversumamplitude_HE /= float(nevcounter0);
-    h_aversumamplitude_HE->Fill( float(lscounterM1) ,aversumamplitude_HE);
-    aversumamplitude_HF /= float(nevcounter0);
-    h_aversumamplitude_HF->Fill( float(lscounterM1) ,aversumamplitude_HF);
-    aversumamplitude_HO /= float(nevcounter0);
-    h_aversumamplitude_HO->Fill( float(lscounterM1) ,aversumamplitude_HO);
+    averSIGNALsumamplitude_HB /= float(nevcounter0);
+    h_averSIGNALsumamplitude_HB->Fill( float(lscounterM1) ,averSIGNALsumamplitude_HB);
+    averSIGNALsumamplitude_HE /= float(nevcounter0);
+    h_averSIGNALsumamplitude_HE->Fill( float(lscounterM1) ,averSIGNALsumamplitude_HE);
+    averSIGNALsumamplitude_HF /= float(nevcounter0);
+    h_averSIGNALsumamplitude_HF->Fill( float(lscounterM1) ,averSIGNALsumamplitude_HF);
+    averSIGNALsumamplitude_HO /= float(nevcounter0);
+    h_averSIGNALsumamplitude_HO->Fill( float(lscounterM1) ,averSIGNALsumamplitude_HO);
 
-    aversumamplitude_HB = 0.;
-    aversumamplitude_HE = 0.;
-    aversumamplitude_HF = 0.;
-    aversumamplitude_HO = 0.;
+    averSIGNALsumamplitude_HB = 0.;
+    averSIGNALsumamplitude_HE = 0.;
+    averSIGNALsumamplitude_HF = 0.;
+    averSIGNALsumamplitude_HO = 0.;
+    
+    //------------------------------------------------------                        averNOSIGNAL
+    averNOSIGNALoccupancy_HB /= float(nevcounter0);
+    h_averNOSIGNALoccupancy_HB->Fill( float(lscounterM1) ,averNOSIGNALoccupancy_HB);
+    averNOSIGNALoccupancy_HE /= float(nevcounter0);
+    h_averNOSIGNALoccupancy_HE->Fill( float(lscounterM1) ,averNOSIGNALoccupancy_HE);
+    averNOSIGNALoccupancy_HF /= float(nevcounter0);
+    h_averNOSIGNALoccupancy_HF->Fill( float(lscounterM1) ,averNOSIGNALoccupancy_HF);
+    averNOSIGNALoccupancy_HO /= float(nevcounter0);
+    h_averNOSIGNALoccupancy_HO->Fill( float(lscounterM1) ,averNOSIGNALoccupancy_HO);
+
+    averNOSIGNALoccupancy_HB = 0.;
+    averNOSIGNALoccupancy_HE = 0.;
+    averNOSIGNALoccupancy_HF = 0.;
+    averNOSIGNALoccupancy_HO = 0.;
     
     //------------------------------------------------------
+    averNOSIGNALsumamplitude_HB /= float(nevcounter0);
+    h_averNOSIGNALsumamplitude_HB->Fill( float(lscounterM1) ,averNOSIGNALsumamplitude_HB);
+    averNOSIGNALsumamplitude_HE /= float(nevcounter0);
+    h_averNOSIGNALsumamplitude_HE->Fill( float(lscounterM1) ,averNOSIGNALsumamplitude_HE);
+    averNOSIGNALsumamplitude_HF /= float(nevcounter0);
+    h_averNOSIGNALsumamplitude_HF->Fill( float(lscounterM1) ,averNOSIGNALsumamplitude_HF);
+    averNOSIGNALsumamplitude_HO /= float(nevcounter0);
+    h_averNOSIGNALsumamplitude_HO->Fill( float(lscounterM1) ,averNOSIGNALsumamplitude_HO);
+
+    averNOSIGNALsumamplitude_HB = 0.;
+    averNOSIGNALsumamplitude_HE = 0.;
+    averNOSIGNALsumamplitude_HF = 0.;
+    averNOSIGNALsumamplitude_HO = 0.;
+    
+    //------------------------------------------------------   maxxSA and maxxOccupancy
     if (verbosity == -9812 ) std::cout << "************* lscounterM1= " <<lscounterM1 << "   maxxSUM1 =  " <<maxxSUM1 << "   nevcounter0 =  " <<nevcounter0 << std::endl;
-    maxxSUM1 /= float(nevcounter0);// ONLY FOR AVERAGE-AMPLITUDE
     if (verbosity == -9812 ) std::cout << "after dividing   maxxSUM1 =  " <<maxxSUM1 << std::endl;
     h_maxxSUMAmpl_HB->Fill( float(lscounterM1) ,maxxSUM1);
-    maxxSUM2 /= float(nevcounter0);// ONLY FOR AVERAGE-AMPLITUDE
     h_maxxSUMAmpl_HE->Fill( float(lscounterM1) ,maxxSUM2);
-    maxxSUM3 /= float(nevcounter0);// ONLY FOR AVERAGE-AMPLITUDE
     h_maxxSUMAmpl_HO->Fill( float(lscounterM1) ,maxxSUM3);
-    maxxSUM4 /= float(nevcounter0);// ONLY FOR AVERAGE-AMPLITUDE
     h_maxxSUMAmpl_HF->Fill( float(lscounterM1) ,maxxSUM4);
     maxxSUM1 = 0.;
     maxxSUM2 = 0.;
     maxxSUM3 = 0.;
     maxxSUM4 = 0.;
     //------------------------------------------------------
-    maxxOCCUP1 /= float(nevcounter0);// ONLY FOR AVERAGE-occupancy
     h_maxxOCCUP_HB->Fill( float(lscounterM1) ,maxxOCCUP1);
-    maxxOCCUP2 /= float(nevcounter0);// ONLY FOR AVERAGE-occupancy
     h_maxxOCCUP_HE->Fill( float(lscounterM1) ,maxxOCCUP2);
-    maxxOCCUP3 /= float(nevcounter0);// ONLY FOR AVERAGE-occupancy
     h_maxxOCCUP_HO->Fill( float(lscounterM1) ,maxxOCCUP3);
-    maxxOCCUP4 /= float(nevcounter0);// ONLY FOR AVERAGE-occupancy
     h_maxxOCCUP_HF->Fill( float(lscounterM1) ,maxxOCCUP4);
     maxxOCCUP1 = 0.;
     maxxOCCUP2 = 0.;
@@ -3899,12 +3971,15 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     }//for HODigiCollection
   }//ho.isValid(
 
-  ///////////////////////////////////////////////  for  maxx SUM_Ai over events in LS
-  ///////////////////////////////////////////////  for  maxx SUM_(i w/ Ai above threshold)    over events in LS
+  ///////////////////////////////////////////////  
+  ///////////////////////////////////////////////  
   //////////// k0(sub): =0 HB; =1 HE; =2 HO; =3 HF;
   //////////// k1(depth-1): = 0 - 3 or depth: = 1 - 4;
 
-
+  int maxtestmetka=550;
+  int testcount1=0;
+  int testcount2=0;
+  int testcount3=0;
 
   //amplitudechannel[k0][k1][k2][k3] - amplitudes of channels in one event
   for(int k0 = 0; k0<4; k0++) {
@@ -3912,15 +3987,27 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     double sumamplitudesubdet = 0.;	
     int sumofchannels0 = 0;
     double sumamplitudesubdet0 = 0.;	
+    if (verbosity == -9129 && k0==3) testmetka++;
 
-
+      if (verbosity == -9129 && k0==3 && testmetka== maxtestmetka) std::cout << " ==================================================================================== =  " << std::endl;
 
     //  for(int k1 = 0; k1<4; k1++) {
     for(int k2 = 0; k2<82; k2++) {
       if (verbosity == -9814 && k0==3) std::cout << "===loop   lscounterM1 =  " <<lscounterM1 <<"k3=70 for   sumamplitudechannel_HF depth1 =  " <<amplitudechannel[k0][0][k2][70] <<"k3=70 for   sumamplitudechannel_HF depth2=  " <<amplitudechannel[k0][1][k2][70] << "   k2 =  " <<k2 << std::endl;
 
       for(int k3 = 0; k3<72; k3++) {
-	
+
+	if (verbosity == -9129 && k0==3 && testmetka== maxtestmetka && (amplitudechannel[k0][0][k2][k3] !=0. || amplitudechannel[k0][1][k2][k3] !=0.)  ) {
+	  std::cout << "===loop   lscounterM1 =  " <<lscounterM1 <<" sumamplitudechannel_HF depth1 =  " <<amplitudechannel[k0][0][k2][k3] <<" sumamplitudechannel_HF depth2=  " <<amplitudechannel[k0][1][k2][k3] << " k2 =  " <<k2 << " k3 =  " <<k3 << std::endl;
+	  
+	  if(amplitudechannel[k0][0][k2][k3]!=0. && amplitudechannel[k0][1][k2][k3]!=0.) testcount1++;
+	  
+	  if(amplitudechannel[k0][0][k2][k3]!=0. && amplitudechannel[k0][1][k2][k3]==0.) testcount2++;
+	  if(amplitudechannel[k0][0][k2][k3]!=0. && amplitudechannel[k0][1][k2][k3]==0.) std::cout << "===CASE 2:   lscounterM1 =  " <<lscounterM1 <<" sumamplitudechannel_HF depth1 =  " <<amplitudechannel[k0][0][k2][k3] <<" sumamplitudechannel_HF depth2=  " <<amplitudechannel[k0][1][k2][k3] << " k2 =  " <<k2 << " k3 =  " <<k3 << std::endl;
+	  
+	  if(amplitudechannel[k0][0][k2][k3]==0. && amplitudechannel[k0][1][k2][k3]!=0.) testcount3++;
+	  if(amplitudechannel[k0][0][k2][k3]==0. && amplitudechannel[k0][1][k2][k3]!=0.) std::cout << "===CASE 3:   lscounterM1 =  " <<lscounterM1 <<" sumamplitudechannel_HF depth1 =  " <<amplitudechannel[k0][0][k2][k3] <<" sumamplitudechannel_HF depth2=  " <<amplitudechannel[k0][1][k2][k3] << " k2 =  " <<k2 << " k3 =  " <<k3 << std::endl;
+	}       
 	// HB
 	if( k0 == 0 ) {
 	  double sumamplitudechannel_HB = amplitudechannel[k0][0][k2][k3]+amplitudechannel[k0][1][k2][k3];
@@ -3987,43 +4074,70 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	
       }//k3
     }//k2
-    //  }//k1
-    
-      if( k0 == 0 ) { 
-	//	if( sumamplitudesubdet > maxxSUM1) maxxSUM1 = sumamplitudesubdet;
-	//	if( sumofchannels > maxxOCCUP1) maxxOCCUP1 = sumofchannels;
-	averoccupancy_HB+=sumofchannels;
-	aversumamplitude_HB+=sumamplitudesubdet;
-	maxxOCCUP1+=sumofchannels0;
-	maxxSUM1+=sumamplitudesubdet0;
-	//	if (verbosity == -9812 ) std::cout << "===loop   lscounterM1 =  " <<lscounterM1 <<"   maxxSUM1 =  " <<maxxSUM1 << "   sumamplitudesubdet0 =  " <<sumamplitudesubdet0 << std::endl;
-      }//HB
-      if( k0 == 1 ) { 
-	//	if( sumamplitudesubdet > maxxSUM2) maxxSUM2 = sumamplitudesubdet;
-	//	if( sumofchannels > maxxOCCUP2) maxxOCCUP2 = sumofchannels;
-	averoccupancy_HE+=sumofchannels;
-	aversumamplitude_HE+=sumamplitudesubdet;
-	maxxOCCUP2+=sumofchannels0;
-	maxxSUM2+=sumamplitudesubdet0;
-      }//HE
-      if( k0 == 2 ) { 
-	//	if( sumamplitudesubdet > maxxSUM3) maxxSUM3 = sumamplitudesubdet;
-	//	if( sumofchannels > maxxOCCUP3) maxxOCCUP3 = sumofchannels;
-	averoccupancy_HO+=sumofchannels;
-	aversumamplitude_HO+=sumamplitudesubdet;
-	maxxOCCUP3+=sumofchannels0;
-	maxxSUM3+=sumamplitudesubdet0;
-      }//HO
-      if( k0 == 3 ) { 
-	//	if( sumamplitudesubdet > maxxSUM4) maxxSUM4 = sumamplitudesubdet;
-	//	if( sumofchannels > maxxOCCUP4) maxxOCCUP4 = sumofchannels;
-	averoccupancy_HF+=sumofchannels;
-	aversumamplitude_HF+=sumamplitudesubdet;
-	maxxOCCUP4+=sumofchannels0;
-	maxxSUM4+=sumamplitudesubdet0;
-      }//HF
-      if (verbosity == -9814 && k0==3) std::cout << "===loop   lscounterM1 =  " <<lscounterM1 <<"    sumofchannels0 =  " <<sumofchannels0 <<"    maxxSUM4 =  " <<maxxSUM4 << std::endl;
+
+    if (verbosity == -9129 && k0==3 && testmetka== maxtestmetka) {
+      std::cout << " ==================================================================================== =  " << std::endl;
+      std::cout << "===FINAL:   testcount1 =  " <<testcount1 <<" testcount2 =  " <<testcount2 <<" testcount3=  " <<testcount3 << std::endl;
+    }
       
+    //  }//k1
+
+
+    // SA of each sub-detector DONE. Then: summarize or find maximum throught events of LS
+    if( k0 == 0 ) { 
+      h_eventamplitude_HB->Fill((sumamplitudesubdet+sumamplitudesubdet0));
+      h_eventoccupancy_HB->Fill((sumofchannels+sumofchannels0));
+      if( (sumamplitudesubdet+sumamplitudesubdet0) > maxxSUM1) maxxSUM1 = sumamplitudesubdet+sumamplitudesubdet0;
+      if( (sumofchannels+sumofchannels0) > maxxOCCUP1) maxxOCCUP1 = sumofchannels+sumofchannels0;
+      averSIGNALoccupancy_HB+=sumofchannels;
+      averSIGNALsumamplitude_HB+=sumamplitudesubdet;
+      averNOSIGNALoccupancy_HB+=sumofchannels0;
+      averNOSIGNALsumamplitude_HB+=sumamplitudesubdet0;
+      //	if (verbosity == -9812 ) std::cout << "===loop   lscounterM1 =  " <<lscounterM1 <<"   maxxSUM1 =  " <<maxxSUM1 << "   sumamplitudesubdet0 =  " <<sumamplitudesubdet0 << std::endl;
+      if((sumamplitudesubdet+sumamplitudesubdet0)>60000) {
+	for(int k2 = 0; k2<82; k2++) {
+	  for(int k3 = 0; k3<72; k3++) {
+	    int ieta = k2-41;
+	    /// HB depth1:
+	    if(amplitudechannel[k0][0][k2][k3]!=0.){h_2DAtaildepth1_HB->Fill(double(ieta),double(k3),amplitudechannel[k0][0][k2][k3]);h_2D0Ataildepth1_HB->Fill(double(ieta),double(k3),1.);}
+	    /// HB depth2:
+	    if(amplitudechannel[k0][1][k2][k3]!=0.){h_2DAtaildepth2_HB->Fill(double(ieta),double(k3),amplitudechannel[k0][1][k2][k3]);h_2D0Ataildepth2_HB->Fill(double(ieta),double(k3),1.);}
+	  }//for
+	}//for
+      }//>60000
+    }//HB
+    if( k0 == 1 ) { 
+      h_eventamplitude_HE->Fill((sumamplitudesubdet+sumamplitudesubdet0));
+      h_eventoccupancy_HE->Fill((sumofchannels+sumofchannels0));
+      if( (sumamplitudesubdet+sumamplitudesubdet0) > maxxSUM2) maxxSUM2 = sumamplitudesubdet+sumamplitudesubdet0;
+      if( (sumofchannels+sumofchannels0) > maxxOCCUP2) maxxOCCUP2 = sumofchannels+sumofchannels0;
+      averSIGNALoccupancy_HE+=sumofchannels;
+      averSIGNALsumamplitude_HE+=sumamplitudesubdet;
+      averNOSIGNALoccupancy_HE+=sumofchannels0;
+      averNOSIGNALsumamplitude_HE+=sumamplitudesubdet0;
+    }//HE
+    if( k0 == 2 ) { 
+      h_eventamplitude_HO->Fill((sumamplitudesubdet+sumamplitudesubdet0));
+      h_eventoccupancy_HO->Fill((sumofchannels+sumofchannels0));
+      if( (sumamplitudesubdet+sumamplitudesubdet0) > maxxSUM3) maxxSUM3 = sumamplitudesubdet+sumamplitudesubdet0;
+      if( (sumofchannels+sumofchannels0) > maxxOCCUP3) maxxOCCUP3 = sumofchannels+sumofchannels0;
+      averSIGNALoccupancy_HO+=sumofchannels;
+      averSIGNALsumamplitude_HO+=sumamplitudesubdet;
+      averNOSIGNALoccupancy_HO+=sumofchannels0;
+      averNOSIGNALsumamplitude_HO+=sumamplitudesubdet0;
+    }//HO
+    if( k0 == 3 ) { 
+      h_eventamplitude_HF->Fill((sumamplitudesubdet+sumamplitudesubdet0));
+      h_eventoccupancy_HF->Fill((sumofchannels+sumofchannels0));
+      if( (sumamplitudesubdet+sumamplitudesubdet0) > maxxSUM4) maxxSUM4 = sumamplitudesubdet+sumamplitudesubdet0;
+      if( (sumofchannels+sumofchannels0) > maxxOCCUP4) maxxOCCUP4 = sumofchannels+sumofchannels0;
+      averSIGNALoccupancy_HF+=sumofchannels;
+      averSIGNALsumamplitude_HF+=sumamplitudesubdet;
+      averNOSIGNALoccupancy_HF+=sumofchannels0;
+      averNOSIGNALsumamplitude_HF+=sumamplitudesubdet0;
+    }//HF
+    if (verbosity == -9814 && k0==3) std::cout << "===loop   lscounterM1 =  " <<lscounterM1 <<"    sumofchannels0 =  " <<sumofchannels0 <<"    maxxSUM4 =  " <<maxxSUM4 << std::endl;
+    
   }//k0
   
   ///////////////////// ///////////////////// //////////////////////////////////////////
@@ -5651,31 +5765,57 @@ void VeRawAnalyzer::beginJob()
     h_2D0sumErrorBLS8    = new TH2F("h_2D0sumErrorBLS8"," ",    82, -41., 41., 72, 0., 72.);
     h_2DsumErrorBLS8    = new TH2F("h_2DsumErrorBLS8"," ",    82, -41., 41., 72, 0., 72.);
 
-    // for averOCCUPANCY :
-    h_averoccupancy_HB  = new TH1F("h_averoccupancy_HB"," ",     bac, 1.,bac2);
-    h_averoccupancy_HE  = new TH1F("h_averoccupancy_HE"," ",     bac, 1.,bac2);
-    h_averoccupancy_HF  = new TH1F("h_averoccupancy_HF"," ",     bac, 1.,bac2);
-    h_averoccupancy_HO  = new TH1F("h_averoccupancy_HO"," ",     bac, 1.,bac2);
+
+    // for averSIGNALOCCUPANCY :
+    h_averSIGNALoccupancy_HB  = new TH1F("h_averSIGNALoccupancy_HB"," ",     bac, 1.,bac2);
+    h_averSIGNALoccupancy_HE  = new TH1F("h_averSIGNALoccupancy_HE"," ",     bac, 1.,bac2);
+    h_averSIGNALoccupancy_HF  = new TH1F("h_averSIGNALoccupancy_HF"," ",     bac, 1.,bac2);
+    h_averSIGNALoccupancy_HO  = new TH1F("h_averSIGNALoccupancy_HO"," ",     bac, 1.,bac2);
     
-    // for aversumamplitude :
-    h_aversumamplitude_HB  = new TH1F("h_aversumamplitude_HB"," ",     bac, 1.,bac2);
-    h_aversumamplitude_HE  = new TH1F("h_aversumamplitude_HE"," ",     bac, 1.,bac2);
-    h_aversumamplitude_HF  = new TH1F("h_aversumamplitude_HF"," ",     bac, 1.,bac2);
-    h_aversumamplitude_HO  = new TH1F("h_aversumamplitude_HO"," ",     bac, 1.,bac2);
+    // for averSIGNALsumamplitude :
+    h_averSIGNALsumamplitude_HB  = new TH1F("h_averSIGNALsumamplitude_HB"," ",     bac, 1.,bac2);
+    h_averSIGNALsumamplitude_HE  = new TH1F("h_averSIGNALsumamplitude_HE"," ",     bac, 1.,bac2);
+    h_averSIGNALsumamplitude_HF  = new TH1F("h_averSIGNALsumamplitude_HF"," ",     bac, 1.,bac2);
+    h_averSIGNALsumamplitude_HO  = new TH1F("h_averSIGNALsumamplitude_HO"," ",     bac, 1.,bac2);
     
-    // for SUMAmplitude
+    // for averNOSIGNALOCCUPANCY :
+    h_averNOSIGNALoccupancy_HB  = new TH1F("h_averNOSIGNALoccupancy_HB"," ",     bac, 1.,bac2);
+    h_averNOSIGNALoccupancy_HE  = new TH1F("h_averNOSIGNALoccupancy_HE"," ",     bac, 1.,bac2);
+    h_averNOSIGNALoccupancy_HF  = new TH1F("h_averNOSIGNALoccupancy_HF"," ",     bac, 1.,bac2);
+    h_averNOSIGNALoccupancy_HO  = new TH1F("h_averNOSIGNALoccupancy_HO"," ",     bac, 1.,bac2);
+    
+    // for averNOSIGNALsumamplitude :
+    h_averNOSIGNALsumamplitude_HB  = new TH1F("h_averNOSIGNALsumamplitude_HB"," ",     bac, 1.,bac2);
+    h_averNOSIGNALsumamplitude_HE  = new TH1F("h_averNOSIGNALsumamplitude_HE"," ",     bac, 1.,bac2);
+    h_averNOSIGNALsumamplitude_HF  = new TH1F("h_averNOSIGNALsumamplitude_HF"," ",     bac, 1.,bac2);
+    h_averNOSIGNALsumamplitude_HO  = new TH1F("h_averNOSIGNALsumamplitude_HO"," ",     bac, 1.,bac2);
+    
+    // for channel SUM over depthes Amplitudes for each sub-detector
     h_sumamplitudechannel_HB  = new TH1F("h_sumamplitudechannel_HB"," ",      100,  0., 2000.);
     h_sumamplitudechannel_HE  = new TH1F("h_sumamplitudechannel_HE"," ",      100,  0., 3000.);
     h_sumamplitudechannel_HF  = new TH1F("h_sumamplitudechannel_HF"," ",      100,  0., 7000.);
     h_sumamplitudechannel_HO  = new TH1F("h_sumamplitudechannel_HO"," ",      100,  0.,10000.);
 
-    // for maxxSUMAmplitude OR aversumamplitude_WITH_ELSE-CUT
+    // for event Amplitudes for each sub-detector
+    h_eventamplitude_HB  = new TH1F("h_eventamplitude_HB"," ",      100,  0.,  80000.);
+    h_eventamplitude_HE  = new TH1F("h_eventamplitude_HE"," ",      100,  0., 100000.);
+    h_eventamplitude_HF  = new TH1F("h_eventamplitude_HF"," ",      100,  0., 150000.);
+    h_eventamplitude_HO  = new TH1F("h_eventamplitude_HO"," ",      100,  0., 250000.);
+
+    // for event Occupancy for each sub-detector
+    h_eventoccupancy_HB  = new TH1F("h_eventoccupancy_HB"," ",      100,  0.,  3000.);
+    h_eventoccupancy_HE  = new TH1F("h_eventoccupancy_HE"," ",      100,  0.,  2000.);
+    h_eventoccupancy_HF  = new TH1F("h_eventoccupancy_HF"," ",      100,  0.,  1000.);
+    h_eventoccupancy_HO  = new TH1F("h_eventoccupancy_HO"," ",      100,  0.,  2500.);
+
+
+    // for maxxSUMAmplitude 
     h_maxxSUMAmpl_HB = new TH1F("h_maxxSUMAmpl_HB"," ",     bac, 1.,bac2);
     h_maxxSUMAmpl_HE = new TH1F("h_maxxSUMAmpl_HE"," ",     bac, 1.,bac2);
     h_maxxSUMAmpl_HF = new TH1F("h_maxxSUMAmpl_HF"," ",     bac, 1.,bac2);
     h_maxxSUMAmpl_HO = new TH1F("h_maxxSUMAmpl_HO"," ",     bac, 1.,bac2);
 
-    // for maxxOCCUP OR aversumamplitude_WITH_ELSE-CUT
+    // for maxxOCCUP 
     h_maxxOCCUP_HB = new TH1F("h_maxxOCCUP_HB"," ",     bac, 1.,bac2);
     h_maxxOCCUP_HE = new TH1F("h_maxxOCCUP_HE"," ",     bac, 1.,bac2);
     h_maxxOCCUP_HF = new TH1F("h_maxxOCCUP_HF"," ",     bac, 1.,bac2);
@@ -6089,6 +6229,11 @@ void VeRawAnalyzer::beginJob()
     h_Amplitude_notCapIdErrors_HF2 = new TH1F("h_Amplitude_notCapIdErrors_HF2"," ", 100, 0.,30000.);
     h_Amplitude_notCapIdErrors_HO4 = new TH1F("h_Amplitude_notCapIdErrors_HO4"," ", 100, 0.,30000.);
 
+
+    h_2DAtaildepth1_HB  = new TH2F("h_2DAtaildepth1_HB"," ",    82, -41., 41., 72, 0., 72.);
+    h_2D0Ataildepth1_HB  = new TH2F("h_2D0Ataildepth1_HB"," ",    82, -41., 41., 72, 0., 72.);
+    h_2DAtaildepth2_HB  = new TH2F("h_2DAtaildepth2_HB"," ",    82, -41., 41., 72, 0., 72.);
+    h_2D0Ataildepth2_HB  = new TH2F("h_2D0Ataildepth2_HB"," ",    82, -41., 41., 72, 0., 72.);
 
 
 
@@ -7201,7 +7346,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	  if (verbosity == -56) std::cout << "***BAD HB channels from ADCAmpl: "  <<" ieta= " << ieta <<" iphi= " << iphi <<" amplitude= " << amplitude << std::endl;
 	}// if
 
-	//	if(amplitude >400.) averoccupancy_HB += 1.;
+	//	if(amplitude >400.) averSIGNALoccupancy_HB += 1.;
 	if(amplitude < 35.) {
 	  if(mdepth==1) h_mapDepth1ADCAmpl225Copy_HB->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==2) h_mapDepth2ADCAmpl225Copy_HB->Fill(double(ieta), double(iphi), 1.);
@@ -7407,7 +7552,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	  if(mdepth==3) h_mapDepth3ADCAmpl225_HE->Fill(double(ieta), double(iphi), 1.);
 	  if (verbosity == -56) std::cout << "***BAD HE channels from ADCAmpl: "  <<" ieta= " << ieta <<" iphi= " << iphi <<" amplitude= " << amplitude << std::endl;
 	}// if
-	//	if(amplitude > 700.) averoccupancy_HE += 1.;
+	//	if(amplitude > 700.) averSIGNALoccupancy_HE += 1.;
 
 	if(amplitude < 40.) {
 	  if(mdepth==1) h_mapDepth1ADCAmpl225Copy_HE->Fill(double(ieta), double(iphi), 1.);
@@ -7930,7 +8075,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
 	  if(mdepth==2) h_mapDepth2ADCAmpl225_HF->Fill(double(ieta), double(iphi), 1.);
 	  if (verbosity == -51) std::cout << "***BAD HF channels from ADCAmpl: "  <<" ieta= " << ieta <<" iphi= " << iphi <<" amplitude= " << amplitude << std::endl;
 	}// if
-	//	if(amplitude >1500.) averoccupancy_HF += 1.;
+	//	if(amplitude >1500.) averSIGNALoccupancy_HF += 1.;
 	if(amplitude < 20.) {
 	  if(mdepth==1) h_mapDepth1ADCAmpl225Copy_HF->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==2) h_mapDepth2ADCAmpl225Copy_HF->Fill(double(ieta), double(iphi), 1.);
@@ -8424,7 +8569,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
 	  if(mdepth==4) h_mapDepth4ADCAmpl225_HO->Fill(double(ieta), double(iphi), 1.);
 	  if (verbosity == -56) std::cout << "***BAD HO channels from ADCAmpl: "  <<" ieta= " << ieta <<" iphi= " << iphi <<" amplitude= " << amplitude << std::endl;
 	}// if
-	//	if(amplitude >2000.) averoccupancy_HO += 1.;
+	//	if(amplitude >2000.) averSIGNALoccupancy_HO += 1.;
 
 	if(amplitude < 100.) {
 	  if(mdepth==4) h_mapDepth4ADCAmpl225Copy_HO->Fill(double(ieta), double(iphi), 1.);
@@ -9342,46 +9487,72 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 
 
 
-    //------------------------------------------------------
-    averoccupancy_HB /= float(nevcounter0);
-    h_averoccupancy_HB->Fill( float(lscounterM1) ,averoccupancy_HB);
-    averoccupancy_HE /= float(nevcounter0);
-    h_averoccupancy_HE->Fill( float(lscounterM1) ,averoccupancy_HE);
-    averoccupancy_HF /= float(nevcounter0);
-    h_averoccupancy_HF->Fill( float(lscounterM1) ,averoccupancy_HF);
-    averoccupancy_HO /= float(nevcounter0);
-    h_averoccupancy_HO->Fill( float(lscounterM1) ,averoccupancy_HO);
+    //------------------------------------------------------   averSIGNAL
+    averSIGNALoccupancy_HB /= float(nevcounter0);
+    h_averSIGNALoccupancy_HB->Fill( float(lscounterM1) ,averSIGNALoccupancy_HB);
+    averSIGNALoccupancy_HE /= float(nevcounter0);
+    h_averSIGNALoccupancy_HE->Fill( float(lscounterM1) ,averSIGNALoccupancy_HE);
+    averSIGNALoccupancy_HF /= float(nevcounter0);
+    h_averSIGNALoccupancy_HF->Fill( float(lscounterM1) ,averSIGNALoccupancy_HF);
+    averSIGNALoccupancy_HO /= float(nevcounter0);
+    h_averSIGNALoccupancy_HO->Fill( float(lscounterM1) ,averSIGNALoccupancy_HO);
 
-    averoccupancy_HB = 0.;
-    averoccupancy_HE = 0.;
-    averoccupancy_HF = 0.;
-    averoccupancy_HO = 0.;
+    averSIGNALoccupancy_HB = 0.;
+    averSIGNALoccupancy_HE = 0.;
+    averSIGNALoccupancy_HF = 0.;
+    averSIGNALoccupancy_HO = 0.;
     
     //------------------------------------------------------
-    aversumamplitude_HB /= float(nevcounter0);
-    h_aversumamplitude_HB->Fill( float(lscounterM1) ,aversumamplitude_HB);
-    aversumamplitude_HE /= float(nevcounter0);
-    h_aversumamplitude_HE->Fill( float(lscounterM1) ,aversumamplitude_HE);
-    aversumamplitude_HF /= float(nevcounter0);
-    h_aversumamplitude_HF->Fill( float(lscounterM1) ,aversumamplitude_HF);
-    aversumamplitude_HO /= float(nevcounter0);
-    h_aversumamplitude_HO->Fill( float(lscounterM1) ,aversumamplitude_HO);
+    averSIGNALsumamplitude_HB /= float(nevcounter0);
+    h_averSIGNALsumamplitude_HB->Fill( float(lscounterM1) ,averSIGNALsumamplitude_HB);
+    averSIGNALsumamplitude_HE /= float(nevcounter0);
+    h_averSIGNALsumamplitude_HE->Fill( float(lscounterM1) ,averSIGNALsumamplitude_HE);
+    averSIGNALsumamplitude_HF /= float(nevcounter0);
+    h_averSIGNALsumamplitude_HF->Fill( float(lscounterM1) ,averSIGNALsumamplitude_HF);
+    averSIGNALsumamplitude_HO /= float(nevcounter0);
+    h_averSIGNALsumamplitude_HO->Fill( float(lscounterM1) ,averSIGNALsumamplitude_HO);
 
-    aversumamplitude_HB = 0.;
-    aversumamplitude_HE = 0.;
-    aversumamplitude_HF = 0.;
-    aversumamplitude_HO = 0.;
+    averSIGNALsumamplitude_HB = 0.;
+    averSIGNALsumamplitude_HE = 0.;
+    averSIGNALsumamplitude_HF = 0.;
+    averSIGNALsumamplitude_HO = 0.;
+    
+    //------------------------------------------------------   averNOSIGNAL
+    averNOSIGNALoccupancy_HB /= float(nevcounter0);
+    h_averNOSIGNALoccupancy_HB->Fill( float(lscounterM1) ,averNOSIGNALoccupancy_HB);
+    averNOSIGNALoccupancy_HE /= float(nevcounter0);
+    h_averNOSIGNALoccupancy_HE->Fill( float(lscounterM1) ,averNOSIGNALoccupancy_HE);
+    averNOSIGNALoccupancy_HF /= float(nevcounter0);
+    h_averNOSIGNALoccupancy_HF->Fill( float(lscounterM1) ,averNOSIGNALoccupancy_HF);
+    averNOSIGNALoccupancy_HO /= float(nevcounter0);
+    h_averNOSIGNALoccupancy_HO->Fill( float(lscounterM1) ,averNOSIGNALoccupancy_HO);
+
+    averNOSIGNALoccupancy_HB = 0.;
+    averNOSIGNALoccupancy_HE = 0.;
+    averNOSIGNALoccupancy_HF = 0.;
+    averNOSIGNALoccupancy_HO = 0.;
+    
+    //------------------------------------------------------
+    averNOSIGNALsumamplitude_HB /= float(nevcounter0);
+    h_averNOSIGNALsumamplitude_HB->Fill( float(lscounterM1) ,averNOSIGNALsumamplitude_HB);
+    averNOSIGNALsumamplitude_HE /= float(nevcounter0);
+    h_averNOSIGNALsumamplitude_HE->Fill( float(lscounterM1) ,averNOSIGNALsumamplitude_HE);
+    averNOSIGNALsumamplitude_HF /= float(nevcounter0);
+    h_averNOSIGNALsumamplitude_HF->Fill( float(lscounterM1) ,averNOSIGNALsumamplitude_HF);
+    averNOSIGNALsumamplitude_HO /= float(nevcounter0);
+    h_averNOSIGNALsumamplitude_HO->Fill( float(lscounterM1) ,averNOSIGNALsumamplitude_HO);
+
+    averNOSIGNALsumamplitude_HB = 0.;
+    averNOSIGNALsumamplitude_HE = 0.;
+    averNOSIGNALsumamplitude_HF = 0.;
+    averNOSIGNALsumamplitude_HO = 0.;
     
     //------------------------------------------------------
     if (verbosity == -9812 ) std::cout << "************* lscounterM1= " <<lscounterM1 << "   maxxSUM1 =  " <<maxxSUM1 << "   nevcounter0 =  " <<nevcounter0 << std::endl;
-    maxxSUM1 /= float(nevcounter0);// ONLY FOR AVERAGE-AMPLITUDE
     if (verbosity == -9812 ) std::cout << "after dividing   maxxSUM1 =  " <<maxxSUM1 << std::endl;
     h_maxxSUMAmpl_HB->Fill( float(lscounterM1) ,maxxSUM1);
-    maxxSUM2 /= float(nevcounter0);// ONLY FOR AVERAGE-AMPLITUDE
     h_maxxSUMAmpl_HE->Fill( float(lscounterM1) ,maxxSUM2);
-    maxxSUM3 /= float(nevcounter0);// ONLY FOR AVERAGE-AMPLITUDE
     h_maxxSUMAmpl_HO->Fill( float(lscounterM1) ,maxxSUM3);
-    maxxSUM4 /= float(nevcounter0);// ONLY FOR AVERAGE-AMPLITUDE
     h_maxxSUMAmpl_HF->Fill( float(lscounterM1) ,maxxSUM4);
     maxxSUM1 = 0.;
     maxxSUM2 = 0.;
@@ -9389,15 +9560,10 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
     maxxSUM4 = 0.;
       if (verbosity == -9814 ) std::cout << "*******  FINAL       ===loop   lscounterM1 =  " <<lscounterM1 <<"    nevcounter0 =  " <<nevcounter0 <<"    maxxSUM4 =  " <<maxxSUM4 << std::endl;
 
-
     //------------------------------------------------------
-    maxxOCCUP1 /= float(nevcounter0);// ONLY FOR AVERAGE-occupancy
     h_maxxOCCUP_HB->Fill( float(lscounterM1) ,maxxOCCUP1);
-    maxxOCCUP2 /= float(nevcounter0);// ONLY FOR AVERAGE-occupancy
     h_maxxOCCUP_HE->Fill( float(lscounterM1) ,maxxOCCUP2);
-    maxxOCCUP3 /= float(nevcounter0);// ONLY FOR AVERAGE-occupancy
     h_maxxOCCUP_HO->Fill( float(lscounterM1) ,maxxOCCUP3);
-    maxxOCCUP4 /= float(nevcounter0);// ONLY FOR AVERAGE-occupancy
     h_maxxOCCUP_HF->Fill( float(lscounterM1) ,maxxOCCUP4);
     maxxOCCUP1 = 0.;
     maxxOCCUP2 = 0.;
@@ -11046,15 +11212,25 @@ void VeRawAnalyzer::endJob(){
     h_Amplitude_notCapIdErrors_HF2->Write();
     h_Amplitude_notCapIdErrors_HO4->Write();
 
-    h_averoccupancy_HB->Write();
-    h_averoccupancy_HE->Write();
-    h_averoccupancy_HF->Write();
-    h_averoccupancy_HO->Write();
+    h_averSIGNALoccupancy_HB->Write();
+    h_averSIGNALoccupancy_HE->Write();
+    h_averSIGNALoccupancy_HF->Write();
+    h_averSIGNALoccupancy_HO->Write();
 
-    h_aversumamplitude_HB->Write();
-    h_aversumamplitude_HE->Write();
-    h_aversumamplitude_HF->Write();
-    h_aversumamplitude_HO->Write();
+    h_averSIGNALsumamplitude_HB->Write();
+    h_averSIGNALsumamplitude_HE->Write();
+    h_averSIGNALsumamplitude_HF->Write();
+    h_averSIGNALsumamplitude_HO->Write();
+
+    h_averNOSIGNALoccupancy_HB->Write();
+    h_averNOSIGNALoccupancy_HE->Write();
+    h_averNOSIGNALoccupancy_HF->Write();
+    h_averNOSIGNALoccupancy_HO->Write();
+
+    h_averNOSIGNALsumamplitude_HB->Write();
+    h_averNOSIGNALsumamplitude_HE->Write();
+    h_averNOSIGNALsumamplitude_HF->Write();
+    h_averNOSIGNALsumamplitude_HO->Write();
 
     h_maxxSUMAmpl_HB->Write();
     h_maxxSUMAmpl_HE->Write();
@@ -11070,6 +11246,22 @@ void VeRawAnalyzer::endJob(){
     h_sumamplitudechannel_HE->Write();
     h_sumamplitudechannel_HF->Write();
     h_sumamplitudechannel_HO->Write();
+
+    h_eventamplitude_HB->Write();
+    h_eventamplitude_HE->Write();
+    h_eventamplitude_HF->Write();
+    h_eventamplitude_HO->Write();
+    
+    h_eventoccupancy_HB->Write();
+    h_eventoccupancy_HE->Write();
+    h_eventoccupancy_HF->Write();
+    h_eventoccupancy_HO->Write();
+
+
+    h_2DAtaildepth1_HB->Write();
+    h_2D0Ataildepth1_HB->Write();
+    h_2DAtaildepth2_HB->Write();
+    h_2D0Ataildepth2_HB->Write();
 
     ///////////////////////
   }//if
