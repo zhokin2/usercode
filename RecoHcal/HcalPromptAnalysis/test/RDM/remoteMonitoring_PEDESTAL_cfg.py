@@ -1,6 +1,21 @@
 #how to run: cmsRun remoteMonitoring_LED_cfg.py 211659 file:/afs/cern.ch/work/d/dtlisov/private/Monitoring/data /afs/cern.ch/work/d/dtlisov/private/Monitoring/histos
 #how to run: cmsRun remoteMonitoring_LED_cfg.py 211659 /store/group/comm_hcal/USC /afs/cern.ch/work/d/dtlisov/private/Monitoring/histos
 import sys
+import FWCore.ParameterSet.Config as cms
+process = cms.Process('OKRECO')
+
+# import of standard configurations
+process.load('Configuration.StandardSequences.Services_cff')
+process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
+process.load('FWCore.MessageService.MessageLogger_cfi')
+process.load('Configuration.EventContent.EventContent_cff')
+process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
+process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff')
+process.load('Configuration.StandardSequences.Reconstruction_Data_cff')
+process.load('Configuration.StandardSequences.EndOfProcess_cff')
+process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
+process.load('RecoLocalCalo.Configuration.hcalLocalReco_cff')
+
 
 #runnumber = sys.argv[2][4:-5]
 
@@ -11,9 +26,6 @@ histodir = sys.argv[4]
 print 'RUN = '+runnumber
 print 'Input file = '+rundir+'/USC_'+runnumber+'.root'
 print 'Output file = '+histodir+'/LED_'+runnumber+'.root'
-
-import FWCore.ParameterSet.Config as cms
-process = cms.Process("testAnalyzer")
 
 process.maxEvents = cms.untracked.PSet(
 #    input = cms.untracked.int32(1000)
@@ -386,15 +398,15 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
 process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
     dump = cms.untracked.vstring(''),
     file = cms.untracked.string('')
-  )
+)
+from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
+#process.load('Configuration.AlCa.GlobalTag_condDBv2')
+process.GlobalTag = GlobalTag(process.GlobalTag, 'GR_P_V54', '')
+
 process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
 process.hcalDigis.FilterDataQuality = cms.bool(False)
 process.hcalDigis.InputLabel = cms.InputTag("source")
 				
-process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
-process.GlobalTag.globaltag = 'GR_P_V41::All'
-process.es_prefer_GlobalTag = cms.ESPrefer('PoolDBESSource','GlobalTag')
-
 process.p = cms.Path(process.hcalDigis*process.Analyzer)
 
 process.MessageLogger = cms.Service("MessageLogger",
