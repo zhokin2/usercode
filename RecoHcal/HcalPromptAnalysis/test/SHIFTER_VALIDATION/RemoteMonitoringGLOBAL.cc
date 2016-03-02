@@ -2452,7 +2452,7 @@ int main(int argc, char *argv[])
 //      h3Ceff->GetZaxis()->SetLabelSize(0.08);
       h3Ceff->SetXTitle("#eta \b");
       h3Ceff->SetYTitle("#phi \b");
-      h3Ceff->SetZTitle("HB channel Amplitude \b");
+      h3Ceff->SetZTitle("rate for channels of HB \b");
       h3Ceff->SetMarkerColor(2);
       h3Ceff->SetLineColor(2);
       h3Ceff->Draw("COLZ");
@@ -2575,7 +2575,7 @@ int main(int argc, char *argv[])
 //      h3Ceff->GetZaxis()->SetLabelSize(0.08);
       h3Ceff->SetXTitle("#eta \b");
       h3Ceff->SetYTitle("#phi \b");
-      h3Ceff->SetZTitle("HE channel Amplitude \b");
+      h3Ceff->SetZTitle("rate for channels of HE \b");
       h3Ceff->SetMarkerColor(2);
       h3Ceff->SetLineColor(2);
       h3Ceff->Draw("COLZ");
@@ -2698,7 +2698,7 @@ int main(int argc, char *argv[])
 //      h3Ceff->GetZaxis()->SetLabelSize(0.08);
       h3Ceff->SetXTitle("#eta \b");
       h3Ceff->SetYTitle("#phi \b");
-      h3Ceff->SetZTitle("HO channel Amplitude \b");
+      h3Ceff->SetZTitle("rate for channels of HO \b");
       h3Ceff->SetMarkerColor(2);
       h3Ceff->SetLineColor(2);
       h3Ceff->Draw("COLZ");
@@ -2846,7 +2846,7 @@ int main(int argc, char *argv[])
 //      h3Ceff->GetZaxis()->SetLabelSize(0.08);
       h3Ceff->SetXTitle("#eta \b");
       h3Ceff->SetYTitle("#phi \b");
-      h3Ceff->SetZTitle("HF channel Amplitude \b");
+      h3Ceff->SetZTitle("rate for channels of HF \b");
       h3Ceff->SetMarkerColor(2);
       h3Ceff->SetLineColor(2);
       h3Ceff->Draw("COLZ");
@@ -3250,8 +3250,8 @@ int main(int argc, char *argv[])
       pqmks->SetMinimum(200.);
     }
     else if(sub==1) {
-      pqmks->SetMaximum(600.);
-      pqmks->SetMinimum(0.);
+      pqmks->SetMaximum(910.);
+      pqmks->SetMinimum(10.);
     }
     else if(sub==2) {
       pqmks->SetMaximum(200.);
@@ -3437,6 +3437,7 @@ int main(int argc, char *argv[])
   ChannelDepthsummedAmplitudesPlots[3] = (TH1F*)hfile->Get("h_sumamplitudechannel_HF");
 
 
+    gStyle->SetOptStat(110000);                     
     cFour1->Clear();
     cFour1->Divide(2,2);
   for (int sub=0; sub<4; sub++) {
@@ -3465,6 +3466,7 @@ int main(int argc, char *argv[])
     cFour1->Update();
     cFour1->Print("ChannelDepthsummedAmplitudes.png");
     cFour1->Clear();
+    gStyle->SetOptStat(0);                     
 
 
   //////////
@@ -4276,21 +4278,23 @@ int main(int argc, char *argv[])
     //	   for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< A > Depth "<< k <<" </td>"  << std::endl;
     //	   for (int sub=1;sub<=4;sub++) htmlFile << "<td class=\"s1\" align=\"center\">< A > Depth1, sub "<< sub <<" </td>"  << std::endl;
     
-    htmlFile << "<td class=\"s1\" align=\"center\">< A >HB Dep1</td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">< A >HE Dep1</td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">< A >HO Dep4</td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">< A >HF Dep1</td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< A >HB Depth1</td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< A >HE Depth1</td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< A >HO Depth4</td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< A >HF Depth1</td>"  << std::endl;
     
+    htmlFile << "<td class=\"s1\" align=\"center\">< SA >HB (Signal) </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< Occup. > HB (Signal) </td>"  << std::endl;
     htmlFile << "<td class=\"s1\" align=\"center\">< SA >HF (Signal) </td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">Occup. HF (Signal) </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< Occup. > HF (Signal) </td>"  << std::endl;
+
+    htmlFile << "<td class=\"s1\" align=\"center\">< SA >HB (NoSignal) </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< Occup. > HB (NoSignal) </td>"  << std::endl;
     htmlFile << "<td class=\"s1\" align=\"center\">< SA >HF (NoSignal) </td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">Occup. HF (NoSignal) </td>"  << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">< Occup. > HF (NoSignal) </td>"  << std::endl;
+
     htmlFile << "<td class=\"s1\" align=\"center\"> maxSA HB  </td>"  << std::endl;
     htmlFile << "<td class=\"s1\" align=\"center\"> maxOccup. HB </td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\"> maxSA HE  </td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\"> maxOccup. HE </td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\"> maxSA HO  </td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\"> maxOccup. HO </td>"  << std::endl;
     htmlFile << "<td class=\"s1\" align=\"center\"> maxSA HF  </td>"  << std::endl;
     htmlFile << "<td class=\"s1\" align=\"center\"> maxOccup. HF </td>"  << std::endl;
     
@@ -4320,16 +4324,18 @@ int main(int argc, char *argv[])
 	  else  htmlFile << raw_class <<HistNumBadChanDepth[test][sub][k]->GetBinContent(i)<<"</td>"<< std::endl;
 	}
       }
+      htmlFile << raw_class <<SummedAmplitudeHisto[0]->GetBinContent(i)<<"</td>"<< std::endl;	     
+      htmlFile << raw_class <<SummedAmplitudeOccupancyHisto[0]->GetBinContent(i)<<"</td>"<< std::endl;	     
       htmlFile << raw_class <<SummedAmplitudeHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
       htmlFile << raw_class <<SummedAmplitudeOccupancyHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
+
+      htmlFile << raw_class <<NoSignalSummedAmplitudeHisto[0]->GetBinContent(i)<<"</td>"<< std::endl;	     
+      htmlFile << raw_class <<NoSignalSummedAmplitudeOccupancyHisto[0]->GetBinContent(i)<<"</td>"<< std::endl;	     
       htmlFile << raw_class <<NoSignalSummedAmplitudeHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
       htmlFile << raw_class <<NoSignalSummedAmplitudeOccupancyHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
+
       htmlFile << raw_class <<MaxxSummedAmplitudeHisto[0]->GetBinContent(i)<<"</td>"<< std::endl;	     
       htmlFile << raw_class <<MaxxSummedAmplitudeOccupancyHisto[0]->GetBinContent(i)<<"</td>"<< std::endl;	     
-      htmlFile << raw_class <<MaxxSummedAmplitudeHisto[1]->GetBinContent(i)<<"</td>"<< std::endl;	     
-      htmlFile << raw_class <<MaxxSummedAmplitudeOccupancyHisto[1]->GetBinContent(i)<<"</td>"<< std::endl;	     
-      htmlFile << raw_class <<MaxxSummedAmplitudeHisto[2]->GetBinContent(i)<<"</td>"<< std::endl;	     
-      htmlFile << raw_class <<MaxxSummedAmplitudeOccupancyHisto[2]->GetBinContent(i)<<"</td>"<< std::endl;	     
       htmlFile << raw_class <<MaxxSummedAmplitudeHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
       htmlFile << raw_class <<MaxxSummedAmplitudeOccupancyHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
       
