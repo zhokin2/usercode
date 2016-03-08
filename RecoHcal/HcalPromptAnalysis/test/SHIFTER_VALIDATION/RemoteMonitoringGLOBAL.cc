@@ -3306,6 +3306,7 @@ int main(int argc, char *argv[])
   int countoccumaxHB=0;int countoccumaxHE=0;int countoccumaxHO=0;int countoccumaxHF=0;
   unsigned long int countamplHB=0;unsigned long int countamplHE=0;unsigned long int countamplHO=0;unsigned long int countamplHF=0;
   unsigned long int countoccuHB=0;unsigned long int countoccuHE=0;unsigned long int countoccuHO=0;unsigned long int countoccuHF=0;
+  gStyle->SetOptStat(110000);                     
   for (int sub=0; sub<4; sub++) {
     cFour->Clear();
     cFour->Divide(2,2);
@@ -3420,6 +3421,7 @@ int main(int argc, char *argv[])
     if (lpqxc) delete lpqxc;
     if (hpzlm) delete hpzlm;
   }//for    
+    gStyle->SetOptStat(0);                     
   //////////
   cout<<">=>=>>=> countamplmaxHB= "<<countamplmaxHB<<" countamplmaxHE= "<<countamplmaxHE<<" countamplmaxHO= "<<countamplmaxHO<<" countamplmaxHF= "<<countamplmaxHF<<  endl;
   cout<<">=>=>>=> countoccumaxHB= "<<countoccumaxHB<<" countoccumaxHE= "<<countoccumaxHE<<" countoccumaxHO= "<<countoccumaxHO<<" countoccumaxHF= "<<countoccumaxHF<<  endl;
@@ -4189,16 +4191,24 @@ int main(int argc, char *argv[])
     htmlFile << "</style>"<< std::endl;
     htmlFile << "<body>"<< std::endl;
     htmlFile << "<h1> Averaged Summed Amplitudes & corresponding occupancy of each sub-detector in Global Run = "<< runnumber <<" </h1>"<< std::endl;  
+	     htmlFile << "<a name=\"Top\"></a>\n";
+	     htmlFile << "<b>Contents:<br>\n";
+	     htmlFile << "1. <a href=\"#SAhigh\">average SA&Occupancy for Signal  </a><br>\n";
+	     htmlFile << "2. <a href=\"#SAlow\">average SA&Occupancy for NoSignal </a><br>\n";
+	     htmlFile << "3. <a href=\"#SAmax\"> maxSA & maxOccupancy; SA & Occupancy; </a><br>\n";
+	     htmlFile << "4. <a href=\"#FullTable\">Table </a><br>\n";
+
     htmlFile << "<h2> Clarifying on averaged Summed Amplitude (avSA) : </h2>"<< std::endl; 
     htmlFile << "<h3> Summed Amplitudes (SA) are averaged over all events of each LS: avSA_LS = SUM (SA_eventsInLS) / N_eventsInLS ,</h3>"<< std::endl; 
     htmlFile << "<h3> where SA = SUM(A_i) ,and means that Amplitude is summed over all sub-detector channels, </h3>"<< std::endl; 
     htmlFile << "<h3> where A_i = SUM(A_depth) denotes channel amplitude summed over depths;  </h3>"<< std::endl; 
-    htmlFile << "<br>"<< std::endl;
-    htmlFile << "<h3> Apply cuts on A_i to take into account channels with or/and without a'la Signal: </h3>"<< std::endl; 
+//  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/SAwriteup.html\"> see more details for SummedAmplitudes</a></td>"<< std::endl;
+    htmlFile << "<h2> Apply cuts on A_i to take into account channels with or/and without a'la Signal: </h2>"<< std::endl; 
     htmlFile << " <img src=\"ChannelDepthsummedAmplitudes.png\" />" << std::endl;      
     htmlFile << "<br>"<< std::endl;
-
-
+    htmlFile << "<br>"<< std::endl;
+htmlFile << "<a name=\"SAhigh\"></a>\n";
     htmlFile << "<h1> 1.  for channels with signal </h1>"<< std::endl; 
     htmlFile << "<br>"<< std::endl;
     htmlFile << "<h2> for HB: A_i> 80; </h2>"<< std::endl; 
@@ -4213,8 +4223,10 @@ int main(int argc, char *argv[])
     htmlFile << "<h2> for HF: A_i> 600;</h2>"<< std::endl; 
     htmlFile << " <img src=\"SummedAmplitudesSignal_HF.png\" />" << std::endl;      
     htmlFile << "<br>"<< std::endl;
+htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 
 
+htmlFile << "<a name=\"SAlow\"></a>\n";
     htmlFile << "<h1> 2.  for channels w/o signal </h1>"<< std::endl; 
     htmlFile << "<br>"<< std::endl;
     htmlFile << "<h2> for HB: A_i< 80;</h2>"<< std::endl; 
@@ -4229,10 +4241,12 @@ int main(int argc, char *argv[])
     htmlFile << "<h2> for HF: A_i< 600;</h2>"<< std::endl; 
     htmlFile << " <img src=\"NoSignalSummedAmplitudes_HF.png\" />" << std::endl;      
     htmlFile << "<br>"<< std::endl;
+htmlFile << "<a href=\"#Top\">to top</a><br>\n";
     
     
     htmlFile << "<br>"<< std::endl;
     htmlFile << "<br>"<< std::endl;
+htmlFile << "<a name=\"SAmax\"></a>\n";
     htmlFile << "<h1> 3. four plots: ---1--->  max SA ---2---> max Occupancy ---3--->  SA ---4---> Occupancy over all events of LS </h1>"<< std::endl; 
     htmlFile << "<br>"<< std::endl;
 
@@ -4259,8 +4273,10 @@ int main(int argc, char *argv[])
     htmlFile << "<h2>" " ......(forCut:SAmax>22000) N= "<<countamplmaxHF<< " ...... (forCut:OCCUPmax>860) N= "<<countoccumaxHF<< " </h2>"<< std::endl; 
     htmlFile << "<h2>" " ......(forCut:SA>22000) N= "<<countamplHF<< " ...... (forCut:OCCUP>860) N= "<<countoccuHF<< " </h2>"<< std::endl; 
     htmlFile << "<br>"<< std::endl;
+htmlFile << "<a href=\"#Top\">to top</a><br>\n";
     
     
+htmlFile << "<a name=\"FullTable\"></a>\n";
     htmlFile << "<h2> 4.Lumisection Status:  </h2>"<< std::endl;
     htmlFile << "<h3> Legends: HBdepth1 red boxes correspond LSs selected with cut: <td class=\"s6\" align=\"center\">"<<Cut0[1][1][1]<< std::endl;
     htmlFile << "<h3> Legends: HEdepth1 red boxes correspond LSs selected with cut: <td class=\"s6\" align=\"center\">"<<Cut0[1][2][1]<< std::endl;
@@ -4343,6 +4359,7 @@ int main(int argc, char *argv[])
       ind+=1;
     }	                
     htmlFile << "</table>" << std::endl; 
+htmlFile << "<a href=\"#Top\">to top</a><br>\n";
     
     
     
