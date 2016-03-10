@@ -4196,7 +4196,7 @@ int main(int argc, char *argv[])
 	     htmlFile << "1. <a href=\"#SAhigh\">average SA&Occupancy for Signal  </a><br>\n";
 	     htmlFile << "2. <a href=\"#SAlow\">average SA&Occupancy for NoSignal </a><br>\n";
 	     htmlFile << "3. <a href=\"#SAmax\"> maxSA & maxOccupancy; SA & Occupancy; </a><br>\n";
-	     htmlFile << "4. <a href=\"#FullTable\">Table </a><br>\n";
+	     htmlFile << "4. <a href=\"#FullTable\">Table(avA; avSA; avOccupancy; maxSA; maxOccupancy;) </a><br>\n";
 
     htmlFile << "<h2> Clarifying on averaged Summed Amplitude (avSA) : </h2>"<< std::endl; 
     htmlFile << "<h3> Summed Amplitudes (SA) are averaged over all events of each LS: avSA_LS = SUM (SA_eventsInLS) / N_eventsInLS ,</h3>"<< std::endl; 
