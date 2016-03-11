@@ -3437,11 +3437,15 @@ int main(int argc, char *argv[])
   ChannelDepthsummedAmplitudesPlots[1] = (TH1F*)hfile->Get("h_sumamplitudechannel_HE");
   ChannelDepthsummedAmplitudesPlots[2] = (TH1F*)hfile->Get("h_sumamplitudechannel_HO");
   ChannelDepthsummedAmplitudesPlots[3] = (TH1F*)hfile->Get("h_sumamplitudechannel_HF");
-
-
-    gStyle->SetOptStat(110000);                     
-    cFour1->Clear();
-    cFour1->Divide(2,2);
+  TLine *litebdt[4];
+  litebdt[0]=new TLine(  80., 0.8,   80., ChannelDepthsummedAmplitudesPlots[0]->GetBinContent(4) +100.);
+  litebdt[1]=new TLine( 200., 0.8,  200., ChannelDepthsummedAmplitudesPlots[1]->GetBinContent(7) +100.);
+  litebdt[2]=new TLine(1200., 0.8, 1200., ChannelDepthsummedAmplitudesPlots[2]->GetBinContent(17)+100.);
+  litebdt[3]=new TLine( 600., 0.8,  600., ChannelDepthsummedAmplitudesPlots[3]->GetBinContent(6) +100.);
+  
+  gStyle->SetOptStat(110000);                     
+  cFour1->Clear();
+  cFour1->Divide(2,2);
   for (int sub=0; sub<4; sub++) {
     
     if(sub==0)  cFour1->cd(1);
@@ -3451,11 +3455,10 @@ int main(int argc, char *argv[])
     gPad->SetLogy();
     ChannelDepthsummedAmplitudesPlots[sub]->SetMarkerStyle(20);
     ChannelDepthsummedAmplitudesPlots[sub]->SetMarkerSize(0.8);
-         if(sub==0) ChannelDepthsummedAmplitudesPlots[sub]->SetTitle("HB channel Amplitudes\b");
-         if(sub==1) ChannelDepthsummedAmplitudesPlots[sub]->SetTitle("HE channel Amplitudes\b");
-         if(sub==2) ChannelDepthsummedAmplitudesPlots[sub]->SetTitle("HO channel Amplitudes\b");
-         if(sub==3) ChannelDepthsummedAmplitudesPlots[sub]->SetTitle("HF channel Amplitudes\b");
-//    ChannelDepthsummedAmplitudesPlots[sub]->GetYaxis()->SetLabelSize(0.08);
+    if(sub==0) ChannelDepthsummedAmplitudesPlots[sub]->SetTitle("HB channel Amplitudes\b");
+    if(sub==1) ChannelDepthsummedAmplitudesPlots[sub]->SetTitle("HE channel Amplitudes\b");
+    if(sub==2) ChannelDepthsummedAmplitudesPlots[sub]->SetTitle("HO channel Amplitudes\b");
+    if(sub==3) ChannelDepthsummedAmplitudesPlots[sub]->SetTitle("HF channel Amplitudes\b");
     if(sub==0) ChannelDepthsummedAmplitudesPlots[sub]->SetXTitle("HB channel depths summed Amplitudes \b");
     if(sub==1) ChannelDepthsummedAmplitudesPlots[sub]->SetXTitle("HE channel depths summed Amplitudes \b");
     if(sub==2) ChannelDepthsummedAmplitudesPlots[sub]->SetXTitle("HO channel depths summed Amplitudes \b");
@@ -3463,17 +3466,105 @@ int main(int argc, char *argv[])
     ChannelDepthsummedAmplitudesPlots[sub]->SetMarkerColor(2);
     ChannelDepthsummedAmplitudesPlots[sub]->SetLineColor(2);
     ChannelDepthsummedAmplitudesPlots[sub]->Draw("");
-    
+    litebdt[sub]->SetLineColor(kBlue);
+    litebdt[sub]->Draw("s");
   }//for    
-    cFour1->Update();
-    cFour1->Print("ChannelDepthsummedAmplitudes.png");
-    cFour1->Clear();
-    gStyle->SetOptStat(0);                     
+  cFour1->Update();
+  cFour1->Print("ChannelDepthsummedAmplitudes.png");
+  cFour1->Clear();
+  gStyle->SetOptStat(0);                     
 
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+  /// Summed Amplitude Plots:
+  //*************************                        *****     Ataildepth1_HB                 *****
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>channelsummedA over depths "<<endl;
   //////////
+  cHB->Clear();
+  cHB->Divide(2,1);
+  cHB->cd(1);
+  TH2F *twod1= (TH2F*)hfile->Get("h_2DAtaildepth1_HB");
+  TH2F *twod0= (TH2F*)hfile->Get("h_2D0Ataildepth1_HB");
+  twod1->Sumw2();
+  twod0->Sumw2();
+  TH2F* tail1= (TH2F*)twod1->Clone("tail1");
+  tail1->Divide(twod1,twod0, 1, 1, "B");
+  tail1->Sumw2();
+  gPad->SetGridy();
+  gPad->SetGridx();
+  gPad->SetLogz();
+  tail1->SetMarkerStyle(20);
+  tail1->SetMarkerSize(0.4);
+  tail1->SetTitle("Amplitudes for tail-events (HBdepth1) \b");
+  tail1->SetXTitle("#eta \b");
+  tail1->SetYTitle("#phi \b");
+  tail1->SetZTitle("2D <A> in the tail - HB Depth1 \b");
+  tail1->SetMarkerColor(2);
+  tail1->SetLineColor(2);
+  tail1->Draw("COLZ");
+  cHB->cd(2);
+  TH2F *ewpg1= (TH2F*)hfile->Get("h_2DAtaildepth2_HB");
+  TH2F *ewpg0= (TH2F*)hfile->Get("h_2D0Ataildepth2_HB");
+  ewpg1->Sumw2();
+  ewpg0->Sumw2();
+  TH2F* tail2= (TH2F*)ewpg1->Clone("tail2");
+  if(ewpg1 && ewpg0  ) tail2->Divide(ewpg1,ewpg0, 1, 1, "B");
+  tail2->Sumw2();
+  gPad->SetGridy();
+  gPad->SetGridx();
+  gPad->SetLogz();
+  tail2->SetMarkerStyle(20);
+  tail2->SetMarkerSize(0.4);
+  tail2->SetTitle("Amplitudes for tail-events (HBdepth2) \b");
+  tail2->SetXTitle("#eta \b");
+  tail2->SetYTitle("#phi \b");
+  tail2->SetZTitle("2D <A> in the tail - HB Depth2 \b");
+  tail2->SetMarkerColor(2);
+  tail2->SetLineColor(2);
+  tail2->Draw("COLZ");
   
-//====================================================================================================================
+  cHB->Update();
+  cHB->Print("AtaildepthHB.png");
+  cHB->Clear();
+  if (ewpg0) delete ewpg0;
+  if (ewpg1) delete ewpg1;
+  if (twod0) delete twod0;
+  if (twod1) delete twod1;
+  
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+  /// Summed Amplitude Plots:
+  //*************************                        *****     sum(Signal+NoSignal) occupancy for HF                *****
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>channelsummedA over depths "<<endl;
+  //////////
+  cHB->Clear();
+  cHB->Divide(1,1);
+  cHB->cd(1);
+  TH1F* ufrew1= (TH1F*)SummedAmplitudeOccupancyHisto[3]->Clone("ufrew1");
+  if(SummedAmplitudeOccupancyHisto[3] && NoSignalSummedAmplitudeOccupancyHisto[3]  ) ufrew1->Add(SummedAmplitudeOccupancyHisto[3],NoSignalSummedAmplitudeOccupancyHisto[3], 1, 1);
+  ufrew1->GetXaxis()->SetRangeUser(1., maxbins+1.);
+  gPad->SetGridx();
+  ufrew1->SetMarkerStyle(20);
+  ufrew1->SetMarkerSize(0.8);
+  ufrew1->GetYaxis()->SetLabelSize(0.04);
+  ufrew1->SetTitle("HF Occupancy vs LS\b");      
+  ufrew1->SetXTitle("average occupancy per LS HF\b");
+  ufrew1->SetMarkerColor(4);
+  ufrew1->SetLineColor(0);
+  ufrew1->Draw("Error");
+  
+  cHB->Update();
+  cHB->Print("sumOccupancyHF.png");
+  cHB->Clear();
+  if (ufrew1) delete ufrew1;
+  
+  //////////
+  //////////
+  //////////
+  //////////
+  //////////
+  //////////
+  //////////
+  //====================================================================================================================
   cout<<">>>>>>>>>>>>>>>>>>>>>>>> ====================================================================="<<endl;
 
 //=====================================================================================================
@@ -3481,7 +3572,11 @@ int main(int argc, char *argv[])
 
 //=====================================================================================
   cout<<">>>>>>>>>>>>>>>>>>>>>>>> ================================="<<endl;
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>> ================================="<<endl;
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>> ================================="<<endl;
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>> ================================="<<endl;
 
+  cout<<">>>>>>>             START NOW CREATING OF HTML PAGES      <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
 //======================================================================
 // Creating each test kind for each subdet html pages:
   std::string raw_class;  
@@ -4255,6 +4350,9 @@ htmlFile << "<a name=\"SAmax\"></a>\n";
     htmlFile << "<h2>" " ......(forCut:SAmax>60000) N= "<<countamplmaxHB<< " ...... (forCut:OCCUPmax>2000) N= "<<countoccumaxHB<< " </h2>"<< std::endl; 
     htmlFile << "<h2>" " ......(forCut:SA>60000) N= "<<countamplHB<< " ...... (forCut:OCCUP>2000) N= "<<countoccuHB<< " </h2>"<< std::endl; 
     htmlFile << "<br>"<< std::endl;
+    htmlFile << "<h3> ONLY for HB (cross-check): channel Amplitudes for events in the Tail (averaged): </h3>"<< std::endl; 
+    htmlFile << " <img src=\"AtaildepthHB.png\" />" << std::endl;      
+    htmlFile << "<br>"<< std::endl;
 
     htmlFile << "<h2> for HE: maxSA vs LS, masOccupancy vs LS, SA, Occupancy </h2>"<< std::endl; 
     htmlFile << " <img src=\"MaxxSummedAmplitudes_HE.png\" />" << std::endl;      
@@ -4272,6 +4370,9 @@ htmlFile << "<a name=\"SAmax\"></a>\n";
     htmlFile << " <img src=\"MaxxSummedAmplitudes_HF.png\" />" << std::endl;      
     htmlFile << "<h2>" " ......(forCut:SAmax>22000) N= "<<countamplmaxHF<< " ...... (forCut:OCCUPmax>860) N= "<<countoccumaxHF<< " </h2>"<< std::endl; 
     htmlFile << "<h2>" " ......(forCut:SA>22000) N= "<<countamplHF<< " ...... (forCut:OCCUP>860) N= "<<countoccuHF<< " </h2>"<< std::endl; 
+    htmlFile << "<br>"<< std::endl;
+    htmlFile << "<h2> Occupancy HF (ONLY) vs LS </h2>"<< std::endl; 
+    htmlFile << " <img src=\"sumOccupancyHF.png\" />" << std::endl;      
     htmlFile << "<br>"<< std::endl;
 htmlFile << "<a href=\"#Top\">to top</a><br>\n";
     
@@ -4368,11 +4469,11 @@ htmlFile << "<a href=\"#Top\">to top</a><br>\n";
     htmlFile << "</html> " << std::endl; 
     htmlFile.close();
     
-    //======================================================================
+    //====================================================================== // Creating description of html-files
     
-    
+    /*    
     //======================================================================
-  // Creating description html file: 
+  // Creating description HELP.html file: 
   htmlFile.open("HELP.html");  
   htmlFile << "</html><html xmlns=\"http://www.w3.org/1999/xhtml\">"<< std::endl;
   htmlFile << "<head>"<< std::endl;
@@ -4404,8 +4505,41 @@ htmlFile << "<a href=\"#Top\">to top</a><br>\n";
   htmlFile << "</body> " << std::endl;
   htmlFile << "</html> " << std::endl; 
   htmlFile.close();
-  
+*/  
   //======================================================================
+  // Creating description CMTresults.html file: 
+  htmlFile.open("CMTresults.html");  
+  htmlFile << "</html><html xmlns=\"http://www.w3.org/1999/xhtml\">"<< std::endl;
+  htmlFile << "<head>"<< std::endl;
+  htmlFile << "<meta http-equiv=\"Content-Type\" content=\"text/html\"/>"<< std::endl;
+  htmlFile << "<title> Certification Monitoring Tool </title>"<< std::endl;
+  htmlFile << "<style type=\"text/css\">"<< std::endl;
+  htmlFile << " body,td{ background-color: #FFFFCC; font-family: arial, arial ce, helvetica; font-size: 12px; }"<< std::endl;
+  htmlFile << "   td.s0 { font-family: arial, arial ce, helvetica; }"<< std::endl;
+  htmlFile << "   td.s1 { font-family: arial, arial ce, helvetica; font-weight: bold; background-color: #FFC169; text-align: center;}"<< std::endl;
+  htmlFile << "   td.s2 { font-family: arial, arial ce, helvetica; background-color: #eeeeee; }"<< std::endl;
+  htmlFile << "   td.s3 { font-family: arial, arial ce, helvetica; background-color: #d0d0d0; }"<< std::endl;
+  htmlFile << "   td.s4 { font-family: arial, arial ce, helvetica; background-color: #FFC169; }"<< std::endl;
+  htmlFile << "</style>"<< std::endl;
+  htmlFile << "<body>"<< std::endl;
+  htmlFile << "<h1>  LS-certification (recommendation) from analysis of CMT-dependencies of THIS run </h1>"<< std::endl;
+  htmlFile << "<br>"<< std::endl;
+  htmlFile << "<br>"<< std::endl;
+  htmlFile << "<h2> - List of suspicious LSs:  </h2> "<< std::endl;
+  htmlFile << "<br>"<< std::endl;
+  htmlFile << "<h3> to be added </h3> "<< std::endl;
+  htmlFile << "<br>"<< std::endl;
+  htmlFile << "<br>"<< std::endl;
+  htmlFile << "<br>"<< std::endl;
+  htmlFile << "<h2> - Comments: </h2> "<< std::endl;
+  htmlFile << "<br>"<< std::endl;
+  htmlFile << "<h3> to be added </h3> "<< std::endl;
+  htmlFile << "<br>"<< std::endl;
+  htmlFile << "<br>"<< std::endl;
+  htmlFile << "<br>"<< std::endl; 
+  htmlFile << "</body> " << std::endl;
+  htmlFile << "</html> " << std::endl; 
+  htmlFile.close();
   
   //======================================================================
   // Creating main html file: 
@@ -4429,6 +4563,9 @@ htmlFile << "<a href=\"#Top\">to top</a><br>\n";
   htmlFile << "<body>"<< std::endl;
   
   htmlFile << "<h1> Certification Monitoring Tool, GLOBAL RUN = "<< runnumber <<". </h1>"<< std::endl;
+  htmlFile << "<br>"<< std::endl;
+htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/CMTresults.html\">  CMT-analysis RESULTS (for this run) </a></td>"<< std::endl;
+  htmlFile << "<br>"<< std::endl;
   htmlFile << "<br>"<< std::endl; 
 
   //  htmlFile << "<h2> 1. General information </h2>"<< std::endl;   
@@ -4438,7 +4575,8 @@ htmlFile << "<a href=\"#Top\">to top</a><br>\n";
   
   
   htmlFile << "<h2> 2. HCAL status for different criteria </h2>"<< std::endl;   
-  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+  //  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
   htmlFile << "<br>"<< std::endl;
   htmlFile << "<table width=\"600\">"<< std::endl;
   htmlFile << "<tr>"<< std::endl;
