@@ -159,10 +159,10 @@ for i in ${runList} ; do
 	exit 2
     fi
 
-    if [ ! -s HELP.html ] ; then
-	echo "GLOBAL failure was not detected. HELP.html is missing"
-	exit 2
-    fi
+##    if [ ! -s HELP.html ] ; then
+##	echo "GLOBAL failure was not detected. HELP.html is missing"
+##	exit 2
+##    fi
 
 
     local_WebDir=dir-CMT-GLOBAL_${runnumber}
@@ -173,7 +173,7 @@ for i in ${runList} ; do
 	    > ${local_WebDir}/$j
     done
     cp *.png ${local_WebDir}
-    cp HELP.html ${local_WebDir}
+##    cp HELP.html ${local_WebDir}
     files=`cd ${local_WebDir}; ls`
     #echo "CMT files=${files}"
 
