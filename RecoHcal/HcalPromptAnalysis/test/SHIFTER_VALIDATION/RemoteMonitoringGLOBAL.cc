@@ -3555,6 +3555,8 @@ int main(int argc, char *argv[])
   ufrew1->SetXTitle("average occupancy per LS HF\b");
   ufrew1->SetMarkerColor(4);
   ufrew1->SetLineColor(0);
+  ufrew1->SetMaximum(866.);
+  ufrew1->SetMinimum(856.);
   ufrew1->Draw("Error");
   
   cHB->Update();
