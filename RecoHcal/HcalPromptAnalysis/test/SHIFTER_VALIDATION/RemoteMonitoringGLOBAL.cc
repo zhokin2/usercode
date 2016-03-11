@@ -3478,63 +3478,68 @@ int main(int argc, char *argv[])
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
   /// Summed Amplitude Plots:
   //*************************                        *****     Ataildepth1_HB                 *****
-  cout<<">>>>>>>>>>>>>>>>>>>>>>>>channelsummedA over depths "<<endl;
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>2DAtaildepth "<<endl;
   //////////
   cHB->Clear();
   cHB->Divide(2,1);
+
+  TH2F *DAtaildepth1[2];    // 1d histogramm for subdet
+  DAtaildepth1[0] = (TH2F*)hfile->Get("h_2DAtaildepth1_HB");
+  DAtaildepth1[1] = (TH2F*)hfile->Get("h_2D0Ataildepth1_HB");
   cHB->cd(1);
-  TH2F *twod1= (TH2F*)hfile->Get("h_2DAtaildepth1_HB");
-  TH2F *twod0= (TH2F*)hfile->Get("h_2D0Ataildepth1_HB");
-  twod1->Sumw2();
-  twod0->Sumw2();
-  TH2F* tail1= (TH2F*)twod1->Clone("tail1");
-  tail1->Divide(twod1,twod0, 1, 1, "B");
-  tail1->Sumw2();
-  gPad->SetGridy();
-  gPad->SetGridx();
-  gPad->SetLogz();
-  tail1->SetMarkerStyle(20);
-  tail1->SetMarkerSize(0.4);
-  tail1->SetTitle("Amplitudes for tail-events (HBdepth1) \b");
-  tail1->SetXTitle("#eta \b");
-  tail1->SetYTitle("#phi \b");
-  tail1->SetZTitle("2D <A> in the tail - HB Depth1 \b");
-  tail1->SetMarkerColor(2);
-  tail1->SetLineColor(2);
-  tail1->Draw("COLZ");
-  cHB->cd(2);
-  TH2F *ewpg1= (TH2F*)hfile->Get("h_2DAtaildepth2_HB");
-  TH2F *ewpg0= (TH2F*)hfile->Get("h_2D0Ataildepth2_HB");
-  ewpg1->Sumw2();
-  ewpg0->Sumw2();
-  TH2F* tail2= (TH2F*)ewpg1->Clone("tail2");
-  if(ewpg1 && ewpg0  ) tail2->Divide(ewpg1,ewpg0, 1, 1, "B");
-  tail2->Sumw2();
-  gPad->SetGridy();
-  gPad->SetGridx();
-  gPad->SetLogz();
-  tail2->SetMarkerStyle(20);
-  tail2->SetMarkerSize(0.4);
-  tail2->SetTitle("Amplitudes for tail-events (HBdepth2) \b");
-  tail2->SetXTitle("#eta \b");
-  tail2->SetYTitle("#phi \b");
-  tail2->SetZTitle("2D <A> in the tail - HB Depth2 \b");
-  tail2->SetMarkerColor(2);
-  tail2->SetLineColor(2);
-  tail2->Draw("COLZ");
+  if(!DAtaildepth1[0] || !DAtaildepth1[1] ) {
+    cout<<">>>>>>>>>>>>>>>>>>>>>>>>Ataildepth1_HB EMPTY histoes for 2DAtaildepth 1"<<endl;
+  }
+  else {
+    TH2F *tail1= (TH2F*)DAtaildepth1[0]->Clone("tail1");
+    tail1->Divide(DAtaildepth1[0],DAtaildepth1[1], 1, 1, "B");
+    //  tail1->Sumw2();
+    gPad->SetGridy();
+    gPad->SetGridx();
+    gPad->SetLogz();
+    tail1->SetMarkerStyle(20);
+    tail1->SetMarkerSize(0.4);
+    tail1->SetTitle("Amplitudes for tail-events (HBdepth1) \b");
+    tail1->SetXTitle("#eta \b");
+    tail1->SetYTitle("#phi \b");
+    tail1->SetZTitle("2D <A> in the tail - HB Depth1 \b");
+    tail1->SetMarkerColor(2);
+    tail1->SetLineColor(2);
+    tail1->Draw("COLZ");
+  }
+  TH2F *DAtaildepth2[2];    // 1d histogramm for subdet
+  DAtaildepth2[0] = (TH2F*)hfile->Get("h_2DAtaildepth2_HB");
+  DAtaildepth2[1] = (TH2F*)hfile->Get("h_2D0Ataildepth2_HB");
+  cHB->cd(1);
+  if(!DAtaildepth2[0] || !DAtaildepth2[1] ) {
+    cout<<">>>>>>>>>>>>>>>>>>>>>>>>Ataildepth1_HB EMPTY histoes for 2DAtaildepth 2"<<endl;
+  }
+  else {
+    TH2F *tail2= (TH2F*)DAtaildepth2[0]->Clone("tail2");
+    tail2->Divide(DAtaildepth2[0],DAtaildepth2[1], 1, 1, "B");
+    //  tail2->Sumw2();
+    gPad->SetGridy();
+    gPad->SetGridx();
+    gPad->SetLogz();
+    tail2->SetMarkerStyle(20);
+    tail2->SetMarkerSize(0.4);
+    tail2->SetTitle("Amplitudes for tail-events (HBdepth2) \b");
+    tail2->SetXTitle("#eta \b");
+    tail2->SetYTitle("#phi \b");
+    tail2->SetZTitle("2D <A> in the tail - HB Depth2 \b");
+    tail2->SetMarkerColor(2);
+    tail2->SetLineColor(2);
+    tail2->Draw("COLZ");
+  }
   
   cHB->Update();
   cHB->Print("AtaildepthHB.png");
   cHB->Clear();
-  if (ewpg0) delete ewpg0;
-  if (ewpg1) delete ewpg1;
-  if (twod0) delete twod0;
-  if (twod1) delete twod1;
   
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
   /// Summed Amplitude Plots:
   //*************************                        *****     sum(Signal+NoSignal) occupancy for HF                *****
-  cout<<">>>>>>>>>>>>>>>>>>>>>>>>channelsummedA over depths "<<endl;
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>sumOccupancyHF "<<endl;
   //////////
   cHB->Clear();
   cHB->Divide(1,1);
