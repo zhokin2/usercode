@@ -18,7 +18,8 @@ foreach i (`cat TXT_${1}/run_${jj}`)
 @ nn = ${nn} + "1"
 echo "nn= ${nn} ,  i= ${i},  kk= ${kk}"
 
-if( ${nn} < "120" ) then
+#if( ${nn} < "120" ) then
+if( ${nn} < "50" ) then
 echo "${i}" >> PYTHON_${1}/Reco_${jj}_${kk}_cfg.py
 
 else
