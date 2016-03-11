@@ -3510,7 +3510,7 @@ int main(int argc, char *argv[])
   TH2F *DAtaildepth2[2];    // 1d histogramm for subdet
   DAtaildepth2[0] = (TH2F*)hfile->Get("h_2DAtaildepth2_HB");
   DAtaildepth2[1] = (TH2F*)hfile->Get("h_2D0Ataildepth2_HB");
-  cHB->cd(1);
+  cHB->cd(2);
   if(!DAtaildepth2[0] || !DAtaildepth2[1] ) {
     cout<<">>>>>>>>>>>>>>>>>>>>>>>>Ataildepth1_HB EMPTY histoes for 2DAtaildepth 2"<<endl;
   }
