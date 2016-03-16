@@ -161,10 +161,10 @@ for i in ${runList} ; do
 	exit 2
     fi
 
-    if [ ! -s HELP.html ] ; then
-	echo "MAP_Global failure was not detected. HELP.html is missing"
-	exit 2
-    fi
+#    if [ ! -s HELP.html ] ; then
+#	echo "MAP_Global failure was not detected. HELP.html is missing"
+#	exit 2
+#    fi
 
     local_WebDir=dir-GlobalRMT-GLOBAL_${runnumber}
     rm -rf ${local_WebDir}
@@ -173,8 +173,10 @@ for i in ${runList} ; do
 	cat $j | sed 's#cms-cpt-software.web.cern.ch\/cms-cpt-software\/General\/Validation\/SVSuite#cms-conddb-dev.cern.ch\/eosweb\/hcal#g' \
 		> ${local_WebDir}/$j
     done
+
     cp *.png ${local_WebDir}
-    cp HELP.html ${local_WebDir}
+#    cp HELP.html ${local_WebDir}
+
     files=`cd ${local_WebDir}; ls`
     #echo "GlobalRMT files=${files}"
 
