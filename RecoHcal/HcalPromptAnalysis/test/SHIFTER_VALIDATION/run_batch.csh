@@ -12,6 +12,7 @@ echo ${i} ${j} ${1}
 #./batchjobs.csh ${1} ${j} 
 
 bsub -q 8nh batchjobs.csh ${1} ${j} `pwd` 
+#bsub -q 1nd batchjobs.csh ${1} ${j} `pwd`
 
 end
 #rm -rf PYTHON_${1}
