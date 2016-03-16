@@ -23,7 +23,7 @@
 #include "TGraph.h"
 #include <TPaveText.h>
 
-// HistBadTSshapesHF.png            MapRateAmpl2HB.png      MapRateAmplDriftHB.png
+// 
 
 using namespace std;
 //inline void HERE(const char *msg) { std::cout << msg << std::endl; }
@@ -2277,7 +2277,8 @@ int main(int argc, char *argv[])
      htmlFile << "<h3> 2.B.List of Bad channels (rate > 0.1) and its rates for each RMT criteria </h3>"<< std::endl;
 
      //htmlFile << "  <td><a href=\"HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
-     htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+     //   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
 
      htmlFile << "<table>"<< std::endl;     
      htmlFile << "<tr>";
@@ -2632,11 +2633,12 @@ int main(int argc, char *argv[])
   }
       
 //======================================================================
+// Creating description html file: 
+     ofstream htmlFile;
 
 
 //======================================================================
-// Creating description html file: 
-     ofstream htmlFile;
+/*
      htmlFile.open("HELP.html");  
      htmlFile << "</html><html xmlns=\"http://www.w3.org/1999/xhtml\">"<< std::endl;
      htmlFile << "<head>"<< std::endl;
@@ -2675,7 +2677,7 @@ int main(int argc, char *argv[])
      htmlFile << "</body> " << std::endl;
      htmlFile << "</html> " << std::endl; 
      htmlFile.close();
-
+*/
 //======================================================================
 
 //======================================================================
@@ -2728,7 +2730,10 @@ int main(int argc, char *argv[])
      htmlFile << "<h3> 2.B. List of Bad channels </h3>"<< std::endl;
   
      //htmlFile << "  <td><a href=\"HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
-     htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+     //   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+
+
      htmlFile << "<table>"<< std::endl;     
      htmlFile << "<tr>";
      htmlFile << "<td class=\"s4\" align=\"center\">#</td>"    << std::endl;
@@ -2796,7 +2801,8 @@ int main(int argc, char *argv[])
      
      htmlFile << "<h3> 2.C.List of Gain unstable channels </h3>"<< std::endl;
      //htmlFile << "  <td><a href=\"HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
-     htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+     //   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
 
      htmlFile << "<table>"<< std::endl;     
      htmlFile << "<tr>";
@@ -2866,7 +2872,8 @@ int main(int argc, char *argv[])
      
      htmlFile << "<h3> 2.D.List of channels with bad Pedestals </h3>"<< std::endl;
      // htmlFile << "  <td><a href=\"HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
-     htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+     //   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
 
      htmlFile << "<table>"<< std::endl;     
      htmlFile << "<tr>";
