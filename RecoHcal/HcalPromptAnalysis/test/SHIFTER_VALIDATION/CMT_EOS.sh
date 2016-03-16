@@ -197,7 +197,9 @@ for i in ${runList} ; do
     fi
 
     rm *.html
-    rm *.png    
+    rm *.png 
+##     rm *.root
+##    rm -rf dir-CMT-GLOBAL_*
 
 
 
