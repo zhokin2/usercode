@@ -201,7 +201,8 @@ for i in ${runList} ; do
 
     rm *.html
     rm *.png
-
+    rm -rf dir-GlobalRMT-GLOBAL_*
+    rm *.root
 #fi
 
 done
