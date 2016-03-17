@@ -198,8 +198,8 @@ for i in ${runList} ; do
 
     rm *.html
     rm *.png 
-##     rm *.root
-##    rm -rf dir-CMT-GLOBAL_*
+    rm -rf dir-CMT-GLOBAL_*
+    rm *.root
 
 
 
