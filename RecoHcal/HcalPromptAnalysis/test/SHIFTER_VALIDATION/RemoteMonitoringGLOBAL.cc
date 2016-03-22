@@ -1659,7 +1659,7 @@ int main(int argc, char *argv[])
       //      avedelta_HE = sumdelta/hV[0]->GetNbinsX();
       avedelta_HE = sumdelta/nnndelta;
       std::cout << "******************>>>>>>      ErrA_HE:  avedelta_HE = " << avedelta_HE <<std::endl;
-      if (avedelta_HE>1.1 || (avedelta_HE<0.7 && avedelta_HE>0.)) {
+      if (avedelta_HE>1.1 || (avedelta_HE<0.5 && avedelta_HE>0.)) {
 	flagErrAB_HE[0]=1;
       }//if
     }//hV.size
@@ -1932,7 +1932,7 @@ int main(int argc, char *argv[])
       //      avedelta_HO = sumdelta/hV[0]->GetNbinsX();
       avedelta_HO = sumdelta/nnndelta;
       std::cout << "******************>>>>>>      ErrA_HO:  avedelta_HO = " << avedelta_HO <<std::endl;
-      if (avedelta_HO>0.65 || (avedelta_HO<0.2 && avedelta_HO>0.)) {
+      if (avedelta_HO>0.8 || (avedelta_HO<0.2 && avedelta_HO>0.)) {
 	flagErrAB_HO[0]=1;
       }//if
     }//hV.size
