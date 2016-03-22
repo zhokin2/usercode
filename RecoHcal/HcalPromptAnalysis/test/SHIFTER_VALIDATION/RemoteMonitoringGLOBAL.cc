@@ -1388,7 +1388,7 @@ int main(int argc, char *argv[])
       //      avedelta_HB = sumdelta/hV[0]->GetNbinsX();
       avedelta_HB = sumdelta/nnndelta;
       std::cout << "******************>>>>>>      ErrA_HB:  avedelta_HB = " << avedelta_HB <<std::endl;
-      if (avedelta_HB>1.6 || (avedelta_HB<0.1 && avedelta_HB>0.)) {
+      if (avedelta_HB>0.24 || (avedelta_HB<0.14 && avedelta_HB>0.)) {
 	flagErrAB_HB[0]=1;
       }//if
     }//hV.size
@@ -1659,7 +1659,7 @@ int main(int argc, char *argv[])
       //      avedelta_HE = sumdelta/hV[0]->GetNbinsX();
       avedelta_HE = sumdelta/nnndelta;
       std::cout << "******************>>>>>>      ErrA_HE:  avedelta_HE = " << avedelta_HE <<std::endl;
-      if (avedelta_HE>1.8 || (avedelta_HE<0.2 && avedelta_HE>0.)) {
+      if (avedelta_HE>1.1 || (avedelta_HE<0.7 && avedelta_HE>0.)) {
 	flagErrAB_HE[0]=1;
       }//if
     }//hV.size
@@ -1932,7 +1932,7 @@ int main(int argc, char *argv[])
       //      avedelta_HO = sumdelta/hV[0]->GetNbinsX();
       avedelta_HO = sumdelta/nnndelta;
       std::cout << "******************>>>>>>      ErrA_HO:  avedelta_HO = " << avedelta_HO <<std::endl;
-      if (avedelta_HO>1.5 || (avedelta_HO<0.1 && avedelta_HO>0.)) {
+      if (avedelta_HO>0.65 || (avedelta_HO<0.2 && avedelta_HO>0.)) {
 	flagErrAB_HO[0]=1;
       }//if
     }//hV.size
@@ -3136,7 +3136,8 @@ int main(int argc, char *argv[])
     TH1F* kslpq = new TH1F("kslpq","", maxbins, 1., maxbins+1.);
     //    cout<<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   sub =     "<< sub <<endl;
     for (int i=1;i<=kslpq->GetXaxis()->GetNbins();i++) {
-      double ccc1 =  SummedAmplitudeHisto[sub]->GetBinContent(i);
+      double ccc1 =  0.;
+      if(SummedAmplitudeHisto[sub]) ccc1 =  SummedAmplitudeHisto[sub]->GetBinContent(i);
       //      	  if(ccc1>0.)	  cout<<"  iLS = "<<i<<"  LS= "<<ccc1<<endl;
       if(ccc1>0.) kslpq->Fill(float(i), ccc1);
     }
@@ -3154,7 +3155,8 @@ int main(int argc, char *argv[])
     cHE->cd(2);
     TH1F* pqmks = new TH1F("pqmks","", maxbins, 1., maxbins+1.);
     for (int i=1;i<=pqmks->GetXaxis()->GetNbins();i++) {
-      double ccc1 =  SummedAmplitudeOccupancyHisto[sub]->GetBinContent(i);
+      double ccc1 =  0.;
+      if(SummedAmplitudeOccupancyHisto[sub]) ccc1 =  SummedAmplitudeOccupancyHisto[sub]->GetBinContent(i);
       //	  if(ccc1>0.)	  cout<<"  iLS = "<<i<<"  LS= "<<ccc1<<endl;
       if(ccc1>0.) pqmks->Fill(float(i), ccc1);
     }
@@ -3201,7 +3203,8 @@ int main(int argc, char *argv[])
     cHE->cd(1);
     TH1F* kslpq = new TH1F("kslpq","", maxbins, 1., maxbins+1.);
     for (int i=1;i<=kslpq->GetXaxis()->GetNbins();i++) {
-      double ccc1 =  NoSignalSummedAmplitudeHisto[sub]->GetBinContent(i);
+      double ccc1 =  0.;
+      if(NoSignalSummedAmplitudeHisto[sub]) ccc1 =  NoSignalSummedAmplitudeHisto[sub]->GetBinContent(i);
       //	  if(ccc1>0.)	  cout<<"  iLS = "<<i<<"  LS= "<<ccc1<<endl;
       if(ccc1>0.) kslpq->Fill(float(i), ccc1);
     }
@@ -3234,7 +3237,8 @@ int main(int argc, char *argv[])
     cHE->cd(2);
     TH1F* pqmks = new TH1F("pqmks","", maxbins, 1., maxbins+1.);
     for (int i=1;i<=pqmks->GetXaxis()->GetNbins();i++) {
-      double ccc1 =  NoSignalSummedAmplitudeOccupancyHisto[sub]->GetBinContent(i);
+      double ccc1 =  0.;
+      if(NoSignalSummedAmplitudeOccupancyHisto[sub]) ccc1 =  NoSignalSummedAmplitudeOccupancyHisto[sub]->GetBinContent(i);
       //	  if(ccc1>0.)	  cout<<"  iLS = "<<i<<"  LS= "<<ccc1<<endl;
       if(ccc1>0.) pqmks->Fill(float(i), ccc1);
     }
@@ -3314,7 +3318,8 @@ int main(int argc, char *argv[])
     cFour->cd(1);
     TH1F* lpqxc = new TH1F("lpqxc","", maxbins, 1., maxbins+1.);
     for (int i=1;i<=lpqxc->GetXaxis()->GetNbins();i++) {
-      double ccc1 =  MaxxSummedAmplitudeHisto[sub]->GetBinContent(i);
+      double ccc1 =  0.;
+      if(MaxxSummedAmplitudeHisto[sub]) ccc1 =  MaxxSummedAmplitudeHisto[sub]->GetBinContent(i);
       //   	  if(ccc1>0.)	  cout<<"111111111111111111111111111  iLS = "<<i<<"  LS= "<<ccc1<<endl;
       if(ccc1>0.) lpqxc->Fill(float(i), ccc1);
       if(sub==0 && ccc1> 60000.) countamplmaxHB++;
@@ -3340,8 +3345,9 @@ int main(int argc, char *argv[])
     cFour->cd(2);
     TH1F* hpzlm = new TH1F("hpzlm","", maxbins, 1., maxbins+1.);
     for (int i=1;i<=hpzlm->GetXaxis()->GetNbins();i++) {
-      double ccc1 =  MaxxSummedAmplitudeOccupancyHisto[sub]->GetBinContent(i);
-      //     	  if(ccc1>0.)	  cout<<"2222222222222222222222222  iLS = "<<i<<"  LS= "<<ccc1<<endl;
+      double ccc1 =  0.;
+      if(MaxxSummedAmplitudeOccupancyHisto[sub]) ccc1 =  MaxxSummedAmplitudeOccupancyHisto[sub]->GetBinContent(i);
+      //    if(ccc1>0.)	  cout<<"2222222222222222222222222  iLS = "<<i<<"  LS= "<<ccc1<<endl;
       if(ccc1>0.) hpzlm->Fill(float(i), ccc1);
       if(sub==0 && ccc1> 2000.) countoccumaxHB++;
       if(sub==1 && ccc1> 1200.) countoccumaxHE++;
@@ -3368,15 +3374,16 @@ int main(int argc, char *argv[])
     /////////
     cFour->cd(3);
     gPad->SetLogy();
+    if(SAmplitudeHisto[sub]) {
     for (int i=1;i<=SAmplitudeHisto[sub]->GetXaxis()->GetNbins();i++) {
 //      if(sub==0 && i * 800> 60000.) {
 //	cout<<">=>=>>=> countamplHB= "<<countamplHB<<" content = "<<SAmplitudeHisto[sub]->GetBinContent(i)<<" sub= "<<sub<<" i= "<<i<<  endl;
 //	countamplHB+=SAmplitudeHisto[sub]->GetBinContent(i);
 //      }
-      if(sub==0 && i * 800> 60000.) countamplHB+=SAmplitudeHisto[sub]->GetBinContent(i);
-      if(sub==1 && i *1000> 60000.) countamplHE+=SAmplitudeHisto[sub]->GetBinContent(i);
-      if(sub==2 && i *2500>150000.) countamplHO+=SAmplitudeHisto[sub]->GetBinContent(i);
-      if(sub==3 && i *1400> 22000.) countamplHF+=SAmplitudeHisto[sub]->GetBinContent(i);
+      if(sub==0 && i * 800> 60000. ) countamplHB+=SAmplitudeHisto[sub]->GetBinContent(i);
+      if(sub==1 && i *1000> 60000. ) countamplHE+=SAmplitudeHisto[sub]->GetBinContent(i);
+      if(sub==2 && i *2500>150000. ) countamplHO+=SAmplitudeHisto[sub]->GetBinContent(i);
+      if(sub==3 && i *1400> 22000. ) countamplHF+=SAmplitudeHisto[sub]->GetBinContent(i);
     }
     SAmplitudeHisto[sub]->SetMarkerStyle(20);
     SAmplitudeHisto[sub]->SetMarkerSize(0.8);
@@ -3389,15 +3396,16 @@ int main(int argc, char *argv[])
     SAmplitudeHisto[sub]->SetMarkerColor(2);
     SAmplitudeHisto[sub]->SetLineColor(2);
     SAmplitudeHisto[sub]->Draw("");
-    
+ }    
     /////////
     cFour->cd(4);
     gPad->SetLogy();
+    if(OccupancyHisto[sub]) {
     for (int i=1;i<=OccupancyHisto[sub]->GetXaxis()->GetNbins();i++) {
-      if(sub==0 && i * 30 > 2000.) countoccuHB+=OccupancyHisto[sub]->GetBinContent(i);
-      if(sub==1 && i * 20 > 1200.) countoccuHE+=OccupancyHisto[sub]->GetBinContent(i);
-      if(sub==2 && i * 25 > 2000.) countoccuHO+=OccupancyHisto[sub]->GetBinContent(i);
-      if(sub==3 && i * 10 >  860.) countoccuHF+=OccupancyHisto[sub]->GetBinContent(i);
+      if(sub==0 && i * 30 > 2000. ) countoccuHB+=OccupancyHisto[sub]->GetBinContent(i);
+      if(sub==1 && i * 20 > 1200. ) countoccuHE+=OccupancyHisto[sub]->GetBinContent(i);
+      if(sub==2 && i * 25 > 2000. ) countoccuHO+=OccupancyHisto[sub]->GetBinContent(i);
+      if(sub==3 && i * 10 >  860. ) countoccuHF+=OccupancyHisto[sub]->GetBinContent(i);
     }
     OccupancyHisto[sub]->SetMarkerStyle(20);
     OccupancyHisto[sub]->SetMarkerSize(0.8);
@@ -3410,7 +3418,7 @@ int main(int argc, char *argv[])
     OccupancyHisto[sub]->SetMarkerColor(4);
     OccupancyHisto[sub]->SetLineColor(4);
     OccupancyHisto[sub]->Draw("");
-    
+ }    
 
     cFour->Update();
     if(sub==0)  cFour->Print("MaxxSummedAmplitudes_HB.png");
@@ -3438,10 +3446,10 @@ int main(int argc, char *argv[])
   ChannelDepthsummedAmplitudesPlots[2] = (TH1F*)hfile->Get("h_sumamplitudechannel_HO");
   ChannelDepthsummedAmplitudesPlots[3] = (TH1F*)hfile->Get("h_sumamplitudechannel_HF");
   TLine *litebdt[4];
-  litebdt[0]=new TLine(  80., 0.8,   80., ChannelDepthsummedAmplitudesPlots[0]->GetBinContent(4) +100.);
-  litebdt[1]=new TLine( 200., 0.8,  200., ChannelDepthsummedAmplitudesPlots[1]->GetBinContent(7) +100.);
-  litebdt[2]=new TLine(1200., 0.8, 1200., ChannelDepthsummedAmplitudesPlots[2]->GetBinContent(17)+100.);
-  litebdt[3]=new TLine( 600., 0.8,  600., ChannelDepthsummedAmplitudesPlots[3]->GetBinContent(6) +100.);
+  if(ChannelDepthsummedAmplitudesPlots[0]) litebdt[0]=new TLine(  80., 0.8,   80., ChannelDepthsummedAmplitudesPlots[0]->GetBinContent(4) +100.);
+  if(ChannelDepthsummedAmplitudesPlots[1]) litebdt[1]=new TLine( 200., 0.8,  200., ChannelDepthsummedAmplitudesPlots[1]->GetBinContent(7) +100.);
+  if(ChannelDepthsummedAmplitudesPlots[2]) litebdt[2]=new TLine(1200., 0.8, 1200., ChannelDepthsummedAmplitudesPlots[2]->GetBinContent(17)+100.);
+  if(ChannelDepthsummedAmplitudesPlots[3]) litebdt[3]=new TLine( 600., 0.8,  600., ChannelDepthsummedAmplitudesPlots[3]->GetBinContent(6) +100.);
   
   gStyle->SetOptStat(110000);                     
   cFour1->Clear();
@@ -3544,6 +3552,7 @@ int main(int argc, char *argv[])
   cHB->Clear();
   cHB->Divide(1,1);
   cHB->cd(1);
+  if(SummedAmplitudeOccupancyHisto[3]) {
   TH1F* ufrew1= (TH1F*)SummedAmplitudeOccupancyHisto[3]->Clone("ufrew1");
   if(SummedAmplitudeOccupancyHisto[3] && NoSignalSummedAmplitudeOccupancyHisto[3]  ) ufrew1->Add(SummedAmplitudeOccupancyHisto[3],NoSignalSummedAmplitudeOccupancyHisto[3], 1, 1);
   ufrew1->GetXaxis()->SetRangeUser(1., maxbins+1.);
@@ -3558,11 +3567,11 @@ int main(int argc, char *argv[])
   ufrew1->SetMaximum(866.);
   ufrew1->SetMinimum(856.);
   ufrew1->Draw("Error");
-  
   cHB->Update();
   cHB->Print("sumOccupancyHF.png");
   cHB->Clear();
   if (ufrew1) delete ufrew1;
+  } 
   
   //////////
   //////////
@@ -4092,7 +4101,7 @@ int main(int argc, char *argv[])
 	     else              raw_class="<td class=\"s3\" align=\"center\">";              
 	     htmlFile << "<tr>"<< std::endl;
 	     htmlFile << "<td class=\"s4\" align=\"center\">" << i <<"</td>"<< std::endl;
-	     //                  htmlFile << raw_class<< LumLum->GetBinContent(i)<<"</td>"<< std::endl;
+	     //                  htmlFile << raw_class<< LumLum->GetBinContent(i)<<"</td>"<< std::endl;	
 	     htmlFile << raw_class<< LumiEv->GetBinContent(i)<<"</td>"<< std::endl;	      
 	     for (int k=k_min[sub];k<=k_max[sub]; k++) {	              
 	       if (HistNumBadChanDepth[test][sub][k]->GetBinContent(i) > Cut0[test][sub][k]) 
@@ -4448,6 +4457,7 @@ htmlFile << "<a name=\"FullTable\"></a>\n";
 	  else  htmlFile << raw_class <<HistNumBadChanDepth[test][sub][k]->GetBinContent(i)<<"</td>"<< std::endl;
 	}
       }
+      if(SummedAmplitudeHisto[0]) {
       htmlFile << raw_class <<SummedAmplitudeHisto[0]->GetBinContent(i)<<"</td>"<< std::endl;	     
       htmlFile << raw_class <<SummedAmplitudeOccupancyHisto[0]->GetBinContent(i)<<"</td>"<< std::endl;	     
       htmlFile << raw_class <<SummedAmplitudeHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
@@ -4462,7 +4472,7 @@ htmlFile << "<a name=\"FullTable\"></a>\n";
       htmlFile << raw_class <<MaxxSummedAmplitudeOccupancyHisto[0]->GetBinContent(i)<<"</td>"<< std::endl;	     
       htmlFile << raw_class <<MaxxSummedAmplitudeHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
       htmlFile << raw_class <<MaxxSummedAmplitudeOccupancyHisto[3]->GetBinContent(i)<<"</td>"<< std::endl;	     
-      
+      }  
       htmlFile << "</tr>" << std::endl;
       ind+=1;
     }	                
