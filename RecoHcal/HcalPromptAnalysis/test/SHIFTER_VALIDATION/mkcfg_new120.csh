@@ -20,7 +20,9 @@ echo "nn= ${nn} ,  i= ${i},  kk= ${kk}"
 
 #if( ${nn} < "120" ) then
 #if( ${nn} < "50" ) then
-if( ${nn} < "30" ) then
+#if( ${nn} < "30" ) then
+if( ${nn} < "3" ) then
+
 echo "${i}" >> PYTHON_${1}/Reco_${jj}_${kk}_cfg.py
 
 else
