@@ -27,7 +27,7 @@ echo "${i}" >> PYTHON_${1}/Reco_${jj}_${kk}_cfg.py
 
 else
 echo "${i}" >> PYTHON_${1}/Reco_${jj}_${kk}_cfg.py
-cat a.py.end >> PYTHON_${1}/Reco_${jj}_${kk}_cfg.py
+cat a.py.end | sed s/Global.root/Global\_${jj}_${kk}.root/g >> PYTHON_${1}/Reco_${jj}_${kk}_cfg.py
 @ kk = ${kk} + "1"
 cat a.py.beg  > PYTHON_${1}/Reco_${jj}_${kk}_cfg.py
 set nn=0
@@ -35,7 +35,7 @@ endif
 
 end
 
-if( ${nn} != "0" ) cat a.py.end >> PYTHON_${1}/Reco_${jj}_${kk}_cfg.py
+if( ${nn} != "0" ) cat a.py.end | sed s/Global.root/Global\_${jj}_${kk}.root/g >> PYTHON_${1}/Reco_${jj}_${kk}_cfg.py
 @ j = ${j} + "1"
 
 end
