@@ -51,7 +51,6 @@ using namespace edm;
 #include "DataFormats/HcalDetId/interface/HcalSubdetector.h"
 
 #include "DataFormats/HcalDigi/interface/HcalDigiCollections.h"
-//#include "DataFormats/HcalDigi/interface/HcalUpgradeDataFrame.h"
 #include "DataFormats/HcalDigi/interface/HBHEDataFrame.h"
 #include "DataFormats/HcalDigi/interface/HFDataFrame.h"
 #include "DataFormats/HcalDigi/interface/HODataFrame.h"
@@ -66,9 +65,7 @@ using namespace edm;
 
 #include "CalibFormats/HcalObjects/interface/HcalDbRecord.h"
 #include "CalibFormats/HcalObjects/interface/HcalCalibrations.h"
-//#include "CalibFormats/HcalObjects/interface/HcalCoderUpgrade.h"
 #include "CalibFormats/HcalObjects/interface/HcalCoderDb.h" 
-//#include "CalibFormats/HcalObjects/interface/HcalCoder.h" 
 #include "CalibFormats/HcalObjects/interface/HcalDbService.h"
 #include "CondFormats/HcalObjects/interface/HcalQIECoder.h"
 
@@ -87,6 +84,8 @@ using namespace edm;
 #include "Geometry/CaloGeometry/interface/CaloSubdetectorGeometry.h"
 #include "Geometry/CaloGeometry/interface/CaloCellGeometry.h"
 #include "Geometry/Records/interface/IdealGeometryRecord.h"
+
+#include "Geometry/Records/interface/HcalRecNumberingRecord.h"
 #include "Geometry/CaloTopology/interface/HcalTopology.h"
 //#include "Geometry/Records/interface/CaloGeometryRecord.h"
 //#include "Geometry/CaloGeometry/interface/CaloSubdetectorGeometry.h"
@@ -123,7 +122,7 @@ public:
   virtual void endJob() ;
   virtual void beginRun( const edm::Run& r, const edm::EventSetup& iSetup);
   virtual void endRun( const edm::Run& r, const edm::EventSetup& iSetup);
-  
+  virtual void fillMAP(); 
 private:
 edm::EDGetTokenT<HcalCalibDigiCollection> tok_calib_;
 edm::EDGetTokenT<HBHEDigiCollection> tok_hbhe_;
@@ -144,7 +143,8 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   
   edm::ESHandle<HcalDbService> conditions;
   const HcalQIEShape* shape;
-  
+  const HcalTopology* topo; 
+
   /////////////////////////////////////////////
   int verbosity;
   int MAPcreation;
@@ -1371,7 +1371,7 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH1F*  h_shape0_bad_channels_HO;
   TH1F*  h_shape_good_channels_HO;
   TH1F*  h_shape0_good_channels_HO;
-  /*
+ 
   TH1F*  h_sumamplitude_depth1_HB;
   TH1F*  h_sumamplitude_depth2_HB;
   TH1F*  h_sumamplitude_depth1_HE;
@@ -1497,8 +1497,6 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
     TH1F*  h_ADC_HOdepth4_TS7;
     TH1F*  h_ADC_HOdepth4_TS8;
     TH1F*  h_ADC_HOdepth4_TS9;
-*/
-
 
   TH2F* h_mapDepth1Ped0_HB;
   TH2F* h_mapDepth1Ped1_HB;
@@ -2228,7 +2226,15 @@ VeRawAnalyzer::~VeRawAnalyzer()
 // ------------ method called to for each event  ------------
 void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup){
 
-//    std::cout<<" Start analyze "<<std::endl;
+
+  if (MAPcreation>0) {
+    edm::ESHandle<HcalTopology> topo_;
+    iSetup.get<HcalRecNumberingRecord>().get(topo_);
+    topo = &*topo_;
+    fillMAP();
+    MAPcreation=0;
+  }
+ //std::cout<<" Start analyze "<<nevent<<std::endl;
 
   if(verbosity > 0) std::cout<<" Start analyze "<<std::endl;    
 
@@ -2237,72 +2243,16 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   Run=iEvent.id().run();
   Nevent=iEvent.id().event();    // event number 
   lumi=iEvent.luminosityBlock(); // lumi section
-  //  timestamp= iEvent.time().value(); // timestamp ?
   int bcn = iEvent.bunchCrossing();
-//  if(
-//     (lumi == 71 && bcn == 753 && Nevent == 128) ||
-//     (lumi == 76 && bcn == 753 && Nevent == 138) ||
-//     (lumi == 82 && bcn == 753 && Nevent == 144) ||
-//     (lumi == 82 && bcn == 757 && Nevent == 145) ||
-//     (lumi == 89 && bcn == 753 && Nevent == 162) ||
-//     (lumi == 89 && bcn == 757 && Nevent == 163)  
-//     ) std::cout  <<  " Run =  "  << Run  <<  " bcn =  "  << bcn  <<  " LS =  "  << lumi  <<  " event =  "  << Nevent  <<  endl;
+
    if(verbosity > 0 ) std::cout  <<  " Run =  "  << Run  <<  " bcn =  "  << bcn  <<  " LS =  "  << lumi  <<  " event =  "  << Nevent  <<  endl;
 
   int outabortgap = 1;
   if(bcn >= bcnrejectedlow_ && bcn <= bcnrejectedhigh_ ) outabortgap = 0; //  if(bcn>=3446 && bcn<=3564) 
 
-
-
-  if((flagabortgaprejected_ == 1 && outabortgap == 1) || (flagabortgaprejected_ == 0 && outabortgap == 0) || flagabortgaprejected_ == 2 ) {
-    //if( ((flagabortgaprejected_ == 1 && outabortgap == 1) || (flagabortgaprejected_ == 0 && outabortgap == 0) || flagabortgaprejected_ == 2) && lumi ==118 ) {
-//    if( ((flagabortgaprejected_ == 1 && outabortgap == 1) || (flagabortgaprejected_ == 0 && outabortgap == 0) || flagabortgaprejected_ == 2) && lumi ==112 ) {
-//    if( ((flagabortgaprejected_ == 1 && outabortgap == 1) || (flagabortgaprejected_ == 0 && outabortgap == 0) || flagabortgaprejected_ == 2) && lumi >=112 && lumi<=118) {
-
-
-   //////
-    // // // // // // to get counters:
-    
-    /*
-	// Get The Info you need
-    // int bcn = iEvent.bunchCrossing();
-	// int sourceId = amc13h->sourceId();
-	int bx = iEvent.bunchId();
-	unsigned int orn = amc13h->orbitNumber();
-	int l1a = amc13h->l1aNumber();
-	int namc = amc13h->NAMC();
-	// int amc13version = amc13h->AMC13FormatVersion();for (int iamc=0; iamc<namc; iamc++)
-	{
-	// Get the info for that AMC13
-	int slot = amc13h->AMCSlot(iamc);
-	int crate = amc13h->AMCId(iamc)&0xFF;
-	// int amcsize = amc13h->AMCSize(iamc)/1000;
-	
-	//	_mes["uTCA_CratesVSslots"].Fill(slot, crate);
-	HcalUHTRData uhtr(amc13h->AMCPayload(iamc), amc13h->AMCSize(iamc));
-	for (HcalUHTRData::const_iterator iuhtr=uhtr.begin(); iuhtr!=uhtr.end();
-	++iuhtr)
-	{
-	if (!iuhtr.isHeader())
-	continue;
-	
-	// Flavor determines what kind of data this uhtr contains
-	// tp, regular digi, upgrade qie digis, etc..
-	if (iuhtr.flavor()==hcaldqm::constants::UTCA_DATAFLAVOR)
-	{
-	// get the Info you need
-	int fiber = (iuhtr.channelid()>>2)&0x1F;
-	int fibchannel = iuhtr.channelid()&0x3;
-	uint32_t l1a_uhtr = uhtr.l1ANumber();
-	uint32_t bx_uhtr = uhtr.bunchNumber();
-	uint32_t orn_uhtr = uhtr.orbitNumber();
-	int32_t dbcn = bx_uhtr - bx;
-	int32_t dorn = orn_uhtr - orn;
-	int32_t devn = l1a_uhtr-l1a;
-	}}}
-*/
-
-  //////
+  if((flagabortgaprejected_ == 1 && outabortgap == 1) || 
+            (flagabortgaprejected_ == 0 && outabortgap == 0) || flagabortgaprejected_ == 2 ) {
+  // to get counters:
   // to get runcounter:
   if(run0 != Run) {
     ++runcounter;
@@ -2315,17 +2265,17 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       h_nls_per_run->Fill(float(lscounterrun) );
       h_nls_per_run10->Fill(float(lscounterrun10) );
       lscounterrun =0;lscounterrun10 =0;
-    }
+    } // runcounter > 1
     cout  <<  " ---------***********************------------- "  <<  endl;
     cout  <<  " New Run =  "  << Run <<  " runcounter =  "  << runcounter <<  endl;
     cout  <<  " ------- "  <<  endl;
     run0 = Run;
     eventcounter = 0;
     ls0 =-1;
-  }
+  } // new run
   else {
     nevcounter00=0;
-  }//else
+  }//else new run
   ++eventcounter;
 
   // to get new LS:
@@ -2335,33 +2285,37 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       h_nevents_per_eachLS->Fill( float(lscounter) ,float(nevcounter) );//
       nevcounter0=nevcounter;
       if(verbosity > 0 ) std::cout  <<  " nevcounter0 =  "  << nevcounter0  <<  endl;
-    }
-    //  ++lscounter;++lscounterrun;
+    } // ls0>-1
     lscounter++;lscounterrun++;
+
       if(verbosity > 0 ) std::cout  <<  " lscounter =  "  << lscounter  <<  endl;
-    /////////////////////////////////////////////////////////////////
-    //    lscounterM1 = lumi ;
+
+    ////////////////////////////////////////////////////////////////
+
     if(usecontinuousnumbering_) { lscounterM1 = lscounter - 1; }
     else {lscounterM1 = ls0; }
-    //    else {lscounterM1 = lumi; }
     if(ls0 != -1) h_nevents_per_eachRealLS->Fill( float(lscounterM1) ,float(nevcounter) );//
 
     /////////////////////////////////////////////////////////////////
     h_lsnumber_per_eachLS->Fill( float(lscounter) ,float(lumi) );
     if(nevcounter > 10.) {++lscounter10; ++lscounterrun10; }
-    if (verbosity == -79 && lscounter == 76) cout  <<  " for old LS =  "  << ls0 <<  " nevents =  "  << nevcounter <<  endl;
-    if (verbosity == -79 && lscounter == 77) cout  <<  " for old LS =  "  << ls0 <<  " nevents =  "  << nevcounter <<  endl;
+    if (verbosity == -79 && lscounter == 76) 
+          cout  <<  " for old LS =  "  << ls0 <<  " nevents =  "  << nevcounter <<  endl;
+    if (verbosity == -79 && lscounter == 77) 
+          cout  <<  " for old LS =  "  << ls0 <<  " nevents =  "  << nevcounter <<  endl;
     h_nevents_per_LS->Fill(float(nevcounter) );
     h_nevents_per_LSzoom->Fill(float(nevcounter) );
     nevcounter=0;
-    if (verbosity == -79 && lscounter == 76) cout  <<  " New LS =  "  << lumi <<  "  lscounter =  "  << lscounter <<  "  lscounter10 =  "  << lscounter10 <<  endl;
-    if (verbosity == -79 && lscounter == 77) cout  <<  " New LS =  "  << lumi <<  "  lscounter =  "  << lscounter <<  "  lscounter10 =  "  << lscounter10 <<  endl;
-    //    cout  <<  " --------------------------------------------- "  <<  endl;
+    if (verbosity == -79 && lscounter == 76) 
+            cout  <<  " New LS =  "  << lumi <<  "  lscounter =  "  << 
+                   lscounter <<  "  lscounter10 =  "  << lscounter10 <<  endl;
+    if (verbosity == -79 && lscounter == 77) cout  <<  " New LS =  "  << lumi <<  
+          "  lscounter =  "  << lscounter <<  "  lscounter10 =  "  << lscounter10 <<  endl;
     ls0 = lumi;
-  }//
+  }// new lumi
   else {
     nevcounter0=0;
-  }//else
+  }//else new lumi
   ++nevcounter;// #ev in LS
   //////
   //11.04.14 - to study time dependencies  
@@ -2370,8 +2324,10 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     nevcounter0=nevcounter00;
   }
   // for following use: lscounter, nevcounter0 :=! 0 if new LS started
-  if (verbosity == -79 && lscounter == 76) std::cout << "   nevcounter0=  " << nevcounter0 <<" lscounter= " << lscounter <<" nevcounter= " << nevcounter <<" sumEstimator4= " << (double)sumEstimator4[3][1][40][50] << std::endl;
-  
+  if (verbosity == -79 && lscounter == 76) 
+              std::cout << "   nevcounter0=  " << nevcounter0 <<" lscounter= " << 
+                   lscounter <<" nevcounter= " << nevcounter <<" sumEstimator4= " << 
+                           (double)sumEstimator4[3][1][40][50] << std::endl;
   if (verbosity == -84 ) std::cout << "==================>>>    nevcounter0 = " <<nevcounter0 << "in LS nevcounter = " <<nevcounter << "in run: eventcounter = " <<eventcounter << "  lscounter = " <<lscounter << "  lscounterrun = " <<lscounterrun << "  runcounter = " <<runcounter<< "  lscounterM1 = " <<lscounterM1 << std::endl;
   if (verbosity == -5555 ) std::cout << "==================>>>    nevcounter0 = " <<nevcounter0 << "in LS nevcounter = " <<nevcounter << "in run: eventcounter = " <<eventcounter << "  lscounter = " <<lscounter << "  lscounterrun = " <<lscounterrun << "  runcounter = " <<runcounter<< "  lscounterM1 = " <<lscounterM1 << std::endl;
   if (verbosity == -7777 ) std::cout << "==================>>>    nevcounter0 = " <<nevcounter0 << "in LS nevcounter = " <<nevcounter << "in run: eventcounter = " <<eventcounter << "  lscounter = " <<lscounter << "  lscounterrun = " <<lscounterrun << "  runcounter = " <<runcounter<< "  lscounterM1 = " <<lscounterM1 << std::endl;
@@ -2380,7 +2336,9 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   
   if(nevcounter0 != 0 || nevcounter > 99999 ) {  
     if(nevcounter > 99999 ) nevcounter0 = 1;
-    
+ 
+      std::cout<<" We are here "<<std::endl;
+   
     ///////  int sub= cell.subdet();  1-HB, 2-HE, 3-HO, 4-HF
     ////////////            k0(sub): =0 HB; =1 HE; =2 HO; =3 HF;
     ////////////         k1(depth-1): = 0 - 3 or depth: = 1 - 4;
@@ -2431,7 +2389,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	  for(int k2 = 0; k2<82; k2++) {
 	    int ieta = k2-41;
 	    
-	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator0
+	    // ------------------------------------------------------------sumEstimator0
 	    if (verbosity == -81 ) std::cout << "sumEstimator0 = " <<sumEstimator0[k0][k1][k2][k3]<< std::endl;
 	    if(sumEstimator0[k0][k1][k2][k3] != 0. ) {
 
@@ -2516,7 +2474,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	      }
 	    }//if(sumEstimator0[k0][k1][k2][k3] != 0.
 	    
-	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator1
+	    // ---------------------------------------------------sumEstimator1
 	    if (verbosity == -81 ) std::cout << "sumEstimator1 = " <<sumEstimator1[k0][k1][k2][k3]<< std::endl;
 	    if(sumEstimator1[k0][k1][k2][k3] != 0. ) {
 	      
@@ -2885,6 +2843,9 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 
 	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator2
 	    if (verbosity == -81 ) std::cout << "sumEstimator2 = " <<sumEstimator2[k0][k1][k2][k3]<< std::endl;
+
+                 std::cout << "sumEstimator2 = " <<sumEstimator2[k0][k1][k2][k3]<< std::endl;
+
 	    if(sumEstimator2[k0][k1][k2][k3] != 0. ) {
 
 	      // fill histoes:
@@ -2990,6 +2951,10 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 
 	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator3
 	    if (verbosity == -81 ) std::cout << "sumEstimator3 = " <<sumEstimator3[k0][k1][k2][k3]<< std::endl;
+
+ std::cout << "sumEstimator3 = " <<sumEstimator3[k0][k1][k2][k3]<< std::endl;
+
+
 	    if(sumEstimator3[k0][k1][k2][k3] != 0. ) {
 
 	      // fill histoes:
@@ -3095,6 +3060,9 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 
 	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator4
 	    if (verbosity == -81 ) std::cout << "sumEstimator4 = " <<sumEstimator4[k0][k1][k2][k3]<< std::endl;
+
+              std::cout << "sumEstimator4 = " <<sumEstimator4[k0][k1][k2][k3]<< std::endl;
+
 	    if(sumEstimator4[k0][k1][k2][k3] != 0. ) {
 
 	      // fill histoes:
@@ -3201,6 +3169,9 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 
 	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator5
 	    if (verbosity == -81 ) std::cout << "sumEstimator5 = " <<sumEstimator5[k0][k1][k2][k3]<< std::endl;
+
+                    std::cout << "sumEstimator5 = " <<sumEstimator5[k0][k1][k2][k3]<< std::endl;
+
 	    if(sumEstimator5[k0][k1][k2][k3] != 0. ) {
 
 	      // fill histoes:
@@ -3305,6 +3276,10 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	    
 	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator6 (Error-B)
 	    if (verbosity == -81 ) std::cout << "sumEstimator6 = " <<sumEstimator6[k0][k1][k2][k3]<< std::endl;
+
+                  std::cout << "sumEstimator6 = " <<sumEstimator6[k0][k1][k2][k3]<< std::endl;
+
+
 	    if(sumEstimator6[k0][k1][k2][k3] != 0. ) {
 	      
 	      // fill histoes:
@@ -3620,60 +3595,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     
     //------------------------------------------------------
   }//if(nevcounter0 != 0)
-  
-  /*  
-
-  bool LaserEvent, LaserRaddam;
-  std::vector<edm::Handle<FEDRawDataCollection> >::const_iterator rawdata; 
-  std::vector<edm::Handle<FEDRawDataCollection> > rawdata1;
-  
-  iEvent.getManyByType(rawdata1);
-  
-  if(rawdata1.size()==0) {
-    cout<<" No Raw collection is found "<<endl;
-  } else {
-    int flag = -1;
-    for(std::vector<edm::Handle<FEDRawDataCollection> >::const_iterator it = rawdata1.begin();it != rawdata1.end(); it++) {
-      
-      // std::cout<<" product name "<< (*it).provenance()->moduleName()<<
-      //              " "<<(*it).provenance()->moduleLabel()<<
-      //              std::endl;
-      if((*it).provenance()->moduleLabel() == "hltHcalCalibrationRaw") {
-	flag = 1;
-	rawdata = it;
-      }
-    }//for
-  }
-*/
-  /*
-  // Abort Gap laser 
-  LaserEvent=false;
-  LaserRaddam=false;
-  int hc_RADDAM=2, hc_HBHEHPD=3, hc_HOHPD=4, hc_HFPMT=5;
-  edm::Handle<FEDRawDataCollection> frd; 
-  iEvent.getByLabel("hltHcalCalibrationRaw",frd); 
-  
-  if(!frd.isValid()) {
-  cout<<" No hltHcalCalibrationRaw collection is found "<<endl;
-  } else {
-  //iEvent.getByType(frd);
-  //checking FEDs for calibration information       
-  for (int i=FEDNumbering::MINHCALFEDID;i<=FEDNumbering::MAXHCALFEDID; i++) {
-  const FEDRawData& fedData = frd->FEDData(i); 
-  if ( fedData.size() < 24 ) continue ;         
-  int value = ((const HcalDCCHeader*)(fedData.data()))->getCalibType() ;
-  //cout<< value<<"\n";            
-  if(value==hc_HBHEHPD || value==hc_HOHPD || value==hc_HFPMT) LaserEvent=true; 
-  if(value==hc_RADDAM){
-  LaserEvent=true; 
-  LaserRaddam=true; 
-  }
-  } 
-  if(LaserEvent==true)
-  numOfLaserEv++; 
-  }
-  std::cout<<" Before GCT trigger "<<std::endl;
-  */
+//  POINT1  
  
   ///////////////////////////////////////////////////
   // get conditions
@@ -3719,6 +3641,10 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   /////////////////////////////////////////////// HFDigiCollection
   if(verbosity > 0 ) std::cout  <<  " HFDigiCollection start  "  <<  endl;
 
+//   std::cout  <<  " HFDigiCollection start  "  <<  endl;
+//   verbosity = 1;
+
+
   edm::Handle<HFDigiCollection> hf;
   if(verbosity > 0 ) std::cout  <<  " 1  "  <<  endl;
   
@@ -3762,13 +3688,14 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	int ieta  = eta;
 	if(ieta > 0) ieta -= 1;
 	if (verbosity == -13) std::cout<<"******************   HFDigiCollection nTS= "<<nTS<<std::endl;
-	//      double amplitude = 0.; 
+
 	if(nTS<=numOfTS) for(int i=0;i<nTS;i++) {
+
 	  TS_data[i]=adc2fC[digi->sample(i).adc()];
-	  //	if(TS_data[i] < 10. ) TS_data[i] = 0.;
-	  //	amplitude += TS_data[i];
 	  signal[3][ieta+41][iphi] += TS_data[i];
+
 	  if(i>1&&i<6) signal3[3][ieta+41][iphi] += TS_data[i];
+
 	  if (verbosity == -13) {
 	    cout<< "HF phi= " << phi << " eta= " << eta << endl;
 	    cout<< "HF iphi= " << iphi << " ieta= " << ieta << endl;
@@ -3778,26 +3705,12 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		<< " TS3= " << adc2fC[digi->sample(3).adc()] 
 		<< " TS4= " << adc2fC[digi->sample(4).adc()] 
 		<< " TS5= " << adc2fC[digi->sample(5).adc()] << endl;
-	  }// for
+	  }// Verbosity
 
-	}//if(recordHistoes_ && studyCalibCellsHist_) 
-	
-	
-	
-      }//if(hf.isValid
-
-//      if(studyDiffAmplHist_) {
-//	if(depth==1) h_mapDepth1AmplE34_HF->Fill(double(ieta), double(iphi), amplitude);    
-//	if(depth==2) h_mapDepth2AmplE34_HF->Fill(double(ieta), double(iphi), amplitude);    
-//      }//if(studyDiffAmplHist_)
-//      
-//      // for All HF histoes:
-//      if(depth==1) h_mapDepth1_HF->Fill(double(ieta), double(iphi), 1.);    
-//      if(depth==2) h_mapDepth2_HF->Fill(double(ieta), double(iphi), 1.);    
-//      if(eta == 29&&phi==1 && verbosity > 0) std::cout<<" 29 eta HF "<<depth<<std::endl; 
-   
+	}// TS 
+      }// if(recordHistoes_ && studyCalibCellsHist_) 
     }// for
-  }
+  } // hf.isValid
 
   /////////////////////////////////////////////// HBHEDigiCollection
   if(verbosity > 0 ) std::cout  <<  " 6  "  <<  endl;
@@ -3850,7 +3763,6 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	    {                 
 	      if(nTS<=numOfTS) for(int i=0;i<nTS;i++) {
 		TS_data[i]=adc2fC[digi->sample(i).adc()];
-		//		if(TS_data[i] < 10. ) TS_data[i] = 0.;
 		signal[0][ieta+41][iphi] += TS_data[i];
 		if(i>1&&i<6) signal3[0][ieta+41][iphi] += TS_data[i];
 	      } 
@@ -3866,12 +3778,8 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	    } 
 	}//if(recordHistoes_ && studyCalibCellsHist_) 
 	
-	
-	  ////////////////////////////////////////////////////////////////
-	
 	////////////////////////////////////////////////////////////////  for Olga's script:
 	if(recordNtuples_ && nevent50 < maxNeventsInNtuple_) {
-	  //	if(recordNtuples_ && nevent < maxNeventsInNtuple_) {
 	  
 	  if(digi->id().subdet()==HcalBarrel) 
 	    {                 
@@ -3886,12 +3794,8 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		} else {
 		  hb[eta+14][0][phi-1][i] = TS_data[i];
 		}
-	      }
-	      
-//	      if(eta == 16&&phi==1 && verbosity > 0 ) std::cout<<" 16 eta "<<depth<<" "<<digi->id().subdet()<<std::endl;
-//	      if(eta == 15&&phi==1 && verbosity > 0 ) std::cout<<" 15 eta "<<depth<<" "<<digi->id().subdet()<<std::endl;
-
-	    } 
+	      } // TS
+	    } // HBDigi  
 	  
 	  if(digi->id().subdet()==HcalEndcap)
 	    {  
@@ -3902,24 +3806,18 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 // For eta +-16 there is one depth in HE (behind 2 HB depths): 3 depths in HBHE in total
 		  if(eta == 16) he16[1][0][phi-1][i] = TS_data[i];
 		  if(eta == -16) he16[0][0][phi-1][i] = TS_data[i];
-		} else {
+		} else { // eta =16
 		  int jeta = abs(eta);
 		  if(eta>0) jeta = eta-4;
 		  if(eta<0) jeta = eta+29;
 		  if (verbosity == -22) std::cout<<" HE "<<eta<<" "<<jeta<<std::endl;
 		  he[jeta][depth-1][phi-1][i] = TS_data[i];
-		}
-	      } 
-//	      if(eta == 29&&phi==1 && verbosity > 0 ) std::cout<<" 29 eta HE "<<depth<<std::endl;
-//	      if(eta == 16&&phi==1 && verbosity > 0 ) std::cout<<" 16 eta "<<depth<<" "<<digi->id().subdet()<<std::endl;
+		} // eta!=16
+	      } // TS
 	    }// HcalEndcap                                                                    
-	  
 	}//if(recordNtuples_)
-	
-      }// for
-    
+      }// for HBHE digis
   }//hbhe.isValid
-  
   
   ///////////////////////////////////////////////////   HODigiCollection
   edm::Handle<HODigiCollection> ho; 
@@ -3966,8 +3864,6 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	  if(i>1&&i<6) signal3[2][ieta+41][iphi] += TS_data[i];
 	}//if for
       }//if(recordHistoes_ && studyCalibCellsHist_) 
-      
-      
     }//for HODigiCollection
   }//ho.isValid(
 
@@ -3981,15 +3877,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   int testcount2=0;
   int testcount3=0;
 
-  //amplitudechannel[k0][k1][k2][k3] - amplitudes of channels in one event
   for(int k0 = 0; k0<4; k0++) {
     int sumofchannels = 0;
     double sumamplitudesubdet = 0.;	
     int sumofchannels0 = 0;
     double sumamplitudesubdet0 = 0.;	
     if (verbosity == -9129 && k0==3) testmetka++;
-
-      if (verbosity == -9129 && k0==3 && testmetka== maxtestmetka) std::cout << " ==================================================================================== =  " << std::endl;
+    if (verbosity == -9129 && k0==3 && testmetka== maxtestmetka) std::cout << " ==================================================================================== =  " << std::endl;
 
     //  for(int k1 = 0; k1<4; k1++) {
     for(int k2 = 0; k2<82; k2++) {
@@ -4141,62 +4035,6 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   }//k0
   
   ///////////////////// ///////////////////// //////////////////////////////////////////
-  
-  
-
-
-
-  if(flagcpuoptimization_== 0 ) {
-  ///////////////////////////////////////////////  for : sumamplitudesubdet.C script:
-  //////////// k0(sub): =0 HB; =1 HE; =2 HO; =3 HF;
-  //////////// k1(depth-1): = 0 - 3 or depth: = 1 - 4;
-
-    /*
-  for(int k0 = 0; k0<4; k0++) {
-    for(int k1 = 0; k1<4; k1++) {
-      double sumamplitudesubdet = 0.;	
-      for(int k2 = 0; k2<82; k2++) {
-	for(int k3 = 0; k3<72; k3++) {
-	  sumamplitudesubdet += amplitudechannel[k0][k1][k2][k3];
-	}//k3
-      }//k2
-      //////////
-
-      if(k0 == 0 && k1 == 0) h_sumamplitude_depth1_HB->Fill(sumamplitudesubdet);
-      if(k0 == 0 && k1 == 1) h_sumamplitude_depth2_HB->Fill(sumamplitudesubdet);
-      if(k0 == 1 && k1 == 0) h_sumamplitude_depth1_HE->Fill(sumamplitudesubdet);
-      if(k0 == 1 && k1 == 1) h_sumamplitude_depth2_HE->Fill(sumamplitudesubdet);
-      if(k0 == 1 && k1 == 2) h_sumamplitude_depth3_HE->Fill(sumamplitudesubdet);
-      if(k0 == 3 && k1 == 0) h_sumamplitude_depth1_HF->Fill(sumamplitudesubdet);
-      if(k0 == 3 && k1 == 1) h_sumamplitude_depth2_HF->Fill(sumamplitudesubdet);
-      if(k0 == 2 && k1 == 3) h_sumamplitude_depth4_HO->Fill(sumamplitudesubdet);
-      //////////
-      if(k0 == 0 && k1 == 0) h_sumamplitude_depth1_HB0->Fill(sumamplitudesubdet);
-      if(k0 == 0 && k1 == 1) h_sumamplitude_depth2_HB0->Fill(sumamplitudesubdet);
-      if(k0 == 1 && k1 == 0) h_sumamplitude_depth1_HE0->Fill(sumamplitudesubdet);
-      if(k0 == 1 && k1 == 1) h_sumamplitude_depth2_HE0->Fill(sumamplitudesubdet);
-      if(k0 == 1 && k1 == 2) h_sumamplitude_depth3_HE0->Fill(sumamplitudesubdet);
-      if(k0 == 3 && k1 == 0) h_sumamplitude_depth1_HF0->Fill(sumamplitudesubdet);
-      if(k0 == 3 && k1 == 1) h_sumamplitude_depth2_HF0->Fill(sumamplitudesubdet);
-      if(k0 == 2 && k1 == 3) h_sumamplitude_depth4_HO0->Fill(sumamplitudesubdet);
-      //////////
-      if(k0 == 0 && k1 == 0) h_sumamplitude_depth1_HB1->Fill(sumamplitudesubdet);
-      if(k0 == 0 && k1 == 1) h_sumamplitude_depth2_HB1->Fill(sumamplitudesubdet);
-      if(k0 == 1 && k1 == 0) h_sumamplitude_depth1_HE1->Fill(sumamplitudesubdet);
-      if(k0 == 1 && k1 == 1) h_sumamplitude_depth2_HE1->Fill(sumamplitudesubdet);
-      if(k0 == 1 && k1 == 2) h_sumamplitude_depth3_HE1->Fill(sumamplitudesubdet);
-      if(k0 == 3 && k1 == 0) h_sumamplitude_depth1_HF1->Fill(sumamplitudesubdet);
-      if(k0 == 3 && k1 == 1) h_sumamplitude_depth2_HF1->Fill(sumamplitudesubdet);
-      if(k0 == 2 && k1 == 3) h_sumamplitude_depth4_HO1->Fill(sumamplitudesubdet);
-      //////////
-    }//k1
-  }//k0
-*/
-  
-  ////////////
-  } 
-  
-
   ///////////////////////////////////////////////  for zRunRatio34.C & zRunNbadchan.C scripts:
   if(recordHistoes_ && studyRunDependenceHist_) {
     int eeeeee;
@@ -4395,24 +4233,12 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   if(!gotCALIBDigis) {
     cout<<" No HcalCalibDigiCollection collection is found "<<endl;
   } else {
-
-
-//  edm::Handle<HcalCalibDigiCollection> calib;
-////  iEvent.getByType(calib);
-//  iEvent.getByLabel("hcalDigis",calib);
-//  if(!calib.isValid()) {
-//    cout<<" No HcalCalibDigiCollection is found "<<endl;
-//  } else {
-
-
-    //          std::cout<<" Collection HcalCalibDigiCollection "<<std::endl;
     for(HcalCalibDigiCollection::const_iterator digi=calib->begin();digi!=calib->end();digi++){
       int cal_det=digi->id().hcalSubdet(); // 1-HB,2-HE,3-HO,4-HF
       int cal_phi=digi->id().iphi();
       int cal_eta=digi->id().ieta();
       int cal_cbox=digi->id().cboxChannel();
 
-      //      int cal_depth=digi->id().depth();//class HcalCalibDetId has no member named 'depth'
       /////////////////////////////////////////////     
       if(recordHistoes_ && studyCalibCellsHist_) {
 	if(cal_det>0 && cal_det<5 && cal_cbox == 0 ) {
@@ -4636,18 +4462,6 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		h_mapGetRMSOverNormalizedSignal0_HF->Fill(double(k2plot),double(k3),1.);
 	      }
 	    }
-	    // 
-	    /*
-	    GetRMSOverNormalizedSignal =-1.;
-	    if(signal3[k1][k2][k3]>0.&& calib3[k1][kkk2][kkk3]>0.) {
-	      GetRMSOverNormalizedSignal = signal3[k1][k2][k3]/calib3[k1][kkk2][kkk3];
-	      if(k1==0) h_GetRMSOverNormalizedSignal3_HB->Fill(GetRMSOverNormalizedSignal,1.);    
-	      if(k1==1) h_GetRMSOverNormalizedSignal3_HE->Fill(GetRMSOverNormalizedSignal,1.);    
-	      if(k1==2) h_GetRMSOverNormalizedSignal3_HO->Fill(GetRMSOverNormalizedSignal,1.);    
-	      if(k1==3) h_GetRMSOverNormalizedSignal3_HF->Fill(GetRMSOverNormalizedSignal,1.);  
-	    }
-*/
-
 	  }//optimization
 	  ////////////////////////////////////////////////////////////////  for zcalib....C script:
 	  if(signal[k1][k2][k3]>0.) {
@@ -4833,22 +4647,11 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 				<<", lumi "<<lumi
 				<<", numOfLaserEv "<<numOfLaserEv<<endl;          
     }                          
-  /////////////////////////////////////////////////// 
-  /*
-  // to get eventcounter - N events in Run
-  if(run1 != Run) {
-    if( runcounter != 1) {
-      cout<<" for Run = "<<run1<<" with runcounter = "<< runcounter-1 <<" #ev = "<<eventcounter<<endl;
-    }
-    run1 = Run;
-    eventcounter = 0;
-  }
-  ++eventcounter;
-*/
-  /////////////////////////////////////////////////// 
   }// bcn
   
-  /////////////////////////////////////////////////// 
+
+//EndAnalyzer
+
 }
 // ------------ method called once each job just before starting event loop  -----------
 void VeRawAnalyzer::beginJob()
@@ -6078,7 +5881,7 @@ void VeRawAnalyzer::beginJob()
 
     //    if(flagcpuoptimization_== 0 ) {
 
-    /*
+    
 				   int spl= 1000;
 				   float spls=5000;
 				   h_sumamplitude_depth1_HB = new TH1F("h_sumamplitude_depth1_HB"," ", spl, 0.,spls);
@@ -6208,7 +6011,7 @@ void VeRawAnalyzer::beginJob()
 				   h_ADC_HOdepth4_TS7 = new TH1F("h_ADC_HOdepth4_TS7"," ", each, 0.,each1);  
 				   h_ADC_HOdepth4_TS8 = new TH1F("h_ADC_HOdepth4_TS8"," ", each, 0.,each1); 
 				   h_ADC_HOdepth4_TS9 = new TH1F("h_ADC_HOdepth4_TS9"," ", each, 0.,each1); 
-*/
+
 				   //				   }
     
     h_Amplitude_forCapIdErrors_HB1 = new TH1F("h_Amplitude_forCapIdErrors_HB1"," ", 100, 0.,30000.);
@@ -7803,7 +7606,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
       ///////////////////////////////////
 
       if(flagcpuoptimization_== 0 ) {
-	/*
+	
 	if(sub == 4 )  h_ADC_HF->Fill(ampldefault, 1.);
       //  
 	if(sub == 4 && mdepth == 1 )  h_ADC_HFdepth1->Fill(ampldefault, 1.);
@@ -7848,7 +7651,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
 	if(sub == 4 && mdepth == 1 )  h_ADC_HFdepth1_TS9->Fill(ampldefault, 1.);
 	if(sub == 4 && mdepth == 2 )  h_ADC_HFdepth2_TS9->Fill(ampldefault, 1.);
       }
-*/
+
   //////      
 	}     
       if (verbosity == -51) std::cout << "fillDigiAmplitudeHF  amplitude = " << amplitude << std::endl;
@@ -9570,32 +9373,24 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
     maxxOCCUP3 = 0.;
     maxxOCCUP4 = 0.;
     
-    
-
-
-
   }//if( nevcounter0 != 0 )    
   /////////////////////////////// -------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
+//    edm::ESHandle<HcalTopology> topo_;
+//    iSetup.get<HcalRecNumberingRecord>().get(topo_);
+//    topo = &*topo_;
+/*
   if (MAPcreation>0) {
     std::cout << "===== Start writing Channel MAP =====" << std::endl;    
     MAPfile.open(MAPOutputFileName);
-    
-    edm::ESHandle<HcalTopology> topo;
-    iSetup.get<IdealGeometryRecord>().get(topo);
+ 
+    edm::ESHandle<HcalTopology> topo_;
+    iSetup.get<HcalRecNumberingRecord>().get(topo_);
+
+    const HcalTopology* topo = &*topo_;
     
     HcalLogicalMapGenerator gen;
-    HcalLogicalMap lmap=gen.createMap(&(*topo)); 
+    HcalLogicalMap lmap=gen.createMap(topo); 
     
     HcalElectronicsMap emap=lmap.generateHcalElectronicsMap();
     std::string subdet =""; 
@@ -9672,6 +9467,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	     for (int depth=1;depth<=2;depth++) {
                 HcalDetId *detid=0;
                 detid=new HcalDetId(HcalBarrel,eta,phi,depth); subdet="HB";
+                std::cout<<" Detid = "<<detid<<" "<<eta<<" "<<phi<<" "<<depth<<std::endl;
 	        HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
 	        HcalElectronicsId emap_entry=emap.lookup(*detid);
                 MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
@@ -9680,10 +9476,12 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
                 MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
                 MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
                 MAPfile << "}," << std::endl;		
-		delete detid;
+		//delete detid;
              }  //Depth
           }  //Phi
-       }  //Eta    
+       }  //Eta  
+*/
+/*  
         for (int eta= 1;eta<=16;eta++) {
           for (int phi=1;phi<=72;phi++) {
 	     for (int depth=1;depth<=2;depth++) {
@@ -9701,7 +9499,10 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
              }  //Depth
           }  //Phi
        }  //Eta 
-       
+*/
+//  }
+
+/*       
 //HE     	      
       for (int eta= -20;eta<=-20;eta++) {
           for (int phi=72;phi<=72;phi++) {
@@ -9888,14 +9689,50 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 
        
     MAPfile.close(); 
+    MAPcreation = 0;
     std::cout << "===== Finish writing Channel MAP =====" << std::endl;  
   }
-  
-
+*/  
+    std::cout<<" ==== Edn of run "<<std::endl;
 }
 
 void VeRawAnalyzer::endJob(){   
-  
+
+/*  if (MAPcreation>0) {
+    std::cout << "===== Start writing Channel MAP =====" << std::endl;    
+    MAPfile.open(MAPOutputFileName);
+    
+    HcalLogicalMapGenerator gen;
+    HcalLogicalMap lmap=gen.createMap(topo); 
+    
+    HcalElectronicsMap emap=lmap.generateHcalElectronicsMap();
+    std::string subdet =""; 
+
+        for (int eta= -16;eta<0;eta++) {
+          for (int phi=1;phi<=72;phi++) {
+             for (int depth=1;depth<=2;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalBarrel,eta,phi,depth); subdet="HB";
+                if(detid == 0) continue;
+                std::cout<<" Detid = "<<detid<<" "<<eta<<" "<<phi<<" "<<depth<<std::endl;
+                HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;           
+                //delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta  
+
+  } 
+
+*/
+
+ 
   cout  <<  " --------------------------------------- "  <<  endl;
   cout<<" for Run = "<<run0<<" with runcounter = "<< runcounter <<" #ev = "<<eventcounter<<endl;
   cout  << " #LS =  "  << lscounterrun << " #LS10 =  "  << lscounterrun10 << " Last LS =  "  << ls0 <<  endl;
@@ -11049,7 +10886,7 @@ void VeRawAnalyzer::endJob(){
     h_shape0_bad_channels_HO->Write();
     h_shape_good_channels_HO->Write();
     h_shape0_good_channels_HO->Write();
-    /*
+    
     h_sumamplitude_depth1_HB->Write();
     h_sumamplitude_depth2_HB->Write();
     h_sumamplitude_depth1_HE->Write();
@@ -11175,7 +11012,6 @@ void VeRawAnalyzer::endJob(){
     h_ADC_HOdepth4_TS8->Write();
     h_ADC_HOdepth4_TS9->Write();
 
-*/
     h_bcnnbadchannels_depth1_HB->Write();
     h_bcnnbadchannels_depth2_HB->Write();
     h_bcnnbadchannels_depth1_HE->Write();
@@ -11316,6 +11152,307 @@ double VeRawAnalyzer::dPhiWsign(double phi1, double phi2) {
     if(a2 > 0.5 * PI)  tmp -= 2.*PI;
   }
   return tmp;
+
+}
+
+void VeRawAnalyzer::fillMAP() {
+
+    HcalLogicalMapGenerator gen;
+    HcalLogicalMap lmap=gen.createMap(topo); 
+  
+    HcalElectronicsMap emap=lmap.generateHcalElectronicsMap();
+    std::string subdet =""; 
+
+    MAPfile << "#define LogEleMapdb_h" << std::endl;
+    MAPfile << "#include <algorithm>" << std::endl;
+    MAPfile << "#include <iostream>" << std::endl;
+    MAPfile << "#include <vector>" << std::endl;
+    MAPfile << "#include <string>" << std::endl;
+    MAPfile << "#include <sstream>" << std::endl;
+    MAPfile <<  std::endl;
+
+    MAPfile << "struct Cell {" << std::endl;
+    MAPfile << " std::string subdet;" << std::endl;    
+    MAPfile << " int Eta;" << std::endl;             
+    MAPfile << " int Phi;" << std::endl;           
+    MAPfile << " int Depth;" << std::endl;           
+    MAPfile << " std::string RBX;" << std::endl;
+    MAPfile << " int RM;" << std::endl;             
+    MAPfile << " int Pixel;" << std::endl;
+    MAPfile << " int RMfiber;" << std::endl;
+    MAPfile << " int FiberCh;" << std::endl;
+    MAPfile << " int QIE;" << std::endl;
+    MAPfile << " int ADC;" << std::endl;
+    MAPfile << " int VMECardID;" << std::endl;
+    MAPfile << " int dccID;" << std::endl;
+    MAPfile << " int Spigot;" << std::endl;
+    MAPfile << " int FiberIndex;" << std::endl;
+    MAPfile << " int HtrSlot;" << std::endl;
+    MAPfile << " int HtrTB;" << std::endl;
+    MAPfile <<  std::endl;
+
+    MAPfile << "// the function check, if \"par\" == \"val\" for this cell" << std::endl;
+    MAPfile << " bool check(const std::string par, const int val) const " << std::endl;
+    MAPfile << " {" << std::endl;
+    MAPfile << "       if (par == \"Eta\")    return (val == Eta);" << std::endl;
+    MAPfile << "  else if (par == \"Phi\")     return (val == Phi);" << std::endl;
+    MAPfile << "  else if (par == \"Depth\")      return (val == Depth);" << std::endl;
+    MAPfile << "  else if (par == \"RM\")     return (val == RM);" << std::endl;
+    MAPfile << "  else if (par == \"Pixel\") return (val == Pixel);" << std::endl;
+    MAPfile << "  else if (par == \"RMfiber\")    return (val == RMfiber);" << std::endl;
+    MAPfile << "  else if (par == \"FiberCh\")    return (val == FiberCh);" << std::endl;
+    MAPfile << "  else if (par == \"QIE\")     return (val == QIE);" << std::endl;
+    MAPfile << "  else if (par == \"ADC\")     return (val == ADC);" << std::endl;
+    MAPfile << "  else if (par == \"VMECardID\")     return (val == VMECardID);" << std::endl;
+    MAPfile << "  else if (par == \"dccID\")     return (val == dccID);" << std::endl;
+    MAPfile << "  else if (par == \"Spigot\")     return (val == Spigot);" << std::endl;
+    MAPfile << "  else if (par == \"FiberIndex\")     return (val == FiberIndex);" << std::endl;
+    MAPfile << "  else if (par == \"HtrSlot\")     return (val == HtrSlot);" << std::endl;
+    MAPfile << "  else if (par == \"HtrTB\")     return (val == HtrTB);" << std::endl;
+    MAPfile << "  else return false;" << std::endl;
+    MAPfile << " }" << std::endl;
+    MAPfile <<  std::endl;
+
+    MAPfile << " bool check(const std::string par, const std::string val) const" << std::endl;
+    MAPfile << " {" << std::endl;
+    MAPfile << "       if (par == \"subdet\")    return (val == subdet);" << std::endl;
+    MAPfile << "  else if (par == \"RBX\")    return (val == RBX);" << std::endl;
+    MAPfile << "  else return false;" << std::endl;
+    MAPfile << " }" << std::endl;
+
+    MAPfile << "};" << std::endl;
+    MAPfile <<  std::endl;  
+
+    MAPfile << "const Cell AllCells[] = {" << std::endl; 
+    MAPfile << "//{ SD, Eta, Phi, Depth,     RBX, RM, PIXEL, RMfiber, Fiber Ch., QIE, ADC, VMECrateId, dccid, spigot, fiberIndex, htrSlot, htrTopBottom }" << std::endl;     
+
+// HB
+
+        for (int eta= -16;eta<0;eta++) {
+          for (int phi=1;phi<=72;phi++) {
+             for (int depth=1;depth<=2;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalBarrel,eta,phi,depth); subdet="HB";
+                HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;           
+                delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta    
+        for (int eta= 1;eta<=16;eta++) {
+          for (int phi=1;phi<=72;phi++) {
+             for (int depth=1;depth<=2;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalBarrel,eta,phi,depth); subdet="HB";
+                HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()-1<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;           
+                delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta 
+
+// HE
+      for (int eta= -20;eta<=-20;eta++) {
+          for (int phi=72;phi<=72;phi++) {
+             for (int depth=1;depth<=2;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalEndcap,eta,phi,depth); subdet="HE";
+                HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;           
+                delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta
+
+      for (int eta= -19;eta<=-16;eta++) {
+          for (int phi=72;phi<=72;phi++) {
+             for (int depth=1;depth<=3;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalEndcap,eta,phi,depth); subdet="HE";
+                HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;           
+                delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta
+      for (int eta= -29;eta<=-16;eta++) {
+          for (int phi=1;phi<=71;phi++) {
+             for (int depth=1;depth<=3;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalEndcap,eta,phi,depth); subdet="HE";
+                HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;           
+                delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta
+         for (int eta= 16;eta<=29;eta++) {
+          for (int phi=1;phi<=72;phi++) {
+             for (int depth=1;depth<=3;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalEndcap,eta,phi,depth); subdet="HE";
+                HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;           
+                delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta
+
+// HF
+
+        for (int eta= -41;eta<=-29;eta++) {
+          for (int phi=1;phi<=72;phi+=2) {
+             for (int depth=1;depth<=2;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalForward,eta,phi,depth); subdet="HF";
+                HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;           
+                delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta
+
+        for (int eta= 29;eta<=41 ;eta++) {
+          for (int phi=1;phi<=72;phi+=2) {
+             for (int depth=1;depth<=2;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalForward,eta,phi,depth); subdet="HF";
+                HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;           
+                delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta
+
+// HO
+
+        for (int eta= -15;eta<0;eta++) {
+          for (int phi=1;phi<=72;phi++) {
+             for (int depth=4;depth<=4;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalOuter,eta,phi,depth); subdet="HO";
+                HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;           
+                delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta
+
+        for (int eta= 1;eta<=15;eta++) {
+          for (int phi=1;phi<=72;phi++) {
+             for (int depth=4;depth<=4;depth++) {
+                HcalDetId *detid=0;
+                detid=new HcalDetId(HcalOuter,eta,phi,depth); subdet="HO";
+                HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
+                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()-1<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
+                MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
+                MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
+                MAPfile << emap_entry.readoutVMECrateId()<<" ,    "<<emap_entry.dccid()<<" ,     "<<emap_entry.spigot()<<" ,         "<<emap_entry.fiberIndex()<<" ,      " ;
+                MAPfile << emap_entry.htrSlot()<<" ,      "<<emap_entry.htrTopBottom() ;
+                MAPfile << "}," << std::endl;           
+                delete detid;
+             }  //Depth
+          }  //Phi
+       }  //Eta
+    MAPfile << "};" << std::endl;
+    MAPfile <<  std::endl;
+    
+    MAPfile << "// macro for array length calculation" << std::endl; 
+    MAPfile << "#define DIM(a) (sizeof(a)/sizeof(a[0]))" << std::endl; 
+    MAPfile <<  std::endl;  
+
+    MAPfile << "// class for cells array managing" << std::endl; 
+    MAPfile << "class CellDB {" << std::endl; 
+    MAPfile << "public:" << std::endl; 
+    MAPfile << "  CellDB()" << std::endl; 
+    MAPfile << "  : cells(AllCells,  AllCells + DIM(AllCells))" << std::endl; 
+    MAPfile << "{}" << std::endl; 
+    MAPfile <<  std::endl;  
+  
+    MAPfile << "// return i-th cell" << std::endl;
+    MAPfile << "Cell operator [] (int i) const {return cells[i];}" << std::endl;
+     
+    MAPfile << "// number of cells in database" << std::endl; 
+    MAPfile << "int size() const {return cells.size();}" << std::endl;
+    MAPfile <<  std::endl; 
+
+    MAPfile << "// select cells for which \"par\" == \"val\"" << std::endl; 
+    MAPfile << "template<typename T>" << std::endl; 
+    MAPfile << "CellDB find(const std::string par, const T val) const" << std::endl; 
+    MAPfile << "{" << std::endl; 
+    MAPfile << "  std::vector<Cell> s;" << std::endl; 
+    MAPfile << "  for (size_t i = 0; i < cells.size(); ++i)" << std::endl; 
+    MAPfile << "    if (cells[i].check(par, val))" << std::endl; 
+    MAPfile << "    s.push_back(cells[i]);" << std::endl; 
+    MAPfile << "  return CellDB(s);" << std::endl; 
+    MAPfile << "} " << std::endl; 
+    MAPfile <<  std::endl; 
+
+    MAPfile << "private:" << std::endl; 
+    MAPfile << " CellDB( const std::vector<Cell> s)" << std::endl; 
+    MAPfile << " : cells(s)" << std::endl; 
+    MAPfile << "{}" << std::endl; 
+    MAPfile << "std::vector<Cell> cells;" << std::endl; 
+    MAPfile << "};" << std::endl;
+
+       
+    MAPfile.close(); 
+    std::cout << "===== Finish writing Channel MAP =====" << std::endl;  
 
 }
 

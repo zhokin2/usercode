@@ -1,5 +1,6 @@
 #how to run: cmsRun remoteMonitoring_LED_cfg.py 211659 file:/afs/cern.ch/work/d/dtlisov/private/Monitoring/data /afs/cern.ch/work/d/dtlisov/private/Monitoring/histos
 #how to run: cmsRun remoteMonitoring_LED_cfg.py 211659 /store/group/comm_hcal/USC /afs/cern.ch/work/d/dtlisov/private/Monitoring/histos
+
 import sys
 import FWCore.ParameterSet.Config as cms
 process = cms.Process('OKRECO')
@@ -15,8 +16,6 @@ process.load('Configuration.StandardSequences.Reconstruction_Data_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load('RecoLocalCalo.Configuration.hcalLocalReco_cff')
-
-
 #runnumber = sys.argv[2][4:-5]
 
 runnumber = sys.argv[2]
@@ -49,6 +48,7 @@ process.source = cms.Source("HcalTBSource",
 		  "HCAL_DCC730","HCAL_DCC731"
 		 )	
   )
+
 process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #
                                   Verbosity = cms.untracked.int32(0),
@@ -395,17 +395,21 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #
                                   )		
 
+
+
 process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
     dump = cms.untracked.vstring(''),
     file = cms.untracked.string('')
-)
+  )
+				
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'GR_P_V54', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_Prompt_v8', '')
 
 process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
 process.hcalDigis.FilterDataQuality = cms.bool(False)
 process.hcalDigis.InputLabel = cms.InputTag("source")
-				
+
+
 process.p = cms.Path(process.hcalDigis*process.Analyzer)
 
 process.MessageLogger = cms.Service("MessageLogger",

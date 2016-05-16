@@ -5,13 +5,18 @@ set refnumber=${3}
 set runNevents=${4}
 set CALIB=${5}
 
+set RELEASE=CMSSW807patch2_STABLE
+
+#eos ls /eos/cms/store/group/dpg_hcal/comm_hcal/USC > ${WD}/${CALIB}_LIST/fullSrc0_list_${2}
+#eos ls /eos/cms/store/group/dpg_hcal/comm_hcal/LS1 > ${WD}/${CALIB}_LIST/fullSrc1_list_${2}
+
 set fullSrc0='/store/group/dpg_hcal/comm_hcal/USC'
 set fullSrc1='/store/group/dpg_hcal/comm_hcal/LS1'
 set fullSrc='NO'
 set WebDir='/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb'
 set WebSite='https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT'
 set HistoDir='/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos'
-set WD='/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21_STABLE/src/RecoHcal/HcalPromptAnalysis/test/RDM'
+set WD="/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/${RELEASE}/src/RecoHcal/HcalPromptAnalysis/test/RDM"
 
 echo ${runnumber} >> ${WD}/LOG/batchlog
 grep -q ${runnumber} ${WD}/${CALIB}_LIST/fullSrc0_list_${2}
@@ -37,13 +42,13 @@ echo "Batch submission" ${fullSrc} " " ${runnumber} >> ${WD}/LOG/batchlog
 mkdir ${runnumber}
 setenv WORK `pwd`/${runnumber}
 
-cd /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21_STABLE/src/RecoHcal/HcalPromptAnalysis/test
+cd /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/${RELEASE}/src/RecoHcal/HcalPromptAnalysis/test
 cmsenv
 cp ${WD}/remoteMonitoring_${CALIB}_cfg.py ${WORK}/remoteMonitoring_cfg.py
 cp ${WD}/RemoteMonitoringMAP.cc ${WORK}
 cp ${WD}/compile.csh ${WORK}
 cp ${WD}/LogEleMapdb.h ${WORK}
-cp ${WD}/${CALIB}_LIST/runlist.tmp0.${2} ${WORK}/runlist.tmp
+cp ${WD}/${CALIB}_LIST/runlist.tmp.${2} ${WORK}/runlist.tmp
 
 cd ${WORK}
 
@@ -62,7 +67,7 @@ echo " After CMS run ">>${WD}/LOG/log_${runnumber}
 rm -rf ${WebDir}/${CALIB}_${runnumber} 
 mkdir ${WebDir}/${CALIB}_${runnumber} >> & ${WD}/LOG/log_${runnumber}
 ./compile.csh RemoteMonitoringMAP.cc  >> & ${WD}/LOG/log_${runnumber}
-./RemoteMonitoringMAP.cc.exe "${HistoDir}/${CALIB}_${runnumber}.root" "${HistoDir}/${CALIB}_${refnumber}.root"
+./RemoteMonitoringMAP.cc.exe "${HistoDir}/${CALIB}_${runnumber}.root" "${HistoDir}/${CALIB}_${refnumber}.root" ${CALIB} >> & ${WD}/LOG/log_${runnumber}
 
 ##root -b -q -l 'RemoteMonitoringMAP.C+("'${HistoDir}'/${CALIB}_'${runnumber}'.root","'${HistoDir}'/${CALIB}_'${refnumber}'.root")'
 ls -l >> ${WD}/LOG/log_${runnumber}
@@ -77,13 +82,13 @@ ls -l >> ${WD}/LOG/log_${runnumber}
 
 set j=`cat runlist.tmp | grep ${runnumber}`
 echo ${j} >> ${WD}/LOG/batchlog    
-setenv runtype `echo $j | awk -F - '{print $13}'`
-setenv runHTML `echo $j | awk -F - '{print $25}' | awk -F 'href=' '{print $2}'`
-setenv runday `echo $j | awk -F - '{print $19}'`
-setenv runmonth `echo $j | awk -F - '{print $18}'`
-setenv runyear `echo $j | awk -F - '{print $17}'`
-setenv runtime `echo $j | awk -F - '{print $20}'`
-setenv rundate ${runday}"."${runmonth}"."${runyear} 
+setenv runtype ${CALIB} 
+setenv runHTML NO
+#setenv runday `echo $j | awk -F - '{print $19}'`
+#setenv runmonth `echo $j | awk -F - '{print $18}'`
+#setenv runyear `echo $j | awk -F - '{print $17}'`
+setenv runtime `echo $j | awk -F _ '{print $4}'`
+setenv rundate `echo $j | awk -F _ '{print $3}'` 
 #wget ${runHTML} >> ${WD}/LOG/batchlog
 #setenv runNevents `cat index.html | tail -n +14 | head -n 1 | awk -F '>' '{print $2}' | awk -F '<' '{print $1}'`
 #rm index.html
@@ -108,7 +113,7 @@ echo '<td class="s'$raw'" align="center">'$rundate'</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$runtime'</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$refnumber'</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center"><a href="'$WebSite'/'${CALIB}'_'$runnumber'/MAP.html">'${CALIB}'_'$runnumber'</a></td>'>> index_draft.html
-echo '<td class="s'$raw'" align="center"><a href="'$runHTML'">DetDiag_'$runnumber'</a></td>'>> index_draft.html
+echo '<td class="s'$raw'" align="center">NO</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">OK</td>'>> index_draft.html
 echo '</tr>'>> index_draft.html
 
@@ -134,7 +139,7 @@ cp index_draft.html $WebDir/${CALIB}_$runnumber
 cmsMkdir /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/RMT/${CALIB}_$runnumber
 foreach i (`ls *.html`)
 cat ${i} | sed 's#cms-cpt-software.web.cern.ch\/cms-cpt-software\/General\/Validation\/SVSuite#cms-conddb-dev.cern.ch\/eosweb\/hcal#g'> ${i}.n
-cmsStagei -f ${i}.n /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/RMT/${CALIB}_$runnumber
+cmsStage -f ${i}.n /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/RMT/${CALIB}_$runnumber/${i}
 end
 foreach k (`ls *.png`)
 cmsStage -f ${k} /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/RMT/${CALIB}_$runnumber
