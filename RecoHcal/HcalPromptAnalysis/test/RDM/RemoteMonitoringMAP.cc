@@ -32,13 +32,14 @@ using namespace std;
     gStyle->SetOptStat(0);
     gStyle->SetOptTitle(1);
 // ok change
-               if(argc<2) return 1;
+               if(argc<3) return 1;
                char fname[300];
                char refname[300];
+               char runtypeC[300];
                sprintf(fname,"%s",argv[1]);
                sprintf(refname,"%s",argv[2]);
-
-               std::cout<<fname<<" "<<refname<<std::endl;
+               sprintf(runtypeC,"%s",argv[3]);
+               std::cout<<fname<<" "<<refname<<" "<<runtypeC<<std::endl;
 // ok change
 
 
@@ -46,6 +47,7 @@ using namespace std;
 // Connect the input files, parameters and get the 2-d histogram in memory
 //    TFile *hfile= new TFile("GlobalHist.root", "READ");
     string promt = (string) fname;
+    string runtype = (string) runtypeC;
     string runnumber ="";
     for (unsigned int i=promt.size()-11; i<promt.size()-5 ; i++) runnumber += fname[i];
     string refrunnumber ="";
@@ -54,16 +56,88 @@ using namespace std;
     
     TFile *hfile= new TFile( fname, "READ");
     TFile *hreffile= new TFile(refname, "READ");
-     //CUTS:    [test][subdetector]                                  ADC amplitude  Am      Width  for Wm             Ratio cut for Rm             TS mean for TNm           TS max  for TXm
-    double MIN_M[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},       {0, 100.,70.,40.,40.}, {0, 0.7, 0.7, 0.1, 0.1},  {0, 0.7, 0.6, 0.40, 0.45}, {0, 2.5, 1.0, 1.0, 1.0}, {0, 1.5, 1.5, 0.5, 0.5}};
-    double MAX_M[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 3000,3000,3000,3000}, {0, 2.5, 2.2, 2.8, 2.6}, {0, 0.94, 0.95, 1.04, 1.02}, {0, 5.5, 5.2, 4.8, 4.2}, {0, 6.5, 6.5, 8.5, 8.5}};                    
-    double MIN_C[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},{0, 1000.,1000.,1000.,100.}, {0, 1.3, 1.3, 0.7, 0.3}, {0, 0.76 , 0.76, 0.85, 0.5}, {0, 2.4, 2.4, 1.5, 3.5}, {0, 1.5, 1.5, 1.5, 3.5}};
-    double MAX_C[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 1E20,1E20,1E20,1E20},{0, 1.9, 1.9, 1.65, 1.5},   {0, 0.94, 0.94, 1.0, 0.8}, {0, 3.7, 3.7, 2.7, 4.5}, {0, 2.5, 2.5, 2.5, 4.5}};                    
-    double porog[5] = {0., 2., 2., 2., 2.}; // Cut for GS test in pro cents
-//    double porog[5] = {0., 200., 200., 100., 100.}; // Cut for GS test in pro cents
-    double Pedest[2][5] = {{0.,0.1,0.6,0.1,0.8},{0.,0.1,0.1,0.1,0.4}};//Cuts for Pedestal  and pedestal  Width
+    double MIN_M[7][5];
+    double MAX_M[7][5];  
+    double MIN_C[7][5];
+    double MAX_C[7][5];
+    double porog[5];
+    double Pedest[2][5];
+
+    if (runtype=="LED") 
+    {
+       //CUTS:    [test][subdetector]                                       ADC amplitude  Am      Width  for Wm             Ratio cut for Rm             TS mean for TNm           TS max  for TXm
+       double MIN_M_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},       {0, 100.,70.,40.,40.}, {0, 0.7, 0.7, 0.1, 0.1},  {0, 0.7, 0.6, 0.40, 0.45}, {0, 2.5, 1.0, 1.0, 1.0}, {0, 1.5, 1.5, 0.5, 0.5}};
+       double MAX_M_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 3000,3000,3000,3000}, {0, 2.5, 2.5, 2.8, 2.6}, {0, 0.94, 0.95, 1.04, 1.02}, {0, 5.5, 5.2, 4.8, 4.2}, {0, 6.5, 6.5, 8.5, 8.5}};                    
+       double MIN_C_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},{0, 1000.,1000.,1000.,100.}, {0, 1.3, 1.3, 0.7, 0.3}, {0, 0.76 , 0.76, 0.85, 0.5}, {0, 2.4, 2.4, 1.5, 3.5}, {0, 1.5, 1.5, 1.5, 3.5}};
+       double MAX_C_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 1E20,1E20,1E20,1E20},{0, 1.9, 1.9, 1.65, 1.5},  {0, 0.94, 0.94, 0.99, 0.8}, {0, 3.7, 3.7, 2.7, 4.5}, {0, 2.5, 2.5, 2.5, 4.5}};                    
+       double porog_LED[5] = {0., 2., 2., 2., 2.}; // Cut for GS test in pro cents
+       double Pedest_LED[2][5] = {{0.,0.1,0.6,0.1,0.8},{0.,0.1,0.1,0.1,0.4}};//Cuts for Pedestal  and pedestal  Width
+       for (int i=0;i<=6;i++) 
+           for (int j=0;j<=4;j++) {
+               MIN_M[i][j]=MIN_M_LED[i][j];
+               MAX_M[i][j]=MAX_M_LED[i][j];
+               MIN_C[i][j]=MIN_C_LED[i][j];
+               MAX_C[i][j]=MAX_C_LED[i][j];
+           }
+       for (int i=0;i<=4;i++) {
+            porog[i]=porog_LED[i];
+            Pedest[0][i]=Pedest_LED[0][i];
+            Pedest[1][i]=Pedest_LED[1][i];
+       }
+    }
+
+    if (runtype=="LASER") 
+    {
+       //CUTS:    [test][subdetector]                                  ADC amplitude  Am      Width  for Wm             Ratio cut for Rm             TS mean for TNm           TS max  for TXm
+       double MIN_M_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},       {0, 40.,40.,100.,40.}, {0, 0.3, 0.9, 0.2, 0.2},   {0, 0.5, 0.55, 0.55, 0.60}, {0, 5.0, 2.5, 1.1, 5.5}, {0, 1.5, 1.5, 1.5, 1.5}};
+       double MAX_M_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 3500,3500,3500,3500}, {0, 2.5, 3.6, 2.6, 2.1}, {0, 1.00, 1.00, 1.04, 1.02}, {0, 7.5, 6.5, 4.4, 8.5}, {0, 8.5, 8.5, 6.5, 8.5}};                    
+       double MIN_C_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},{0, 1000.,1000.,1000.,100.}, {0, 1.3, 1.3, 0.7, 0.3}, {0, 0.76 , 0.76, 0.85, 0.5}, {0, 2.4, 2.4, 1.5, 3.5}, {0, 1.5, 1.5, 1.5, 3.5}};
+       double MAX_C_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 1E20,1E20,1E20,1E20},{0, 1.9, 1.9, 1.65, 1.5},   {0, 0.94, 0.94, 1.0, 0.8}, {0, 3.7, 3.7, 2.7, 4.5}, {0, 2.5, 2.5, 2.5, 4.5}};                    
+       double porog_LASER[5] = {0., 2., 2., 2., 2.}; // Cut for GS test in pro cents
+//     double porog_LASER[5] = {0., 200., 200., 100., 100.}; // Cut for GS test in pro cents
+       double Pedest_LASER[2][5] = {{0.,0.1,0.6,0.1,0.8},{0.,0.1,0.1,0.1,0.4}};//Cuts for Pedestal  and pedestal  Width 
+       for (int i=0;i<=6;i++) 
+           for (int j=0;j<=4;j++) {
+               MIN_M[i][j]=MIN_M_LASER[i][j];
+               MAX_M[i][j]=MAX_M_LASER[i][j];
+               MIN_C[i][j]=MIN_C_LASER[i][j];
+               MAX_C[i][j]=MAX_C_LASER[i][j];
+           }
+       for (int i=0;i<=4;i++) {
+            porog[i]=porog_LASER[i];
+            Pedest[0][i]=Pedest_LASER[0][i];
+            Pedest[1][i]=Pedest_LASER[1][i];      
+       }
+    }
+    if (runtype=="PEDESTAL") 
+    {
+       //CUTS:    [test][subdetector]                                  ADC amplitude  Am      Width  for Wm             Ratio cut for Rm             TS mean for TNm           TS max  for TXm
+       double MIN_M_PEDESTAL[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},           {0, 10.,10.,200.,5.}, {0, 2.7, 2.7, 2.7, 0.2}, {0, 0.31, 0.31, 0.05, 0.15}, {0, 4.5, 4.5, 4.5, 2.0}, {0, 0.5, 0.5, 0.5, 0.5}};
+       double MAX_M_PEDESTAL[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 2500.,2500.,2500.,50.}, {0, 3.0, 3.0, 5.0, 3.0}, {0, 0.95, 0.95, 1.00, 0.98}, {0, 4.6, 4.6, 4.6, 7.0}, {0, 9.5, 9.5, 8.5, 8.5}};                    
+       double MIN_C_PEDESTAL[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},{0, 1000.,1000.,1000.,100.}, {0, 1.3, 1.3, 0.7, 0.3}, {0, 0.76 , 0.76, 0.85, 0.5}, {0, 2.4, 2.4, 1.5, 3.5}, {0, 1.5, 1.5, 1.5, 3.5}};
+       double MAX_C_PEDESTAL[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 1E20,1E20,1E20,1E20},{0, 1.9, 1.9, 1.65, 1.5},   {0, 0.94, 0.94, 1.0, 0.8}, {0, 3.7, 3.7, 2.7, 4.5}, {0, 2.5, 2.5, 2.5, 4.5}};                    
+       double porog_PEDESTAL[5] = {0., 2., 2., 2., 2.}; // Cut for GS test in pro cents
+//     double porog_PEDESTAL[5] = {0., 200., 200., 100., 100.}; // Cut for GS test in pro cents
+       double Pedest_PEDESTAL[2][5] = {{0.,0.1,0.6,0.1,0.8},{0.,0.1,0.1,0.1,0.4}};//Cuts for Pedestal  and pedestal  Width
+       for (int i=0;i<=6;i++) 
+           for (int j=0;j<=4;j++) {
+               MIN_M[i][j]=MIN_M_PEDESTAL[i][j];
+               MAX_M[i][j]=MAX_M_PEDESTAL[i][j];
+               MIN_C[i][j]=MIN_C_PEDESTAL[i][j];
+               MAX_C[i][j]=MAX_C_PEDESTAL[i][j];
+           }
+       for (int i=0;i<=4;i++) {
+            porog[i]=porog_PEDESTAL[i];
+            Pedest[0][i]=Pedest_PEDESTAL[0][i];
+            Pedest[1][i]=Pedest_PEDESTAL[1][i];
+       }
+   }
+
+
 //======================================================================
 
+cout<< endl;
+cout<< MIN_M[2][1] << endl;
 
 
 //======================================================================
@@ -388,7 +462,7 @@ using namespace std;
           if (test==6) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 9.);
 	  cONE->Modified(); 
           cONE->Update(); 
-	  float min_x[] = {(float)MIN_M[test][sub],(float)MIN_M[test][sub]};
+	  float min_x[] = {MIN_M[test][sub],MIN_M[test][sub]};
           float min_y[] = {0.,100000000.};
           TGraph* MIN = new TGraph(2, min_x, min_y);
           MIN->SetLineStyle(2);
@@ -397,7 +471,7 @@ using namespace std;
           MIN->SetFillStyle(3005);
           MIN->SetFillColor(2);
           MIN->Draw("L"); 
-          float max_x[] = {(float)MAX_M[test][sub],(float)MAX_M[test][sub]};
+          float max_x[] = {MAX_M[test][sub],MAX_M[test][sub]};
           float max_y[] = {0.,100000000.};
           TGraph* MAX = new TGraph(2, max_x, max_y);
           MAX->SetLineStyle(2);
@@ -739,7 +813,7 @@ using namespace std;
           if (test==16) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 9.);
 	  cONE->Modified(); 
           cONE->Update(); 
-	  float min_x[] = {(float)MIN_C[test-10][sub],(float)MIN_C[test-10][sub]};
+	  float min_x[] = {MIN_C[test-10][sub],MIN_C[test-10][sub]};
           float min_y[] = {0.,100000000.};
           TGraph* MIN = new TGraph(2, min_x, min_y);
           MIN->SetLineStyle(2);
@@ -748,7 +822,7 @@ using namespace std;
           MIN->SetFillStyle(3005);
           MIN->SetFillColor(2);
           MIN->Draw("L"); 
-          float max_x[] = {(float)MAX_C[test-10][sub],(float)MAX_C[test-10][sub]};
+          float max_x[] = {MAX_C[test-10][sub],MAX_C[test-10][sub]};
           float max_y[] = {0.,100000000.};
           TGraph* MAX = new TGraph(2, max_x, max_y);
           MAX->SetLineStyle(2);
@@ -986,7 +1060,7 @@ using namespace std;
             if (sub==2) {cHE->Modified(); cHE->Update();}
             if (sub==3) {cONE->Modified();cONE->Update();}
             if (sub==4) {cHB->Modified(); cHB->Update();} 
-	    float min_x[] = {-1*(float)porog[sub],-1*(float)porog[sub]};
+	    float min_x[] = {-1*porog[sub],-1*porog[sub]};
             float min_y[] = {0.,100000000.};
             TGraph* MIN = new TGraph(2, min_x, min_y);
             MIN->SetLineStyle(2);
@@ -995,7 +1069,7 @@ using namespace std;
             MIN->SetFillStyle(3005);
             MIN->SetFillColor(2);
             MIN->Draw("L"); 
-            float max_x[] = {(float)porog[sub],(float)porog[sub]};
+            float max_x[] = {porog[sub],porog[sub]};
             float max_y[] = {0.,100000000.};
             TGraph* MAX = new TGraph(2, max_x, max_y);
             MAX->SetLineStyle(2);
@@ -1145,7 +1219,7 @@ using namespace std;
 
 	      cPED->Modified(); 
               cPED->Update(); 
-	      float min_x[] = {(float)Pedest[test-31][sub],(float)Pedest[test-31][sub]};
+	      float min_x[] = {Pedest[test-31][sub],Pedest[test-31][sub]};
               float min_y[] = {0.,100000000.};
               TGraph* MIN = new TGraph(2, min_x, min_y);
               MIN->SetLineStyle(2);
@@ -1321,7 +1395,7 @@ using namespace std;
       hist_ADC_All[sub]->SetTitle(str);
       hist_ADC_All[sub]->Draw("");
       // hist_ADC_All[sub]->GetYaxis()->SetRangeUser(0, 72.);
-      // hist_ADC_All[sub]->GetZaxis()->SetRangeUser(0.0001, 1.);
+      hist_ADC_All[sub]->GetXaxis()->SetRangeUser(0.000, 1000.);
       cONE->Modified(); cONE->Update();
       if (sub==1) {cONE->Print("Hist_ADC_HB_All.png"); cONE->Clear();} 
       if (sub==2) {cONE->Print("Hist_ADC_HE_All.png"); cONE->Clear();}
@@ -1354,7 +1428,7 @@ using namespace std;
               hist_ADC_DS[sub][k]->SetTitle(str);
               hist_ADC_DS[sub][k]->Draw("");
            // hist_ADC_DS[sub][k]->GetYaxis()->SetRangeUser(0, 72.);
-           // hist_ADC_DS[sub][k]->GetZaxis()->SetRangeUser(0.0001, 1.);
+              hist_ADC_DS[sub][k]->GetXaxis()->SetRangeUser(0.000, 1000.);
               if (sub==1) {cHB->Modified(); cHB->Update();} 
               if (sub==2) {cHE->Modified(); cHE->Update();}
               if (sub==3) {cONE->Modified();cONE->Update();}
@@ -2032,7 +2106,7 @@ using namespace std;
      if (sub==3)  htmlFileD << " <img src=\"MapRateAmpl2HO.png\" />" << std::endl;  
      if (sub==4)  htmlFileD << " <img src=\"MapRateAmpl2HF.png\" />" << std::endl;   
      htmlFileD << "<br>"<< std::endl; 
-     htmlFileD << "<h3> 1.C. Relative difference between Current run and Current run distribution over all events, channels for each depth.</h3>"<< std::endl;
+     htmlFileD << "<h3> 1.C. Relative difference between Current and Reference run distribution over all events, channels for each depth.</h3>"<< std::endl;
      htmlFileD << "<h4>  Legend: Bins less -"<<porog[sub]<<"% and more +"<<porog[sub]<<"% correpond to bad relative difference position </h4>"<< std::endl;
      if (sub==1)  htmlFileD << " <img src=\"HistAmplDriftDepthHB.png\" />" << std::endl; 
      if (sub==2)  htmlFileD << " <img src=\"HistAmplDriftDepthHE.png\" />" << std::endl; 
@@ -2167,7 +2241,7 @@ using namespace std;
      if (sub==2) htmlFileS << " <img src=\"Hist_ADC_HE_DS.png\" />" << std::endl;
      if (sub==3) htmlFileS << " <img src=\"Hist_ADC_HO_DS.png\" />" << std::endl;
      if (sub==4) htmlFileS << " <img src=\"Hist_ADC_HF_DS.png\" />" << std::endl;
-
+/*
      htmlFileS << "<h2> 3. ADC Sum in Time Slice </h3>"<< std::endl;
      htmlFileS << "<h3> 3.A. ADC Sum over all channels histogrammed over all events for each depth separately. </h3>"<< std::endl; 
 //     htmlFileS << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
@@ -2189,7 +2263,7 @@ using namespace std;
      if (sub==2) htmlFileS << " <img src=\"Hist_SumADC_HE1.png\" />" << std::endl;
      if (sub==3) htmlFileS << " <img src=\"Hist_SumADC_HO1.png\" />" << std::endl;
      if (sub==4) htmlFileS << " <img src=\"Hist_SumADC_HF1.png\" />" << std::endl;
-
+*/
      htmlFileS.close();
   }// end sub
 
@@ -2370,22 +2444,22 @@ using namespace std;
 	if ((ce.size()>=1)&&(Sub[2][i]==sub)) {
            if (Sub[2][i]==1) {
 	      ce = db.find("subdet", "HB").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl; continue;}
+	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HB, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}
 	      }
 	   if (Sub[2][i]==2) {
 	      ce = db.find("subdet", "HE").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;continue;}
+	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HE, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}	   
 	      }
 	   if (Sub[2][i]==3) {
 	      ce = db.find("subdet", "HO").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;continue;}
+	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HO, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}	   
 	      }	   
 	   if (Sub[2][i]==4) {
 	      ce = db.find("subdet", "HF").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;continue;}
+	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HF, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}	   
 	      }	
 	   htmlFile << "<tr>"<< std::endl;
@@ -2484,22 +2558,22 @@ using namespace std;
 	if ((ce.size()>=1)&&(Sub[1][i]==sub)) {
            if (Sub[1][i]==1) {
 	      ce = db.find("subdet", "HB").find("Eta", Eta[1][i]).find("Phi", Phi[1][i]).find("Depth", Depth[1][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; continue;}
+	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HB, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}
 	      }
 	   if (Sub[1][i]==2) {
 	      ce = db.find("subdet", "HE").find("Eta", Eta[1][i]).find("Phi", Phi[1][i]).find("Depth", Depth[1][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; continue;}
+	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HE, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}	   
 	      }
 	   if (Sub[1][i]==3) {
 	      ce = db.find("subdet", "HO").find("Eta", Eta[1][i]).find("Phi", Phi[1][i]).find("Depth", Depth[1][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; continue;}
+	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HO, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}	   
 	      }	   
 	   if (Sub[1][i]==4) {
 	      ce = db.find("subdet", "HF").find("Eta", Eta[1][i]).find("Phi", Phi[1][i]).find("Depth", Depth[1][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; continue;}
+	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HF, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}	   
 	      }	
            htmlFile << "<td class=\"s4\" align=\"center\">" << ind+1 <<"</td>"<< std::endl;
@@ -2598,22 +2672,22 @@ using namespace std;
 	if ((ce.size()>=1)&&(Sub[3][i]==sub)) {
            if (Sub[3][i]==1) {
 	      ce = db.find("subdet", "HB").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
+	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HB, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}
 	      }
 	   if (Sub[3][i]==2) {
 	      ce = db.find("subdet", "HE").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
+	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HE, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}	   
 	      }
 	   if (Sub[3][i]==3) {
 	      ce = db.find("subdet", "HO").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
+	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HO, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}	   
 	      }	   
 	   if (Sub[3][i]==4) {
 	      ce = db.find("subdet", "HF").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
+	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HF, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}	   
 	      }	
            htmlFile << "<td class=\"s4\" align=\"center\">" << ind+1 <<"</td>"<< std::endl;
@@ -2704,13 +2778,11 @@ using namespace std;
      htmlFile << "</body> " << std::endl;
      htmlFile << "</html> " << std::endl; 
      htmlFile.close();
-     std::cout<<" ==== End to create HELP.html "<<std::endl;
+
 //======================================================================
 
 //======================================================================
-// Creating main html file:
-     std::cout<<" ==== Start to create MAP.html "<<std::endl;
-   
+// Creating main html file:   
      htmlFile.open("MAP.html");  
      htmlFile << "</html><html xmlns=\"http://www.w3.org/1999/xhtml\">"<< std::endl;
      htmlFile << "<head>"<< std::endl;
@@ -2966,8 +3038,6 @@ using namespace std;
      htmlFile << "</body> " << std::endl;
      htmlFile << "</html> " << std::endl; 
      htmlFile.close();  
-     std::cout<<" ==== MAP.html closed "<<std::endl;
-
 //======================================================================
      
 //======================================================================
