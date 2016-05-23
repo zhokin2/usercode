@@ -2844,8 +2844,6 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator2
 	    if (verbosity == -81 ) std::cout << "sumEstimator2 = " <<sumEstimator2[k0][k1][k2][k3]<< std::endl;
 
-                 std::cout << "sumEstimator2 = " <<sumEstimator2[k0][k1][k2][k3]<< std::endl;
-
 	    if(sumEstimator2[k0][k1][k2][k3] != 0. ) {
 
 	      // fill histoes:
@@ -2952,9 +2950,6 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator3
 	    if (verbosity == -81 ) std::cout << "sumEstimator3 = " <<sumEstimator3[k0][k1][k2][k3]<< std::endl;
 
- std::cout << "sumEstimator3 = " <<sumEstimator3[k0][k1][k2][k3]<< std::endl;
-
-
 	    if(sumEstimator3[k0][k1][k2][k3] != 0. ) {
 
 	      // fill histoes:
@@ -3060,8 +3055,6 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 
 	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator4
 	    if (verbosity == -81 ) std::cout << "sumEstimator4 = " <<sumEstimator4[k0][k1][k2][k3]<< std::endl;
-
-              std::cout << "sumEstimator4 = " <<sumEstimator4[k0][k1][k2][k3]<< std::endl;
 
 	    if(sumEstimator4[k0][k1][k2][k3] != 0. ) {
 
@@ -3170,8 +3163,6 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator5
 	    if (verbosity == -81 ) std::cout << "sumEstimator5 = " <<sumEstimator5[k0][k1][k2][k3]<< std::endl;
 
-                    std::cout << "sumEstimator5 = " <<sumEstimator5[k0][k1][k2][k3]<< std::endl;
-
 	    if(sumEstimator5[k0][k1][k2][k3] != 0. ) {
 
 	      // fill histoes:
@@ -3276,9 +3267,6 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	    
 	    // ------------------------------------------------------------------------------------------------------------------------sumEstimator6 (Error-B)
 	    if (verbosity == -81 ) std::cout << "sumEstimator6 = " <<sumEstimator6[k0][k1][k2][k3]<< std::endl;
-
-                  std::cout << "sumEstimator6 = " <<sumEstimator6[k0][k1][k2][k3]<< std::endl;
-
 
 	    if(sumEstimator6[k0][k1][k2][k3] != 0. ) {
 	      
