@@ -2337,7 +2337,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   if(nevcounter0 != 0 || nevcounter > 99999 ) {  
     if(nevcounter > 99999 ) nevcounter0 = 1;
  
-      std::cout<<" We are here "<<std::endl;
+    ///   std::cout<<" We are here "<<std::endl;
    
     ///////  int sub= cell.subdet();  1-HB, 2-HE, 3-HO, 4-HF
     ////////////            k0(sub): =0 HB; =1 HE; =2 HO; =3 HF;
