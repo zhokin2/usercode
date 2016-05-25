@@ -7526,7 +7526,9 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
     //     if((*digiItr).size() !=  4) std::cout << "TSsize HF != 4 and = " <<(*digiItr).size()<< std::endl;
     if((*digiItr).size() !=  TSsize) errorBtype = 1.; 
     TSsize=digiItr->size();
-    
+
+    //  std::cout << "TSsize HF  = " <<(*digiItr).size()<< std::endl;    
+
     ////// 
     for (int ii=0; ii<TSsize; ii++) {  
       //  for (int ii=0; ii<digiItr->size(); ii++) {  
@@ -7660,10 +7662,10 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
     // ------------ to get signal in TS: -2 max +1  ------------
 
 
-    if(ts_with_max_signal > -1 && ts_with_max_signal < 4) ampl = tool[ts_with_max_signal];
-    if(ts_with_max_signal+2 > -1 && ts_with_max_signal+2 < 4) ampl += tool[ts_with_max_signal+2];
-    if(ts_with_max_signal+1 > -1 && ts_with_max_signal+1 < 4) ampl += tool[ts_with_max_signal+1];
-    if(ts_with_max_signal-1 > -1 && ts_with_max_signal-1 < 4) ampl += tool[ts_with_max_signal-1];
+    if(ts_with_max_signal > -1 && ts_with_max_signal < TSsize) ampl = tool[ts_with_max_signal];
+    if(ts_with_max_signal+2 > -1 && ts_with_max_signal+2 < TSsize) ampl += tool[ts_with_max_signal+2];
+    if(ts_with_max_signal+1 > -1 && ts_with_max_signal+1 < TSsize) ampl += tool[ts_with_max_signal+1];
+    if(ts_with_max_signal-1 > -1 && ts_with_max_signal-1 < TSsize) ampl += tool[ts_with_max_signal-1];
 
     //  if(ts_with_max_signal+1 > -1 && ts_with_max_signal+1 < 10) ampl += tool[ts_with_max_signal+1];
     //  if(ts_with_max_signal-1 > -1 && ts_with_max_signal-1 < 10) ampl += tool[ts_with_max_signal-1];
@@ -7688,7 +7690,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
 
     if (ratio<0. || ratio>1.02) ratio = 0.;
     
-    if (verbosity == -51) std::cout << "*HF ratio = " <<ratio<< " ampl ="<<ampl<< std::endl;
+    if (verbosity == -551) std::cout << "*HF ratio = " <<ratio<< " ampl ="<<ampl<< std::endl;
 
     
     double aveamplitude = 0.;
