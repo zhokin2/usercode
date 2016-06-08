@@ -159,10 +159,10 @@ for i in ${runList} ; do
 	exit 2
     fi
 
-    if [ ! -s HELP.html ] ; then
-	echo "GLOBAL failure was not detected. HELP.html is missing"
-	exit 2
-    fi
+#    if [ ! -s HELP.html ] ; then
+#	echo "GLOBAL failure was not detected. HELP.html is missing"
+#	exit 2
+#    fi
 
 
     local_WebDir=dir-CMT-GLOBAL_${runnumber}
@@ -209,10 +209,10 @@ for i in ${runList} ; do
 	exit 2
     fi
 
-    if [ ! -s HELP.html ] ; then
-	echo "MAP_Global failure was not detected. HELP.html is missing"
-	exit 2
-    fi
+#    if [ ! -s HELP.html ] ; then
+#	echo "MAP_Global failure was not detected. HELP.html is missing"
+#	exit 2
+#    fi
 
     local_WebDir=dir-GlobalRMT-GLOBAL_${runnumber}
     rm -rf ${local_WebDir}
