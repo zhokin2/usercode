@@ -7,7 +7,8 @@ mkdir `pwd`/TMP_`date '+%Y-%m-%d_%H_%M_%S'`
 ### Definitions
 setenv SRC ${4}
 setenv SCRIPTDIR ${4}
-setenv SCRAM_ARCH slc6_amd64_gcc491
+##setenv SCRAM_ARCH slc6_amd64_gcc491
+setenv SCRAM_ARCH slc6_amd64_gcc530
 
 ### Environment
 cd ${SRC}
