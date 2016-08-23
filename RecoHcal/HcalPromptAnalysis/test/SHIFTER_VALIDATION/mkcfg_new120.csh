@@ -2,9 +2,9 @@
 
 set j=1
 rm -rf PYTHON_${1}
-rm -rf TXT_${1}
+#rm -rf TXT_${1}
 mkdir PYTHON_${1}
-mkdir TXT_${1}
+#mkdir TXT_${1}
 
 ./file_lists.csh ${1}
 
