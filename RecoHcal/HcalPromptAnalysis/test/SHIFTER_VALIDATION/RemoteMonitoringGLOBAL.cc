@@ -1388,7 +1388,7 @@ int main(int argc, char *argv[])
       //      avedelta_HB = sumdelta/hV[0]->GetNbinsX();
       avedelta_HB = sumdelta/nnndelta;
       std::cout << "******************>>>>>>      ErrA_HB:  avedelta_HB = " << avedelta_HB <<std::endl;
-      if (avedelta_HB>0.24 || (avedelta_HB<0.14 && avedelta_HB>0.)) {
+      if (avedelta_HB>1.6 || (avedelta_HB<0.1 && avedelta_HB>0.)) {
 	flagErrAB_HB[0]=1;
       }//if
     }//hV.size
@@ -1659,7 +1659,7 @@ int main(int argc, char *argv[])
       //      avedelta_HE = sumdelta/hV[0]->GetNbinsX();
       avedelta_HE = sumdelta/nnndelta;
       std::cout << "******************>>>>>>      ErrA_HE:  avedelta_HE = " << avedelta_HE <<std::endl;
-      if (avedelta_HE>1.1 || (avedelta_HE<0.5 && avedelta_HE>0.)) {
+      if (avedelta_HE>1.8 || (avedelta_HE<0.2 && avedelta_HE>0.)) {
 	flagErrAB_HE[0]=1;
       }//if
     }//hV.size
@@ -1932,7 +1932,7 @@ int main(int argc, char *argv[])
       //      avedelta_HO = sumdelta/hV[0]->GetNbinsX();
       avedelta_HO = sumdelta/nnndelta;
       std::cout << "******************>>>>>>      ErrA_HO:  avedelta_HO = " << avedelta_HO <<std::endl;
-      if (avedelta_HO>0.8 || (avedelta_HO<0.2 && avedelta_HO>0.)) {
+      if (avedelta_HO>1.5 || (avedelta_HO<0.1 && avedelta_HO>0.)) {
 	flagErrAB_HO[0]=1;
       }//if
     }//hV.size
@@ -2202,7 +2202,7 @@ int main(int argc, char *argv[])
       //      avedelta_HF = sumdelta/hV[0]->GetNbinsX();
       avedelta_HF = sumdelta/nnndelta;
       //      std::cout << "******************>>>>>>      ErrA_HF:  avedelta_HF = " << avedelta_HF << " Npoints for comparison= " << nnndelta <<std::endl;
-      if (avedelta_HF>2.4 || (avedelta_HF<0.8 && avedelta_HF>0.)) {
+      if (avedelta_HF>4.4 || (avedelta_HF<0.8 && avedelta_HF>0.)) {
 	flagErrAB_HF[0]=1;
       }//if
     }//hV.size
@@ -4018,12 +4018,12 @@ int main(int argc, char *argv[])
      //HF:
 	     if (sub==4) {
 	       //		flagSpecHF+=1;
-	       htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.8-2.4 (p-p collisions) </h3>\n";
+	       htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.8-4.4 (p-p collisions) </h3>\n";
 	       htmlFile << " <img src=\"HistErrA_HF.png\" />\n";
 	       htmlFile << "<br>\n";
 	       if (flagErrAB_HF[0]==-1) htmlFile<<"<h3>test was not possible</h3>\n";
-	       else if (flagErrAB_HF[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HF (Mean of max difference " << avedelta_HF  << "  is within 0.8-2.4) </h3>\n";
-	       else if (flagErrAB_HF[0]==1) htmlFile<<"<<h3> ErrorA_HF is available once Mean of max difference " << avedelta_HF  << " is out 0.8-2.4 (p-p collisions)</font></h3>\n";
+	       else if (flagErrAB_HF[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HF (Mean of max difference " << avedelta_HF  << "  is within 0.8-4.4) </h3>\n";
+	       else if (flagErrAB_HF[0]==1) htmlFile<<"<<h3> ErrorA_HF is available once Mean of max difference " << avedelta_HF  << " is out 0.8-4.4 (p-p collisions)</font></h3>\n";
 	       else htmlFile<<"<h3>auto-interpretation is not available</h3>\n";
 	       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 
