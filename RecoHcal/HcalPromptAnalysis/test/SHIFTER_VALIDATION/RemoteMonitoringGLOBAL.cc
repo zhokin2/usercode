@@ -1660,7 +1660,7 @@ int main(int argc, char *argv[])
       //      avedelta_HE = sumdelta/hV[0]->GetNbinsX();
       avedelta_HE = sumdelta/nnndelta;
       std::cout << "******************>>>>>>      ErrA_HE:  avedelta_HE = " << avedelta_HE <<std::endl;
-      if (avedelta_HE>1.8 || (avedelta_HE<0.2 && avedelta_HE>0.)) {
+      if (avedelta_HE>2.2 || (avedelta_HE<0.2 && avedelta_HE>0.)) {
 	flagErrAB_HE[0]=1;
       }//if
     }//hV.size
@@ -3934,12 +3934,12 @@ int main(int argc, char *argv[])
 	     
      //HE:
 	     if (sub==2) {
-	       htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.2-1.8 (p-p collisions) </h3>\n";
+	       htmlFile << "<h3>Mean of max difference between dependencies to be within: 0.2-2.2 (p-p collisions) </h3>\n";
 	       htmlFile << " <img src=\"HistErrA_HE.png\" />\n";
 	       htmlFile << "<br>\n";
 	       if (flagErrAB_HE[0]==-1) htmlFile<<"<h3>test was not possible</h3>\n";
-	       else if (flagErrAB_HE[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HE (Mean of max difference " << avedelta_HE  << "  is within 0.2-1.8) </h3>\n";
-	       else if (flagErrAB_HE[0]==1) htmlFile<<"<<h3> ErrorA_HE is available once Mean of max difference " << avedelta_HE  << " is out 0.2-1.8 (p-p collisions)</font></h3>\n";
+	       else if (flagErrAB_HE[0]==0) htmlFile<<"<h3> Fine:NoErrorA_HE (Mean of max difference " << avedelta_HE  << "  is within 0.2-2.2) </h3>\n";
+	       else if (flagErrAB_HE[0]==1) htmlFile<<"<<h3> ErrorA_HE is available once Mean of max difference " << avedelta_HE  << " is out 0.2-2.2 (p-p collisions)</font></h3>\n";
 	       else htmlFile<<"<h3>auto-interpretation is not available</h3>\n";
 	       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 
