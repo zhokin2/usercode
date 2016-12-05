@@ -1,0 +1,35 @@
+ssh lxplus
+cd ~/ztest
+setenv SCRAM_ARCH slc6_amd64_gcc530 
+cmsenv
+voms-proxy-init -voms cms -rfc 
+
+emacs runlist_test
+
+286031 286033 286034 286051 286054 286069 286070 286178 286200 286201
+286288 286301 286302 286309 286314 286327 286328 286329 286365 286420 
+286422 286424 286425 286441 286442 286450 286471 286496 286513 286514 
+286515 286516 286517 286518 286519 286520
+
+
+cd ../../src/
+scram b
+cd -
+
+./run_batch120.csh runlist_test
+bjobs
+
+./checkoutput120.csh PYTHON_runlist_test longruns
+./glu_runs_fromfile.csh longruns runlist_test
+
+
+cmsStage -f Global_285244.root /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Global_285244.root
+
+eos ls -l /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/
+
+./index_toAddOnlyNewRuns_EOS.sh runlist_test
+cmsStage -f OLDindex.html /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/OLDindex.html
+cmsStage -f index_draft.html /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/index.html
+
+./CMT_EOS.sh runlist_test
+./GlobalRMT_EOS.sh runlist_test
