@@ -91,6 +91,13 @@ using namespace edm;
 //#include "Geometry/CaloGeometry/interface/CaloSubdetectorGeometry.h"
 //#include "Geometry/CaloGeometry/interface/CaloCellGeometry.h"
 
+// for upgrade:
+//#include "TBDataFormats/HcalTBObjects/interface/HcalTBTriggerData.h"
+//#include "TBDataFormats/HcalTBObjects/interface/HcalTBBeamCounters.h"
+//#include "TBDataFormats/HcalTBObjects/interface/HcalTBEventPosition.h"
+//#include "TBDataFormats/HcalTBObjects/interface/HcalTBParticleId.h"
+//#include "TBDataFormats/HcalTBObjects/interface/HcalTBTiming.h"
+// end upgrade
 
 // ROOT
 #include "TFile.h"
@@ -128,6 +135,19 @@ edm::EDGetTokenT<HcalCalibDigiCollection> tok_calib_;
 edm::EDGetTokenT<HBHEDigiCollection> tok_hbhe_;
 edm::EDGetTokenT<HODigiCollection> tok_ho_;
 edm::EDGetTokenT<HFDigiCollection> tok_hf_;  
+
+  // for upgrade:
+  bool skipDataTPs;
+  edm::InputTag emulTPsTag_;
+  edm::InputTag dataTPsTag_;
+  
+  edm::EDGetTokenT<HcalTrigPrimDigiCollection> tok_emulTPs_;
+  edm::EDGetTokenT<HcalTrigPrimDigiCollection> tok_dataTPs_;
+  
+//    edm::EDGetTokenT<QIE11DigiCollection> tok_QIE11DigiCollection_;
+//    edm::EDGetTokenT<HcalTBTriggerData> tok_HcalTBTriggerData_;
+//    edm::EDGetTokenT<HcalTBTiming> tok_HcalTBTiming_;
+  // end upgrade
 
   ////////////////////////////////////
   // simple test
@@ -1671,6 +1691,14 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH2F*    h_2DAtaildepth2_HB;
   TH2F*    h_2D0Ataildepth2_HB;
 
+  // for upgrade:
+//      TH1F* h_upgrade_s1Count;
+//      TH1F* h_upgrade_s2Count;
+//      TH1F* h_upgrade_s3Count;
+//      TH1F* h_upgrade_s4Count;
+//      TH1F* h_upgrade_triggerTime;
+//      TH1F* h_upgrade_ttcL1Atime; 
+    // end upgrade
 
 
   /////////////////////////////////////////////
@@ -1805,14 +1833,42 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   maxNeventsInNtuple_ = iConfig.getParameter<int>("maxNeventsInNtuple");
   //
   //
-
+// register for data access:
 //  tok_calib_ = consumes<HcalCalibDigiCollection>(edm::InputTag("hcalDigis"));
   tok_calib_ = consumes<HcalCalibDigiCollection>(iConfig.getParameter<edm::InputTag>("hcalCalibDigiCollectionTag"));  //
   
   tok_hbhe_ = consumes<HBHEDigiCollection>(iConfig.getParameter<edm::InputTag>("hbheDigiCollectionTag"));
   tok_ho_ = consumes<HODigiCollection>(iConfig.getParameter<edm::InputTag>("hoDigiCollectionTag"));
   tok_hf_ = consumes<HFDigiCollection>(iConfig.getParameter<edm::InputTag>("hfDigiCollectionTag"));  //
-  //
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
+
+//  for upgrade:
+//  //   from https://github.com/cms-sw/cmssw/blob/CMSSW_8_0_20_patchX/Validation/HcalDigis/src/HcalDigisValidation.cc
+
+////    tok_hbhe_ = consumes< HBHEDigiCollection >(inputTag_);
+////    tok_ho_ = consumes< HODigiCollection >(inputTag_);
+////    tok_hf_ = consumes< HFDigiCollection >(inputTag_);    
+////    tok_qie11_hbhe_ = consumes< QIE11DigiCollection >(edm::InputTag(inputLabel_, "HBHEQIE11DigiCollection"));
+////    tok_qie10_hf_ = consumes< QIE10DigiCollection >(edm::InputTag(inputLabel_, "HFQIE10DigiCollection"));
+    emulTPsTag_ = iConfig.getParameter<edm::InputTag > ("emulTPs");
+    dataTPsTag_ = iConfig.getParameter<edm::InputTag > ("dataTPs");
+tok_emulTPs_ = consumes<HcalTrigPrimDigiCollection>(emulTPsTag_);
+if(dataTPsTag_==edm::InputTag("")) skipDataTPs = true;
+    else {
+        skipDataTPs = false;
+        tok_dataTPs_ = consumes<HcalTrigPrimDigiCollection>(dataTPsTag_);
+    }
+
+//  // from /afs/cern.ch/user/z/zhokin/z904/hcal02/adcHists/plugins/adcHists.cc
+////  tok_HBHEDigiCollection_ = consumes<HBHEDigiCollection>(edm::InputTag("hcalDigis"));
+////    tok_QIE11DigiCollection_ = consumes<QIE11DigiCollection>(edm::InputTag("hcalDigis"));
+//    tok_HcalTBTriggerData_ = consumes<HcalTBTriggerData>(edm::InputTag("tbunpack"));
+//    tok_HcalTBTiming_ = consumes<HcalTBTiming>(edm::InputTag("tbunpack"));
+//    //  gain_ = iConfig.getUntrackedParameter<double>("gain");
+//  end upgrade
+
+
+
 
   recordHistoes_=iConfig.getUntrackedParameter<bool>("recordHistoes");
   studyRunDependenceHist_=iConfig.getUntrackedParameter<bool>("studyRunDependenceHist"); 
@@ -3721,6 +3777,34 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     cout<<" No HBHEDigiCollection collection is found "<<endl;
   } else {
     
+  // for upgrade:
+//    edm::Handle<HcalTBTriggerData> trigData;
+//    iEvent.getByToken(tok_HcalTBTriggerData_, trigData);
+
+//    edm::Handle<HcalTBTiming> timing;
+//    iEvent.getByToken(tok_HcalTBTiming_,timing);
+
+//    //Reject any event which was not a beam trigger and only a beam trigger inside the spill window
+//    //if(trigData->wasInSpillPedestalTrigger() || trigData->wasOutSpillPedestalTrigger() || trigData->wasSpillIgnorantPedestalTrigger()) return;
+//    //if(trigData->wasLEDTrigger())   return;
+//    //if(trigData->wasLaserTrigger()) return;
+//    //if(trigData->wasFakeTrigger())  return;
+//    //if(!trigData->wasInSpill())     return;
+
+//    double s1Count = timing->S1Count();
+//    double s2Count = timing->S2Count();
+//    double s3Count = timing->S3Count();
+//    double s4Count = timing->S4Count();
+//    double triggerTime = timing->triggerTime();
+//    double ttcL1Atime = timing->ttcL1Atime();
+
+//h_upgrade_s1Count->Fill(s1Count,1.);
+//h_upgrade_s2Count->Fill(s2Count,1.);
+//h_upgrade_s3Count->Fill(s3Count,1.);
+//h_upgrade_s4Count->Fill(s4Count,1.);
+//h_upgrade_triggerTime->Fill(triggerTime,1.);
+//h_upgrade_ttcL1Atime->Fill(ttcL1Atime,1.);
+    // end upgrade
     
     unsigned int N =  hbhe->size();
     if (verbosity == -22) std::cout << " HBHEDigiCollection size : " << N << std::endl;
@@ -3730,6 +3814,11 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       {
 	eta=digi->id().ieta(); phi=digi->id().iphi(); depth=digi->id().depth(); nTS=digi->size();      
 	
+  // for upgrade:
+//	if(trigData->wasBeamTrigger())
+//	{    
+//	}
+    // end upgrade
 	/////////////////////////////////////// counters of event*digis
 	nnnnnn++;  
 	//////////////////////////////////  counters of event for subdet & depth
@@ -3855,7 +3944,11 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     }//for HODigiCollection
   }//ho.isValid(
 
+
+  // upgrade1
+// end upgrade1
   ///////////////////////////////////////////////  
+
   ///////////////////////////////////////////////  
   //////////// k0(sub): =0 HB; =1 HE; =2 HO; =3 HF;
   //////////// k1(depth-1): = 0 - 3 or depth: = 1 - 4;
@@ -6026,6 +6119,14 @@ void VeRawAnalyzer::beginJob()
     h_2DAtaildepth2_HB  = new TH2F("h_2DAtaildepth2_HB"," ",    82, -41., 41., 72, 0., 72.);
     h_2D0Ataildepth2_HB  = new TH2F("h_2D0Ataildepth2_HB"," ",    82, -41., 41., 72, 0., 72.);
 
+  // for upgrade:
+//    h_upgrade_s1Count   = new TH1F("h_upgrade_s1Count"," ",      100,  0.,100.);
+//    h_upgrade_s2Count   = new TH1F("h_upgrade_s2Count"," ",      100,  0.,100.);
+//    h_upgrade_s3Count   = new TH1F("h_upgrade_s3Count"," ",      100,  0.,100.);
+//    h_upgrade_s4Count   = new TH1F("h_upgrade_s4Count"," ",      100,  0.,100.);
+//    h_upgrade_triggerTime   = new TH1F("h_upgrade_triggerTime"," ",      1000,  0.,20000.);
+//    h_upgrade_ttcL1Atime   = new TH1F("h_upgrade_ttcL1Atime"," ",      1000,  0.,20000.);
+    // end upgrade
 
 
 
@@ -11088,6 +11189,16 @@ void VeRawAnalyzer::endJob(){
     h_2D0Ataildepth1_HB->Write();
     h_2DAtaildepth2_HB->Write();
     h_2D0Ataildepth2_HB->Write();
+
+
+  // for upgrade:
+//    h_upgrade_s1Count->Write();
+//    h_upgrade_s2Count->Write();
+//    h_upgrade_s3Count->Write();
+//    h_upgrade_s4Count->Write();
+//    h_upgrade_triggerTime->Write();
+//    h_upgrade_ttcL1Atime->Write(); 
+    // end upgrade
 
     ///////////////////////
   }//if
