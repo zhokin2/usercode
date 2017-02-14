@@ -350,12 +350,13 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #usecontinuousnumbering = cms.untracked.bool(True),
                                   #
                                   #
-                                  #
                                   hcalCalibDigiCollectionTag = cms.InputTag('hcalDigis'),
                                   hbheDigiCollectionTag = cms.InputTag('hcalDigis'),
                                   hoDigiCollectionTag = cms.InputTag('hcalDigis'),
                                   hfDigiCollectionTag = cms.InputTag('hcalDigis'),
-                                  #
+                                  #for upgrade:
+                                  hbheQIE11DigiCollectionTag = cms.InputTag('hcalDigis'),
+                                  hbheQIE10DigiCollectionTag = cms.InputTag('hcalDigis'),
                                   #
                                   #
                                   splashesUpperLimit = cms.int32(10000),
