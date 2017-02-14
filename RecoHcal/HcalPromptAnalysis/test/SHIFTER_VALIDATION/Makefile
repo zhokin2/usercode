@@ -1,10 +1,11 @@
 ROOTINC=-I `root-config --incdir`
 ROOTLIBS=`root-config --libs`
-CFLAGS=-std=c++11
-#CFLAGS=
+#CFLAGS=-std=c++11
+CFLAGS=-std=c++1y
 
-echo "ROOTINC=${ROOTINC}"
-echo "ROOTLIBS=${ROOTLIBS}"
+
+#echo "ROOTINC=${ROOTINC}"
+#echo "ROOTLIBS=${ROOTLIBS}"
 
 DEPS= LogEleMapdb.h
 
