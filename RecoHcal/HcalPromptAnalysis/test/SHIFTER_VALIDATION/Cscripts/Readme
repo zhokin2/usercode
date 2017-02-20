@@ -1,35 +1,12 @@
-h_mapDepth3Error_HF->Write();
-h_mapDepth4Error_HF->Write();
-
----------------------------------
-amplitudechannel[sub-1][mdepth-1][ieta+41][iphi]
----------------------------------
-
-
-  sum0Estimator[sub-1][mdepth-1][ieta+41][iphi] += 1.;
-  //      for Error B-type
-  sumEstimator6[sub-1][mdepth-1][ieta+41][iphi] += errorBtype;
-  //      sumEstimator0[sub-1][mdepth-1][ieta+41][iphi] += pedestalw0;//Sig_Pedestals	
-  sumEstimator0[sub-1][mdepth-1][ieta+41][iphi] += pedestal0;//    Pedestals	
-
-
-
-
-badchannels[sub-1][mdepth-1][ieta+41][iphi]
-sumEstimator0 to 6
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ to produce .ps-file 
+ -- input file name is:  ../PYTHON_runlist_test/Global_283884_1.root
+ -- output ps-file is zadcamplitude.ps
+on lxplus:
+./compile.sh zadcamplitude.cc
+./zadcamplitude.cc.exe
+ -- to see it:
+evince,  gv,       zadcamplitude.ps
+ps2pdf zadcamplitude.ps
+acroread dedx.pdf
+qiv dedx.png
 
