@@ -383,6 +383,35 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                    #
                                   #
                                   #
+                                  #for upgrade: ---------------------------------------------------------
+                                  hbheQIE11DigiCollectionTag = cms.InputTag('hcalDigis'),
+                                  hbheQIE10DigiCollectionTag = cms.InputTag('hcalDigis'),
+                                  # flag to use either only old QIE8 digiCollections or only new QIE10,11 digiCollections
+                                  #=0-all digiCollections(default for normal running), =1-only old QIE8 digiCollections, 
+                                  #=2-only new QIE1011 digiCollections, =3-only new QIE1011 digiCollections w/o new high depthes
+                                  #=4-2016fall, =5-2016fall w/o new high depthes, =6-2017bebin, =7-2017bebin w/o new high depthes in HEonly
+                                  #=8--2017bebin w/o new high depthes, =9-all digiCollections  w/o new high depthes
+                                  # flag   HBHE8    HBHE11   HF8   HF10  comments:
+                                  #  0       +        +       +     +     all
+                                  #  1       +        -       +     -     old
+                                  #  2       -        +       -     +     new
+                                  #  3       -        +       -     +     new w/o high depthes
+                                  #  4       +        -       +     +     2016fall
+                                  #  5       +        -       +     +     2016fall w/o high depthes
+                                  #  6       +        +       -     +     2017begin
+                                  #  7       +        +       -     +     2017begin w/o high depthes in HEonly
+                                  #  8       +        +       -     +     2017begin w/o high depthes
+                                  #  9       +        +       +     +     all  w/o high depthes
+                                  # 
+                                  flagupgradeqie1011 = cms.int32(1),
+                                  #end upgrade: ---------------------------------------------------------
+                                  #
+                                  #
+                                  # for local LASER runs ONLY!!! to be = 1    (,else = 0)
+                                  flagLaserRaddam = cms.int32(1),
+                                  #
+                                  #
+                                  #
                                   HistOutFile = cms.untracked.string(histodir+'/LED_'+runnumber+'.root'),
 #                                  HistOutFile = cms.untracked.string('testLaser178165.root'),
 #                                  HistOutFile = cms.untracked.string('testLaser141849.root'),
