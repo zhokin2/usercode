@@ -1,3 +1,4 @@
+=======================================================================
  to produce .ps-file 
  -- input file name is:  ../PYTHON_runlist_test/Global_283884_1.root
  -- output ps-file is zadcamplitude.ps
@@ -9,4 +10,144 @@ evince,  gv,       zadcamplitude.ps
 ps2pdf zadcamplitude.ps
 acroread dedx.pdf
 qiv dedx.png
+===============================================   RADDAM plots in RMT:
+1) 2x2
+hfile1->Get("h_ADCAmplZoom1_HE") hfile1->Get("h_ADCAmpl_HE")
+hfile2->Get("h_ADCAmplZoom1_HE") hfile2->Get("h_ADCAmpl_HE")
 
+or
+
+2x3
+(TH1F*)hfile1->Get("h_AamplitudewithPedSubtr_RADDAM_HEzoom0"); (TH1F*)hfile2->Get("h_AamplitudewithPedSubtr_RADDAM_HEzoom0");
+hfile1->Get("h_AamplitudewithPedSubtr_RADDAM_HEzoom1");   hfile2->Get("h_AamplitudewithPedSubtr_RADDAM_HEzoom1");
+hfile1->Get("h_AamplitudewithPedSubtr_RADDAM_HE");        hfile2->Get("h_AamplitudewithPedSubtr_RADDAM_HE");
+
+
+2) 2x3     phi info for hfile1 &h file2 :
+      c1->cd(1);
+      TH1F *file2r1= (TH1F*)hfile2->Get("h_mapDepth3RADDAM16_HE");
+      file2r1->SetXTitle("Run2 channel A for eta16_HE \b");
+  
+      c1->cd(3);
+      TH1F *file2r3= (TH1F*)hfile2->Get("h_Eta16Depth3RADDAM_HED2");
+      gPad->SetLogy();
+      //      gPad->SetLogx();
+      file2r3->SetMarkerStyle(20);
+      file2r3->SetMarkerSize(0.8);
+      file2r3->GetYaxis()->SetLabelSize(0.04);
+      file2r3->SetXTitle("Run2 <channel A> for eta16_HE \b");
+      file2r3->SetMarkerColor(1);
+      file2r3->SetLineColor(1);
+      file2r3->Draw("");
+      TH1F *pfile23= (TH1F*)hfile2->Get("h_Eta16Depth3RADDAM_HED2P");
+      gPad->SetLogy();
+      //      gPad->SetLogx();
+      pfile23->SetMarkerStyle(20);
+      pfile23->SetMarkerSize(0.8);
+      pfile23->GetYaxis()->SetLabelSize(0.04);
+      pfile23->SetXTitle("Run2 <channel A> for eta16_HE \b");
+      pfile23->SetMarkerColor(2);
+      pfile23->SetLineColor(2);
+      pfile23->Draw("Same");
+      TH1F *afile23= (TH1F*)hfile2->Get("h_Eta16Depth3RADDAM_HED2ALL");
+      gPad->SetLogy();
+      //      gPad->SetLogx();
+      afile23->SetMarkerStyle(20);
+      afile23->SetMarkerSize(0.8);
+      afile23->GetYaxis()->SetLabelSize(0.04);
+      afile23->SetXTitle("Run2 <channel A> for eta16_HE \b");
+      afile23->SetMarkerColor(4);
+      afile23->SetLineColor(4);
+      afile23->Draw("Same");
+
+      c1->cd(5);
+      TH1F *file2r4= (TH1F*)hfile2->Get("h_NphiForEta16Depth3RADDAM_HED2");
+      gPad->SetLogy();
+      //      gPad->SetLogx();
+      file2r4->SetMarkerStyle(20);
+      file2r4->SetMarkerSize(0.8);
+      file2r4->GetYaxis()->SetLabelSize(0.04);
+      file2r4->SetXTitle("NphiSectors for eta16_HE");
+      file2r4->SetMarkerColor(1);
+      file2r4->SetLineColor(1);
+      file2r4->Draw("");
+      TH1F *pfile24= (TH1F*)hfile2->Get("h_NphiForEta16Depth3RADDAM_HED2P");
+      gPad->SetLogy();
+      //      gPad->SetLogx();
+      pfile24->SetMarkerStyle(20);
+      pfile24->SetMarkerSize(0.8);
+      pfile24->GetYaxis()->SetLabelSize(0.04);
+      pfile24->SetXTitle("Run2 NphiSectors for eta16_HE");
+      pfile24->SetMarkerColor(2);
+      pfile24->SetLineColor(2);
+      pfile24->Draw("Same");
+      TH1F *afile24= (TH1F*)hfile2->Get("h_NphiForEta16Depth3RADDAM_HED2ALL");
+      gPad->SetLogy();
+      //      gPad->SetLogx();
+      afile24->SetMarkerStyle(20);
+      afile24->SetMarkerSize(0.8);
+      afile24->GetYaxis()->SetLabelSize(0.04);
+      afile24->SetXTitle("Run2 NphiSectors for eta16_HE");
+      afile24->SetMarkerColor(4);
+      afile24->SetLineColor(4);
+      afile24->Draw("Same");
+
+3) etavsphi for different Depthes:
+
+      c1->cd(1);
+      TH2F *twod1= (TH2F*)hfile1->Get("h_mapDepth1RADDAM_HE");
+      TH2F *twod0= (TH2F*)hfile1->Get("h_mapDepth1RADDAM0_HE");
+      twod1->Sumw2();
+      twod0->Sumw2();
+      //    if(twod0->IsA()->InheritsFrom("TH2F")){
+	TH2F* Ceff = (TH2F*)twod1->Clone("Ceff");
+	Ceff->Divide(twod1,twod0, 1, 1, "B");
+	Ceff->Sumw2();
+
+4)
+h_A_Depth1RADDAM_HE
+h_A_Depth2RADDAM_HE
+h_A_Depth3RADDAM_HE
+
+
+=====: 
+  TH2F*   h_mapDepth1RADDAM_HE;
+  TH2F*   h_mapDepth2RADDAM_HE;
+  TH2F*   h_mapDepth3RADDAM_HE;
+  TH1F*   h_mapDepth3RADDAM16_HE;
+  TH2F*   h_mapDepth1RADDAM0_HE;
+  TH2F*   h_mapDepth2RADDAM0_HE;
+  TH2F*   h_mapDepth3RADDAM0_HE;
+  TH1F*   h_AamplitudewithPedSubtr_RADDAM_HE;
+  TH1F*   h_AamplitudewithPedSubtr_RADDAM_HEzoom0;
+  TH1F*   h_AamplitudewithPedSubtr_RADDAM_HEzoom1;
+  TH1F*   h_A_Depth1RADDAM_HE;
+  TH1F*   h_A_Depth2RADDAM_HE;
+  TH1F*   h_A_Depth3RADDAM_HE;
+  TH1F*   h_sumphiEta16Depth3RADDAM_HED2;
+  TH1F*   h_Eta16Depth3RADDAM_HED2;
+  TH1F*   h_NphiForEta16Depth3RADDAM_HED2;
+  TH1F*   h_sumphiEta16Depth3RADDAM_HED2P;
+  TH1F*   h_Eta16Depth3RADDAM_HED2P;
+  TH1F*   h_NphiForEta16Depth3RADDAM_HED2P;
+  TH1F*   h_sumphiEta16Depth3RADDAM_HED2ALL;
+  TH1F*   h_Eta16Depth3RADDAM_HED2ALL;
+  TH1F*   h_NphiForEta16Depth3RADDAM_HED2ALL;
+
+  TH1F*   h_sigLayer1RADDAM_HE;
+  TH1F*   h_sigLayer2RADDAM_HE;
+  TH1F*   h_sigLayer1RADDAM0_HE;
+  TH1F*   h_sigLayer2RADDAM0_HE;
+  TH1F*   h_sigLayer1RADDAM5_HE;
+  TH1F*   h_sigLayer2RADDAM5_HE;
+  TH1F*   h_sigLayer1RADDAM6_HE;
+  TH1F*   h_sigLayer2RADDAM6_HE;
+  TH1F*   h_sigLayer1RADDAM5_HED2;
+  TH1F*   h_sigLayer1RADDAM6_HED2;
+  TH1F*   h_sigLayer2RADDAM5_HED2;
+  TH1F*   h_sigLayer2RADDAM6_HED2;
+
+
+use script to check/test:
+
+zraddam0.cc
