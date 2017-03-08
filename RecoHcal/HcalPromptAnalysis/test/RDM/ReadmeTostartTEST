@@ -1,0 +1,9 @@
+// to run local runs use:
+
+//   flagupgradeqie1011 = cms.int32(1)
+cmsRun remoteMonitoring_TEST_cfg.py 264649 file:/afs/cern.ch/work/z/zhokin/hcal/cmt7/CMSSW_8_1_0_pre10/src/RecoHcal/HcalPromptAnalysis/test/RDM /afs/cern.ch/work/z/zhokin/hcal/cmt7/CMSSW_8_1_0_pre10/src/RecoHcal/HcalPromptAnalysis/test/RDM
+
+//   flagupgradeqie1011 = cms.int32(9)
+cmsRun remoteMonitoring_TEST_cfg.py 287398 file:/afs/cern.ch/work/z/zhokin/hcal/cmt7/CMSSW_8_1_0_pre10/src/RecoHcal/HcalPromptAnalysis/test/RDM /afs/cern.ch/work/z/zhokin/hcal/cmt7/CMSSW_8_1_0_pre10/src/RecoHcal/HcalPromptAnalysis/test/RDM
+
+
