@@ -20,7 +20,12 @@ echo ${i}
 ##./das_client.py --query="file dataset=/ZeroBias/Run2015E-v1/RAW run=${i}" --limit=0 | sed "s/\/store/\'\/store/g" | sed "s/root/root\',/g"> TXT_${1}/run_${i}
 ##
 ##
-./das_client.py --query="file dataset=/ZeroBias/Run2016E-v2/RAW run=${i}" --limit=0 | sed "s/\/store/\'\/store/g" | sed "s/root/root\',/g"> TXT_${1}/run_${i}
+./das_client.py --query="file dataset=/ZeroBias/Run2016H-v1/RAW run=${i}" --limit=0 | sed "s/\/store/\'\/store/g" | sed "s/root/root\',/g"> TXT_${1}/run_${i}
+#./das_client.py --query="file dataset=/ZeroBias/Run2016G-v1/RAW run=${i}" --limit=0 | sed "s/\/store/\'\/store/g" | sed "s/root/root\',/g"> TXT_${1}/run_${i}
+##
+#./das_client.py --query="file dataset=/ZeroBias/PARun2016B-v1/RAW run=${i}" --limit=0 | sed "s/\/store/\'\/store/g" | sed "s/root/root\',/g"> TXT_${1}/run_${i}
+#./das_client.py --query="file dataset=/ZeroBias/PARun2016C-v1/RAW run=${i}" --limit=0 | sed "s/\/store/\'\/store/g" | sed "s/root/root\',/g"> TXT_${1}/run_${i}
+#./das_client.py --query="file dataset=/ZeroBias/PARun2016D-v1/RAW run=${i}" --limit=0 | sed "s/\/store/\'\/store/g" | sed "s/root/root\',/g"> TXT_${1}/run_${i}
 ##
 ##
 #./das_client.py --query="file dataset=/HcalNZS/Run2015D-v1/RAW run=${i}" --limit=0 | sed "s/\/store/\'\/store/g" | sed "s/root/root\',/g"> TXT_${1}/run_${i}
