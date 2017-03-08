@@ -136,6 +136,7 @@ echo "Get list of files in ${HistoDir}"
 histoFiles=`${eos} ls $HistoDir | grep root | awk -F '_' '{print $2}' | awk -F '.' '{print $1}'`
 echo -e '\n\nRun numbers on EOS:'
 runListEOSall=`echo $histoFiles | tee _runlistEOSall_`
+echo "Got `wc -w <<< "${runListEOSall}"` runs from HistDir ${HistoDir}"
 
 echo -e '\n\nRun numbers:'
 runListEOS=`echo $runList | tee _runlist_`
@@ -164,12 +165,15 @@ cp index.html OLDindex.html
 cat index.html | head -n -1 > index_draft.html
 
 #extract run numbers for correct continuation
-kkk=0
+k=0
 for i in ${runListEOSall} ; do
-let "kkk = kkk + 1"
+let "k = k + 1"
 done
 
-k=kkk-1
+########################################## type by hands number of new runs k=k-number:
+let "k = k - 8"
+echo ' ================>>>    k in old list = '$k
+
 for i in ${runListEOS} ; do
  
 #runnumber=$(echo $i | sed -e 's/[^0-9]*//g')
@@ -178,6 +182,7 @@ runnumber=${i}
 #if [[ "$runnumber" > 243400 ]] ; then
 let "k = k + 1"
 echo
+echo ' ================>>> new k in loop = '$k
 echo
 echo
 echo 'RUN number = '$runnumber
@@ -287,13 +292,13 @@ if [ ${debug} -gt 0 ] ; then
     echo "debug=${debug}. No upload to eos"
     status=-1
 else
-#    echo "Commented by me:  cmsStage -f index_draft.html $WebDir/CMT/index.html No upload to eos"
-   cmsStage -f OLDindex.html $WebDir/CMT/OLDindex.html
-   cmsStage -f index_draft.html $WebDir/CMT/index.html
+###    echo "Commented by me:  cmsStage -f index_draft.html $WebDir/CMT/index.html No upload to eos"
+#   cmsStage -f OLDindex.html $WebDir/CMT/OLDindex.html
+#   cmsStage -f index_draft.html $WebDir/CMT/index.html
 
 
     status="$?"
-#rm index_draft.html
+# rm index_draft.html
 fi
 
 # delete temp files
