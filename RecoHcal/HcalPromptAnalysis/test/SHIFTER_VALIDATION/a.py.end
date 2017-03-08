@@ -382,6 +382,9 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   flagupgradeqie1011 = cms.int32(9),
                                   #end upgrade: ---------------------------------------------------------
                                   #
+                                  # for local LASER runs ONLY!!! to be = 1    (,else = 0)
+                                  flagLaserRaddam = cms.int32(0),
+                                  #                                  #
                                   #
                                   splashesUpperLimit = cms.int32(10000),
                                   #
