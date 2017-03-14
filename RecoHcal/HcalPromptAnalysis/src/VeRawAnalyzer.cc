@@ -2480,7 +2480,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     //    iSetup.get<HcalRecNumberingRecord>().get(topo_);
     topo = &*topo_;
     //AZ commented for upgrade check only   
-    if( flagupgradeqie1011_   == 1   )    fillMAP();
+    if( flagupgradeqie1011_   == 1 || flagupgradeqie1011_ >= 6 )    fillMAP();
     MAPcreation=0;
   }
  //std::cout<<" Start analyze "<<nevent<<std::endl;
