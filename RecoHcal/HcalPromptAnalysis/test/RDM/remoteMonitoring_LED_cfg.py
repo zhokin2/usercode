@@ -402,7 +402,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #  8       +        +       -     +     2017begin w/o high depthes
                                   #  9       +        +       +     +     all  w/o high depthes
                                   # 
-                                  flagupgradeqie1011 = cms.int32(1),
+                                  flagupgradeqie1011 = cms.int32(6),
                                   #end upgrade: ---------------------------------------------------------
                                   #
                                   #
