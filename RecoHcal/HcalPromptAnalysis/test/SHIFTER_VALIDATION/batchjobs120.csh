@@ -7,7 +7,8 @@ mkdir `pwd`/TMP_`date '+%Y-%m-%d_%H_%M_%S'`
 ### Definitions
 setenv SRC ${4}
 setenv SCRIPTDIR ${4}
-setenv SCRAM_ARCH slc6_amd64_gcc491
+##setenv SCRAM_ARCH slc6_amd64_gcc491
+setenv SCRAM_ARCH slc6_amd64_gcc530
 
 ### Environment
 cd ${SRC}
@@ -29,7 +30,7 @@ ls -l * >> &log_${2}_${3}
 
 ### Copy output files to 
 ##cp Global.root /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_7_4_16_SHIFT/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION/Global_${2}_${3}.root
-cp Global_${2}_${3}.root /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_8_0_8/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION/Global_${2}_${3}.root
+cp Global_${2}_${3}.root /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_8_0_22/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION/Global_${2}_${3}.root
 ## rm all unnesecery
 #rm log_${2} 
 ##rm Global.root

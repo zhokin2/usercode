@@ -7,7 +7,8 @@ setenv MYWORKDIR `pwd`
 setenv SRC ${3}
 setenv SCRIPTDIR ${3}
 ##setenv SCRAM_ARCH slc6_amd64_gcc472
-setenv SCRAM_ARCH slc6_amd64_gcc491
+##setenv SCRAM_ARCH slc6_amd64_gcc491
+setenv SCRAM_ARCH slc6_amd64_gcc530
 
 ### Environment
 cd ${SRC}

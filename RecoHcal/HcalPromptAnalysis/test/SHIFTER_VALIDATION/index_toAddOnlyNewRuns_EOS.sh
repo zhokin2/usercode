@@ -169,7 +169,8 @@ for i in ${runListEOSall} ; do
 let "kkk = kkk + 1"
 done
 
-k=kkk-1
+##k=kkk-1
+k=kkk-2
 for i in ${runListEOS} ; do
  
 #runnumber=$(echo $i | sed -e 's/[^0-9]*//g')
@@ -287,13 +288,13 @@ if [ ${debug} -gt 0 ] ; then
     echo "debug=${debug}. No upload to eos"
     status=-1
 else
-#    echo "Commented by me:  cmsStage -f index_draft.html $WebDir/CMT/index.html No upload to eos"
+###    echo "Commented by me:  cmsStage -f index_draft.html $WebDir/CMT/index.html No upload to eos"
    cmsStage -f OLDindex.html $WebDir/CMT/OLDindex.html
    cmsStage -f index_draft.html $WebDir/CMT/index.html
 
 
     status="$?"
-#rm index_draft.html
+# rm index_draft.html
 fi
 
 # delete temp files
