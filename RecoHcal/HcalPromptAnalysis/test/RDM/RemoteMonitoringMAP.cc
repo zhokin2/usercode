@@ -22,7 +22,7 @@
 #include "TGraph.h"
 
 using namespace std;
-
+// h_ADC_HBdepth1
 // ok change
     int
        main(int argc, char *argv[])
@@ -462,8 +462,8 @@ cout<< MIN_M[2][1] << endl;
           if (test==6) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 9.);
 	  cONE->Modified(); 
           cONE->Update(); 
-	  float min_x[] = {MIN_M[test][sub],MIN_M[test][sub]};
-          float min_y[] = {0.,100000000.};
+	  double min_x[] = {MIN_M[test][sub],MIN_M[test][sub]};
+          double min_y[] = {0.,100000000.};
           TGraph* MIN = new TGraph(2, min_x, min_y);
           MIN->SetLineStyle(2);
           MIN->SetLineColor(2);
@@ -471,8 +471,8 @@ cout<< MIN_M[2][1] << endl;
           MIN->SetFillStyle(3005);
           MIN->SetFillColor(2);
           MIN->Draw("L"); 
-          float max_x[] = {MAX_M[test][sub],MAX_M[test][sub]};
-          float max_y[] = {0.,100000000.};
+          double max_x[] = {MAX_M[test][sub],MAX_M[test][sub]};
+          double max_y[] = {0.,100000000.};
           TGraph* MAX = new TGraph(2, max_x, max_y);
           MAX->SetLineStyle(2);
           MAX->SetLineColor(2);
@@ -813,8 +813,8 @@ cout<< MIN_M[2][1] << endl;
           if (test==16) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 9.);
 	  cONE->Modified(); 
           cONE->Update(); 
-	  float min_x[] = {MIN_C[test-10][sub],MIN_C[test-10][sub]};
-          float min_y[] = {0.,100000000.};
+	  double min_x[] = {MIN_C[test-10][sub],MIN_C[test-10][sub]};
+          double min_y[] = {0.,100000000.};
           TGraph* MIN = new TGraph(2, min_x, min_y);
           MIN->SetLineStyle(2);
           MIN->SetLineColor(2);
@@ -822,8 +822,8 @@ cout<< MIN_M[2][1] << endl;
           MIN->SetFillStyle(3005);
           MIN->SetFillColor(2);
           MIN->Draw("L"); 
-          float max_x[] = {MAX_C[test-10][sub],MAX_C[test-10][sub]};
-          float max_y[] = {0.,100000000.};
+          double max_x[] = {MAX_C[test-10][sub],MAX_C[test-10][sub]};
+          double max_y[] = {0.,100000000.};
           TGraph* MAX = new TGraph(2, max_x, max_y);
           MAX->SetLineStyle(2);
           MAX->SetLineColor(2);
@@ -1060,8 +1060,8 @@ cout<< MIN_M[2][1] << endl;
             if (sub==2) {cHE->Modified(); cHE->Update();}
             if (sub==3) {cONE->Modified();cONE->Update();}
             if (sub==4) {cHB->Modified(); cHB->Update();} 
-	    float min_x[] = {-1*porog[sub],-1*porog[sub]};
-            float min_y[] = {0.,100000000.};
+	    double min_x[] = {-1*porog[sub],-1*porog[sub]};
+            double min_y[] = {0.,100000000.};
             TGraph* MIN = new TGraph(2, min_x, min_y);
             MIN->SetLineStyle(2);
             MIN->SetLineColor(2);
@@ -1069,8 +1069,8 @@ cout<< MIN_M[2][1] << endl;
             MIN->SetFillStyle(3005);
             MIN->SetFillColor(2);
             MIN->Draw("L"); 
-            float max_x[] = {porog[sub],porog[sub]};
-            float max_y[] = {0.,100000000.};
+            double max_x[] = {porog[sub],porog[sub]};
+            double max_y[] = {0.,100000000.};
             TGraph* MAX = new TGraph(2, max_x, max_y);
             MAX->SetLineStyle(2);
             MAX->SetLineColor(2);
@@ -1219,8 +1219,8 @@ cout<< MIN_M[2][1] << endl;
 
 	      cPED->Modified(); 
               cPED->Update(); 
-	      float min_x[] = {Pedest[test-31][sub],Pedest[test-31][sub]};
-              float min_y[] = {0.,100000000.};
+	      double min_x[] = {Pedest[test-31][sub],Pedest[test-31][sub]};
+              double min_y[] = {0.,100000000.};
               TGraph* MIN = new TGraph(2, min_x, min_y);
               MIN->SetLineStyle(2);
               MIN->SetLineColor(2);
@@ -1356,7 +1356,7 @@ cout<< MIN_M[2][1] << endl;
     if (sub==4) {cONE->Print("HistBadTSshapesHF.png"); cONE->Clear();} 
   }// end sub      
     
-
+  /*
  //+++++++++++++++++++++++++++++++++++  
 //Test 42 ADC in TS distributions   
 //++++++++++++++++++++++++++++++++++++
@@ -1582,6 +1582,11 @@ std::cout<<" We are here to print ADC "<<std::endl;
           if (sub==4) {cHB->Print("Hist_SumADC_HF1.png"); cHB->Clear();} 
   }// end sub
 
+*/
+
+
+
+//======================================================================
    std::cout<<" We are here to print MAPs "<<std::endl;
 
 //======================================================================
