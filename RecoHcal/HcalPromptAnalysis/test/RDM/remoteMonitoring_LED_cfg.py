@@ -428,8 +428,6 @@ process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
     file = cms.untracked.string('')
 )
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-##process.load('Configuration.AlCa.GlobalTag_condDBv2')
-##process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_Prompt_v8', '')
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data_FULL', '')
 
 
