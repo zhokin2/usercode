@@ -403,11 +403,11 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #  8       +        +       -     +     2017begin w/o high depthes
                                   #  9       +        +       +     +     all  w/o high depthes
                                   # 
-                                  flagupgradeqie1011 = cms.int32(1),
+                                  flagupgradeqie1011 = cms.int32(8),
                                   #end upgrade: ---------------------------------------------------------
                                   #
                                   #
-                                  # for local LASER runs ONLY!!! to be = 1    (,else = 0)
+                                  # for local LASER runs ONLY!!! to be = 1 or =2(more raddam-plots) ,else = 0
                                   flagLaserRaddam = cms.int32(1),
                                   #
                                   #
@@ -432,7 +432,8 @@ process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
   )
 				
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_Prompt_v8', '')
+#from Configuration.AlCa.GlobalTag import GlobalTag
+process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data_FULL', '')
 
 process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
 process.hcalDigis.FilterDataQuality = cms.bool(False)
