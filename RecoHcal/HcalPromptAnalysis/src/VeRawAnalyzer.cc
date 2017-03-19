@@ -622,6 +622,9 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   TH2F* h_mapDepth2ADCAmpl12_HF;
   TH2F* h_mapDepth4ADCAmpl12_HO;
 
+  TH2F* h_mapDepth1linADCAmpl12_HE;
+  TH2F* h_mapDepth2linADCAmpl12_HE;
+  TH2F* h_mapDepth3linADCAmpl12_HE;
   /////////////////////////////////////////////
   TH1F* h_ADCAmpl_HF;
   TH1F* h_ADCAmplZoom1_HF;
@@ -2480,7 +2483,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     //    iSetup.get<HcalRecNumberingRecord>().get(topo_);
     topo = &*topo_;
     //AZ commented for upgrade check only   
-    if( flagupgradeqie1011_   == 1 || flagupgradeqie1011_ >= 6 )    fillMAP();
+    if( flagupgradeqie1011_   == 1   )    fillMAP();
     MAPcreation=0;
   }
  //std::cout<<" Start analyze "<<nevent<<std::endl;
@@ -4243,6 +4246,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   ////////////////////////////////////////////////////////////////////  TREATMENT OF OBTAINED DIGI-COLLECTION INFORMATION:
   /////////////////////////////////////////////////////////////  
   //////////////////////////////////////////////////////  
+    if(flagLaserRaddam_  >  1 ) {
     
     //  averamplitudewithPedSubtr = 0.;
     
@@ -4331,7 +4335,6 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     }//for  
     
     //////////////---------------------------------------------------------------------------------  3D treatment, zraddam1.cc script
-    if(flagLaserRaddam_ == 1 ) {
       
       if (verbosity == -9111) std::cout<< "=====================  111111                " << endl;
       //------------------------------------------------------        aver per eta 16(depth=3-> k1=2, k2=16(15) :
@@ -4399,8 +4402,11 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       }//for  
       
       //////////////////////////////////END of RADDAM treatment:  
-    }// END TREATMENT   
-    //////////////////////////////////////////////////////  
+    }// END TREATMENT : if(flagLaserRaddam_ == 1
+    //////////////////////////////////////////////////////////////////////////  
+    //////////////////////////////////////////////////////////////////////////////////////////////  
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
     //////////// k0(sub): =0 HB; =1 HE; =2 HO; =3 HF;
     //////////// k1(depth-1): = 0 - 6 or depth: = 1 - 7;
     
@@ -5408,12 +5414,14 @@ void VeRawAnalyzer::beginJob()
     //    }
     int min80 =-100.;
     int max80 =9000.;
+    // fill for each digi (=each event, each channel)
     h_mapDepth1RADDAM_HE = new TH2F("h_mapDepth1RADDAM_HE"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth2RADDAM_HE = new TH2F("h_mapDepth2RADDAM_HE"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth3RADDAM_HE = new TH2F("h_mapDepth3RADDAM_HE"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth1RADDAM0_HE = new TH2F("h_mapDepth1RADDAM0_HE"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth2RADDAM0_HE = new TH2F("h_mapDepth2RADDAM0_HE"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth3RADDAM0_HE = new TH2F("h_mapDepth3RADDAM0_HE"," ", 82, -41., 41., 72, 0., 72.);
+
     h_sigLayer1RADDAM_HE = new TH1F("h_sigLayer1RADDAM_HE"," ", 82, -41., 41.);
     h_sigLayer2RADDAM_HE = new TH1F("h_sigLayer2RADDAM_HE"," ", 82, -41., 41.);
     h_sigLayer1RADDAM0_HE = new TH1F("h_sigLayer1RADDAM0_HE"," ", 82, -41., 41.);
@@ -6468,6 +6476,10 @@ void VeRawAnalyzer::beginJob()
     h_mapDepth1ADCAmpl12_HF = new TH2F("h_mapDepth1ADCAmpl12_HF"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth2ADCAmpl12_HF = new TH2F("h_mapDepth2ADCAmpl12_HF"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth4ADCAmpl12_HO = new TH2F("h_mapDepth4ADCAmpl12_HO"," ", 82, -41., 41., 72, 0., 72.);
+
+    h_mapDepth1linADCAmpl12_HE = new TH2F("h_mapDepth1linADCAmpl12_HE"," ", 82, -41., 41., 72, 0., 72.);
+    h_mapDepth2linADCAmpl12_HE = new TH2F("h_mapDepth2linADCAmpl12_HE"," ", 82, -41., 41., 72, 0., 72.);
+    h_mapDepth3linADCAmpl12_HE = new TH2F("h_mapDepth3linADCAmpl12_HE"," ", 82, -41., 41., 72, 0., 72.);
     //--------------------------------------------------
     h_mapGetRMSOverNormalizedSignal_HB=new TH2F("h_mapGetRMSOverNormalizedSignal_HB"," ",82,-41.,41.,72,0.,72.);
     h_mapGetRMSOverNormalizedSignal0_HB=new TH2F("h_mapGetRMSOverNormalizedSignal0_HB"," ",82,-41.,41.,72,0.,72.);
@@ -7310,6 +7322,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 {
     CaloSamples tool;  // TS
     CaloSamples toolwithPedSubtr;  // TS
+    CaloSamples lintoolwithoutPedSubtr;  // TS
     HcalDetId cell(digiItr->id()); 
     int mdepth = cell.depth();
 //    int iphi0  = cell.iphi();// 1-72
@@ -7370,6 +7383,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
     double absamplitude = 0.;
     double amplitude345 = 0.;
     double ampl = 0.;
+    double linamplitudewithoutPedSubtr = 0.;
     double timew = 0.;
     double timeww = 0.;
     double max_signal = -100.;
@@ -7390,6 +7404,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
     for (int ii=0; ii<TSsize; ii++) {  
       //  for (int ii=0; ii<digiItr->size(); ii++) {  
       double ampldefaultwithPedSubtr = 0.;
+      double linampldefaultwithoutPedSubtr = 0.;
       double ampldefault = 0.;
       double ampldefault0 = 0.;
       double ampldefault1 = 0.;
@@ -7400,7 +7415,8 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
       if( useADCmassive_ ) {ampldefault = ampldefault0;}
       if( useADCfC_ ) {ampldefault = ampldefault1;}
       if( useADCcounts_ ) {ampldefault = ampldefault2;}
-      ampldefaultwithPedSubtr = ampldefault;
+      ampldefaultwithPedSubtr = ampldefault0;
+      linampldefaultwithoutPedSubtr = ampldefault2;
 
       int capid = ((*digiItr)[ii]).capid();
       //      double pedestal = calib.pedestal(capid);
@@ -7417,8 +7433,9 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
       ampldefaultwithPedSubtr -=  pedestal; // pedestal subtraction      
       if( usePedestalSubtraction_ ) ampldefault -=  pedestal; // pedestal subtraction
       //      ampldefault*= calib.respcorrgain(capid) ; // fC --> GeV      
-      toolwithPedSubtr[ii] = ampldefaultwithPedSubtr;
       tool[ii] = ampldefault;
+      toolwithPedSubtr[ii] = ampldefaultwithPedSubtr;
+      lintoolwithoutPedSubtr[ii] = linampldefaultwithoutPedSubtr;
 
       pedestalaver9 +=  pedestal;    
       pedestalwaver9 +=  pedestalw*pedestalw;    
@@ -7602,9 +7619,12 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
     //  if(ts_with_max_signal-2 > -1 && ts_with_max_signal-2 < 10) ampl += tool[ts_with_max_signal-2];
 
 
-
-
-
+    ///----------------------------------------------------------------------------------------------------  for raddam:
+    if(ts_with_max_signal   > -1 && ts_with_max_signal   < 10) linamplitudewithoutPedSubtr  = lintoolwithoutPedSubtr[ts_with_max_signal];
+    if(ts_with_max_signal+2 > -1 && ts_with_max_signal+2 < 10) linamplitudewithoutPedSubtr += lintoolwithoutPedSubtr[ts_with_max_signal+2];
+    if(ts_with_max_signal+1 > -1 && ts_with_max_signal+1 < 10) linamplitudewithoutPedSubtr += lintoolwithoutPedSubtr[ts_with_max_signal+1];
+    if(ts_with_max_signal-1 > -1 && ts_with_max_signal-1 < 10) linamplitudewithoutPedSubtr += lintoolwithoutPedSubtr[ts_with_max_signal-1];
+    
     double ratio = 0.;
     //    if(amplallTS != 0.) ratio = ampl/amplallTS;
     if(amplitude != 0. ) ratio = ampl/amplitude;
@@ -8082,10 +8102,13 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	if(mdepth==1) h_mapDepth1ADCAmpl_HE->Fill(double(ieta), double(iphi), amplitude);
 	if(mdepth==2) h_mapDepth2ADCAmpl_HE->Fill(double(ieta), double(iphi), amplitude);
 	if(mdepth==3) h_mapDepth3ADCAmpl_HE->Fill(double(ieta), double(iphi), amplitude);
-	if(mdepth==1) h_mapDepth1ADCAmpl12_HE->Fill(double(ieta), double(iphi), ampl);
-	if(mdepth==2) h_mapDepth2ADCAmpl12_HE->Fill(double(ieta), double(iphi), ampl);
-	if(mdepth==3) h_mapDepth3ADCAmpl12_HE->Fill(double(ieta), double(iphi), ampl);
+
+	if(mdepth==1) {h_mapDepth1ADCAmpl12_HE->Fill(double(ieta), double(iphi), ampl);  h_mapDepth1linADCAmpl12_HE->Fill(double(ieta), double(iphi), linamplitudewithoutPedSubtr);}
+	if(mdepth==2) {h_mapDepth2ADCAmpl12_HE->Fill(double(ieta), double(iphi), ampl);  h_mapDepth2linADCAmpl12_HE->Fill(double(ieta), double(iphi), linamplitudewithoutPedSubtr);}
+	if(mdepth==3) {h_mapDepth3ADCAmpl12_HE->Fill(double(ieta), double(iphi), ampl);  h_mapDepth3linADCAmpl12_HE->Fill(double(ieta), double(iphi), linamplitudewithoutPedSubtr);}
+	
 	if(amplitude > forallestimators_amplitude_bigger_) sumEstimator1[sub-1][mdepth-1][ieta+41][iphi] += amplitude;
+
       }//if(studyADCAmplHist_
       ///////////////////////////////
       //   //   //   //   //   //   //   //   //  HE       TSmean:
@@ -8169,7 +8192,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
       }// if(studyDiffAmplHist_)     
       
       // RADDAM filling:
-      if(flagLaserRaddam_ == 1 ) {
+      if(flagLaserRaddam_ > 0 ) {
 	double amplitudewithPedSubtr = 0.;
 	
 	//for cut on A_channel:
@@ -8199,7 +8222,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	//	if(amplitudewithPedSubtr > 50.  && amplitudewithPedSubtr < 5000.) {
 	if(amplitudewithPedSubtr > 50.  ) {
 	  
-	  mapRADDAM_HE[mdepth-1][ieta+41][iphi] += amplitudewithPedSubtr; ++mapRADDAM0_HE[mdepth-1][ieta+41][iphi];
+	  if(flagLaserRaddam_  >  1 ) {	  mapRADDAM_HE[mdepth-1][ieta+41][iphi] += amplitudewithPedSubtr; ++mapRADDAM0_HE[mdepth-1][ieta+41][iphi];}
 	  
 	  if(mdepth==1) {h_mapDepth1RADDAM_HE->Fill(double(ieta), double(iphi), amplitudewithPedSubtr); h_mapDepth1RADDAM0_HE->Fill(double(ieta), double(iphi), 1.); h_A_Depth1RADDAM_HE->Fill(amplitudewithPedSubtr);}   
 	  if(mdepth==2) {h_mapDepth2RADDAM_HE->Fill(double(ieta), double(iphi), amplitudewithPedSubtr); h_mapDepth2RADDAM0_HE->Fill(double(ieta), double(iphi), 1.); h_A_Depth2RADDAM_HE->Fill(amplitudewithPedSubtr);}   
@@ -12085,6 +12108,9 @@ void VeRawAnalyzer::endJob(){
     h_mapDepth1ADCAmpl12_HE->Write();
     h_mapDepth2ADCAmpl12_HE->Write();
     h_mapDepth3ADCAmpl12_HE->Write();
+    h_mapDepth1linADCAmpl12_HE->Write();
+    h_mapDepth2linADCAmpl12_HE->Write();
+    h_mapDepth3linADCAmpl12_HE->Write();
 
     h_TSmeanA_HE->Write();
     h_mapDepth1TSmeanA225_HE->Write();
