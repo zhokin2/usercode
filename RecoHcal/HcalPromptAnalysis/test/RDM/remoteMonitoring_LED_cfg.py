@@ -14,10 +14,10 @@ process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff')
-###process.load('Configuration.StandardSequences.Reconstruction_Data_cff')
+process.load('Configuration.StandardSequences.Reconstruction_Data_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
-###process.load('RecoLocalCalo.Configuration.hcalLocalReco_cff')
+process.load('RecoLocalCalo.Configuration.hcalLocalReco_cff')
 #runnumber = sys.argv[2][4:-5]
 
 runnumber = sys.argv[2]
@@ -406,7 +406,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #end upgrade: ---------------------------------------------------------
                                   #
                                   #
-                                  # for local LASER runs ONLY!!! to be = 1    (,else = 0)
+                                  # for local LASER runs ONLY!!! to be > 0    (,else = 0)
                                   flagLaserRaddam = cms.int32(0),
                                   #
                                    #
@@ -428,8 +428,9 @@ process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
     file = cms.untracked.string('')
 )
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
+##process.load('Configuration.AlCa.GlobalTag_condDBv2')
+##process.GlobalTag = GlobalTag(process.GlobalTag, '80X_dataRun2_Prompt_v8', '')
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data_FULL', '')
-
 
 process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
 process.hcalDigis.FilterDataQuality = cms.bool(False)
