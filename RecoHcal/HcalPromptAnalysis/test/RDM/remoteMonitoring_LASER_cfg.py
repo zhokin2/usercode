@@ -407,7 +407,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #end upgrade: ---------------------------------------------------------
                                   #
                                   #
-                                  # for local LASER runs ONLY!!! to be = 1    (,else = 0)
+                                  # for local LASER runs ONLY!!! to be = 1 or =2(more raddam-plots) ,else = 0
                                   flagLaserRaddam = cms.int32(1),
                                   #
                                   #
@@ -432,6 +432,7 @@ process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
   )
 				
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
+#from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data_FULL', '')
 
 process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
