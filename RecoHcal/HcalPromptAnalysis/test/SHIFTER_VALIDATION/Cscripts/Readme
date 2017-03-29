@@ -1,4 +1,74 @@
-=======================================================================
+========================================================================================================= AMT RADDAM readme:
+// see V.Epshteyn plots:
+acroread /afs/cern.ch/user/z/zhokin/public/html/RADDAM/Note_draft_v2.pdf 
+
+
+readme:
+cd /afs/cern.ch/work/z/zhokin/hcal/cmt8/CMSSW_9_0_0_pre4/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION/Cscripts
+Latest script zamt3raddam.cc
+
+plots to be copied into /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/AMTweb/2016, 2016lin are here:
+cd /afs/cern.ch/work/z/zhokin/hcal/cmt8/CMSSW_9_0_0_pre4/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION/Cscripts/testamt3
+
+
+zamt3raddam.cc allows to change flags: 
+
+1.flagcutamplitude - to reject channels with Aijk or with Mean-RMS of <Aijk> 
+ = 0 Acut    =1 (mean_with_kfactor +  cutMinA)       =2 (mean_with_k2factor*RMS +cutMinA)   <--- all works good; plots are perfect for flagcutamplitude=2 (default now)
+
+2. flaglumiuse - to select X-scale eirther days or Lumi.
+
+3. flaggaincorrections - to use gain corrections(now stable - no need to play)
+
+Produce plots as for HEP and HEM at the same time, and in adddition some control plots.
+(Est' varianty ispol'zovaniya A, A12, A12withPedestalSubtraction(in each TS), but default is A12, kak u V.Epshtejna)
+
+Script znegamt3raddam.cc - just for checks only HEP or HEM (not at the same time, change massive by hands)
+
+Visualization is in:
+/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/AMTweb/
+/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/AMTweb/2016, 2016lin
+
+Algorithm:
+1. Use local LASER runs during Stable Operation(protons only) of 2016
+[see CMS Fill Report:
+https://cmswbmoff.web.cern.ch/cmswbmoff/cmsdb/servlet/FillReport?N=12&BYLASTFILLS=TRUE&STABLE=TRUE
+]
+
+2. For each run and each HE channel use Ampitude averaged over events of run (<Aijk>).
+Amplitude: adcCounts collected over 4 TSs(-1,max,+1,+2) w/o pedestal subtraction.
+Use RMT root files, where these Amplitudes are available.
+
+3. Apply gain corrections for <Aijk>: LED runs 272847(ref.) and 285349
+
+4. Choose reference runs(10.05.2016) for HEP and HEM (272957 and 272967)
+
+5. Define Rijk =  <Aijk> /  <Aijk>_ref and reject bad channels: Rijk < 40.
+
+6. phi-averaging: Rijk  -->    <Rij>_phi
+
+7. Define Rr = <Rij>_phi / <R_3_16>_phi
+
+8. Plots: Rr vs t (days, Lumi)
+
+9. Use AMT to provide visualization:
+[
+https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/AMT/HE.html
+]
+
+
+
+
+
+
+
+======================================================================= very OLD:
+======================================================================= very OLD:
+======================================================================= very OLD:
+======================================================================= very OLD:
+======================================================================= very OLD:
+======================================================================= very OLD:
+======================================================================= very OLD:
  to produce .ps-file 
  -- input file name is:  ../PYTHON_runlist_test/Global_283884_1.root
  -- output ps-file is zadcamplitude.ps
@@ -114,10 +184,13 @@ h_A_Depth3RADDAM_HE
   TH2F*   h_mapDepth1RADDAM_HE;
   TH2F*   h_mapDepth2RADDAM_HE;
   TH2F*   h_mapDepth3RADDAM_HE;
-  TH1F*   h_mapDepth3RADDAM16_HE;
+
   TH2F*   h_mapDepth1RADDAM0_HE;
   TH2F*   h_mapDepth2RADDAM0_HE;
   TH2F*   h_mapDepth3RADDAM0_HE;
+
+
+  TH1F*   h_mapDepth3RADDAM16_HE;
   TH1F*   h_AamplitudewithPedSubtr_RADDAM_HE;
   TH1F*   h_AamplitudewithPedSubtr_RADDAM_HEzoom0;
   TH1F*   h_AamplitudewithPedSubtr_RADDAM_HEzoom1;
