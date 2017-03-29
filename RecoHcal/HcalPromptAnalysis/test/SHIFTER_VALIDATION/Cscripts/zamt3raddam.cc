@@ -51,15 +51,16 @@ int main(int argc, char *argv[])
   //TCanvas *c1;
   TGraph *gr1;  TGraph *gr2;TGraph *gr3;  TGraph *gr4;TGraph *gr5;  TGraph *gr6;TGraph *gr7;TGraph *gr8;TGraph *gr9;
   //
-  const Int_t NMethods =26;// total number of Methods (all-together 26 methods)
+  const Int_t NMethods =34;// total number of Methods (all-together 34 methods)
   const Int_t NMethodsStart =0;     // since which method to start ( min=  0)
-  const Int_t NMethodsToUse =25;// choose Number of methods to use ( max= 25)
+  const Int_t NMethodsToUse =33;// choose Number of methods to use ( max= 33)
   //
- TString MethodName[NMethods] = { "PLOT0", "PLOT1", "PLOT2", "PLOT3", "PLOT4", "PLOT5", "PLOT6", "PLOT7", "PLOT8", "PLOT9","PLOT10","PLOT11","PLOT12",
-				  "PLOT13","PLOT14","PLOT15","PLOT16","PLOT17","PLOT18","PLOT19","PLOT20","PLOT21","PLOT22","PLOT23","PLOT24","PLOT25"};
+ TString MethodName[NMethods] = { "PLOT0", "PLOT1", "PLOT2", "PLOT3", "PLOT4", "PLOT5", "PLOT6", "PLOT7", "PLOT8", "PLOT9", "PLOT10","PLOT11","PLOT12","PLOT13","PLOT14","PLOT15","PLOT16",
+				  "PLOT17","PLOT18","PLOT19","PLOT20","PLOT21","PLOT22","PLOT23","PLOT24","PLOT25","PLOT26","PLOT27","PLOT28","PLOT29","PLOT30","PLOT31","PLOT32","PLOT33"};
   //______________________________________________________________________________________________________________________________    
  //LUMI-DAYS:
  const Int_t NMAX0 =200;// number of DAYS(time abscissa)
+ // for initial test:
  Float_t LU[NMAX0] = {
     0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.2, 1.3, 1.6, 1.9, 2.1, 2.4, 2.7, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 6.9,
      7.0, 7.0, 7.0, 7.0, 7.0, 7.0, 7.4, 7.9, 8.3, 8.7, 9.1, 9.5,10.0,10.5,10.9,11.3,11.7,12.1,12.5,13.0,13.4,13.8,14.2,14.6,15.0,15.4,15.8,16.2,16.6,17.0,17.4,17.8,18.2,18.7,19.1,19.5,19.5,19.5,19.5,19.5,
@@ -91,11 +92,12 @@ int main(int argc, char *argv[])
 		      ++ncounts;
 		    }
 		    cout << "LU1[NMAX0-1] = " <<      LU1[NMAX0-1]    <<endl;
-  //______________________________________________________________________________________________________________________________    
-		    
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //______________________________________________________________________________________________________________________________        bad channels:
+		    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////   phi(0-71)=22,23 ; depth1 ; eta:18,19,22,24,25,26,27(=jjj:59,60,63,65,66,67,68)
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////,"282850","282854","282931","283117
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////,155.,155.,156.,157.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////k1=37 38 39 40 41 42 43 44 
+////////////////////////////////////////////////////////////////////////////////
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////  runs for positive direction: P kdirection = 1
   const Int_t NMAXP =50;// number of LASER runs(time abscissa)
   TString LASERrunsP[NMAXP] = {"272957","273354","273899","274185","274260","274357",
@@ -137,7 +139,8 @@ int main(int argc, char *argv[])
   //
   //---=[ SetCanvasDef           ]=----------------
   // Create a new canvas.
-  TCanvas  *c1 = new TCanvas("c1","Hcal4test",200,10,700,900);
+  TCanvas  *c1 = new TCanvas("c1","Hcal4test",10,10,900,700);
+  //TCanvas  *c1 = new TCanvas("c1","Hcal4test",200,10,700,900);
 
   c1->Range(0,0,25,18);
   //c1->SetFillColor(40);
@@ -159,9 +162,11 @@ int main(int argc, char *argv[])
   
   Float_t x1=0.00; Float_t x2=200.00;
   
+//  Float_t y1=0.0; Float_t y2=  2.01;
   Float_t y1=0.60; Float_t y2=  1.01;
   Float_t y3=0.85; Float_t y4=  1.01;
-  Float_t y5=0.70; Float_t y6=  1.01;
+  //Float_t y5=0.70; Float_t y6=  1.01;
+  Float_t y5=0.60; Float_t y6=  1.01;
   // 
   Float_t xx1=0.12; Float_t xx2=0.31;
   Float_t yy1=0.17; Float_t yy2=0.38;
@@ -186,7 +191,25 @@ int main(int argc, char *argv[])
   for(int ij = 0; ij<13; ij++) {RRM[ij]=0.;RRP[ij]=0.;}
   for(int ij = 0; ij<11; ij++) {RRM7[ij]=0.;RRP7[ij]=0.;}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    LOOP over kdirection 0 & 1
+  TH1F*  phidependenceM =  new TH1F("phidependenceM","", 72, 0.,72.);
+  TH1F* phidependenceM0 = new TH1F("phidependenceM0","", 72, 0.,72.);
+  TH1F*  phidependenceP =  new TH1F("phidependenceP","", 72, 0.,72.);
+  TH1F* phidependenceP0 = new TH1F("phidependenceP0","", 72, 0.,72.);
+  TH1F* phidepdrawing30= (TH1F*)phidependenceM->Clone("phidepdrawing30");
+  TH1F* phidepdrawing31= (TH1F*)phidependenceP->Clone("phidepdrawing31");
+  TH1F*  phiRRM =  new TH1F("phiRRM","", 100, 0.,5.);
+  TH1F*  phiRRP =  new TH1F("phiRRP","", 100, 0.,5.);
+  // variant of order of normalization ; =2 as V.Epshteyn
+  Int_t variant = 1;
+//  Int_t variant = 2;// does not work properly for moment(30.03.2017)
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    LOOP over kdirection 0 & 1
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    LOOP over kdirection 0 & 1
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    LOOP over kdirection 0 & 1
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    LOOP over kdirection 0 & 1
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    LOOP over kdirection 0 & 1
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    LOOP over kdirection 0 & 1
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // kdirection:   negative dir M:=0 ;   positive dir P: =1  
 
   for(int kdirection = 0; kdirection<2; kdirection++){
@@ -207,42 +230,82 @@ int main(int argc, char *argv[])
 	LASERruns[apn]=LASERrunsP[apn];
 	X0[apn]=X0P[apn];}
     }
+    //////////////////////////////////////////////////////
       
- //----------------------------------------------------------------------------------------------------- cut Rijk
-  Float_t CutrwithphiMin = 0.; Float_t CutrwithphiMax = 40.;
-  if(kdirection == 0 ){CutrwithphiMin = 0.; CutrwithphiMax = 40.;}
+  //---------------------------------------------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------------------------------------------------
+  //========================================================================================================================
+  //---------------------------------------------------------------------------------------------------------------------
   //---------------------------------------------------------------------------------------------------------------------
   //     Int_t NP = 3; // for loop over time points(LASER runs) NMAX is number of LASER runs(time abscissa)
   Int_t NP = NMAX;  // for loop over time points(LASER runs) NMAX is number of LASER runs(time abscissa)
   //
-  
-  //         = 0 Acut                     =1 meancut
-  Int_t flagcutamplitude = 0;   Float_t kfaktor = 3.0;
-  cout << "!!*********************        flagcutamplitude= " <<flagcutamplitude << "   kfaktor= " <<kfaktor <<endl;
-  
+  //---------------------------------------------------------------------------------------------------------------------  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //  ------ flagcutamplitude is  very important flag !!!!!!  : 
+  //  
+  //  = 0 Acut    =1 (mean_with_kfactor +  cutMinA)       =2 (mean_with_k2factor*RMS +cutMinA)   <--- all works good; plots are perfect for =2(default now)
+  Int_t flagcutamplitude = 2;   
   // take into account for future treatment only channels with <Aijk>_runevents within cutMinA to cutMaxA:
-  //    int cutMinA = 100; int cutMaxA = 1000;   
-  // Float_t cutMinA = 50.; Float_t cutMaxA = 2500.;   
-  Float_t cutMinA = 50.; Float_t cutMaxA = 3500.;  // only for flagcutamplitude=0
-  if(kdirection == 0 ) cutMaxA = 4000.; 
+  Double_t cutMinA = 90.; Double_t cutMaxA = 3500.;  if(kdirection == 0 ) {cutMinA =100.;cutMaxA = 3600.;} // only for flagcutamplitude=0
+  //Double_t cutMinA = 70.; Double_t cutMaxA = 3500.;  if(kdirection == 0 ) {cutMinA =100.;cutMaxA = 3600.;} // only for flagcutamplitude=0
+  Double_t kfactor = 2.6;                                                                 // only for flagcutamplitude=1 and cutMinA applied as well
+  Double_t k2factor = 1.5;                                                                 // only for flagcutamplitude=2 and cutMinA applied as well
+
+  cout << "!!*********************        flagcutamplitude= " <<flagcutamplitude <<endl;
+  if(flagcutamplitude==1)  cout << "   kfactor= " <<kfactor <<endl;
+  if(flagcutamplitude==2)  cout << "   k2factor= " <<k2factor <<endl;
+  //
+  //
+  //    ///    //    //    //    /    //    //    //    //    //    //    //    //          
+  Double_t cutMinM = 600.;if(kdirection == 0 ) cutMinM = 800.;                            // run selections: to choose/reject whole run
   //
   // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //----------------------------------------------------------------------first ratio Aijk/Aijk_ref ----> cut Rijk 
+    // for flagcutamplitude = 2  :
+    Double_t CutrwithphiMin = 0.0; Double_t CutrwithphiMax = 40.0; // P
+    if(kdirection == 0 ){CutrwithphiMin = 0.0; CutrwithphiMax = 40.0;} // M
+    // for flagcutamplitude = 0 and 1 :
+    if(flagcutamplitude < 2 ) {
+      CutrwithphiMin = 0.0; CutrwithphiMax = 4.0; // P
+      if(kdirection == 0 ){CutrwithphiMin = 0.0; CutrwithphiMax = 4.0;} // M
+    }
+    //---------------------------------------------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------------------------------------------------
+ //----------------------------------------------------------------------------------------------------- cut rr
+//  Double_t CutrrwithphiMin = 0.4; Double_t CutrrwithphiMax = 99991.5; // P
+//  if(kdirection == 0 ){CutrrwithphiMin = 0.4; CutrrwithphiMax = 99991.5;} // M
+      Double_t CutrrwithphiMin = 0.4; Double_t CutrrwithphiMax = 1.5; // P
+      if(kdirection == 0 ){CutrrwithphiMin = 0.4; CutrrwithphiMax = 1.5;} // M
+  //---------------------------------------------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------------------------------------------------Var2  (cut rr)
+  //    Float_t CutrwithphiMinVar2 = 0.4; Float_t CutrwithphiMaxVar2 = 1.4; // P
+  //    if(kdirection == 0 ){CutrwithphiMinVar2 = 0.4; CutrwithphiMaxVar2 = 2.0;} // M
+
+    Double_t CutrwithphiMinVar2 = 0.1; Double_t CutrwithphiMaxVar2 = 1.5; // P
+    if(kdirection == 0 ){CutrwithphiMinVar2 = 0.1; CutrwithphiMaxVar2 = 1.5;} // M
+
+  //---------------------------------------------------------------------------------------------------------------------
+  // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  flaglumiuse
   //-----------------------------------------------------------------------------------------------------
-  for(int k1 = 0; k1<NP; k1++){XX[k1] = X0[k1];}
+  for(int kk1 = 0; kk1<NP; kk1++){XX[kk1] = X0[kk1];}
   // use lumi ??? :
 //    Int_t flaglumiuse = 1; // =0-days; =1-lumi;
-  Int_t flaglumiuse = 1; // =0-days; =1-lumi;
+  Int_t flaglumiuse = 0; // =0-days; =1-lumi;
   cout << "!!*********************        flaglumiuse  = " <<  flaglumiuse <<endl;
 
+  // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// flaggaincorrections
   Int_t flaggaincorrections = 1; // =0 do not use; =1 use corrections
   cout << "     !!*********************        flaggaincorrections  = " <<  flaggaincorrections <<endl;
 //----------------------------------------------------------------------------------------------------- for test with test-LU
-//  if(flaglumiuse == 1) {for(int k1 = 0; k1<NP; k1++){ int z1=X0[k1];  XX[k1] = LU[z1];}   x2= 45.0;   }
+//  if(flaglumiuse == 0) {for(int k1 = 0; k1<NP; k1++){ int z1=X0[k1];  XX[k1] = LU[z1];}   x2= 45.0;   }
 //-----------------------------------------------------------------------------------------------------
   if(flaglumiuse == 1) {for(int k1 = 0; k1<NP; k1++){ int z1=X0[k1];  XX[k1] = LU1[z1];} x2= 45.0;   }
   //-----------------------------------------------------------------------------------------------------
   // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  Int_t verbosity = 0;// no printout
+  Int_t verbosity = 0;//    =0 no printout;                   =9 run selection;                   others >0 - validation tests
   //
   // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //
@@ -291,7 +354,7 @@ int main(int argc, char *argv[])
   //========================================================================================== PLOT18:        P       r vs t for L7      and eta 17 18 19 20 24 26 29
   //----------------------------------------------------------------------------------------------------
   //========================================================================================== PLOT19:        M Amplitude
-  //========================================================================================== PLOT20:        p mean Amplitude Depth3
+  //========================================================================================== PLOT20:        p Mean amplitude Depth3
   //----------------------------------------------------------------------------------------------------  
   //========================================================================================== PLOT21:        P       r vs t for Depth3  and 27 28
   //----------------------------------------------------------------------------------------------------  
@@ -300,6 +363,27 @@ int main(int argc, char *argv[])
   //========================================================================================== PLOT24:        M       Rijk
   //----------------------------------------------------------------------------------------------------  
   //========================================================================================== PLOT25:        all     r(Theta) dependence for P & M 
+  //========================================================================================== PLOT26:        M       RRijkM
+  //========================================================================================== PLOT27:        P       RRijkP
+  //----------------------------------------------------------------------------------------------------
+  //========================================================================================== PLOT28:        M Mean Amplitude
+  //========================================================================================== PLOT29:        P Mean Amplitude
+  //----------------------------------------------------------------------------------------------------
+  //========================================================================================== PLOT30:        M     r(PHI) dependence 
+  //========================================================================================== PLOT31:        P     r(PHI) dependence 
+  //----------------------------------------------------------------------------------------------------
+  //========================================================================================== PLOT28:        M RMS Amplitude
+  //========================================================================================== PLOT29:        P RMS Amplitude
+  //----------------------------------------------------------------------------------------------------
+  //----------------------------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------------------------------- additions after PLOT loop:
+  //----------------------------------------------------------------------------------------------------
+  //========================================================================================== PLOT100:        M & P     r(PHI) dependence ( PLOT30 & PLOT31 )
+  //========================================================================================== PLOT101:        like Rijk M & P (PLOT22 & PLOT24) but w/o bad channels on base RRijk limits
+  //----------------------------------------------------------------------------------------------------
+  //----------------------------------------------------------------------------------------------------
+  //----------------------------------------------------------------------------------------------------
+  //----------------------------------------------------------------------------------------------------
   //----------------------------------------------------------------------------------------------------
   ///////////////////////////////////////////////////////////////////////// initial nulling:
   for(int iii = 1; iii<4; iii++) {
@@ -316,7 +400,7 @@ int main(int argc, char *argv[])
   }
   /////////////////////////////////////////////////////////////////////////
   //______________________________________________________________________________ gain corrections: (time range: 187 days)
-  Int_t timerange = 187;
+  //  Int_t timerange = 187;
   // ref.run:
   TFile *hfile1= new TFile("/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/LED_272847.root", "READ"); // 2016-05-09       
   TH2F *xwod1= (TH2F*)hfile1->Get("h_mapDepth1ADCAmpl12_HE");TH2F *xwod2= (TH2F*)hfile1->Get("h_mapDepth2ADCAmpl12_HE");TH2F *xwod3= (TH2F*)hfile1->Get("h_mapDepth3ADCAmpl12_HE");
@@ -341,7 +425,7 @@ int main(int argc, char *argv[])
     }
   }
   // fill massive gainkoeff ,  where iii=depth, jjj=eta, kkk=phi
-  TH1F* gainkoeff = new TH1F("gainkoeff","", 100, 0.5,1.5);
+  TH1F* gainkoeff = new TH1F("gainkoeff","", 100, 0.8,1.2);
   for(int iii = 1; iii<4; iii++) {
     for (int jjj=1;jjj<=82;jjj++) {
       for (int kkk=1;kkk<=72;kkk++) {
@@ -359,15 +443,24 @@ int main(int argc, char *argv[])
 //  TString fname = "/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/LED_";
   
   // booking:
-  TH1F* Ceff1D = new TH1F("Ceff1D","", 1000, 0.,8000.);
-  TH1F* Seff1D = new TH1F("Seff1D","", 100, 0.,400.);
+  TH1F* Ceff1D = new TH1F("Ceff1D","", 200, 0.,5000.);
+  TH1F* Seff1D = new TH1F("Seff1D","", 200, 0.,1000.);
+  TH1F* Ceff1M = new TH1F("Ceff1M","", 200, 0.,1300.);
+  TH1F* Ceff1R = new TH1F("Ceff1R","", 100, 0.,1000.);
 
   TH1F* Meff1D = new TH1F("Meff1D","", 100, 0.,4000.);
   TH1F* Meff2D = new TH1F("Meff2D","", 100, 0.,4000.);
   TH1F* Meff3D = new TH1F("Meff3D","", 100, 0.,4000.);
 
-  TH1F* rwithphi = new TH1F("rwithphi","", 100, -1.,499.);
+//    TH1F* rwithphi = new TH1F("rwithphi","", 1000, -1.,2449.);
+//    TH1F* rwithphi = new TH1F("rwithphi","", 100, -1.,1449.);
+//    TH1F* rwithphi = new TH1F("rwithphi","", 100, -1.,449.);
+    TH1F* rwithphi = new TH1F("rwithphi","", 100, -1.,149.);
+//    TH1F* rwithphi = new TH1F("rwithphi","", 100, -1.,9.);
+//      TH1F* rwithphi = new TH1F("rwithphi","", 100, -1.,5.);
 
+  TH1F* rrwithphiM = new TH1F("rrwithphiM","", 100, -1.,4.);
+  TH1F* rrwithphiP = new TH1F("rrwithphiP","", 100, -1.,4.);
 
 
   Int_t kmm = 0;Int_t kpp = 0;  
@@ -376,7 +469,13 @@ int main(int argc, char *argv[])
   //
 
   //////////////////////////////////////////////////////////////////////////  LOOP    raddam current
+  //////////////////////////////////////////////////////////////////////////  LOOP    raddam current
+  //////////////////////////////////////////////////////////////////////////////////////////////  LOOP    raddam current
+  //////////////////////////////////////////////////////////////////////////  LOOP    raddam current
+  //////////////////////////////////////////////////////////////////////////  LOOP    raddam current
       for(int k1 = 0; k1<NP; k1++) {
+	//  if(k1==0 || (k1 >37 && k1<42)) {
+
       //______________________________________________________
 	  TString epsName = fname + LASERruns[k1] +".root";
 	  TFile *hfile= new TFile(epsName, "READ");
@@ -384,7 +483,7 @@ int main(int argc, char *argv[])
 	//	TFile *hfile= new TFile("LASER_272957.root", "READ");        
 
 
-    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! read LASER run with k1= " << k1   <<"  run:  " << LASERruns[k1] <<endl;
+    cout << "!!!! read LASER run with k1= " << k1   <<"  run:  " << LASERruns[k1] <<endl;
      // Define nominator denominator for some methods:
     //---------------------------------------------------
     // 000000000000000000000000000000000000000000000000000000000000000000000000
@@ -434,19 +533,12 @@ int main(int argc, char *argv[])
     TH2F* Ceff1= (TH2F*)twod1->Clone("Ceff1");
     TH2F* Ceff2= (TH2F*)twod2->Clone("Ceff2");
     TH2F* Ceff3= (TH2F*)twod3->Clone("Ceff3");
-    //          cout<<"1 " <<endl;
-    twod1->Sumw2();
-//          cout<<"2 " <<endl;
-    twod2->Sumw2();
-//          cout<<"3 " <<endl;
-    twod3->Sumw2();
-//          cout<<"4 " <<endl;
-    t0010->Sumw2();
-//          cout<<"5 " <<endl;
-    //      t0020->Sumw2();
-    //      cout<<"6 " <<endl;
-    //      t0030->Sumw2();
-    //      cout<<"7 " <<endl;
+
+    //    twod1->Sumw2();
+    //    twod2->Sumw2();
+    //    twod3->Sumw2();
+    //    t0010->Sumw2();
+
     // <Aijk>_runevents:
     Ceff1->Divide(twod1,t0010, 1, 1, "B");  
     Ceff2->Divide(twod2,t0020, 1, 1, "B");  
@@ -468,37 +560,31 @@ int main(int argc, char *argv[])
       }
     }
     //////////////////////////////////////////////////////////////////////////////////   see raddam done
-    
     // fill massive <Aijk>_runevents ,  where iii=depth, jjj=eta, kkk=phi
     for (int jjj=0;jjj<nx;jjj++) {
       for (int kkk=0;kkk<ny;kkk++) {
 	// FILL NEW PLOTS:
+	// Aijk: Ceff1D & Seff1D plots 
 	if(Ceff1->GetBinContent(jjj,kkk)!= 0.) {Ceff1D->Fill(Ceff1->GetBinContent(jjj,kkk));Seff1D->Fill(Ceff1->GetBinContent(jjj,kkk));}
 	if(Ceff2->GetBinContent(jjj,kkk)!= 0.) {Ceff1D->Fill(Ceff2->GetBinContent(jjj,kkk));Seff1D->Fill(Ceff2->GetBinContent(jjj,kkk));}
 	if(Ceff3->GetBinContent(jjj,kkk)!= 0.) {Ceff1D->Fill(Ceff3->GetBinContent(jjj,kkk));Seff1D->Fill(Ceff3->GetBinContent(jjj,kkk));}
-
+	// to get correct mean w/o channels without signal
 	if(Ceff1->GetBinContent(jjj,kkk)>cutMinA) {Meff1D->Fill(Ceff1->GetBinContent(jjj,kkk));}
 	if(Ceff2->GetBinContent(jjj,kkk)>cutMinA) {Meff2D->Fill(Ceff2->GetBinContent(jjj,kkk));}
 	if(Ceff3->GetBinContent(jjj,kkk)>cutMinA) {Meff3D->Fill(Ceff3->GetBinContent(jjj,kkk));}
-
-
       }
     }
-
+    //--------------------------------------
+    Ceff1M->Fill(Meff1D->GetMean());Ceff1M->Fill(Meff2D->GetMean());Ceff1M->Fill(Meff3D->GetMean());
+    //cout<<" kdirection = " << kdirection <<"!!!!!!!  run out Mean = " << k1 <<"   Meff1D->GetMean() = " << Meff1D->GetMean() <<endl; 
+    if(verbosity==9 && (Meff1D->GetMean()<cutMinM ||  Meff2D->GetMean()<cutMinM ||  Meff3D->GetMean()<cutMinM) ) cout<<" kdirection = " << kdirection <<"******  run out Mean = " << k1 <<"   Meff1D->GetMean() = " << Meff1D->GetMean() <<"   cutMinM = " << cutMinM <<endl; 
+    Ceff1R->Fill(Meff1D->GetRMS());Ceff1R->Fill(Meff2D->GetRMS());Ceff1R->Fill(Meff3D->GetRMS());
+    //--------------------------------------
     // take into account for future treatment only channels with <Aijk>_runevents within cutMinA to cutMaxA:
     // apply cut on <Aijk>_runevents
   //             -41                                +41
   //                            82 bins
-    if(flagcutamplitude==1) {
-      for (int jjj=0;jjj<nx;jjj++) {
-	for (int kkk=0;kkk<ny;kkk++) {
-	  if(Ceff1->GetBinContent(jjj,kkk)> cutMinA && Ceff1->GetBinContent(jjj,kkk)< kfaktor*Meff1D->GetMean()) mapRADDAM_HE[1][jjj][kkk+1] =  Ceff1->GetBinContent(jjj,kkk);
-	  if(Ceff2->GetBinContent(jjj,kkk)> cutMinA && Ceff2->GetBinContent(jjj,kkk)< kfaktor*Meff2D->GetMean()) mapRADDAM_HE[2][jjj][kkk+1] =  Ceff2->GetBinContent(jjj,kkk);
-	  if(Ceff3->GetBinContent(jjj,kkk)> cutMinA && Ceff3->GetBinContent(jjj,kkk)< kfaktor*Meff3D->GetMean()) mapRADDAM_HE[3][jjj][kkk+1] =  Ceff3->GetBinContent(jjj,kkk);
-	}
-      }
-    }// if
-    else if(flagcutamplitude==0) { 
+    if(flagcutamplitude==0) { 
       for (int jjj=0;jjj<nx;jjj++) {
 	for (int kkk=0;kkk<ny;kkk++) {
 	  if(Ceff1->GetBinContent(jjj,kkk)> cutMinA && Ceff1->GetBinContent(jjj,kkk)< cutMaxA) mapRADDAM_HE[1][jjj][kkk+1] =  Ceff1->GetBinContent(jjj,kkk);
@@ -507,11 +593,44 @@ int main(int argc, char *argv[])
 	}
       }
     }// if
+    else if(flagcutamplitude==1) {
+      for (int jjj=0;jjj<nx;jjj++) {
+	for (int kkk=0;kkk<ny;kkk++) {
+	  if(Ceff1->GetBinContent(jjj,kkk)> cutMinA && Ceff1->GetBinContent(jjj,kkk)< kfactor*Meff1D->GetMean()) mapRADDAM_HE[1][jjj][kkk+1] =  Ceff1->GetBinContent(jjj,kkk);
+	  if(Ceff2->GetBinContent(jjj,kkk)> cutMinA && Ceff2->GetBinContent(jjj,kkk)< kfactor*Meff2D->GetMean()) mapRADDAM_HE[2][jjj][kkk+1] =  Ceff2->GetBinContent(jjj,kkk);
+	  if(Ceff3->GetBinContent(jjj,kkk)> cutMinA && Ceff3->GetBinContent(jjj,kkk)< kfactor*Meff3D->GetMean()) mapRADDAM_HE[3][jjj][kkk+1] =  Ceff3->GetBinContent(jjj,kkk);
+	}
+      }
+    }// if
+    else if(flagcutamplitude==2) {
+      for (int jjj=0;jjj<nx;jjj++) {
+	for (int kkk=0;kkk<ny;kkk++) {
+	  if(Ceff1->GetBinContent(jjj,kkk)> cutMinA && Ceff1->GetBinContent(jjj,kkk)< (Meff1D->GetMean() + k2factor*Meff1D->GetRMS())   ) mapRADDAM_HE[1][jjj][kkk+1] =  Ceff1->GetBinContent(jjj,kkk);
+	  if(Ceff2->GetBinContent(jjj,kkk)> cutMinA && Ceff2->GetBinContent(jjj,kkk)< (Meff2D->GetMean() + k2factor*Meff2D->GetRMS())   ) mapRADDAM_HE[2][jjj][kkk+1] =  Ceff2->GetBinContent(jjj,kkk);
+	  if(Ceff3->GetBinContent(jjj,kkk)> cutMinA && Ceff3->GetBinContent(jjj,kkk)< (Meff3D->GetMean() + k2factor*Meff3D->GetRMS())   ) mapRADDAM_HE[3][jjj][kkk+1] =  Ceff3->GetBinContent(jjj,kkk);
+	}
+      }
+    }// if
+    //////////////////---------------------------------------
+    ///////////////////////////////////////////////////////////////// nulling: either M for positive direction, or P for negative direction, just in case
+    for(int iii = 1; iii<4; iii++) {for (int jjj=1;jjj<=82;jjj++) {
+	if( (kdirection == 0 && jjj> 41) || (kdirection == 1 && jjj< 42)  ) {
+	  for (int kkk=1;kkk<=72;kkk++) {
+	    mapRADDAM_HE[iii][jjj][kkk] = 0.;
+	  }}}}
+    //////////////////---------------------------------------
+    ///////////////////////////////////////////////////////////////// nulling for known bad channels of known runs:
+    if(k1>36 && k1<45) {
+	for(int iii = 1; iii<4; iii++) {for(int jjj=1;jjj<=82;jjj++){for(int kkk=1;kkk<=72;kkk++){
+	      if( (iii==1) && (jjj==59 || jjj==60 || jjj==63 || jjj==65 || jjj==66 || jjj==67 || jjj==68) && (kkk==23 || kkk==24) ) {
+		mapRADDAM_HE[iii][jjj][kkk] = 0.;
+	      }}}}}
     //////////////////---------------------------------------
     //////////////////---------------------------------------
     //////////////////---------------------------------------
+    //////////////////--------------------------------------------------------------------- gain corrections:
     //////////////////---------------------------------------
-    //////////////////--------------------------------------- gain corrections:
+    //////////////////---------------------------------------
     for(int iii = 1; iii<4; iii++) {
       for (int jjj=1;jjj<=82;jjj++) {
 	for (int kkk=1;kkk<=72;kkk++) {
@@ -520,7 +639,7 @@ int main(int argc, char *argv[])
       }
     }
     //////////////////---------------------------------------
-    //                                                            define A for refRun    Laser-megatile:           HEM : 272967 = [0] ,                     HEP : 272957 = [0],
+    //                                                 define A for refRun    Laser-megatile:           HEM : 272967 = k1=[0] ,                     HEP : 272957 = k1=[0],
     //////////////////---------------------------------------
     
     if(k1==mk1f && kmm==0 && kdirection == 0) {
@@ -551,8 +670,10 @@ int main(int argc, char *argv[])
       //      dormP /= pcount;
     }
     //////////////////---------------------------------------
-    //////////////////--------each run  normalization on first run  ----------------- find Rijk = <Aijk>_runevents /  <Aijk>_runevents(ref.run)
     //////////////////---------------------------------------
+    //////////////////--------each run  normalization on first run  ----------------- find Rijk = <Aijk>_runevents /  <Aijk>_runevents(ref.run)
+     //////////////////---------------------------------------
+   //////////////////---------------------------------------
     for(int iii = 1; iii<4; iii++) {
       for (int jjj=1;jjj<=82;jjj++) {
 	for (int kkk=1;kkk<=72;kkk++) {
@@ -563,29 +684,98 @@ int main(int argc, char *argv[])
     }//for 
     //
     //////////////////---------------------------------------
+    //////////////////---------------------------------------
+    //////////////////---------------------------------------
+    //////////////////---------------------------------------
+    ///   variant2: for each run define phi-averaged A for norm.channel (3,16) and then, divide Rijk on it, i.e. get RRijk
+    if( variant == 2) {
+      Double_t normchannelM = 0; Double_t normchannelP = 0;
+      //////////////////--------------------------------------- for each run, define A-norm_channel(3,16) averaged over PHI 
+      if(kdirection == 0 ) {
+	Int_t mcounter = 0;
+	for (int kkk=1;kkk<=72;kkk++) {if(mapRADDAM_HE[3][26][kkk] > 0.) {normchannelM += mapRADDAM_HE[3][26][kkk]; mcounter++;}}//for 
+	if(mcounter!=0) normchannelM /= mcounter;   }
+      else if(kdirection == 1 ) {
+	Int_t pcounter = 0;
+	for (int kkk=1;kkk<=72;kkk++) {if(mapRADDAM_HE[3][57][kkk] > 0.) {normchannelP += mapRADDAM_HE[3][57][kkk]; pcounter++;}}//for 
+	if(pcounter!=0) normchannelP /= pcounter;   }
+      //      cout<<"norm_channel(3,16) averaged over PHI: normchannelM = " << normchannelM <<   "                        normchannelP = " << normchannelP <<endl;
+      //////////////////---------------------------------------
+      //////////////////--------each run  normalization on channel 3,16
+      //////////////////---------------------------------------
+      for(int iii = 1; iii<4; iii++) {
+	for (int jjj=1;jjj<=82;jjj++) {
+	  for (int kkk=1;kkk<=72;kkk++) {
+	    if(mapRADDAM_HE[iii][jjj][kkk] > 0. && normchannelM != 0 && jjj < 42 && kdirection == 0) {mapRADDAM_HE[iii][jjj][kkk] /= normchannelM;}
+	    if(mapRADDAM_HE[iii][jjj][kkk] > 0. && normchannelP != 0 && jjj > 41 && kdirection == 1) {mapRADDAM_HE[iii][jjj][kkk] /= normchannelP;}
+	  }//for  
+	}//for 
+      }//for 
+      
+    } // variant
+    
+    //////////////////---------------------------------------
+    //////////////////---------------------------------------
+    //////////////////---------------------------------------
     //                                               then, avereaging over phi, but first sum over phi before!!! any dividing:
     //////////////////---------------------------------------
     for(int iii = 1; iii<4; iii++) {
       for (int jjj=1;jjj<=82;jjj++) {
 	for (int kkk=1;kkk<=72;kkk++) {
-	  if(mapRADDAM_HE[iii][jjj][kkk] != 0 ) rwithphi->Fill(mapRADDAM_HE[iii][jjj][kkk]);
-	  if(mapRADDAM_HE[iii][jjj][kkk] > CutrwithphiMin && mapRADDAM_HE[iii][jjj][kkk] < CutrwithphiMax) {
-	    
-	    // ----------------------------------------   sum over phi before!!! any dividing:
-	    mapRADDAM_HED2[iii][jjj] += mapRADDAM_HE[iii][jjj][kkk];
-	    // N phi sectors w/ digihits
-	    ++mapRADDAM_HED20[iii][jjj];
+	  if(mapRADDAM_HE[iii][jjj][kkk] > 0 ) {
+	    //	    if(mapRADDAM_HE[iii][jjj][kkk]< 0.031)  cout<<"*****   depth = " << iii <<" k1 = " << k1 <<" eta = " << jjj <<" phi = " << kkk <<" mapRADDAM_ijk = " <<     mapRADDAM_HE[iii][jjj][kkk] <<endl;
+	    // control histoes to reject bad channels using Rijk:
+	  rwithphi->Fill(mapRADDAM_HE[iii][jjj][kkk]);
 
-	    if(verbosity == 3 && iii==3 )  cout<<"   depth = " << iii <<" k1 = " << k1 <<" eta = " << jjj <<" mapRADDAM_HED2[iii][jjj] = " << mapRADDAM_HED2[iii][jjj]     <<" Nphi = " << mapRADDAM_HED20[iii][jjj] <<" mapRADDAM_HE[iii][jjj][kkk = " <<     mapRADDAM_HE[iii][jjj][kkk] <<endl;
+	  // use only good(rwithphi) Rijk channels:
+	  if( (mapRADDAM_HE[iii][jjj][kkk] > CutrwithphiMin && mapRADDAM_HE[iii][jjj][kkk] < CutrwithphiMax && variant != 2) || 
+	      (mapRADDAM_HE[iii][jjj][kkk] > CutrwithphiMinVar2 && mapRADDAM_HE[iii][jjj][kkk] < CutrwithphiMaxVar2 && variant == 2) ) {
 
-	  }//if
+	    // control only! histoes to reject bad channels using RRijk (rrwithphiM & rrwithphiP) :
+	    Double_t RRrrRr = 0.;
+	    if(variant != 2) {
+	      if(jjj<42 && kdirection == 0 ){if(mapRADDAM_HE[3][26][kkk] != 0 ) {RRrrRr = mapRADDAM_HE[iii][jjj][kkk] / mapRADDAM_HE[3][26][kkk];rrwithphiM->Fill(RRrrRr);}}
+	      else  if(jjj>41 && kdirection == 1 ){if(mapRADDAM_HE[3][57][kkk] != 0 ) {RRrrRr = mapRADDAM_HE[iii][jjj][kkk] / mapRADDAM_HE[3][57][kkk];rrwithphiP->Fill(RRrrRr);}}
+	    }
+	    else if(variant == 2) {
+	      if(jjj<42 && kdirection == 0 ){RRrrRr = mapRADDAM_HE[iii][jjj][kkk];rrwithphiM->Fill(RRrrRr);}
+	      else  if(jjj>41 && kdirection == 1 ){RRrrRr = mapRADDAM_HE[iii][jjj][kkk];rrwithphiP->Fill(RRrrRr);}
+	      //	      if(RRrrRr< 0.031)  cout<<"   depth = " << iii <<" k1 = " << k1 <<" eta = " << jjj <<" phi = " << kkk <<" RRrrRr = " <<     RRrrRr <<endl;
+	    }
+
+	    // use only good(rrwithphiM P) RRijk channels:
+	    if((RRrrRr > CutrrwithphiMin && RRrrRr < CutrrwithphiMax && variant != 2) || variant==2 ) {
+	      
+	      // ----------------------------------------   sum over phi before!!! any dividing:
+	      mapRADDAM_HED2[iii][jjj] += mapRADDAM_HE[iii][jjj][kkk];
+	      // N phi sectors w/ digihits
+	      mapRADDAM_HED20[iii][jjj]++;
+	      
+	      if(verbosity == 3 && iii==3 )  cout<<"   depth = " << iii <<" k1 = " << k1 <<" eta = " << jjj <<" mapRADDAM_HED2[iii][jjj] = " << mapRADDAM_HED2[iii][jjj]     <<" Nphi = " << mapRADDAM_HED20[iii][jjj] <<" mapRADDAM_HE[iii][jjj][kkk = " <<     mapRADDAM_HE[iii][jjj][kkk] <<endl;
+	      
+	      // define pointers for PHI dependence:
+	      if(jjj<42 && kdirection==0 ) {
+		phidependenceM->Fill(float(kkk-1),mapRADDAM_HE[iii][jjj][kkk]);
+		phidependenceM0->Fill(float(kkk-1),1.);
+		phiRRM->Fill(mapRADDAM_HE[iii][jjj][kkk]);
+	      }
+	      else if(jjj>41 && kdirection==1 ) {
+		phidependenceP->Fill(float(kkk-1),mapRADDAM_HE[iii][jjj][kkk]);
+		phidependenceP0->Fill(float(kkk-1),1.);
+		phiRRP->Fill(mapRADDAM_HE[iii][jjj][kkk]);
+	      }
+	      
+	    }//if RRrrRr
+	  }//if > CutrwithphiMin 
+
+	  }// if mapRADDAM_HE[iii][jjj][kkk] != 0 
 	}//for  
       }//for  
     }//for  
-  //=================================================================== normalization on first run channel 3,16:
-  //           jjj =  1          |         82    | -41
+    //=================================================================== normalization on first run channel 3,16:
+  //           jjj =  1          |         82    
   //                1- 41        -        42-82
-  //                       26          57        | -41
+  //                       26          57             
   //HE
   // depth1         13-25        -        58-70        13-26 --> N=14, 57-70 --> N=14
   // depth2         13-24        -        59-67
@@ -594,9 +784,10 @@ int main(int argc, char *argv[])
   //   jj     M: 0-13                P: 0-13
   // real N:    16-29                  16,29
   // correspondence realN to jj:
-  //jj   M:     0    1   2   3   4   5   6   7   8   9   10    11    12    13      P:    0    1   2   3   4   5   6   7   8   9   10    11    12    13
-  // real N:   29   28  27  26  25  24  23  22  21  20   19    18    17    16           16   17  18  19  20  21  22  23  24  25   26    27    28    29
-  //                -   -       -        -   -  -                                                            -   -   -       -           -    -
+  //jj   M:     0    1   2   3   4   5   6   7   8   9   10    11    12    13*     P:    0*   1   2   3   4   5   6   7   8   9   10    11    12    13
+  // real N:   29   28  27  26  25  24  23  22  21  20   19    18    17    16*          16*  17  18  19  20  21  22  23  24  25   26    27    28    29
+  // jjj:      13   14  15  16  17  18  19  20  21  22   23    24    25    26*   +31=   57*  58  59  60  61  62  63  64  65  66   67    68    69    70
+  //                                                                           (jjj-41) 16*  17  18  19  20  21  22  23  24  25   26    27    28    29   
   //
   //    ZZM[k1][depth]][jjj=eta] --> ZZM[k1][7][14] negative direction   ,  ZZP[k1][7][14] positive dir.  
   //                                            jj =  0 - 13                           jj =  0 - 13
@@ -604,42 +795,44 @@ int main(int argc, char *argv[])
   //                          Cell = ZZM[k1][3][13]                  and    ZZP[k1][3][0]
     //////////////////---------------------------------------
     //////////////////---------------------------------------
-    //////////////------------------------------                                   and now averaging per N-phi_sectors
-    //////////////////---------------------------------------
-    for(int iii = 1; iii<4; iii++) {
-      for (int jjj=1;jjj<=82;jjj++) {
-
-	if(mapRADDAM_HED20[iii][jjj] != 0 ) {
-
-	  if(verbosity == 1)  cout<<"****aver per N-phi_sectors********* depth = " << iii <<" RunIndex = " << k1 <<" eta = " << jjj <<" Nphi = " << mapRADDAM_HED20[iii][jjj] <<endl;
-	  mapRADDAM_HED2[iii][jjj] /= mapRADDAM_HED20[iii][jjj];
-	  if(verbosity == 3 && iii==3 ) cout<<"****aver per N-phi_sectors********* depth = " << iii <<" RunIndex = " << k1 <<" eta = " << jjj <<" Nphi = " << mapRADDAM_HED20[iii][jjj] <<endl;
-	  //	  int jj = jjj-13;
-	  //	  if(jj> 13) jj -=44;
-	  //	  if(jj<0 || jj>13) cout<<"*** ERROR *** depth = " << iii <<" eta = " << jjj <<" new-eta = " << jj <<endl;
+      //////////////------------------------------                                   and now averaging over N-phi_sectors
+      //////////////////---------------------------------------
+      for(int iii = 1; iii<4; iii++) {
+	for (int jjj=1;jjj<=82;jjj++) {
 	  
-	  if(jjj<42 ) {
-	    if(kdirection == 0) {
-	      int jj = jjj-13;
-	      if(jj<0 || jj>13) cout<<"***ZZM ERROR *** depth = " << iii <<" eta = " << jjj <<" new-eta = " << jj <<endl;
-	      ZZM[k1][iii][jj] = mapRADDAM_HED2[iii][jjj];
-	      if(verbosity == 1)  cout<<"****aver per N-phi_sectors********* ZZM[k1][iii][jj] = " << ZZM[k1][iii][jj] <<endl;
-	    }//if kdirection=0
-	  }
-	  else {
-	    if(kdirection == 1) {
-	      int jj = jjj-13;
-	      jj -=44;
-	      if(jj<0 || jj>13) cout<<"***ZZP ERROR *** depth = " << iii <<" eta = " << jjj <<" new-eta = " << jj <<endl;
-	      ZZP[k1][iii][jj] = mapRADDAM_HED2[iii][jjj];
-	      if(verbosity == 1)  cout<<"****aver per N-phi_sectors****** ZZP[k1][iii][jj] = " << ZZP[k1][iii][jj] <<endl;
-	    }//if kdirection=1
-	  }// if jjj<42
-
-	}// if(mapRADDAM_HED20 != 0
-
-      }//for  
-    }//for 
+	  if(mapRADDAM_HED20[iii][jjj] != 0 ) {
+	    
+	    if(verbosity == 1)  cout<<"****aver per N-phi_sectors********* depth = " << iii <<" RunIndex = " << k1 <<" eta = " << jjj <<" Nphi = " << mapRADDAM_HED20[iii][jjj] <<endl;
+	    mapRADDAM_HED2[iii][jjj] /= mapRADDAM_HED20[iii][jjj];
+	    if(verbosity == 3 && iii==3 ) cout<<"****aver per N-phi_sectors********* depth = " << iii <<" RunIndex = " << k1 <<" eta = " << jjj <<" Nphi = " << mapRADDAM_HED20[iii][jjj] <<endl;
+	    //	  int jj = jjj-13;
+	    //	  if(jj> 13) jj -=44;
+	    //	  if(jj<0 || jj>13) cout<<"*** ERROR *** depth = " << iii <<" eta = " << jjj <<" new-eta = " << jj <<endl;
+	    
+	    if(jjj<42 ) {
+	      if(kdirection == 0) {
+		int jj = jjj-13;
+		if(jj<0 || jj>13) cout<<"***ZZM ERROR *** depth = " << iii <<" eta = " << jjj <<" new-eta = " << jj <<endl;
+		ZZM[k1][iii][jj] = mapRADDAM_HED2[iii][jjj];
+		if(verbosity == 1)  cout<<"****aver per N-phi_sectors********* ZZM[k1][iii][jj] = " << ZZM[k1][iii][jj] <<endl;
+	      }//if kdirection=0
+	    }
+	    else {
+	      if(kdirection == 1) {
+		int jj = jjj-13;
+		jj -=44;
+		if(jj<0 || jj>13) cout<<"***ZZP ERROR *** depth = " << iii <<" eta = " << jjj <<" new-eta = " << jj <<endl;
+		ZZP[k1][iii][jj] = mapRADDAM_HED2[iii][jjj];
+		if(verbosity == 1)  cout<<"****aver per N-phi_sectors****** ZZP[k1][iii][jj] = " << ZZP[k1][iii][jj] <<endl;
+	      }//if kdirection=1
+	    }// if jjj<42
+	    
+	  }// if(mapRADDAM_HED20 != 0
+	  
+	}//for  
+      }//for 
+    ///////////////////////////////////////////////////////////////// nulling :
+    /////////////////////////////////////////////////////////////////////////////////////////////// nulling :
     ///////////////////////////////////////////////////////////////// nulling :
     //
     for(int iii = 1; iii<4; iii++) {
@@ -668,47 +861,55 @@ ZZP[k1][iii][jj] =
 	}//if( k1 == NP-1 
 */	
 
-
+	//  }//if(k1==0 || (k1>37
                     //  END OF LOOP OVER LASER RUNS
     }//for k1 loop over time points(LASER runs)
     cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!                   DONE: last LASER run READ " <<endl;
-    //  END OF LOOP OVER LASER RUNS
-    //  END OF LOOP OVER LASER RUNS
+    // ////////////////////////////////////////////////////////////////////////////////////////////////// END OF LOOP OVER LASER RUNS
+    ////////////////////////////////////////////////////////////////////////////////////////////////////  END OF LOOP OVER LASER RUNS
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // =========================   normalization on channel:    ZZM[k1][3][13];   ZZP[k1][3][0];
-  //
-    for(int k1 = 0; k1<NP; k1++) {
-      if(verbosity == 1) {cout<<" ********************************************************************time *************point = " << k1 <<endl;}
-      for(int iii = 1; iii<4; iii++) {
-	for (int jj=0;jj<=13;jj++) {
-
-	  if(verbosity == 1) {cout<<" **** iii = " << iii <<" **** jj = " << jj <<endl;}
-	  //    cout << "!!!!!!!!!!!!!!!!!!normalization on channel:!!!!!!!!!!!!!!   Positive Direction " <<endl;
-
-	  if(kdirection == 1) {
-	    if(iii==3&&jj==0) {} else{
-	      if(ZZP[k1][3][0]  != 0 ) {ZZP[k1][iii][jj] /= ZZP[k1][3][0];}
-	      if(verbosity == 1 && ZZP[k1][iii][jj] != 0 ) {cout<<"Normalized P Positive Direction ***** depth = " << iii <<" eta = " << jj <<" ZZP[k1][iii][jj] = " << ZZP[k1][iii][jj] <<endl;}
-	      if(verbosity == 3 && ZZP[k1][iii][jj] != 0 && iii==3 ) {cout<<"Normalized P Positive Direction ***** depth = " << iii <<" eta = " << jj <<" ZZP[k1][iii][jj] = " << ZZP[k1][iii][jj] <<" ZZP[k1][3][0] = " << ZZP[k1][3][0]<<endl;}
+    // ////////////////////////////////////////////////////////////////////////////////////////////////// END OF LOOP OVER LASER RUNS
+    ////////////////////////////////////////////////////////////////////////////////////////////////////  END OF LOOP OVER LASER RUNS
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////////////////////////////////////// END OF LOOP OVER LASER RUNS
+    ////////////////////////////////////////////////////////////////////////////////////////////////////  END OF LOOP OVER LASER RUNS
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    if(variant != 2 ) {
+      // =========================   normalization on channel:    ZZM[k1][3][13];   ZZP[k1][3][0];
+      //
+      for(int k1 = 0; k1<NP; k1++) {
+	if(verbosity == 1) {cout<<" ********************************************************************time *************point = " << k1 <<endl;}
+	for(int iii = 1; iii<4; iii++) {
+	  for (int jj=0;jj<=13;jj++) {
+	    
+	    if(verbosity == 1) {cout<<" **** iii = " << iii <<" **** jj = " << jj <<endl;}
+	    //    cout << "!!!!!!!!!!!!!!!!!!normalization on channel:!!!!!!!!!!!!!!   Positive Direction " <<endl;
+	    
+	    if(kdirection == 1) {
+	      if(iii==3&&jj==0) {} else{
+		if(ZZP[k1][3][0]  != 0 ) {ZZP[k1][iii][jj] /= ZZP[k1][3][0];}
+		if(verbosity == 1 && ZZP[k1][iii][jj] != 0 ) {cout<<"Normalized P Positive Direction ***** depth = " << iii <<" eta = " << jj <<" ZZP[k1][iii][jj] = " << ZZP[k1][iii][jj] <<endl;}
+		if(verbosity == 3 && ZZP[k1][iii][jj] != 0 && iii==3 ) {cout<<"Normalized P Positive Direction ***** depth = " << iii <<" eta = " << jj <<" ZZP[k1][iii][jj] = " << ZZP[k1][iii][jj] <<" ZZP[k1][3][0] = " << ZZP[k1][3][0]<<endl;}
+	      }// if
+	    }//if
+	    
+	    else if(kdirection == 0) {
+	      //    cout << "!!!!!!!!!!!!!!!!!normalization on channel:!!!!!!!!!!!!!!!   Negative Direction " <<endl;
+	      if(iii==3&&jj==13) {} else{
+		if(ZZM[k1][3][13] != 0 ) {ZZM[k1][iii][jj] /= ZZM[k1][3][13];}
+		if(verbosity == 1 && ZZM[k1][iii][jj] != 0 ) {cout<<"Normalized M Negative Direction ***** depth = " << iii <<" eta = " << jj <<" ZZM[k1][iii][jj] = " << ZZM[k1][iii][jj] <<endl;}
+		if(verbosity == 3 && ZZM[k1][iii][jj] != 0 && iii==3 ) {cout<<"Normalized M Negative Direction ***** depth = " << iii <<" eta = " << jj <<" ZZM[k1][iii][jj] = " << ZZM[k1][iii][jj] <<" ZZM[k1][3][0] = " << ZZM[k1][3][0]<<endl;}
+	      }// if
+	      
+	      
 	    }// if
-	  }//if
-
-	  else if(kdirection == 0) {
-	    //    cout << "!!!!!!!!!!!!!!!!!normalization on channel:!!!!!!!!!!!!!!!   Negative Direction " <<endl;
-	    if(iii==3&&jj==13) {} else{
-	      if(ZZM[k1][3][13] != 0 ) {ZZM[k1][iii][jj] /= ZZM[k1][3][13];}
-	      if(verbosity == 1 && ZZM[k1][iii][jj] != 0 ) {cout<<"Normalized M Negative Direction ***** depth = " << iii <<" eta = " << jj <<" ZZM[k1][iii][jj] = " << ZZM[k1][iii][jj] <<endl;}
-	      if(verbosity == 3 && ZZM[k1][iii][jj] != 0 && iii==3 ) {cout<<"Normalized M Negative Direction ***** depth = " << iii <<" eta = " << jj <<" ZZM[k1][iii][jj] = " << ZZM[k1][iii][jj] <<" ZZM[k1][3][0] = " << ZZM[k1][3][0]<<endl;}
-	    }// if
-
-
-	  }// if
-
-	}//for  
+	    
+	  }//for  
+	}//for 
       }//for 
-    }//for 
-    //
-  //============================= table   ====================================== normalization on first run channel 3,16:
+      //
+    } // variant
+    //============================= table   ====================================== normalization on first run channel 3,16:
   //             -41                                +41
   //                            82 bins
   //           jjj =  1          |         82    | -41
@@ -737,12 +938,12 @@ ZZP[k1][iii][jj] =
   //
   //
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    int k1last=NP-1;
   ////////////////////////////////////////////////// Preparation for PLOT25:
   // jj   M:    0-   1   2   3   4   5   6   7   8   9   10    11   -12    13      P:    0    1-  2   3   4   5   6   7   8   9   10    11    12   -13
   // real N:   29   28  27  26  25  24  23  22  21  20   19    18    17    16           16   17  18  19  20  21  22  23  24  25   26    27    28    29
   // RR   N:   12   11  10   9   8   7   6   5   4   3    2    1      0                       0   1   2   3   4   5   6   7   8    9    10    11    12   
   // RR7  N:        10   9   8   7   6   5   4   3   2    1    0                                  0   1   2   3   4   5   6   7    8    9     10
-    int k1last=NP-1;
     // L1: eta 17-29
     if(kdirection == 0 ) for (int jj=0;jj<13;jj++) {RRM[12-jj] = ZZM[k1last][1][jj];}
     if(kdirection == 1 ) for (int jj=1;jj<14;jj++) {RRP[jj-1] = ZZP[k1last][1][jj];}
@@ -750,9 +951,6 @@ ZZP[k1][iii][jj] =
     if(kdirection == 0 ) for(int iii = 2; iii<4; iii++) {for (int jj=1;jj<12;jj++) {  if((iii==2 && jj>2 && jj<12) || (iii==3 && jj>0 && jj<3)) RRM7[11-jj] = ZZM[k1last][iii][jj];  }}
     if(kdirection == 1 ) for(int iii = 2; iii<4; iii++) {for (int jj=2;jj<13;jj++) {  if((iii==2 && jj>1 && jj<11) || (iii==3 && jj>10 && jj<13)) RRP7[jj-2] = ZZP[k1last][iii][jj];  }}
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 
 
@@ -768,8 +966,8 @@ ZZP[k1][iii][jj] =
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Int_t Method = NMethodsStart ;
   while (Method<NMethodsToUse+1) {
-    if( (kdirection==1 && Method != 9 && Method != 19 && Method != 24 &&Method!= 1&&Method!= 2&&Method!= 3&&Method!= 4&&Method!= 5&&Method!= 6&&Method!= 7&&Method!= 8) || 
-        (kdirection==0 && Method != 0 && Method != 10 && Method != 22 &&Method!=11&&Method!=12&&Method!=13&&Method!=14&&Method!=15&&Method!=16&&Method!=17&&Method!=18     && Method != 25  ) )
+    if((kdirection==1 && Method != 9 && Method != 19 && Method != 24 && Method != 26 &&Method != 28 &&Method != 32 &&Method!= 1&&Method!= 2&&Method!= 3&&Method!= 4&&Method!= 5&&Method!= 6&&Method!= 7&&Method!= 8 && Method !=30) || 
+       (kdirection==0 && Method != 0 && Method != 10 && Method != 22 && Method != 27 &&Method != 29 &&Method != 33 &&Method!=11&&Method!=12&&Method!=13&&Method!=14&&Method!=15&&Method!=16&&Method!=17&&Method!=18 && Method !=31 &&Method !=25))
       {
     cout<<" ****  START   Method " << Method <<endl;
     //======================================================================================================= PLOT0: P:    <Aijk>_ev.run for all runs
@@ -819,7 +1017,7 @@ ZZP[k1][iii][jj] =
       gPad->SetGridx();
       gPad->SetLogy();
       gStyle->SetOptStat(101110); 
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       //    Ceff1D->SetTitle("any Error, HE Depth1 \n");
       Ceff1D->SetMarkerStyle(20);
       Ceff1D->SetMarkerSize(0.4);
@@ -840,7 +1038,7 @@ ZZP[k1][iii][jj] =
       gPad->SetGridx();
       gPad->SetLogy();
       gStyle->SetOptStat(101110); 
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       //    Seff1D->SetTitle("any Error, HE Depth1 \n");
       Seff1D->SetMarkerStyle(20);
       Seff1D->SetMarkerSize(0.4);
@@ -861,16 +1059,21 @@ ZZP[k1][iii][jj] =
       gPad->SetGridx();
       gPad->SetLogy();
       gStyle->SetOptStat(101110);  
-      //    Meff3D->SetTitle("any Error, HE Depth3 \n");
-      Meff3D->SetMarkerStyle(20);
-      Meff3D->SetMarkerSize(0.4);
-      Meff3D->GetYaxis()->SetLabelSize(0.04);
-      Meff3D->SetXTitle("for mean <Aijk>");
-      Meff3D->SetYTitle("N");
-      Meff3D->SetMarkerColor(4);
-      Meff3D->SetLineColor(4);
-      //    Meff3D->Draw("Error");
-          Meff3D->Draw("PL");
+      Meff1D->SetMarkerStyle(20);
+      Meff1D->SetMarkerSize(0.4);
+      Meff1D->GetYaxis()->SetLabelSize(0.04);
+      Meff1D->SetXTitle("for mean <Aijk>");
+      Meff1D->SetYTitle("N");
+      Meff1D->SetMarkerColor(4);
+      Meff1D->SetLineColor(4);
+      Meff1D->Draw("Error");
+      Meff2D->SetMarkerColor(2);
+      Meff2D->SetLineColor(2);
+      Meff2D->Draw("ErrorSame");
+      Meff3D->SetMarkerColor(3);
+      Meff3D->SetLineColor(3);
+      Meff3D->Draw("ErrorSame");
+      //          Meff3D->Draw("PL");
     }//Method = 20
     //  ////////////////////////////////////////////////////////////////////////// 
  
@@ -885,9 +1088,10 @@ Draw("APL"); - w/ errors
     if(Method == 1 ) {
       for(int k1 = 0; k1<NP; k1++) {YY[k1]=0.;}
       c1->Range(0,0,25,18);
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
+      //    TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
       pad1->Draw();
       pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
@@ -925,9 +1129,9 @@ Draw("APL"); - w/ errors
     if(Method == 2 ) {
       for(int k1 = 0; k1<NP; k1++) {YY[k1]=0.;}
       c1->Range(0,0,25,18);
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
       pad1->Draw();
       pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
@@ -974,9 +1178,9 @@ Draw("APL"); - w/ errors
     if(Method == 3 ) {
       for(int k1 = 0; k1<NP; k1++) {YY[k1]=0.;}
       c1->Range(0,0,25,18);
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
       pad1->Draw();
       pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
@@ -1011,9 +1215,9 @@ Draw("APL"); - w/ errors
     if(Method == 4 ) {
       for(int k1 = 0; k1<NP; k1++) {YY[k1]=0.;}
       c1->Range(0,0,25,18);
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
       pad1->Draw();
       pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
@@ -1055,9 +1259,9 @@ Draw("APL"); - w/ errors
     if(Method == 5 ) {
       for(int k1 = 0; k1<NP; k1++) {YY[k1]=0.;}
       c1->Range(0,0,25,18);
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
       pad1->Draw();
       pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
@@ -1116,9 +1320,9 @@ Draw("APL"); - w/ errors
     if(Method == 6 ) {
       for(int k1 = 0; k1<NP; k1++) {YY[k1]=0.;}
       c1->Range(0,0,25,18);
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
       pad1->Draw();
       pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
@@ -1166,9 +1370,9 @@ Draw("APL"); - w/ errors
     if(Method == 7 ) {
       for(int k1 = 0; k1<NP; k1++) {YY[k1]=0.;}
       c1->Range(0,0,25,18);
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
       pad1->Draw();
       pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
@@ -1224,9 +1428,9 @@ Draw("APL"); - w/ errors
     if(Method == 8 ) {
       for(int k1 = 0; k1<NP; k1++) {YY[k1]=0.;}
       c1->Range(0,0,25,18);
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
       pad1->Draw();
       pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
@@ -1278,9 +1482,9 @@ Draw("APL"); - w/ errors
     if(Method == 11 ) {
       for(int k1 = 0; k1<NP; k1++) {YY[k1]=0.;}
       c1->Range(0,0,25,18);
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
       pad1->Draw();
       pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
@@ -1318,9 +1522,9 @@ Draw("APL"); - w/ errors
     if(Method == 12 ) {
       for(int k1 = 0; k1<NP; k1++) {YY[k1]=0.;}
       c1->Range(0,0,25,18);
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
       pad1->Draw();
       pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
@@ -1367,9 +1571,9 @@ Draw("APL"); - w/ errors
     if(Method == 13 ) {
       for(int k1 = 0; k1<NP; k1++) {YY[k1]=0.;}
       c1->Range(0,0,25,18);
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
       pad1->Draw();
       pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
@@ -1404,9 +1608,9 @@ Draw("APL"); - w/ errors
     if(Method == 14 ) {
       for(int k1 = 0; k1<NP; k1++) {YY[k1]=0.;}
       c1->Range(0,0,25,18);
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
       pad1->Draw();
       pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
@@ -1447,9 +1651,9 @@ Draw("APL"); - w/ errors
     if(Method == 15 ) {
       for(int k1 = 0; k1<NP; k1++) {YY[k1]=0.;}
       c1->Range(0,0,25,18);
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
       pad1->Draw();
       pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
@@ -1507,9 +1711,9 @@ Draw("APL"); - w/ errors
     if(Method == 16 ) {
       for(int k1 = 0; k1<NP; k1++) {YY[k1]=0.;}
       c1->Range(0,0,25,18);
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
       pad1->Draw();
       pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
@@ -1558,9 +1762,9 @@ Draw("APL"); - w/ errors
     if(Method == 17 ) {
       for(int k1 = 0; k1<NP; k1++) {YY[k1]=0.;}
       c1->Range(0,0,25,18);
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
       pad1->Draw();
       pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
@@ -1621,9 +1825,9 @@ Draw("APL"); - w/ errors
     if(Method == 18 ) {
       for(int k1 = 0; k1<NP; k1++) {YY[k1]=0.;}
       c1->Range(0,0,25,18);
-      c1->SetFillColor(40);
+      c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
       pad1->Draw();
       pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
@@ -1670,10 +1874,10 @@ Draw("APL"); - w/ errors
    gStyle->SetPalette(kSolar);
       for(int k1 = 0; k1<NP; k1++) {YY[k1]=0.;}
       c1->Range(0,0,25,18);
-      //    c1->SetFillColor(40);
+      //    c1->SetFillColor(0);
       c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
       pad1->Draw();pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
       //              x1   y1     x2     y2
@@ -1764,7 +1968,7 @@ Draw("APL"); - w/ errors
       c1->Range(0,0,25,18);
       c1->SetFillColor(0);
       c1->Clear();
-      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.83,33);
+      TPad *pad1 = new TPad("pad1","This is pad1",0.02,0.02,0.98,0.98,0);
       pad1->Draw();
       pad1->cd();
       pad1->Range(-0.255174,-19.25,2.29657,-6.75);
@@ -1815,6 +2019,157 @@ Draw("APL"); - w/ errors
 */
 
     }//Method = 25
+
+
+    //======================================================================================================= PLOT26:
+    if(Method == 26 ) {
+      cout<<"****Draw 26 Dependencies: M: draw <RRijk>_ev.run for all runs   *** " <<endl;
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogy();
+      gStyle->SetOptStat(1110000); 
+      rrwithphiM->SetMarkerStyle(20);
+      rrwithphiM->SetMarkerSize(0.4);
+      rrwithphiM->GetYaxis()->SetLabelSize(0.04);
+      rrwithphiM->SetTitle("all runs & channels");
+      rrwithphiM->SetXTitle("HEM <RRijk>");
+      rrwithphiM->SetYTitle("N");
+      rrwithphiM->SetMarkerColor(4);
+      rrwithphiM->SetLineColor(4);
+      //    rrwithphiM->Draw("Error");
+          rrwithphiM->Draw("PL");
+    }//Method = 26
+
+
+
+    //======================================================================================================= PLOT27:
+    if(Method == 27 ) {
+      cout<<"****Draw 27 Dependencies: P: draw <RRijk>_ev.run for all runs   *** " <<endl;
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogy();
+      gStyle->SetOptStat(1110000); 
+      rrwithphiP->SetMarkerStyle(20);
+      rrwithphiP->SetMarkerSize(0.4);
+      rrwithphiP->GetYaxis()->SetLabelSize(0.04);
+      rrwithphiP->SetTitle("all runs & channels");
+      rrwithphiP->SetXTitle("HEP <RRijk>");
+      rrwithphiP->SetYTitle("N");
+      rrwithphiP->SetMarkerColor(4);
+      rrwithphiP->SetLineColor(4);
+      //    rrwithphiP->Draw("Error");
+          rrwithphiP->Draw("PL");
+    }//Method = 27
+
+
+    //======================================================================================================= PLOT28: M:  Mean <Aijk>_ev.run for all runs
+    if(Method == 28 ) {
+      cout<<"****Draw 28 Dependencies: Mean   *** " <<endl;
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogy();
+      gStyle->SetOptStat(1110000);
+      c1->SetFillColor(0);
+      //    Ceff1M->SetTitle("any Error, HE Depth1 \n");
+      Ceff1M->SetMarkerStyle(20);
+      Ceff1M->SetMarkerSize(0.4);
+      Ceff1M->GetYaxis()->SetLabelSize(0.04);
+      Ceff1M->SetTitle("M: all runs & channels");
+      Ceff1M->SetXTitle("M: Mean <Aijk>");
+      Ceff1M->SetYTitle("N");
+      Ceff1M->SetMarkerColor(4);
+      Ceff1M->SetLineColor(4);
+      Ceff1M->SetMinimum(0.7); 
+      //    Ceff1M->Draw("Error");
+      Ceff1M->Draw("PL");
+    }//Method = 28
+    
+    //======================================================================================================= PLOT29: P:  Mean  <Aijk>_ev.run for all runs
+    if(Method == 29 ) {
+      cout<<"****Draw 29 Dependencies: Mean   *** " <<endl;
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogy();
+      gStyle->SetOptStat(1110000);
+      c1->SetFillColor(0);
+      //    Ceff1M->SetTitle("any Error, HE Depth1 \n");
+      Ceff1M->SetMarkerStyle(20);
+      Ceff1M->SetMarkerSize(0.4);
+      Ceff1M->GetYaxis()->SetLabelSize(0.04);
+      Ceff1M->SetTitle("P: all runs & channels");
+      Ceff1M->SetXTitle("P: Mean <Aijk>");
+      Ceff1M->SetYTitle("N");
+      Ceff1M->SetMarkerColor(4);
+      Ceff1M->SetLineColor(4);
+      Ceff1M->SetMinimum(0.7);     
+      //    Ceff1M->Draw("Error");
+      Ceff1M->Draw("PL");
+    }//Method = 29
+    
+    //======================================================================================================= PLOT30: M  PHI dependence
+    if(Method == 30 ) {
+      cout<<"****Draw 30 Dependencies:M   PHI   *** " <<endl;
+      phidepdrawing30->Divide(phidependenceM,phidependenceM0, 1, 1, "B");
+      phidepdrawing30->Sumw2();gPad->SetGridy();gPad->SetGridx();//gStyle->SetOptStat(0000000);
+      gPad->SetLogy(0);
+      phidepdrawing30->SetMarkerStyle(20);phidepdrawing30->SetMarkerSize(1.4);phidepdrawing30->GetYaxis()->SetLabelSize(0.04);
+      phidepdrawing30->SetXTitle("Phi");phidepdrawing30->SetYTitle("RR");phidepdrawing30->SetMarkerColor(2);
+      phidepdrawing30->SetLineColor(2);phidepdrawing30->Draw("Error");
+
+    }//Method = 30
+    
+    //======================================================================================================= PLOT31: P  PHI dependence
+    if(Method == 31 ) {
+      cout<<"****Draw 31 Dependencies:P   PHI   *** " <<endl;
+      phidepdrawing31->Divide(phidependenceP,phidependenceP0, 1, 1, "B");
+      phidepdrawing31->Sumw2();gPad->SetGridy();gPad->SetGridx();//gStyle->SetOptStat(0000000);
+      gPad->SetLogy(0);
+      phidepdrawing31->SetMarkerStyle(20);phidepdrawing31->SetMarkerSize(1.4);phidepdrawing31->GetYaxis()->SetLabelSize(0.04);
+      phidepdrawing31->SetXTitle("Phi");phidepdrawing31->SetYTitle("RR");phidepdrawing31->SetMarkerColor(4);
+      phidepdrawing31->SetLineColor(4);phidepdrawing31->Draw("Error");
+
+    }//Method = 31
+    
+    //======================================================================================================= PLOT32: M:  Mean <Aijk>_ev.run for all runs
+    if(Method == 32 ) {
+      cout<<"****Draw 32 Dependencies: RMS    *** " <<endl;
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogy();
+      gStyle->SetOptStat(1110000);
+      c1->SetFillColor(0);
+      Ceff1R->SetMarkerStyle(20);
+      Ceff1R->SetMarkerSize(0.4);
+      Ceff1R->GetYaxis()->SetLabelSize(0.04);
+      Ceff1R->SetTitle("M: all runs & channels");
+      Ceff1R->SetXTitle("M: RMS <Aijk>");
+      Ceff1R->SetYTitle("N");
+      Ceff1R->SetMarkerColor(4);
+      Ceff1R->SetLineColor(4);
+      Ceff1R->SetMinimum(0.7); 
+      Ceff1R->Draw("PL");
+    }//Method = 32
+    
+    //======================================================================================================= PLOT33: P:  Mean <Aijk>_ev.run for all runs
+    if(Method == 33 ) {
+      cout<<"****Draw 33 Dependencies: RMS    *** " <<endl;
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gPad->SetLogy();
+      gStyle->SetOptStat(1110000);
+      c1->SetFillColor(0);
+      Ceff1R->SetMarkerStyle(20);
+      Ceff1R->SetMarkerSize(0.4);
+      Ceff1R->GetYaxis()->SetLabelSize(0.04);
+      Ceff1R->SetTitle("P: all runs & channels");
+      Ceff1R->SetXTitle("M: RMS <Aijk>");
+      Ceff1R->SetYTitle("N");
+      Ceff1R->SetMarkerColor(4);
+      Ceff1R->SetLineColor(4);
+      Ceff1R->SetMinimum(0.7); 
+      Ceff1R->Draw("PL");
+    }//Method = 33
+    
     //================================================================================
     //====================================================================================================================================================
     //================================================================================
@@ -1844,6 +2199,32 @@ Draw("APL"); - w/ errors
   }// loop over Methods
   //======================================================================================================= 
   } // loop over directions
+  //=======================================================================================================
+  // // // // // // // additional plots: 
+  // // // // // // // additional plots: 
+  // // // // // // // additional plots: 
+  TString fdir = "testamt3/";
+  //=============================================  PLOT100
+//  gStyle->SetOptStat(0000000);
+  phidepdrawing30->Draw("Error");
+//  gStyle->SetOptStat(0000000);
+  phidepdrawing31->Draw("ErrorSame");
+  TString plotName = fdir +"PLOT100.png";
+  c1->SaveAs(plotName);
+  cout<<"****PLOT "   << 100  <<" drawn **** " <<endl;
+  //=============================================  PLOT101
+  gStyle->SetOptStat(1110000);
+      phiRRM->SetMarkerStyle(20);phiRRM->SetMarkerSize(1.4);phiRRM->GetYaxis()->SetLabelSize(0.04);
+      phiRRM->SetXTitle("RR");phiRRM->SetYTitle("N");
+      phiRRM->SetMarkerColor(2);phiRRM->SetLineColor(2);
+  phiRRM->Draw("Error");
+      phiRRP->SetMarkerStyle(20);phiRRP->SetMarkerSize(1.4);phiRRP->GetYaxis()->SetLabelSize(0.04);
+      phiRRP->SetXTitle("RR");phiRRP->SetYTitle("N");
+      phiRRP->SetMarkerColor(4);phiRRP->SetLineColor(4);
+  phiRRP->Draw("ErrorSame");
+  plotName = fdir +"PLOT101.png";
+  c1->SaveAs(plotName);
+  cout<<"****PLOT "   << 101  <<" drawn **** " <<endl;
   //======================================================================================================= 
   //======================================================================================================= 
   //======================================================================================================= 
