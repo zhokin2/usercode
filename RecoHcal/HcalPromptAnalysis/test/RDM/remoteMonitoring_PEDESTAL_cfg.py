@@ -306,6 +306,8 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   lsdep_estimator1_HEdepth3 = cms.double(2500.),
                                   lsdep_estimator1_HFdepth1 = cms.double(2500.),
                                   lsdep_estimator1_HFdepth2 = cms.double(2500.),
+                                  lsdep_estimator1_HFdepth3 = cms.double(2500.),
+                                  lsdep_estimator1_HFdepth4 = cms.double(2500.),
                                   lsdep_estimator1_HOdepth4 = cms.double(2500.),
                                   # cuts on Estimator2 to see LS dependences:
                                   lsdep_estimator2_HBdepth1 = cms.double(7.),
