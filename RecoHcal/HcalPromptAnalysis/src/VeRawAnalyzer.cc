@@ -322,6 +322,10 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   double lsdep_estimator1_HFdepth1_;
   double lsdep_estimator1_HFdepth2_;
   double lsdep_estimator1_HOdepth4_;
+  // HF upgrade:
+  double lsdep_estimator1_HFdepth3_;
+  double lsdep_estimator1_HFdepth4_;
+
 
   double lsdep_estimator2_HBdepth1_;
   double lsdep_estimator2_HBdepth2_;
@@ -1023,10 +1027,14 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH1F*    h_sumADCAmplLS6         ;
   TH2F*    h_2DsumADCAmplLS6         ;
   TH2F*    h_2DsumADCAmplLS6_LSselected;
+  TH2F*    h_2D0sumADCAmplLS6         ;
   TH1F*    h_sumADCAmplperLS6         ;
   TH1F*    h_sumCutADCAmplperLS6         ;
-  TH2F*    h_2D0sumADCAmplLS6         ;
   TH1F*    h_sum0ADCAmplperLS6         ;
+  // for HF upgrade:
+  TH1F*    h_sumADCAmplperLS6u         ;
+  TH1F*    h_sumCutADCAmplperLS6u         ;
+  TH1F*    h_sum0ADCAmplperLS6u         ;
 
   TH1F*    h_sumADCAmplperLS1_P1         ;
   TH1F*    h_sum0ADCAmplperLS1_P1         ;
@@ -1069,10 +1077,13 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH1F*    h_sumADCAmplLS7         ;
   TH2F*    h_2DsumADCAmplLS7         ;
   TH2F*    h_2DsumADCAmplLS7_LSselected;
+  TH2F*    h_2D0sumADCAmplLS7         ;
   TH1F*    h_sumADCAmplperLS7         ;
   TH1F*    h_sumCutADCAmplperLS7         ;
-  TH2F*    h_2D0sumADCAmplLS7         ;
   TH1F*    h_sum0ADCAmplperLS7         ;
+  TH1F*    h_sumADCAmplperLS7u         ;
+  TH1F*    h_sumCutADCAmplperLS7u         ;
+  TH1F*    h_sum0ADCAmplperLS7u         ;
   
   TH1F*    h_sumADCAmplLS8         ;
   TH2F*    h_2DsumADCAmplLS8         ;
@@ -2113,6 +2124,9 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   lsdep_estimator1_HFdepth1_ = iConfig.getParameter<double>("lsdep_estimator1_HFdepth1");
   lsdep_estimator1_HFdepth2_ = iConfig.getParameter<double>("lsdep_estimator1_HFdepth2");
   lsdep_estimator1_HOdepth4_ = iConfig.getParameter<double>("lsdep_estimator1_HOdepth4");
+  // HF upgrade:
+  lsdep_estimator1_HFdepth3_ = iConfig.getParameter<double>("lsdep_estimator1_HFdepth3");
+  lsdep_estimator1_HFdepth4_ = iConfig.getParameter<double>("lsdep_estimator1_HFdepth4");
 
   lsdep_estimator2_HBdepth1_ = iConfig.getParameter<double>("lsdep_estimator2_HBdepth1");
   lsdep_estimator2_HBdepth2_ = iConfig.getParameter<double>("lsdep_estimator2_HBdepth2");
@@ -2996,9 +3010,8 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 
 		  }
 		  /////////////////////////////////////////////////////////
-		  
-		  
-		}
+		}//if(k1+1  ==1)
+
 		// HFdepth2
 		if(k1+1  ==2) {
 		  h_sumADCAmplLS7->Fill(bbbc/bbb1);
@@ -3032,10 +3045,23 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		      h_sum0ADCAmplperLS6_M2->Fill( float(lscounterM1) ,bbb1);
 		    }
 		  }
+		}//if(k1+1  ==2)
+
+		// HFdepth3 upgrade
+		if(k1+1  ==3) {
+		  h_sumADCAmplperLS6u->Fill( float(lscounterM1) ,bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth3_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS6u->Fill( float(lscounterM1) ,bbbc); 
+		  h_sum0ADCAmplperLS6u->Fill( float(lscounterM1) ,bbb1);
+		}//if(k1+1  ==3)
+
+		// HFdepth4 upgrade
+		if(k1+1  ==4) {
+		  h_sumADCAmplperLS7u->Fill( float(lscounterM1) ,bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth4_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS7u->Fill( float(lscounterM1) ,bbbc); 
+		  h_sum0ADCAmplperLS7u->Fill( float(lscounterM1) ,bbb1);
+		}//if(k1+1  ==4)
 
 
-
-		}
 	      }
 	      // HO:
 	      if(k0==2) {
@@ -5852,18 +5878,26 @@ void VeRawAnalyzer::beginJob()
     h_sumADCAmplLS6   = new TH1F("h_sumADCAmplLS6"," ",      100,  0.,lsdep_estimator1_HFdepth1_);
     h_2DsumADCAmplLS6    = new TH2F("h_2DsumADCAmplLS6"," ",    82, -41., 41., 72, 0., 72.);
     h_2DsumADCAmplLS6_LSselected= new TH2F("h_2DsumADCAmplLS6_LSselected"," ",82,-41.,41.,72,0.,72.);
+    h_2D0sumADCAmplLS6    = new TH2F("h_2D0sumADCAmplLS6"," ",    82, -41., 41., 72, 0., 72.);
     h_sumADCAmplperLS6  = new TH1F("h_sumADCAmplperLS6"," ",     bac, 1.,bac2);
     h_sumCutADCAmplperLS6  = new TH1F("h_sumCutADCAmplperLS6"," ",     bac, 1.,bac2);
-    h_2D0sumADCAmplLS6    = new TH2F("h_2D0sumADCAmplLS6"," ",    82, -41., 41., 72, 0., 72.);
     h_sum0ADCAmplperLS6  = new TH1F("h_sum0ADCAmplperLS6"," ",     bac, 1.,bac2);
+    // HF upgrade depth3
+    h_sumADCAmplperLS6u = new TH1F("h_sumADCAmplperLS6u"," ",     bac, 1.,bac2);
+    h_sumCutADCAmplperLS6u = new TH1F("h_sumCutADCAmplperLS6u"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS6u = new TH1F("h_sum0ADCAmplperLS6u"," ",     bac, 1.,bac2);
 
     h_sumADCAmplLS7   = new TH1F("h_sumADCAmplLS7"," ",      100,  0.,lsdep_estimator1_HFdepth2_);
     h_2DsumADCAmplLS7    = new TH2F("h_2DsumADCAmplLS7"," ",    82, -41., 41., 72, 0., 72.);
     h_2DsumADCAmplLS7_LSselected= new TH2F("h_2DsumADCAmplLS7_LSselected"," ",82,-41.,41.,72,0.,72.);
+    h_2D0sumADCAmplLS7    = new TH2F("h_2D0sumADCAmplLS7"," ",    82, -41., 41., 72, 0., 72.);
     h_sumADCAmplperLS7  = new TH1F("h_sumADCAmplperLS7"," ",     bac, 1.,bac2);
     h_sumCutADCAmplperLS7  = new TH1F("h_sumCutADCAmplperLS7"," ",     bac, 1.,bac2);
-    h_2D0sumADCAmplLS7    = new TH2F("h_2D0sumADCAmplLS7"," ",    82, -41., 41., 72, 0., 72.);
     h_sum0ADCAmplperLS7  = new TH1F("h_sum0ADCAmplperLS7"," ",     bac, 1.,bac2);
+    // HF upgrade depth4
+    h_sumADCAmplperLS7u = new TH1F("h_sumADCAmplperLS7u"," ",     bac, 1.,bac2);
+    h_sumCutADCAmplperLS7u = new TH1F("h_sumCutADCAmplperLS7u"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLS7u = new TH1F("h_sum0ADCAmplperLS7u"," ",     bac, 1.,bac2);
 
     h_sumADCAmplLS8   = new TH1F("h_sumADCAmplLS8"," ",      100,  0.,lsdep_estimator1_HOdepth4_);
     h_2DsumADCAmplLS8    = new TH2F("h_2DsumADCAmplLS8"," ",    82, -41., 41., 72, 0., 72.);
@@ -9605,6 +9639,19 @@ void VeRawAnalyzer::fillDigiAmplitudeHFQIE10(QIE10DataFrame qie10df)
   if (verbosity == -2323) std::cout <<" fillDigiAmplitude  HFQIE10   Size of Digi nTS= "<<nTS<<" qie10df.size()= "<<qie10df.size()<<std::endl;
 
   /////////////////////////////////////////////////////////////////
+  /*
+                                  # flag   HBHE8    HBHE11   HF8   HF10  comments:
+                                  #  0       +        +       +     +     all
+                                  #  1       +        -       +     -     old
+                                  #  2       -        +       -     +     new (2018)
+                                  #  3       -        +       -     +     new w/o high depthes
+                                  #  4       +        -       +     +     2016fall
+                                  #  5       +        -       +     +     2016fall w/o high depthes
+                                  #  6       +        +       -     +     2017begin
+                                  #  7       +        +       -     +     2017begin w/o high depthes in HEonly
+                                  #  8       +        +       -     +     2017begin w/o high depthes
+                                  #  9       +        +       +     +     all  w/o high depthes
+*/
   if(mdepth ==0  || sub != 4  ) return;
   if(mdepth > 2 && flagupgradeqie1011_    == 3  ) return;
   if(mdepth > 2 && flagupgradeqie1011_    == 5  ) return;
@@ -10844,7 +10891,6 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 		  h_sumADCAmplperLS6->Fill( float(lscounterM1) ,bbbc);
 		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth1_  ) h_sumCutADCAmplperLS6->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS6->Fill( float(lscounterM1) ,bbb1);
-
 		}
 		if(k1+1  ==2) {
 		  h_sumADCAmplLS7->Fill(bbbc/bbb1);
@@ -10856,8 +10902,23 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 		  h_sumADCAmplperLS7->Fill( float(lscounterM1) ,bbbc);
 		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth2_  ) h_sumCutADCAmplperLS7->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS7->Fill( float(lscounterM1) ,bbb1);
-
 		}
+
+		// HFdepth3 upgrade
+		if(k1+1  ==3) {
+		  h_sumADCAmplperLS6u->Fill( float(lscounterM1) ,bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth3_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS6u->Fill( float(lscounterM1) ,bbbc); 
+		  h_sum0ADCAmplperLS6u->Fill( float(lscounterM1) ,bbb1);
+		}//if(k1+1  ==3)
+
+		// HFdepth4 upgrade
+		if(k1+1  ==4) {
+		  h_sumADCAmplperLS7u->Fill( float(lscounterM1) ,bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth4_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS7u->Fill( float(lscounterM1) ,bbbc); 
+		  h_sum0ADCAmplperLS7u->Fill( float(lscounterM1) ,bbb1);
+		}//if(k1+1  ==4)
+
+
 	      }
 	      // HO:
 	      if(k0==2) {
@@ -12409,10 +12470,13 @@ void VeRawAnalyzer::endJob(){
     h_sumADCAmplLS6->Write();
     h_2DsumADCAmplLS6->Write();
     h_2DsumADCAmplLS6_LSselected->Write();
+    h_2D0sumADCAmplLS6->Write();
     h_sumADCAmplperLS6->Write();
     h_sumCutADCAmplperLS6->Write();
-    h_2D0sumADCAmplLS6->Write();
     h_sum0ADCAmplperLS6->Write();
+    h_sumADCAmplperLS6u->Write();
+    h_sumCutADCAmplperLS6u->Write();
+    h_sum0ADCAmplperLS6u->Write();
 
 
     h_sumADCAmplperLS1_P1 ->Write();
@@ -12456,10 +12520,13 @@ void VeRawAnalyzer::endJob(){
     h_sumADCAmplLS7->Write();
     h_2DsumADCAmplLS7->Write();
     h_2DsumADCAmplLS7_LSselected->Write();
+    h_2D0sumADCAmplLS7->Write();
     h_sumADCAmplperLS7->Write();
     h_sumCutADCAmplperLS7->Write();
-    h_2D0sumADCAmplLS7->Write();
     h_sum0ADCAmplperLS7->Write();
+    h_sumADCAmplperLS7u->Write();
+    h_sumCutADCAmplperLS7u->Write();
+    h_sum0ADCAmplperLS7u->Write();
     
     h_sumADCAmplLS8->Write();
     h_2DsumADCAmplLS8->Write();
