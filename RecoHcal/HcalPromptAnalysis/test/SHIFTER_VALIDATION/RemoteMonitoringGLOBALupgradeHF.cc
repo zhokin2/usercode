@@ -901,7 +901,7 @@ int main(int argc, char *argv[])
             if (sub==2) cHE->Divide(3,1);
             if (sub==3) cHB->Divide(1,1);
             if (sub==4) cHE->Divide(2,1);
-            if (sub==4 && test==1) cHE->Divide(2,2); // HF upgrade with new depthes 3 and 4
+            if (sub==4 && test==1) cFour1->Divide(2,2); // HF upgrade with new depthes 3 and 4
 
 	    int kkkkkkmax = k_max[sub];
 	    if (sub==4 && test==1) kkkkkkmax = k_maxHFupgrade[sub];
