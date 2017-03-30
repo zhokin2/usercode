@@ -55,14 +55,18 @@ int main(int argc, char *argv[])
     // Cut [test][sub][depth]
     double Cut0[7][5][5]={{{0.,0.,0.,0.,0.}, {0.,1.,1.0,0.,0.},  {0.,1.,1.,1.,0.},   {0.,0.,0.,0.,1.}, {0.,1.,1.,0.,0.}},  //CapID
 	            //old {{0.,0.,0.,0.,0.}, {0.,11.,13.,0.,0.}, {0.,25., 6.,30.,0.}, {0.,0.,0.,0., 28.}, {0.,80.,40.,0.,0.}},  //Amplitude  0,HB,HE,HO,HF depthes 
-                          {{0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.}, {0.,45.,40.,65.,0.}, {0.,0.,0.,0.,100.}, {0.,55.,40.,0.,0.}},  //Amplitude  0,HB,HE,HO,HF depthes 
+                    //last      {{0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.}, {0.,45.,40.,65.,0.}, {0.,0.,0.,0.,100.}, {0.,55.,40.,0.,0.}},  //Amplitude  0,HB,HE,HO,HF depthes 
+                          {{0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.}, {0.,45.,40.,65.,0.}, {0.,0.,0.,0.,100.}, {0.,55.,40.,40.,40.}},  //Amplitude  0,HB,HE,HO,HF depthes for HFupgrade
 			  {{0.,0.,0.,0.,0.}, {0.,3.,3.,0.,0.},   {0.,3.,3.,3.,0.},   {0.,0.,0.,0.,3.}, {0.,2.,2.,0.,0.}}, //Width
 			  {{0.,0.,0.,0.,0.}, {0.,0.4,0.4,0.,0.}, {0.,0.4,0.4,0.4,0.},{0.,0.,0.,0.,0.4},{0.,0.8,0.8,0.,0.}}, //Ratio
 			  {{0.,0.,0.,0.,0.}, {0.,4.7,4.7,0.,0.}, {0.,4.8,4.8,5.0,0.},{0.,0.,0.,0.,4.8},{0.,4.0,4.0,0.,0.}}, //TSn
 			  {{0.,0.,0.,0.,0.}, {0.,3.5,3.5,0.,0.}, {0.,4.0,4.0,4.0,0.},{0.,0.,0.,0.,3.},{0.,3.5,3.5,0.,0.}}, //TSx
 			  {{0.,0.,0.,0.,0.},   {0.,0.,0.,0.,0.},    {0.,0.,0.,0.,0.},{0.,0.,0.,0.,0.},{0.,0.,0.,0.,0.}}}; //Empty
-    double CutAb[5][5]={{0.,0.,0.,0.,0.},{0.,20.,7.,0.,0.},{0.,16.,13.,4.,0.},{0.,0.,0.,0.,45.},{0.,10.,5.,0.,0.}}; // cut 1
-    double CutPo[5][5]={{0.,0.,0.,0.,0.},{0.,9.,3.,0.,0.},{0.,8.,6.,2.,0.},{0.,0.,0.,0.,20.},{0.,5.,3.,0.,0.}}; //cut 3
+
+    double CutAb[5][5]={{0.,0.,0.,0.,0.},{0.,20.,7.,0.,0.},{0.,16.,13.,4.,0.},{0.,0.,0.,0.,45.},{0.,10.,5.,0.,0.}}; // cut 1 for CapIdErrors
+
+    double CutPo[5][5]={{0.,0.,0.,0.,0.},{0.,9.,3.,0.,0.},{0.,8.,6.,2.,0.},{0.,0.,0.,0.,20.},{0.,5.,3.,0.,0.}}; //cut 3 for CapIdErrors (portions)
+
 //======================================================================
 
 
@@ -80,7 +84,9 @@ int main(int argc, char *argv[])
 //  char *str = (char*)alloca(10000);
   
   int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+
   int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+  int k_maxHFupgrade[5]={0,2,3,4,4}; // maximum depth for each subdet	
 
 //+++++++++++++++++++++++++++++  
 // Lumi iLumi and number of events  
@@ -670,6 +676,9 @@ int main(int argc, char *argv[])
       
       HistNumBadChanDepth[1][4][1] = (TH1F*)hfile->Get("h_sumADCAmplperLS6");
       HistNumBadChanDepth[1][4][2] = (TH1F*)hfile->Get("h_sumADCAmplperLS7");
+      // HF upgrade:
+      HistNumBadChanDepth[1][4][3] = (TH1F*)hfile->Get("h_sumADCAmplperLS6u");
+      HistNumBadChanDepth[1][4][4] = (TH1F*)hfile->Get("h_sumADCAmplperLS7u");
       
       HistNumBadChanFull[1] = (TH1F*) HistNumBadChanDepth[1][1][1]->Clone();
       
@@ -684,6 +693,9 @@ int main(int argc, char *argv[])
       
       HistCutNumBadChanDepth[1][4][1] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS6");
       HistCutNumBadChanDepth[1][4][2] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS7");    
+      // HF upgrade:
+      HistCutNumBadChanDepth[1][4][3] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS6u");
+      HistCutNumBadChanDepth[1][4][4] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS7u");
       
       
       HistNumChanDepth[1][1][1] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS1");     
@@ -697,6 +709,9 @@ int main(int argc, char *argv[])
       
       HistNumChanDepth[1][4][1] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS6");     
       HistNumChanDepth[1][4][2] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS7");
+      // HF upgrade:
+      HistNumChanDepth[1][4][3] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS6u");
+      HistNumChanDepth[1][4][4] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS7u");
            
       HistNumChanFull[1] = (TH1F*) HistNumChanDepth[1][1][1]->Clone();
       // just initialization of [6] massive for alternative <A> calculation
@@ -880,17 +895,22 @@ int main(int argc, char *argv[])
       HistNumChanFull[5] = (TH1F*) HistNumChanDepth[5][1][1]->Clone();
                   
       
-    for (int test=0;test<=5;test++) { //Test: 0, 
+    for (int test=0;test<=5;test++) { //Test: =0(CapIdErrors), =1(Amplitude), =2... 
         for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
             if (sub==1) cHE->Divide(2,1);
             if (sub==2) cHE->Divide(3,1);
             if (sub==3) cHB->Divide(1,1);
             if (sub==4) cHE->Divide(2,1);
-            for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
+            if (sub==4 && test==1) cFour1->Divide(2,2); // HF upgrade with new depthes 3 and 4
+
+	    int kkkkkkmax = k_max[sub];
+	    if (sub==4 && test==1) kkkkkkmax = k_maxHFupgrade[sub];
+            for (int k=k_min[sub];k<=kkkkkkmax;k++) {  //Depth 
                 if (sub==1) cHE->cd(k); 
                 if (sub==2) cHE->cd(k);
 	        if (sub==3) cHB->cd(k-3);
 	        if (sub==4) cHE->cd(k);
+	        if (sub==4 && test==1) cHE->cd(k);
 		gPad->SetGridy();
                 gPad->SetGridx();
 //                gPad->SetLogy();      
@@ -1013,7 +1033,7 @@ int main(int argc, char *argv[])
 	    
 	    HistNumChanFull[6]->SetBinContent(x,0.0 );
 	    for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-	      for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
+	      for (int k=k_min[sub];k<=k_maxHFupgrade[sub];k++) {  //Depth 
 		double ccc1 =  HistNumBadChanDepth[test][sub][k]->GetBinContent(x);
 		HistNumChanFull[6]->SetBinContent(x,HistNumChanFull[6]->GetBinContent(x) + ccc1);
 	      }
@@ -3843,7 +3863,7 @@ int main(int argc, char *argv[])
 	     if (sub==1) htmlFile << "<h3> Legends:  dots selected with following cuts: <td class=\"s6\" align=\"center\">"<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2) correspond BAD LS.</td></h3>"<< std::endl;
 	     if (sub==2) htmlFile << "<h3> Legends:  dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3) correspond BAD LS. </h3>"<< std::endl;
 	     if (sub==3) htmlFile << "<h3> Legends:  dots selected with following cuts: "<<Cut0[test][sub][4]<<" (Depth4) correspond BAD LS. </h3>"<< std::endl;
-	     if (sub==4) htmlFile << "<h3> Legends:  dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2) correspond BAD LS. </h3>"<< std::endl;
+	     if (sub==4) htmlFile << "<h3> Legends:  dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3), "<<Cut0[test][sub][4]<<" (Depth4) correspond BAD LS. </h3>"<< std::endl;
 	   }
 	   if (test==0){
 	     if (sub==1) htmlFile << " <img src=\"HistPortHB.png\" />" << std::endl; 
