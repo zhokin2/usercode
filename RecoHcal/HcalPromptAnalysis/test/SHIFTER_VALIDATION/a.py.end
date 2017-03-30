@@ -291,8 +291,10 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   lsdep_estimator1_HEdepth1 = cms.double(55.),
                                   lsdep_estimator1_HEdepth2 = cms.double(60.),
                                   lsdep_estimator1_HEdepth3 = cms.double(70.),
-                                  lsdep_estimator1_HFdepth1 = cms.double(200.),
+                                  lsdep_estimator1_HFdepth1 = cms.double(150.),
                                   lsdep_estimator1_HFdepth2 = cms.double(120.),
+                                  lsdep_estimator1_HFdepth3 = cms.double(100.),
+                                  lsdep_estimator1_HFdepth4 = cms.double(100.),
                                   lsdep_estimator1_HOdepth4 = cms.double(300.),
                                   # cuts on Estimator2:Tn to see bcs & LS dependences:
                                   lsdep_estimator2_HBdepth1 = cms.double(5.),
@@ -370,7 +372,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   # flag   HBHE8    HBHE11   HF8   HF10  comments:
                                   #  0       +        +       +     +     all
                                   #  1       +        -       +     -     old
-                                  #  2       -        +       -     +     new
+                                  #  2       -        +       -     +     new 2018
                                   #  3       -        +       -     +     new w/o high depthes
                                   #  4       +        -       +     +     2016fall
                                   #  5       +        -       +     +     2016fall w/o high depthes
