@@ -336,7 +336,8 @@ int main(int argc, char *argv[])
   TH1F* Meff2D = new TH1F("Meff2D","", 100, 0.,4000.);
   TH1F* Meff3D = new TH1F("Meff3D","", 100, 0.,4000.);
 
-  TH1F* rwithphi = new TH1F("rwithphi","", 100, -1.,6.);
+  //TH1F* rwithphi = new TH1F("rwithphi","", 100, -1.,6.);
+  TH1F* rwithphi = new TH1F("rwithphi","", 100, -1.,499.);
 
 
 
@@ -525,8 +526,12 @@ int main(int argc, char *argv[])
     for(int iii = 1; iii<4; iii++) {
       for (int jjj=1;jjj<=82;jjj++) {
 	for (int kkk=1;kkk<=72;kkk++) {
-	  if(normM[iii][jjj][kkk] != 0 && jjj < 42 && kdirection == 0) {mapRADDAM_HE[iii][jjj][kkk] /= normM[iii][jjj][kkk];}
-	  if(normP[iii][jjj][kkk] != 0 && jjj > 41 && kdirection == 1) {mapRADDAM_HE[iii][jjj][kkk] /= normP[iii][jjj][kkk];}
+	  if(jjj < 42 && kdirection == 0) {
+	    if(normM[iii][jjj][kkk] != 0 ) {mapRADDAM_HE[iii][jjj][kkk] /= normM[iii][jjj][kkk];}else{mapRADDAM_HE[iii][jjj][kkk] = 0.;}
+	  }
+	  if(jjj > 41 && kdirection == 1) {
+	    if(normP[iii][jjj][kkk] != 0 ) {mapRADDAM_HE[iii][jjj][kkk] /= normP[iii][jjj][kkk];}else{mapRADDAM_HE[iii][jjj][kkk] = 0.;}
+	  }
 	}//for  
       }//for 
     }//for 
