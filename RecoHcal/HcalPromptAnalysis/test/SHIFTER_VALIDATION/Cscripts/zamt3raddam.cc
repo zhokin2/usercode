@@ -246,9 +246,9 @@ int main(int argc, char *argv[])
   //  ------ flagcutamplitude is  very important flag !!!!!!  : 
   //  
   //  = 0 Acut    =1 (mean_with_kfactor +  cutMinA)       =2 (mean_with_k2factor*RMS +cutMinA)   <--- all works good; plots are perfect for =2(default now)
-  Int_t flagcutamplitude = 2;   
+  Int_t flagcutamplitude = 0;   
   // take into account for future treatment only channels with <Aijk>_runevents within cutMinA to cutMaxA:
-  Double_t cutMinA = 90.; Double_t cutMaxA = 3500.;  if(kdirection == 0 ) {cutMinA =100.;cutMaxA = 3600.;} // only for flagcutamplitude=0
+  Double_t cutMinA = 70.; Double_t cutMaxA = 3500.;  if(kdirection == 0 ) {cutMinA =100.;cutMaxA = 3600.;} // only for flagcutamplitude=0
   //Double_t cutMinA = 70.; Double_t cutMaxA = 3500.;  if(kdirection == 0 ) {cutMinA =100.;cutMaxA = 3600.;} // only for flagcutamplitude=0
   Double_t kfactor = 2.6;                                                                 // only for flagcutamplitude=1 and cutMinA applied as well
   Double_t k2factor = 1.5;                                                                 // only for flagcutamplitude=2 and cutMinA applied as well
@@ -264,8 +264,8 @@ int main(int argc, char *argv[])
   // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  //----------------------------------------------------------------------first ratio Aijk/Aijk_ref ----> cut Rijk 
     // for flagcutamplitude = 2  :
-    Double_t CutrwithphiMin = 0.0; Double_t CutrwithphiMax = 40.0; // P
-    if(kdirection == 0 ){CutrwithphiMin = 0.0; CutrwithphiMax = 40.0;} // M
+    Double_t CutrwithphiMin = 0.0; Double_t CutrwithphiMax = 4.0; // P
+    if(kdirection == 0 ){CutrwithphiMin = 0.0; CutrwithphiMax = 4.0;} // M
     // for flagcutamplitude = 0 and 1 :
     if(flagcutamplitude < 2 ) {
       CutrwithphiMin = 0.0; CutrwithphiMax = 4.0; // P
@@ -388,11 +388,11 @@ int main(int argc, char *argv[])
   //----------------------------------------------------------------------------------------------------
   //----------------------------------------------------------------------------------------------------
   ///////////////////////////////////////////////////////////////////////// initial nulling:
-  for(int iii = 1; iii<4; iii++) {
-    for (int jjj=1;jjj<=82;jjj++) {
+  for(int iii = 0; iii<4; iii++) {
+    for (int jjj=0;jjj<=82;jjj++) {
       mapRADDAM_HED2[iii][jjj] =  0.;
       mapRADDAM_HED20[iii][jjj] =  0.;
-      for (int kkk=1;kkk<=72;kkk++) {
+      for (int kkk=0;kkk<=72;kkk++) {
 	mapRADDAM_HE[iii][jjj][kkk] = 0.;
 	normM[iii][jjj][kkk] = 0.;
 	normP[iii][jjj][kkk] = 0.;
@@ -457,8 +457,8 @@ int main(int argc, char *argv[])
 //    TH1F* rwithphi = new TH1F("rwithphi","", 1000, -1.,2449.);
 //    TH1F* rwithphi = new TH1F("rwithphi","", 100, -1.,1449.);
 //    TH1F* rwithphi = new TH1F("rwithphi","", 100, -1.,449.);
-    TH1F* rwithphi = new TH1F("rwithphi","", 100, -1.,149.);
-//    TH1F* rwithphi = new TH1F("rwithphi","", 100, -1.,9.);
+//    TH1F* rwithphi = new TH1F("rwithphi","", 100, -1.,149.);
+    TH1F* rwithphi = new TH1F("rwithphi","", 100, -1.,9.);
 //      TH1F* rwithphi = new TH1F("rwithphi","", 100, -1.,5.);
 
   TH1F* rrwithphiM = new TH1F("rrwithphiM","", 100, -1.,4.);
@@ -679,8 +679,12 @@ int main(int argc, char *argv[])
     for(int iii = 1; iii<4; iii++) {
       for (int jjj=1;jjj<=82;jjj++) {
 	for (int kkk=1;kkk<=72;kkk++) {
-	  if(normM[iii][jjj][kkk] != 0 && jjj < 42 && kdirection == 0) {mapRADDAM_HE[iii][jjj][kkk] /= normM[iii][jjj][kkk];}
-	  if(normP[iii][jjj][kkk] != 0 && jjj > 41 && kdirection == 1) {mapRADDAM_HE[iii][jjj][kkk] /= normP[iii][jjj][kkk];}
+	  if(jjj < 42 && kdirection == 0) {
+	    if(normM[iii][jjj][kkk] != 0 ) {mapRADDAM_HE[iii][jjj][kkk] /= normM[iii][jjj][kkk];}else{mapRADDAM_HE[iii][jjj][kkk] = 0.;}
+	  }
+	  if(jjj > 41 && kdirection == 1) {
+	    if(normP[iii][jjj][kkk] != 0 ) {mapRADDAM_HE[iii][jjj][kkk] /= normP[iii][jjj][kkk];}else{mapRADDAM_HE[iii][jjj][kkk] = 0.;}
+	  }
 	}//for  
       }//for 
     }//for 
@@ -714,7 +718,7 @@ int main(int argc, char *argv[])
 	}//for 
       }//for 
       
-    } // variant
+    } // variant2
     
     //////////////////---------------------------------------
     //////////////////---------------------------------------
@@ -837,11 +841,11 @@ int main(int argc, char *argv[])
     /////////////////////////////////////////////////////////////////////////////////////////////// nulling :
     ///////////////////////////////////////////////////////////////// nulling :
     //
-    for(int iii = 1; iii<4; iii++) {
-      for (int jjj=1;jjj<=82;jjj++) {
+    for(int iii = 0; iii<4; iii++) {
+      for (int jjj=0;jjj<=82;jjj++) {
 	mapRADDAM_HED2[iii][jjj] =  0.;
 	mapRADDAM_HED20[iii][jjj] =  0.;
-	for (int kkk=1;kkk<=72;kkk++) {
+	for (int kkk=0;kkk<=72;kkk++) {
 	  mapRADDAM_HE[iii][jjj][kkk] = 0.;
 	}
       }
@@ -2181,7 +2185,7 @@ Draw("APL"); - w/ errors
       Ceff1R->SetMarkerSize(0.4);
       Ceff1R->GetYaxis()->SetLabelSize(0.04);
       Ceff1R->SetTitle("P: all runs & channels");
-      Ceff1R->SetXTitle("M: RMS <Aijk>");
+      Ceff1R->SetXTitle("P: RMS <Aijk>");
       Ceff1R->SetYTitle("N");
       Ceff1R->SetMarkerColor(4);
       Ceff1R->SetLineColor(4);
