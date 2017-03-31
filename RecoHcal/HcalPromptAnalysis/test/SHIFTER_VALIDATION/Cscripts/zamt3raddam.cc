@@ -50,6 +50,8 @@ int main(int argc, char *argv[])
   //______________________________________________________________________________________________________________________________    
   //TCanvas *c1;
   TGraph *gr1;  TGraph *gr2;TGraph *gr3;  TGraph *gr4;TGraph *gr5;  TGraph *gr6;TGraph *gr7;TGraph *gr8;TGraph *gr9;
+  TGraphErrors* ge1;TGraphErrors* ge2;TGraphErrors* ge3;TGraphErrors* ge4;TGraphErrors* ge5;TGraphErrors* ge6;TGraphErrors* ge7;TGraphErrors* ge8;TGraphErrors* ge9;
+
   //
   const Int_t NMethods =34;// total number of Methods (all-together 34 methods)
   const Int_t NMethodsStart =0;     // since which method to start ( min=  0)
@@ -175,12 +177,12 @@ int main(int argc, char *argv[])
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   Int_t NMAX = NMAXM;if(NMAXP>NMAXM) NMAX = NMAXP; 
   //----------------------------------------------------------------------
-  Float_t X0[NMAX];TString LASERruns[NMAX]; Float_t XX[NMAX]; 
+  Float_t X0[NMAX];TString LASERruns[NMAX]; Double_t XX[NMAX]; Double_t XXE[NMAX]; 
   const Int_t NDEP =8;const Int_t NETA =14;const Int_t NETA0=83;const Int_t NPHI0=73;
 
   Double_t ZZM[NMAX][NDEP][NETA];
   Double_t ZZP[NMAX][NDEP][NETA];
-  Float_t YY[NMAX]; 
+  Double_t YY[NMAX]; Double_t YYE[NMAX]; 
   //
   Double_t mapRADDAM_HE[NDEP][NETA0][NPHI0]; Double_t mapRADDAM_HED2[NDEP][NETA0]; Int_t mapRADDAM_HED20[NDEP][NETA0]; Float_t gainRADDAM_HE[NDEP][NETA0][NPHI0]; 
   Double_t normM[NDEP][NETA0][NPHI0]; 
@@ -290,10 +292,10 @@ int main(int argc, char *argv[])
   //---------------------------------------------------------------------------------------------------------------------
   // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  flaglumiuse
   //-----------------------------------------------------------------------------------------------------
-  for(int kk1 = 0; kk1<NP; kk1++){XX[kk1] = X0[kk1];}
+  for(int kk1 = 0; kk1<NP; kk1++){ XX[kk1] = X0[kk1]; XXE[kk1] = 0.001*XX[kk1]; }
   // use lumi ??? :
-//    Int_t flaglumiuse = 1; // =0-days; =1-lumi;
-  Int_t flaglumiuse = 0; // =0-days; =1-lumi;
+    Int_t flaglumiuse = 1; // =0-days; =1-lumi;
+    //Int_t flaglumiuse = 0; // =0-days; =1-lumi;
   cout << "!!*********************        flaglumiuse  = " <<  flaglumiuse <<endl;
 
   // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// flaggaincorrections
@@ -326,11 +328,11 @@ int main(int argc, char *argv[])
   //
   //========================================================================================== PLOT0:        P   Amplitude -    100 5000   
   //----------------------------------------------------------------------------------------------------
-  //========================================================================================== PLOT1:        M       r vs t for Depth1  and eta 21 22 23 25 27 28
-  //========================================================================================== PLOT2:        M       r vs t for Depth1  and eta 17 18 19 20 24 26 29
+  //========================================================================================== PLOT1:        M       r vs t for Depth1  and eta 21 22 23 25 27 28 (for tests)
+  //========================================================================================== PLOT2:        M       r vs t for Depth1  and eta 17 18 19 20 24 26 29 (for tests)
   //----------------------------------------------------------------------------------------------------  
-  //========================================================================================== PLOT3:        M       r vs t for Depth2  and eta 21 22 23 25 27 28
-  //========================================================================================== PLOT4:        M       r vs t for Depth2  and eta 17 18 19 20 24 26
+  //========================================================================================== PLOT3:        M       r vs t for Depth2  and eta 21 22 23 25 27 28 (for tests)
+  //========================================================================================== PLOT4:        M       r vs t for Depth2  and eta 17 18 19 20 24 26 (for tests)
   //----------------------------------------------------------------------------------------------------  
   //========================================================================================== PLOT5:        M       r vs t for L1      and eta 21 22 23 25 27 28
   //========================================================================================== PLOT6:        M       r vs t for L1      and eta 17 18 19 20 24 26 29
@@ -341,11 +343,11 @@ int main(int argc, char *argv[])
   //========================================================================================== PLOT9:         M Amplitude
   //========================================================================================== PLOT10:        P Amplitude Amplitude -    100 200 
   //----------------------------------------------------------------------------------------------------
-  //========================================================================================== PLOT11:        P       r vs t for Depth1  and eta 21 22 23 25 27 28
-  //========================================================================================== PLOT12:        P       r vs t for Depth1  and eta 17 18 19 20 24 26 29
+  //========================================================================================== PLOT11:        P       r vs t for Depth1  and eta 21 22 23 25 27 28 (for tests)
+  //========================================================================================== PLOT12:        P       r vs t for Depth1  and eta 17 18 19 20 24 26 29 (for tests)
   //----------------------------------------------------------------------------------------------------  
-  //========================================================================================== PLOT13:        P       r vs t for Depth2  and eta 21 22 23 25 27 28
-  //========================================================================================== PLOT14:        P       r vs t for Depth2  and eta 17 18 19 20 24 26 29
+  //========================================================================================== PLOT13:        P       r vs t for Depth2  and eta 21 22 23 25 27 28 (for tests)
+  //========================================================================================== PLOT14:        P       r vs t for Depth2  and eta 17 18 19 20 24 26 29 (for tests)
   //----------------------------------------------------------------------------------------------------  
   //========================================================================================== PLOT15:        P       r vs t for L1      and eta 21 22 23 25 27 28
   //========================================================================================== PLOT16:        P       r vs t for L1      and eta 17 18 19 20 24 26 29
@@ -354,9 +356,9 @@ int main(int argc, char *argv[])
   //========================================================================================== PLOT18:        P       r vs t for L7      and eta 17 18 19 20 24 26 29
   //----------------------------------------------------------------------------------------------------
   //========================================================================================== PLOT19:        M Amplitude
-  //========================================================================================== PLOT20:        p Mean amplitude Depth3
+  //========================================================================================== PLOT20:        p Mean amplitude Depth3 (for tests)
   //----------------------------------------------------------------------------------------------------  
-  //========================================================================================== PLOT21:        P       r vs t for Depth3  and 27 28
+  //========================================================================================== PLOT21:        P       r vs t for Depth3  and eta 27 28 (for tests)
   //----------------------------------------------------------------------------------------------------  
   //========================================================================================== PLOT22:        P       Rijk
   //========================================================================================== PLOT23:        all     gains from 2 LED runs
@@ -369,14 +371,14 @@ int main(int argc, char *argv[])
   //========================================================================================== PLOT28:        M Mean Amplitude
   //========================================================================================== PLOT29:        P Mean Amplitude
   //----------------------------------------------------------------------------------------------------
-  //========================================================================================== PLOT30:        M     r(PHI) dependence 
-  //========================================================================================== PLOT31:        P     r(PHI) dependence 
+  //========================================================================================== PLOT30:        M     r(PHI) dependence  (for tests)
+  //========================================================================================== PLOT31:        P     r(PHI) dependence  (for tests)
   //----------------------------------------------------------------------------------------------------
   //========================================================================================== PLOT28:        M RMS Amplitude
   //========================================================================================== PLOT29:        P RMS Amplitude
   //----------------------------------------------------------------------------------------------------
   //----------------------------------------------------------------------------------------------------
-  //---------------------------------------------------------------------------------------------------- additions after PLOT loop:
+  //---------------------------------------------------------------------------------------------------- additions  (for tests) after PLOT loop:
   //----------------------------------------------------------------------------------------------------
   //========================================================================================== PLOT100:        M & P     r(PHI) dependence ( PLOT30 & PLOT31 )
   //========================================================================================== PLOT101:        like Rijk M & P (PLOT22 & PLOT24) but w/o bad channels on base RRijk limits
@@ -967,7 +969,7 @@ ZZP[k1][iii][jj] =
   Int_t Method = NMethodsStart ;
   while (Method<NMethodsToUse+1) {
     if((kdirection==1 && Method != 9 && Method != 19 && Method != 24 && Method != 26 &&Method != 28 &&Method != 32 &&Method!= 1&&Method!= 2&&Method!= 3&&Method!= 4&&Method!= 5&&Method!= 6&&Method!= 7&&Method!= 8 && Method !=30) || 
-       (kdirection==0 && Method != 0 && Method != 10 && Method != 22 && Method != 27 &&Method != 29 &&Method != 33 &&Method!=11&&Method!=12&&Method!=13&&Method!=14&&Method!=15&&Method!=16&&Method!=17&&Method!=18 && Method !=31 &&Method !=25))
+       (kdirection==0 && Method != 0 && Method != 10 && Method != 22 && Method != 27 &&Method != 29 &&Method != 33 &&Method!=11&&Method!=12&&Method!=13&&Method!=14&&Method!=15&&Method!=16&&Method!=17&&Method!=18 && Method !=31 &&Method !=21 && Method !=25))
       {
     cout<<" ****  START   Method " << Method <<endl;
     //======================================================================================================= PLOT0: P:    <Aijk>_ev.run for all runs
@@ -1888,13 +1890,30 @@ Draw("APL"); - w/ errors
       //jj   M:     0    1   2   3   4   5   6   7   8   9   10    11    12    13      P:    0    1   2   3   4   5   6   7   8   9   10    11    12    13
       // real N:   29   28  27  26  25  24  23  22  21  20   19    18    17    16           16   17  18  19  20  21  22  23  24  25   26    27    28    29
       //                -   -       -        -   -  -                                                            -   -   -       -           -    -
-      for(int k1 = 0; k1<NP; k1++) {YY[k1] = ZZP[k1][3][11];}/// eta=27
-      gr1 = new TGraph(NP,XX,YY); gr1->SetLineColor(1); gr1->SetMarkerColor(1); gr1->SetMarkerStyle(20); gr1->SetMarkerSize(1.2); gr1->SetTitle("ieta 27"); gr1->SetName("gr1");gr1->SetFillStyle(0); gr1->Draw("P");
-      for(int k1 = 0; k1<NP; k1++) {YY[k1] = ZZP[k1][3][12];}/// eta=28
-      gr2 = new TGraph(NP,XX,YY); gr2->SetLineColor(2); gr2->SetMarkerColor(2); gr2->SetMarkerStyle(20); gr2->SetMarkerSize(1.2); gr2->SetTitle("ieta 28"); gr2->SetName("gr2"); gr2->SetFillStyle(0); gr2->Draw("P");
+      for(int k1 = 0; k1<NP; k1++) {YY[k1] = ZZP[k1][3][11];YYE[k1] = 0.01*YY[k1];}/// eta=27
+      //    gr1 = new TGraph(NP,XX,YY); gr1->SetLineColor(1); gr1->SetMarkerColor(1); gr1->SetMarkerStyle(20); gr1->SetMarkerSize(1.2); gr1->SetTitle("ieta 27"); gr1->SetName("gr1");gr1->SetFillStyle(0); gr1->Draw("P");
+      ge1 = new TGraphErrors(NP,XX,YY, XXE, YYE); ge1->SetLineColor(1); ge1->SetMarkerColor(1); ge1->SetMarkerStyle(20); ge1->SetMarkerSize(1.2); ge1->SetTitle("ieta 27"); ge1->SetName("gr1");ge1->SetFillStyle(0); ge1->Draw("P");
+      TF1 *myfit = new TF1("myfit","[0] + [1]*x**{[2]}", 1., 2.);
+      myfit->SetParName(0,"c0");myfit->SetParName(1,"c1");myfit->SetParName(2,"c2");
+      myfit->SetParameter(0, 0.01);myfit->SetParameter(1, 1.1);myfit->SetParameter(2, 0.12);
+      gStyle->SetOptFit(1101);myfit->SetLineColor(1); 
+      ge1->Fit("myfit");//  OR just: "gaus" "expo" (w/ 2 parameters) "polN"  // ge1->Fit("pol5");
+
+      for(int k1 = 0; k1<NP; k1++) {YY[k1] = ZZP[k1][3][12];YYE[k1] = 0.01*YY[k1];}/// eta=28
+      //      gr2 = new TGraph(NP,XX,YY); gr2->SetLineColor(2); gr2->SetMarkerColor(2); gr2->SetMarkerStyle(20); gr2->SetMarkerSize(1.2); gr2->SetTitle("ieta 28"); gr2->SetName("gr2"); gr2->SetFillStyle(0); gr2->Draw("P");
+      ge2 = new TGraphErrors(NP,XX,YY, XXE, YYE); ge2->SetLineColor(2); ge2->SetMarkerColor(2); ge2->SetMarkerStyle(20); ge2->SetMarkerSize(1.2); ge2->SetTitle("ieta 28"); ge2->SetName("ge2"); ge2->SetFillStyle(0); ge2->Draw("P");
+      //    TF1 *myfit = new TF1("myfit","[0] + [1]*x**{[2]}", 1., 2.);
+      //    TF1 *myfit = new TF1("myfit","[0]*sin(x) + [1]*exp(-[2]*x)", 0, 2);
+      TF1 *myfit2= new TF1("myfit2","[0]*sin(x) + [1]*exp(-[2]*x)", 0, 2);
+      myfit2->SetParName(0,"c0");myfit2->SetParName(1,"c1");myfit2->SetParName(2,"c2");
+      myfit2->SetParameter(0, 0.01);myfit2->SetParameter(1, 1.1);myfit2->SetParameter(2, 0.12);
+      gStyle->SetOptFit(1101);myfit2->SetLineColor(2); 
+      ge2->Fit("myfit2");//  OR just: "gaus" "expo" (w/ 2 parameters) "polN"  // ge1->Fit("pol5");
+
       //    TLegend leg(.5,.67,.88,.88,     "HEP Depth3");
       TLegend leg(xx1,yy1,xx2,yy2, " HEP Depth3");
-      leg.AddEntry(gr1); leg.AddEntry(gr2);
+      //      leg.AddEntry(gr1); leg.AddEntry(gr2);
+      leg.AddEntry(ge1); leg.AddEntry(ge2);
       leg.SetMargin( 0.3 );
       leg.SetBorderSize(1);
       leg.DrawClone("Same");
