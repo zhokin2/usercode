@@ -171,7 +171,7 @@ let "k = k + 1"
 done
 
 ########################################## type by hands number of new runs k=k-number:
-let "k = k - 8"
+let "k = k - 11"
 echo ' ================>>>    k in old list = '$k
 
 for i in ${runListEOS} ; do
