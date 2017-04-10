@@ -9634,6 +9634,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHFQIE10(QIE10DataFrame qie10df)
   int iphi = hcaldetid.iphi();
   int mdepth = hcaldetid.depth();
   int sub   = hcaldetid.subdet(); // 1-HB, 2-HE (HFQIE10DigiCollection: 4-HF)
+  if (verbosity == -2424 && mdepth > 2 ) std::cout << " fillDigiAmplitude HFQIE10    DIGI ->  "  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
   if (verbosity == -2323) std::cout << " fillDigiAmplitude HFQIE10    DIGI ->  "  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
   nTS = qie10df.samples();
   if (verbosity == -2323) std::cout <<" fillDigiAmplitude  HFQIE10   Size of Digi nTS= "<<nTS<<" qie10df.size()= "<<qie10df.size()<<std::endl;
@@ -9702,7 +9703,8 @@ void VeRawAnalyzer::fillDigiAmplitudeHFQIE10(QIE10DataFrame qie10df)
   double errorBtype = 0.;  
   
   //    int TSsize = 10;
-  int TSsize = 6;
+//  int TSsize = 6;
+  int TSsize = 3;
   //     if(qie10df.size() !=  4) std::cout << "TSsize HFQIE10 != 4 and = " <<qie10df.size()<< std::endl;
   if(nTS !=  TSsize) errorBtype = 1.; 
   TSsize=nTS;
