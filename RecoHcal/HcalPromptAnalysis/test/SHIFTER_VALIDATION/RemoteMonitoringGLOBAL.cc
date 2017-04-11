@@ -894,14 +894,13 @@ int main(int argc, char *argv[])
 
       HistNumChanFull[5] = (TH1F*) HistNumChanDepth[5][1][1]->Clone();
                   
-      
     for (int test=0;test<=5;test++) { //Test: =0(CapIdErrors), =1(Amplitude), =2... 
         for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
             if (sub==1) cHE->Divide(2,1);
             if (sub==2) cHE->Divide(3,1);
             if (sub==3) cHB->Divide(1,1);
-            if (sub==4) cHE->Divide(2,1);
-            if (sub==4 && test==1) cFour1->Divide(2,2); // HF upgrade with new depthes 3 and 4
+            if (sub==4 && test!=1) cHE->Divide(2,1);
+            if (sub==4 && test==1) {cFour1->Clear();cFour1->Divide(2,2);} // HF upgrade with new depthes 3 and 4
 
 	    int kkkkkkmax = k_max[sub];
 	    if (sub==4 && test==1) kkkkkkmax = k_maxHFupgrade[sub];
@@ -909,8 +908,8 @@ int main(int argc, char *argv[])
                 if (sub==1) cHE->cd(k); 
                 if (sub==2) cHE->cd(k);
 	        if (sub==3) cHB->cd(k-3);
-	        if (sub==4) cHE->cd(k);
-	        if (sub==4 && test==1) cHE->cd(k);
+	        if (sub==4 && test!=1) cHE->cd(k);
+	        if (sub==4 && test==1) cFour1->cd(k);
 		gPad->SetGridy();
                 gPad->SetGridx();
 //                gPad->SetLogy();      
@@ -985,7 +984,8 @@ int main(int argc, char *argv[])
 	       	if (sub==1) { cHE->Modified();} 
                 if (sub==2) { cHE->Modified();}
                 if (sub==3) { cHB->Modified();}
-                if (sub==4) { cHE->Modified();} 
+                if (sub==4 && test!=1) { cHE->Modified();} 
+                if (sub==4 && test==1) { cFour1->Modified();} 
 
 	    }    // k loop
 
@@ -1000,7 +1000,7 @@ int main(int argc, char *argv[])
 	        if (sub==1) {cHE->Print("HistADCamplHB.png"); cHE->Clear();} 
                 if (sub==2) {cHE->Print("HistADCamplHE.png"); cHE->Clear();}
                 if (sub==3) {cHB->Print("HistADCamplHO.png"); cHB->Clear();}
-                if (sub==4) {cHE->Print("HistADCamplHF.png"); cHE->Clear();}  
+                if (sub==4) {cFour1->Print("HistADCamplHF.png"); cFour1->Clear();}  
 	    } 
 	    if (test==2){ 
 	        if (sub==1) {cHE->Print("HistWidthHB.png"); cHE->Clear();} 
