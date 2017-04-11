@@ -3999,7 +3999,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	nTS = qie10df.samples();
 	///////////////////
 	counterhfqie10++;
-	if(verbosity == -2323 ) std::cout  <<  "*****************************QIE10Digis;     nTS = "  << nTS <<  "  counterhfqie10= "  << counterhfqie10 <<  endl;
+	if(verbosity == -2323 || verbosity == -2424) std::cout  <<  "**********  QIE10Digis;  nTS = "  << nTS <<  "  counterhfqie10= "  << counterhfqie10 <<  endl;
 	////////////////////////////////////////////////////////////  for zerrors.C script:
 	if(recordHistoes_ && studyCapIDErrorsHist_) fillDigiErrorsHFQIE10(qie10df); 
 	//////////////////////////////////////  for ztsmaxa.C,zratio34.C,zrms.C & zdifampl.C scripts:
@@ -7131,6 +7131,7 @@ void VeRawAnalyzer::fillDigiErrorsHFQIE10(QIE10DataFrame qie10df)
   int mdepth = hcaldetid.depth();
   int sub   = hcaldetid.subdet(); // 1-HB, 2-HE (HFDigiCollection: 4-HF)
   if (verbosity == -22) std::cout << " HF DIGI ->  "  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
+  if (verbosity == -2424 && mdepth > 2 ) std::cout << " fillDigiErrorsHFQIE10 "  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
   // !!!!!!
   int error1 =  0;
     // !!!!!!
