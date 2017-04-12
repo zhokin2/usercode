@@ -6,7 +6,7 @@
 #
 # cmsRun remoteMonitoring_TEST_cfg.py 286590 file:/afs/cern.ch/work/z/zhokin/hcal/cmt8/CMSSW_9_0_0_pre4/src/RecoHcal/HcalPromptAnalysis/test/RDM/test /afs/cern.ch/work/z/zhokin/hcal/cmt8/CMSSW_9_0_0_pre4/src/RecoHcal/HcalPromptAnalysis/test/RDM/test
 #
-# cmsRun remoteMonitoring_TEST_cfg.py 280702 file:/afs/cern.ch/work/z/zhokin/hcal/cmt8/CMSSW_9_0_0_pre4/src/RecoHcal/HcalPromptAnalysis/test/RDM/test /afs/cern.ch/work/z/zhokin/hcal/cmt8/CMSSW_9_0_0_pre4/src/RecoHcal/HcalPromptAnalysis/test/RDM/test
+# cmsRun remoteMonitoring_TEST_cfg.py 280702 file:/afs/cern.ch/work/z/zhokin/hcal/cmt10/CMSSW_9_0_0_pre6/src/RecoHcal/HcalPromptAnalysis/test/RDM/test /afs/cern.ch/work/z/zhokin/hcal/cmt10/CMSSW_9_0_0_pre6/src/RecoHcal/HcalPromptAnalysis/test/RDM/test
 #
 #
 import sys
@@ -65,12 +65,12 @@ process.source = cms.Source("HcalTBSource",
 
 process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #
-                                  Verbosity = cms.untracked.int32(0),
+                                  #Verbosity = cms.untracked.int32(0),
                                   #Verbosity = cms.untracked.int32(-9991),
                                   #Verbosity = cms.untracked.int32(-9111),
                                   #Verbosity = cms.untracked.int32(1),
                                   # HF:
-                                  #Verbosity = cms.untracked.int32(-2323),
+                                  Verbosity = cms.untracked.int32(-2424),
                                   # HE:
                                   #Verbosity = cms.untracked.int32(-2324),
                                   #
