@@ -1,34 +1,29 @@
 #how to run: cmsRun remoteMonitoring_LED_cfg.py 211659 file:/afs/cern.ch/work/d/dtlisov/private/Monitoring/data /afs/cern.ch/work/d/dtlisov/private/Monitoring/histos
 #how to run: cmsRun remoteMonitoring_LED_cfg.py 211659 /store/group/comm_hcal/USC /afs/cern.ch/work/d/dtlisov/private/Monitoring/histos
-
 import sys
 import FWCore.ParameterSet.Config as cms
 from Configuration.StandardSequences.Eras import eras
-#process = cms.Process('OKRECO')
-process = cms.Process('OKRECO',eras.Run2_25ns)
+process = cms.Process('TEST',eras.Run2_2017 )
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
 process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
-process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
+process.load("Configuration.StandardSequences.GeometryDB_cff")
 process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff')
 process.load('Configuration.StandardSequences.Reconstruction_Data_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load('RecoLocalCalo.Configuration.hcalLocalReco_cff')
-#runnumber = sys.argv[2][4:-5]
 
+#runnumber = sys.argv[2][4:-5]
 #runnumber = sys.argv[2]
 #rundir = sys.argv[3]
 #histodir = sys.argv[4]
 
-runnumber = 273232
-# HF:
-#runnumber = 291408
-# HE CIP:
-runnumber = 290283
+#runnumber = 290380
+runnumber = 291408
 
 #print 'RUN = '+runnumber
 #print 'Input file = '+rundir+'/USC_'+runnumber+'.root'
@@ -42,15 +37,8 @@ process.maxEvents = cms.untracked.PSet(
 #process.source = cms.Source("PoolSource",
 process.source = cms.Source("HcalTBSource",
     fileNames = cms.untracked.vstring(
-#	       'file:/afs/cern.ch/work/d/dtlisov/private/Monitoring/data/USC_209311.root'
-#              '/store/group/comm_hcal/USC/USC_212179.root'
-#               '/store/group/dpg_hcal/comm_hcal/USC/USC_272967.root'
-               '/store/group/dpg_hcal/comm_hcal/USC/USC_273232.root'               
-#               '/store/group/dpg_hcal/comm_hcal/USC/run291617/USC_291617.root'
-#               '/store/group/dpg_hcal/comm_hcal/USC/run291408/USC_291408.root'
-#               '/store/group/dpg_hcal/comm_hcal/USC/run290283/USC_290283.root'
-
-#               '/store/group/dpg_hcal/comm_hcal/USC/USC_264649.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run290380/USC_290380.root'
+               '/store/group/dpg_hcal/comm_hcal/USC/run291617/USC_291617.root'
                 ), 
     streams = cms.untracked.vstring(
 		  "HCAL_Trigger",
@@ -67,6 +55,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #
                                   #Verbosity = cms.untracked.int32(0),
                                   Verbosity = cms.untracked.int32(-2424),
+                                  #Verbosity = cms.untracked.int32(-84),
                                   #Verbosity = cms.untracked.int32(-91),
                                   #Verbosity = cms.untracked.int32(-92),
                                   #
@@ -450,6 +439,17 @@ process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
 #from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data_FULL', '')
+
+#from Configuration.AlCa.autoCond import autoCond
+#process.GlobalTag.globaltag=autoCond['run2_hlt']
+#     'run1_data'         :   '90X_dataRun2_v4',
+#     'run2_data'         :   '90X_dataRun2_v4',
+#     'run2_data_relval'  :   '90X_dataRun2_relval_v4',
+#     'run2_data_promptlike' : '90X_dataRun2_PromptLike_v4',
+#     'run1_hlt'          :   '90X_dataRun2_HLT_frozen_v2',
+#     'run2_hlt'          :   '90X_dataRun2_HLT_frozen_v2',
+#     'run2_hlt_relval'   :   '90X_dataRun2_HLT_relval_v2',
+#     'run2_hlt_hi'       :   '90X_dataRun2_HLTHI_frozen_v2',
 
 process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
 process.hcalDigis.FilterDataQuality = cms.bool(False)
