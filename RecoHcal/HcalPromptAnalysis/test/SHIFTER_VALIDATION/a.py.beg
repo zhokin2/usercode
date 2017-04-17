@@ -3,16 +3,21 @@
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
 # with command line options: Reconstruction.py -s RAW2DIGI,RECO --filein file:gensimraw.root --eventcontent RECO --datatier RECO --conditions FrontierConditions_GlobalTag,auto:upgradePLS1 -n 10 --data --no_exec
-import FWCore.ParameterSet.Config as cms
 
-process = cms.Process('OKRECO')
+import sys
+import FWCore.ParameterSet.Config as cms
+from Configuration.StandardSequences.Eras import eras
+process = cms.Process('TEST',eras.Run2_2017 )
+
+#import FWCore.ParameterSet.Config as cms
+#process = cms.Process('OKRECO')
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
 process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
-#process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
+process.load('Configuration.StandardSequences.GeometryDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff')
 process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
 ##process.load('Configuration.StandardSequences.Reconstruction_Data_cff')
@@ -21,7 +26,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condD
 ##process.load('RecoLocalCalo.Configuration.hcalLocalReco_cff')
 #----------------------------------------------------------------------------
 # temporarily:   use either only first below line (old QIE8) or only second+3 next lines together(new QIE10):
-process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
+#process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 #process.load("Configuration.Geometry.GeometryExtended2016dev_cff")
 #process.load("Configuration.Geometry.GeometryExtended2016devReco_cff")
 #process.load("CalibCalorimetry.HcalPlugins.Hcal_Conditions_forGlobalTag_cff")
