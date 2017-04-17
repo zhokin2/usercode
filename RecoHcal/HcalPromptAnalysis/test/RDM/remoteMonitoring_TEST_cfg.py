@@ -12,16 +12,14 @@
 import sys
 import FWCore.ParameterSet.Config as cms
 from Configuration.StandardSequences.Eras import eras
-
-
-process = cms.Process('OKRECO',eras.Run2_25ns)
+process = cms.Process('TEST',eras.Run2_2017 )
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
 process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
-process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
+process.load('Configuration.StandardSequences.GeometryDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff')
 ###process.load('Configuration.StandardSequences.Reconstruction_Data_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
