@@ -2,21 +2,22 @@
 #how to run: cmsRun remoteMonitoring_LED_cfg.py 211659 /store/group/comm_hcal/USC /afs/cern.ch/work/d/dtlisov/private/Monitoring/histos
 import sys
 import FWCore.ParameterSet.Config as cms
-process = cms.Process('OKRECO')
+from Configuration.StandardSequences.Eras import eras
+process = cms.Process('TEST',eras.Run2_2017 )
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
 process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
-process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
+process.load('Configuration.StandardSequences.GeometryDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff')
 process.load('Configuration.StandardSequences.Reconstruction_Data_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load('RecoLocalCalo.Configuration.hcalLocalReco_cff')
-#runnumber = sys.argv[2][4:-5]
 
+#runnumber = sys.argv[2][4:-5]
 runnumber = sys.argv[2]
 rundir = sys.argv[3]
 histodir = sys.argv[4]
