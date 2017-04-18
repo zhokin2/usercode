@@ -188,7 +188,7 @@ for i in ${runList} ; do
 	    cmsStage -f ${local_WebDir}/${f} $WebDir/CMT/GLOBAL_$runnumber/${f}
 	    if [ ! $? -eq 0 ] ; then
 		echo "CMT cmsStage failed for ${f}"
-		exit 2
+#		exit 2
 	    fi
 	done
     else
