@@ -23,7 +23,7 @@ process.load('RecoLocalCalo.Configuration.hcalLocalReco_cff')
 #histodir = sys.argv[4]
 
 #runnumber = 290380
-runnumber = 291408
+runnumber = 291959
 
 #print 'RUN = '+runnumber
 #print 'Input file = '+rundir+'/USC_'+runnumber+'.root'
@@ -38,7 +38,7 @@ process.maxEvents = cms.untracked.PSet(
 process.source = cms.Source("HcalTBSource",
     fileNames = cms.untracked.vstring(
 #               '/store/group/dpg_hcal/comm_hcal/USC/run290380/USC_290380.root'
-               '/store/group/dpg_hcal/comm_hcal/USC/run291617/USC_291617.root'
+               '/store/group/dpg_hcal/comm_hcal/USC/run291959/USC_291959.root'
                 ), 
     streams = cms.untracked.vstring(
 		  "HCAL_Trigger",
@@ -53,8 +53,8 @@ process.source = cms.Source("HcalTBSource",
 
 process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #
-                                  #Verbosity = cms.untracked.int32(0),
-                                  Verbosity = cms.untracked.int32(-2424),
+                                  Verbosity = cms.untracked.int32(0),
+                                  #Verbosity = cms.untracked.int32(-2424),
                                   #Verbosity = cms.untracked.int32(-84),
                                   #Verbosity = cms.untracked.int32(-91),
                                   #Verbosity = cms.untracked.int32(-92),
