@@ -68,7 +68,7 @@ using namespace edm;
 //to gnerate logical and electrical mapping
 #include "CalibCalorimetry/HcalAlgos/interface/HcalLogicalMapGenerator.h"
 #include "CondFormats/HcalObjects/interface/HcalLogicalMap.h"
-#include "CondFormats/HcalObjects/interface/HcalElectronicsMap.h"
+//#include "CondFormats/HcalObjects/interface/HcalElectronicsMap.h"
 
 #include "CalibFormats/HcalObjects/interface/HcalDbRecord.h"
 #include "CalibFormats/HcalObjects/interface/HcalCalibrations.h"
@@ -13848,10 +13848,16 @@ double VeRawAnalyzer::dPhiWsign(double phi1, double phi2) {
 
 void VeRawAnalyzer::fillMAP() {
 
-    HcalLogicalMapGenerator gen;
-    HcalLogicalMap lmap=gen.createMap(topo); 
-  
-    HcalElectronicsMap emap=lmap.generateHcalElectronicsMap();
+      HcalLogicalMapGenerator gen;
+      HcalLogicalMap lmap=gen.createMap(topo); 
+
+  //    HcalElectronicsMap emap=lmap.generateHcalElectronicsMap();
+
+    //    const HcalElectronicsMap* emap=conditions->getHcalMapping();
+      const HcalElectronicsMap* emap;
+      emap=conditions->getHcalMapping();
+
+
     std::string subdet =""; 
 
     MAPfile << "#define LogEleMapdb_h" << std::endl;
@@ -13925,7 +13931,7 @@ void VeRawAnalyzer::fillMAP() {
                 HcalDetId *detid=0;
                 detid=new HcalDetId(HcalBarrel,eta,phi,depth); subdet="HB";
                 HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                HcalElectronicsId emap_entry=emap->lookup(*detid);
                 MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
                 MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
                 MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
@@ -13942,7 +13948,7 @@ void VeRawAnalyzer::fillMAP() {
                 HcalDetId *detid=0;
                 detid=new HcalDetId(HcalBarrel,eta,phi,depth); subdet="HB";
                 HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                HcalElectronicsId emap_entry=emap->lookup(*detid);
                 MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()-1<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
                 MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
                 MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
@@ -13961,7 +13967,7 @@ void VeRawAnalyzer::fillMAP() {
                 HcalDetId *detid=0;
                 detid=new HcalDetId(HcalEndcap,eta,phi,depth); subdet="HE";
                 HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                HcalElectronicsId emap_entry=emap->lookup(*detid);
                 MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
                 MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
                 MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
@@ -13979,7 +13985,7 @@ void VeRawAnalyzer::fillMAP() {
                 HcalDetId *detid=0;
                 detid=new HcalDetId(HcalEndcap,eta,phi,depth); subdet="HE";
                 HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                HcalElectronicsId emap_entry=emap->lookup(*detid);
                 MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1<<" ,    "<< detid->depth()<<" ," ;    
                 MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
                 MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
@@ -13996,7 +14002,7 @@ void VeRawAnalyzer::fillMAP() {
                 HcalDetId *detid=0;
                 detid=new HcalDetId(HcalEndcap,eta,phi,depth); subdet="HE";
                 HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                HcalElectronicsId emap_entry=emap->lookup(*detid);
                 MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
                 MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
                 MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
@@ -14013,7 +14019,7 @@ void VeRawAnalyzer::fillMAP() {
                 HcalDetId *detid=0;
                 detid=new HcalDetId(HcalEndcap,eta,phi,depth); subdet="HE";
                 HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                HcalElectronicsId emap_entry=emap->lookup(*detid);
                 MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
                 MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
                 MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
@@ -14033,7 +14039,7 @@ void VeRawAnalyzer::fillMAP() {
                 HcalDetId *detid=0;
                 detid=new HcalDetId(HcalForward,eta,phi,depth); subdet="HF";
                 HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                HcalElectronicsId emap_entry=emap->lookup(*detid);
                 MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
                 MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
                 MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
@@ -14051,7 +14057,7 @@ void VeRawAnalyzer::fillMAP() {
                 HcalDetId *detid=0;
                 detid=new HcalDetId(HcalForward,eta,phi,depth); subdet="HF";
                 HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                HcalElectronicsId emap_entry=emap->lookup(*detid);
                 MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
                 MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
                 MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
@@ -14071,7 +14077,7 @@ void VeRawAnalyzer::fillMAP() {
                 HcalDetId *detid=0;
                 detid=new HcalDetId(HcalOuter,eta,phi,depth); subdet="HO";
                 HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                HcalElectronicsId emap_entry=emap->lookup(*detid);
                 MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
                 MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
                 MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
@@ -14089,7 +14095,7 @@ void VeRawAnalyzer::fillMAP() {
                 HcalDetId *detid=0;
                 detid=new HcalDetId(HcalOuter,eta,phi,depth); subdet="HO";
                 HcalFrontEndId    lmap_entry=lmap.getHcalFrontEndId(*detid);
-                HcalElectronicsId emap_entry=emap.lookup(*detid);
+                HcalElectronicsId emap_entry=emap->lookup(*detid);
                 MAPfile << "  {\""<<subdet<<"\" , "<< detid->ieta()-1<<" , "<< detid->iphi()-1 <<" ,    "<< detid->depth()<<" ," ;    
                 MAPfile << "\""<<lmap_entry.rbx()<<"\" , "<<lmap_entry.rm()<<" ,   "<<lmap_entry.pixel()<<" ,      "<<lmap_entry.rmFiber()<<" ,        " ;
                 MAPfile << lmap_entry.fiberChannel()<<" ,  "<<lmap_entry.qieCard()<<" ,  "<<lmap_entry.adc()<<" ,        ";    
