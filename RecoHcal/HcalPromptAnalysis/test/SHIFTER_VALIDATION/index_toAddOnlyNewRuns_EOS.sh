@@ -170,7 +170,7 @@ for i in ${runListEOSall} ; do
 let "k = k + 1"
 done
 
-########################################## type by hands number of new runs k=k-number:
+########################################## type by hands "number" of new runs k=k-number:
 let "k = k - 11"
 echo ' ================>>>    k in old list = '$k
 
