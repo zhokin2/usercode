@@ -31,7 +31,8 @@ ls -l * >> &log_${2}_${3}
 ### Copy output files to 
 ##cp Global.root /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_7_4_16_SHIFT/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION/Global_${2}_${3}.root
 ##cp Global_${2}_${3}.root /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_8_0_8/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION/Global_${2}_${3}.root
-cp Global_${2}_${3}.root /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_9_0_2/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION/Global_${2}_${3}.root
+##cp Global_${2}_${3}.root /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_9_0_2/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION/Global_${2}_${3}.root
+cp Global_${2}_${3}.root /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_9_1_1/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION/Global_${2}_${3}.root
 ## rm all unnesecery
 #rm log_${2} 
 ##rm Global.root
