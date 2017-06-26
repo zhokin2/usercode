@@ -2693,7 +2693,8 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     nevcounter0=0;
   }//else new lumi
   ++nevcounter;// #ev in LS
-  //////
+  if(verbosity > 0 ) std::cout  <<  " nevcounter =  "  << nevcounter  <<  endl;
+   //////
   //11.04.14 - to study time dependencies  
   if(flagtoaskrunsorls_ == 0 ) {
     lscounterM1 = runcounter;
@@ -2704,7 +2705,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
               std::cout << "   nevcounter0=  " << nevcounter0 <<" lscounter= " << 
                    lscounter <<" nevcounter= " << nevcounter <<" sumEstimator4= " << 
                            (double)sumEstimator4[3][1][40][50] << std::endl;
-  if (verbosity == -84 ) std::cout << "==================>>>    nevcounter0 = " <<nevcounter0 << "in LS nevcounter = " <<nevcounter << "in run: eventcounter = " <<eventcounter << "  lscounter = " <<lscounter << "  lscounterrun = " <<lscounterrun << "  runcounter = " <<runcounter<< "  lscounterM1 = " <<lscounterM1 << std::endl;
+  if (verbosity > 0 ) std::cout << "==================>>>    nevcounter0 = " <<nevcounter0 << "in LS nevcounter = " <<nevcounter << "in run: eventcounter = " <<eventcounter << "  lscounter = " <<lscounter << "  lscounterrun = " <<lscounterrun << "  runcounter = " <<runcounter<< "  lscounterM1 = " <<lscounterM1 << std::endl;
   if (verbosity == -5555 ) std::cout << "==================>>>    nevcounter0 = " <<nevcounter0 << "in LS nevcounter = " <<nevcounter << "in run: eventcounter = " <<eventcounter << "  lscounter = " <<lscounter << "  lscounterrun = " <<lscounterrun << "  runcounter = " <<runcounter<< "  lscounterM1 = " <<lscounterM1 << std::endl;
   if (verbosity == -7777 ) std::cout << "==================>>>    nevcounter0 = " <<nevcounter0 << "in LS nevcounter = " <<nevcounter << "in run: eventcounter = " <<eventcounter << "  lscounter = " <<lscounter << "  lscounterrun = " <<lscounterrun << "  runcounter = " <<runcounter<< "  lscounterM1 = " <<lscounterM1 << std::endl;
   if (verbosity == -7778 && nevcounter0 != 0) std::cout << "==================>>>    nevcounter0 = " <<nevcounter0 << "in run: eventcounter = " <<eventcounter << "  lscounter = " <<lscounter << "  lscounterM1 = " <<lscounterM1 << "  lumi = " <<lumi << std::endl;
@@ -2764,6 +2765,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	for(int k3 = 0; k3<72; k3++) {
 	  for(int k2 = 0; k2<82; k2++) {
 	    int ieta = k2-41;
+	    if(verbosity > 0 ) std::cout  <<  " k0 =  "  << k0  <<  " k1 =  "  << k1  <<  " k2 =  "  << k2  <<  " k3 =  "  << k3  <<  endl;
 	    
 	    // ------------------------------------------------------------sumEstimator0
 	    if (verbosity == -81 ) std::cout << "sumEstimator0 = " <<sumEstimator0[k0][k1][k2][k3]<< std::endl;
@@ -4014,7 +4016,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   ///////////////////       END of GENERAL NULLING       ////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-  if(verbosity == -2323 || verbosity == -2324) std::cout  <<  "   ****===============================================================   START ALL DigiCollections running: "  <<  endl;
+  if(verbosity > 0 || verbosity == -2323 || verbosity == -2324) std::cout  <<  "   ****===============================================================   START ALL DigiCollections running: "  <<  endl;
 
 
   ////////////////////////////////////////////////////////////////////
@@ -4033,7 +4035,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     else { 
       ////////////////////////////////////////////////////////////////////   qie8   QIE8 :
       //    int qwert7= 0; int qwert8= 0;
-      if (verbosity == -2323) std::cout << "===================================== HFDigiCollection size  =  : " << hf->size() << std::endl;
+      if (verbosity > 0 || verbosity == -2323) std::cout << "===================================== HFDigiCollection size  =  : " << hf->size() << std::endl;
       for(HFDigiCollection::const_iterator digi=hf->begin();digi!=hf->end();digi++){
 	//      HcalDetId hcaldetid = static_cast<HcalDetId>(digi->id());
 	//      int ieta = hcaldetid.ieta(); int iphi = hcaldetid.iphi(); int depth = hcaldetid.depth();
@@ -4051,7 +4053,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	if(recordHistoes_ && studyCalibCellsHist_) {
 	  int iphi  = phi-1;	int ieta  = eta;
 	  if(ieta > 0) ieta -= 1;
-	  if (verbosity == -2323) std::cout<<"*****   HFDigiCollection nTS= "<<nTS<<std::endl;
+	  if (verbosity > 0 || verbosity == -2323) std::cout<<"*****   HFDigiCollection nTS= "<<nTS<<std::endl;
 	  if(nTS<=numOfTS) for(int i=0;i<nTS;i++) {
 	      TS_data[i]=adc2fC[digi->sample(i).adc()];
 	      signal[3][ieta+41][iphi] += TS_data[i];
@@ -4069,12 +4071,12 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   // upgrade:
   if(flagupgradeqie1011_ != 1 ) {
     
-    if(verbosity == -2323 ) std::cout  <<  "   ****   QIE10Digis; 111111 "  <<  endl;
+    if(verbosity > 0 || verbosity == -2323 ) std::cout  <<  "   ****   QIE10Digis; 111111 "  <<  endl;
     edm::Handle<QIE10DigiCollection> hfqie10; 
     iEvent.getByToken(tok_qie10_,hfqie10); 
     const QIE10DigiCollection& qie10dc=*(hfqie10);////////////////////////////////////////////////    <<<=========  !!!!
     bool gotQIE10Digis=true;
-    if(verbosity == -2323 ) std::cout  <<  "   ****   QIE10Digis; 222222 "  <<  endl;
+    if(verbosity > 0 || verbosity == -2323 ) std::cout  <<  "   ****   QIE10Digis; 222222 "  <<  endl;
     if (!(iEvent.getByToken(tok_qie10_,hfqie10)))
       {gotQIE10Digis=false;} //this is a boolean set up to check if there are HFdigis in input root file
     if (!(hfqie10.isValid())){gotQIE10Digis=false;} //if it is not there, leave it false
@@ -4097,7 +4099,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       */
       
       ////////////      int sub = cell.subdet();  
-      if(verbosity == -2323 ) std::cout  <<  "===================================== QIE10HFDigiCollection size  = qie10dc.size = "  <<  qie10dc.size() << endl;
+      if(verbosity > 0 || verbosity == -2323 ) std::cout  <<  "===================================== QIE10HFDigiCollection size  = qie10dc.size = "  <<  qie10dc.size() << endl;
       for (unsigned int j=0; j < qie10dc.size(); j++){
 	QIE10DataFrame qie10df = static_cast<QIE10DataFrame>(qie10dc[j]);
 	DetId detid = qie10df.detid();
@@ -4109,17 +4111,19 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	nTS = qie10df.samples();
 	///////////////////
 	counterhfqie10++;
-	if(verbosity == -2323 || verbosity == -2424) std::cout  <<  "**********  QIE10Digis;  nTS = "  << nTS <<  "  counterhfqie10= "  << counterhfqie10 <<  endl;
+	if(verbosity > 0 || verbosity == -2323 || verbosity == -2424) std::cout  <<  "**********  QIE10Digis;  nTS = "  << nTS <<  "  counterhfqie10= "  << counterhfqie10 <<  endl;
 	////////////////////////////////////////////////////////////  for zerrors.C script:
 	if(recordHistoes_ && studyCapIDErrorsHist_) fillDigiErrorsHFQIE10(qie10df); 
+	if(verbosity > 0  ) std::cout  <<  "================= fillDigiAmplitudeHFQIE10 START"  << endl;
 	//////////////////////////////////////  for ztsmaxa.C,zratio34.C,zrms.C & zdifampl.C scripts:
 	if(recordHistoes_) fillDigiAmplitudeHFQIE10(qie10df); 
+	if(verbosity > 0  ) std::cout  <<  "================= fillDigiAmplitudeHFQIE10 DONE"  << endl;
 	///////////////////
 	//     if(recordHistoes_ ) {
 	if(recordHistoes_ && studyCalibCellsHist_) {
 	  int iphi  = phi-1;	int ieta  = eta;
 	  if(ieta > 0) ieta -= 1;
-	  if (verbosity == -2323) {std::cout<< "HFQIE10 phi= " << phi << " eta= " << eta <<  " depth= " << depth << endl; std::cout<< "HFQIE10 iphi= " << iphi << " ieta= " << ieta << endl;}
+	  if (verbosity > 0 || verbosity == -2323) {std::cout<< "HFQIE10 phi= " << phi << " eta= " << eta <<  " depth= " << depth << endl; std::cout<< "HFQIE10 iphi= " << iphi << " ieta= " << ieta << endl;}
 	  
 	  //	if(nTS<=numOfTS) for(int i=0;i<nTS;i++) {
 	  //	    TS_data[i]=adc2fC[cell.sample(i).adc()];
@@ -4143,13 +4147,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	      // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	      float charge = adc2fC_QIE10[ adc ];
 	      //	    if (verbosity == -2323) {std::cout<< "HFQIE10 adc= " << adc << " tdc= " << tdc << " trail= " << trail << " capid= " << capid << " soi= " << soi << " charge= " << charge << endl;}// Verbosity
-	      if (verbosity == -2323) {std::cout<< "HFQIE10 adc= " << adc << " charge= " << charge << endl;}// Verbosity
+	      if (verbosity > 0 || verbosity == -2323) {std::cout<< "HFQIE10 adc= " << adc << " charge= " << charge << endl;}// Verbosity
 	      TS_data[i]=adc2fC_QIE10[ adc ];
 	      signal[3][ieta+41][iphi] += TS_data[i];
 	      if(i>1&&i<6) signal3[3][ieta+41][iphi] += TS_data[i];
 	      
 	    }// TS 
-	  if (verbosity == -2323) {std::cout<< "HFQIE10 TS0= " << TS_data[0] << " TS1= " << TS_data[1] << " TS2= " << TS_data[2] << " TS3= " << TS_data[3] << " TS4= " << TS_data[4] << " TS5= " << TS_data[5] << endl;}// Verbosity
+	  if (verbosity > 0 || verbosity == -2323) {std::cout<< "HFQIE10 TS0= " << TS_data[0] << " TS1= " << TS_data[1] << " TS2= " << TS_data[2] << " TS3= " << TS_data[3] << " TS4= " << TS_data[4] << " TS5= " << TS_data[5] << endl;}// Verbosity
 	}// if(recordHistoes_ && studyCalibCellsHist_) 
       }// for
     } // hfqie10.isValid
@@ -4159,6 +4163,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// HBHEDigiCollection
   int qwert1= 0; int qwert2= 0;int qwert3= 0;int qwert4= 0;int qwert5= 0;
+  if (verbosity > 0 || verbosity == -2324) std::cout << "===================================== HBHEDigiCollection Start " << std::endl;
   if(flagupgradeqie1011_  != 2 && flagupgradeqie1011_  != 3 ) {
     edm::Handle<HBHEDigiCollection> hbhe; 
     iEvent.getByToken(tok_hbhe_,hbhe);
@@ -4169,7 +4174,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       cout<<" No HBHEDigiCollection collection is found "<<endl;
     } else {
       unsigned int NHBHEDigiCollectionsize =  hbhe->size();
-      if (verbosity == -2324) std::cout << "===================================== HBHEDigiCollection size : " << NHBHEDigiCollectionsize << std::endl;
+      if (verbosity > 0 || verbosity == -2324) std::cout << "===================================== HBHEDigiCollection size : " << NHBHEDigiCollectionsize << std::endl;
       
       for(HBHEDigiCollection::const_iterator digi=hbhe->begin();digi!=hbhe->end();digi++)
 	{
@@ -4247,13 +4252,14 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   //---------------------------------------------------------------
   //////////////////////////////////////////////////////////////////////////////////////////////////upgradeHBHE upgradehe  
   // upgrade:
+  if (verbosity > 0 || verbosity == -2324) std::cout << "===================================== QIE11DigiCollection Start " << std::endl;
   if(flagupgradeqie1011_  != 1 && flagupgradeqie1011_  != 4 && flagupgradeqie1011_  != 5 ) {
-    if(verbosity == -2324 ) std::cout  <<  "   ****   QIE11Digis; 111111 "  <<  endl;
+    if(verbosity > 0 || verbosity == -2324 ) std::cout  <<  "   ****   QIE11Digis; 111111 "  <<  endl;
     edm::Handle<QIE11DigiCollection> heqie11; 
     iEvent.getByToken(tok_qie11_,heqie11);
     const QIE11DigiCollection& qie11dc=*(heqie11);////////////////////////////////////////////////    <<<=========  !!!!
     bool gotQIE11Digis=true;
-    if(verbosity == -2324 ) std::cout  <<  "   ****   QIE11Digis; 222222 "  <<  endl;
+    if(verbosity > 0 || verbosity == -2324 ) std::cout  <<  "   ****   QIE11Digis; 222222 "  <<  endl;
     if (!(iEvent.getByToken(tok_qie11_,heqie11))) gotQIE11Digis=false; //this is a boolean set up to check if there are QIE11gigis in input root file
     if (!(heqie11.isValid())) gotQIE11Digis=false; //if it is not there, leave it false
     if(!gotQIE11Digis) { cout<<" No QIE11DigiCollection collection is found "<<endl;} 
@@ -4289,7 +4295,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	///////////////////
 	nnnnnnhbheqie11++;
 	nnnnnn++;
-	if(verbosity == -2324 ) std::cout  <<  "*****************************QIE11Digis;     nTS = "  << nTS <<  endl;
+	if(verbosity > 0 || verbosity == -2324 ) std::cout  <<  "*****************************QIE11Digis;     nTS = "  << nTS <<  endl;
 	////////////////////////////////////////////////////////////  for zerrors.C script:
 	if(recordHistoes_ && studyCapIDErrorsHist_) fillDigiErrorsQIE11(qie11df); 
 	//////////////////////////////////////  for ztsmaxa.C,zratio34.C,zrms.C & zdifampl.C scripts:
@@ -4387,7 +4393,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     //  averamplitudewithPedSubtr = 0.;
     
     ////////////////////////////////////////////////////// RADDAM treatment:  
-    if (verbosity == -9111) std::cout<< "=====================               RADDAM treatment: " << endl;
+    if (verbosity > 0 || verbosity == -9111) std::cout<< "=====================               RADDAM treatment: " << endl;
 
     //------------------------------------------------------    
     //////////// k1(depth-1): = 0 - 6 or depth: = 1 - 7;
@@ -4449,7 +4455,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	  int kkk = k2; if(k2plot >0 ) kkk=k2+1; 
 	  int kk2 = 25; if(k2plot >0 ) kk2=56;	
 	  if(mapRADDAM_HED2[k1][k2] != 0. && mapRADDAM_HED2[2][kk2] != 0 ) {
-	    if (verbosity == -9991) std::cout<< "=====================  444444   kk2     =   " <<kk2 <<"mapRADDAM_HED2[k1][k2] = " <<mapRADDAM_HED2[k1][k2] <<"mapRADDAM_HED2[2][kk2] = " <<mapRADDAM_HED2[2][kk2] << endl;
+	    if (verbosity > 0 || verbosity == -9991) std::cout<< "=====================  444444   kk2     =   " <<kk2 <<"mapRADDAM_HED2[k1][k2] = " <<mapRADDAM_HED2[k1][k2] <<"mapRADDAM_HED2[2][kk2] = " <<mapRADDAM_HED2[2][kk2] << endl;
 	    mapRADDAM_HED2[k1][k2] /= mapRADDAM_HED2[2][kk2];
 	    if (verbosity == -9991) std::cout<< "===Divided:      k1 =   " <<k1 << "  k2 =   " <<k2 <<"      mmapRADDAM_HED2[k1][k2] = " <<mapRADDAM_HED2[k1][k2] << endl;
 	    // (d1 & eta 17-29)                       L1
@@ -4472,7 +4478,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     
     //////////////---------------------------------------------------------------------------------  3D treatment, zraddam1.cc script
       
-      if (verbosity == -9111) std::cout<< "=====================  111111                " << endl;
+      if (verbosity > 0 || verbosity == -9111) std::cout<< "=====================  111111                " << endl;
       //------------------------------------------------------        aver per eta 16(depth=3-> k1=2, k2=16(15) :
       //////////// k1(depth-1): = 0 - 6 or depth: = 1 - 7;
       for(int k1 = 0; k1<3; k1++) {
@@ -6995,7 +7001,8 @@ void VeRawAnalyzer::beginJob()
 // ------------ method called for each event  ------------
 void VeRawAnalyzer::fillDigiErrors(HBHEDigiCollection::const_iterator& digiItr)
 {
-    CaloSamples tool;  // TS
+    CaloSamples toolOriginal;  // TS
+    //    double tool[100];
     if (verbosity == -22) std::cout << "**************   in loop over Digis   counter =     " << nnnnnnhbhe << std::endl;
     HcalDetId cell(digiItr->id()); 
     int mdepth = cell.depth();
@@ -7151,7 +7158,8 @@ void VeRawAnalyzer::fillDigiErrors(HBHEDigiCollection::const_iterator& digiItr)
 // ------------ method called for each event  ------------
 void VeRawAnalyzer::fillDigiErrorsQIE11(QIE11DataFrame qie11df)
 {
-  CaloSamples tool;  // TS
+  CaloSamples toolOriginal;  // TS
+  //  double tool[100];
   if (verbosity == -22) std::cout << "**************   loop over HBHEQIE11 Digis    " << std::endl;
   DetId detid = qie11df.detid();
   HcalDetId hcaldetid = HcalDetId(detid);
@@ -7250,22 +7258,23 @@ void VeRawAnalyzer::fillDigiErrorsQIE11(QIE11DataFrame qie11df)
 // ------------ method called for each event  ------------
 void VeRawAnalyzer::fillDigiErrorsHF(HFDigiCollection::const_iterator& digiItr)
 {
-    CaloSamples tool;  // TS
-    HcalDetId cell(digiItr->id()); 
-    int mdepth = cell.depth();
-    int iphi  = cell.iphi()-1;
-    int ieta  = cell.ieta();
-    if(ieta > 0) ieta -= 1;
-    int sub   = cell.subdet(); // 1-HB, 2-HE (HFDigiCollection: 4-HF)
-    if(mdepth > 2 ) std::cout << " HF DIGI ??????????????   ERROR       mdepth =  "  << mdepth << std::endl;
-    if (verbosity == -22) std::cout << " HF DIGI ->  "  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
-    // !!!!!!
-    int errorGeneral =  0;int error1 =  0;int error2 =  0;int error3 =  0;int error4 =  0;int error5 =  0;int error6 =  0;int error7 =  0;
-    // !!!!!!
-    bool anycapid   =  true;bool anyer      =  false;bool anydv      =  true;
-    // for help:
-    int firstcapid  = 0;int sumcapid    = 0;int lastcapid=0, capid=0;int ERRORfiber = -10;int ERRORfiberChan = -10;int ERRORfiberAndChan = -10;int repetedcapid = 0;
-    if (verbosity == -22) std::cout <<" Size of HF Digi "<<(*digiItr).size()<<std::endl;
+  CaloSamples toolOriginal;  // TS
+  //  double tool[100];
+  HcalDetId cell(digiItr->id()); 
+  int mdepth = cell.depth();
+  int iphi  = cell.iphi()-1;
+  int ieta  = cell.ieta();
+  if(ieta > 0) ieta -= 1;
+  int sub   = cell.subdet(); // 1-HB, 2-HE (HFDigiCollection: 4-HF)
+  if(mdepth > 2 ) std::cout << " HF DIGI ??????????????   ERROR       mdepth =  "  << mdepth << std::endl;
+  if (verbosity == -22) std::cout << " HF DIGI ->  "  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
+  // !!!!!!
+  int errorGeneral =  0;int error1 =  0;int error2 =  0;int error3 =  0;int error4 =  0;int error5 =  0;int error6 =  0;int error7 =  0;
+  // !!!!!!
+  bool anycapid   =  true;bool anyer      =  false;bool anydv      =  true;
+  // for help:
+  int firstcapid  = 0;int sumcapid    = 0;int lastcapid=0, capid=0;int ERRORfiber = -10;int ERRORfiberChan = -10;int ERRORfiberAndChan = -10;int repetedcapid = 0;
+  if (verbosity == -22) std::cout <<" Size of HF Digi "<<(*digiItr).size()<<std::endl;
     ///////////////////////////////////////    
     for  (int ii=0;ii<(*digiItr).size();ii++) {
       capid = (*digiItr)[ii].capid(); // capId (0-3, sequential)
@@ -7338,7 +7347,8 @@ void VeRawAnalyzer::fillDigiErrorsHF(HFDigiCollection::const_iterator& digiItr)
 // ------------ method called for each event  ------------
 void VeRawAnalyzer::fillDigiErrorsHFQIE10(QIE10DataFrame qie10df)
 {
-  CaloSamples tool;  // TS
+  CaloSamples toolOriginal;  // TS
+  //  double tool[100];
   if (verbosity == -22) std::cout << "**************   loop over HF Digis    " << std::endl;
   DetId detid = qie10df.detid();
   HcalDetId hcaldetid = HcalDetId(detid);
@@ -7421,7 +7431,8 @@ void VeRawAnalyzer::fillDigiErrorsHFQIE10(QIE10DataFrame qie10df)
 void VeRawAnalyzer::fillDigiErrorsHO(HODigiCollection::const_iterator& digiItr)
 {
 
-    CaloSamples tool;  // TS
+    CaloSamples toolOriginal;  // TS
+    //    double tool[100];
     
     if (verbosity == -22) std::cout << "**************   loop over HO Digis    " << std::endl;
    
@@ -7572,9 +7583,12 @@ void VeRawAnalyzer::fillDigiErrorsHO(HODigiCollection::const_iterator& digiItr)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiItr)
 {
-    CaloSamples tool;  // TS
-    CaloSamples toolwithPedSubtr;  // TS
-    CaloSamples lintoolwithoutPedSubtr;  // TS
+    CaloSamples toolOriginal;  // TS
+    double tool[100];
+    double toolwithPedSubtr[100];  // TS
+    double lintoolwithoutPedSubtr[100];  // TS
+    //    CaloSamples toolwithPedSubtr;  // TS
+    //    CaloSamples lintoolwithoutPedSubtr;  // TS
     HcalDetId cell(digiItr->id()); 
     int mdepth = cell.depth();
 //    int iphi0  = cell.iphi();// 1-72
@@ -7597,7 +7611,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
     const HcalQIECoder* channelCoder = conditions->getHcalCoder(cell);
     const HcalPedestalWidth* pedw = conditions->getPedestalWidth(cell);
     HcalCoderDb coder (*channelCoder, *shape);
-    if( useADCfC_ )     coder.adc2fC(*digiItr,tool);
+    if( useADCfC_ )     coder.adc2fC(*digiItr,toolOriginal);
 
     if (verbosity == -22) std::cout << "coder done..." << std::endl;
     if (verbosity == -22) std::cout << "fillDigiAmplitude    coder done..." << std::endl;
@@ -7662,7 +7676,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
       double ampldefault1 = 0.;
       double ampldefault2 = 0.;
       ampldefault0 = adc2fC[digiItr->sample(ii).adc()];// massive ADCcounts
-      if( useADCfC_ ) ampldefault1 = tool[ii];//adcfC
+      if( useADCfC_ ) ampldefault1 = toolOriginal[ii];//adcfC
       ampldefault2  = (*digiItr)[ii].adc();//ADCcounts linearized
       if( useADCmassive_ ) {ampldefault = ampldefault0;}
       if( useADCfC_ ) {ampldefault = ampldefault1;}
@@ -8518,7 +8532,8 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
 {
-  CaloSamples tool;  // TS
+  CaloSamples toolOriginal;  // TS
+  double tool[100];
   if (verbosity == -2324) std::cout << "**************   loop over QIE11 Digis    " << std::endl;
   DetId detid = qie11df.detid();
   HcalDetId hcaldetid = HcalDetId(detid);
@@ -8549,7 +8564,7 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
     const HcalQIECoder* channelCoder = conditions->getHcalCoder(hcaldetid);
     const HcalPedestalWidth* pedw = conditions->getPedestalWidth(hcaldetid);
     HcalCoderDb coder (*channelCoder, *shape);
-    if( useADCfC_ )     coder.adc2fC(qie11df,tool);
+    if( useADCfC_ )     coder.adc2fC(qie11df,toolOriginal);
     //    double noiseADC = qie11df[0].adc();
     if (verbosity == -2324) std::cout << "coder done..." << std::endl;
     if (verbosity == -2324) std::cout << "fillDigiAmplitude    coder done..." << std::endl;
@@ -8607,7 +8622,7 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
       double ampldefault1 = 0.;
       double ampldefault2 = 0.;
       ampldefault0 = adc2fC_QIE10[ qie11df[ii].adc() ];// massive
-      if( useADCfC_ ) ampldefault1 = tool[ii];//adcfC
+      if( useADCfC_ ) ampldefault1 = toolOriginal[ii];//adcfC
       ampldefault2  = qie11df[ii].adc();//ADCcounts
       if( useADCmassive_ ) {ampldefault = ampldefault0;}
       if( useADCfC_ ) {ampldefault = ampldefault1;}
@@ -9432,7 +9447,8 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiItr)
 {
-    CaloSamples tool;  // TS
+    CaloSamples toolOriginal;  // TS
+    double tool[100];
     HcalDetId cell(digiItr->id()); 
     int mdepth = cell.depth();
     int iphi  = cell.iphi()-1;// 0-71
@@ -9455,7 +9471,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
     const HcalPedestalWidth* pedw = conditions->getPedestalWidth(cell);
 
     HcalCoderDb coder (*channelCoder, *shape);
-    if( useADCfC_ ) coder.adc2fC(*digiItr,tool);
+    if( useADCfC_ ) coder.adc2fC(*digiItr,toolOriginal);
 
     if (verbosity == -51) std::cout << "coder done..." << std::endl;
     if (verbosity == -51) std::cout << "fillDigiAmplitudeHF    coder done..." << std::endl;
@@ -9501,7 +9517,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
       double ampldefault1 = 0.;
       double ampldefault2 = 0.;
       ampldefault0 = adc2fC[digiItr->sample(ii).adc()];// massive
-      if( useADCfC_ ) ampldefault1 = tool[ii];//adcfC
+      if( useADCfC_ ) ampldefault1 = toolOriginal[ii];//adcfC
       ampldefault2  = (*digiItr)[ii].adc();//ADCcounts
       if( useADCmassive_ ) {ampldefault = ampldefault0;}
       if( useADCfC_ ) {ampldefault = ampldefault1;}
@@ -9918,7 +9934,8 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void VeRawAnalyzer::fillDigiAmplitudeHFQIE10(QIE10DataFrame qie10df)
 {
-  CaloSamples tool;  // TS
+  CaloSamples toolOriginal;  // TS
+  double tool[100];
   if (verbosity == -2323) std::cout << "**************   loop over HFQIE10 Digis    " << std::endl;
   DetId detid = qie10df.detid();
   HcalDetId hcaldetid = HcalDetId(detid);
@@ -9928,11 +9945,11 @@ void VeRawAnalyzer::fillDigiAmplitudeHFQIE10(QIE10DataFrame qie10df)
   int mdepth = hcaldetid.depth();
   int sub   = hcaldetid.subdet(); // 1-HB, 2-HE (HFQIE10DigiCollection: 4-HF)
   if (verbosity == -2424 && mdepth > 2 ) std::cout << " fillDigiAmplitude HFQIE10    DIGI ->  "  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
-  if (verbosity == -2323) std::cout << " fillDigiAmplitude HFQIE10    DIGI ->  "  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
+  if (verbosity > 0 || verbosity == -2323) std::cout << " fillDigiAmplitude HFQIE10    DIGI ->  "  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
 
   nTS = qie10df.samples();//  ----------------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  if (verbosity == -2323) std::cout <<" fillDigiAmplitude  HFQIE10   Size of Digi nTS= "<<nTS<<" qie10df.size()= "<<qie10df.size()<<std::endl;
+  if (verbosity > 0 || verbosity == -2323) std::cout <<" fillDigiAmplitude  HFQIE10   Size of Digi nTS= "<<nTS<<" qie10df.size()= "<<qie10df.size()<<std::endl;
 
   /////////////////////////////////////////////////////////////////
   /*
@@ -9964,9 +9981,9 @@ void VeRawAnalyzer::fillDigiAmplitudeHFQIE10(QIE10DataFrame qie10df)
   const HcalQIECoder* channelCoder = conditions->getHcalCoder(hcaldetid);
   const HcalPedestalWidth* pedw = conditions->getPedestalWidth(hcaldetid);
   HcalCoderDb coder (*channelCoder, *shape);
-  if( useADCfC_ ) coder.adc2fC(qie10df,tool);
+  if( useADCfC_ ) coder.adc2fC(qie10df,toolOriginal);
   //    double noiseADC = qie10df[0].adc();
-  if (verbosity == -2323) std::cout << "fillDigiAmplitudeHFQIE10    coder done..." << std::endl;
+  if (verbosity > 0 || verbosity == -2323) std::cout << "fillDigiAmplitudeHFQIE10    coder done..." << std::endl;
   /////////////////////////////////////////////////////////////////
 
 
@@ -10011,7 +10028,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHFQIE10(QIE10DataFrame qie10df)
     double ampldefault1 = 0.;
     double ampldefault2 = 0.;
     ampldefault0 = adc2fC_QIE10[ qie10df[ii].adc() ];// massive
-    if( useADCfC_ ) ampldefault1 = tool[ii];//adcfC
+    if( useADCfC_ ) ampldefault1 = toolOriginal[ii];//adcfC
     ampldefault2  = qie10df[ii].adc();//ADCcounts
     if( useADCmassive_ ) {ampldefault = ampldefault0;}
     if( useADCfC_ ) {ampldefault = ampldefault1;}
@@ -10024,13 +10041,18 @@ void VeRawAnalyzer::fillDigiAmplitudeHFQIE10(QIE10DataFrame qie10df)
     
     if (verbosity == -2323 && sub == 4) std::cout << "HFQIE10 ii = " <<ii<< " massive = " <<ampldefault0<< " adcfC = " <<ampldefault1<< "  ADCcounts= " <<ampldefault2<< " pedestal = " << pedestal <<  " capid = " <<capid<< std::endl;
     
-    if( usePedestalSubtraction_ ) ampldefault -=  pedestal; // pedestal subtraction
+     if (verbosity > 0 ) std::cout << "HFQIE10 ii = " <<ii<< " massive = " <<ampldefault0<< " adcfC = " <<ampldefault1<< "  ADCcounts= " <<ampldefault2<< " pedestal = " << pedestal <<  " capid = " <<capid<< std::endl;
+    
+   if( usePedestalSubtraction_ ) ampldefault -=  pedestal; // pedestal subtraction
+     if (verbosity > 0 ) std::cout << "HFQIE10 usePedestalSubtraction_ = " <<usePedestalSubtraction_ << " ampldefault = " <<ampldefault << " ii = " <<ii << std::endl;
     
     tool[ii] = ampldefault;
+     if (verbosity > 0 ) std::cout << "HFQIE10 ampldefault = " <<ampldefault << std::endl;
     
     pedestalaver9 +=  pedestal;    
     pedestalwaver9 +=  pedestalw*pedestalw;    
     
+     if (verbosity > 0 ) std::cout << "HFQIE10 pedestalwaver9 = " <<pedestalwaver9 << std::endl;
     if(capid == 0 && c0 == 0) {
       c0++;   c4++;
       pedestalaver4 +=  pedestal;    
@@ -10065,12 +10087,13 @@ void VeRawAnalyzer::fillDigiAmplitudeHFQIE10(QIE10DataFrame qie10df)
       max_signal = ampldefault;
       ts_with_max_signal = ii;
     }
+     if (verbosity > 0 ) std::cout << "HFQIE10 max_signal  = " <<max_signal << std::endl;
     amplitude+=ampldefault;// 
     absamplitude+=abs(ampldefault);// 
     ///////////////////////////////////
     
-    if(flagcpuoptimization_== 0 ) {
       /*
+    if(flagcpuoptimization_== 0 ) {
       if(sub == 4 )  h_ADC_HF->Fill(ampldefault, 1.);
       //  
       if(sub == 4 && mdepth == 1 )  h_ADC_HFdepth1->Fill(ampldefault, 1.);
@@ -10116,10 +10139,10 @@ void VeRawAnalyzer::fillDigiAmplitudeHFQIE10(QIE10DataFrame qie10df)
 	if(sub == 4 && mdepth == 2 )  h_ADC_HFdepth2_TS9->Fill(ampldefault, 1.);
       }
       ////// 
-*/     
     }  //  if(flagcpuoptimization_== 0   
+*/     
     //////      
-    if (verbosity == -2323) std::cout << "fillDigiAmplitudeHFQIE10  summed amplitude = " << amplitude << std::endl;
+    if (verbosity > 0 || verbosity == -2323) std::cout << "fillDigiAmplitudeHFQIE10  summed amplitude = " << amplitude << std::endl;
     timew += (ii+1)*abs(ampldefault);
     timeww += (ii+1)*ampldefault;
   }//for 1
@@ -10461,7 +10484,8 @@ void VeRawAnalyzer::fillDigiAmplitudeHFQIE10(QIE10DataFrame qie10df)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiItr)
 {
-    CaloSamples tool;  // TS
+    CaloSamples toolOriginal;  // TS
+    double tool[100];
     
     HcalDetId cell(digiItr->id()); 
     int mdepth = cell.depth();
@@ -10489,7 +10513,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
     const HcalQIECoder* channelCoder = conditions->getHcalCoder(cell);
     const HcalPedestalWidth* pedw = conditions->getPedestalWidth(cell);
     HcalCoderDb coder (*channelCoder, *shape);
-    if( useADCfC_ )  coder.adc2fC(*digiItr,tool);
+    if( useADCfC_ )  coder.adc2fC(*digiItr,toolOriginal);
 
     if (verbosity == -22) std::cout << "coder done..." << std::endl;
     if (verbosity == -22) std::cout << "fillDigiAmplitudeH0    coder done..." << std::endl;
@@ -10533,7 +10557,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
       double ampldefault1 = 0.;
       double ampldefault2 = 0.;
       ampldefault0 = adc2fC[digiItr->sample(ii).adc()];// massive
-      if( useADCfC_ ) ampldefault1 = tool[ii];//adcfC
+      if( useADCfC_ ) ampldefault1 = toolOriginal[ii];//adcfC
       ampldefault2  = (*digiItr)[ii].adc();//ADCcounts
       if( useADCmassive_ ) {ampldefault = ampldefault0;}
       if( useADCfC_ ) {ampldefault = ampldefault1;}
