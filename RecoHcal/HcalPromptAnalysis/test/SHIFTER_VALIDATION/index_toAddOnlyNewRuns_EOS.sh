@@ -172,7 +172,7 @@ let "k = k + 1"
 done
 
 ########################################## type by hands number of new runs k=k-number:
-let "k = k - 6"
+let "k = k - 11"
 echo ' ================>>>    k in old list = '$k
 
 for i in ${runListEOS} ; do
@@ -293,11 +293,9 @@ if [ ${debug} -gt 0 ] ; then
     echo "debug=${debug}. No upload to eos"
     status=-1
 else
-###    echo "Commented by me:  cmsStage -f index_draft.html $WebDir/CMT/index.html No upload to eos"
-#   cmsStage -f OLDindex.html $WebDir/CMT/OLDindex.html
-#   cmsStage -f index_draft.html $WebDir/CMT/index.html
-#   eos cp -f OLDindex.html $WebDir/CMT/OLDindex.html
-#   eos cp -f index_draft.html $WebDir/CMT/index.html
+###    echo "Commented by me:  eos cp index_draft.html $WebDir/CMT/index.html No upload to eos"
+   eos cp OLDindex.html $WebDir/CMT/OLDindex.html
+   eos cp index_draft.html $WebDir/CMT/index.html
 
 
     status="$?"
