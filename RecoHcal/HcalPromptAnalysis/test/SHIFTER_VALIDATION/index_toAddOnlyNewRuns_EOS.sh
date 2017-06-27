@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WebDir='/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring'
+WebDir='/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring'
 WebSite='https://cms-conddb-dev.cern.ch/eosweb/hcal/HcalRemoteMonitoring'
 HistoDir='/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos'
 eos='/afs/cern.ch/project/eos/installation/0.3.84-aquamarine/bin/eos.select'
@@ -158,7 +158,8 @@ echo -e "Full runList for EOS complete\n"
 # copy index.html from EOS:
 echo 'next message is Fine: '
 rm index.html
-cmsStage $WebDir/CMT/index.html index.html
+#cmsStage $WebDir/CMT/index.html index.html
+eos cp $WebDir/CMT/index.html index.html
 cp index.html OLDindex.html
 
 # delete last line of copied index_draft.html which close the table
@@ -171,7 +172,7 @@ let "k = k + 1"
 done
 
 ########################################## type by hands number of new runs k=k-number:
-let "k = k - 11"
+let "k = k - 6"
 echo ' ================>>>    k in old list = '$k
 
 for i in ${runListEOS} ; do
@@ -295,6 +296,8 @@ else
 ###    echo "Commented by me:  cmsStage -f index_draft.html $WebDir/CMT/index.html No upload to eos"
 #   cmsStage -f OLDindex.html $WebDir/CMT/OLDindex.html
 #   cmsStage -f index_draft.html $WebDir/CMT/index.html
+#   eos cp -f OLDindex.html $WebDir/CMT/OLDindex.html
+#   eos cp -f index_draft.html $WebDir/CMT/index.html
 
 
     status="$?"
