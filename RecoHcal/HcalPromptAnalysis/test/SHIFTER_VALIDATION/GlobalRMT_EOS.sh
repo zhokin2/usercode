@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WebDir='/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring'
+WebDir='/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring'
 WebSite='https://cms-conddb-dev.cern.ch/eosweb/hcal/HcalRemoteMonitoring'
 HistoDir='/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos'
 eos='/afs/cern.ch/project/eos/installation/0.3.84-aquamarine/bin/eos.select'
@@ -181,16 +181,16 @@ for i in ${runList} ; do
     #echo "GlobalRMT files=${files}"
 
     if [ ${debug} -eq 0 ] ; then
-	cmsMkdir $WebDir/GlobalRMT/GLOBAL_$runnumber
+	eos mkdir $WebDir/GlobalRMT/GLOBAL_$runnumber
 	if [ ! $? -eq 0 ] ; then
-	    echo "GlobalRMT cmsMkdir failed"
+	    echo "GlobalRMT eos mkdir failed"
 	    exit 2
 	fi
 	for f in ${files} ; do
-	    echo "cmsStage -f ${local_WebDir}/${f} $WebDir/GlobalRMT/GLOBAL_$runnumber/${f}"
-	    cmsStage -f ${local_WebDir}/${f} $WebDir/GlobalRMT/GLOBAL_$runnumber/${f}
+	    echo "eos cp ${local_WebDir}/${f} $WebDir/GlobalRMT/GLOBAL_$runnumber/${f}"
+	    eos cp ${local_WebDir}/${f} $WebDir/GlobalRMT/GLOBAL_$runnumber/${f}
 	    if [ ! $? -eq 0 ] ; then
-		echo "GlobalRMT cmsStage failed for ${f}"
+		echo "GlobalRMT eos cp failed for ${f}"
 		exit 2
 	    fi
 	done
