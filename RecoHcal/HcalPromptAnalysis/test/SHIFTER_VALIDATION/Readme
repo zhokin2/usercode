@@ -32,13 +32,13 @@ bjobs
 
 
 eos cp Global_297169.root 
-/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Global_297169.root
+/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Global_297169.root
 
 eos ls -l /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/
 
 ./index_toAddOnlyNewRuns_EOS.sh runlist_test
-eos cp OLDindex.html /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/OLDindex.html
-eos cp index_draft.html /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/index.html
+eos cp OLDindex.html /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/OLDindex.html
+eos cp index_draft.html /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/index.html
 
 ./CMT_EOS.sh runlist_test
 ./GlobalRMT_EOS.sh runlist_test
