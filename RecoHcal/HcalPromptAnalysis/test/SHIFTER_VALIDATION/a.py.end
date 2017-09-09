@@ -380,8 +380,9 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #  7       +        +       -     +     2017begin w/o high depthes in HEonly
                                   #  8       +        +       -     +     2017begin w/o high depthes
                                   #  9       +        +       +     +     all  w/o high depthes
+                                  # 10       +        -       -     +     2017 w/o HEP17
                                   # 
-                                  flagupgradeqie1011 = cms.int32(6),
+                                  flagupgradeqie1011 = cms.int32(10),
                                   #end upgrade: ---------------------------------------------------------
                                   #
                                   # for local LASER runs ONLY!!! to be = 1    (,else = 0)
