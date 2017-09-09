@@ -166,13 +166,14 @@ cp index.html OLDindex.html
 cat index.html | head -n -1 > index_draft.html
 
 #extract run numbers for correct continuation
-k=0
+k=1027+16 
+#k=0
 for i in ${runListEOSall} ; do
 let "k = k + 1"
 done
 
 ########################################## type by hands number of new runs k=k-number:
-let "k = k - 11"
+let "k = k - 16"
 echo ' ================>>>    k in old list = '$k
 
 for i in ${runListEOS} ; do
