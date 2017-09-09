@@ -4253,7 +4253,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   //////////////////////////////////////////////////////////////////////////////////////////////////upgradeHBHE upgradehe  
   // upgrade:
   if (verbosity > 0 || verbosity == -2324) std::cout << "===================================== QIE11DigiCollection Start " << std::endl;
-  if(flagupgradeqie1011_  != 1 && flagupgradeqie1011_  != 4 && flagupgradeqie1011_  != 5 ) {
+  if(flagupgradeqie1011_  != 1 && flagupgradeqie1011_  != 4 && flagupgradeqie1011_  != 5 && flagupgradeqie1011_  != 10 ) {
     if(verbosity > 0 || verbosity == -2324 ) std::cout  <<  "   ****   QIE11Digis; 111111 "  <<  endl;
     edm::Handle<QIE11DigiCollection> heqie11; 
     iEvent.getByToken(tok_qie11_,heqie11);
