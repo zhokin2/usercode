@@ -1,9 +1,8 @@
 #!/bin/bash
-
-WebDir='/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring'
+WebDir='/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring'
 WebSite='https://cms-conddb-dev.cern.ch/eosweb/hcal/HcalRemoteMonitoring'
-HistoDir='/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos'
-eos='/afs/cern.ch/project/eos/installation/0.3.84-aquamarine/bin/eos.select'
+HistoDir='/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos'
+eos='/afs/cern.ch/project/eos/installation/0.3.15/bin/eos.select'
 
 # print usage info
 if [[ "$1" == "" ]]; then
@@ -30,12 +29,6 @@ if [ ! ${status} -eq 0 ] ; then
     echo "failed to find eos command"
     # exit 1
 fi
-
-
-# create log directory
-LOG_DIR="dir-Logs"
-if [ ! -d ${LOG_DIR} ] ; then mkdir ${LOG_DIR}; fi
-rm -f ${LOG_DIR}/*
 
 
 # Process arguments and set the flags
@@ -128,46 +121,70 @@ echo -e "list complete\n"
 #processing skipped
 
 
-# #  #  # # # # # # # # # # #####
+# #  #  # # # # # # # # # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # #####
 # Create global web page
 #
 
 echo "Get list of files in ${HistoDir}"
-#cmsLs $HistoDir | grep root | awk  '{print $5}' | awk -F / '{print $10}' > rtmp
-#cat rtmp | awk -F _ '{print $2}' | awk -F . '{print $1}' > _runlist_
-# Warning obtained on Oct 19, 2015:
-#   WARNING: this script (cmsLs) is deprecated and will be removed in Jan 2016
-#           Please use the 'eos ls' command directly.
+eos ls $HistoDir | grep root | awk  '{print $5}' | awk -F / '{print $10}' > rtmp
+cat rtmp | awk -F _ '{print $2}' | awk -F . '{print $1}' > _runlist_
 
 histoFiles=`${eos} ls $HistoDir | grep root | awk -F '_' '{print $2}' | awk -F '.' '{print $1}'`
-echo -e '\n\nRun numbers on EOS:'
+echo -e '\n\nRun numbers on EOS now:'
+echo "${histoFiles}"
+echo -e '\n\nRun numbers to be on EOS:'
 runListEOS=`echo $histoFiles | tee _runlist_`
 echo "${runListEOS}"
 echo -e "list complete\n"
 
 #making table
+#############                 making table
 
-# print header to index.html 
-if [ ${#comment} -eq 0 ] ; then
-    echo `cat header_GLOBAL_EOS.txt` > index_draft.html
-else
-    echo `head -n -1 header_GLOBAL_EOS.txt` > index_draft.html
-    echo -e "<td class=\"s1\" align=\"center\">Comment</td>\n</tr>\n" \
-	>> index_draft.html
-fi
+# skip/comment header:
+## print header to index.html 
+#if [ ${#comment} -eq 0 ] ; then
+#    echo `cat header_GLOBAL_EOS.txt` > index_draft.html
+#else
+#    echo `head -n -1 header_GLOBAL_EOS.txt` > index_draft.html
+#    echo -e "<td class=\"s1\" align=\"center\">Comment</td>\n</tr>\n" \
+#	>> index_draft.html
+#fi
 
-#extract run numbers
+echo 'next message is Fine because of command rm index.html: '
+rm index.html
+
+echo 'copy index.html and  OLDindex.html '
+eos cp $WebDir/CMT/index.html index.html
+cp index.html OLDindex.html
+
+echo ' delete last line of copied index_draft.html which close the table'
+cat index.html | head -n -1 > index_draft.html
+
+echo 'extract run numbers:'
 k=0
 for i in ${runListEOS} ; do
- 
-#runnumber=$(echo $i | sed -e 's/[^0-9]*//g')
-#runnumber=$(echo $i | awk -F 'run' '{print $2}'| awk -F '.' '{print $1}')
-runnumber=${i}
-#if [[ "$runnumber" > 243400 ]] ; then
 let "k = k + 1"
+done
+echo ' ================>>>    k in old list = '$k
+
+
+#k=1294
+k=0
+echo ' ================>>> starting hardcoded k = '$k
+#===================
+for i in ${runListEOS} ; do
+#echo 'extract run numbers'
+ 
+##runnumber=$(echo $i | sed -e 's/[^0-9]*//g')
+##runnumber=$(echo $i | awk -F 'run' '{print $2}'| awk -F '.' '{print $1}')
+runnumber=${i}
+let "k = k + 1"
+#=======
+if [[ "$runnumber" > 290742 ]] ; then
+##if [[ "$runnumber" > 243400 ]] ; then
 echo
 echo
-echo
+echo 'k = '$k
 echo 'RUN number = '$runnumber
 
 # extract the date of file
@@ -262,9 +279,10 @@ fi
 echo '</tr>'>> index_draft.html
 prev=$i
 
-#fi
+fi
+#=======
 done
-
+#===================
 
 # print footer to index.html 
 echo `cat footer.txt`>> index_draft.html
@@ -275,7 +293,10 @@ if [ ${debug} -gt 0 ] ; then
     echo "debug=${debug}. No upload to eos"
     status=-1
 else
-    cmsStage -f index_draft.html $WebDir/CMT/index.html
+##    cmsStage -f index_draft.html $WebDir/CMT/index.html
+###    echo "Commented by me:  eos cp index_draft.html $WebDir/CMT/index.html No upload to eos"
+#  eos cp OLDindex.html $WebDir/CMT/OLDindex.html
+#  eos cp index_draft.html $WebDir/CMT/index.html
     status="$?"
 #rm index_draft.html
 fi
