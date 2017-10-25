@@ -181,7 +181,7 @@ for i in ${runList} ; do
     #echo "GlobalRMT files=${files}"
 
     if [ ${debug} -eq 0 ] ; then
-###	eos mkdir $WebDir/GlobalRMT/GLOBAL_$runnumber
+	eos mkdir $WebDir/GlobalRMT/GLOBAL_$runnumber
 	if [ ! $? -eq 0 ] ; then
 	    echo "GlobalRMT eos mkdir failed"
 	    exit 2
