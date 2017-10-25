@@ -2,8 +2,8 @@
 
 WebDir='/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring'
 WebSite='https://cms-conddb-dev.cern.ch/eosweb/hcal/HcalRemoteMonitoring'
-HistoDir='/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos'
-eos='/afs/cern.ch/project/eos/installation/0.3.84-aquamarine/bin/eos.select'
+HistoDir='/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos'
+eos='/afs/cern.ch/project/eos/installation/0.3.15/bin/eos.select'
 
 # print usage info
 if [[ "$1" == "" ]]; then
@@ -126,12 +126,9 @@ echo -e "runList complete\n"
 # Create global web page
 #
 
-echo "Get list of files in ${HistoDir}"
-#cmsLs $HistoDir | grep root | awk  '{print $5}' | awk -F / '{print $10}' > rtmp
+echo "Get list of runss in ${HistoDir}"
+#eos ls $HistoDir | grep root | awk  '{print $5}' | awk -F / '{print $10}' > rtmp
 #cat rtmp | awk -F _ '{print $2}' | awk -F . '{print $1}' > _runlist_
-# Warning obtained on Oct 19, 2015:
-#   WARNING: this script (cmsLs) is deprecated and will be removed in Jan 2016
-#           Please use the 'eos ls' command directly.
 
 histoFiles=`${eos} ls $HistoDir | grep root | awk -F '_' '{print $2}' | awk -F '.' '{print $1}'`
 echo -e '\n\nRun numbers on EOS:'
@@ -166,14 +163,13 @@ cp index.html OLDindex.html
 cat index.html | head -n -1 > index_draft.html
 
 #extract run numbers for correct continuation
-k=1027+16 
 #k=0
-for i in ${runListEOSall} ; do
-let "k = k + 1"
-done
-
+#for i in ${runListEOSall} ; do
+#let "k = k + 1"
+#done
+k=1353
 ########################################## type by hands number of new runs k=k-number:
-let "k = k - 16"
+#let "k = k - 1"
 echo ' ================>>>    k in old list = '$k
 
 for i in ${runListEOS} ; do
@@ -295,8 +291,8 @@ if [ ${debug} -gt 0 ] ; then
     status=-1
 else
 ###    echo "Commented by me:  eos cp index_draft.html $WebDir/CMT/index.html No upload to eos"
-   eos cp OLDindex.html $WebDir/CMT/OLDindex.html
-   eos cp index_draft.html $WebDir/CMT/index.html
+#  eos cp OLDindex.html $WebDir/CMT/OLDindex.html
+#  eos cp index_draft.html $WebDir/CMT/index.html
 
 
     status="$?"
