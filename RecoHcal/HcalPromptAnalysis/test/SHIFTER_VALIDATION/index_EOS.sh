@@ -180,8 +180,10 @@ for i in ${runListEOS} ; do
 runnumber=${i}
 let "k = k + 1"
 #=======
-if [[ "$runnumber" > 290742 ]] ; then
-##if [[ "$runnumber" > 243400 ]] ; then
+if [[ "$runnumber" > 304562 ]] ; then
+##if [[ "$runnumber" > 305405 ]] ; then
+##if [[ "$runnumber" > 303825 ]] ; then
+##if [[ "$runnumber" > 290742 ]] ; then
 echo
 echo
 echo 'k = '$k
