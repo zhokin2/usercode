@@ -3,7 +3,7 @@
 WebDir='/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring'
 WebSite='https://cms-conddb-dev.cern.ch/eosweb/hcal/HcalRemoteMonitoring'
 HistoDir='/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos'
-eos='/afs/cern.ch/project/eos/installation/0.3.84-aquamarine/bin/eos.select'
+eos='/afs/cern.ch/project/eos/installation/0.3.15/bin/eos.select'
 
 # print usage info
 if [[ "$1" == "" ]]; then
