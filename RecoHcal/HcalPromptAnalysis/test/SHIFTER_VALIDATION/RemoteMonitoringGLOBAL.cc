@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     double Cut0[7][5][5]={{{0.,0.,0.,0.,0.}, {0.,1.,1.0,0.,0.},  {0.,1.,1.,1.,0.},   {0.,0.,0.,0.,1.}, {0.,1.,1.,0.,0.}},  //CapID
 	            //old {{0.,0.,0.,0.,0.}, {0.,11.,13.,0.,0.}, {0.,25., 6.,30.,0.}, {0.,0.,0.,0., 28.}, {0.,80.,40.,0.,0.}},  //Amplitude  0,HB,HE,HO,HF depthes 
                     //last      {{0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.}, {0.,45.,40.,65.,0.}, {0.,0.,0.,0.,100.}, {0.,55.,40.,0.,0.}},  //Amplitude  0,HB,HE,HO,HF depthes 
-                          {{0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.}, {0.,100.,140.,150.,0.}, {0.,0.,0.,0.,100.}, {0.,200.,80.,80.,80.}},  //Amplitude  0,HB,HE,HO,HF depthes for HFupgrade
+                          {{0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.}, {0.,100.,140.,150.,0.}, {0.,0.,0.,0.,100.}, {0.,170.,110.,170.,110.}},  //Amplitude  0,HB,HE,HO,HF depthes for HFupgrade
 			  {{0.,0.,0.,0.,0.}, {0.,3.,3.,0.,0.},   {0.,3.,3.,3.,0.},   {0.,0.,0.,0.,3.}, {0.,2.,2.,0.,0.}}, //Width
 			  {{0.,0.,0.,0.,0.}, {0.,0.4,0.4,0.,0.}, {0.,0.4,0.4,0.4,0.},{0.,0.,0.,0.,0.4},{0.,0.8,0.8,0.,0.}}, //Ratio
 			  {{0.,0.,0.,0.,0.}, {0.,4.7,4.7,0.,0.}, {0.,4.8,4.8,5.0,0.},{0.,0.,0.,0.,4.8},{0.,4.0,4.0,0.,0.}}, //TSn
@@ -4108,13 +4108,19 @@ int main(int argc, char *argv[])
 	   htmlFile << "<td class=\"s4\" align=\"center\">LS</td>"    << std::endl;
 	   //              htmlFile << "<td class=\"s1\" align=\"center\">LS</td>"  << std::endl;
 	   htmlFile << "<td class=\"s1\" align=\"center\">Number of events</td>"  << std::endl;
-	   if (test==0) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< Nbcs > Depth "<< k <<" </td>"  << std::endl;
-	   if (test==1) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< A > Depth "<< k <<" </td>"  << std::endl;
-	   if (test==2) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< W > Depth "<< k <<" </td>"  << std::endl;
-	   if (test==3) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< R > Depth "<< k <<" </td>"  << std::endl;
-	   if (test==4) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< TSn > Depth "<< k <<" </td>"  << std::endl;
-	   if (test==5) for (int k=k_min[sub];k<=k_max[sub]; k++) htmlFile << "<td class=\"s1\" align=\"center\">< TSx > Depth "<< k <<" </td>"  << std::endl;
+
+
+	   int kkkkkkmax = k_max[sub];
+	   if (test==1 && sub==4) kkkkkkmax = k_maxHFupgrade[sub];
+
+	   if (test==0) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< Nbcs > Depth "<< k <<" </td>"  << std::endl;
+	   if (test==1) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< A > Depth "<< k <<" </td>"  << std::endl;
+	   if (test==2) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< W > Depth "<< k <<" </td>"  << std::endl;
+	   if (test==3) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< R > Depth "<< k <<" </td>"  << std::endl;
+	   if (test==4) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< TSn > Depth "<< k <<" </td>"  << std::endl;
+	   if (test==5) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< TSx > Depth "<< k <<" </td>"  << std::endl;
 	   htmlFile << "</tr>"   << std::endl;    
+
 	   ind = 0;              
 	   for (int i=1;i<=MaxLum;i++) {
 	     if ((ind%2)==1)   raw_class="<td class=\"s2\" align=\"center\">";
@@ -4123,7 +4129,7 @@ int main(int argc, char *argv[])
 	     htmlFile << "<td class=\"s4\" align=\"center\">" << i <<"</td>"<< std::endl;
 	     //                  htmlFile << raw_class<< LumLum->GetBinContent(i)<<"</td>"<< std::endl;	
 	     htmlFile << raw_class<< LumiEv->GetBinContent(i)<<"</td>"<< std::endl;	      
-	     for (int k=k_min[sub];k<=k_max[sub]; k++) {	              
+	     for (int k=k_min[sub];k<=kkkkkkmax; k++) {	              
 	       if (HistNumBadChanDepth[test][sub][k]->GetBinContent(i) > Cut0[test][sub][k]) 
 		 htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][sub][k]->GetBinContent(i)<<"</td>"<< std::endl;
 	       else  htmlFile << raw_class <<HistNumBadChanDepth[test][sub][k]->GetBinContent(i)<<"</td>"<< std::endl;
@@ -4254,6 +4260,8 @@ int main(int argc, char *argv[])
     htmlFile << "<td class=\"s1\" align=\"center\">HO Depth 4</td>"   << std::endl;
     htmlFile << "<td class=\"s1\" align=\"center\">HF Depth 1</td>"   << std::endl;
     htmlFile << "<td class=\"s1\" align=\"center\">HF Depth 2</td>"   << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">HF Depth 3</td>"   << std::endl;
+    htmlFile << "<td class=\"s1\" align=\"center\">HF Depth 4</td>"   << std::endl;
     htmlFile << "</tr>"   << std::endl;     
     
     ind = 0;
@@ -4263,7 +4271,11 @@ int main(int argc, char *argv[])
       else              raw_class="<td class=\"s3\" align=\"center\">";                    
       int met =0;
       for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-	for (int k=k_min[sub];k<=k_max[sub]; k++) 
+
+	int kkkkkkmax = k_max[sub];
+	if (test==1 && sub==4) kkkkkkmax = k_maxHFupgrade[sub];
+
+	for (int k=k_min[sub];k<=kkkkkkmax; k++) 
 	  if (HistNumBadChanDepth[test][sub][k]->GetBinContent(i) > Cut0[test][sub][k]) met = 1; 
       }
       if (met==1) {
