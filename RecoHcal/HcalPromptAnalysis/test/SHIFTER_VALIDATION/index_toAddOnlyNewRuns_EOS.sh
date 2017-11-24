@@ -167,7 +167,7 @@ cat index.html | head -n -1 > index_draft.html
 #for i in ${runListEOSall} ; do
 #let "k = k + 1"
 #done
-k=1393
+k=1498
 ########################################## type by hands number of new runs k=k-number:
 #let "k = k - 1"
 echo ' ================>>>    k in old list = '$k
