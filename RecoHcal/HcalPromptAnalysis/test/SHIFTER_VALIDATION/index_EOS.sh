@@ -125,15 +125,22 @@ echo -e "list complete\n"
 # Create global web page
 #
 
-echo "Get list of files in ${HistoDir}"
-eos ls $HistoDir | grep root | awk  '{print $5}' | awk -F / '{print $10}' > rtmp
-cat rtmp | awk -F _ '{print $2}' | awk -F . '{print $1}' > _runlist_
+#echo "Get list of files in ${HistoDir}"
+#eos ls $HistoDir | grep root | awk  '{print $5}' | awk -F / '{print $10}' > rtmp
+#cat rtmp | awk -F _ '{print $2}' | awk -F . '{print $1}' > _runlist_
+#cat $1 > _runlist_
 
 histoFiles=`${eos} ls $HistoDir | grep root | awk -F '_' '{print $2}' | awk -F '.' '{print $1}'`
-echo -e '\n\nRun numbers on EOS now:'
-echo "${histoFiles}"
+#echo -e '\n\nRun numbers on EOS now:'
+#echo "${histoFiles}"
+
+
 echo -e '\n\nRun numbers to be on EOS:'
-runListEOS=`echo $histoFiles | tee _runlist_`
+##runListEOS=`echo $histoFiles | tee _runlist_`
+##runListEOS=`echo $histoFiles | tee _runlist_`
+runListEOS=`echo $histoFiles `
+
+
 echo "${runListEOS}"
 echo -e "list complete\n"
 
@@ -180,7 +187,10 @@ for i in ${runListEOS} ; do
 runnumber=${i}
 let "k = k + 1"
 #=======
-if [[ "$runnumber" > 304562 ]] ; then
+if [[ "$runnumber" > 309999 ]] ; then
+#if [[ "$runnumber" > 306051 ]] ; then
+#if [[ "$runnumber" > 305341 ]] ; then
+#if [[ "$runnumber" > 304562 ]] ; then
 ##if [[ "$runnumber" > 305405 ]] ; then
 ##if [[ "$runnumber" > 303825 ]] ; then
 ##if [[ "$runnumber" > 290742 ]] ; then
