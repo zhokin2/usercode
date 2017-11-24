@@ -53,19 +53,19 @@ int main(int argc, char *argv[])
     
     TFile *hfile= new TFile( fname, "READ");
     // Cut [test][sub][depth]
-    double Cut0[7][5][5]={{{0.,0.,0.,0.,0.}, {0.,1.,1.0,0.,0.},  {0.,1.,1.,1.,0.},   {0.,0.,0.,0.,1.}, {0.,1.,1.,0.,0.}},  //CapID
-	            //old {{0.,0.,0.,0.,0.}, {0.,11.,13.,0.,0.}, {0.,25., 6.,30.,0.}, {0.,0.,0.,0., 28.}, {0.,80.,40.,0.,0.}},  //Amplitude  0,HB,HE,HO,HF depthes 
-                    //last      {{0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.}, {0.,45.,40.,65.,0.}, {0.,0.,0.,0.,100.}, {0.,55.,40.,0.,0.}},  //Amplitude  0,HB,HE,HO,HF depthes 
-                          {{0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.}, {0.,100.,140.,150.,0.}, {0.,0.,0.,0.,100.}, {0.,170.,110.,170.,110.}},  //Amplitude  0,HB,HE,HO,HF depthes for HFupgrade
-			  {{0.,0.,0.,0.,0.}, {0.,3.,3.,0.,0.},   {0.,3.,3.,3.,0.},   {0.,0.,0.,0.,3.}, {0.,2.,2.,0.,0.}}, //Width
-			  {{0.,0.,0.,0.,0.}, {0.,0.4,0.4,0.,0.}, {0.,0.4,0.4,0.4,0.},{0.,0.,0.,0.,0.4},{0.,0.8,0.8,0.,0.}}, //Ratio
-			  {{0.,0.,0.,0.,0.}, {0.,4.7,4.7,0.,0.}, {0.,4.8,4.8,5.0,0.},{0.,0.,0.,0.,4.8},{0.,4.0,4.0,0.,0.}}, //TSn
-			  {{0.,0.,0.,0.,0.}, {0.,3.5,3.5,0.,0.}, {0.,4.0,4.0,4.0,0.},{0.,0.,0.,0.,3.},{0.,3.5,3.5,0.,0.}}, //TSx
-			  {{0.,0.,0.,0.,0.},   {0.,0.,0.,0.,0.},    {0.,0.,0.,0.,0.},{0.,0.,0.,0.,0.},{0.,0.,0.,0.,0.}}}; //Empty
+    //                              Empty                         HB                           HE                                      HO                          HF
+    double Cut0[7][5][8]={{{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,1.0,1.0,0.,0.,0.,0.,0.}, {0.,1.,1.,1.,0.,0.,0.,0.},               {0.,0.,0.,0.,1.,0.,0.,0.},   {0.,1.,1.,0.,0.,0.,0.,0.}         },  //CapID  0,HB,HE,HO,HF 
+		  //      {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.,0.,0.,0.}, {0.,100.,140.,150.,0.,0.,0.,0.},         {0.,0.,0.,0.,100.,0.,0.,0.}, {0.,170.,110.,170.,110.,0.,0.,0.} },  //Amplitude  0,HB,HE,HO,HF 
+                          {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.,0.,0.,0.}, {0.,110.,130.,180.,9999.,9999.,9999.,9999.}, {0.,0.,0.,0.,100.,0.,0.,0.}, {0.,170.,110.,170.,110.,0.,0.,0.} },  //Amplitude  0,HB,HE,HO,HF 
+			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,3.,3.,0.,0.,0.,0.,0.},   {0.,3.,3.,3.,0.,0.,0.,0.},               {0.,0.,0.,0.,3.,0.,0.,0.},   {0.,2.,2.,0.,0.,0.,0.,0.}         }, //Width  0,HB,HE,HO,HF 
+			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,0.4,0.4,0.,0.,0.,0.,0.}, {0.,0.4,0.4,0.4,0.,0.,0.,0.},            {0.,0.,0.,0.,0.4,0.,0.,0.},  {0.,0.8,0.8,0.,0.,0.,0.,0.}       }, //Ratio  0,HB,HE,HO,HF 
+			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,4.7,4.7,0.,0.,0.,0.,0.}, {0.,4.8,4.8,5.0,0.,0.,0.,0.},            {0.,0.,0.,0.,4.8,0.,0.,0.},  {0.,4.0,4.0,0.,0.,0.,0.,0.}       }, //TSn  0,HB,HE,HO,HF 
+			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,3.5,3.5,0.,0.,0.,0.,0.}, {0.,4.0,4.0,4.0,0.,0.,0.,0.},            {0.,0.,0.,0.,3.,0.,0.,0.},   {0.,3.5,3.5,0.,0.,0.,0.,0.}       }, //TSx  0,HB,HE,HO,HF 
+			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,0.,0.,0.,0.,0.,0.,0.},   {0.,0.,0.,0.,0.,0.,0.,0.},               {0.,0.,0.,0.,0.,0.,0.,0.},   {0.,0.,0.,0.,0.,0.,0.,0.}         }  }; //Empty
 
-    double CutAb[5][5]={{0.,0.,0.,0.,0.},{0.,20.,7.,0.,0.},{0.,16.,13.,4.,0.},{0.,0.,0.,0.,45.},{0.,10.,5.,0.,0.}}; // cut 1 for CapIdErrors
+    double CutAb[5][8]=   {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,20.,7.,0.,0.,0.,0.,0.},  {0.,16.,13.,4.,0.,0.,0.,0.},             {0.,0.,0.,0.,45.,0.,0.,0.},  {0.,10.,5.,0.,0.,0.,0.,0.}        }; // cut 1 for CapIdErrors 0,HB,HE,HO,HF 
 
-    double CutPo[5][5]={{0.,0.,0.,0.,0.},{0.,9.,3.,0.,0.},{0.,8.,6.,2.,0.},{0.,0.,0.,0.,20.},{0.,5.,3.,0.,0.}}; //cut 3 for CapIdErrors (portions)
+    double CutPo[5][8]=   {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,9.,3.,0.,0.,0.,0.,0.},   {0.,8.,6.,2.,0.,0.,0.,0.},               {0.,0.,0.,0.,20.,0.,0.,0.},  {0.,5.,3.,0.,0.,0.,0.,0.}         }; //cut 3 for CapIdErrors (portions) 0,HB,HE,HO,HF 
 
 //======================================================================
 
@@ -79,14 +79,16 @@ int main(int argc, char *argv[])
   TCanvas *cHE = new TCanvas("cHE","cHE",1500,500);
   TCanvas *cONE = new TCanvas("cONE","cONE",500,500);
   TCanvas *cFour = new TCanvas("cFour","cFour",1500,1000);
-  TCanvas *cFour1= new TCanvas("cFour1","cFour1",1200,800);
+  TCanvas *cFour1 = new TCanvas("cFour1","cFour1",1200,800);
+  TCanvas *cNine = new TCanvas("cNine","cNine",1500,1500);
   
 //  char *str = (char*)alloca(10000);
   
-  int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+  int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet HB HE HO HF
 
-  int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-  int k_maxHFupgrade[5]={0,2,3,4,4}; // maximum depth for each subdet	
+  int k_max[5]         ={0,2,3,4,2}; // maximum depth for each subdet HB HE HO HF	
+  //  int k_maxHFupgrade[5]={0,2,3,4,4}; // maximum depth for each subdet HB HE HO HF	
+  int k_maxHFupgrade[5]={0,2,7,4,4}; // maximum depth for each subdet HB HE HO HF	
 
 //+++++++++++++++++++++++++++++  
 // Lumi iLumi and number of events  
@@ -610,9 +612,14 @@ int main(int argc, char *argv[])
 //=======================================================================================================
 // 1-d histograms third definition
 
-      TH1F *HistNumBadChanDepth[7][5][5];    // 1d histogramm for test,subdet, depth 
-      TH1F *HistCutNumBadChanDepth[7][5][5];    // 1d histogramm for test,subdet, depth 
-      TH1F *HistNumChanDepth[7][5][5];    // 1d histogramm for test,subdet, depth   
+      TH1F *HistNumBadChanDepth[7][5][8];    // 1d histogramm for test,subdet, depth 
+      TH1F *HistCutNumBadChanDepth[7][5][8];    // 1d histogramm for test,subdet, depth 
+      TH1F *HistNumChanDepth[7][5][8];    // 1d histogramm for test,subdet, depth   
+
+      //      TH1F *HistNumBadChanDepth[7][5][5];    // 1d histogramm for test,subdet, depth 
+      //      TH1F *HistCutNumBadChanDepth[7][5][5];    // 1d histogramm for test,subdet, depth 
+      //      TH1F *HistNumChanDepth[7][5][5];    // 1d histogramm for test,subdet, depth   
+
       TH1F *HistNumBadChanFull[7];    // 1d histogramm for test
       TH1F *HistNumChanFull[7];    // 1d histogramm for test  
 
@@ -665,32 +672,53 @@ int main(int argc, char *argv[])
 // ADC Amplitude   
 //+++++++++++++++++++++++++++++  
  
+//////////////////////
+      // HB:
       HistNumBadChanDepth[1][1][1] = (TH1F*)hfile->Get("h_sumADCAmplperLS1");
       HistNumBadChanDepth[1][1][2] = (TH1F*)hfile->Get("h_sumADCAmplperLS2");
  
+      // HE:
       HistNumBadChanDepth[1][2][1] = (TH1F*)hfile->Get("h_sumADCAmplperLS3");
       HistNumBadChanDepth[1][2][2] = (TH1F*)hfile->Get("h_sumADCAmplperLS4"); 
       HistNumBadChanDepth[1][2][3] = (TH1F*)hfile->Get("h_sumADCAmplperLS5");
+      // HE upgrade:
+      HistNumBadChanDepth[1][2][4] = (TH1F*)hfile->Get("h_sumADCAmplperLSdepth4HEu");
+      HistNumBadChanDepth[1][2][5] = (TH1F*)hfile->Get("h_sumADCAmplperLSdepth5HEu"); 
+      HistNumBadChanDepth[1][2][6] = (TH1F*)hfile->Get("h_sumADCAmplperLSdepth6HEu");
+      HistNumBadChanDepth[1][2][7] = (TH1F*)hfile->Get("h_sumADCAmplperLSdepth7HEu");
       
+      // HO:
       HistNumBadChanDepth[1][3][4] = (TH1F*)hfile->Get("h_sumADCAmplperLS8");
       
+      // HF:
       HistNumBadChanDepth[1][4][1] = (TH1F*)hfile->Get("h_sumADCAmplperLS6");
       HistNumBadChanDepth[1][4][2] = (TH1F*)hfile->Get("h_sumADCAmplperLS7");
       // HF upgrade:
       HistNumBadChanDepth[1][4][3] = (TH1F*)hfile->Get("h_sumADCAmplperLS6u");
       HistNumBadChanDepth[1][4][4] = (TH1F*)hfile->Get("h_sumADCAmplperLS7u");
       
+      // other cases:
       HistNumBadChanFull[1] = (TH1F*) HistNumBadChanDepth[1][1][1]->Clone();
       
+//////////////////////
+      // HB:
       HistCutNumBadChanDepth[1][1][1] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS1");
       HistCutNumBadChanDepth[1][1][2] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS2");
  
+      // HE:
       HistCutNumBadChanDepth[1][2][1] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS3");
       HistCutNumBadChanDepth[1][2][2] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS4"); 
       HistCutNumBadChanDepth[1][2][3] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS5");
+      // HE upgrade:
+      HistCutNumBadChanDepth[1][2][4] = (TH1F*)hfile->Get("h_sumCutADCAmplperLSdepth4HEu");
+      HistCutNumBadChanDepth[1][2][5] = (TH1F*)hfile->Get("h_sumCutADCAmplperLSdepth5HEu"); 
+      HistCutNumBadChanDepth[1][2][6] = (TH1F*)hfile->Get("h_sumCutADCAmplperLSdepth6HEu");
+      HistCutNumBadChanDepth[1][2][7] = (TH1F*)hfile->Get("h_sumCutADCAmplperLSdepth7HEu");
       
+      // HO:
       HistCutNumBadChanDepth[1][3][4] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS8");
       
+      // HF:
       HistCutNumBadChanDepth[1][4][1] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS6");
       HistCutNumBadChanDepth[1][4][2] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS7");    
       // HF upgrade:
@@ -698,21 +726,32 @@ int main(int argc, char *argv[])
       HistCutNumBadChanDepth[1][4][4] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS7u");
       
       
+//////////////////////
+      // HB:
       HistNumChanDepth[1][1][1] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS1");     
       HistNumChanDepth[1][1][2] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS2"); 
  
+      // HE:
       HistNumChanDepth[1][2][1] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS3");     
       HistNumChanDepth[1][2][2] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS4"); 
       HistNumChanDepth[1][2][3] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS5");     
+      // HE upgrade:
+      HistNumChanDepth[1][2][4] = (TH1F*)hfile->Get("h_sum0ADCAmplperLSdepth4HEu");
+      HistNumChanDepth[1][2][5] = (TH1F*)hfile->Get("h_sum0ADCAmplperLSdepth5HEu"); 
+      HistNumChanDepth[1][2][6] = (TH1F*)hfile->Get("h_sum0ADCAmplperLSdepth6HEu");
+      HistNumChanDepth[1][2][7] = (TH1F*)hfile->Get("h_sum0ADCAmplperLSdepth7HEu");
       
+      // HO:
       HistNumChanDepth[1][3][4] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS8"); 
       
+      // HF:
       HistNumChanDepth[1][4][1] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS6");     
       HistNumChanDepth[1][4][2] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS7");
       // HF upgrade:
       HistNumChanDepth[1][4][3] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS6u");
       HistNumChanDepth[1][4][4] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS7u");
            
+      // other cases:
       HistNumChanFull[1] = (TH1F*) HistNumChanDepth[1][1][1]->Clone();
       // just initialization of [6] massive for alternative <A> calculation
       HistNumChanFull[6] = (TH1F*) HistNumChanDepth[1][1][1]->Clone();
@@ -893,59 +932,64 @@ int main(int argc, char *argv[])
       HistNumChanDepth[5][4][2] = (TH1F*)hfile->Get("h_sum0TSmaxAperLS7");
 
       HistNumChanFull[5] = (TH1F*) HistNumChanDepth[5][1][1]->Clone();
-                  
-    for (int test=0;test<=5;test++) { //Test: =0(CapIdErrors), =1(Amplitude), =2... 
-        for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-            if (sub==1) cHE->Divide(2,1);
-            if (sub==2) cHE->Divide(3,1);
-            if (sub==3) cHB->Divide(1,1);
-            if (sub==4 && test!=1) cHE->Divide(2,1);
-            if (sub==4 && test==1) {cFour1->Clear();cFour1->Divide(2,2);} // HF upgrade with new depthes 3 and 4
-
-	    int kkkkkkmax = k_max[sub];
-	    if (sub==4 && test==1) kkkkkkmax = k_maxHFupgrade[sub];
-            for (int k=k_min[sub];k<=kkkkkkmax;k++) {  //Depth 
-                if (sub==1) cHE->cd(k); 
-                if (sub==2) cHE->cd(k);
-	        if (sub==3) cHB->cd(k-3);
-	        if (sub==4 && test!=1) cHE->cd(k);
-	        if (sub==4 && test==1) cFour1->cd(k);
-		gPad->SetGridy();
-                gPad->SetGridx();
-//                gPad->SetLogy();      
-		
-		if(sub==1 && k== 1 ) {} else {
-		  // use "else" because ...Full[test] are filled by estimastor for sub==1 && k== 1 at initialization of ...Full[test] variables
-		  for (int x=1;x<=HistNumBadChanFull[test]->GetXaxis()->GetNbins();x++) {
-		    double ccc1 =  HistNumBadChanDepth[test][sub][k]->GetBinContent(x);
-		    HistNumBadChanFull[test]->SetBinContent(x,HistNumBadChanFull[test]->GetBinContent(x) + ccc1);
-		    double ccc2 =  HistNumChanDepth[test][sub][k]->GetBinContent(x);
-		    HistNumChanFull[test]->SetBinContent(x,HistNumChanFull[test]->GetBinContent(x) + ccc2);
-		  }}//end x
-
+      
+      for (int test=0;test<=5;test++) { //Test: =0(CapIdErrors), =1(Amplitude), =2... 
+	for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
+	  if (sub==1) cHE->Divide(2,1);//HB
+	  if (sub==2 && test!=1) cHE->Divide(3,1);//HE
+	  if (sub==2 && test==1) {cNine->Clear();cNine->Divide(3,3);}//HE upgrade with new depthes 4,5,6,7 for Amplitude test only
+	  if (sub==3) cHB->Divide(1,1);//HO
+	  if (sub==4 && test!=1) cHE->Divide(2,1);//HF
+	  if (sub==4 && test==1) {cFour1->Clear();cFour1->Divide(2,2);} // HF upgrade with new depthes 3 and 4 for Amplitude test only
+	  
+	  int kkkkkkmax = k_max[sub];
+	  if ( (sub==4 || sub==2) && test==1) kkkkkkmax = k_maxHFupgrade[sub];
+	  for (int k=k_min[sub];k<=kkkkkkmax;k++) {  //Depth 
+	    if (sub==1) cHE->cd(k);//HB 
+	    if (sub==2 && test!=1) cHE->cd(k);//HE
+	    if (sub==2 && test==1) cNine->cd(k);//HE upgrade with new depthes 4,5,6,7 for Amplitude test only
+	    if (sub==3) cHB->cd(k-3);//HO
+	    if (sub==4 && test!=1) cHE->cd(k);//HF
+	    if (sub==4 && test==1) cFour1->cd(k);// HF upgrade with new depthes 3 and 4 for Amplitude test only
+	    gPad->SetGridy();
+	    gPad->SetGridx();
+	    //                gPad->SetLogy();      
+	    
+	    if(sub==1 && k== 1 ) {} else {
+	      // use "else" because ...Full[test] are filled by estimastor for sub==1 && k== 1 at initialization of ...Full[test] variables
+	      for (int x=1;x<=HistNumBadChanFull[test]->GetXaxis()->GetNbins();x++) {
+		double ccc1 =  HistNumBadChanDepth[test][sub][k]->GetBinContent(x);
+		HistNumBadChanFull[test]->SetBinContent(x,HistNumBadChanFull[test]->GetBinContent(x) + ccc1);
+		double ccc2 =  HistNumChanDepth[test][sub][k]->GetBinContent(x);
+		HistNumChanFull[test]->SetBinContent(x,HistNumChanFull[test]->GetBinContent(x) + ccc2);
+	      }}//end x
+	    
 		// !!!!!!     change the sense of HistNumBadChanDepth: now it's averaged values(estimators)
-	        HistNumBadChanDepth[test][sub][k]->Divide(HistNumBadChanDepth[test][sub][k],HistNumChanDepth[test][sub][k], 1, 1, "B");	
-		//		int myMaxLum= HistNumBadChanDepth[test][sub][k]->GetBinContent(HistNumBadChanDepth[test][sub][k]->GetMaximumBin());
-		//		cout<<"********************>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>     myMaxLum = "<<myMaxLum<<"        MaxLum = "<<MaxLum<<endl;
-		HistNumBadChanDepth[test][sub][k]->GetXaxis()->SetRangeUser(0, MaxLum);
-
-
-		//   //    //   //   //   //   //   //   //   //   //   //   //   //   //   //   //  //
-		HistNumBadChanDepth[test][sub][k]->SetMarkerStyle(20);
-		HistNumBadChanDepth[test][sub][k]->SetMarkerSize(0.4);
-		HistNumBadChanDepth[test][sub][k]->GetYaxis()->SetLabelSize(0.04);
-                if (k == 1) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 1\b");
-		if (k == 2) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 2\b");
-		if (k == 3) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 3\b");
-		if (k == 4) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 4\b");
-		HistNumBadChanDepth[test][sub][k]->SetXTitle("LS \b");
-		if (test == 0) HistNumBadChanDepth[test][sub][k]->SetYTitle("<Number of bad channels> \b");
-		if (test != 0) HistNumBadChanDepth[test][sub][k]->SetYTitle("Averaged estimator \b");
-		HistNumBadChanDepth[test][sub][k]->SetMarkerColor(2);
-		HistNumBadChanDepth[test][sub][k]->SetLineColor(0);
-		gPad->SetGridx();
-		HistNumBadChanDepth[test][sub][k]->Draw("Error");
-		/*
+	    HistNumBadChanDepth[test][sub][k]->Divide(HistNumBadChanDepth[test][sub][k],HistNumChanDepth[test][sub][k], 1, 1, "B");	
+	    //		int myMaxLum= HistNumBadChanDepth[test][sub][k]->GetBinContent(HistNumBadChanDepth[test][sub][k]->GetMaximumBin());
+	    //		cout<<"********************>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>     myMaxLum = "<<myMaxLum<<"        MaxLum = "<<MaxLum<<endl;
+	    HistNumBadChanDepth[test][sub][k]->GetXaxis()->SetRangeUser(0, MaxLum);
+	    
+	    
+	    //   //    //   //   //   //   //   //   //   //   //   //   //   //   //   //   //  //
+	    HistNumBadChanDepth[test][sub][k]->SetMarkerStyle(20);
+	    HistNumBadChanDepth[test][sub][k]->SetMarkerSize(0.4);
+	    HistNumBadChanDepth[test][sub][k]->GetYaxis()->SetLabelSize(0.04);
+	    if (k == 1) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 1\b");
+	    if (k == 2) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 2\b");
+	    if (k == 3) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 3\b");
+	    if (k == 4) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 4\b");
+	    if (k == 5) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 5\b");
+	    if (k == 6) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 6\b");
+	    if (k == 7) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 7\b");
+	    HistNumBadChanDepth[test][sub][k]->SetXTitle("LS \b");
+	    if (test == 0) HistNumBadChanDepth[test][sub][k]->SetYTitle("<Number of bad channels> \b");
+	    if (test != 0) HistNumBadChanDepth[test][sub][k]->SetYTitle("Averaged estimator \b");
+	    HistNumBadChanDepth[test][sub][k]->SetMarkerColor(2);
+	    HistNumBadChanDepth[test][sub][k]->SetLineColor(0);
+	    gPad->SetGridx();
+	    HistNumBadChanDepth[test][sub][k]->Draw("Error");
+	    /*
 		  if (k == 1) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 1\b");
 		  if (k == 2) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 2\b");
 		  if (k == 3) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 3\b");
@@ -967,80 +1011,89 @@ int main(int argc, char *argv[])
 		  HistNumBadChanDepth[test][sub][k]->GetXaxis()->SetRangeUser(0, MaxLum);
 		  HistNumBadChanDepth[test][sub][k]->Draw("L");
 		  }	
-		*/
-		float min_x[] = {0,10000};
-		float min_y[] = {(float)(Cut0[test][sub][k]),(float)(Cut0[test][sub][k])};
-		TGraph* MIN = new TGraph(2, min_x, min_y);
-		MIN->SetLineStyle(2);
-		MIN->SetLineColor(5);
-		MIN->SetLineWidth(2 + 100*100);
-		MIN->SetFillStyle(3005);
-		MIN->SetFillColor(5);
-		gPad->SetGridy();
-                gPad->SetGridx();
-		MIN->Draw("L");
+	    */
+	    float min_x[] = {0,10000};
+	    float min_y[] = {(float)(Cut0[test][sub][k]),(float)(Cut0[test][sub][k])};
+	    TGraph* MIN = new TGraph(2, min_x, min_y);
+	    MIN->SetLineStyle(2);
+	    MIN->SetLineColor(5);
+	    MIN->SetLineWidth(2 + 100*100);
+	    MIN->SetFillStyle(3005);
+	    MIN->SetFillColor(5);
+	    gPad->SetGridy();
+	    gPad->SetGridx();
+	    MIN->Draw("L");
 
  
-	       	if (sub==1) { cHE->Modified();} 
-                if (sub==2) { cHE->Modified();}
-                if (sub==3) { cHB->Modified();}
-                if (sub==4 && test!=1) { cHE->Modified();} 
-                if (sub==4 && test==1) { cFour1->Modified();} 
-
-	    }    // k loop
-
-	    if (test==0){ 
-	        if (sub==1) {cHE->Print("HistNBCMNHB.png"); cHE->Clear();} 
-                if (sub==2) {cHE->Print("HistNBCMNHE.png"); cHE->Clear();}
-                if (sub==3) {cHB->Print("HistNBCMNHO.png"); cHB->Clear();}
-                if (sub==4) {cHE->Print("HistNBCMNHF.png"); cHE->Clear();}  
-	    } 
+	    if (sub==1) { cHE->Modified();} 
+	    if (sub==2 && test!=1) { cHE->Modified();}
+	    if (sub==2 && test==1) { cNine->Modified();}  // HE upgrade
+	    if (sub==3) { cHB->Modified();}
+	    if (sub==4 && test!=1) { cHE->Modified();} 
+	    if (sub==4 && test==1) { cFour1->Modified();}   // HF upgrade
 	    
-	    if (test==1){ 
-	        if (sub==1) {cHE->Print("HistADCamplHB.png"); cHE->Clear();} 
-                if (sub==2) {cHE->Print("HistADCamplHE.png"); cHE->Clear();}
-                if (sub==3) {cHB->Print("HistADCamplHO.png"); cHB->Clear();}
-                if (sub==4) {cFour1->Print("HistADCamplHF.png"); cFour1->Clear();}  
-	    } 
-	    if (test==2){ 
-	        if (sub==1) {cHE->Print("HistWidthHB.png"); cHE->Clear();} 
-                if (sub==2) {cHE->Print("HistWidthHE.png"); cHE->Clear();}
-                if (sub==3) {cHB->Print("HistWidthHO.png"); cHB->Clear();}
-                if (sub==4) {cHE->Print("HistWidthHF.png"); cHE->Clear();}  
-	    } 
-	    if (test==3){ 
-	        if (sub==1) {cHE->Print("HistRatioHB.png"); cHE->Clear();} 
-                if (sub==2) {cHE->Print("HistRatioHE.png"); cHE->Clear();}
-                if (sub==3) {cHB->Print("HistRatioHO.png"); cHB->Clear();}
-                if (sub==4) {cHE->Print("HistRatioHF.png"); cHE->Clear();}  
-	    } 
-	    if (test==4){ 
-	        if (sub==1) {cHE->Print("HistTmeanHB.png"); cHE->Clear();} 
-                if (sub==2) {cHE->Print("HistTmeanHE.png"); cHE->Clear();}
-                if (sub==3) {cHB->Print("HistTmeanHO.png"); cHB->Clear();}
-                if (sub==4) {cHE->Print("HistTmeanHF.png"); cHE->Clear();}  
-	    } 
-	    if (test==5){ 
-	        if (sub==1) {cHE->Print("HistTmaxHB.png"); cHE->Clear();} 
-                if (sub==2) {cHE->Print("HistTmaxHE.png"); cHE->Clear();}
-                if (sub==3) {cHB->Print("HistTmaxHO.png"); cHB->Clear();}
-                if (sub==4) {cHE->Print("HistTmaxHF.png"); cHE->Clear();}  
-	    } 
+	  }    // k loop
+	  
+	  if (test==0){ 
+	    if (sub==1) {cHE->Print("HistNBCMNHB.png"); cHE->Clear();} 
+	    if (sub==2) {cHE->Print("HistNBCMNHE.png"); cHE->Clear();}
+	    if (sub==3) {cHB->Print("HistNBCMNHO.png"); cHB->Clear();}
+	    if (sub==4) {cHE->Print("HistNBCMNHF.png"); cHE->Clear();}  
+	  } 
+	  // Amplitude:	  
+	  if (test==1){ 
+	    if (sub==1) {cHE->Print("HistADCamplHB.png"); cHE->Clear();} 
+	    //	    if (sub==2) {cHE->Print("HistADCamplHE.png"); cHE->Clear();}
+	    if (sub==2) {cNine->Print("HistADCamplHE.png"); cNine->Clear();}  // HE upgrade
+	    if (sub==3) {cHB->Print("HistADCamplHO.png"); cHB->Clear();}
+	    if (sub==4) {cFour1->Print("HistADCamplHF.png"); cFour1->Clear();}  // HF upgrade
+	  } 
+	  if (test==2){ 
+	    if (sub==1) {cHE->Print("HistWidthHB.png"); cHE->Clear();} 
+	    if (sub==2) {cHE->Print("HistWidthHE.png"); cHE->Clear();}
+	    if (sub==3) {cHB->Print("HistWidthHO.png"); cHB->Clear();}
+	    if (sub==4) {cHE->Print("HistWidthHF.png"); cHE->Clear();}  
+	  } 
+	  if (test==3){ 
+	    if (sub==1) {cHE->Print("HistRatioHB.png"); cHE->Clear();} 
+	    if (sub==2) {cHE->Print("HistRatioHE.png"); cHE->Clear();}
+	    if (sub==3) {cHB->Print("HistRatioHO.png"); cHB->Clear();}
+	    if (sub==4) {cHE->Print("HistRatioHF.png"); cHE->Clear();}  
+	  } 
+	  if (test==4){ 
+	    if (sub==1) {cHE->Print("HistTmeanHB.png"); cHE->Clear();} 
+	    if (sub==2) {cHE->Print("HistTmeanHE.png"); cHE->Clear();}
+	    if (sub==3) {cHB->Print("HistTmeanHO.png"); cHB->Clear();}
+	    if (sub==4) {cHE->Print("HistTmeanHF.png"); cHE->Clear();}  
+	  } 
+	  if (test==5){ 
+	    if (sub==1) {cHE->Print("HistTmaxHB.png"); cHE->Clear();} 
+	    if (sub==2) {cHE->Print("HistTmaxHE.png"); cHE->Clear();}
+	    if (sub==3) {cHB->Print("HistTmaxHO.png"); cHB->Clear();}
+	    if (sub==4) {cHE->Print("HistTmaxHF.png"); cHE->Clear();}  
+	  } 
 	}// end sub 
-	/////////////////////////////////////////////
+	///////////////////////////////////////////// other cases:
 	if(test==1){
 	  for (int x=1;x<=HistNumChanFull[6]->GetXaxis()->GetNbins();x++) {
 	    
 	    HistNumChanFull[6]->SetBinContent(x,0.0 );
-	    for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-	      for (int k=k_min[sub];k<=k_maxHFupgrade[sub];k++) {  //Depth 
+	    int depthsubcount = 0.;
+	    for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
+	      int kkkkkkmax = k_max[sub];
+	      if ( sub==4 || sub==2) kkkkkkmax = k_maxHFupgrade[sub];
+	      for (int k=k_min[sub];k<=kkkkkkmax;k++) {  //Depth 
+		// line below is temporary, just to avoid contribution of HEP(M)17 in depthes 4,5,6,7 but keep in depthes 1,2,3
+		if(sub==2 && k>3 ) break;
+		depthsubcount++;
 		double ccc1 =  HistNumBadChanDepth[test][sub][k]->GetBinContent(x);
 		HistNumChanFull[6]->SetBinContent(x,HistNumChanFull[6]->GetBinContent(x) + ccc1);
-	      }
-	    }
-	    HistNumChanFull[6]->SetBinContent(x, (HistNumChanFull[6]->GetBinContent(x))/8.   );
-	  }
-	}
+	      }//depth
+	    }//sub
+	    if(depthsubcount > 0.) {HistNumChanFull[6]->SetBinContent(x, (HistNumChanFull[6]->GetBinContent(x))/depthsubcount);}
+	    else{HistNumChanFull[6]->SetBinContent(x, (HistNumChanFull[6]->GetBinContent(x))/8.);}
+	  }//x
+	}//test=1
 	////////////  //////   //////  //////  ////// //////
 	if (test!=1) {cHB->Divide(1,1);cHB->cd(1);}else {cHE->Divide(2,1);cHE->cd(1);}
 	HistNumBadChanFull[test]->Divide(HistNumBadChanFull[test],HistNumChanFull[test], 1, 1, "B");	
@@ -3621,6 +3674,7 @@ int main(int argc, char *argv[])
   for (int test=0;test<=5;test++) { //Test: 0,   
       for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
            
+	//	cout<<"Creating each test kind for each subdet html pages:  test=  "<< test << "  sub= "  << sub <<    endl;
            if (test==0){
 	      if (sub==1) {htmlFile.open("HB_CapID.html");}
               if (sub==2) {htmlFile.open("HE_CapID.html");}
@@ -4108,10 +4162,11 @@ int main(int argc, char *argv[])
 	   htmlFile << "<td class=\"s4\" align=\"center\">LS</td>"    << std::endl;
 	   //              htmlFile << "<td class=\"s1\" align=\"center\">LS</td>"  << std::endl;
 	   htmlFile << "<td class=\"s1\" align=\"center\">Number of events</td>"  << std::endl;
-
+	   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	   int kkkkkkmax = k_max[sub];
-	   if (test==1 && sub==4) kkkkkkmax = k_maxHFupgrade[sub];
+	  if ( (sub==4 || sub==2) && test==1) kkkkkkmax = k_maxHFupgrade[sub];
+	  //	   if (test==1 && sub==4) kkkkkkmax = k_maxHFupgrade[sub];
 
 	   if (test==0) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< Nbcs > Depth "<< k <<" </td>"  << std::endl;
 	   if (test==1) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< A > Depth "<< k <<" </td>"  << std::endl;
@@ -4160,6 +4215,9 @@ int main(int argc, char *argv[])
     if (test==4) htmlFile.open("Tmean_GL.html");
     if (test==5) htmlFile.open("Tmax_GL.html");
     
+    //	cout<<"Creating tests  html pages:  test=  "<< test <<     endl;
+
+
     htmlFile << "</html><html xmlns=\"http://www.w3.org/1999/xhtml\">"<< std::endl;
     htmlFile << "<head>"<< std::endl;
     htmlFile << "<meta http-equiv=\"Content-Type\" content=\"text/html\"/>"<< std::endl;
@@ -4244,75 +4302,144 @@ int main(int argc, char *argv[])
     htmlFile << "</tr>"<< std::endl;
     htmlFile << "</table>"<< std::endl;
     htmlFile << "<br>"<< std::endl;    
+    //	cout<<"Creating tests  html pages:  111111" <<     endl;
     
     if (test!=0) htmlFile << "<h2> 4. Table of estimator-values in sub-detectors for ONLY suspicious LSs </h3>"<< std::endl;   
-    if (test==0) htmlFile << "<h2> 4. Table of average Nbcs in sub-detectors for only suspicious LSs </h3>"<< std::endl;
+    if (test==0) htmlFile << "<h2> 4. Table of average Nbcs in sub-detectors for ONLY suspicious LSs </h3>"<< std::endl;
     htmlFile << "<table>"<< std::endl;     
     htmlFile << "<tr>";
     htmlFile << "<td class=\"s4\" align=\"center\">LS</td>"    << std::endl;
     //     htmlFile << "<td class=\"s1\" align=\"center\">LS</td>"  << std::endl;
     htmlFile << "<td class=\"s1\" align=\"center\">Number of events</td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">HB Depth 1</td>"<< std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">HB Depth 2</td>"  << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">HE Depth 1</td>"   << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">HE Depth 2</td>"   << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">HE Depth 3</td>"   << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">HO Depth 4</td>"   << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">HF Depth 1</td>"   << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">HF Depth 2</td>"   << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">HF Depth 3</td>"   << std::endl;
-    htmlFile << "<td class=\"s1\" align=\"center\">HF Depth 4</td>"   << std::endl;
-    htmlFile << "</tr>"   << std::endl;     
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
+      
+      //    cout<<"Creating each test kind for each subdet html pages:  test=  "<< test << "  sub= "  << sub <<    endl;
+      int kkkkkkmax = k_max[sub];
+      if ( (sub==4 || sub==2) && test==1) kkkkkkmax = k_maxHFupgrade[sub];
+      //	   if (test==1 && sub==4) kkkkkkmax = k_maxHFupgrade[sub];
+      if(sub==1) {
+	if (test==0) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< Nbcs > HBdep "<< k <<" </td>"  << std::endl;
+	if (test==1) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< A > HBdepth "<< k <<" </td>"  << std::endl;
+	if (test==2) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< W > HBdepth "<< k <<" </td>"  << std::endl;
+	if (test==3) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< R > HBdepth "<< k <<" </td>"  << std::endl;
+	if (test==4) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< TSn > HBdep "<< k <<" </td>"  << std::endl;
+	if (test==5) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< TSx > HBdep "<< k <<" </td>"  << std::endl;
+      }//     
+      if(sub==2) {
+	if (test==0) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< Nbcs > HEdep "<< k <<" </td>"  << std::endl;
+	if (test==1) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< A > HEdepth "<< k <<" </td>"  << std::endl;
+	if (test==2) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< W > HEdepth "<< k <<" </td>"  << std::endl;
+	if (test==3) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< R > HEdepth "<< k <<" </td>"  << std::endl;
+	if (test==4) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< TSn > HEdep "<< k <<" </td>"  << std::endl;
+	if (test==5) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< TSx > HEdep "<< k <<" </td>"  << std::endl;
+      }//     
+      if(sub==3) {
+	if (test==0) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< Nbcs > HOdep "<< k <<" </td>"  << std::endl;
+	if (test==1) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< A > HOdepth "<< k <<" </td>"  << std::endl;
+	if (test==2) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< W > HOdepth "<< k <<" </td>"  << std::endl;
+	if (test==3) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< R > HOdepth "<< k <<" </td>"  << std::endl;
+	if (test==4) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< TSn > HOdep "<< k <<" </td>"  << std::endl;
+	if (test==5) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< TSx > HOdep "<< k <<" </td>"  << std::endl;
+      }//     
+      if(sub==4) {
+	if (test==0) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< Nbcs > HFdep "<< k <<" </td>"  << std::endl;
+	if (test==1) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< A > HFdepth "<< k <<" </td>"  << std::endl;
+	if (test==2) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< W > HFdepth "<< k <<" </td>"  << std::endl;
+	if (test==3) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< R > HFdepth "<< k <<" </td>"  << std::endl;
+	if (test==4) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< TSn > HFdep "<< k <<" </td>"  << std::endl;
+	if (test==5) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< TSx > HFdep "<< k <<" </td>"  << std::endl;
+      }//     
+    }// sub
+    htmlFile << "</tr>"   << std::endl;    
+    
+//    htmlFile << "<td class=\"s1\" align=\"center\">HB Depth 1</td>"<< std::endl;
+//    htmlFile << "<td class=\"s1\" align=\"center\">HB Depth 2</td>"  << std::endl;
+//    htmlFile << "<td class=\"s1\" align=\"center\">HE Depth 1</td>"   << std::endl;
+//    htmlFile << "<td class=\"s1\" align=\"center\">HE Depth 2</td>"   << std::endl;
+//    htmlFile << "<td class=\"s1\" align=\"center\">HE Depth 3</td>"   << std::endl;
+//    htmlFile << "<td class=\"s1\" align=\"center\">HE Depth 4</td>"   << std::endl;
+//    htmlFile << "<td class=\"s1\" align=\"center\">HE Depth 5</td>"   << std::endl;
+//    htmlFile << "<td class=\"s1\" align=\"center\">HE Depth 6</td>"   << std::endl;
+//    htmlFile << "<td class=\"s1\" align=\"center\">HE Depth 7</td>"   << std::endl;
+//    htmlFile << "<td class=\"s1\" align=\"center\">HO Depth 4</td>"   << std::endl;
+//    htmlFile << "<td class=\"s1\" align=\"center\">HF Depth 1</td>"   << std::endl;
+//    htmlFile << "<td class=\"s1\" align=\"center\">HF Depth 2</td>"   << std::endl;
+//    htmlFile << "<td class=\"s1\" align=\"center\">HF Depth 3</td>"   << std::endl;
+//    htmlFile << "<td class=\"s1\" align=\"center\">HF Depth 4</td>"   << std::endl;
+//    htmlFile << "</tr>"   << std::endl;     
     
     ind = 0;
-    
+    //  cout<<"Creating tests  html pages:  222222" <<     endl;
     for (int i=1;i<=MaxLum;i++) {
-      if ((ind%2)==1)   raw_class="<td class=\"s2\" align=\"center\">";
-      else              raw_class="<td class=\"s3\" align=\"center\">";                    
+      // define al least one exceed in any sub-detector
       int met =0;
       for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-
 	int kkkkkkmax = k_max[sub];
-	if (test==1 && sub==4) kkkkkkmax = k_maxHFupgrade[sub];
-
-	for (int k=k_min[sub];k<=kkkkkkmax; k++) 
-	  if (HistNumBadChanDepth[test][sub][k]->GetBinContent(i) > Cut0[test][sub][k]) met = 1; 
-      }
+	if ( (sub==4 || sub==2) && test==1) kkkkkkmax = k_maxHFupgrade[sub];
+	for (int k=k_min[sub];k<=kkkkkkmax; k++)  {
+	  // line below is temporary, just to avoid contribution of HEP(M)17 in depthes 4,5,6,7 but keep in depthes 1,2,3
+	  if(sub==2 && k>3 ) {}else{
+	    if (HistNumBadChanDepth[test][sub][k]->GetBinContent(i) > Cut0[test][sub][k]) met = 1;}
+	}//depth
+      }//sub
+      // if exceed then plot the line for all sub-detectors
       if (met==1) {
+	if ((ind%2)==1)   raw_class="<td class=\"s2\" align=\"center\">";
+	else              raw_class="<td class=\"s3\" align=\"center\">";                    
 	htmlFile << "<tr>"<< std::endl;
 	htmlFile << "<td class=\"s4\" align=\"center\">" << i <<"</td>"<< std::endl;
 	//            htmlFile << raw_class<< LumLum->GetBinContent(i)<<"</td>"<< std::endl;
-	htmlFile << raw_class<< LumiEv->GetBinContent(i)<<"</td>"<< std::endl;	
-	    if (HistNumBadChanDepth[test][1][1]->GetBinContent(i) > Cut0[test][1][1])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][1][1]->GetBinContent(i)<<"</td>"<< std::endl;
-	    else htmlFile <<raw_class<<HistNumBadChanDepth[test][1][1]->GetBinContent(i)<<"</td>"<< std::endl;   
-	    if (HistNumBadChanDepth[test][1][2]->GetBinContent(i) > Cut0[test][1][2])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][1][2]->GetBinContent(i)<<"</td>"<< std::endl;
-	    else htmlFile <<raw_class<<HistNumBadChanDepth[test][1][2]->GetBinContent(i)<<"</td>"<< std::endl;	    
-	    if (HistNumBadChanDepth[test][2][1]->GetBinContent(i) > Cut0[test][2][1])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][2][1]->GetBinContent(i)<<"</td>"<< std::endl;
-	    else htmlFile <<raw_class<<HistNumBadChanDepth[test][2][1]->GetBinContent(i)<<"</td>"<< std::endl;	    
-	    if (HistNumBadChanDepth[test][2][2]->GetBinContent(i) > Cut0[test][2][2])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][2][2]->GetBinContent(i)<<"</td>"<< std::endl;
-	    else htmlFile <<raw_class<<HistNumBadChanDepth[test][2][2]->GetBinContent(i)<<"</td>"<< std::endl;	    
-	    if (HistNumBadChanDepth[test][2][3]->GetBinContent(i) > Cut0[test][2][3])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][2][3]->GetBinContent(i)<<"</td>"<< std::endl;
-	    else htmlFile <<raw_class<<HistNumBadChanDepth[test][2][3]->GetBinContent(i)<<"</td>"<< std::endl;	    
-	    if (HistNumBadChanDepth[test][3][4]->GetBinContent(i) > Cut0[test][3][4])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][3][4]->GetBinContent(i)<<"</td>"<< std::endl;
-	    else htmlFile <<raw_class<<HistNumBadChanDepth[test][3][4]->GetBinContent(i)<<"</td>"<< std::endl;	    
-	    if (HistNumBadChanDepth[test][4][1]->GetBinContent(i) > Cut0[test][4][1])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][4][1]->GetBinContent(i)<<"</td>"<< std::endl;
-	    else htmlFile <<raw_class<<HistNumBadChanDepth[test][4][1]->GetBinContent(i)<<"</td>"<< std::endl;	  
-	    if (HistNumBadChanDepth[test][4][2]->GetBinContent(i) > Cut0[test][4][2])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][4][2]->GetBinContent(i)<<"</td>"<< std::endl;
-	    else htmlFile <<raw_class<<HistNumBadChanDepth[test][4][2]->GetBinContent(i)<<"</td>"<< std::endl;
-	    ind+=1;
-      }   
-      htmlFile << "</tr>" << std::endl;
-      
-    }		
-    
+	htmlFile << raw_class<< LumiEv->GetBinContent(i)<<"</td>"<< std::endl;
+	for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
+	  int kkkkkkmax = k_max[sub];
+	  if ( (sub==4 || sub==2) && test==1) kkkkkkmax = k_maxHFupgrade[sub];
+	  for (int k=k_min[sub];k<=kkkkkkmax; k++)  {
+	    if (HistNumBadChanDepth[test][sub][k]->GetBinContent(i) > Cut0[test][sub][k]) 
+	      htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][sub][k]->GetBinContent(i)<<"</td>"<< std::endl;
+	    else  htmlFile << raw_class <<HistNumBadChanDepth[test][sub][k]->GetBinContent(i)<<"</td>"<< std::endl;
+	    //	     htmlFile << "</tr>" << std::endl;
+	    /*
+	      if (HistNumBadChanDepth[test][1][1]->GetBinContent(i) > Cut0[test][1][1])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][1][1]->GetBinContent(i)<<"</td>"<< std::endl;
+	      else htmlFile <<raw_class<<HistNumBadChanDepth[test][1][1]->GetBinContent(i)<<"</td>"<< std::endl;   
+	      if (HistNumBadChanDepth[test][1][2]->GetBinContent(i) > Cut0[test][1][2])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][1][2]->GetBinContent(i)<<"</td>"<< std::endl;
+	      else htmlFile <<raw_class<<HistNumBadChanDepth[test][1][2]->GetBinContent(i)<<"</td>"<< std::endl;	    
+	      if (HistNumBadChanDepth[test][2][1]->GetBinContent(i) > Cut0[test][2][1])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][2][1]->GetBinContent(i)<<"</td>"<< std::endl;
+	      else htmlFile <<raw_class<<HistNumBadChanDepth[test][2][1]->GetBinContent(i)<<"</td>"<< std::endl;	    
+	      if (HistNumBadChanDepth[test][2][2]->GetBinContent(i) > Cut0[test][2][2])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][2][2]->GetBinContent(i)<<"</td>"<< std::endl;
+	      else htmlFile <<raw_class<<HistNumBadChanDepth[test][2][2]->GetBinContent(i)<<"</td>"<< std::endl;	    
+	      if (HistNumBadChanDepth[test][2][3]->GetBinContent(i) > Cut0[test][2][3])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][2][3]->GetBinContent(i)<<"</td>"<< std::endl;
+	      else htmlFile <<raw_class<<HistNumBadChanDepth[test][2][3]->GetBinContent(i)<<"</td>"<< std::endl;	    
+	      if (HistNumBadChanDepth[test][2][4]->GetBinContent(i) > Cut0[test][2][4])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][2][4]->GetBinContent(i)<<"</td>"<< std::endl;
+	      else htmlFile <<raw_class<<HistNumBadChanDepth[test][2][4]->GetBinContent(i)<<"</td>"<< std::endl;	    
+	      if (HistNumBadChanDepth[test][2][5]->GetBinContent(i) > Cut0[test][2][5])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][2][5]->GetBinContent(i)<<"</td>"<< std::endl;
+	      else htmlFile <<raw_class<<HistNumBadChanDepth[test][2][5]->GetBinContent(i)<<"</td>"<< std::endl;	    
+	      if (HistNumBadChanDepth[test][2][6]->GetBinContent(i) > Cut0[test][2][6])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][2][6]->GetBinContent(i)<<"</td>"<< std::endl;
+	      else htmlFile <<raw_class<<HistNumBadChanDepth[test][2][6]->GetBinContent(i)<<"</td>"<< std::endl;	    
+	      if (HistNumBadChanDepth[test][2][7]->GetBinContent(i) > Cut0[test][2][7])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][2][7]->GetBinContent(i)<<"</td>"<< std::endl;
+	      else htmlFile <<raw_class<<HistNumBadChanDepth[test][2][7]->GetBinContent(i)<<"</td>"<< std::endl;	    
+	      if (HistNumBadChanDepth[test][3][4]->GetBinContent(i) > Cut0[test][3][4])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][3][4]->GetBinContent(i)<<"</td>"<< std::endl;
+	      else htmlFile <<raw_class<<HistNumBadChanDepth[test][3][4]->GetBinContent(i)<<"</td>"<< std::endl;	    
+	      if (HistNumBadChanDepth[test][4][1]->GetBinContent(i) > Cut0[test][4][1])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][4][1]->GetBinContent(i)<<"</td>"<< std::endl;
+	      else htmlFile <<raw_class<<HistNumBadChanDepth[test][4][1]->GetBinContent(i)<<"</td>"<< std::endl;	  
+	      if (HistNumBadChanDepth[test][4][2]->GetBinContent(i) > Cut0[test][4][2])  htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][4][2]->GetBinContent(i)<<"</td>"<< std::endl;
+	      else htmlFile <<raw_class<<HistNumBadChanDepth[test][4][2]->GetBinContent(i)<<"</td>"<< std::endl;
+	    */
+	  } //k depthes
+	}//sub
+	htmlFile << "</tr>" << std::endl;
+	ind+=1;
+      }// met=1
+    }//i bin lines	
+    //	cout<<"Creating tests  html pages:  333333" <<     endl;
     htmlFile << "</table>" << std::endl;
     htmlFile << "<br>"<< std::endl;
-    
     htmlFile << "</body> " << std::endl;
     htmlFile << "</html> " << std::endl;
     htmlFile.close();
   }//test
   //======================================================================
+  //	cout<<"for summed Amplitudes of each sub-detector" <<     endl;
   
   // for summed Amplitudes of each sub-detector
   htmlFile.open("SummedAmplitudes_GL.html");
