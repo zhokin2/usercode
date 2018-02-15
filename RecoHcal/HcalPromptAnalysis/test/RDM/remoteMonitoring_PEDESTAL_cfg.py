@@ -305,6 +305,10 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   lsdep_estimator1_HEdepth1 = cms.double(2500.),
                                   lsdep_estimator1_HEdepth2 = cms.double(2500.),
                                   lsdep_estimator1_HEdepth3 = cms.double(2500.),
+                                  lsdep_estimator1_HEdepth4 = cms.double(2500.),
+                                  lsdep_estimator1_HEdepth5 = cms.double(2500.),
+                                  lsdep_estimator1_HEdepth6 = cms.double(2500.),
+                                  lsdep_estimator1_HEdepth7 = cms.double(2500.),
                                   lsdep_estimator1_HFdepth1 = cms.double(2500.),
                                   lsdep_estimator1_HFdepth2 = cms.double(2500.),
                                   lsdep_estimator1_HFdepth3 = cms.double(2500.),
@@ -400,10 +404,11 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #  3       -        +       -     +     new w/o high depthes
                                   #  4       +        -       +     +     2016fall
                                   #  5       +        -       +     +     2016fall w/o high depthes
-                                  #  6       +        +       -     +     2017begin
+                                  #  6       +        +       -     +     2017 && 2018
                                   #  7       +        +       -     +     2017begin w/o high depthes in HEonly
                                   #  8       +        +       -     +     2017begin w/o high depthes
                                   #  9       +        +       +     +     all  w/o high depthes
+                                  # 10       +        -       -     +     2017 w/o HEP17
                                   # 
                                   flagupgradeqie1011 = cms.int32(6),
                                   #end upgrade: ---------------------------------------------------------
@@ -430,9 +435,40 @@ process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
     dump = cms.untracked.vstring(''),
     file = cms.untracked.string('')
 )
-from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-#process.load('Configuration.AlCa.GlobalTag_condDBv2')
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data_FULL', '')
+#from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
+#process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data_FULL', '')
+############################################################################
+# V.EPSHTEIN:
+process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+process.GlobalTag.globaltag = '100X_dataRun2_Prompt_Candidate_2018_01_31_16_01_36'
+###
+process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
+    dump = cms.untracked.vstring(''),
+    file = cms.untracked.string('')
+)
+
+process.es_hardcode = cms.ESSource("HcalHardcodeCalibrations",
+    toGet = cms.untracked.vstring('QIEShape',
+        'QIEData',
+        'ChannelQuality',
+        'HcalQIEData',
+        'Pedestals',
+        'PedestalWidths',
+        'Gains',
+        'GainWidths',
+        'ZSThresholds',
+        'RespCorrs')
+)
+###
+process.hcalDigis= cms.EDProducer("HcalRawToDigi",
+    FilterDataQuality = cms.bool(True),
+    HcalFirstFED = cms.untracked.int32(700),
+    InputLabel = cms.InputTag("source"),
+    UnpackCalib = cms.untracked.bool(True),
+    FEDs = cms.untracked.vint32(1100, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1109, 1110, 1111, 1112, 1113, 1114, 1115, 1116, 1117),
+)
+###
+############################################################################
 
 process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
 process.hcalDigis.FilterDataQuality = cms.bool(False)
