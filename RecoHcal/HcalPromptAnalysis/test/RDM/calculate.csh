@@ -4,7 +4,8 @@
 ### All files have the particular time
 ###
 #set DAT=`date '+%Y-%m-%d_%H_%M_%S'`
-set WD='/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_8/src/RecoHcal/HcalPromptAnalysis/test/RDM'
+set RELEASE=CMSSW_10_0_0
+set WD='/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/${RELEASE}/src/RecoHcal/HcalPromptAnalysis/test/RDM'
 
 wget -q http://cmshcalweb01.cern.ch/DetDiag/Local_HTML/runlist.html -O runlist.html.${1}
 
