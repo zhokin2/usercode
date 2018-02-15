@@ -15,7 +15,7 @@ echo ${valdas}
 
 ### set DAT="2015-10-07_14_50_47"
 
-set RELEASE=CMSSW807patch2_STABLE
+set RELEASE=CMSSW_10_0_0
 ### Get list of done from RDM webpage ###
 set TYPE=${1}
 echo ${TYPE}
@@ -39,7 +39,7 @@ set year=`echo ${i} | awk -F _ '{print $3}' | awk -F - '{print $1}'`
 set nevent=`echo ${i} | awk -F _ '{print $5}'`
 echo ${iold} ${jold} ${year} ${nevent}
 if( ${nevent} != "None" ) then
-if( ${nevent} >= "500") then  
+if( ${nevent} >= "500" && ${nevent} < "1000000") then  
 echo  "Start job "
 ###${WD}/HcalRemoteMonitoringNewNew.csh ${iold} ${DAT} ${jold} ${nevent} ${TYPE}
 ###ls ${WD}/HcalRemoteMonitoringNewNew.csh
