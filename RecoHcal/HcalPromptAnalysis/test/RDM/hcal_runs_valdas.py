@@ -1,7 +1,7 @@
 import urllib2, re, simplejson as json, socket
 import sys
 
-URL = "http://vocms00169:2113"
+URL = "http://vocms00170:2113"
 SQL = "select \
         r.RUNNUMBER,\
         r.START_TIME,\
@@ -31,9 +31,12 @@ def qstring(qstring):
   return ps
 
 def get_single(q, qs):
-  resp = urllib2.urlopen("%s/query/%s/data?%s" % (URL, query(q), qstring(qs)))
+  req = urllib2.Request("%s/query/%s/data?%s" % (URL, query(q), qstring(qs)), headers={"Accept" : "application/json"})
+  resp = urllib2.urlopen(req)
   if "getcode" in dir(resp) and resp.getcode() == 200:
-    return json.loads(resp.read())["data"][0][0]
+    ret = json.loads(resp.read())
+    if len(ret["data"]) > 0:
+      return ret["data"][0][0]
   return None
 
 def get_all(q, qs):
@@ -47,7 +50,8 @@ def get_all(q, qs):
     p = 1
     while c > 0:
       u = "%s/query/%s/page/1000/%d/data?%s" % (URL, qid, p, ps)
-      resp = urllib2.urlopen(u)
+      req = urllib2.Request(u, headers={"Accept" : "application/json"})
+      resp = urllib2.urlopen(req)
       if "getcode" in dir(resp) and resp.getcode() == 200:
         j = json.loads(resp.read())
         data.extend(j["data"])
@@ -66,7 +70,9 @@ def main(rf, rt):
       for t in ["pedestal","LED","laser"]:
         if re.search(t, r[3], flags=re.IGNORECASE) != None:
           d = get_single(TIME, { "p.run": int(r[0])}) 
-          print r[0], t, "\"" + d + "\"", r[2]
+          if d is not None:
+            d = "\"" + d + "\""
+          print r[0], t, d, r[2]
           break
   
 
