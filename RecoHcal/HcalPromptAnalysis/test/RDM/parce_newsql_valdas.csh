@@ -7,11 +7,13 @@ echo " Please select run type ./parce_newsql_valdas.csh LED `date '+%Y-%m-%d_%H_
 exit
 endif
 
-set runorigped=225529
-#set runorigled=135077
-set runorigled=212965
-set runoriglas=224708
-set RELEASE=CMSSW807patch2_STABLE
+set runorigped=286893
+set runorigled=286946
+set runoriglas=286766
+# ATTENTION:
+# for laser and pedestal we put runorig = run current
+#
+set RELEASE=CMSSW_10_0_0
 set WD=/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/${RELEASE}/src/RecoHcal/HcalPromptAnalysis/test/RDM
 
 set LAST=0
@@ -33,6 +35,7 @@ set outfile=${WD}/LED_LIST/runlist.tmp.${2}
 endif
 
 if( ${1} == "laser" ) then
+echo "Laser"
 set runref=${runoriglas}
 set LAST=`cat ${WD}/LASER_LIST/LASTRUN`
 set OUTLAST=${WD}/LASER_LIST/LASTRUN
@@ -60,21 +63,22 @@ set mydate=`echo ${i} | awk -F_ '{print $3}'`
 set mytime=`echo ${i} | awk -F_ '{print $4}'`
 set nevent=`echo ${i} | awk -F_ '{print $5}'`
 if( ${run} > ${LAST} ) then
+if( ${1} == "LED" ) then
 echo ${run}"_"${runref}"_"${mydate}"_"${mytime}"_"${nevent} >> ${outfile}
+else
+echo ${run}"_"${run}"_"${mydate}"_"${mytime}"_"${nevent} >> ${outfile}
+endif
 rm ${OUTLAST}
 echo ${run} > ${OUTLAST}
 endif
 end
 if( ${1} == "LED" ) then
 eos ls /eos/cms/store/group/dpg_hcal/comm_hcal/USC > ${WD}/LED_LIST/fullSrc0_list_${2}
-eos ls /eos/cms/store/group/dpg_hcal/comm_hcal/LS1 > ${WD}/LED_LIST/fullSrc1_list_${2}
 endif
 if( ${1} == "laser" ) then
 eos ls /eos/cms/store/group/dpg_hcal/comm_hcal/USC > ${WD}/LASER_LIST/fullSrc0_list_${2}
-eos ls /eos/cms/store/group/dpg_hcal/comm_hcal/LS1 > ${WD}/LASER_LIST/fullSrc1_list_${2}
 endif
 if( ${1} == "pedestal" ) then
 eos ls /eos/cms/store/group/dpg_hcal/comm_hcal/USC > ${WD}/PEDESTAL_LIST/fullSrc0_list_${2}
-eos ls /eos/cms/store/group/dpg_hcal/comm_hcal/LS1 > ${WD}/PEDESTAL_LIST/fullSrc1_list_${2}
 endif
 
