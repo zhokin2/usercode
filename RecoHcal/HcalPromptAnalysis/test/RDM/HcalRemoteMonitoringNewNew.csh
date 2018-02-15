@@ -5,13 +5,12 @@ set refnumber=${3}
 set runNevents=${4}
 set CALIB=${5}
 
-set RELEASE=CMSSW807patch2_STABLE
+set RELEASE=CMSSW_10_0_0
 
 #eos ls /eos/cms/store/group/dpg_hcal/comm_hcal/USC > ${WD}/${CALIB}_LIST/fullSrc0_list_${2}
-#eos ls /eos/cms/store/group/dpg_hcal/comm_hcal/LS1 > ${WD}/${CALIB}_LIST/fullSrc1_list_${2}
+#touch ${WD}/${CALIB}_LIST/fullSrc1_list_${2}
 
 set fullSrc0='/store/group/dpg_hcal/comm_hcal/USC'
-set fullSrc1='/store/group/dpg_hcal/comm_hcal/LS1'
 set fullSrc='NO'
 set WebDir='/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb'
 set WebSite='https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT'
@@ -21,13 +20,19 @@ set WD="/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/${R
 echo ${runnumber} >> ${WD}/LOG/batchlog
 grep -q ${runnumber} ${WD}/${CALIB}_LIST/fullSrc0_list_${2}
 if( ${status} == "0" ) then
+set namef0=`grep ${runnumber} ${WD}/${CALIB}_LIST/fullSrc0_list_${2}`
+set namef=`echo ${namef0} | awk '{print $1}'`
+echo ${namef}
+if( ${namef} == "run${runnumber}" ) then
+set fullSrc=${fullSrc0}/run${runnumber}
+else
 set fullSrc=${fullSrc0}
 endif
 
-grep -q ${runnumber} ${WD}/${CALIB}_LIST/fullSrc1_list_${2}
-if( ${status} == "0" ) then
-set fullSrc=${fullSrc1}
+echo "here"
 endif
+
+echo ${fullSrc} >> ${WD}/LOG/batchlog
 
 if( ${fullSrc} == "NO" ) then
 echo "No Batch submission" ${runnumber} >> ${WD}/LOG/batchlog
@@ -136,13 +141,13 @@ cp *.png $WebDir/${CALIB}_$runnumber  >> & ${WD}/LOG/log_${runnumber}
 mv $WebDir/${CALIB}_$runnumber/index_draft.html $WebDir/${CALIB}_$runnumber/index_draft.html.orig
 cp index_draft.html $WebDir/${CALIB}_$runnumber
 #### Copy to the new site
-cmsMkdir /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/RMT/${CALIB}_$runnumber
+eos mkdir /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/RMT/${CALIB}_$runnumber
 foreach i (`ls *.html`)
 cat ${i} | sed 's#cms-cpt-software.web.cern.ch\/cms-cpt-software\/General\/Validation\/SVSuite#cms-conddb-dev.cern.ch\/eosweb\/hcal#g'> ${i}.n
-cmsStage -f ${i}.n /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/RMT/${CALIB}_$runnumber/${i}
+xrdcp ${i}.n /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/RMT/${CALIB}_$runnumber/${i}
 end
 foreach k (`ls *.png`)
-cmsStage -f ${k} /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/RMT/${CALIB}_$runnumber
+xrdcp ${k} /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/RMT/${CALIB}_$runnumber
 end
 endif
 
