@@ -8,15 +8,7 @@ set WebSite='https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Valid
 
 
 
-cd /tmp/kodolova
-ls > list
-foreach j (`cat list`)
-cd ${j}
-set runnumber=${j}
-set raw=3
-echo '<td class="s'$raw'" align="center">NO</td>'>> index_draft.html
-echo '<td class="s'$raw'" align="center">OK</td>'>> index_draft.html
-echo '</tr>'>> index_draft.html
+foreach j (`cat ledlist`)
 
 foreach i (`ls *.html`)
 cat ${i} | sed s/LED/LASER/g > ${i}_t
@@ -32,16 +24,16 @@ cp *.png $WebDir/${CALIB}_$runnumber
 mv $WebDir/${CALIB}_$runnumber/index_draft.html $WebDir/${CALIB}_$runnumber/index_draft.html.orig
 cp index_draft.html $WebDir/${CALIB}_$runnumber
 
-cmsMkdir /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/RMT/${CALIB}_$runnumber
+eos mkdir /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/RMT/${CALIB}_$runnumber
 foreach i (`ls *.html`)
 cat ${i} | sed 's#cms-cpt-software.web.cern.ch\/cms-cpt-software\/General\/Validation\/SVSuite#cms-conddb-dev.cern.ch\/eosweb\/hcal#g'> ${i}.n
-cmsStage -f ${i}.n /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/RMT/${CALIB}_$runnumber
+xrdcp ${i}.n /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/RMT/${CALIB}_$runnumber
 end
 foreach k (`ls *.png`)
-cmsStage -f ${k} /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/RMT/${CALIB}_$runnumber
+xrdcp ${k} /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/RMT/${CALIB}_$runnumber
 end
 endif
 cd ..
 end
-cd /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW807patch2_STABLE/src/RecoHcal/HcalPromptAnalysis/test/RDM
+cd /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_10_0_0/src/RecoHcal/HcalPromptAnalysis/test/RDM
 
