@@ -67,7 +67,7 @@ using namespace std;
     {
        //CUTS:    [test][subdetector]                                       ADC amplitude  Am      Width  for Wm             Ratio cut for Rm             TS mean for TNm           TS max  for TXm
        double MIN_M_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},       {0, 100.,70.,40.,40.}, {0, 0.7, 0.7, 0.1, 0.1},  {0, 0.7, 0.6, 0.40, 0.45}, {0, 2.5, 1.0, 1.0, 1.0}, {0, 1.5, 1.5, 0.5, 0.5}};
-       double MAX_M_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 3000,3000,3000,3000}, {0, 2.5, 2.5, 2.8, 2.6}, {0, 0.94, 0.95, 1.04, 1.02}, {0, 5.5, 5.2, 4.8, 4.2}, {0, 6.5, 6.5, 8.5, 8.5}};                    
+       double MAX_M_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 3000,3000,3000,150000}, {0, 2.5, 2.5, 2.8, 2.6}, {0, 0.94, 0.95, 1.04, 1.02}, {0, 5.5, 5.2, 4.8, 4.2}, {0, 6.5, 6.5, 8.5, 8.5}};                    
        double MIN_C_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},{0, 1000.,1000.,1000.,100.}, {0, 1.3, 1.3, 0.7, 0.3}, {0, 0.76 , 0.76, 0.85, 0.5}, {0, 2.4, 2.4, 1.5, 3.5}, {0, 1.5, 1.5, 1.5, 3.5}};
        double MAX_C_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 1E20,1E20,1E20,1E20},{0, 1.9, 1.9, 1.65, 1.5},  {0, 0.94, 0.94, 0.99, 0.8}, {0, 3.7, 3.7, 2.7, 4.5}, {0, 2.5, 2.5, 2.5, 4.5}};                    
        double porog_LED[5] = {0., 2., 2., 2., 2.}; // Cut for GS test in pro cents
@@ -529,12 +529,13 @@ cout<< MIN_M[2][1] << endl;
           HistAmpl[test][sub]->SetLineWidth(2);
 	  HistAmpl[test][sub]->SetTitleOffset(1.4,"Y");
           HistAmpl[test][sub]->Draw("");
-//        HistAmpl[test][sub]->GetYaxis()->SetRangeUser(1., 100.);
-          if (test==2) {gPad->SetLogx(); HistAmpl[test][sub]->GetXaxis()->SetRangeUser(1., 10000.);}
-	  if (test==3) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 5.);
-	  if (test==4) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 1.);
-	  if (test==5) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 9.);
-          if (test==6) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 9.);
+// //        HistAmpl[test][sub]->GetYaxis()->SetRangeUser(1., 100.);
+//          if (test==2) {gPad->SetLogx(); HistAmpl[test][sub]->GetXaxis()->SetRangeUser(1., 10000.);}
+          if (test==2) {gPad->SetLogx(); }
+	  if (test==3) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 5.);// width
+	  if (test==4) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 1.);// R
+	  if (test==5) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 9.);//Tn
+          if (test==6) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 9.);//Tx
 	  cONE->Modified(); 
           cONE->Update(); 
 	  double min_x[] = {MIN_M[test][sub],MIN_M[test][sub]};
