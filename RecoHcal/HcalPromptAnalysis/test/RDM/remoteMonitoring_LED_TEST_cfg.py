@@ -45,7 +45,10 @@ process.source = cms.Source("HcalTBSource",
 #                rundir+'/USC_'+runnumber+'.root'
  #               '/store/group/dpg_hcal/comm_hcal/USC/run291959/USC_291959.root'
  #               '/store/group/dpg_hcal/comm_hcal/USC/run309445/USC_309445.root'
-                '/store/group/dpg_hcal/comm_hcal/USC/run309714/USC_309714.root'
+#                '/store/group/dpg_hcal/comm_hcal/USC/run309714/USC_309714.root'
+                '/store/group/dpg_hcal/comm_hcal/USC/run295401/USC_295401.root'
+
+
                ), 
     streams = cms.untracked.vstring(
 		  "HCAL_Trigger",
@@ -423,7 +426,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   # for local LASER runs ONLY!!! to be > 0    (,else = 0)
                                   flagLaserRaddam = cms.int32(0),
                                   #
-                                   #
+                                  #
                                   #
                                   splashesUpperLimit = cms.int32(10000),
                                   #
@@ -431,7 +434,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #
                                   #HistOutFile = cms.untracked.string(histodir+'/LED_'+runnumber+'.root'),
                                   #
-                                  HistOutFile = cms.untracked.string('LEDtest309714.root'),
+                                  HistOutFile = cms.untracked.string('LEDtest295401.root'),
                                   #
                                   MAPOutFile = cms.untracked.string('LogEleMapdb.h')
                                   #
