@@ -252,15 +252,15 @@ int main(int argc, char *argv[])
       kqlerd0->SetMarkerColor(2);
       kqlerd0->SetLineColor(2);
       kqlerd0->Draw("");
-      
+      //    h_ADCAmpl_HF"
       c1->cd(2);
-      TH1F *kqlerd1= (TH1F*)hfile1->Get("h_ADCAmpl_HF");
+      TH1F *kqlerd1= (TH1F*)hfile1->Get("h_ADCAmplZoom1_HF");
       gPad->SetLogy();
       // gPad->SetLogx();
       kqlerd1->SetMarkerStyle(20);
       kqlerd1->SetMarkerSize(0.8);
       kqlerd1->GetYaxis()->SetLabelSize(0.04);
-      kqlerd1->SetXTitle("h_ADCAmpl_HF \b");
+      kqlerd1->SetXTitle("h_ADCAmplZoom1_HF \b");
       kqlerd1->SetMarkerColor(2);
       kqlerd1->SetLineColor(2);
       kqlerd1->Draw("");
