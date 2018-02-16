@@ -5822,7 +5822,7 @@ void VeRawAnalyzer::beginJob()
   ////////////////////////////////////////////////////////////////////////////////////////////////
     // fullAmplitude:
     h_ADCAmplZoom1_HF = new TH1F("h_ADCAmplZoom1_HF"," ", 100, 0.,1000000.);
-    h_ADCAmpl_HF = new TH1F("h_ADCAmpl_HF"," ", 100, 0.,50000.);
+    h_ADCAmpl_HF = new TH1F("h_ADCAmpl_HF"," ", 250, 0.,500000.);
     h_mapDepth1ADCAmpl225_HF = new TH2F("h_mapDepth1ADCAmpl225_HF"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth2ADCAmpl225_HF = new TH2F("h_mapDepth2ADCAmpl225_HF"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth1ADCAmpl225Copy_HF = new TH2F("h_mapDepth1ADCAmpl225Copy_HF"," ", 82, -41., 41., 72, 0., 72.);
