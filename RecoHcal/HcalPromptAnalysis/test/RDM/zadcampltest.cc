@@ -315,7 +315,364 @@ int main(int argc, char *argv[])
       
       c1->Update();
       
+    //========================================================================================== 3    
+      //======================================================================
     //======================================================================
+    //================
+    //======================================================================
+      c1->Clear();
+      c1->Divide(1,4);
+      
+      c1->cd(1);
+      TH1F *JDBEYESJ0= (TH1F*)hfile1->Get("h_totalAmplitudeHBperEvent");
+      //      gPad->SetLogy();
+      // gPad->SetLogx();
+      JDBEYESJ0->SetStats(0);
+      JDBEYESJ0->SetMarkerStyle(20);
+      JDBEYESJ0->SetMarkerSize(0.8);
+      JDBEYESJ0->GetYaxis()->SetLabelSize(0.04);
+      JDBEYESJ0->SetXTitle("h_totalAmplitudeHBperEvent \b");
+      JDBEYESJ0->SetMarkerColor(2);
+      JDBEYESJ0->SetLineColor(1);
+      JDBEYESJ0->Draw("HIST same P0");
+      JDBEYESJ0->SetMinimum(0.8);
+      //    h_ADCAmpl_HF"
+      c1->cd(2);
+      TH1F *JDBEYESJ1= (TH1F*)hfile1->Get("h_totalAmplitudeHEperEvent");
+      //      gPad->SetLogy();
+      // gPad->SetLogx();
+      JDBEYESJ1->SetStats(0);
+      JDBEYESJ1->SetMarkerStyle(20);
+      JDBEYESJ1->SetMarkerSize(0.8);
+      JDBEYESJ1->GetYaxis()->SetLabelSize(0.04);
+      JDBEYESJ1->SetXTitle("h_totalAmplitudeHEperEvent \b");
+      JDBEYESJ1->SetMarkerColor(2);
+      JDBEYESJ1->SetLineColor(1);
+      JDBEYESJ1->Draw("HIST same P0");
+      JDBEYESJ1->SetMinimum(0.8);
+      c1->cd(3);
+      TH1F *JDBEYESJ2= (TH1F*)hfile1->Get("h_totalAmplitudeHFperEvent");
+      // gPad->SetLogy();
+      // gPad->SetLogx();
+      JDBEYESJ2->SetStats(0);
+      JDBEYESJ2->SetMarkerStyle(20);
+      JDBEYESJ2->SetMarkerSize(0.8);
+      JDBEYESJ2->GetYaxis()->SetLabelSize(0.04);
+      JDBEYESJ2->SetXTitle("h_totalAmplitudeHFperEvent \b");
+      JDBEYESJ2->SetMarkerColor(2);
+      JDBEYESJ2->SetLineColor(2);
+      JDBEYESJ2->Draw("HIST same P0");
+      JDBEYESJ2->SetMinimum(0.8);
+      c1->cd(4);
+      TH1F *JDBEYESJ3= (TH1F*)hfile1->Get("h_totalAmplitudeHOperEvent");
+      // gPad->SetLogy();
+      // gPad->SetLogx();
+      JDBEYESJ3->SetStats(0);
+      JDBEYESJ3->SetMarkerStyle(20);
+      JDBEYESJ3->SetMarkerSize(0.8);
+      JDBEYESJ3->GetYaxis()->SetLabelSize(0.04);
+      JDBEYESJ3->SetXTitle("h_totalAmplitudeHOperEvent \b");
+      JDBEYESJ3->SetMarkerColor(2);
+      JDBEYESJ3->SetLineColor(2);
+      JDBEYESJ3->Draw("HIST same P0");
+      JDBEYESJ3->SetMinimum(0.8);
+
+      c1->Update();
+      
+    //========================================================================================== 4    
+      //======================================================================
+    //======================================================================
+    //================
+    //======================================================================
+      c1->Clear();
+      c1->Divide(2,2);
+      
+      c1->cd(1);
+      TH1F *kjftrh0= (TH1F*)hfile1->Get("h_totalAmplitudeHB");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      kjftrh0->SetMarkerStyle(20);
+      kjftrh0->SetMarkerSize(0.8);
+      kjftrh0->GetYaxis()->SetLabelSize(0.04);
+      kjftrh0->SetXTitle("h_totalAmplitudeHB \b");
+      kjftrh0->SetMarkerColor(2);
+      kjftrh0->SetLineColor(2);
+      kjftrh0->Draw("");
+      //    h_ADCAmpl_HF"
+      c1->cd(2);
+      TH1F *kjftrh1= (TH1F*)hfile1->Get("h_totalAmplitudeHE");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      kjftrh1->SetMarkerStyle(20);
+      kjftrh1->SetMarkerSize(0.8);
+      kjftrh1->GetYaxis()->SetLabelSize(0.04);
+      kjftrh1->SetXTitle("h_totalAmplitudeHE \b");
+      kjftrh1->SetMarkerColor(2);
+      kjftrh1->SetLineColor(2);
+      kjftrh1->Draw("");
+      
+      c1->cd(3);
+      TH1F *kjftrh2= (TH1F*)hfile1->Get("h_totalAmplitudeHF");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      kjftrh2->SetMarkerStyle(20);
+      kjftrh2->SetMarkerSize(0.8);
+      kjftrh2->GetYaxis()->SetLabelSize(0.04);
+      kjftrh2->SetXTitle("h_totalAmplitudeHF \b");
+      kjftrh2->SetMarkerColor(2);
+      kjftrh2->SetLineColor(2);
+      kjftrh2->Draw("");
+      
+      c1->cd(4);
+      TH1F *kjftrh3= (TH1F*)hfile1->Get("h_totalAmplitudeHO");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      kjftrh3->SetMarkerStyle(20);
+      kjftrh3->SetMarkerSize(0.8);
+      kjftrh3->GetYaxis()->SetLabelSize(0.04);
+      kjftrh3->SetXTitle("h_totalAmplitudeHO \b");
+      kjftrh3->SetMarkerColor(2);
+      kjftrh3->SetLineColor(2);
+      kjftrh3->Draw("");
+      
+      
+      c1->Update();
+      
+    //========================================================================================== 5    
+      //======================================================================
+    //======================================================================
+    //================
+    //======================================================================
+      c1->Clear();
+      c1->Divide(2,2);
+      
+      c1->cd(1);
+      TH1F *oqppq0= (TH1F*)hfile1->Get("h_AmplitudeHBtest");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      oqppq0->SetMarkerStyle(20);
+      oqppq0->SetMarkerSize(0.8);
+      oqppq0->GetYaxis()->SetLabelSize(0.04);
+      oqppq0->SetXTitle("h_AmplitudeHBtest \b");
+      oqppq0->SetMarkerColor(2);
+      oqppq0->SetLineColor(2);
+      oqppq0->Draw("");
+      //    h_ADCAmpl_HF"
+      c1->cd(2);
+      TH1F *oqppq1= (TH1F*)hfile1->Get("h_AmplitudeHEtest");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      oqppq1->SetMarkerStyle(20);
+      oqppq1->SetMarkerSize(0.8);
+      oqppq1->GetYaxis()->SetLabelSize(0.04);
+      oqppq1->SetXTitle("h_AmplitudeHEtest \b");
+      oqppq1->SetMarkerColor(2);
+      oqppq1->SetLineColor(2);
+      oqppq1->Draw("");
+      
+      c1->cd(3);
+      TH1F *oqppq2= (TH1F*)hfile1->Get("h_AmplitudeHFtest");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      oqppq2->SetMarkerStyle(20);
+      oqppq2->SetMarkerSize(0.8);
+      oqppq2->GetYaxis()->SetLabelSize(0.04);
+      oqppq2->SetXTitle("h_AmplitudeHFtest \b");
+      oqppq2->SetMarkerColor(2);
+      oqppq2->SetLineColor(2);
+      oqppq2->Draw("");
+      
+      c1->cd(4);
+      TH1F *oqppq3= (TH1F*)hfile1->Get("h_AmplitudeHOtest");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      oqppq3->SetMarkerStyle(20);
+      oqppq3->SetMarkerSize(0.8);
+      oqppq3->GetYaxis()->SetLabelSize(0.04);
+      oqppq3->SetXTitle("h_AmplitudeHOtest \b");
+      oqppq3->SetMarkerColor(2);
+      oqppq3->SetLineColor(2);
+      oqppq3->Draw("");
+      
+      
+      c1->Update();
+      
+    //========================================================================================== 6    
+      //======================================================================
+    //======================================================================
+    //================
+    //======================================================================
+      c1->Clear();
+      c1->Divide(2,2);
+      
+      c1->cd(1);
+      TH1F *KJGHG0= (TH1F*)hfile1->Get("h_numberofhitsHBtest");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      KJGHG0->SetMarkerStyle(20);
+      KJGHG0->SetMarkerSize(0.8);
+      KJGHG0->GetYaxis()->SetLabelSize(0.04);
+      KJGHG0->SetXTitle("h_numberofhitsHB \b");
+      KJGHG0->SetMarkerColor(2);
+      KJGHG0->SetLineColor(2);
+      KJGHG0->Draw("");
+      //    h_ADCAmpl_HF"
+      c1->cd(2);
+      TH1F *KJGHG1= (TH1F*)hfile1->Get("h_numberofhitsHEtest");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      KJGHG1->SetMarkerStyle(20);
+      KJGHG1->SetMarkerSize(0.8);
+      KJGHG1->GetYaxis()->SetLabelSize(0.04);
+      KJGHG1->SetXTitle("h_numberofhitsHE \b");
+      KJGHG1->SetMarkerColor(2);
+      KJGHG1->SetLineColor(2);
+      KJGHG1->Draw("");
+      
+      c1->cd(3);
+      TH1F *KJGHG2= (TH1F*)hfile1->Get("h_numberofhitsHFtest");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      KJGHG2->SetMarkerStyle(20);
+      KJGHG2->SetMarkerSize(0.8);
+      KJGHG2->GetYaxis()->SetLabelSize(0.04);
+      KJGHG2->SetXTitle("h_numberofhitsHF \b");
+      KJGHG2->SetMarkerColor(2);
+      KJGHG2->SetLineColor(2);
+      KJGHG2->Draw("");
+      
+      c1->cd(4);
+      TH1F *KJGHG3= (TH1F*)hfile1->Get("h_numberofhitsHOtest");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      KJGHG3->SetMarkerStyle(20);
+      KJGHG3->SetMarkerSize(0.8);
+      KJGHG3->GetYaxis()->SetLabelSize(0.04);
+      KJGHG3->SetXTitle("h_numberofhitsHO \b");
+      KJGHG3->SetMarkerColor(2);
+      KJGHG3->SetLineColor(2);
+      KJGHG3->Draw("");
+      
+      
+      c1->Update();
+      
+    //========================================================================================== 7    
+      //======================================================================
+    //======================================================================
+    //================
+    //======================================================================
+      c1->Clear();
+      c1->Divide(2,2);
+      
+      c1->cd(1);
+      TH1F *kjkjkhj0= (TH1F*)hfile1->Get("h_AmplitudeHBtest1");
+      //      gPad->SetLogy();
+      // gPad->SetLogx();
+     kjkjkhj0->SetMarkerStyle(20);
+     kjkjkhj0->SetMarkerSize(0.8);
+     kjkjkhj0->GetYaxis()->SetLabelSize(0.04);
+     kjkjkhj0->SetXTitle("h_AmplitudeHBtest1 \b");
+     kjkjkhj0->SetMarkerColor(2);
+     kjkjkhj0->SetLineColor(2);
+     kjkjkhj0->Draw("");
+      //    h_ADCAmpl_HF"
+      c1->cd(2);
+      TH1F *kjkjkhj1= (TH1F*)hfile1->Get("h_AmplitudeHBtest6");
+//       gPad->SetLogy();
+      // gPad->SetLogx();
+     kjkjkhj1->SetMarkerStyle(20);
+     kjkjkhj1->SetMarkerSize(0.8);
+     kjkjkhj1->GetYaxis()->SetLabelSize(0.04);
+     kjkjkhj1->SetXTitle("h_AmplitudeHBtest6 \b");
+     kjkjkhj1->SetMarkerColor(2);
+     kjkjkhj1->SetLineColor(2);
+     kjkjkhj1->Draw("");
+      
+      c1->cd(3);
+      TH1F *kjkjkhj2= (TH1F*)hfile1->Get("h_AmplitudeHEtest1");
+//       gPad->SetLogy();
+      // gPad->SetLogx();
+     kjkjkhj2->SetMarkerStyle(20);
+     kjkjkhj2->SetMarkerSize(0.8);
+     kjkjkhj2->GetYaxis()->SetLabelSize(0.04);
+     kjkjkhj2->SetXTitle("h_AmplitudeHEtest1 \b");
+     kjkjkhj2->SetMarkerColor(2);
+     kjkjkhj2->SetLineColor(2);
+     kjkjkhj2->Draw("");
+      
+      c1->cd(4);
+      TH1F *kjkjkhj3= (TH1F*)hfile1->Get("h_AmplitudeHEtest6");
+//       gPad->SetLogy();
+      // gPad->SetLogx();
+     kjkjkhj3->SetMarkerStyle(20);
+     kjkjkhj3->SetMarkerSize(0.8);
+     kjkjkhj3->GetYaxis()->SetLabelSize(0.04);
+     kjkjkhj3->SetXTitle("h_AmplitudeHEtest6 \b");
+     kjkjkhj3->SetMarkerColor(2);
+     kjkjkhj3->SetLineColor(2);
+     kjkjkhj3->Draw("");
+      
+      
+      c1->Update();
+    //========================================================================================== 8  
+      //======================================================================
+    //======================================================================
+    //================
+    //======================================================================
+      c1->Clear();
+      c1->Divide(2,2);
+      
+      c1->cd(1);
+      TH1F *dkfuirhj0= (TH1F*)hfile1->Get("h_AmplitudeHBtest1");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+     dkfuirhj0->SetMarkerStyle(20);
+     dkfuirhj0->SetMarkerSize(0.8);
+     dkfuirhj0->GetYaxis()->SetLabelSize(0.04);
+     dkfuirhj0->SetXTitle("h_AmplitudeHBtest1 \b");
+     dkfuirhj0->SetMarkerColor(2);
+     dkfuirhj0->SetLineColor(2);
+     dkfuirhj0->Draw("");
+      //    h_ADCAmpl_HF"
+      c1->cd(2);
+      TH1F *dkfuirhj1= (TH1F*)hfile1->Get("h_AmplitudeHBtest6");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+     dkfuirhj1->SetMarkerStyle(20);
+     dkfuirhj1->SetMarkerSize(0.8);
+     dkfuirhj1->GetYaxis()->SetLabelSize(0.04);
+     dkfuirhj1->SetXTitle("h_AmplitudeHBtest6 \b");
+     dkfuirhj1->SetMarkerColor(2);
+     dkfuirhj1->SetLineColor(2);
+     dkfuirhj1->Draw("");
+      
+      c1->cd(3);
+      TH1F *dkfuirhj2= (TH1F*)hfile1->Get("h_AmplitudeHEtest1");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+     dkfuirhj2->SetMarkerStyle(20);
+     dkfuirhj2->SetMarkerSize(0.8);
+     dkfuirhj2->GetYaxis()->SetLabelSize(0.04);
+     dkfuirhj2->SetXTitle("h_AmplitudeHEtest1 \b");
+     dkfuirhj2->SetMarkerColor(2);
+     dkfuirhj2->SetLineColor(2);
+     dkfuirhj2->Draw("");
+      
+      c1->cd(4);
+      TH1F *dkfuirhj3= (TH1F*)hfile1->Get("h_AmplitudeHEtest6");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+     dkfuirhj3->SetMarkerStyle(20);
+     dkfuirhj3->SetMarkerSize(0.8);
+     dkfuirhj3->GetYaxis()->SetLabelSize(0.04);
+     dkfuirhj3->SetXTitle("h_AmplitudeHEtest6 \b");
+     dkfuirhj3->SetMarkerColor(2);
+     dkfuirhj3->SetLineColor(2);
+     dkfuirhj3->Draw("");
+      
+      
+      c1->Update();
+          //======================================================================
     //==================================================================================================== end
     //======================================================================
     //======================================================================
