@@ -29,6 +29,7 @@ process.load('RecoLocalCalo.Configuration.hcalLocalReco_cff')
 
 process.maxEvents = cms.untracked.PSet(
 #    input = cms.untracked.int32(1000)
+#  input = cms.untracked.int32(10)
   input = cms.untracked.int32(-1)
   )
 
@@ -43,12 +44,19 @@ process.source = cms.Source("HcalTBSource",
 #	       'file:/afs/cern.ch/work/d/dtlisov/private/Monitoring/data/USC_209311.root'
 #              '/store/group/comm_hcal/USC/USC_212179.root'
 #                rundir+'/USC_'+runnumber+'.root'
- #               '/store/group/dpg_hcal/comm_hcal/USC/run291959/USC_291959.root'
- #               '/store/group/dpg_hcal/comm_hcal/USC/run309445/USC_309445.root'
+
+#                '/store/group/dpg_hcal/comm_hcal/USC/run308234/USC_308234.root'
+#                '/store/group/dpg_hcal/comm_hcal/USC/run308383/USC_308383.root'
+
+#                '/store/group/dpg_hcal/comm_hcal/USC/run308543/USC_308543.root'
+#                '/store/group/dpg_hcal/comm_hcal/USC/run308882/USC_308882.root'
+#                '/store/group/dpg_hcal/comm_hcal/USC/run309064/USC_309064.root'
+
+#                '/store/group/dpg_hcal/comm_hcal/USC/run309373/USC_309373.root'
+#                '/store/group/dpg_hcal/comm_hcal/USC/run309592/USC_309592.root'
+#                '/store/group/dpg_hcal/comm_hcal/USC/run309821/USC_309821.root'
 #                '/store/group/dpg_hcal/comm_hcal/USC/run309714/USC_309714.root'
-                '/store/group/dpg_hcal/comm_hcal/USC/run295401/USC_295401.root'
-
-
+               '/store/group/dpg_hcal/comm_hcal/USC/run309821/USC_309821.root'
                ), 
     streams = cms.untracked.vstring(
 		  "HCAL_Trigger",
@@ -64,6 +72,7 @@ process.source = cms.Source("HcalTBSource",
 process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #
                                   Verbosity = cms.untracked.int32(0),
+                                  #Verbosity = cms.untracked.int32(-9001),
                                   #Verbosity = cms.untracked.int32(-84),
                                   #Verbosity = cms.untracked.int32(-91),
                                   #Verbosity = cms.untracked.int32(-92),
@@ -434,8 +443,19 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #
                                   #HistOutFile = cms.untracked.string(histodir+'/LED_'+runnumber+'.root'),
                                   #
-                                  HistOutFile = cms.untracked.string('LEDtest295401.root'),
-                                  #
+                                  HistOutFile = cms.untracked.string('LEDtest309821.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest308234.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest308383.root'),
+
+                                  #HistOutFile = cms.untracked.string('LEDtest308543.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest308882.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest309064.root'),
+
+                                  #HistOutFile = cms.untracked.string('LEDtest309373.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest309592.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest309821.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest309714.root'),
+                                 #
                                   MAPOutFile = cms.untracked.string('LogEleMapdb.h')
                                   #
                                   ##OutputFilePath = cms.string('/tmp/zhokin/'),        
