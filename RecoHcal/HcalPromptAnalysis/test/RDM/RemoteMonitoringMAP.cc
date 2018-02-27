@@ -1,6 +1,10 @@
 // How to run:
 //root -b -q -l 'RemoteMonitoringMAP.C+("/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/LED_214513.root","/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/LED_214512.root")'
 //root -b -q -l 'RemoteMonitoringMAP.C+(" /afs/cern.ch/work/d/dtlisov/private/Monitoring/histos/LED_211659.root","/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/LED_214512.root")'
+// ./RemoteMonitoringMAP.cc.exe root_file1  root_file_ref PEDESTAL
+//./RemoteMonitoringMAP.cc.exe root_file1  root_file_ref LASER
+
+
 
 #include "LogEleMapdb.h"
 
@@ -67,7 +71,7 @@ using namespace std;
     {
        //CUTS:    [test][subdetector]                                       ADC amplitude  Am      Width  for Wm             Ratio cut for Rm             TS mean for TNm           TS max  for TXm
        double MIN_M_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},       {0, 100.,70.,40.,40.}, {0, 0.7, 0.7, 0.1, 0.1},  {0, 0.7, 0.6, 0.40, 0.45}, {0, 2.5, 1.0, 1.0, 1.0}, {0, 1.5, 1.5, 0.5, 0.5}};
-       double MAX_M_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 3000,3000,3000,150000}, {0, 2.5, 2.5, 2.8, 2.6}, {0, 0.94, 0.95, 1.04, 1.02}, {0, 5.5, 5.2, 4.8, 4.2}, {0, 6.5, 6.5, 8.5, 8.5}};                    
+       double MAX_M_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 3000,500000,3000,150000}, {0, 2.5, 2.5, 2.8, 2.6}, {0, 0.94, 0.95, 1.04, 1.02}, {0, 5.5, 5.2, 4.8, 4.2}, {0, 6.5, 6.5, 8.5, 8.5}};                    
        double MIN_C_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},{0, 1000.,1000.,1000.,100.}, {0, 1.3, 1.3, 0.7, 0.3}, {0, 0.76 , 0.76, 0.85, 0.5}, {0, 2.4, 2.4, 1.5, 3.5}, {0, 1.5, 1.5, 1.5, 3.5}};
        double MAX_C_LED[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 1E20,1E20,1E20,1E20},{0, 1.9, 1.9, 1.65, 1.5},  {0, 0.94, 0.94, 0.99, 0.8}, {0, 3.7, 3.7, 2.7, 4.5}, {0, 2.5, 2.5, 2.5, 4.5}};                    
        double porog_LED[5] = {0., 2., 2., 2., 2.}; // Cut for GS test in pro cents
@@ -89,8 +93,8 @@ using namespace std;
     if (runtype=="LASER") 
     {
        //CUTS:    [test][subdetector]                                  ADC amplitude  Am      Width  for Wm             Ratio cut for Rm             TS mean for TNm           TS max  for TXm
-       double MIN_M_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},       {0, 40.,40.,100.,40.}, {0, 0.3, 0.9, 0.2, 0.2},   {0, 0.5, 0.55, 0.55, 0.60}, {0, 5.0, 2.5, 1.1, 5.5}, {0, 1.5, 1.5, 1.5, 1.5}};
-       double MAX_M_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 3500,3500,3500,3500}, {0, 2.5, 3.6, 2.6, 2.1}, {0, 1.00, 1.00, 1.04, 1.02}, {0, 7.5, 6.5, 4.4, 8.5}, {0, 8.5, 8.5, 6.5, 8.5}};                    
+       double MIN_M_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.}, {0, 40.,40.,100.,40.}, {0, 0.3, 0.9, 0.2, 0.2},   {0, 0.5, 0.55, 0.55, 0.60}, {0, 5.0, 2.5, 1.1, 5.5}, {0, 1.5, 1.5, 1.5, 1.5}};
+       double MAX_M_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.}, {0, 3500,350000,3500,150000}, {0, 2.5, 3.6, 2.6, 2.1}, {0, 1.00, 1.00, 1.04, 1.02}, {0, 7.5, 6.5, 4.4, 8.5}, {0, 8.5, 8.5, 6.5, 8.5}};                    
        double MIN_C_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},{0, 1000.,1000.,1000.,100.}, {0, 1.3, 1.3, 0.7, 0.3}, {0, 0.76 , 0.76, 0.85, 0.5}, {0, 2.4, 2.4, 1.5, 3.5}, {0, 1.5, 1.5, 1.5, 3.5}};
        double MAX_C_LASER[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 1E20,1E20,1E20,1E20},{0, 1.9, 1.9, 1.65, 1.5},   {0, 0.94, 0.94, 1.0, 0.8}, {0, 3.7, 3.7, 2.7, 4.5}, {0, 2.5, 2.5, 2.5, 4.5}};                    
        double porog_LASER[5] = {0., 2., 2., 2., 2.}; // Cut for GS test in pro cents
@@ -113,7 +117,7 @@ using namespace std;
     {
        //CUTS:    [test][subdetector]                                  ADC amplitude  Am      Width  for Wm             Ratio cut for Rm             TS mean for TNm           TS max  for TXm
        double MIN_M_PEDESTAL[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},           {0, 10.,10.,200.,5.}, {0, 2.7, 2.7, 2.7, 0.2}, {0, 0.31, 0.31, 0.05, 0.15}, {0, 4.5, 4.5, 4.5, 2.0}, {0, 0.5, 0.5, 0.5, 0.5}};
-       double MAX_M_PEDESTAL[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 2500.,2500.,2500.,50.}, {0, 3.0, 3.0, 5.0, 3.0}, {0, 0.95, 0.95, 1.00, 0.98}, {0, 4.6, 4.6, 4.6, 7.0}, {0, 9.5, 9.5, 8.5, 8.5}};                    
+       double MAX_M_PEDESTAL[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 2500.,250000.,2500.,150000.}, {0, 3.0, 3.0, 5.0, 3.0}, {0, 0.95, 0.95, 1.00, 0.98}, {0, 4.6, 4.6, 4.6, 7.0}, {0, 9.5, 9.5, 8.5, 8.5}};                    
        double MIN_C_PEDESTAL[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},{0, 1000.,1000.,1000.,100.}, {0, 1.3, 1.3, 0.7, 0.3}, {0, 0.76 , 0.76, 0.85, 0.5}, {0, 2.4, 2.4, 1.5, 3.5}, {0, 1.5, 1.5, 1.5, 3.5}};
        double MAX_C_PEDESTAL[7][5]={{0., 0.,0.,0.,0.}, {0., 0.,0.,0.,0.},   {0, 1E20,1E20,1E20,1E20},{0, 1.9, 1.9, 1.65, 1.5},   {0, 0.94, 0.94, 1.0, 0.8}, {0, 3.7, 3.7, 2.7, 4.5}, {0, 2.5, 2.5, 2.5, 4.5}};                    
        double porog_PEDESTAL[5] = {0., 2., 2., 2., 2.}; // Cut for GS test in pro cents
@@ -147,7 +151,8 @@ cout<< MIN_M[2][1] << endl;
   TCanvas *cHB = new TCanvas("cHB","cHB",1000,500);
   //TCanvas *cHE = new TCanvas("cHE","cHE",1500,500);
   TCanvas *cHE = new TCanvas("cHE","cHE",1500,1500);
-  TCanvas *cONE = new TCanvas("cONE","cONE",500,500);
+  //TCanvas *cONE = new TCanvas("cONE","cONE",500,500);
+  TCanvas *cONE = new TCanvas("cONE","cONE",1500,500);
   TCanvas *cPED = new TCanvas("cPED","cPED",1000,500);
   //TCanvas *cHF = new TCanvas("cHF","cHF",1000,1000);
   TCanvas *cHF = new TCanvas("cHF","cHF",1000,1000);
@@ -510,13 +515,20 @@ cout<< MIN_M[2][1] << endl;
              if (sub==4) {cHF->Print("MapRateMaxPosHF.png"); cHF->Clear();} 
 	  }
    
-          cONE->Divide(1,1);
+	  //          cONE->Divide(1,1);
+          cONE->Divide(3,1);
+	  if(test == 2 && sub == 2 ) {
+	    cONE->cd(2);
+	    TH1F *kjkjkhj2= (TH1F*)hfile->Get("h_AmplitudeHEtest1");kjkjkhj2->Draw("");kjkjkhj2->SetTitle("HE, All Depth: shunt1");
+	    cONE->cd(3);
+	    TH1F *kjkjkhj3= (TH1F*)hfile->Get("h_AmplitudeHEtest6");kjkjkhj3->Draw("");kjkjkhj3->SetTitle("HE, All Depth: shunt6");
+	  }
           cONE->cd(1);
           gPad->SetGridy();
           gPad->SetGridx(); 
           gPad->SetLogy();
           if (sub==1) HistAmpl[test][sub]->SetTitle("HB, All Depth");
-          if (sub==2) HistAmpl[test][sub]->SetTitle("HE, All Depth");
+          if (sub==2) HistAmpl[test][sub]->SetTitle("HE, All Depth: shunt6");
           if (sub==3) HistAmpl[test][sub]->SetTitle("HO, All Depth");
           if (sub==4) HistAmpl[test][sub]->SetTitle("HF, All Depth");
           if (test==2) HistAmpl[test][sub]->SetXTitle("ADC Amlitude in each event & cell \b");
@@ -529,7 +541,7 @@ cout<< MIN_M[2][1] << endl;
           HistAmpl[test][sub]->SetLineWidth(2);
 	  HistAmpl[test][sub]->SetTitleOffset(1.4,"Y");
           HistAmpl[test][sub]->Draw("");
-// //        HistAmpl[test][sub]->GetYaxis()->SetRangeUser(1., 100.);
+	  // //        HistAmpl[test][sub]->GetYaxis()->SetRangeUser(1., 100.);
 //          if (test==2) {gPad->SetLogx(); HistAmpl[test][sub]->GetXaxis()->SetRangeUser(1., 10000.);}
           if (test==2) {gPad->SetLogx(); }
 	  if (test==3) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 5.);// width
@@ -1875,7 +1887,6 @@ std::cout<<" We are here to print ADC "<<std::endl;
 	  }//end Sub 	  	  
        }//end Phi
     }//end Eta 
-                   
 // subdet maps
   for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
 
@@ -1919,9 +1930,77 @@ std::cout<<" We are here to print ADC "<<std::endl;
        if (sub==4) {cHF->Print("MAPHF.png"); cHF->Clear();} 
   }
   
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  TCanvas *cmain1 = new TCanvas("cmain1","MAP",200,10,1400,1800);
+  cmain1->Divide(2,2);
+  
+  cmain1->cd(1);
+  TH1F *JDBEYESJ0= (TH1F*)hfile->Get("h_totalAmplitudeHBperEvent");
+  JDBEYESJ0->SetStats(0);
+  JDBEYESJ0->SetMarkerStyle(20);
+  JDBEYESJ0->SetMarkerSize(0.8);
+  JDBEYESJ0->GetYaxis()->SetLabelSize(0.04);
+  JDBEYESJ0->SetXTitle("iEvent \b");
+  JDBEYESJ0->SetYTitle("totalAmplitude perEvent \b");
+  JDBEYESJ0->SetTitle("HB \b");
+  JDBEYESJ0->SetMarkerColor(2);
+  JDBEYESJ0->SetLineColor(1);
+  JDBEYESJ0->SetMinimum(0.8);
+  JDBEYESJ0->Draw("HIST same P0");
+  
+  cmain1->cd(2);
+  TH1F *JDBEYESJ1= (TH1F*)hfile->Get("h_totalAmplitudeHEperEvent");
+  JDBEYESJ1->SetStats(0);
+  JDBEYESJ1->SetMarkerStyle(20);
+  JDBEYESJ1->SetMarkerSize(0.8);
+  JDBEYESJ1->GetYaxis()->SetLabelSize(0.04);
+  JDBEYESJ1->SetXTitle("iEvent \b");
+  JDBEYESJ1->SetYTitle("totalAmplitude perEvent \b");
+  JDBEYESJ1->SetTitle("HE \b");
+  JDBEYESJ1->SetMarkerColor(2);
+  JDBEYESJ1->SetLineColor(1);
+  JDBEYESJ1->SetMinimum(0.8);
+  JDBEYESJ1->Draw("HIST same P0");
+  
+  cmain1->cd(3);
+  TH1F *JDBEYESJ2= (TH1F*)hfile->Get("h_totalAmplitudeHFperEvent");
+  JDBEYESJ2->SetStats(0);
+  JDBEYESJ2->SetMarkerStyle(20);
+  JDBEYESJ2->SetMarkerSize(0.8);
+  JDBEYESJ2->GetYaxis()->SetLabelSize(0.04);
+  JDBEYESJ2->SetXTitle("iEvent \b");
+  JDBEYESJ2->SetYTitle("totalAmplitude perEvent \b");
+  JDBEYESJ2->SetTitle("HF \b");
+  JDBEYESJ2->SetMarkerColor(2);
+  JDBEYESJ2->SetLineColor(1);
+  JDBEYESJ2->SetMinimum(0.8);
+  JDBEYESJ2->Draw("HIST same P0");
+  
+  cmain1->cd(4);
+  TH1F *JDBEYESJ3= (TH1F*)hfile->Get("h_totalAmplitudeHOperEvent");
+  JDBEYESJ3->SetStats(0);
+  JDBEYESJ3->SetMarkerStyle(20);
+  JDBEYESJ3->SetMarkerSize(0.8);
+  JDBEYESJ3->GetYaxis()->SetLabelSize(0.04);
+  JDBEYESJ3->SetXTitle("iEvent \b");
+  JDBEYESJ3->SetYTitle("totalAmplitude perEvent \b");
+  JDBEYESJ3->SetTitle("HO \b");
+  JDBEYESJ3->SetMarkerColor(2);
+  JDBEYESJ3->SetLineColor(1);
+  JDBEYESJ3->SetMinimum(0.8);
+  JDBEYESJ3->Draw("HIST same P0");
+  
+  cmain1->Modified(); 
+  cmain1->Update();   
+  cmain1->Print("EVENTDEPENDENCE.png"); 
+  
+  std::cout<<" EVENTDEPENDENCE "<<std::endl;
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ALL SubDet  
   gStyle->SetOptTitle(0);
-  TCanvas *cmain = new TCanvas("cmain","MAP",800,800);
+  TCanvas *cmain = new TCanvas("cmain","MAP",1000,1000);
+  //cmain->cd(1);
   gPad->SetGridy();
   gPad->SetGridx();
 //   gPad->SetLogz();
@@ -2466,30 +2545,36 @@ std::cout<<" We are here to print ADC "<<std::endl;
 
      
      if (sub==1) {
-       /*
+       
        htmlFile << "  <td><a href=\"HB_Tile.html\">Megatile Channels</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"HB_Calib.html\">Calibration Channels</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"HB_Drift.html\">Gain Stability</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"HB_Pedestals.html\">Pedestals</a></td>"<< std::endl;
-       */
+       htmlFile << "  <td><a href=\"HB_Shapes.html\">ADC Shapes</a></td>"<< std::endl;
+       
+       /*
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HB_Tile.html\">Megatile Channels</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HB_Calib.html\">Calibration Channels</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HB_Drift.html\">Gain Stability</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HB_Pedestals.html\">Pedestals</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HB_Shapes.html\">ADC Shapes</a></td>"<< std::endl;
+*/
      }
      if (sub==2) {
-       /* 
+       
        htmlFile << "  <td><a href=\"HE_Tile.html\">Megatile Channels</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"HE_Calib.html\">Calibration Channels</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"HE_Drift.html\">Gain Stability</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"HE_Pedestals.html\">Pedestals</a></td>"<< std::endl;
-       */
+       htmlFile << "  <td><a href=\"HE_Shapes.html\">ADC Shapes</a></td>"<< std::endl;
+       
+       /*
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HE_Tile.html\">Megatile Channels</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HE_Calib.html\">Calibration Channels</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HE_Drift.html\">Gain Stability</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HE_Pedestals.html\">Pedestals</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HE_Shapes.html\">ADC Shapes</a></td>"<< std::endl;
+*/
      } 
      if (sub==3) {
        /*
@@ -2497,6 +2582,7 @@ std::cout<<" We are here to print ADC "<<std::endl;
        htmlFile << "  <td><a href=\"HO_Calib.html\">Calibration Channels</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"HO_Drift.html\">Gain Stability</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"HO_Pedestals.html\">Pedestals</a></td>"<< std::endl;
+       htmlFile << "  <td><a href=\"HO_Shapes.html\">ADC Shapes</a></td>"<< std::endl;
        */
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HO_Tile.html\">Megatile Channels</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HO_Calib.html\">Calibration Channels</a></td>"<< std::endl;
@@ -2510,6 +2596,7 @@ std::cout<<" We are here to print ADC "<<std::endl;
        htmlFile << "  <td><a href=\"HF_Calib.html\">Calibration Channels</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"HF_Drift.html\">Gain Stability</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"HF_Pedestals.html\">Pedestals</a></td>"<< std::endl;
+       htmlFile << "  <td><a href=\"HF_Shapes.html\">ADC Shapes</a></td>"<< std::endl;
        */
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HF_Tile.html\">Megatile Channels</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HF_Calib.html\">Calibration Channels</a></td>"<< std::endl;
@@ -2536,8 +2623,8 @@ std::cout<<" We are here to print ADC "<<std::endl;
      
      htmlFile << "<h3> 2.B.List of Bad channels (rate > 0.1) and its rates for each RMT criteria (for GS - %) </h3>"<< std::endl;
 
-     //htmlFile << "  <td><a href=\"HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
-     htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+     htmlFile << "  <td><a href=\"HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+     //   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
 
      htmlFile << "<table>"<< std::endl;     
      htmlFile << "<tr>";
@@ -2969,31 +3056,43 @@ std::cout<<" We are here to print ADC "<<std::endl;
      htmlFile << "<h2> 1. Analysis results for subdetectors </h2>"<< std::endl;   
      htmlFile << "<table width=\"400\">"<< std::endl;
      htmlFile << "<tr>"<< std::endl;
-     /*
+     
      htmlFile << "  <td><a href=\"HB.html\">HB</a></td>"<< std::endl;
      htmlFile << "  <td><a href=\"HE.html\">HE</a></td>"<< std::endl;
      htmlFile << "  <td><a href=\"HO.html\">HO</a></td>"<< std::endl;
      htmlFile << "  <td><a href=\"HF.html\">HF</a></td>"<< std::endl;    
-     */
+     
+     /*
      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HB.html\">HB</a></td>"<< std::endl;
      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HE.html\">HE</a></td>"<< std::endl;
      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HO.html\">HO</a></td>"<< std::endl;
      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HF.html\">HF</a></td>"<< std::endl;
-         
+*/       
      htmlFile << "</tr>"<< std::endl;
      htmlFile << "</table>"<< std::endl;
      htmlFile << "<br>"<< std::endl;    
+
+
+
+     htmlFile << "<h2> 2. Summed channel Ai over first 1000 events of this Run </h2>"<< std::endl;   
+     htmlFile << "<h3> 2.A. Total subdetector Amplitude vs iEvent </h3>"<< std::endl;
+     htmlFile << " <img src=\"EVENTDEPENDENCE.png\" />" << std::endl;      
+     htmlFile << "<br>"<< std::endl;
+     htmlFile << "<br>"<< std::endl;
+     htmlFile << "<br>"<< std::endl;
+
         
-     htmlFile << "<h2> 2. HCAL status over all criteria and subdetectors </h2>"<< std::endl;   
-     htmlFile << "<h3> 2.A. Channels in detector space </h3>"<< std::endl;
+     htmlFile << "<h2> 3. HCAL status over all criteria and subdetectors </h2>"<< std::endl;   
+     htmlFile << "<h3> 3.A. Channels in detector space </h3>"<< std::endl;
      htmlFile << "<h4> Legend for channel status: green - good, red - bad, yellow - at least 2% gain drift, white - not applicable or out of range </h4>"<< std::endl;
      htmlFile << " <img src=\"MAP.png\" />" << std::endl;      
      htmlFile << "<br>"<< std::endl;
+     htmlFile << "<br>"<< std::endl;
      
-     htmlFile << "<h3> 2.B. List of Bad channels </h3>"<< std::endl;
+     htmlFile << "<h3> 3.B. List of Bad channels </h3>"<< std::endl;
   
-     //htmlFile << "  <td><a href=\"HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
-     htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+     htmlFile << "  <td><a href=\"HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+     //htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
      htmlFile << "<table>"<< std::endl;     
      htmlFile << "<tr>";
      htmlFile << "<td class=\"s4\" align=\"center\">#</td>"    << std::endl;
@@ -3062,8 +3161,8 @@ std::cout<<" We are here to print ADC "<<std::endl;
      htmlFile << "<br>"<< std::endl;
      
      htmlFile << "<h3> 2.C.List of Gain unstable channels </h3>"<< std::endl;
-     //htmlFile << "  <td><a href=\"HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
-     htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+     htmlFile << "  <td><a href=\"HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+     //   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
 
      htmlFile << "<table>"<< std::endl;     
      htmlFile << "<tr>";
@@ -3133,8 +3232,8 @@ std::cout<<" We are here to print ADC "<<std::endl;
      
      
      htmlFile << "<h3> 2.D.List of channels with bad Pedestals </h3>"<< std::endl;
-     // htmlFile << "  <td><a href=\"HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
-     htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
+     //   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
 
      htmlFile << "<table>"<< std::endl;     
      htmlFile << "<tr>";
