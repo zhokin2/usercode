@@ -187,8 +187,7 @@ double adc2fC_QIE10[NUMADCS]={
 
 
 //shunt1
-//double const adc2fC_qie11[NUMADCS] = {
-double const adc2fC_QIE11[NUMADCS]={
+double const adc2fC_QIE11_shunt1[NUMADCS]={
   1.89, 5.07, 8.25, 11.43, 14.61, 17.78, 20.96, 24.14, 27.32,
  30.50, 33.68, 36.86, 40.04, 43.22, 46.40, 49.58, 54.35, 60.71, 67.07, 73.43, 79.79, 86.15,
   92.51, 98.87, 105.2, 111.6, 117.9, 124.3, 130.7, 137.0, 143.4, 149.7, 156.1, 162.5, 168.8,
@@ -214,10 +213,9 @@ double const adc2fC_QIE11[NUMADCS]={
   213287.0, 219822.6, 226358.3, 232894.0, 239429.6, 245965.3, 252501.0, 259036.6, 265572.3,
   275375.8, 288447.2, 301518.5, 314589.8, 327661.2, 340732.5, 353803.8};
 
-/*
+
 //shunt6
-//double const adc2fC_qie11[NUMADCS] = {
-double const adc2fC_QIE11[NUMADCS]={
+double const adc2fC_QIE11_shunt6[NUMADCS]={
 9.56, 28.24, 46.91, 65.59, 84.27, 102.9, 121.6, 140.3, 159.0, 177.7,
 196.3, 215.0, 233.7, 252.4, 271.0, 289.7, 317.7, 355.1, 392.4, 429.8, 467.1, 504.5, 541.9, 579.2, 616.6, 653.9,
 691.3, 728.6, 766.0, 803.3, 840.7, 878.0, 915.4, 952.8, 990.1, 1027.5, 1083.5, 1158.2, 1232.9, 1307.6, 1382.3,
@@ -239,7 +237,7 @@ double const adc2fC_QIE11[NUMADCS]={
  698768.8, 717776.9, 736785.0, 755793.0, 784305.2, 822321.3, 860337.5, 898353.7, 936369.9, 974386.0, 1012402.2,
 1050418.4, 1088434.6, 1126450.7, 1164466.9, 1202483.1, 1240499.3, 1278515.4, 1316531.6, 1354547.8, 1392564.0,
 1430580.1, 1468596.3, 1506612.5, 1544628.7, 1601652.9, 1677685.3, 1753717.6, 1829750.0, 1905782.3, 1981814.7, 2057847.0};
-*/
+
 
 
 
@@ -547,6 +545,27 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   double pedestalHOMax_;
   /////////////////////////////////////////////
 
+   TH1F*   h_numberofhitsHBtest;
+   TH1F*   h_numberofhitsHEtest;
+   TH1F*   h_numberofhitsHFtest;
+   TH1F*   h_numberofhitsHOtest;
+  TH1F*   h_AmplitudeHBtest;
+  TH1F*   h_AmplitudeHBtest1;
+  TH1F*   h_AmplitudeHBtest6;
+  TH1F*   h_AmplitudeHEtest;
+  TH1F*   h_AmplitudeHEtest1;
+  TH1F*   h_AmplitudeHEtest6;
+  TH1F*   h_AmplitudeHFtest;
+  TH1F*   h_AmplitudeHOtest;
+  TH1F*   h_totalAmplitudeHB;
+  TH1F*   h_totalAmplitudeHE;
+  TH1F*   h_totalAmplitudeHF;
+  TH1F*   h_totalAmplitudeHO;
+  TH1F*   h_totalAmplitudeHBperEvent;
+  TH1F*   h_totalAmplitudeHEperEvent;
+  TH1F*   h_totalAmplitudeHFperEvent;
+  TH1F*   h_totalAmplitudeHOperEvent;
+ 
 
   TH1F* h_errorGeneral;
   TH1F* h_error1;
@@ -2709,7 +2728,9 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   lumi=iEvent.luminosityBlock(); // lumi section
   int bcn = iEvent.bunchCrossing();
 
-   if(verbosity > 0 ) std::cout  <<  " Run =  "  << Run  <<  " bcn =  "  << bcn  <<  " LS =  "  << lumi  <<  " event =  "  << Nevent  <<  endl;
+   if(verbosity > 0 ) std::cout  <<  " nevent =  "  << nevent  <<  " Run =  "  << Run  <<  " bcn =  "  << bcn  <<  " LS =  "  << lumi  <<  " event =  "  << Nevent  <<  endl;
+
+   if(verbosity == -9001 ) std::cout  <<  " nevent =  "  << nevent  <<  " Run =  "  << Run  <<  " bcn =  "  << bcn  <<  " LS =  "  << lumi  <<  " event =  "  << Nevent  <<  endl;
 
   int outabortgap = 1;
   if(bcn >= bcnrejectedlow_ && bcn <= bcnrejectedhigh_ ) outabortgap = 0; //  if(bcn>=3446 && bcn<=3564) 
@@ -2763,19 +2784,19 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     /////////////////////////////////////////////////////////////////
     h_lsnumber_per_eachLS->Fill( float(lscounter) ,float(lumi) );
     if(nevcounter > 10.) {++lscounter10; ++lscounterrun10; }
-    if (verbosity == -79 && lscounter == 76) 
-          cout  <<  " for old LS =  "  << ls0 <<  " nevents =  "  << nevcounter <<  endl;
-    if (verbosity == -79 && lscounter == 77) 
-          cout  <<  " for old LS =  "  << ls0 <<  " nevents =  "  << nevcounter <<  endl;
+    if (verbosity == -9001 ) cout  <<  " for old LS =  "  << ls0 <<  " nevcounter =  "  << nevcounter <<  endl;
+    if (verbosity == -79 && lscounter == 76) cout  <<  " for old LS =  "  << ls0 <<  " nevents =  "  << nevcounter <<  endl;
+    if (verbosity == -79 && lscounter == 77) cout  <<  " for old LS =  "  << ls0 <<  " nevents =  "  << nevcounter <<  endl;
     h_nevents_per_LS->Fill(float(nevcounter) );
     h_nevents_per_LSzoom->Fill(float(nevcounter) );
     nevcounter=0;
-    if (verbosity == -79 && lscounter == 76) 
-            cout  <<  " New LS =  "  << lumi <<  "  lscounter =  "  << 
-                   lscounter <<  "  lscounter10 =  "  << lscounter10 <<  endl;
-    if (verbosity == -79 && lscounter == 77) cout  <<  " New LS =  "  << lumi <<  
-          "  lscounter =  "  << lscounter <<  "  lscounter10 =  "  << lscounter10 <<  endl;
+
+    if(verbosity == -9001 ) cout  <<  " New LS =  "  << lumi << "  lscounter =  "  << lscounter <<  "  lscounter10 =  "  << lscounter10 <<  endl;
+    if (verbosity == -79 && lscounter == 76) cout  <<  " New LS =  "  << lumi <<  "  lscounter =  "  << lscounter <<  "  lscounter10 =  "  << lscounter10 <<  endl;
+    if (verbosity == -79 && lscounter == 77) cout  <<  " New LS =  "  << lumi <<  "  lscounter =  "  << lscounter <<  "  lscounter10 =  "  << lscounter10 <<  endl;
+
     ls0 = lumi;
+
   }// new lumi
   else {
     nevcounter0=0;
@@ -2798,7 +2819,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   if (verbosity == -7777 ) std::cout << "==================>>>    nevcounter0 = " <<nevcounter0 << "in LS nevcounter = " <<nevcounter << "in run: eventcounter = " <<eventcounter << "  lscounter = " <<lscounter << "  lscounterrun = " <<lscounterrun << "  runcounter = " <<runcounter<< "  lscounterM1 = " <<lscounterM1 << std::endl;
   if (verbosity == -7778 && nevcounter0 != 0) std::cout << "==================>>>    nevcounter0 = " <<nevcounter0 << "in run: eventcounter = " <<eventcounter << "  lscounter = " <<lscounter << "  lscounterM1 = " <<lscounterM1 << "  lumi = " <<lumi << std::endl;
   
-  
+  if(verbosity == -9001 )  std::cout <<  "====11111111   ===>>>    nevcounter0 = " <<nevcounter0 << "in LS nevcounter = " <<nevcounter << "in run: eventcounter = " <<eventcounter << std::endl;
   if(nevcounter0 != 0 || nevcounter > 99999 ) {  
     if(nevcounter > 99999 ) nevcounter0 = 1;
  
@@ -4223,6 +4244,10 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       
       ////////////      int sub = cell.subdet();  
       if(verbosity > 0 || verbosity == -2323 ) std::cout  <<  "===================================== QIE10HFDigiCollection size  = qie10dc.size = "  <<  qie10dc.size() << endl;
+
+      double totalAmplitudeHF = 0.;
+
+
       for (unsigned int j=0; j < qie10dc.size(); j++){
 	QIE10DataFrame qie10df = static_cast<QIE10DataFrame>(qie10dc[j]);
 	DetId detid = qie10df.detid();
@@ -4253,6 +4278,9 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	  //	    TS_data[i]=adc2fC[digi->sample(i).adc()];
 	  //	    TS_data[i]=digi->adc();
 	  
+
+	  double amplitudefullTSs = 0.;
+	  double nnnnnnTS = 0.;
 	  for(int i=0; i<nTS; ++i)
 	    {
 	      // j - QIE channel
@@ -4273,12 +4301,28 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	      if (verbosity > 0 || verbosity == -2323) {std::cout<< "HFQIE10 adc= " << adc << " charge= " << charge << endl;}// Verbosity
 	      TS_data[i]=adc2fC_QIE10[ adc ];
 	      signal[3][ieta+41][iphi] += TS_data[i];
-	      if(i>1&&i<6) signal3[3][ieta+41][iphi] += TS_data[i];
-	      
-	    }// TS 
-	  if (verbosity > 0 || verbosity == -2323) {std::cout<< "HFQIE10 TS0= " << TS_data[0] << " TS1= " << TS_data[1] << " TS2= " << TS_data[2] << " TS3= " << TS_data[3] << " TS4= " << TS_data[4] << " TS5= " << TS_data[5] << endl;}// Verbosity
-	}// if(recordHistoes_ && studyCalibCellsHist_) 
-      }// for
+	      totalAmplitudeHF += TS_data[i];
+	      amplitudefullTSs += TS_data[i];
+	      nnnnnnTS++;
+	  if(i>1&&i<6) signal3[3][ieta+41][iphi] += TS_data[i];
+	  
+	}// TS 
+	h_numberofhitsHFtest->Fill(nnnnnnTS); 
+	h_AmplitudeHFtest->Fill(amplitudefullTSs); 
+	
+	if (verbosity > 0 || verbosity == -2323) {std::cout<< "HFQIE10 TS0= " << TS_data[0] << " TS1= " << TS_data[1] << " TS2= " << TS_data[2] << " TS3= " << TS_data[3] << " TS4= " << TS_data[4] << " TS5= " << TS_data[5] << endl;}// Verbosity
+      }// if(recordHistoes_ && studyCalibCellsHist_) 
+    }// for
+    
+    
+    h_totalAmplitudeHF->Fill(totalAmplitudeHF); 
+    h_totalAmplitudeHFperEvent->Fill(float(eventcounter),totalAmplitudeHF); 
+    
+    if(verbosity == -9001 )  std::cout <<  "====HF   ===>>>    nevcounter0 = " <<nevcounter0 << "in LS nevcounter = " <<nevcounter << "in run: eventcounter = " <<eventcounter << std::endl;
+    if(verbosity == -9001 )  std::cout <<  "====HF   ===>>>    totalAmplitudeHF = " << totalAmplitudeHF  << std::endl;
+    
+    
+    
     } // hfqie10.isValid
   }// end flagupgrade 
   //end upgrade
@@ -4299,6 +4343,12 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       unsigned int NHBHEDigiCollectionsize =  hbhe->size();
       if (verbosity > 0 || verbosity == -2324) std::cout << "===================================== HBHEDigiCollection size : " << NHBHEDigiCollectionsize << std::endl;
       
+      double totalAmplitudeHB = 0.;
+      double totalAmplitudeHE = 0.;
+      double nnnnnnTSHB = 0.;
+      double nnnnnnTSHE = 0.;
+
+
       for(HBHEDigiCollection::const_iterator digi=hbhe->begin();digi!=hbhe->end();digi++)
 	{
 	  eta=digi->id().ieta(); phi=digi->id().iphi(); depth=digi->id().depth(); nTS=digi->size();      
@@ -4320,20 +4370,34 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	    int iphi  = phi-1;
 	    int ieta  = eta;
 	    if(ieta > 0) ieta -= 1;
+	    //////////////////////////////////////////    HB:
 	    if(digi->id().subdet()==HcalBarrel) {                 
+	      double amplitudefullTSs = 0.;
+	      nnnnnnTSHB++;
 	      if(nTS<=numOfTS) for(int i=0;i<nTS;i++) {
 		  TS_data[i]=adc2fC[digi->sample(i).adc()];
 		  signal[0][ieta+41][iphi] += TS_data[i];
+		  amplitudefullTSs += TS_data[i];
+		  totalAmplitudeHB += TS_data[i];
 		  if(i>1&&i<6) signal3[0][ieta+41][iphi] += TS_data[i];
 		} 
-	    } 
+	      h_AmplitudeHBtest->Fill(amplitudefullTSs); 
+	    } // HB
+	    //////////////////////////////////////////    HE:
 	    if(digi->id().subdet()==HcalEndcap) {  
+	      double amplitudefullTSs = 0.;
+	      nnnnnnTSHE++;
 	      if(nTS<=numOfTS) for(int i=0;i<nTS;i++) {
 		  TS_data[i]=adc2fC[digi->sample(i).adc()];
 		  signal[1][ieta+41][iphi] += TS_data[i];
+		  totalAmplitudeHE += TS_data[i];
+		  amplitudefullTSs += TS_data[i];
 		  if(i>1&&i<6) signal3[1][ieta+41][iphi] += TS_data[i];
 		} 
-	    } 
+	      h_AmplitudeHEtest->Fill(amplitudefullTSs); 
+	    } // HE
+
+
 	  }//if(recordHistoes_ && studyCalibCellsHist_) 
 	  ////////////////////////////////////////////////////////////////  for Olga's script:
 	  if(recordNtuples_ && nevent50 < maxNeventsInNtuple_) {
@@ -4370,6 +4434,18 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	    }// HcalEndcap                                                                    
 	  }//if(recordNtuples_)
 	}// for HBHE digis
+
+      //    std::cout << "======= HBHEDigiCollection size : " << NHBHEDigiCollectionsize << "   nnnnnnhbhe= " << nnnnnnhbhe << "   nnnnnn= " << nnnnnn << std::endl;
+
+	      
+      if(totalAmplitudeHB !=0.) { h_numberofhitsHBtest->Fill(nnnnnnTSHB);   h_totalAmplitudeHB->Fill(totalAmplitudeHB); h_totalAmplitudeHBperEvent->Fill(float(eventcounter),totalAmplitudeHB); }
+      if(totalAmplitudeHE !=0.) { h_numberofhitsHEtest->Fill(nnnnnnTSHE);   h_totalAmplitudeHE->Fill(totalAmplitudeHE); h_totalAmplitudeHEperEvent->Fill(float(eventcounter),totalAmplitudeHE); }
+
+  if(verbosity == -9001 )  std::cout <<  "====OLD   ===>>>    nevcounter0 = " <<nevcounter0 << "in LS nevcounter = " <<nevcounter << "in run: eventcounter = " <<eventcounter << std::endl;
+  if(verbosity == -9001 )  std::cout <<  "====OLD   ===>>>    totalAmplitudeHB = " << totalAmplitudeHB  << " totalAmplitudeHE = " << totalAmplitudeHE  << std::endl;
+
+
+
     }//hbhe.isValid
   }// end flagupgrade 
   //---------------------------------------------------------------
@@ -4402,7 +4478,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	bool dv    = digi[ii].dv();  // valid data
 	} }
       */
-      
+
+
+      double totalAmplitudeHBQIE11 = 0.;
+      double totalAmplitudeHEQIE11 = 0.;
+      double nnnnnnTSHBQIE11 = 0.;
+      double nnnnnnTSHEQIE11 = 0.;
+     
       ////////////      int sub = cell.subdet();  
       if(verbosity == -2324 ) std::cout  <<  "===================================== QIE11HBHEDigiCollection size = qie11dc.size = "  <<  qie11dc.size() << endl;
       for (unsigned int j=0; j < qie11dc.size(); j++){
@@ -4412,6 +4494,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	int eta = hcaldetid.ieta();
 	int phi = hcaldetid.iphi();
 	int depth = hcaldetid.depth();
+	if( depth == 0 ) return;
 	int sub   = hcaldetid.subdet(); // 1-HB, 2-HE (HFDigiCollection: 4-HF)
 	// loop over the samples in the digi
 	nTS = qie11df.samples();
@@ -4440,30 +4523,69 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	  //	    TS_data[i]=adc2fC[digi->sample(i).adc()];
 	  //	    TS_data[i]=digi->adc();
 	  if(sub == 1 ) { 	  
+	    double amplitudefullTSs1 = 0.;
+	    double amplitudefullTSs6 = 0.;
+	    nnnnnnTSHBQIE11++;
 	    for(int i=0; i<nTS; ++i){
+	      //      ampldefault0 = adc2fC_QIE11_shunt1[ qie11df[ii].adc() ];// massive !!!!!!
+	      //      if( useADCfC_ ) ampldefault1 = toolOriginal[ii];//adcfC
+	      //      ampldefault2  = qie11df[ii].adc();//ADCcounts
 	      int adc = qie11df[i].adc();
 	      //	      converter.linearize(qie11dc[j][i].adc());
-	      float charge = adc2fC_QIE11[ adc ];
+	      double charge1 = adc2fC_QIE11_shunt1[ adc ];
+	      double charge6 = adc2fC_QIE11_shunt6[ adc ];
 	      //	    if (verbosity == -2324) {std::cout<< "HBQIE11 adc= " << adc << " tdc= " << tdc << " trail= " << trail << " capid= " << capid << " soi= " << soi << " charge= " << charge << endl;}// Verbosity
-	      if (verbosity == -2324) {std::cout<< "HBQIE11 adc= " << adc << " charge= " << charge << endl;}// Verbosity
-	      TS_data[i]=adc2fC_QIE11[ adc ];
-	      signal[0][ieta+41][iphi] += TS_data[i];
-	      if(i>1&&i<6) signal3[0][ieta+41][iphi] += TS_data[i];
+	      if (verbosity == -2324) {std::cout<< "HBQIE11 adc= " << adc << " charge1= " << charge1 << " charge6= " << charge6 << endl;}// Verbosity
+	      amplitudefullTSs1 += charge1;
+	      amplitudefullTSs6 += charge6;
+	      double charge = charge6;
+	      TS_data[i]=charge;
+	      signal[0][ieta+41][iphi] += charge;
+	      if(i>1&&i<6) signal3[0][ieta+41][iphi] += charge;
+	      totalAmplitudeHBQIE11 += charge;
+	      if(verbosity == -9001 && nnnnnnTSHBQIE11<10 && nevcounter ==1)  std::cout <<  "====QIE11   ===>>>   charge = " <<charge << "  totalAmplitudeHBQIE11 = " <<totalAmplitudeHBQIE11 << "  nTS = " << nTS << std::endl;
 	    }//for
+	    h_AmplitudeHBtest1->Fill(amplitudefullTSs1,1.); 
+	    h_AmplitudeHBtest6->Fill(amplitudefullTSs6,1.); 
 	  }//HB end
 	  if(sub == 2 ) {  
+	    double amplitudefullTSs1 = 0.;
+	    double amplitudefullTSs6 = 0.;
+	    nnnnnnTSHEQIE11++;
 	    for(int i=0;i<nTS;i++) {
+	      //      ampldefault0 = adc2fC_QIE11_shunt1[ qie11df[ii].adc() ];// massive !!!!!!
+	      //      if( useADCfC_ ) ampldefault1 = toolOriginal[ii];//adcfC
+	      //      ampldefault2  = qie11df[ii].adc();//ADCcounts
 	      int adc = qie11df[i].adc();
-	      float charge = adc2fC_QIE11[ adc ];
+	      //	      converter.linearize(qie11dc[j][i].adc());
+	      double charge1 = adc2fC_QIE11_shunt1[ adc ];
+	      double charge6 = adc2fC_QIE11_shunt6[ adc ];
 	      //	    if (verbosity == -2324) {std::cout<< "HEQIE11 adc= " << adc << " tdc= " << tdc << " trail= " << trail << " capid= " << capid << " soi= " << soi << " charge= " << charge << endl;}// Verbosity
-	      if (verbosity == -2324) {std::cout<< "HEQIE11 adc= " << adc << " charge= " << charge << endl;}// Verbosity
-	      TS_data[i]=adc2fC_QIE11[ adc ];
-	      signal[1][ieta+41][iphi] += TS_data[i];
-	      if(i>1&&i<6) signal3[1][ieta+41][iphi] += TS_data[i];
+	      if (verbosity == -2324) {std::cout<< "HEQIE11 adc= " << adc << " charge1= " << charge1 << " charge6= " << charge6 << endl;}// Verbosity
+	      amplitudefullTSs1 += charge1;
+	      amplitudefullTSs6 += charge6;
+	      double charge = charge6;
+	      TS_data[i]=charge;
+	      signal[1][ieta+41][iphi] += charge;
+	      if(i>1&&i<6) signal3[1][ieta+41][iphi] += charge;
+	      totalAmplitudeHEQIE11 += charge;
+	      if(verbosity == -9001 && nnnnnnTSHEQIE11<10 && nevcounter ==1)  std::cout <<  "====QIE11   ===>>>   charge = " <<charge << "  totalAmplitudeHEQIE11 = " <<totalAmplitudeHEQIE11 << "  nTS = " << nTS << std::endl;
 	    }//for
+	    h_AmplitudeHEtest1->Fill(amplitudefullTSs1,1.); 
+	    h_AmplitudeHEtest6->Fill(amplitudefullTSs6,1.); 
+
+
 	  }//HE end
 	}//if(recordHistoes_ && studyCalibCellsHist_) 
       }// for QIE11 digis
+      
+      if(totalAmplitudeHBQIE11 !=0.) {  h_numberofhitsHBtest->Fill(nnnnnnTSHBQIE11);   h_totalAmplitudeHB->Fill(totalAmplitudeHBQIE11); h_totalAmplitudeHBperEvent->Fill(float(eventcounter),totalAmplitudeHBQIE11); }
+      if(totalAmplitudeHEQIE11 !=0.) {  h_numberofhitsHEtest->Fill(nnnnnnTSHEQIE11);   h_totalAmplitudeHE->Fill(totalAmplitudeHEQIE11); h_totalAmplitudeHEperEvent->Fill(float(eventcounter),totalAmplitudeHEQIE11); }
+
+  if(verbosity == -9001 )  std::cout <<  "====QIE11   ===>>>    nevcounter0 = " <<nevcounter0 << "in LS nevcounter = " <<nevcounter << "in run: eventcounter = " <<eventcounter << std::endl;
+  if(verbosity == -9001 )  std::cout <<  "====QIE11   ===>>>    totalAmplitudeHBQIE11 = " << totalAmplitudeHBQIE11  << " totalAmplitudeHEQIE11 = " << totalAmplitudeHEQIE11  << std::endl;
+
+
     }//heqie11.isValid
   }// end flagupgrade 
   
@@ -4478,6 +4600,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       cout<<" No HO collection is found "<<endl;
     } else {
       int qwert6= 0; 
+      double totalAmplitudeHO = 0.;
       for(HODigiCollection::const_iterator digi=ho->begin();digi!=ho->end();digi++){
 	eta=digi->id().ieta(); phi=digi->id().iphi(); depth=digi->id().depth(); nTS=digi->size();
 	///////////////////
@@ -4493,15 +4616,28 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	  int iphi  = phi-1;
 	  int ieta  = eta;
 	  if(ieta > 0) ieta -= 1;
-	  //      double amplitude = 0;
+	  double nnnnnnTS = 0.;
+	  double amplitudefullTSs = 0.;
 	  if(nTS<=numOfTS) for(int i=0;i<nTS;i++) {
 	      TS_data[i]=adc2fC[digi->sample(i).adc()];
-	      //	amplitude += TS_data[i];
+	      amplitudefullTSs += TS_data[i];
 	      signal[2][ieta+41][iphi] += TS_data[i];
+	      totalAmplitudeHO += TS_data[i];
 	      if(i>1&&i<6) signal3[2][ieta+41][iphi] += TS_data[i];
+	      nnnnnnTS++;
 	    }//if for
+	  h_AmplitudeHOtest->Fill(amplitudefullTSs); 
+	  h_numberofhitsHOtest->Fill(nnnnnnTS); 
 	}//if(recordHistoes_ && studyCalibCellsHist_) 
       }//for HODigiCollection
+      
+      h_totalAmplitudeHO->Fill(totalAmplitudeHO); 
+      h_totalAmplitudeHOperEvent->Fill(float(eventcounter),totalAmplitudeHO); 
+
+  if(verbosity == -9001 )  std::cout <<  "====HO   ===>>>    nevcounter0 = " <<nevcounter0 << "in LS nevcounter = " <<nevcounter << "in run: eventcounter = " <<eventcounter << std::endl;
+  if(verbosity == -9001 )  std::cout <<  "====HO   ===>>>    totalAmplitudeHO = " << totalAmplitudeHO  << std::endl;
+
+
     }//ho.isValid(
   
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////  
@@ -5571,8 +5707,13 @@ void VeRawAnalyzer::beginJob()
     h_fiber2_HO = new TH1F("h_fiber2_HO"," ", 40, 0., 40.);
     h_repetedcapid_HO = new TH1F("h_repetedcapid_HO"," ", 5, 0., 5.);
     
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    // fullAmplitude:
+    /////////////////////////////////////////////////////////////////////////////////////////////////             HB
+    h_numberofhitsHBtest = new TH1F("h_numberofhitsHBtest"," ", 100, 0.,100.);
+    h_AmplitudeHBtest = new TH1F("h_AmplitudeHBtest"," ", 100, 0.,10000.);
+    h_AmplitudeHBtest1 = new TH1F("h_AmplitudeHBtest1"," ", 100, 0.,1000000.);
+    h_AmplitudeHBtest6 = new TH1F("h_AmplitudeHBtest6"," ", 100, 0.,2000000.);
+    h_totalAmplitudeHB = new TH1F("h_totalAmplitudeHB"," ", 100, 0.,3000000.);
+    h_totalAmplitudeHBperEvent = new TH1F("h_totalAmplitudeHBperEvent"," ", 1000, 1.,1001.);
     // fullAmplitude:
     h_ADCAmpl345Zoom_HB = new TH1F("h_ADCAmpl345Zoom_HB"," ", 100, 0.,400.);
     h_ADCAmpl345Zoom1_HB = new TH1F("h_ADCAmpl345Zoom1_HB"," ", 100, 0.,100.);
@@ -5586,7 +5727,7 @@ void VeRawAnalyzer::beginJob()
 
     h_ADCAmplZoom_HB = new TH1F("h_ADCAmplZoom_HB"," ", 100, 0.,400.);
     h_ADCAmplZoom1_HB = new TH1F("h_ADCAmplZoom1_HB"," ", 100, -20.,80.);
-    h_ADCAmpl_HB = new TH1F("h_ADCAmpl_HB"," ", 100, 10.,3000.);
+    h_ADCAmpl_HB = new TH1F("h_ADCAmpl_HB"," ", 100, 10.,5000.);
     h_mapDepth1ADCAmpl225_HB = new TH2F("h_mapDepth1ADCAmpl225_HB"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth2ADCAmpl225_HB = new TH2F("h_mapDepth2ADCAmpl225_HB"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth1ADCAmpl225Copy_HB = new TH2F("h_mapDepth1ADCAmpl225Copy_HB"," ", 82, -41., 41., 72, 0., 72.);
@@ -5620,13 +5761,19 @@ void VeRawAnalyzer::beginJob()
     h_mapDepth1_HB = new TH2F("h_mapDepth1_HB"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth2_HB = new TH2F("h_mapDepth2_HB"," ", 82, -41., 41., 72, 0., 72.);
     
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////             HE
+    h_numberofhitsHEtest = new TH1F("h_numberofhitsHEtest"," ", 100, 0.,10000.);
+    h_AmplitudeHEtest = new TH1F("h_AmplitudeHEtest"," ", 100, 0.,1000000.);
+    h_AmplitudeHEtest1 = new TH1F("h_AmplitudeHEtest1"," ", 100, 0.,1000000.);
+    h_AmplitudeHEtest6 = new TH1F("h_AmplitudeHEtest6"," ", 100, 0.,2000000.);
+    h_totalAmplitudeHE = new TH1F("h_totalAmplitudeHE"," ", 100, 0.,10000000000.);
+    h_totalAmplitudeHEperEvent = new TH1F("h_totalAmplitudeHEperEvent"," ", 1000, 1.,1001.);
     // fullAmplitude:
     h_ADCAmpl345Zoom_HE = new TH1F("h_ADCAmpl345Zoom_HE"," ", 100, 0.,3000000.);
     h_ADCAmpl345Zoom1_HE = new TH1F("h_ADCAmpl345Zoom1_HE"," ", 100, 0.,100000.);
     h_ADCAmpl345_HE = new TH1F("h_ADCAmpl345_HE"," ", 100, 0.,700000.);
     h_ADCAmplZoom1_HE = new TH1F("h_ADCAmplZoom1_HE"," ", 100, 0.,100000.);
-    h_ADCAmpl_HE = new TH1F("h_ADCAmpl_HE"," ", 300, 0.,300000.);
+    h_ADCAmpl_HE = new TH1F("h_ADCAmpl_HE"," ", 200, 0.,2000000.);
     h_mapDepth1ADCAmpl225_HE = new TH2F("h_mapDepth1ADCAmpl225_HE"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth2ADCAmpl225_HE = new TH2F("h_mapDepth2ADCAmpl225_HE"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth3ADCAmpl225_HE = new TH2F("h_mapDepth3ADCAmpl225_HE"," ", 82, -41., 41., 72, 0., 72.);
@@ -5819,7 +5966,11 @@ void VeRawAnalyzer::beginJob()
     ////////////////////////////////////////////////////////////////////////////////////   raddam study END
     
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////                    HF
+    h_numberofhitsHFtest = new TH1F("h_numberofhitsHFtest"," ", 100, 0.,30000.);
+    h_AmplitudeHFtest = new TH1F("h_AmplitudeHFtest"," ", 100, 0.,300000.);
+    h_totalAmplitudeHF = new TH1F("h_totalAmplitudeHF"," ", 100, 0.,100000000000.);
+    h_totalAmplitudeHFperEvent = new TH1F("h_totalAmplitudeHFperEvent"," ", 1000, 1.,1001.);
     // fullAmplitude:
     h_ADCAmplZoom1_HF = new TH1F("h_ADCAmplZoom1_HF"," ", 100, 0.,1000000.);
     h_ADCAmpl_HF = new TH1F("h_ADCAmpl_HF"," ", 250, 0.,500000.);
@@ -5882,9 +6033,13 @@ void VeRawAnalyzer::beginJob()
     h_mapDepth3_HF = new TH2F("h_mapDepth3_HF"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth4_HF = new TH2F("h_mapDepth4_HF"," ", 82, -41., 41., 72, 0., 72.);
     
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////                  HO
+    h_numberofhitsHOtest = new TH1F("h_numberofhitsHOtest"," ", 100, 0.,30000.);
+    h_AmplitudeHOtest = new TH1F("h_AmplitudeHOtest"," ", 100, 0.,300000.);
+    h_totalAmplitudeHO = new TH1F("h_totalAmplitudeHO"," ", 100, 0.,100000000.);
+    h_totalAmplitudeHOperEvent = new TH1F("h_totalAmplitudeHOperEvent"," ", 1000, 1.,1001.);
     // fullAmplitude:
-    h_ADCAmpl_HO = new TH1F("h_ADCAmpl_HO"," ", 100, 0.,3000.);
+    h_ADCAmpl_HO = new TH1F("h_ADCAmpl_HO"," ", 100, 0.,7000.);
     h_ADCAmplZoom1_HO = new TH1F("h_ADCAmplZoom1_HO"," ", 100, -20.,280.);
     h_ADCAmpl_HO_copy = new TH1F("h_ADCAmpl_HO_copy"," ", 100, 0.,30000.);
     h_mapDepth4ADCAmpl225_HO = new TH2F("h_mapDepth4ADCAmpl225_HO"," ", 82, -41., 41., 72, 0., 72.);
@@ -7351,7 +7506,8 @@ void VeRawAnalyzer::fillDigiErrorsQIE11(QIE11DataFrame qie11df)
     double ampl = 0.;
     for (int ii=0; ii<nTS; ii++) {  
       int adc = qie11df[ii].adc();
-      double ampldefault =adc2fC_QIE11[ adc ];
+      //      double ampldefault =adc2fC_QIE11_shunt1[ adc ];
+      double ampldefault =adc2fC_QIE11_shunt6[ adc ];
       ampl+=ampldefault;// 
     }
     ///////////////////////////////////////Digis
@@ -8760,10 +8916,11 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
       double ampldefault0 = 0.;
       double ampldefault1 = 0.;
       double ampldefault2 = 0.;
-      ampldefault0 = adc2fC_QIE11[ qie11df[ii].adc() ];// massive
+      //    ampldefault0 = adc2fC_QIE11_shunt1[ qie11df[ii].adc() ];// massive !!!!!!
+      ampldefault0 = adc2fC_QIE11_shunt6[ qie11df[ii].adc() ];// massive !!!!!!
       if( useADCfC_ ) ampldefault1 = toolOriginal[ii];//adcfC
       ampldefault2  = qie11df[ii].adc();//ADCcounts
-      if( useADCmassive_ ) {ampldefault = ampldefault0;}
+      if( useADCmassive_ ) {ampldefault = ampldefault0;}// !!!!!!
       if( useADCfC_ ) {ampldefault = ampldefault1;}
       if( useADCcounts_ ) {ampldefault = ampldefault2;}
       int capid = (qie11df[ii]).capid();
@@ -9410,6 +9567,8 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
 	h_ADCAmpl345Zoom1_HE->Fill(amplitude345,1.);
 	h_ADCAmpl345_HE->Fill(amplitude345,1.);
 	h_ADCAmpl_HE->Fill(amplitude,1.);
+	//	if( ieta <0) h_ADCAmpl_HEM->Fill(amplitude,1.);
+	//	if( ieta >0) h_ADCAmpl_HEP->Fill(amplitude,1.);
 	h_ADCAmplZoom1_HE->Fill(amplitude,1.);
 	if(amplitude < ADCAmplHEMin_  || amplitude > ADCAmplHEMax_) {
 	  if(studyRunDependenceHist_ && flagtodefinebadchannel_==5) ++badchannels[sub-1][mdepth-1][ieta+41][iphi];// 0-82 ; 0-71
@@ -12565,6 +12724,27 @@ void VeRawAnalyzer::endJob(){
     h_repetedcapid_HO->Write();
     
     ///////////////////////
+    h_numberofhitsHBtest->Write();
+    h_numberofhitsHEtest->Write();
+    h_numberofhitsHFtest->Write();
+    h_numberofhitsHOtest->Write();
+    h_AmplitudeHBtest->Write();
+    h_AmplitudeHBtest1->Write();
+    h_AmplitudeHBtest6->Write();
+    h_AmplitudeHEtest->Write();
+    h_AmplitudeHEtest1->Write();
+    h_AmplitudeHEtest6->Write();
+    h_AmplitudeHFtest->Write();
+    h_AmplitudeHOtest->Write();
+    h_totalAmplitudeHB->Write();
+    h_totalAmplitudeHE->Write();
+    h_totalAmplitudeHF->Write();
+    h_totalAmplitudeHO->Write();
+    h_totalAmplitudeHBperEvent->Write();
+    h_totalAmplitudeHEperEvent->Write();
+    h_totalAmplitudeHFperEvent->Write();
+    h_totalAmplitudeHOperEvent->Write();
+    
     h_ADCAmpl345Zoom_HB->Write();
     h_ADCAmpl345Zoom1_HB->Write();
     h_ADCAmpl345_HB->Write();
