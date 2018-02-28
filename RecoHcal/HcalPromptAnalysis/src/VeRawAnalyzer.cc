@@ -910,6 +910,12 @@ TH1F*         h_Amplitude_notCapIdErrors_HF2;
 TH1F*         h_Amplitude_notCapIdErrors_HO4;
 
   /////////////////////////////////////////////
+  TH1F* h_corrforxaMAIN_HE  ;
+  TH1F* h_corrforxaMAIN0_HE ;
+  TH1F* h_corrforxaADDI_HE  ;
+  TH1F* h_corrforxaADDI0_HE; 
+  
+
   TH1F* h_ADCAmpl_HE;
   TH1F* h_ADCAmplZoom1_HE;
 
@@ -5771,9 +5777,15 @@ void VeRawAnalyzer::beginJob()
     // fullAmplitude:
     h_ADCAmpl345Zoom_HE = new TH1F("h_ADCAmpl345Zoom_HE"," ", 100, 0.,3000000.);
     h_ADCAmpl345Zoom1_HE = new TH1F("h_ADCAmpl345Zoom1_HE"," ", 100, 0.,100000.);
-    h_ADCAmpl345_HE = new TH1F("h_ADCAmpl345_HE"," ", 100, 0.,700000.);
+    h_ADCAmpl345_HE = new TH1F("h_ADCAmpl345_HE"," ", 70, 0.,700000.);
     h_ADCAmplZoom1_HE = new TH1F("h_ADCAmplZoom1_HE"," ", 100, 0.,100000.);
     h_ADCAmpl_HE = new TH1F("h_ADCAmpl_HE"," ", 200, 0.,2000000.);
+
+    h_corrforxaMAIN_HE = new TH1F("h_corrforxaMAIN_HE"," ", 70, 0.,700000.);
+    h_corrforxaMAIN0_HE = new TH1F("h_corrforxaMAIN0_HE"," ", 70, 0.,700000.);
+    h_corrforxaADDI_HE = new TH1F("h_corrforxaADDI_HE"," ", 70, 0.,700000.);
+    h_corrforxaADDI0_HE = new TH1F("h_corrforxaADDI0_HE"," ", 70, 0.,700000.);
+
     h_mapDepth1ADCAmpl225_HE = new TH2F("h_mapDepth1ADCAmpl225_HE"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth2ADCAmpl225_HE = new TH2F("h_mapDepth2ADCAmpl225_HE"," ", 82, -41., 41., 72, 0., 72.);
     h_mapDepth3ADCAmpl225_HE = new TH2F("h_mapDepth3ADCAmpl225_HE"," ", 82, -41., 41., 72, 0., 72.);
@@ -7506,8 +7518,12 @@ void VeRawAnalyzer::fillDigiErrorsQIE11(QIE11DataFrame qie11df)
     double ampl = 0.;
     for (int ii=0; ii<nTS; ii++) {  
       int adc = qie11df[ii].adc();
+
+
       //      double ampldefault =adc2fC_QIE11_shunt1[ adc ];
       double ampldefault =adc2fC_QIE11_shunt6[ adc ];
+
+
       ampl+=ampldefault;// 
     }
     ///////////////////////////////////////Digis
@@ -8890,6 +8906,7 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
     double difpedestal3 = 0.;
 
     double amplitude = 0.;
+    double amplitude0= 0.;
     double absamplitude = 0.;
     double amplitude345 = 0.;
     double ampl = 0.;
@@ -8911,18 +8928,27 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
     TSsize=nTS;
     //  if(qie10df.size() !=  TSsize) errorBtype = 1.; 
     //  TSsize=qie10df.size();
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     for (int ii=0; ii<TSsize; ii++) {  
       double ampldefault = 0.;
       double ampldefault0 = 0.;
       double ampldefault1 = 0.;
       double ampldefault2 = 0.;
+
+      ///////   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    MAKE A CHOISE OF SHUNT:  shunt1 or shunt6 ????  !!
       //    ampldefault0 = adc2fC_QIE11_shunt1[ qie11df[ii].adc() ];// massive !!!!!!
       ampldefault0 = adc2fC_QIE11_shunt6[ qie11df[ii].adc() ];// massive !!!!!!
+      ///////   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
       if( useADCfC_ ) ampldefault1 = toolOriginal[ii];//adcfC
       ampldefault2  = qie11df[ii].adc();//ADCcounts
       if( useADCmassive_ ) {ampldefault = ampldefault0;}// !!!!!!
       if( useADCfC_ ) {ampldefault = ampldefault1;}
       if( useADCcounts_ ) {ampldefault = ampldefault2;}
+
+      
+
       int capid = (qie11df[ii]).capid();
       //      double pedestal = calib.pedestal(capid);
       double pedestalINI = pedestal00->getValue(capid);
@@ -8984,7 +9010,8 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
       amplitude+=ampldefault;// 
       absamplitude+=abs(ampldefault);// 
 
-      if(ii ==3 || ii==4 || ii==5) amplitude345+=ampldefault;  
+      //    if(ii ==3 || ii==4 || ii==5) amplitude345+=ampldefault;  
+      if(ii ==1 || ii==2 || ii ==3 || ii==4 || ii==5|| ii ==6 || ii==7 || ii==8) amplitude345+=ampldefault;  
 
 
       if(flagcpuoptimization_== 0 ) {
@@ -9077,7 +9104,8 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
       timew += (ii+1)*abs(ampldefault);
       timeww += (ii+1)*ampldefault;
     }//for 1
-    amplitudechannel[sub-1][mdepth-1][ieta+41][iphi] += amplitude;// 0-82 ; 0-71  HBHE
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    amplitude0 = amplitude;
 
     pedestalaver9 /= TSsize;
     pedestalaver4 /= c4;
@@ -9085,7 +9113,6 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
     pedestalwaver9 = sqrt(pedestalwaver9/TSsize);
     //pow(pedestalwaver4/c4,0.5);
     pedestalwaver4 = sqrt(pedestalwaver4/c4);
-    
     
     if (verbosity == -81 && sub == 1) std::cout << "HB pedestalaver9 = " <<pedestalaver9<< std::endl;
     //    if (verbosity == -2324) std::cout << std::endl << "*** E = " << ampl << "   ACD -> fC -> (gain ="<< calib.respcorrgain(0) << ") GeV (ped.subtracted)" << std::endl;
@@ -9099,6 +9126,43 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
     //  if(ts_with_max_signal+1 > -1 && ts_with_max_signal+1 < 10) ampl += tool[ts_with_max_signal+1];
     //  if(ts_with_max_signal-1 > -1 && ts_with_max_signal-1 < 10) ampl += tool[ts_with_max_signal-1];
     //  if(ts_with_max_signal-2 > -1 && ts_with_max_signal-2 < 10) ampl += tool[ts_with_max_signal-2];
+
+      ///////   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      !!!!!!!!!!!!!!!!!! HE charge correction for SiPMs:
+      // HE charge correction for SiPMs:
+      if(sub == 2 ) { 
+	// parametrization of SiPM non-linearity function for:
+	//                                         amplitude345, amplitude, ampl, :
+	// correction (as a function of the number of fired pixels = x) itself:
+	//   correction = a2*x*x + b1*x + c0;
+	// main case for D=2.8mm SiPMs:  c0, b1, a2 = 1.000000   2.71238e-05   1.32877e-10
+	// addi case for D=3.3mm SiPMs:  c0, b1, a2 = 1.000000   2.59096e-05   4.60721e-11  for( (|eta| = 16 & depth=4)   || (|eta| = 17 & depth=2||3)  || (|eta| = 18 & depth=5) )
+	// where eta: -29 ... -16  && 16 ... 29 -> keeping in mind: if(ieta > 0) ieta -= 1; we have: where eta: -29 ... -16  && 15 ... 28
+	// We have 40 fC/p.e. in DB [3] for N_fired_pixels estimate;  
+	// [3] = https://twiki.cern.ch/twiki/pub/CMS/HcalSiPMParameters/HcalSiPMParameters_2017plan1_v2.0_data.txt
+	// calculation example:
+	//    1.32877e-10*1000*1000 + 2.71238e-05*1000 + 1. = 1.027256677
+	//    1.32877e-10*10000*10000 + 2.71238e-05*10000 + 1. = 1.2845257
+	double xa = amplitude/40.;double xb = ampl/40.;double xc = amplitude345/40.;
+	// ADDI case:
+	if( ((ieta==-16||ieta==15) && mdepth==4) ||  ((ieta==-17||ieta==16) && (mdepth==2||mdepth==3)) || ((ieta==-18||ieta==17) && mdepth==5) ) {
+	  double c0 = 1.000000;double b1 = 2.59096e-05;double a2 = 4.60721e-11;
+	  double corrforxa = a2*xa*xa + b1*xa + c0;double corrforxb = a2*xb*xb + b1*xb + c0;double corrforxc = a2*xc*xc + b1*xc + c0;
+	  h_corrforxaADDI_HE->Fill(amplitude, corrforxa);
+	  h_corrforxaADDI0_HE->Fill(amplitude, 1.);
+	  amplitude *= corrforxa;ampl *= corrforxb;amplitude345 *= corrforxc;
+	}
+	// MAIN case:
+	else {
+	  double c0 = 1.000000;double b1 = 2.71238e-05;double a2 = 1.32877e-10;
+	  double corrforxa = a2*xa*xa + b1*xa + c0;double corrforxb = a2*xb*xb + b1*xb + c0;double corrforxc = a2*xc*xc + b1*xc + c0;
+	  h_corrforxaMAIN_HE->Fill(amplitude, corrforxa);
+	  h_corrforxaMAIN0_HE->Fill(amplitude, 1.);
+	  amplitude *= corrforxa;ampl *= corrforxb;amplitude345 *= corrforxc;
+	}
+      }// sub == 2   HE charge correction end
+      ///////   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      !!!!!!!!!!!!!!!!!!
+
+    amplitudechannel[sub-1][mdepth-1][ieta+41][iphi] += amplitude;// 0-82 ; 0-71  HBHE
 
     double ratio = 0.;
     //    if(amplallTS != 0.) ratio = ampl/amplallTS;
@@ -9119,7 +9183,7 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
     double aveamplitude = 0.;
     double aveamplitudew = 0.;
     if(absamplitude >0 && timew >0)  aveamplitude = timew/absamplitude;// average_TS +1
-    if(amplitude >0 && timeww >0)  aveamplitudew = timeww/amplitude;// average_TS +1
+    if(amplitude0 >0 && timeww >0)  aveamplitudew = timeww/amplitude0;// average_TS +1
     double rmsamp = 0.;
     // and CapIdErrors:
     int error = 0;
@@ -9148,7 +9212,7 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
     //  if( !anycapid || anyer || !anydv )    error = 1; 
     
     double rmsamplitude = 0.;
-    if( (amplitude >0 && rmsamp >0) || (amplitude <0 && rmsamp <0))  rmsamplitude = sqrt( rmsamp/amplitude );
+    if( (amplitude0 >0 && rmsamp >0) || (amplitude0 <0 && rmsamp <0))  rmsamplitude = sqrt( rmsamp/amplitude0 );
     double aveamplitude1 = aveamplitude-1;// means iTS=0-9
     
     //    for (int ii=0; ii<TSsize; ii++) {  
@@ -9181,7 +9245,7 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
       double ampldefault = tool[ii];
       ///
       if ( sub == 1 ) {
-	if(amplitude >120 ) {
+	if(amplitude0 >120 ) {
 	  h_shape_Ahigh_HB0->Fill(float(ii),ampldefault);
 	  h_shape0_Ahigh_HB0->Fill(float(ii),1.);
 	}
@@ -9226,7 +9290,7 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
     if ( sub == 1 ) {
       
       // bad_channels with C,A,W,P,pW,
-      if( error == 1 || amplitude < ADCAmplHBMin_ || amplitude > ADCAmplHBMax_ ||
+      if( error == 1 || amplitude0 < ADCAmplHBMin_ || amplitude0 > ADCAmplHBMax_ ||
 	  rmsamplitude < rmsHBMin_ || rmsamplitude > rmsHBMax_ ||
 	  pedestal0 < pedestalHBMax_ || pedestal1 < pedestalHBMax_
 	  || pedestal2 < pedestalHBMax_ || pedestal3 < pedestalHBMax_ ||
@@ -9249,7 +9313,7 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
     }// sub   HB
     if ( sub == 2 ) {
       // bad_channels with C,A,W,P,pW,
-      if( error == 1 || amplitude < ADCAmplHEMin_ || amplitude > ADCAmplHEMax_ ||
+      if( error == 1 || amplitude0 < ADCAmplHEMin_ || amplitude0 > ADCAmplHEMax_ ||
 	  rmsamplitude < rmsHEMin_ || rmsamplitude > rmsHEMax_ ||
 	  pedestal0 < pedestalHEMax_ || pedestal1 < pedestalHEMax_
 	  || pedestal2 < pedestalHEMax_ || pedestal3 < pedestalHEMax_ ||
@@ -12902,6 +12966,12 @@ void VeRawAnalyzer::endJob(){
     h_ADCAmpl345_HE->Write();
     h_ADCAmpl_HE->Write();
     h_ADCAmplZoom1_HE->Write();
+
+    h_corrforxaMAIN_HE ->Write();
+    h_corrforxaMAIN0_HE ->Write();
+    h_corrforxaADDI_HE ->Write();
+    h_corrforxaADDI0_HE ->Write();
+
     h_mapDepth1ADCAmpl225_HE->Write();
     h_mapDepth2ADCAmpl225_HE->Write();
     h_mapDepth3ADCAmpl225_HE->Write();
