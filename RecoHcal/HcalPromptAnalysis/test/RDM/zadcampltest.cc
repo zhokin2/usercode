@@ -672,6 +672,70 @@ int main(int argc, char *argv[])
       
       
       c1->Update();
+    //========================================================================================== 9
+      //======================================================================
+    //======================================================================
+    //================
+    //======================================================================
+      c1->Clear();
+      c1->Divide(1,2);
+      
+      c1->cd(1);
+      TH1F *kbdfv= (TH1F*)hfile1->Get("h_ADCAmpl345_HE");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+     kbdfv->SetMarkerStyle(20);
+     kbdfv->SetMarkerSize(0.8);
+     kbdfv->GetYaxis()->SetLabelSize(0.04);
+     kbdfv->SetXTitle("h_ADCAmpl345_HE \b");
+     kbdfv->SetMarkerColor(2);
+     kbdfv->SetLineColor(2);
+     kbdfv->Draw("");
+
+
+      c1->cd(2);
+      TH2F *twoedepth1hb1= (TH2F*)hfile1->Get("h_corrforxaMAIN_HE");
+      TH2F *twoedepth1hb0= (TH2F*)hfile1->Get("h_corrforxaMAIN0_HE");
+      twoedepth1hb1->Sumw2();
+      twoedepth1hb0->Sumw2();
+	TH2F* Cdepth1hbfz225= (TH2F*)twoedepth1hb1->Clone("Cdepth1hbfz225");
+	Cdepth1hbfz225->Divide(twoedepth1hb1,twoedepth1hb0, 1, 1, "B");
+	Cdepth1hbfz225->Sumw2();
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gStyle->SetOptStat(00000000);
+      Cdepth1hbfz225->SetMarkerStyle(20);
+      Cdepth1hbfz225->SetMarkerSize(0.4);
+      Cdepth1hbfz225->SetXTitle("charge, fC \b");
+      Cdepth1hbfz225->SetYTitle("Fcor \b");
+      Cdepth1hbfz225->SetMarkerColor(2);
+      Cdepth1hbfz225->SetLineColor(2);
+      Cdepth1hbfz225->SetMaximum(1.500);
+      Cdepth1hbfz225->SetMinimum(0.9);
+      Cdepth1hbfz225->Draw("HIST same P0");
+
+      TH2F *gffgghb1= (TH2F*)hfile1->Get("h_corrforxaADDI_HE");
+      TH2F *gffgghb0= (TH2F*)hfile1->Get("h_corrforxaADDI0_HE");
+      gffgghb1->Sumw2();
+      gffgghb0->Sumw2();
+	TH2F* Cdepth1hbfz399= (TH2F*)gffgghb1->Clone("Cdepth1hbfz399");
+	Cdepth1hbfz399->Divide(gffgghb1,gffgghb0, 1, 1, "B");
+	Cdepth1hbfz399->Sumw2();
+      gPad->SetGridy();
+      gPad->SetGridx();
+      gStyle->SetOptStat(00000000);
+      Cdepth1hbfz399->SetMarkerStyle(24);
+      Cdepth1hbfz399->SetMarkerSize(0.4);
+      Cdepth1hbfz399->SetXTitle("charge, fC \b");
+      Cdepth1hbfz399->SetYTitle("Fcor \b");
+      Cdepth1hbfz399->SetMarkerColor(4);
+      Cdepth1hbfz399->SetLineColor(4);
+      Cdepth1hbfz399->SetMaximum(1.500);
+      Cdepth1hbfz399->SetMinimum(0.9);
+      Cdepth1hbfz399->Draw("HIST same P0");
+      
+      
+      c1->Update();
           //======================================================================
     //==================================================================================================== end
     //======================================================================
