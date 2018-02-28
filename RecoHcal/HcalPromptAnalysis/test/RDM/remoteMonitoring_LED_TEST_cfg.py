@@ -29,7 +29,6 @@ process.load('RecoLocalCalo.Configuration.hcalLocalReco_cff')
 
 process.maxEvents = cms.untracked.PSet(
 #    input = cms.untracked.int32(1000)
-#  input = cms.untracked.int32(10)
   input = cms.untracked.int32(-1)
   )
 
@@ -44,7 +43,13 @@ process.source = cms.Source("HcalTBSource",
 #	       'file:/afs/cern.ch/work/d/dtlisov/private/Monitoring/data/USC_209311.root'
 #              '/store/group/comm_hcal/USC/USC_212179.root'
 #                rundir+'/USC_'+runnumber+'.root'
-
+#                '/store/group/dpg_hcal/comm_hcal/USC/run307782/USC_307782.root'
+#                '/store/group/dpg_hcal/comm_hcal/USC/run307826/USC_307826.root'
+#                '/store/group/dpg_hcal/comm_hcal/USC/run307856/USC_307856.root'
+#                '/store/group/dpg_hcal/comm_hcal/USC/run307892/USC_307892.root'
+#
+### 
+#                '/store/group/dpg_hcal/comm_hcal/USC/run307971/USC_307971.root'
 #                '/store/group/dpg_hcal/comm_hcal/USC/run308234/USC_308234.root'
 #                '/store/group/dpg_hcal/comm_hcal/USC/run308383/USC_308383.root'
 
@@ -52,11 +57,26 @@ process.source = cms.Source("HcalTBSource",
 #                '/store/group/dpg_hcal/comm_hcal/USC/run308882/USC_308882.root'
 #                '/store/group/dpg_hcal/comm_hcal/USC/run309064/USC_309064.root'
 
-#                '/store/group/dpg_hcal/comm_hcal/USC/run309373/USC_309373.root'
+#                '/store/group/dpg_hcal/comm_hcal/USC/run308786/USC_308786.root'
 #                '/store/group/dpg_hcal/comm_hcal/USC/run309592/USC_309592.root'
 #                '/store/group/dpg_hcal/comm_hcal/USC/run309821/USC_309821.root'
-#                '/store/group/dpg_hcal/comm_hcal/USC/run309714/USC_309714.root'
-               '/store/group/dpg_hcal/comm_hcal/USC/run309821/USC_309821.root'
+#
+#               '/store/group/dpg_hcal/comm_hcal/USC/run309669/USC_309669.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run309672/USC_309672.root'
+#                '/store/group/dpg_hcal/comm_hcal/USC/run309676/USC_309676.root'
+#            
+#               '/store/group/dpg_hcal/comm_hcal/USC/run309573/USC_309573.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run309924/USC_309924.root'
+#            
+#               '/store/group/dpg_hcal/comm_hcal/USC/run310262/USC_310262.root'
+#              '/store/group/dpg_hcal/comm_hcal/USC/run310268/USC_310268.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run310403/USC_310403.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run310410/USC_310410.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run310427/USC_310427.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run310452/USC_310452.root'
+               '/store/group/dpg_hcal/comm_hcal/USC/run310454/USC_310454.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run310456/USC_310456.root'
+
                ), 
     streams = cms.untracked.vstring(
 		  "HCAL_Trigger",
@@ -72,7 +92,6 @@ process.source = cms.Source("HcalTBSource",
 process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #
                                   Verbosity = cms.untracked.int32(0),
-                                  #Verbosity = cms.untracked.int32(-9001),
                                   #Verbosity = cms.untracked.int32(-84),
                                   #Verbosity = cms.untracked.int32(-91),
                                   #Verbosity = cms.untracked.int32(-92),
@@ -443,19 +462,37 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #
                                   #HistOutFile = cms.untracked.string(histodir+'/LED_'+runnumber+'.root'),
                                   #
-                                  HistOutFile = cms.untracked.string('LEDtest309821.root'),
+                                  #HistOutFile = cms.untracked.string(histodir+'/LED_'+runnumber+'.root'),
+                                  #
+                                  #HistOutFile = cms.untracked.string('LEDtest307971.root'),
                                   #HistOutFile = cms.untracked.string('LEDtest308234.root'),
                                   #HistOutFile = cms.untracked.string('LEDtest308383.root'),
-
+                                  #
                                   #HistOutFile = cms.untracked.string('LEDtest308543.root'),
                                   #HistOutFile = cms.untracked.string('LEDtest308882.root'),
                                   #HistOutFile = cms.untracked.string('LEDtest309064.root'),
-
-                                  #HistOutFile = cms.untracked.string('LEDtest309373.root'),
+                                  #
+                                  #HistOutFile = cms.untracked.string('LEDtest308786.root'),
                                   #HistOutFile = cms.untracked.string('LEDtest309592.root'),
                                   #HistOutFile = cms.untracked.string('LEDtest309821.root'),
-                                  #HistOutFile = cms.untracked.string('LEDtest309714.root'),
-                                 #
+                                  #
+                                  #HistOutFile = cms.untracked.string('LEDtest309669.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest309672.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest309676.root'),
+                                  #
+                                  #HistOutFile = cms.untracked.string('LEDtest309573.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest309924.root'),
+                                  #
+                                  #HistOutFile = cms.untracked.string('LEDtest310262.root'),
+                                  #istOutFile = cms.untracked.string('LEDtest310268.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest310403.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest310410.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest310427.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest310452.root'),
+                                  HistOutFile = cms.untracked.string('LEDtest310454.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest310456.root'),
+
+                                  #
                                   MAPOutFile = cms.untracked.string('LogEleMapdb.h')
                                   #
                                   ##OutputFilePath = cms.string('/tmp/zhokin/'),        
