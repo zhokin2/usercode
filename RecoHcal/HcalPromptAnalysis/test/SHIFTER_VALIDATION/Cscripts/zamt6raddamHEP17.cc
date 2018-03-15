@@ -201,6 +201,7 @@ int main(int argc, char *argv[])
 
   //
   Float_t RrangeMIN = 0.90;Float_t RrangeMAX = 1.1;
+//  Float_t RrangeMIN = 0.985;Float_t RrangeMAX = 1.006;
 //  Float_t RrangeMIN = 0.910;Float_t RrangeMAX = 1.033;
   // x(abscissa) for Days
   //(yearcase == 1
@@ -215,7 +216,8 @@ int main(int argc, char *argv[])
 
   // y(ordinate) for All Days
   //(yearcase == 1
-  Float_t y1=0.90; Float_t y2=  1.1; //  for 1,2,5,6   for 11,12,15,16
+  //  Float_t y1=0.985; Float_t y2=  1.006; //  for 1,2,5,6   for 11,12,15,16
+  Float_t y1=0.9; Float_t y2=  1.1; //  for 1,2,5,6   for 11,12,15,16
 //  Float_t y1=0.98; Float_t y2=  1.04; //  for 1,2,5,6   for 11,12,15,16
 //  Float_t y1=0.95; Float_t y2=  1.05; //  for 1,2,5,6   for 11,12,15,16
   if(yearcase == 2 ) {
@@ -304,8 +306,9 @@ int main(int argc, char *argv[])
     //
     //---------------------------------------------------------------------------------------------------------------------  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // take into account for future treatment only channels with <Aijk>_runevents within cutMinA to cutMaxA:
-    //    Double_t cutMinA =400.; Double_t cutMaxA = 1200.;  // HPD HE only
-    Double_t cutMinA =9000.; Double_t cutMaxA = 40000.;  
+    //       Double_t cutMinA =1.; Double_t cutMaxA = 120000.;  // HPD HE only
+    //    Double_t cutMinA =9000.; Double_t cutMaxA = 40000.;  
+       Double_t cutMinA =50000.; Double_t cutMaxA = 200000.;  // HPD HE only
   //
   // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //    Int_t verbosity = 2;//  
@@ -354,8 +357,10 @@ int main(int argc, char *argv[])
   TString fname = "/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/LED_";
 
   // booking:
-  TH1F* Ceff1D = new TH1F("Ceff1D","", 200, 0.,10000.);
-  TH1F* Seff1D = new TH1F("Seff1D","", 200, 0.,40000.);
+  TH1F* Ceff1D = new TH1F("Ceff1D","", 200, 0.,1000000.);
+  TH1F* Seff1D = new TH1F("Seff1D","", 200, 0.,200000.);
+  //TH1F* Ceff1D = new TH1F("Ceff1D","", 200, 0.,10000.);
+  //TH1F* Seff1D = new TH1F("Seff1D","", 200, 0.,40000.);
   TH2F* mapBADchannels = new TH2F("mapBADchannels"," ", 82, -41., 41., 72, 0., 72.);
   TH1F* gainkoeff = new TH1F("gainkoeff","", 100, 0.9,1.1);
   TH1F* BADruns = new TH1F("BADruns","", NP, 0.,float(NP));
@@ -374,7 +379,9 @@ int main(int argc, char *argv[])
 	//  if(k1==0 || (k1 >37 && k1<42)) {
 
       //______________________________________________________
-	  TString epsName = fname + LEDruns[k1] +".root";
+	//	  TString epsName = fname + LEDruns[k1] +".root";
+	  TString epsName = "rootshunt6/LEDtest" + LEDruns[k1] +".root";
+
 	  TFile *hfile= new TFile(epsName, "READ");
 
     cout << "!!!! read LED run with k1= " << k1   <<"  run:  " << LEDruns[k1] <<endl;
@@ -749,8 +756,10 @@ int main(int argc, char *argv[])
       cout<<"****Draw 4 Dependencies: gains LED runs   *** " <<endl;
       gPad->SetGridy();
       gPad->SetGridx();
-      gPad->SetLogy();
-      gStyle->SetOptStat(1110000); 
+      //    gPad->SetLogy();
+      //gStyle->SetOptStat(1110000); 
+          gStyle->SetOptStat(1100);// only mean & rms
+      //gStyle->SetOptStat(1111111);// only mean & rms
       gainkoeff->SetMarkerStyle(20);
       gainkoeff->SetMarkerSize(0.4);
       gainkoeff->GetYaxis()->SetLabelSize(0.04);
