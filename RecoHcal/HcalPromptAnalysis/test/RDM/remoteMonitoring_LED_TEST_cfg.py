@@ -50,6 +50,7 @@ process.source = cms.Source("HcalTBSource",
 #
 ### 
 #                '/store/group/dpg_hcal/comm_hcal/USC/run307971/USC_307971.root'
+                '/store/group/dpg_hcal/comm_hcal/USC/run308701/USC_308701.root'
 #                '/store/group/dpg_hcal/comm_hcal/USC/run308234/USC_308234.root'
 #                '/store/group/dpg_hcal/comm_hcal/USC/run308383/USC_308383.root'
 
@@ -74,8 +75,32 @@ process.source = cms.Source("HcalTBSource",
 #               '/store/group/dpg_hcal/comm_hcal/USC/run310410/USC_310410.root'
 #               '/store/group/dpg_hcal/comm_hcal/USC/run310427/USC_310427.root'
 #               '/store/group/dpg_hcal/comm_hcal/USC/run310452/USC_310452.root'
-               '/store/group/dpg_hcal/comm_hcal/USC/run310454/USC_310454.root'
+#              '/store/group/dpg_hcal/comm_hcal/USC/run310454/USC_310454.root'
 #               '/store/group/dpg_hcal/comm_hcal/USC/run310456/USC_310456.root'
+#
+#               '/store/group/dpg_hcal/comm_hcal/USC/run308784/USC_308784.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run308882/USC_308882.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run309237/USC_309237.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run309238/USC_309238.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run309318/USC_309318.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run309321/USC_309321.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run309370/USC_309370.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run309573/USC_309573.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run309704/USC_309704.root'
+#
+#               '/store/group/dpg_hcal/comm_hcal/USC/run310847/USC_310847.root'
+#                '/store/group/dpg_hcal/comm_hcal/USC/run310973/USC_310973.root'
+#
+#               '/store/group/dpg_hcal/comm_hcal/USC/run310244/USC_310244.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run310387/USC_310387.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run310587/USC_310587.root'
+#              '/store/group/dpg_hcal/comm_hcal/USC/run310650/USC_310650.root'
+#
+#               '/store/group/dpg_hcal/comm_hcal/USC/run311369/USC_311369.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run311413/USC_311413.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run311457/USC_311457.root'
+#               '/store/group/dpg_hcal/comm_hcal/USC/run311566/USC_311566.root'
+
 
                ), 
     streams = cms.untracked.vstring(
@@ -448,11 +473,18 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   # 10       +        -       -     +     2017 w/o HEP17
                                   # 
                                   flagupgradeqie1011 = cms.int32(6),
-                                  #end upgrade: ---------------------------------------------------------
+                                  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+                                  #end upgrade: --------------------------------------------------------- end upgrade
+                                  # flaguseshunt = 1 or 6 (6 is default for global runs) 
+                                  flaguseshunt = cms.int32(1),
+                                  # flagsipmcorrection: != 0 yes,apply; = 0 do not use;
+                                  flagsipmcorrection = cms.int32(1),
                                   #
                                   #
                                   # for local LASER runs ONLY!!! to be > 0    (,else = 0)
                                   flagLaserRaddam = cms.int32(0),
+                                  # for gaussian fit for local shunt1 (Gsel0) led low-intensity or ped ONLY!!! to be  > 0    (,else = 0)
+                                  flagfitshunt1pedorledlowintensity = cms.int32(1),
                                   #
                                   #
                                   #
@@ -465,6 +497,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #HistOutFile = cms.untracked.string(histodir+'/LED_'+runnumber+'.root'),
                                   #
                                   #HistOutFile = cms.untracked.string('LEDtest307971.root'),
+                                  HistOutFile = cms.untracked.string('LEDtest308701.root'),
                                   #HistOutFile = cms.untracked.string('LEDtest308234.root'),
                                   #HistOutFile = cms.untracked.string('LEDtest308383.root'),
                                   #
@@ -489,8 +522,31 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #HistOutFile = cms.untracked.string('LEDtest310410.root'),
                                   #HistOutFile = cms.untracked.string('LEDtest310427.root'),
                                   #HistOutFile = cms.untracked.string('LEDtest310452.root'),
-                                  HistOutFile = cms.untracked.string('LEDtest310454.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest310454.root'),
                                   #HistOutFile = cms.untracked.string('LEDtest310456.root'),
+                                  #                                 
+                                  #HistOutFile = cms.untracked.string('LEDtest308784.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest308882.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest309237.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest309238.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest309318.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest309321.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest309370.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest309573.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest309704.root'),
+                                  #
+                                  #HistOutFile = cms.untracked.string('LEDtest310847.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest310973.root'),
+                                  #
+                                  #HistOutFile = cms.untracked.string('LEDtest310244.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest310387.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest310587.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest310650.root'),
+                                  #
+                                  #HistOutFile = cms.untracked.string('LEDtest311369.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest311413.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest311457.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest311566.root'),
 
                                   #
                                   MAPOutFile = cms.untracked.string('LogEleMapdb.h')
