@@ -1931,7 +1931,8 @@ std::cout<<" We are here to print ADC "<<std::endl;
   }
   
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  TCanvas *cmain1 = new TCanvas("cmain1","MAP",200,10,1400,1800);
+  //  TCanvas *cmain1 = new TCanvas("cmain1","MAP",200,10,1400,1800);
+  TCanvas *cmain1 = new TCanvas("cmain1","MAP",250,10,1450,1410);
   cmain1->Divide(2,2);
   
   cmain1->cd(1);
@@ -3074,7 +3075,7 @@ std::cout<<" We are here to print ADC "<<std::endl;
 
 
 
-     htmlFile << "<h2> 2. Summed channel Ai over first 1000 events of this Run </h2>"<< std::endl;   
+     htmlFile << "<h2> 2. Amplitude summed over all sub-detector channels vs first 1000 events of this Run </h2>"<< std::endl;   
      htmlFile << "<h3> 2.A. Total subdetector Amplitude vs iEvent </h3>"<< std::endl;
      htmlFile << " <img src=\"EVENTDEPENDENCE.png\" />" << std::endl;      
      htmlFile << "<br>"<< std::endl;
