@@ -649,8 +649,8 @@ int main(int argc, char *argv[])
       c1->Clear();
       c1->Divide(2,2);
              
-      TH2F *twoddepth3he1= (TH2F*)hfile1->Get("h_mapDepth1ADCAmpl_HE");
-      TH2F *twoddepth3he0= (TH2F*)hfile1->Get("h_mapDepth1_HE");
+      TH2F *twoddepth3he1= (TH2F*)hfile1->Get("h_mapDepth3ADCAmpl_HE");
+      TH2F *twoddepth3he0= (TH2F*)hfile1->Get("h_mapDepth3_HE");
       twoddepth3he1->Sumw2();
       twoddepth3he0->Sumw2();
       //    if(twoddepth3he0->IsA()->InheritsFrom("TH2F")){
@@ -659,8 +659,8 @@ int main(int argc, char *argv[])
 	Cdepth3heff->Sumw2();
 	//    }
       c1->cd(1);
-      TH2F *twoedepth3he1= (TH2F*)hfile1->Get("h_mapDepth1ADCAmpl225_HE");
-      TH2F *twoedepth3he0= (TH2F*)hfile1->Get("h_mapDepth1_HE");
+      TH2F *twoedepth3he1= (TH2F*)hfile1->Get("h_mapDepth3ADCAmpl225_HE");
+      TH2F *twoedepth3he0= (TH2F*)hfile1->Get("h_mapDepth3_HE");
       twoedepth3he1->Sumw2();
       twoedepth3he0->Sumw2();
       //    if(twoe0->IsA()->InheritsFrom("TH2F")){
@@ -677,7 +677,7 @@ int main(int argc, char *argv[])
       Cdepth3hefz225->GetZaxis()->SetLabelSize(0.08);
       Cdepth3hefz225->SetXTitle("#eta \b");
       Cdepth3hefz225->SetYTitle("#phi \b");
-      Cdepth3hefz225->SetZTitle("Rate for ADCAmpl in each event & cell - HE Depth1 \b");
+      Cdepth3hefz225->SetZTitle("Rate for ADCAmpl in each event & cell - HE Depth3 \b");
       Cdepth3hefz225->SetMarkerColor(2);
       Cdepth3hefz225->SetLineColor(2);
       Cdepth3hefz225->SetMaximum(1.000);
