@@ -229,6 +229,18 @@ int main(int argc, char *argv[])
       Zzzdepth1hef7->SetZTitle("h_mapDepth7_HE \b");
       Zzzdepth1hef7->Draw("COLZ");
 
+      c1->cd(8);
+      TH1F *jdjswi8= (TH1F*)hfile1->Get("h_ADCAmpl_HE");
+      gPad->SetLogy(kFALSE);
+      // gPad->SetLogx();
+      jdjswi8->SetMarkerStyle(20);
+      jdjswi8->SetMarkerSize(0.8);
+      jdjswi8->GetYaxis()->SetLabelSize(0.04);
+      jdjswi8->SetXTitle("h_ADCAmpl_HE \b");
+      jdjswi8->SetMarkerColor(2);
+      jdjswi8->SetLineColor(2);
+      jdjswi8->Draw("");
+      
 
       
        c1->Update();
@@ -236,43 +248,48 @@ int main(int argc, char *argv[])
     //========================================================================================== 2    
       //======================================================================
     //======================================================================
+       //    h_ADCAmpl345Zoom_HE = new TH1F("h_ADCAmpl345Zoom_HE"," ", 100, 0.,300.);
+       //    h_ADCAmpl345Zoom1_HE = new TH1F("h_ADCAmpl345Zoom1_HE"," ", 100, 0.,100.);
+       //    h_ADCAmplZoom1_HE = new TH1F("h_ADCAmplZoom1_HE"," ", 100, 0.,1000.);
     //================
     //======================================================================
       c1->Clear();
       c1->Divide(2,3);
       
       c1->cd(1);
-      TH1F *kqlerd0= (TH1F*)hfile1->Get("h_ADCAmpl_HO_copy");
+      //      TH1F *kqlerd0= (TH1F*)hfile1->Get("h_ADCAmpl_HO_copy");
+      TH1F *kqlerd0= (TH1F*)hfile1->Get("h_ADCAmpl345Zoom_HE");
       gPad->SetLogy();
       // gPad->SetLogx();
       kqlerd0->SetMarkerStyle(20);
       kqlerd0->SetMarkerSize(0.8);
       kqlerd0->GetYaxis()->SetLabelSize(0.04);
-      kqlerd0->SetXTitle("h_ADCAmpl_HO_copy \b");
+      //      kqlerd0->SetXTitle("h_ADCAmpl_HO_copy \b");
+      kqlerd0->SetXTitle("h_ADCAmpl345Zoom_HE \b");
       kqlerd0->SetMarkerColor(2);
       kqlerd0->SetLineColor(2);
       kqlerd0->Draw("");
       //    h_ADCAmpl_HF"
       c1->cd(2);
-      TH1F *kqlerd1= (TH1F*)hfile1->Get("h_ADCAmplZoom1_HF");
+      TH1F *kqlerd1= (TH1F*)hfile1->Get("h_ADCAmpl345Zoom1_HE");
       gPad->SetLogy();
       // gPad->SetLogx();
       kqlerd1->SetMarkerStyle(20);
       kqlerd1->SetMarkerSize(0.8);
       kqlerd1->GetYaxis()->SetLabelSize(0.04);
-      kqlerd1->SetXTitle("h_ADCAmplZoom1_HF \b");
+      kqlerd1->SetXTitle("h_ADCAmpl345Zoom1_HE \b");
       kqlerd1->SetMarkerColor(2);
       kqlerd1->SetLineColor(2);
       kqlerd1->Draw("");
       
       c1->cd(3);
-      TH1F *kqlerd2= (TH1F*)hfile1->Get("h_ADCAmpl345Zoom_HE");
+      TH1F *kqlerd2= (TH1F*)hfile1->Get("h_ADCAmplZoom1_HE");
       gPad->SetLogy();
       // gPad->SetLogx();
       kqlerd2->SetMarkerStyle(20);
       kqlerd2->SetMarkerSize(0.8);
       kqlerd2->GetYaxis()->SetLabelSize(0.04);
-      kqlerd2->SetXTitle("h_ADCAmpl345Zoom_HE \b");
+      kqlerd2->SetXTitle("h_ADCAmplZoom1_HE \b");
       kqlerd2->SetMarkerColor(2);
       kqlerd2->SetLineColor(2);
       kqlerd2->Draw("");
