@@ -4,7 +4,8 @@ setenv MYWORKDIR `pwd`
 
 cd /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/
 
-setenv SCRAM_ARCH slc6_amd64_gcc472
+#setenv SCRAM_ARCH slc6_amd64_gcc472
+setenv SCRAM_ARCH slc6_amd64_gcc630 
 cmsenv
 
 cd ${MYWORKDIR}
