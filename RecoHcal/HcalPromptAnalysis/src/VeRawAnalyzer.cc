@@ -116,14 +116,13 @@ using namespace edm;
 #include "TTree.h"
 #include "TH1.h"
 #include "TH2.h"
+#include "TF1.h"
 
 // Private include files from Eric
 //#include "FedGet.hh" 
 
 #define NUMADCS 256
 
-
-// for SiPM:
 
 // very preliminary,  NEEDS UPDATING
 double adc2fC_QIE10[NUMADCS]={
@@ -253,6 +252,12 @@ static const float adc2fC[128]={-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5, 10
 				3109.5,3234.5,3359.5,3484.5,3609.5,3797.,4047.,4297.,4547.,4797.,5047.,
 				5297.,5609.5,5984.5,6359.5,6734.5,7172.,7672.,8172.,8734.5,9359.5,9984.5};		   		   
 
+  // for SiPM:
+  const int npfit = 220;
+  float anpfit = 220.;
+
+
+
 class VeRawAnalyzer : public edm::EDAnalyzer 
 {
 public:
@@ -341,6 +346,7 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   double ratioHOMax_;
 
   /////////////////////////////////////////////
+  int  flagfitshunt1pedorledlowintensity_;
   int  flagLaserRaddam_;
   int flagtoaskrunsorls_;
   int flagtodefinebadchannel_;
@@ -354,6 +360,8 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   int flagestimatornormalization_;
   int flagcpuoptimization_;
   int flagupgradeqie1011_;
+  int flagsipmcorrection_;
+  int flaguseshunt_;
 //  int nbadchannels1_;
 //  int nbadchannels2_;
 //  int nbadchannels3_;
@@ -566,6 +574,8 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   TH1F*   h_totalAmplitudeHFperEvent;
   TH1F*   h_totalAmplitudeHOperEvent;
  
+  TH1F*  h_amplitudeaveragedbydepthes_HE;
+  TH1F*  h_ndepthesperamplitudebins_HE;
 
   TH1F* h_errorGeneral;
   TH1F* h_error1;
@@ -926,6 +936,27 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH2F* h_mapDepth5ADCAmpl_HE;
   TH2F* h_mapDepth6ADCAmpl_HE;
   TH2F* h_mapDepth7ADCAmpl_HE;
+
+  TH2F*     h_mapADCAmplfirstpeak_HE;
+  TH2F*     h_mapADCAmplfirstpeak0_HE;
+  TH2F*     h_mapADCAmplsecondpeak_HE;
+  TH2F*     h_mapADCAmplsecondpeak0_HE;
+  TH2F*     h_mapADCAmpl11firstpeak_HE;
+  TH2F*     h_mapADCAmpl11firstpeak0_HE;
+  TH2F*     h_mapADCAmpl11secondpeak_HE;
+  TH2F*     h_mapADCAmpl11secondpeak0_HE;
+  TH2F*     h_mapADCAmpl12firstpeak_HE;
+  TH2F*     h_mapADCAmpl12firstpeak0_HE;
+  TH2F*     h_mapADCAmpl12secondpeak_HE;
+  TH2F*     h_mapADCAmpl12secondpeak0_HE;
+
+  TH1F* h_gsmdifferencefit1_HE;
+  TH1F* h_gsmdifferencefit2_HE;
+  TH1F* h_gsmdifferencefit3_HE;
+  TH1F* h_gsmdifferencefit4_HE;
+  TH1F* h_gsmdifferencefit5_HE;
+  TH1F* h_gsmdifferencefit6_HE;
+
 
   TH2F* h_mapDepth1ADCAmplSiPM_HE;
   TH2F* h_mapDepth2ADCAmplSiPM_HE;
@@ -2201,7 +2232,10 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   double maxxOCCUP3;
   double maxxOCCUP4;
 
-
+  // for SiPM:
+  float binanpfit = anpfit/npfit;
+  long int gsmdepth1sipm[npfit][82][72][7];
+  
 
   TTree*    myTree;
   TFile*    hOutputFile;
@@ -2290,6 +2324,7 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   usecontinuousnumbering_=iConfig.getUntrackedParameter<bool>("usecontinuousnumbering");
   // flagLaserRaddam
   flagLaserRaddam_ = iConfig.getParameter<int>("flagLaserRaddam");//
+  flagfitshunt1pedorledlowintensity_ = iConfig.getParameter<int>("flagfitshunt1pedorledlowintensity");//
 
   flagabortgaprejected_ = iConfig.getParameter<int>("flagabortgaprejected");//
   bcnrejectedlow_ = iConfig.getParameter<int>("bcnrejectedlow");//
@@ -2312,6 +2347,9 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   flagestimatornormalization_ = iConfig.getParameter<int>("flagestimatornormalization");//
   flagcpuoptimization_ = iConfig.getParameter<int>("flagcpuoptimization");//
   flagupgradeqie1011_ = iConfig.getParameter<int>("flagupgradeqie1011");//
+  flagsipmcorrection_ = iConfig.getParameter<int>("flagsipmcorrection");//
+  flaguseshunt_ = iConfig.getParameter<int>("flaguseshunt");//
+
 
 //  nbadchannels1_      = iConfig.getParameter<int>("nbadchannels1");//
 //  nbadchannels2_      = iConfig.getParameter<int>("nbadchannels2");//
@@ -2514,10 +2552,13 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   std::cout<<" ratioHOMin_ = " <<ratioHOMin_ << std::endl;   
   std::cout<<" ratioHOMax_ = " <<ratioHOMax_ << std::endl; 
   std::cout<<" flagLaserRaddam_ = " <<flagLaserRaddam_ << std::endl;
+  std::cout<<" flagfitshunt1pedorledlowintensity_ = " <<flagfitshunt1pedorledlowintensity_ << std::endl;
   std::cout<<" flagtoaskrunsorls_ = " <<flagtoaskrunsorls_ << std::endl;
   std::cout<<" flagestimatornormalization_ = " <<flagestimatornormalization_ << std::endl;
   std::cout<<" flagcpuoptimization_ = " <<flagcpuoptimization_ << std::endl;
   std::cout<<" flagupgradeqie1011_ = " <<flagupgradeqie1011_ << std::endl;
+  std::cout<<" flaguseshunt_ = " <<flaguseshunt_ << std::endl;
+  std::cout<<" flagsipmcorrection_ = " <<flagsipmcorrection_ << std::endl;
   std::cout<<" flagtodefinebadchannel_ = " <<flagtodefinebadchannel_ << std::endl;
   std::cout<<" howmanybinsonplots_ = " <<howmanybinsonplots_ << std::endl;
   std::cout<<" splashesUpperLimit_ = " <<splashesUpperLimit_ << std::endl;
@@ -2614,6 +2655,9 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   std::cout<<" TSmeanHOMin_ = " <<TSmeanHOMin_ << std::endl;   
   std::cout<<" TSmeanHOMax_ = " <<TSmeanHOMax_ << std::endl;   
   
+  std::cout << "ONLY in use of led run (low-intensityGsel0 =shunt1): npfit = " <<npfit << " anpfit = " <<anpfit << " binanpfit = " <<binanpfit << std::endl;
+  
+
   //
   numOfLaserEv=0;
   local_event=0;
@@ -2633,6 +2677,18 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   lscounterrun10=0 ;
   nevcounter0=0 ;
   nevcounter00=0 ;
+
+  for(int k1 = 0; k1<npfit; k1++) {
+    for(int k2 = 0; k2<82; k2++) {
+      for(int k3 = 0; k3<72; k3++) {
+	for(int k4 = 0; k4<7; k4++) {
+	  gsmdepth1sipm[k1][k2][k3][k4] = 0;
+	}//for  
+      }//for  
+    }//for  
+  }//for  
+  
+
   for(int k0 = 0; k0<4; k0++) {
     for(int k1 = 0; k1<7; k1++) {
       for(int k2 = 0; k2<82; k2++) {
@@ -5768,19 +5824,52 @@ void VeRawAnalyzer::beginJob()
     h_mapDepth2_HB = new TH2F("h_mapDepth2_HB"," ", 82, -41., 41., 72, 0., 72.);
     
     //////////////////////////////////////////////////////////////////////////////////////////////             HE
+    // stuff regarding summed(total) Amplitude vs iEvent (histo-name is  h_totalAmplitudeHEperEvent) 
+    // to see from which event ALL channels are available(related to quality of the run)
     h_numberofhitsHEtest = new TH1F("h_numberofhitsHEtest"," ", 100, 0.,10000.);
     h_AmplitudeHEtest = new TH1F("h_AmplitudeHEtest"," ", 100, 0.,1000000.);
     h_AmplitudeHEtest1 = new TH1F("h_AmplitudeHEtest1"," ", 100, 0.,1000000.);
     h_AmplitudeHEtest6 = new TH1F("h_AmplitudeHEtest6"," ", 100, 0.,2000000.);
     h_totalAmplitudeHE = new TH1F("h_totalAmplitudeHE"," ", 100, 0.,10000000000.);
     h_totalAmplitudeHEperEvent = new TH1F("h_totalAmplitudeHEperEvent"," ", 1000, 1.,1001.);
-    // fullAmplitude:
-    h_ADCAmpl345Zoom_HE = new TH1F("h_ADCAmpl345Zoom_HE"," ", 100, 0.,3000000.);
-    h_ADCAmpl345Zoom1_HE = new TH1F("h_ADCAmpl345Zoom1_HE"," ", 100, 0.,100000.);
-    h_ADCAmpl345_HE = new TH1F("h_ADCAmpl345_HE"," ", 70, 0.,700000.);
-    h_ADCAmplZoom1_HE = new TH1F("h_ADCAmplZoom1_HE"," ", 100, 0.,100000.);
-    h_ADCAmpl_HE = new TH1F("h_ADCAmpl_HE"," ", 200, 0.,2000000.);
 
+    // Aijk Amplitude:
+    h_ADCAmplZoom1_HE = new TH1F("h_ADCAmplZoom1_HE"," ",npfit, 0.,anpfit);// for amplmaxts 1TS w/ max
+    h_ADCAmpl345Zoom1_HE = new TH1F("h_ADCAmpl345Zoom1_HE"," ", npfit, 0.,anpfit);// for ampl3ts 3TSs
+    h_ADCAmpl345Zoom_HE = new TH1F("h_ADCAmpl345Zoom_HE"," ", npfit, 0.,anpfit); // for ampl 4TSs
+    h_amplitudeaveragedbydepthes_HE = new TH1F("h_amplitudeaveragedbydepthes_HE"," ", npfit, 0.,anpfit); // for cross-check: A spectrum
+    h_ndepthesperamplitudebins_HE = new TH1F("h_ndepthesperamplitudebins_HE"," ",10, 0.,10.);// for cross-check: ndepthes
+
+    // Ampl12 4TSs to work with "ped-Gsel0" or "led-low-intensity" to clarify gain diff peak2-peak1
+    h_mapADCAmplfirstpeak_HE = new TH2F("h_mapADCAmplfirstpeak_HE"," ", 82, -41., 41., 72, 0., 72.);// for amplmaxts 1TS w/ max
+    h_mapADCAmplfirstpeak0_HE = new TH2F("h_mapADCAmplfirstpeak0_HE"," ", 82, -41., 41., 72, 0., 72.);// for amplmaxts 1TS w/ max
+    h_mapADCAmplsecondpeak_HE = new TH2F("h_mapADCAmplsecondpeak_HE"," ", 82, -41., 41., 72, 0., 72.);// for amplmaxts 1TS w/ max
+    h_mapADCAmplsecondpeak0_HE = new TH2F("h_mapADCAmplsecondpeak0_HE"," ", 82, -41., 41., 72, 0., 72.);// for amplmaxts 1TS w/ max
+
+    h_mapADCAmpl11firstpeak_HE = new TH2F("h_mapADCAmpl11firstpeak_HE"," ", 82, -41., 41., 72, 0., 72.);// for ampl3ts 3TSs
+    h_mapADCAmpl11firstpeak0_HE = new TH2F("h_mapADCAmpl11firstpeak0_HE"," ", 82, -41., 41., 72, 0., 72.);// for ampl3ts 3TSs
+    h_mapADCAmpl11secondpeak_HE = new TH2F("h_mapADCAmpl11secondpeak_HE"," ", 82, -41., 41., 72, 0., 72.);// for ampl3ts 3TSs
+    h_mapADCAmpl11secondpeak0_HE = new TH2F("h_mapADCAmpl11secondpeak0_HE"," ", 82, -41., 41., 72, 0., 72.);// for ampl3ts 3TSs
+
+    h_mapADCAmpl12firstpeak_HE = new TH2F("h_mapADCAmpl12firstpeak_HE"," ", 82, -41., 41., 72, 0., 72.);// for ampl 4TSs
+    h_mapADCAmpl12firstpeak0_HE = new TH2F("h_mapADCAmpl12firstpeak0_HE"," ", 82, -41., 41., 72, 0., 72.);// for ampl 4TSs
+    h_mapADCAmpl12secondpeak_HE = new TH2F("h_mapADCAmpl12secondpeak_HE"," ", 82, -41., 41., 72, 0., 72.);// for ampl 4TSs
+    h_mapADCAmpl12secondpeak0_HE = new TH2F("h_mapADCAmpl12secondpeak0_HE"," ", 82, -41., 41., 72, 0., 72.);// for ampl 4TSs
+
+    // Ampl12 4TSs to work with "ped-Gsel0" or "led-low-intensity" to clarify gain diff peak2-peak1  fit results:
+    h_gsmdifferencefit1_HE = new TH1F("h_gsmdifferencefit1_HE"," ", 80, 20.,60.);
+    h_gsmdifferencefit2_HE = new TH1F("h_gsmdifferencefit2_HE"," ", 80, 20.,60.);
+    h_gsmdifferencefit3_HE = new TH1F("h_gsmdifferencefit3_HE"," ", 80, 20.,60.);
+    h_gsmdifferencefit4_HE = new TH1F("h_gsmdifferencefit4_HE"," ", 80, 20.,60.);
+    h_gsmdifferencefit5_HE = new TH1F("h_gsmdifferencefit5_HE"," ", 80, 20.,60.);
+    h_gsmdifferencefit6_HE = new TH1F("h_gsmdifferencefit6_HE"," ", 80, 20.,60.);
+
+
+    // Aijk Amplitude:
+    h_ADCAmpl_HE = new TH1F("h_ADCAmpl_HE"," ", 200, 0.,2000000.);
+    h_ADCAmpl345_HE = new TH1F("h_ADCAmpl345_HE"," ", 70, 0.,700000.);
+
+    // SiPM corrections:
     h_corrforxaMAIN_HE = new TH1F("h_corrforxaMAIN_HE"," ", 70, 0.,700000.);
     h_corrforxaMAIN0_HE = new TH1F("h_corrforxaMAIN0_HE"," ", 70, 0.,700000.);
     h_corrforxaADDI_HE = new TH1F("h_corrforxaADDI_HE"," ", 70, 0.,700000.);
@@ -7519,9 +7608,8 @@ void VeRawAnalyzer::fillDigiErrorsQIE11(QIE11DataFrame qie11df)
     for (int ii=0; ii<nTS; ii++) {  
       int adc = qie11df[ii].adc();
 
-
-      //      double ampldefault =adc2fC_QIE11_shunt1[ adc ];
       double ampldefault =adc2fC_QIE11_shunt6[ adc ];
+      if(flaguseshunt_ == 1) ampldefault =adc2fC_QIE11_shunt1[ adc ];
 
 
       ampl+=ampldefault;// 
@@ -8657,7 +8745,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
       //     h_mapDepth1ADCAmpl12SiPM_HE
       //   //   //   //   //   //   //   //   //  HE       ADCAmpl:
       if(studyADCAmplHist_) {
-	h_ADCAmpl345Zoom_HE->Fill(amplitude345,1.);
+	h_ADCAmpl345Zoom_HE->Fill(ampl,1.);
 	h_ADCAmpl345Zoom1_HE->Fill(amplitude345,1.);
 	h_ADCAmpl345_HE->Fill(amplitude345,1.);
 	h_ADCAmpl_HE->Fill(amplitude,1.);
@@ -8910,6 +8998,8 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
     double absamplitude = 0.;
     double amplitude345 = 0.;
     double ampl = 0.;
+    double ampl3ts = 0.;
+    double amplmaxts = 0.;
     double timew = 0.;
     double timeww = 0.;
     double max_signal = -100.;
@@ -8937,7 +9027,9 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
 
       ///////   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    MAKE A CHOISE OF SHUNT:  shunt1 or shunt6 ????  !!
       //    ampldefault0 = adc2fC_QIE11_shunt1[ qie11df[ii].adc() ];// massive !!!!!!
-      ampldefault0 = adc2fC_QIE11_shunt6[ qie11df[ii].adc() ];// massive !!!!!!
+      // ampldefault0 = adc2fC_QIE11_shunt6[ qie11df[ii].adc() ];// massive !!!!!!
+      ampldefault0 =adc2fC_QIE11_shunt6[ qie11df[ii].adc() ];// massive !!!!!!
+      if(flaguseshunt_ == 1) ampldefault0 =adc2fC_QIE11_shunt1[ qie11df[ii].adc() ];// massive !!!!!!
       ///////   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
@@ -9118,17 +9210,18 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
     //    if (verbosity == -2324) std::cout << std::endl << "*** E = " << ampl << "   ACD -> fC -> (gain ="<< calib.respcorrgain(0) << ") GeV (ped.subtracted)" << std::endl;
     // ------------ to get signal in TS: -2 max +1  ------------
     
-    if(ts_with_max_signal > -1 && ts_with_max_signal < 10) ampl = tool[ts_with_max_signal];
-    if(ts_with_max_signal+2 > -1 && ts_with_max_signal+2 < 10) ampl += tool[ts_with_max_signal+2];
-    if(ts_with_max_signal+1 > -1 && ts_with_max_signal+1 < 10) ampl += tool[ts_with_max_signal+1];
-    if(ts_with_max_signal-1 > -1 && ts_with_max_signal-1 < 10) ampl += tool[ts_with_max_signal-1];
+    if(ts_with_max_signal > -1 && ts_with_max_signal < 10) {ampl = tool[ts_with_max_signal];ampl3ts = tool[ts_with_max_signal];amplmaxts = tool[ts_with_max_signal];}
+    if(ts_with_max_signal-1 > -1 && ts_with_max_signal-1 < 10) {ampl += tool[ts_with_max_signal-1];ampl3ts += tool[ts_with_max_signal-1];}
+    if(ts_with_max_signal+1 > -1 && ts_with_max_signal+1 < 10) {ampl += tool[ts_with_max_signal+1];ampl3ts += tool[ts_with_max_signal+1];}
+    if(ts_with_max_signal+2 > -1 && ts_with_max_signal+2 < 10) {ampl += tool[ts_with_max_signal+2];}
 
     //  if(ts_with_max_signal+1 > -1 && ts_with_max_signal+1 < 10) ampl += tool[ts_with_max_signal+1];
     //  if(ts_with_max_signal-1 > -1 && ts_with_max_signal-1 < 10) ampl += tool[ts_with_max_signal-1];
     //  if(ts_with_max_signal-2 > -1 && ts_with_max_signal-2 < 10) ampl += tool[ts_with_max_signal-2];
 
-      ///////   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      !!!!!!!!!!!!!!!!!! HE charge correction for SiPMs:
-      // HE charge correction for SiPMs:
+    ///////   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      !!!!!!!!!!!!!!!!!! HE charge correction for SiPMs:
+    // HE charge correction for SiPMs:
+    if(flagsipmcorrection_ != 0 ) {
       if(sub == 2 ) { 
 	// parametrization of SiPM non-linearity function for:
 	//                                         amplitude345, amplitude, ampl, :
@@ -9142,24 +9235,25 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
 	// calculation example:
 	//    1.32877e-10*1000*1000 + 2.71238e-05*1000 + 1. = 1.027256677
 	//    1.32877e-10*10000*10000 + 2.71238e-05*10000 + 1. = 1.2845257
-	double xa = amplitude/40.;double xb = ampl/40.;double xc = amplitude345/40.;
+	double xa = amplitude/40.;double xb = ampl/40.;double xc = amplitude345/40.;double xd = ampl3ts/40.;double xe = amplmaxts/40.;
 	// ADDI case:
 	if( ((ieta==-16||ieta==15) && mdepth==4) ||  ((ieta==-17||ieta==16) && (mdepth==2||mdepth==3)) || ((ieta==-18||ieta==17) && mdepth==5) ) {
 	  double c0 = 1.000000;double b1 = 2.59096e-05;double a2 = 4.60721e-11;
-	  double corrforxa = a2*xa*xa + b1*xa + c0;double corrforxb = a2*xb*xb + b1*xb + c0;double corrforxc = a2*xc*xc + b1*xc + c0;
+	  double corrforxa = a2*xa*xa + b1*xa + c0;double corrforxb = a2*xb*xb + b1*xb + c0;double corrforxc = a2*xc*xc + b1*xc + c0;double corrforxd = a2*xd*xd + b1*xd + c0;double corrforxe = a2*xe*xe + b1*xe + c0;
 	  h_corrforxaADDI_HE->Fill(amplitude, corrforxa);
 	  h_corrforxaADDI0_HE->Fill(amplitude, 1.);
-	  amplitude *= corrforxa;ampl *= corrforxb;amplitude345 *= corrforxc;
+	  amplitude *= corrforxa;ampl *= corrforxb;amplitude345 *= corrforxc;ampl3ts *= corrforxd;amplmaxts *= corrforxe;
 	}
 	// MAIN case:
 	else {
 	  double c0 = 1.000000;double b1 = 2.71238e-05;double a2 = 1.32877e-10;
-	  double corrforxa = a2*xa*xa + b1*xa + c0;double corrforxb = a2*xb*xb + b1*xb + c0;double corrforxc = a2*xc*xc + b1*xc + c0;
+	  double corrforxa = a2*xa*xa + b1*xa + c0;double corrforxb = a2*xb*xb + b1*xb + c0;double corrforxc = a2*xc*xc + b1*xc + c0;double corrforxd = a2*xd*xd + b1*xd + c0;double corrforxe = a2*xe*xe + b1*xe + c0;
 	  h_corrforxaMAIN_HE->Fill(amplitude, corrforxa);
 	  h_corrforxaMAIN0_HE->Fill(amplitude, 1.);
-	  amplitude *= corrforxa;ampl *= corrforxb;amplitude345 *= corrforxc;
+	  amplitude *= corrforxa;ampl *= corrforxb;amplitude345 *= corrforxc;ampl3ts *= corrforxd;amplmaxts *= corrforxe;
 	}
       }// sub == 2   HE charge correction end
+    }//flagsipmcorrection_
       ///////   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      !!!!!!!!!!!!!!!!!!
 
     amplitudechannel[sub-1][mdepth-1][ieta+41][iphi] += amplitude;// 0-82 ; 0-71  HBHE
@@ -9627,13 +9721,12 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
       }//
       //   //   //   //   //   //   //   //   //  HE  QIE11     ADCAmpl:
       if(studyADCAmplHist_) {
-	h_ADCAmpl345Zoom_HE->Fill(amplitude345,1.);
-	h_ADCAmpl345Zoom1_HE->Fill(amplitude345,1.);
 	h_ADCAmpl345_HE->Fill(amplitude345,1.);
 	h_ADCAmpl_HE->Fill(amplitude,1.);
 	//	if( ieta <0) h_ADCAmpl_HEM->Fill(amplitude,1.);
 	//	if( ieta >0) h_ADCAmpl_HEP->Fill(amplitude,1.);
-	h_ADCAmplZoom1_HE->Fill(amplitude,1.);
+
+
 	if(amplitude < ADCAmplHEMin_  || amplitude > ADCAmplHEMax_) {
 	  if(studyRunDependenceHist_ && flagtodefinebadchannel_==5) ++badchannels[sub-1][mdepth-1][ieta+41][iphi];// 0-82 ; 0-71
 	  if(mdepth==1) h_mapDepth1ADCAmpl225_HE->Fill(double(ieta), double(iphi), 1.);
@@ -9655,7 +9748,63 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
 	  if(mdepth==6) h_mapDepth6ADCAmpl225Copy_HE->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==7) h_mapDepth7ADCAmpl225Copy_HE->Fill(double(ieta), double(iphi), 1.);
 	}// if
-	//
+	//		if(mdepth==1 && ieta == 28 &&   iphi == 63) {
+	//	if(mdepth==1) {
+	//	  int iamplitude = int(amplitude);// use all TSs  11111111111111111111
+	//	  int iamplitude = int(amplmaxts);// use 1TS    1111111111111111111111
+	//	  int iamplitude = int(ampl3ts);// use 3TSs      2222222222222222222222
+	int iamplitude = int(ampl/binanpfit);// use 4TSs         333333333333333333333
+
+	//	  std::cout << " ampl= " <<ampl << " binanpfit= " <<binanpfit << " iamplitude = " <<iamplitude << std::endl;	  
+	
+	
+	  if(iamplitude>-1 && iamplitude<npfit) { 
+	    ++gsmdepth1sipm[iamplitude][ieta][iphi][mdepth-1];
+	    //	    std::cout << " ieta= " <<ieta << " iphi= " <<iphi << " mdepth= " <<mdepth << " Naijk = " <<gsmdepth1sipm[iamplitude][ieta][iphi][mdepth-1] << std::endl; 
+	  }	  
+	//ieta = 28iphi = 63     60-61   64-67
+	h_ADCAmplZoom1_HE->Fill(amplitude,1.);// for amplitude allTS
+	//	h_ADCAmplZoom1_HE->Fill(amplmaxts,1.);// for amplmaxts 1TS w/ max
+	h_ADCAmpl345Zoom1_HE->Fill(ampl3ts,1.);// for ampl3ts 3TSs
+	h_ADCAmpl345Zoom_HE->Fill(ampl,1.);// for ampl 4TSs
+	
+	// amplmaxts 1TS                        1111111111111111111111111111111                  ///
+	//	if(amplmaxts>10 && amplmaxts<35 ) {
+	if(amplitude>110 && amplitude< 150 ) {
+	  //	    cout <<    "ieta = "    << ieta    <<    "iphi = "    << iphi    << endl;
+	  h_mapADCAmplfirstpeak_HE->Fill(double(ieta), double(iphi), amplitude);
+	  h_mapADCAmplfirstpeak0_HE->Fill(double(ieta), double(iphi), 1.);
+	}
+	//	else if(amplmaxts>35 && amplmaxts<100 ) {
+	else if(amplitude> 150 && amplitude< 190 ) {
+	  h_mapADCAmplsecondpeak_HE->Fill(double(ieta), double(iphi), amplitude);
+	  h_mapADCAmplsecondpeak0_HE->Fill(double(ieta), double(iphi), 1.);
+	}  
+
+	// ampl = 3TSs                           2222222222222222222222222222222               ///
+	//	if(ampl3ts>20 && ampl3ts< 55 ) {
+	if(ampl3ts> 70 && ampl3ts< 110 ) {
+	  h_mapADCAmpl11firstpeak_HE->Fill(double(ieta), double(iphi), ampl3ts);
+	  h_mapADCAmpl11firstpeak0_HE->Fill(double(ieta), double(iphi), 1.);
+	}
+	//	else if(ampl3ts> 55 && ampl3ts<90 ) {
+	else if(ampl3ts> 110 && ampl3ts< 150 ) {
+	  h_mapADCAmpl11secondpeak_HE->Fill(double(ieta), double(iphi), ampl3ts);
+	  h_mapADCAmpl11secondpeak0_HE->Fill(double(ieta), double(iphi), 1.);
+	}  
+	// ampl = 4TSs                      33333333333333333333333333333333333                ///
+	//	if(ampl>20 && ampl< 67 ) {
+	if(ampl>87 && ampl< 127) {
+	  h_mapADCAmpl12firstpeak_HE->Fill(double(ieta), double(iphi), ampl);
+	  h_mapADCAmpl12firstpeak0_HE->Fill(double(ieta), double(iphi), 1.);
+	}
+	//	else if(ampl> 67 && ampl<120 ) {
+	else if(ampl> 127 && ampl< 167 ) {
+	  h_mapADCAmpl12secondpeak_HE->Fill(double(ieta), double(iphi), ampl);
+	  h_mapADCAmpl12secondpeak0_HE->Fill(double(ieta), double(iphi), 1.);
+	}  
+	//    }//(mdepth==1
+      //
 	// for averaged values of every channel:
 	if(mdepth==1) h_mapDepth1ADCAmpl_HE->Fill(double(ieta), double(iphi), amplitude);
 	if(mdepth==2) h_mapDepth2ADCAmpl_HE->Fill(double(ieta), double(iphi), amplitude);
@@ -11408,8 +11557,115 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
   
   if (verbosity > 0 ) std::cout << "==============    endRun  ==================================  run0 =  " << run0  << " nevcounter0 = " <<nevcounter0 << " nevcounter = " <<nevcounter << std::endl;
   if (verbosity == -7778 ) std::cout << "endRUN: ls0 = " <<ls0 << " lumi = " <<lumi << " run0 = " <<run0 << " nevcounter0 = " <<nevcounter0 << " nevcounter = " <<nevcounter << std::endl;
-  /////////////////////////////// -------------------------------------------------------------------to take into account last LS in Run
 
+
+  ////////////////////   fit stuff:
+  if(flagfitshunt1pedorledlowintensity_ != 0 ) {
+    /////////////////////////////// ------------------------------------------------------------------- gsm gain on: "ped-Gsel0" or "led-low-intensity-Gsel0"
+    //  long int gsmdepth1sipm3[npfit][82][72];
+    double gsmdepth1sipm3[npfit][82][72];
+    for(int k2 = 0; k2<82; k2++) {
+      for(int k3 = 0; k3<72; k3++) {
+	
+	// averaging over depthes:
+	for(int k1 = 0; k1<npfit; k1++) {
+	  gsmdepth1sipm3[k1][k2][k3] = 0;
+	  // 
+	  if(gsmdepth1sipm[k1][k2][k3][6] != 0) std::cout << " k1= " <<k1 << " k2= " <<k2 << " k3 = " <<k3 << " N = " <<gsmdepth1sipm[k1][k2][k3][6] << std::endl;	
+	  
+	  float totsum=0.; long int ntotsum=0;	
+	  for(int k4 = 0; k4<7; k4++) {
+	    //	  	  std::cout << " k1= " <<k1 << " k2= " <<k2 << " k3 = " <<k3 << " k4 = " <<k4 << " N = " <<gsmdepth1sipm[k1][k2][k3][k4] << std::endl;	 
+	    if(gsmdepth1sipm[k1][k2][k3][k4]  != 0) {
+	      totsum += 1.;
+	      ntotsum += gsmdepth1sipm[k1][k2][k3][k4];
+	      //	    std::cout << " k1= " <<k1 << " k2= " <<k2 << " k3 = " <<k3 << " k4 = " <<k4 << " totsum = " <<totsum << " ntotsum = " <<ntotsum << " N = " <<gsmdepth1sipm[k1][k2][k3][k4] << std::endl;	  
+	    }// if
+	  }// for k4
+	  
+	  if(totsum != 0.) {
+	    gsmdepth1sipm3[k1][k2][k3] = ntotsum/totsum;
+	    // cross-check:
+	    h_ndepthesperamplitudebins_HE->Fill(totsum, 1.);    
+	    h_amplitudeaveragedbydepthes_HE->Fill(k1,gsmdepth1sipm3[k1][k2][k3]);    
+	  } // if totsum
+	  
+	}// for k1
+	// averaging over depthes result is gsmdepth1sipm3[k1][k2][k3]
+	
+	
+	int marka1=0;     
+	// Create a histogram and set it's contents
+	TH1F* h_forgaussfit = new TH1F("forgaussfit","", npfit,0.,anpfit);
+	for(int k1 = 0; k1<npfit; k1++) {
+	  if(gsmdepth1sipm3[k1][k2][k3]  != 0.) {
+	    marka1 = 1;
+	    h_forgaussfit->SetBinContent(k1+1,gsmdepth1sipm3[k1][k2][k3]);
+	  }//if
+	}// for(int k1 
+	
+	if(marka1 == 0 ) break;
+	
+	//First, four TF1 objects are created - one for each sub-range:
+      	TF1* g1 = new TF1("m1","gaus",55,77);
+      	TF1* g2 = new TF1("m2","gaus",95,125);
+      	TF1* g3 = new TF1("m3","gaus",130,160);
+      	TF1* g4 = new TF1("m4","gaus",175,200);
+	// The total is the sum of the three, each has 3 parameters
+	TF1* total = new TF1("mstotal","gaus(0)+gaus(3)+gaus(6)+gaus(9)",55,200);
+	// Define the parameter array for the total function
+	Double_t par[12];
+	//
+	// Fit each function and add it to the list of functions
+	/*
+	  hist.Fit("gaus");
+	  TF1  *f1 = new TF1("f1","sin(x)/x",0,10);
+	  TF1  *f2 = new TF1("f2","f1*2",0,10);
+	  TF1 *f1 = new TF1("f1","[0]*x*sin([1]*x)",-3,3);
+	  f1->SetParameters(10,5);
+	  f1->Draw();
+	*/
+	h_forgaussfit->Fit(g1,"R");
+	h_forgaussfit->Fit(g2,"R+");
+	h_forgaussfit->Fit(g3,"R+");
+	h_forgaussfit->Fit(g4,"R+");
+	// Get the parameters from the fit
+	g1->GetParameters(&par[0]);
+	g2->GetParameters(&par[3]);
+	g3->GetParameters(&par[6]);
+	g4->GetParameters(&par[9]);
+	//	cout << " ===================================              111111                  ============================= "<< endl;     
+	//	cout << "par0= "<< par[0] << " par1 = "<< par[1] << " par2 = "<< par[2] << " par3 = "<< par[3] << " par4 = "<< par[4] << " par5 = "<< par[5] << " par6 = "<< par[6] << " par7 = "<< par[7] << " par8 = "<< par[8] << endl;  
+	//	cout << " for k2= "<< k2 << " k3= "<< k3 << " diff: par4 - par1 = "<< par[4]-par[1] << " diff: par7 - par4 = "<< par[7]-par[4] << endl;     
+	h_gsmdifferencefit1_HE->Fill(par[4]-par[1],  1.);    
+	h_gsmdifferencefit2_HE->Fill(par[7]-par[4],  1.);    
+	h_gsmdifferencefit3_HE->Fill(par[10]-par[7], 1.);    
+	
+	// Use the parameters on the sum
+	total->SetParameters(par);
+	h_forgaussfit->Fit(total,"R+");
+	// Get the parameters from the total fit
+	total->GetParameters(&par[0]);
+	//	cout << " ==================================              222222                   ============================= "<< endl;     
+	//	cout << "par0= "<< par[0] << " par1 = "<< par[1] << " par2 = "<< par[2] << " par3 = "<< par[3] << " par4 = "<< par[4] << " par5 = "<< par[5] << " par6 = "<< par[6] << " par7 = "<< par[7] << " par8 = "<< par[8] << endl;  
+	//	cout << " for k2= "<< k2 << " k3= "<< k3 << " diff: par4 - par1 = "<< par[4]-par[1] << " diff: par7 - par4 = "<< par[7]-par[4] << endl;     
+ 	h_gsmdifferencefit4_HE->Fill(par[4]-par[1],  1.);    
+	h_gsmdifferencefit5_HE->Fill(par[7]-par[4],  1.);    
+	h_gsmdifferencefit6_HE->Fill(par[10]-par[7], 1.);    
+	
+	
+      }// for k3
+    }// for k2
+  }// if flag...
+  //////////////////////////////////   end of fit stuff
+
+
+
+
+
+
+  
+  /////////////////////////////// -------------------------------------------------------------------to take into account last LS in Run
   if(usecontinuousnumbering_) { lscounterM1 = lscounter - 1; }
   else {lscounterM1 = ls0; }
 
@@ -12647,10 +12903,10 @@ void VeRawAnalyzer::endJob(){
 */
 
  
-  cout  <<  " --------------------------------------- "  <<  endl;
-  cout<<" for Run = "<<run0<<" with runcounter = "<< runcounter <<" #ev = "<<eventcounter<<endl;
-  cout  << " #LS =  "  << lscounterrun << " #LS10 =  "  << lscounterrun10 << " Last LS =  "  << ls0 <<  endl;
-  cout  <<  " --------------------------------------------- "  <<  endl;
+  std::cout  <<  " --------------------------------------- "  <<  std::endl;
+  std::cout<<" for Run = "<<run0<<" with runcounter = "<< runcounter <<" #ev = "<<eventcounter<<std::endl;
+  std::cout  << " #LS =  "  << lscounterrun << " #LS10 =  "  << lscounterrun10 << " Last LS =  "  << ls0 <<  std::endl;
+  std::cout  <<  " --------------------------------------------- "  <<  std::endl;
   h_nls_per_run->Fill(float(lscounterrun) );
   h_nls_per_run10->Fill(float(lscounterrun10) );
   
@@ -12980,6 +13236,27 @@ void VeRawAnalyzer::endJob(){
     h_mapDepth6ADCAmpl225_HE->Write();
     h_mapDepth7ADCAmpl225_HE->Write();
 
+    h_mapADCAmplfirstpeak_HE->Write();
+    h_mapADCAmplfirstpeak0_HE->Write();
+    h_mapADCAmplsecondpeak_HE->Write();
+    h_mapADCAmplsecondpeak0_HE->Write();
+    h_mapADCAmpl11firstpeak_HE->Write();
+    h_mapADCAmpl11firstpeak0_HE->Write();
+    h_mapADCAmpl11secondpeak_HE->Write();
+    h_mapADCAmpl11secondpeak0_HE->Write();
+    h_mapADCAmpl12firstpeak_HE->Write();
+    h_mapADCAmpl12firstpeak0_HE->Write();
+    h_mapADCAmpl12secondpeak_HE->Write();
+    h_mapADCAmpl12secondpeak0_HE->Write();
+    
+    h_gsmdifferencefit1_HE->Write();
+    h_gsmdifferencefit2_HE->Write();
+    h_gsmdifferencefit3_HE->Write();
+    h_gsmdifferencefit4_HE->Write();
+    h_gsmdifferencefit5_HE->Write();
+    h_gsmdifferencefit6_HE->Write();
+
+    
     h_mapDepth1ADCAmpl_HE->Write();
     h_mapDepth2ADCAmpl_HE->Write();
     h_mapDepth3ADCAmpl_HE->Write();
@@ -14210,6 +14487,12 @@ void VeRawAnalyzer::endJob(){
     h_sigLayer2RADDAM5_HED2->Write();
     h_sigLayer2RADDAM6_HED2->Write();
     h_mapDepth3RADDAM16_HE->Write();
+
+    h_amplitudeaveragedbydepthes_HE->Write();
+    h_ndepthesperamplitudebins_HE->Write();
+
+
+
 
     /*
 // forStudy only
