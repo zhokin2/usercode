@@ -860,9 +860,9 @@ yearcase=3:  since 10.05.2016  up to  30.10.2017
 	  if( Ceff1->GetBinContent(jjj,kkk) != 0.) cout<<"*111111************ jjj = " << jjj<<   "************* kkk = " << kkk <<endl;
 	  if( Ceff2->GetBinContent(jjj,kkk) != 0.) cout<<"*******222****** jjj = " << jjj<<  "************* kkk = " << kkk <<endl;
 	  if( Ceff3->GetBinContent(jjj,kkk) != 0.) cout<<"**********3*** jjj = " << jjj<<  "************* kkk = " << kkk <<endl;
-	}
-      }
-    }
+	}//jjj
+      }//kkk
+    }// if(verbosity == 2 )
     //////////////////////////////////////////////////////////////////////////////////   see raddam done
     // fill massive <Aijk>_runevents ,  where iii=depth, jjj=eta, kkk=phi
     for (int jjj=0;jjj<nx;jjj++) {
