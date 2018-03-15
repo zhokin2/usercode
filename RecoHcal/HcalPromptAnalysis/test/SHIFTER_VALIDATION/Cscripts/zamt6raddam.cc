@@ -676,8 +676,10 @@ int main(int argc, char *argv[])
       cout<<"****Draw 4 Dependencies: gains LED runs   *** " <<endl;
       gPad->SetGridy();
       gPad->SetGridx();
-      gPad->SetLogy();
-      gStyle->SetOptStat(1110000); 
+      //    gPad->SetLogy();
+      //    gStyle->SetOptStat(1110000); 
+      //      gStyle->SetOptStat(101110);// entries, mean, rms, overflow
+      gStyle->SetOptStat(1100);// only mean & rms
       gainkoeff->SetMarkerStyle(20);
       gainkoeff->SetMarkerSize(0.4);
       gainkoeff->GetYaxis()->SetLabelSize(0.04);
