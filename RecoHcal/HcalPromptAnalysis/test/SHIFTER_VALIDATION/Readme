@@ -1,35 +1,40 @@
 ssh lxplus
-cd ~/ztest
-setenv SCRAM_ARCH slc6_amd64_gcc530 
+cd roc5
+setenv SCRAM_ARCH slc6_amd64_gcc630 
 cmsenv
 voms-proxy-init -voms cms -rfc 
 
-emacs runlist_test
+emacs runlist_test &
+emacs a.py.end a.py.beg batchjobs120.csh checkoutput120.csh file_lists.csh run_batch120.csh runlist_test Readme mkcfg_new120.csh &
 
-297169
+---------------------------------------------------------------------------------------to run in batches:
+./run_batch120.csh runlist_test
+bjobs
 
+
+
+-------------------------------------------
+------------------------------------------------------------------------------------------------- to find dataset:
+311668
  You have to have correct permissions for GRID and DAS access !!! Use:
                          voms-proxy-init -voms cms -rfc 
 Use DBS to clarify dataset=/ZeroBias/Run2017B-v1/RAW in file_lists.csh as for instance for run 297169
 https://cmsweb.cern.ch/das/request?view=list&limit=150&instance=prod%2Fglobal&input=dataset+run%3D283884
 by command: dataset run=297169
 Result is: Dataset: /ZeroBias/Run2017B-v1/RAW
-emacs file_lists.csh
+emacs file_lists.csh &
+------------------------------------------------------------------------------------------------- compilation:
 
 cd ../../src/
 scram b
 cd -
-
+---------------------------------------------------------------------------------------
 // no batches , but only to create dir. w/ PYTHONs (for future interactive running):
 ./mkcfg_new120.csh runlist_test
-
-// right to run in batches:
-./run_batch120.csh runlist_test
-bjobs
-
+---------------------------------------------------------------------------------------
 ./checkoutput120.csh PYTHON_runlist_test longruns
 ./glu_runs_fromfile.csh longruns runlist_test
-
+---------------------------------------------------------------------------------------
 
 eos cp Global_297169.root 
 /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Global_297169.root
@@ -39,6 +44,7 @@ eos ls -l /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/h
 ./index_toAddOnlyNewRuns_EOS.sh runlist_test
 eos cp OLDindex.html /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/OLDindex.html
 eos cp index_draft.html /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/index.html
-
+---------------------------------------------------------------------------------------
 ./CMT_EOS.sh runlist_test
 ./GlobalRMT_EOS.sh runlist_test
+---------------------------------------------------------------------------------------
