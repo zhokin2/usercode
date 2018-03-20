@@ -286,19 +286,19 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   # Verbosity = cms.untracked.int32(-80),
                                   #Verbosity = cms.untracked.int32(-79),
                                   # cuts on Estimator1:A to see bcs & LS dependences:
-                                  lsdep_estimator1_HBdepth1 = cms.double(35.),
-                                  lsdep_estimator1_HBdepth2 = cms.double(35.),
-                                  lsdep_estimator1_HEdepth1 = cms.double(55.),
-                                  lsdep_estimator1_HEdepth2 = cms.double(60.),
-                                  lsdep_estimator1_HEdepth3 = cms.double(70.),
-                                  lsdep_estimator1_HEdepth4 = cms.double(55.),
-                                  lsdep_estimator1_HEdepth5 = cms.double(60.),
-                                  lsdep_estimator1_HEdepth6 = cms.double(70.),
-                                  lsdep_estimator1_HEdepth7 = cms.double(70.),
-                                  lsdep_estimator1_HFdepth1 = cms.double(150.),
-                                  lsdep_estimator1_HFdepth2 = cms.double(120.),
-                                  lsdep_estimator1_HFdepth3 = cms.double(100.),
-                                  lsdep_estimator1_HFdepth4 = cms.double(100.),
+                                  lsdep_estimator1_HBdepth1 = cms.double(350.),
+                                  lsdep_estimator1_HBdepth2 = cms.double(350.),
+                                  lsdep_estimator1_HEdepth1 = cms.double(5500.),
+                                  lsdep_estimator1_HEdepth2 = cms.double(6000.),
+                                  lsdep_estimator1_HEdepth3 = cms.double(7000.),
+                                  lsdep_estimator1_HEdepth4 = cms.double(5500.),
+                                  lsdep_estimator1_HEdepth5 = cms.double(6000.),
+                                  lsdep_estimator1_HEdepth6 = cms.double(7000.),
+                                  lsdep_estimator1_HEdepth7 = cms.double(7000.),
+                                  lsdep_estimator1_HFdepth1 = cms.double(1500.),
+                                  lsdep_estimator1_HFdepth2 = cms.double(1200.),
+                                  lsdep_estimator1_HFdepth3 = cms.double(1000.),
+                                  lsdep_estimator1_HFdepth4 = cms.double(1000.),
                                   lsdep_estimator1_HOdepth4 = cms.double(300.),
                                   # cuts on Estimator2:Tn to see bcs & LS dependences:
                                   lsdep_estimator2_HBdepth1 = cms.double(5.),
@@ -389,16 +389,18 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   flagupgradeqie1011 = cms.int32(6),
                                   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
                                   #end upgrade: --------------------------------------------------------- end upgrade
-                                  # flaguseshunt = 1 or 6 (6 is default for global runs) 
-                                  flaguseshunt = cms.int32(1),
-                                  # flagsipmcorrection: != 0 yes,apply; = 0 do not use;
+                                  #
+                                  # flaguseshunt = 1 or 6          (6 is default for global runs) 
+                                  flaguseshunt = cms.int32(6),
+                                  #
+                                  # flagsipmcorrection: != 0 yes,apply; = 0 do not use; (always USE SiPM corrections )
                                   flagsipmcorrection = cms.int32(1),
                                   #
                                   #
                                   # for local LASER runs ONLY!!! to be > 0    (,else = 0)
                                   flagLaserRaddam = cms.int32(0),
                                   # for gaussian fit for local shunt1 (Gsel0) led low-intensity or ped ONLY!!! to be  > 0    (,else = 0)
-                                  flagfitshunt1pedorledlowintensity = cms.int32(1),
+                                  flagfitshunt1pedorledlowintensity = cms.int32(0),
                                   #
                                   #
                                   #
@@ -418,10 +420,30 @@ process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
     dump = cms.untracked.vstring(''),
     file = cms.untracked.string('')
 )
+######################################################################################## Global Tags for 2018 data taking :
+# use twiki site to specify HLT reconstruction Global tags:
+#   https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFrontierConditions
+#
+#   100X_dataRun2_HLT_v2 	for CMSSW_10_0_3 onwards 	CRUZET 2018 	update of 0T templates for SiPixels
+#   100X_dataRun2_HLT_v1 	for CMSSW_10_0_0 onwards 	MWGRs 2018 	first HLT GT for 2018 
+#
+#
+############################################################################ GlobalTag :1+ good as 5
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-#process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data_FULL', '')
 process.GlobalTag = GlobalTag(process.GlobalTag, '100X_dataRun2_HLT_v2', '')
-############################################################################
+############################################################################ GlobalTag :2- error no running
+#process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+#process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data_FULL', '')
+############################################################################ GlobalTag :3- error no running
+#process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+#process.GlobalTag = GlobalTag(process.GlobalTag, '100X_dataRun2_HLT_v2', '')
+############################################################################ GlobalTag :4+ wrong results
+#from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
+#process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data_FULL', '')
+############################################################################ GlobalTag :5+ good as 1
+#process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+#process.GlobalTag.globaltag = '100X_dataRun2_Prompt_Candidate_2018_01_31_16_01_36'
+###########################################################################
 # V.EPSHTEIN:
 #process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 #process.GlobalTag.globaltag = '100X_dataRun2_Prompt_Candidate_2018_01_31_16_01_36'
