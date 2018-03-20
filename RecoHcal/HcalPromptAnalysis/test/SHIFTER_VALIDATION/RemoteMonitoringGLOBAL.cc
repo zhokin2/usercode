@@ -53,19 +53,19 @@ int main(int argc, char *argv[])
     
     TFile *hfile= new TFile( fname, "READ");
     // Cut [test][sub][depth]
-    //                              Empty                         HB                           HE                                      HO                          HF
-    double Cut0[7][5][8]={{{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,1.0,1.0,0.,0.,0.,0.,0.}, {0.,1.,1.,1.,0.,0.,0.,0.},               {0.,0.,0.,0.,1.,0.,0.,0.},   {0.,1.,1.,0.,0.,0.,0.,0.}         },  //CapID  0,HB,HE,HO,HF 
-		  //      {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.,0.,0.,0.}, {0.,100.,140.,150.,0.,0.,0.,0.},         {0.,0.,0.,0.,100.,0.,0.,0.}, {0.,170.,110.,170.,110.,0.,0.,0.} },  //Amplitude  0,HB,HE,HO,HF 
-                          {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.,0.,0.,0.}, {0.,110.,130.,180.,9999.,9999.,9999.,9999.}, {0.,0.,0.,0.,100.,0.,0.,0.}, {0.,170.,110.,170.,110.,0.,0.,0.} },  //Amplitude  0,HB,HE,HO,HF 
-			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,3.,3.,0.,0.,0.,0.,0.},   {0.,3.,3.,3.,0.,0.,0.,0.},               {0.,0.,0.,0.,3.,0.,0.,0.},   {0.,2.,2.,0.,0.,0.,0.,0.}         }, //Width  0,HB,HE,HO,HF 
-			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,0.4,0.4,0.,0.,0.,0.,0.}, {0.,0.4,0.4,0.4,0.,0.,0.,0.},            {0.,0.,0.,0.,0.4,0.,0.,0.},  {0.,0.8,0.8,0.,0.,0.,0.,0.}       }, //Ratio  0,HB,HE,HO,HF 
-			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,4.7,4.7,0.,0.,0.,0.,0.}, {0.,4.8,4.8,5.0,0.,0.,0.,0.},            {0.,0.,0.,0.,4.8,0.,0.,0.},  {0.,4.0,4.0,0.,0.,0.,0.,0.}       }, //TSn  0,HB,HE,HO,HF 
-			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,3.5,3.5,0.,0.,0.,0.,0.}, {0.,4.0,4.0,4.0,0.,0.,0.,0.},            {0.,0.,0.,0.,3.,0.,0.,0.},   {0.,3.5,3.5,0.,0.,0.,0.,0.}       }, //TSx  0,HB,HE,HO,HF 
-			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,0.,0.,0.,0.,0.,0.,0.},   {0.,0.,0.,0.,0.,0.,0.,0.},               {0.,0.,0.,0.,0.,0.,0.,0.},   {0.,0.,0.,0.,0.,0.,0.,0.}         }  }; //Empty
+    //                              Empty                         HB                           HE                                                     HO                          HF
+    double Cut0[7][5][8]={{{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,1.0,1.0,0.,0.,0.,0.,0.}, {0.,1.,1.,1.,0.,0.,0.,0.},                                {0.,0.,0.,0.,1.,0.,0.,0.},   {0.,1.,1.,0.,0.,0.,0.,0.}         },  //CapID  0,HB,HE,HO,HF 
+		  //      {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.,0.,0.,0.}, {0.,100.,140.,150.,0.,0.,0.,0.},                         {0.,0.,0.,0.,100.,0.,0.,0.}, {0.,170.,110.,170.,110.,0.,0.,0.} },  //Amplitude  0,HB,HE,HO,HF 
+                          {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.,0.,0.,0.}, {0.,1000.,1000.,1000.,1000.,1000.,1000.,1000.}, {0.,0.,0.,0.,200.,0.,0.,0.}, {0.,600000.,600000.,600000.,600000.,0.,0.,0.} },  //Amplitude  0,HB,HE,HO,HF 
+			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,3.,3.,0.,0.,0.,0.,0.},   {0.,3.,3.,3.,0.,0.,0.,0.},                               {0.,0.,0.,0.,3.,0.,0.,0.},   {0.,2.,2.,0.,0.,0.,0.,0.}         }, //Width  0,HB,HE,HO,HF 
+			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,0.4,0.4,0.,0.,0.,0.,0.}, {0.,0.4,0.4,0.4,0.,0.,0.,0.},                            {0.,0.,0.,0.,0.4,0.,0.,0.},  {0.,0.8,0.8,0.,0.,0.,0.,0.}       }, //Ratio  0,HB,HE,HO,HF 
+			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,4.7,4.7,0.,0.,0.,0.,0.}, {0.,4.8,4.8,5.0,0.,0.,0.,0.},                            {0.,0.,0.,0.,4.8,0.,0.,0.},  {0.,4.0,4.0,0.,0.,0.,0.,0.}       }, //TSn  0,HB,HE,HO,HF 
+			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,3.5,3.5,0.,0.,0.,0.,0.}, {0.,4.0,4.0,4.0,0.,0.,0.,0.},                            {0.,0.,0.,0.,3.,0.,0.,0.},   {0.,3.5,3.5,0.,0.,0.,0.,0.}       }, //TSx  0,HB,HE,HO,HF 
+			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,0.,0.,0.,0.,0.,0.,0.},   {0.,0.,0.,0.,0.,0.,0.,0.},                               {0.,0.,0.,0.,0.,0.,0.,0.},   {0.,0.,0.,0.,0.,0.,0.,0.}         }  }; //Empty
 
-    double CutAb[5][8]=   {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,20.,7.,0.,0.,0.,0.,0.},  {0.,16.,13.,4.,0.,0.,0.,0.},             {0.,0.,0.,0.,45.,0.,0.,0.},  {0.,10.,5.,0.,0.,0.,0.,0.}        }; // cut 1 for CapIdErrors 0,HB,HE,HO,HF 
+    double CutAb[5][8]=   {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,20.,7.,0.,0.,0.,0.,0.},  {0.,16.,13.,4.,0.,0.,0.,0.},                             {0.,0.,0.,0.,45.,0.,0.,0.},  {0.,10.,5.,0.,0.,0.,0.,0.}        }; // cut 1 for CapIdErrors 0,HB,HE,HO,HF 
 
-    double CutPo[5][8]=   {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,9.,3.,0.,0.,0.,0.,0.},   {0.,8.,6.,2.,0.,0.,0.,0.},               {0.,0.,0.,0.,20.,0.,0.,0.},  {0.,5.,3.,0.,0.,0.,0.,0.}         }; //cut 3 for CapIdErrors (portions) 0,HB,HE,HO,HF 
+    double CutPo[5][8]=   {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,9.,3.,0.,0.,0.,0.,0.},   {0.,8.,6.,2.,0.,0.,0.,0.},                               {0.,0.,0.,0.,20.,0.,0.,0.},  {0.,5.,3.,0.,0.,0.,0.,0.}         }; //cut 3 for CapIdErrors (portions) 0,HB,HE,HO,HF 
 
 //======================================================================
 
@@ -254,7 +254,8 @@ int main(int argc, char *argv[])
 		H_NumBadChanDepth[test][sub][k]->SetYTitle("Number of channel-LSs\b");
 		H_NumBadChanDepth[test][sub][k]->SetMarkerColor(4);
                 H_NumBadChanDepth[test][sub][k]->SetLineColor(0);
-                H_NumBadChanDepth[test][sub][k]->GetXaxis()->SetRangeUser(0, MaxLum);
+		//                H_NumBadChanDepth[test][sub][k]->GetXaxis()->SetRangeUser(0, MaxLum);
+		H_NumBadChanDepth[test][sub][k]->SetMinimum(0.8);
 		H_NumBadChanDepth[test][sub][k]->Draw("Error");
 		  	   
 	    }    
@@ -3785,7 +3786,7 @@ int main(int argc, char *argv[])
            htmlFile << "<br>"<< std::endl;
            if (test==0) {
 	     htmlFile << "<h2> 0. Rate of CapID failures over all events of Run </h2>"<< std::endl;
-	     htmlFile << "<h3> Channel legend: white - good, other colour - bad.  </h3>"<< std::endl; 
+	     htmlFile << "<h3> Channel legend: green - good, other colour - suspicious  </h3>"<< std::endl; 
 	     if (sub==1) htmlFile << " <img src=\"MapCapIdErrorHB.png\" />" << std::endl; 
 	     if (sub==2) htmlFile << " <img src=\"MapCapIdErrorHE.png\" />" << std::endl; 
 	     if (sub==3) htmlFile << " <img src=\"MapCapIdErrorHO.png\" />" << std::endl; 
@@ -3801,7 +3802,7 @@ int main(int argc, char *argv[])
              
 	   }
 	   
-	   if (test !=0) htmlFile << "<h3> Legend: Overflow corresponds to BAD LS candidates.</h3>"<< std::endl;
+	   if (test !=0) htmlFile << "<h3> see Overflow and Underflow </h3>"<< std::endl;
 	   if (test ==0) htmlFile << "<h3> Legend: dots correspond to BAD LS candidates.</h3>"<< std::endl; 
 	   
 	   if (test==0){
@@ -3909,13 +3910,13 @@ int main(int argc, char *argv[])
 	   if (test ==0) {
 	     if (sub==1) htmlFile << "<h2> 3.  Portion of events with Nbcs>"<<CutPo[sub][1]<<" (Depth1), "<<CutPo[sub][2] <<" (Depth2) in each LS.</h2>"<< std::endl;
 	     if (sub==2) htmlFile << "<h2> 3.  Portion of events with Nbcs>"<<CutPo[sub][1]<<" (Depth1), "<<CutPo[sub][2] <<" (Depth2), "<<CutPo[sub][3] <<" (Depth3) in each LS.</h2>"<< std::endl;
-	     if (sub==3) htmlFile << "<h2> 3.  Portion of events with Nbcs>"<<CutPo[sub][1]<<" (Depth4) in each LS.</h2>"<< std::endl;
+	     if (sub==3) htmlFile << "<h2> 3.  Portion of events with Nbcs>"<<CutPo[sub][4]<<" (Depth4) in each LS.</h2>"<< std::endl;
 	     if (sub==4) htmlFile << "<h2> 3.  Portion of events with Nbcs>"<<CutPo[sub][1]<<" (Depth1), "<<CutPo[sub][2] <<" (Depth2) in each LS.</h2>"<< std::endl;
 	     htmlFile << "<h3> Legend: dots correspond to BAD LS candidates.</h3>"<< std::endl;
 	   }
 	   if (test !=0){
 	     if (sub==1) htmlFile << "<h3> Legends:  dots selected with following cuts: <td class=\"s6\" align=\"center\">"<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2) correspond BAD LS.</td></h3>"<< std::endl;
-	     if (sub==2) htmlFile << "<h3> Legends:  dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3) correspond BAD LS. </h3>"<< std::endl;
+	     if (sub==2) htmlFile << "<h3> Legends:  dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3), "<<Cut0[test][sub][4]<<" (Depth4), "<<Cut0[test][sub][5]<<" (Depth5), "<<Cut0[test][sub][6]<<" (Depth6), "<<Cut0[test][sub][7]<<" (Depth7) correspond BAD LS. </h3>"<< std::endl;
 	     if (sub==3) htmlFile << "<h3> Legends:  dots selected with following cuts: "<<Cut0[test][sub][4]<<" (Depth4) correspond BAD LS. </h3>"<< std::endl;
 	     if (sub==4) htmlFile << "<h3> Legends:  dots selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3), "<<Cut0[test][sub][4]<<" (Depth4) correspond BAD LS. </h3>"<< std::endl;
 	   }
@@ -4241,7 +4242,7 @@ int main(int argc, char *argv[])
     if (test==5) htmlFile << "<h1> TIMING MAX, GLOBAL RUN = "<< runnumber <<" </h1>"<< std::endl;  
     htmlFile << "<br>"<< std::endl;
     htmlFile << "<h2> 1.  Map of suspicious channels with this criterion for whole HCAL </h2>"<< std::endl; 
-    htmlFile << "<h3> Channel legend: white - good, other colour - bad.  </h3>"<< std::endl;  
+    htmlFile << "<h3> Channel legend: green - good, other colour - suspicious  </h3>"<< std::endl;  
     htmlFile << "<br>"<< std::endl;      
     if (test==0) htmlFile << " <img src=\"MapCapIdError.png\" />" << std::endl;
     if (test==1) htmlFile << " <img src=\"MapADCAmpl.png\" />" << std::endl;      
@@ -4270,7 +4271,9 @@ int main(int argc, char *argv[])
     }
     if (test==1){
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_ADCampl.html\">HB</a></td>"<< std::endl;
+      // AZ 18.03.2018
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_ADCampl.html\">HE</a></td>"<< std::endl;
+      //      htmlFile << "  <td><a href=\"HE_ADCampl.html\">HE</a></td>"<< std::endl;
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_ADCampl.html\">HO</a></td>"<< std::endl;
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_ADCampl.html\">HF</a></td>"<< std::endl;
     }
@@ -4757,7 +4760,9 @@ htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-softwa
   htmlFile << "<table width=\"600\">"<< std::endl;
   htmlFile << "<tr>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/CapID_GL.html\">Cap ID errors</a></td>"<< std::endl;
+  // AZ 18.03.2018
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
+    //  htmlFile << "  <td><a  href=\"ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Width_GL.html\">Width</a></td>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Ratio_GL.html\">Ratio</a></td>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Tmean_GL.html\">TS mean</a></td>"<< std::endl;
