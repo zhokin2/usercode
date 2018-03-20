@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 
     cout<<fname<<" "<<refname<<std::endl;
 
-
+    // 
 
     //======================================================================
     // Connect the input files, parameters and get the 2-d histogram in memory
@@ -70,40 +70,49 @@ int main(int argc, char *argv[])
     //    double porog[5] = {0., 200., 200., 100., 100.}; // Cut for GS test in pro cents
     double Pedest[2][5] = {{0.,0.2,0.9,0.1,0.2},{0.,0.2,0.2,0.1,0.16}};//Cuts for Pedestal  and pedestal  Width
     //======================================================================
-    
-    
-    
-    //======================================================================
-    // Prepare histograms and plot them to .png files
+//======================================================================
+// Prepare histograms and plot them to .png files
 
  
   TCanvas *cHB = new TCanvas("cHB","cHB",1000,500);
-  TCanvas *cHE = new TCanvas("cHE","cHE",1500,500);
-  TCanvas *cONE = new TCanvas("cONE","cONE",500,500);
-  TCanvas *cPED = new TCanvas("cPED","cPED",1000,1000);
+  //TCanvas *cHE = new TCanvas("cHE","cHE",1500,500);
+  TCanvas *cHE = new TCanvas("cHE","cHE",1500,1500);
+  //  TCanvas *cONE = new TCanvas("cONE","cONE",500,500);
+  TCanvas *cONE = new TCanvas("cONE","cONE",1500,500);
+  TCanvas *cPED = new TCanvas("cPED","cPED",1000,500);
+  //TCanvas *cHF = new TCanvas("cHF","cHF",1000,1000);
+  TCanvas *cHF = new TCanvas("cHF","cHF",1000,1000);
   
   char *str = (char*)alloca(10000);
 
+  // before upgrade 2017:
+  // depth: HB depth1,2; HE depth1,2,3; HO depth4; HF depth1,2
+  // 5 depthes:  0(empty),   1,2,3,4
 
-  TH2F *Map_Ampl[33][5][5]; // 2D histogramm for test,subdet,depth
-  TH2F *Map_SUB[5][5];      // 2d histogramm for subdet, depth
-  TH1F *HistAmplDepth[22][5][5];    // 1d histogramm for test,subdet, depth
+  // upgrade 2017:
+  // depth: HB depth1,2; HE depth1,2,3,4,5,6,7; HO depth4; HF depth1,2,3,4
+  // 8 depthes:  0(empty),   1,2,3,4,5,6,7
+ 
+  //  Int_t ALLDEPTH = 5;
+  Int_t ALLDEPTH = 8;
+
+
+  TH2F *Map_Ampl[33][5][ALLDEPTH]; // 2D histogramm for test,subdet,depth
+  TH2F *Map_SUB[5][ALLDEPTH];      // 2d histogramm for subdet, depth
+  TH1F *HistAmplDepth[22][5][ALLDEPTH];    // 1d histogramm for test,subdet, depth
   TH1F *HistAmpl[22][5];    // 1d histogramm for test,subdet
   
   TH1F *HistPed[3][5][4];   // 1d  histogramm for test,subdet, CapID
   TH2F *Map_Ped[3][5];      // 2d  histogramm for test,subdet -> test 33
-
   TH1F *hist_GoodTSshape[5];   // 1d  histogramm for TS shape subdet -> test 41
   TH1F *hist_GoodTSshape0[5];   // 1d  histogramm for TS shape subdet -> test 41
   TH1F *hist_BadTSshape[5];   // 1d  histogramm for TS shape subdet -> test 41
   TH1F *hist_BadTSshape0[5];   // 1d  histogramm for TS shape subdet -> test 41
- 
   TH1F *hist_ADC_All[5];   // 1d  histogramm for TS shape subdet -> test 42
-  TH1F *hist_ADC_DS[5][5];   // 1d  histogramm for TS shape subdet, depth -> test 42
-
-  TH1F *hist_SumADC[5][5];   // 1d  histogramm for TS shape subdet, depth -> test 43
-  TH1F *hist_SumADC0[5][5];   // 1d  histogramm for TS shape subdet, depth -> test 43
-  TH1F *hist_SumADC1[5][5];   // 1d  histogramm for TS shape subdet, depth -> test 43
+  TH1F *hist_ADC_DS[5][ALLDEPTH];   // 1d  histogramm for TS shape subdet, depth -> test 42
+  TH1F *hist_SumADC[5][ALLDEPTH];   // 1d  histogramm for TS shape subdet, depth -> test 43
+  TH1F *hist_SumADC0[5][ALLDEPTH];   // 1d  histogramm for TS shape subdet, depth -> test 43
+  TH1F *hist_SumADC1[5][ALLDEPTH];   // 1d  histogramm for TS shape subdet, depth -> test 43
 
   Map_SUB[1][1] = (TH2F*)hfile->Get("h_mapDepth1_HB");
   Map_SUB[1][2] = (TH2F*)hfile->Get("h_mapDepth2_HB");   
@@ -112,7 +121,14 @@ int main(int argc, char *argv[])
   Map_SUB[2][3] = (TH2F*)hfile->Get("h_mapDepth3_HE"); 
   Map_SUB[3][4] = (TH2F*)hfile->Get("h_mapDepth4_HO"); 
   Map_SUB[4][1] = (TH2F*)hfile->Get("h_mapDepth1_HF");
-  Map_SUB[4][2] = (TH2F*)hfile->Get("h_mapDepth2_HF"); 
+  Map_SUB[4][2] = (TH2F*)hfile->Get("h_mapDepth2_HF");  
+
+  Map_SUB[2][4] = (TH2F*)hfile->Get("h_mapDepth4_HE");
+  Map_SUB[2][5] = (TH2F*)hfile->Get("h_mapDepth5_HE"); 
+  Map_SUB[2][6] = (TH2F*)hfile->Get("h_mapDepth6_HE"); 
+  Map_SUB[2][7] = (TH2F*)hfile->Get("h_mapDepth7_HE"); 
+  Map_SUB[4][3] = (TH2F*)hfile->Get("h_mapDepth3_HF");
+  Map_SUB[4][4] = (TH2F*)hfile->Get("h_mapDepth4_HF");  
 
 //+++++++++++++++++++++++++++++  
 //Test 0 Entries   
@@ -120,16 +136,19 @@ int main(int argc, char *argv[])
   
   for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
        if (sub==1) cHB->Divide(2,1);
-       if (sub==2) cHE->Divide(3,1);
+       //     if (sub==2) cHE->Divide(3,1);
+       if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
-       if (sub==4) cHB->Divide(2,1);
+       //     if (sub==4) cHF->Divide(2,1);
+       if (sub==4) cHF->Divide(2,2);
        int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
-       int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+       //     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+       int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
        for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
             if (sub==1) cHB->cd(k); 
             if (sub==2) cHE->cd(k);
 	    if (sub==3) cONE->cd(k-3);
-	    if (sub==4) cHB->cd(k);  
+	    if (sub==4) cHF->cd(k);  
             gPad->SetGridy();
             gPad->SetGridx();
             gPad->SetLogz();
@@ -144,19 +163,20 @@ int main(int argc, char *argv[])
 	    if (sub==3) Map_SUB[sub][k]->SetTitleOffset(0.8,"Z");
             Map_SUB[sub][k]->Draw("COLZ");
             Map_SUB[sub][k]->GetYaxis()->SetRangeUser(0, 72.);
- //           Map_SUB[sub][k]->GetZaxis()->SetRangeUser(0.0001, 1.);
+//            Map_SUB[sub][k]->GetZaxis()->SetRangeUser(0.0001, 1.);
             if (sub==1) {cHB->Modified(); cHB->Update();} 
             if (sub==2) {cHE->Modified(); cHE->Update();}
             if (sub==3) {cONE->Modified();cONE->Update();}
-            if (sub==4) {cHB->Modified(); cHB->Update();} 
+            if (sub==4) {cHF->Modified(); cHF->Update();} 
        }//end depth
     
        if (sub==1) {cHB->Print("MapRateEntryHB.png"); cHB->Clear();} 
        if (sub==2) {cHE->Print("MapRateEntryHE.png"); cHE->Clear();}
        if (sub==3) {cONE->Print("MapRateEntryHO.png"); cONE->Clear();}
-       if (sub==4) {cHB->Print("MapRateEntryHF.png"); cHB->Clear();}    
+       if (sub==4) {cHF->Print("MapRateEntryHF.png"); cHF->Clear();}    
   }// end sub  
 
+   
    
 //+++++++++++++++++++++++++++++  
 //Test 1 (Cm) Rate of Cap ID errors   
@@ -171,18 +191,28 @@ int main(int argc, char *argv[])
   Map_Ampl[1][4][1] = (TH2F*)hfile->Get("h_mapDepth1Error_HF");
   Map_Ampl[1][4][2] = (TH2F*)hfile->Get("h_mapDepth2Error_HF"); 
   
+  Map_Ampl[1][2][4] = (TH2F*)hfile->Get("h_mapDepth4Error_HE");
+  Map_Ampl[1][2][5] = (TH2F*)hfile->Get("h_mapDepth5Error_HE"); 
+  Map_Ampl[1][2][6] = (TH2F*)hfile->Get("h_mapDepth6Error_HE"); 
+  Map_Ampl[1][2][7] = (TH2F*)hfile->Get("h_mapDepth7Error_HE"); 
+  Map_Ampl[1][4][3] = (TH2F*)hfile->Get("h_mapDepth3Error_HF");
+  Map_Ampl[1][4][4] = (TH2F*)hfile->Get("h_mapDepth4Error_HF");  
+
   for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
        if (sub==1) cHB->Divide(2,1);
-       if (sub==2) cHE->Divide(3,1);
+       //     if (sub==2) cHE->Divide(3,1);
+       if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
-       if (sub==4) cHB->Divide(2,1);
+       //     if (sub==4) cHF->Divide(2,1);
+       if (sub==4) cHF->Divide(2,2);
        int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
-       int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+       //     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+       int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
        for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
             if (sub==1) cHB->cd(k); 
             if (sub==2) cHE->cd(k);
 	    if (sub==3) cONE->cd(k-3);
-	    if (sub==4) cHB->cd(k);  
+	    if (sub==4) cHF->cd(k);  
             Map_Ampl[1][sub][k]->Divide(Map_Ampl[1][sub][k],Map_SUB[sub][k], 1, 1, "B"); 
             gPad->SetGridy();
             gPad->SetGridx();
@@ -198,20 +228,19 @@ int main(int argc, char *argv[])
 	    if (sub==3) Map_Ampl[1][sub][k]->SetTitleOffset(0.8,"Z");
             Map_Ampl[1][sub][k]->Draw("COLZ");
             Map_Ampl[1][sub][k]->GetYaxis()->SetRangeUser(0, 72.);
-//            Map_Ampl[1][sub][k]->GetZaxis()->SetRangeUser(0.0001, 1.);
+            Map_Ampl[1][sub][k]->GetZaxis()->SetRangeUser(0.0001, 1.);
             if (sub==1) {cHB->Modified(); cHB->Update();} 
             if (sub==2) {cHE->Modified(); cHE->Update();}
             if (sub==3) {cONE->Modified();cONE->Update();}
-            if (sub==4) {cHB->Modified(); cHB->Update();} 
+            if (sub==4) {cHF->Modified(); cHF->Update();} 
        }//end depth
     
        if (sub==1) {cHB->Print("MapRateCapIDHB.png"); cHB->Clear();} 
        if (sub==2) {cHE->Print("MapRateCapIDHE.png"); cHE->Clear();}
        if (sub==3) {cONE->Print("MapRateCapIDHO.png"); cONE->Clear();}
-       if (sub==4) {cHB->Print("MapRateCapIDHF.png"); cHB->Clear();}    
+       if (sub==4) {cHF->Print("MapRateCapIDHF.png"); cHF->Clear();}    
   }// end sub  
 
-  
 
 //+++++++++++++++++++++++++++++  
 //Test 2 (Am) ADC amplitude   
@@ -225,6 +254,14 @@ int main(int argc, char *argv[])
   Map_Ampl[2][3][4] = (TH2F*)hfile->Get("h_mapDepth4ADCAmpl225_HO");
   Map_Ampl[2][4][1] = (TH2F*)hfile->Get("h_mapDepth1ADCAmpl225_HF");
   Map_Ampl[2][4][2] = (TH2F*)hfile->Get("h_mapDepth2ADCAmpl225_HF"); 
+  
+  Map_Ampl[2][2][4] = (TH2F*)hfile->Get("h_mapDepth4ADCAmpl225_HE");
+  Map_Ampl[2][2][5] = (TH2F*)hfile->Get("h_mapDepth5ADCAmpl225_HE"); 
+  Map_Ampl[2][2][6] = (TH2F*)hfile->Get("h_mapDepth6ADCAmpl225_HE"); 
+  Map_Ampl[2][2][7] = (TH2F*)hfile->Get("h_mapDepth7ADCAmpl225_HE"); 
+  Map_Ampl[2][4][3] = (TH2F*)hfile->Get("h_mapDepth3ADCAmpl225_HF");
+  Map_Ampl[2][4][4] = (TH2F*)hfile->Get("h_mapDepth4ADCAmpl225_HF");  
+
   
   HistAmpl[2][1] = (TH1F*)hfile->Get("h_ADCAmpl_HB");
   HistAmpl[2][2] = (TH1F*)hfile->Get("h_ADCAmpl_HE");
@@ -245,6 +282,14 @@ int main(int argc, char *argv[])
   Map_Ampl[3][4][1] = (TH2F*)hfile->Get("h_mapDepth1Amplitude225_HF");
   Map_Ampl[3][4][2] = (TH2F*)hfile->Get("h_mapDepth2Amplitude225_HF");   
   
+  Map_Ampl[3][2][4] = (TH2F*)hfile->Get("h_mapDepth4Amplitude225_HE");
+  Map_Ampl[3][2][5] = (TH2F*)hfile->Get("h_mapDepth5Amplitude225_HE"); 
+  Map_Ampl[3][2][6] = (TH2F*)hfile->Get("h_mapDepth6Amplitude225_HE"); 
+  Map_Ampl[3][2][7] = (TH2F*)hfile->Get("h_mapDepth7Amplitude225_HE"); 
+  Map_Ampl[3][4][3] = (TH2F*)hfile->Get("h_mapDepth3Amplitude225_HF");
+  Map_Ampl[3][4][4] = (TH2F*)hfile->Get("h_mapDepth4Amplitude225_HF");  
+
+  
   HistAmpl[3][1] = (TH1F*)hfile->Get("h_Amplitude_HB");
   HistAmpl[3][2] = (TH1F*)hfile->Get("h_Amplitude_HE");
   HistAmpl[3][3] = (TH1F*)hfile->Get("h_Amplitude_HO");
@@ -263,6 +308,13 @@ int main(int argc, char *argv[])
   Map_Ampl[4][4][1] = (TH2F*)hfile->Get("h_mapDepth1Ampl047_HF");
   Map_Ampl[4][4][2] = (TH2F*)hfile->Get("h_mapDepth2Ampl047_HF"); 
   
+  Map_Ampl[4][2][4] = (TH2F*)hfile->Get("h_mapDepth4Ampl047_HE");
+  Map_Ampl[4][2][5] = (TH2F*)hfile->Get("h_mapDepth5Ampl047_HE"); 
+  Map_Ampl[4][2][6] = (TH2F*)hfile->Get("h_mapDepth6Ampl047_HE"); 
+  Map_Ampl[4][2][7] = (TH2F*)hfile->Get("h_mapDepth7Ampl047_HE"); 
+  Map_Ampl[4][4][3] = (TH2F*)hfile->Get("h_mapDepth3Ampl047_HF");
+  Map_Ampl[4][4][4] = (TH2F*)hfile->Get("h_mapDepth4Ampl047_HF");  
+
   
   HistAmpl[4][1] = (TH1F*)hfile->Get("h_Ampl_HB");
   HistAmpl[4][2] = (TH1F*)hfile->Get("h_Ampl_HE");
@@ -281,6 +333,14 @@ int main(int argc, char *argv[])
   Map_Ampl[5][3][4] = (TH2F*)hfile->Get("h_mapDepth4TSmeanA225_HO");
   Map_Ampl[5][4][1] = (TH2F*)hfile->Get("h_mapDepth1TSmeanA225_HF");
   Map_Ampl[5][4][2] = (TH2F*)hfile->Get("h_mapDepth2TSmeanA225_HF"); 
+  
+  Map_Ampl[5][2][4] = (TH2F*)hfile->Get("h_mapDepth4TSmeanA225_HE");
+  Map_Ampl[5][2][5] = (TH2F*)hfile->Get("h_mapDepth5TSmeanA225_HE"); 
+  Map_Ampl[5][2][6] = (TH2F*)hfile->Get("h_mapDepth6TSmeanA225_HE"); 
+  Map_Ampl[5][2][7] = (TH2F*)hfile->Get("h_mapDepth7TSmeanA225_HE"); 
+  Map_Ampl[5][4][3] = (TH2F*)hfile->Get("h_mapDepth3TSmeanA225_HF");
+  Map_Ampl[5][4][4] = (TH2F*)hfile->Get("h_mapDepth4TSmeanA225_HF");  
+
   
   HistAmpl[5][1] = (TH1F*)hfile->Get("h_TSmeanA_HB");
   HistAmpl[5][2] = (TH1F*)hfile->Get("h_TSmeanA_HE");
@@ -301,6 +361,13 @@ int main(int argc, char *argv[])
   Map_Ampl[6][4][1] = (TH2F*)hfile->Get("h_mapDepth1TSmaxA225_HF");
   Map_Ampl[6][4][2] = (TH2F*)hfile->Get("h_mapDepth2TSmaxA225_HF"); 
   
+  Map_Ampl[6][2][4] = (TH2F*)hfile->Get("h_mapDepth4TSmaxA225_HE");
+  Map_Ampl[6][2][5] = (TH2F*)hfile->Get("h_mapDepth5TSmaxA225_HE"); 
+  Map_Ampl[6][2][6] = (TH2F*)hfile->Get("h_mapDepth6TSmaxA225_HE"); 
+  Map_Ampl[6][2][7] = (TH2F*)hfile->Get("h_mapDepth7TSmaxA225_HE"); 
+  Map_Ampl[6][4][3] = (TH2F*)hfile->Get("h_mapDepth3TSmaxA225_HF");
+  Map_Ampl[6][4][4] = (TH2F*)hfile->Get("h_mapDepth4TSmaxA225_HF");  
+
   HistAmpl[6][1] = (TH1F*)hfile->Get("h_TSmaxA_HB");
   HistAmpl[6][2] = (TH1F*)hfile->Get("h_TSmaxA_HE");
   HistAmpl[6][3] = (TH1F*)hfile->Get("h_TSmaxA_HO");
@@ -309,16 +376,19 @@ int main(int argc, char *argv[])
   for (int test=2;test<=6;test++) { //Test: 2-Am, 3-Wm, 4-Rm, 5-TNm, 6-TXm, 
       for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
           if (sub==1) cHB->Divide(2,1);
-          if (sub==2) cHE->Divide(3,1);
+	  //        if (sub==2) cHE->Divide(3,1);
+          if (sub==2) cHE->Divide(3,3);
           if (sub==3) cONE->Divide(1,1);
-          if (sub==4) cHB->Divide(2,1);
+	  //        if (sub==4) cHF->Divide(2,1);
+          if (sub==4) cHF->Divide(2,2);
           int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
-          int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+	  //        int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+          int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
           for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
               if (sub==1) cHB->cd(k); 
               if (sub==2) cHE->cd(k);
 	      if (sub==3) cONE->cd(k-3);
-	      if (sub==4) cHB->cd(k);  
+	      if (sub==4) cHF->cd(k);  
               Map_Ampl[test][sub][k]->Divide(Map_Ampl[test][sub][k],Map_SUB[sub][k], 1, 1, "B"); 
               gPad->SetGridy();
               gPad->SetGridx();
@@ -338,40 +408,45 @@ int main(int argc, char *argv[])
               if (sub==1) {cHB->Modified(); cHB->Update();} 
               if (sub==2) {cHE->Modified(); cHE->Update();}
               if (sub==3) {cONE->Modified();cONE->Update();}
-              if (sub==4) {cHB->Modified(); cHB->Update();} 
+              if (sub==4) {cHF->Modified(); cHF->Update();} 
           }//end depth    
           if (test==2){ 
 	     if (sub==1) {cHB->Print("MapRateAmplHB.png"); cHB->Clear();} 
              if (sub==2) {cHE->Print("MapRateAmplHE.png"); cHE->Clear();}
              if (sub==3) {cONE->Print("MapRateAmplHO.png"); cONE->Clear();}
-             if (sub==4) {cHB->Print("MapRateAmplHF.png"); cHB->Clear();} 
+             if (sub==4) {cHF->Print("MapRateAmplHF.png"); cHF->Clear();} 
 	  }   
 	  if (test==3){ 
 	     if (sub==1) {cHB->Print("MapRateRMSHB.png"); cHB->Clear();} 
              if (sub==2) {cHE->Print("MapRateRMSHE.png"); cHE->Clear();}
              if (sub==3) {cONE->Print("MapRateRMSHO.png"); cONE->Clear();}
-             if (sub==4) {cHB->Print("MapRateRMSHF.png"); cHB->Clear();} 
+             if (sub==4) {cHF->Print("MapRateRMSHF.png"); cHF->Clear();} 
 	  }
 	  if (test==4){ 
 	     if (sub==1) {cHB->Print("MapRate43TStoAllTSHB.png"); cHB->Clear();} 
              if (sub==2) {cHE->Print("MapRate43TStoAllTSHE.png"); cHE->Clear();}
              if (sub==3) {cONE->Print("MapRate43TStoAllTSHO.png"); cONE->Clear();}
-             if (sub==4) {cHB->Print("MapRate43TStoAllTSHF.png"); cHB->Clear();} 
+             if (sub==4) {cHF->Print("MapRate43TStoAllTSHF.png"); cHF->Clear();} 
 	  }
 	  if (test==5){ 
 	     if (sub==1) {cHB->Print("MapRateMeanPosHB.png"); cHB->Clear();} 
              if (sub==2) {cHE->Print("MapRateMeanPosHE.png"); cHE->Clear();}
              if (sub==3) {cONE->Print("MapRateMeanPosHO.png"); cONE->Clear();}
-             if (sub==4) {cHB->Print("MapRateMeanPosHF.png"); cHB->Clear();} 
+             if (sub==4) {cHF->Print("MapRateMeanPosHF.png"); cHF->Clear();} 
 	  }
           if (test==6){ 
 	     if (sub==1) {cHB->Print("MapRateMaxPosHB.png"); cHB->Clear();} 
              if (sub==2) {cHE->Print("MapRateMaxPosHE.png"); cHE->Clear();}
              if (sub==3) {cONE->Print("MapRateMaxPosHO.png"); cONE->Clear();}
-             if (sub==4) {cHB->Print("MapRateMaxPosHF.png"); cHB->Clear();} 
+             if (sub==4) {cHF->Print("MapRateMaxPosHF.png"); cHF->Clear();} 
 	  }
    
-          cONE->Divide(1,1);
+	  //          cONE->Divide(1,1);
+          cONE->Divide(2,1);
+	  if(test == 2 && sub == 2 ) {
+	    cONE->cd(2);
+	    TH1F *kjkjkhj2= (TH1F*)hfile->Get("h_ADCAmpl_HE");kjkjkhj2->Draw("");kjkjkhj2->SetTitle("HE, All Depth: shunt6");
+	  }
           cONE->cd(1);
           gPad->SetGridy();
           gPad->SetGridx(); 
@@ -390,16 +465,17 @@ int main(int argc, char *argv[])
           HistAmpl[test][sub]->SetLineWidth(2);
 	  HistAmpl[test][sub]->SetTitleOffset(1.4,"Y");
           HistAmpl[test][sub]->Draw("");
-//        HistAmpl[test][sub]->GetYaxis()->SetRangeUser(1., 100.);
-          if (test==2) {gPad->SetLogx(); HistAmpl[test][sub]->GetXaxis()->SetRangeUser(1., 10000.);}
-	  if (test==3) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 5.);
-	  if (test==4) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 1.);
-	  if (test==5) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 9.);
-          if (test==6) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 9.);
+	  // //        HistAmpl[test][sub]->GetYaxis()->SetRangeUser(1., 100.);
+//          if (test==2) {gPad->SetLogx(); HistAmpl[test][sub]->GetXaxis()->SetRangeUser(1., 10000.);}
+          if (test==2) {gPad->SetLogx(); }
+	  if (test==3) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 5.);// width
+	  if (test==4) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 1.);// R
+	  if (test==5) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 9.);// Tn
+          if (test==6) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 9.);// Tx
 	  cONE->Modified(); 
           cONE->Update(); 
-	  float min_x[] = {(float)(MIN_M[test][sub]),(float)(MIN_M[test][sub])};
-          float min_y[] = {0.,100000000.};
+	  double min_x[] = {MIN_M[test][sub],MIN_M[test][sub]};
+          double min_y[] = {0.,100000000.};
           TGraph* MIN = new TGraph(2, min_x, min_y);
           MIN->SetLineStyle(2);
           MIN->SetLineColor(2);
@@ -407,8 +483,8 @@ int main(int argc, char *argv[])
           MIN->SetFillStyle(3005);
           MIN->SetFillColor(2);
           MIN->Draw("L"); 
-          float max_x[] = {(float)(MAX_M[test][sub]),(float)(MAX_M[test][sub])};
-          float max_y[] = {0.,100000000.};
+          double max_x[] = {MAX_M[test][sub],MAX_M[test][sub]};
+          double max_y[] = {0.,100000000.};
           TGraph* MAX = new TGraph(2, max_x, max_y);
           MAX->SetLineStyle(2);
           MAX->SetLineColor(2);
@@ -449,11 +525,6 @@ int main(int argc, char *argv[])
       }// end sub      
   }//end test
 
-  
-  //+++++++++++++++++++++++++++++  
-//Test 11 (Cc) Rate of Cap ID errors for calibration channels  
-//+++++++++++++++++++++++++++++ 
-
   TH2F *Map_Calib[5][5];  // 2d histogramm for subdet, depth
   
   Map_Calib[1][1] = (TH2F*)hfile->Get("h_map_HB");
@@ -464,6 +535,58 @@ int main(int argc, char *argv[])
   Map_Calib[3][4] = (TH2F*)hfile->Get("h_map_HO");
   Map_Calib[4][1] = (TH2F*)hfile->Get("h_map_HF");
   Map_Calib[4][2] = (TH2F*)hfile->Get("h_map_HF");
+
+
+//+++++++++++++++++++++++++++++  
+//Test 0 Entries   
+//+++++++++++++++++++++++++++++ 
+  
+  for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
+//       if (sub==1) cHB->Divide(2,1);
+//       if (sub==2) cHE->Divide(3,1);
+        cONE->Divide(1,1);
+ //      if (sub==4) cHB->Divide(2,1);
+//       int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+//       int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+//       for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
+         int k=1;
+         cONE->cd(k);
+//          if (sub==1) cHB->cd(k); 
+//          if (sub==2) cHE->cd(k);
+	    if (sub==3) k=4;
+//	    if (sub==4) cHB->cd(k);   
+            gPad->SetGridy();
+            gPad->SetGridx();
+            gPad->SetLogz();
+            if (sub==1) sprintf(str,"HB");
+            if (sub==2) sprintf(str,"HE");
+            if (sub==3) sprintf(str,"HO");
+            if (sub==4) sprintf(str,"HF");  
+            Map_Calib[sub][k]->SetTitle(str);
+            Map_Calib[sub][k]->SetXTitle("#eta \b");
+            Map_Calib[sub][k]->SetYTitle("#phi \b");
+            Map_Calib[sub][k]->SetZTitle("Number of events\b");
+	    if (sub==3) Map_Calib[sub][k]->SetTitleOffset(0.8,"Z");
+            Map_Calib[sub][k]->Draw("COLZ");
+            Map_Calib[sub][k]->GetYaxis()->SetRangeUser(0, 72.);
+//            Map_Calib[sub][k]->GetZaxis()->SetRangeUser(0.0001, 1.);
+//            if (sub==1) {cHB->Modified(); cHB->Update();} 
+//            if (sub==2) {cHE->Modified(); cHE->Update();}
+            cONE->Modified();cONE->Update();
+//            if (sub==4) {cHB->Modified(); cHB->Update();} 
+//       }//end depth
+    
+       if (sub==1) {cONE->Print("MapRateCalibEntryHB.png"); cONE->Clear();} 
+       if (sub==2) {cONE->Print("MapRateCalibEntryHE.png"); cONE->Clear();}
+       if (sub==3) {cONE->Print("MapRateCalibEntryHO.png"); cONE->Clear();}
+       if (sub==4) {cONE->Print("MapRateCalibEntryHF.png"); cONE->Clear();}    
+  }// end sub  
+
+ 
+//+++++++++++++++++++++++++++++  
+//Test 11 (Cc) Rate of Cap ID errors for calibration channels  
+//+++++++++++++++++++++++++++++ 
+  
  
   Map_Ampl[11][1][1] = (TH2F*)hfile->Get("h_mapCapCalib047_HB");
   Map_Ampl[11][1][2] = (TH2F*)hfile->Get("h_mapCapCalib047_HB");   
@@ -483,10 +606,10 @@ int main(int argc, char *argv[])
 //       int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
 //       for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
          int k=1;
-         cONE->cd(k-3);
+         cONE->cd(k);
 //          if (sub==1) cHB->cd(k); 
 //          if (sub==2) cHE->cd(k);
-	    if (sub==3) k=4;;
+	    if (sub==3) k=4;
 //	    if (sub==4) cHB->cd(k);  
             Map_Ampl[11][sub][k]->Divide(Map_Ampl[11][sub][k],Map_Calib[sub][k], 1, 1, "B"); 
             gPad->SetGridy();
@@ -516,7 +639,6 @@ int main(int argc, char *argv[])
        if (sub==4) {cONE->Print("MapRateCapCalibHF.png"); cONE->Clear();}    
   }// end sub  
 
-  
 
 //+++++++++++++++++++++++++++++  
 //Test 12 (Ac) ADC amplitude for calibration chanels  
@@ -639,7 +761,7 @@ int main(int argc, char *argv[])
 	      Map_Ampl[test][sub][k]->SetTitleOffset(0.8,"Z");
               Map_Ampl[test][sub][k]->Draw("COLZ");
               Map_Ampl[test][sub][k]->GetYaxis()->SetRangeUser(0, 72.);
-              Map_Ampl[test][sub][k]->GetZaxis()->SetRangeUser(0.0001, 1.);
+              Map_Ampl[test][sub][k]->GetZaxis()->SetRangeUser(0.00001, 1.);
 //              if (sub==1) {cHB->Modified(); cHB->Update();} 
 //              if (sub==2) {cHE->Modified(); cHE->Update();}
               cONE->Modified();cONE->Update();
@@ -703,8 +825,8 @@ int main(int argc, char *argv[])
           if (test==16) HistAmpl[test][sub]->GetXaxis()->SetRangeUser(0., 9.);
 	  cONE->Modified(); 
           cONE->Update(); 
-	  float min_x[] = {(float)(MIN_C[test-10][sub]),(float)(MIN_C[test-10][sub])};
-          float min_y[] = {0.,100000000.};
+	  double min_x[] = {MIN_C[test-10][sub],MIN_C[test-10][sub]};
+          double min_y[] = {0.,100000000.};
           TGraph* MIN = new TGraph(2, min_x, min_y);
           MIN->SetLineStyle(2);
           MIN->SetLineColor(2);
@@ -712,8 +834,8 @@ int main(int argc, char *argv[])
           MIN->SetFillStyle(3005);
           MIN->SetFillColor(2);
           MIN->Draw("L"); 
-          float max_x[] = {(float)(MAX_C[test-10][sub]),(float)(MAX_C[test-10][sub])};
-          float max_y[] = {0.,100000000.};
+          double max_x[] = {MAX_C[test-10][sub],MAX_C[test-10][sub]};
+          double max_y[] = {0.,100000000.};
           TGraph* MAX = new TGraph(2, max_x, max_y);
           MAX->SetLineStyle(2);
           MAX->SetLineColor(2);
@@ -751,12 +873,10 @@ int main(int argc, char *argv[])
              if (sub==3) {cONE->Print("HistMaxPosCalibHO.png"); cONE->Clear();}
              if (sub==4) {cONE->Print("HistMaxPosCalibHF.png"); cONE->Clear();}  
 	  } 	                  
-
       }// end sub      
   }//end test
-  
-  
-  //+++++++++++++++++++++++++++++  
+   
+//+++++++++++++++++++++++++++++  
 //Test 21 (GS) Amplitude drift   
 //+++++++++++++++++++++++++++++
  
@@ -765,52 +885,79 @@ int main(int argc, char *argv[])
   Map_Ampl[21][2][1] = (TH2F*)hfile->Get("h_mapDepth1AmplE34_HE");
   Map_Ampl[21][2][2] = (TH2F*)hfile->Get("h_mapDepth2AmplE34_HE"); 
   Map_Ampl[21][2][3] = (TH2F*)hfile->Get("h_mapDepth3AmplE34_HE"); 
+  Map_Ampl[21][2][4] = (TH2F*)hfile->Get("h_mapDepth4AmplE34_HE"); 
+  Map_Ampl[21][2][5] = (TH2F*)hfile->Get("h_mapDepth5AmplE34_HE"); 
+  Map_Ampl[21][2][6] = (TH2F*)hfile->Get("h_mapDepth6AmplE34_HE"); 
+  Map_Ampl[21][2][7] = (TH2F*)hfile->Get("h_mapDepth7AmplE34_HE"); 
   Map_Ampl[21][3][4] = (TH2F*)hfile->Get("h_mapDepth4AmplE34_HO");
   Map_Ampl[21][4][1] = (TH2F*)hfile->Get("h_mapDepth1AmplE34_HF");
   Map_Ampl[21][4][2] = (TH2F*)hfile->Get("h_mapDepth2AmplE34_HF");   
+  Map_Ampl[21][4][3] = (TH2F*)hfile->Get("h_mapDepth3AmplE34_HF");   
+  Map_Ampl[21][4][4] = (TH2F*)hfile->Get("h_mapDepth4AmplE34_HF");   
   
-  TH2F *Map_RefAmpl[5][5]; // 2D histogramm for subdet, depth
-  TH2F *Map_RefSUB[5][5];  // 2d histogramm for subdet, depth
+  TH2F *Map_RefAmpl[5][ALLDEPTH]; // 2D histogramm for subdet, depth
+  TH2F *Map_RefSUB[5][ALLDEPTH];  // 2d histogramm for subdet, depth
 
   Map_RefAmpl[1][1] = (TH2F*)hreffile->Get("h_mapDepth1AmplE34_HB");
   Map_RefAmpl[1][2] = (TH2F*)hreffile->Get("h_mapDepth2AmplE34_HB");   
   Map_RefAmpl[2][1] = (TH2F*)hreffile->Get("h_mapDepth1AmplE34_HE");
   Map_RefAmpl[2][2] = (TH2F*)hreffile->Get("h_mapDepth2AmplE34_HE"); 
   Map_RefAmpl[2][3] = (TH2F*)hreffile->Get("h_mapDepth3AmplE34_HE"); 
+  Map_RefAmpl[2][4] = (TH2F*)hreffile->Get("h_mapDepth4AmplE34_HE"); 
+  Map_RefAmpl[2][5] = (TH2F*)hreffile->Get("h_mapDepth5AmplE34_HE"); 
+  Map_RefAmpl[2][6] = (TH2F*)hreffile->Get("h_mapDepth6AmplE34_HE"); 
+  Map_RefAmpl[2][7] = (TH2F*)hreffile->Get("h_mapDepth7AmplE34_HE"); 
   Map_RefAmpl[3][4] = (TH2F*)hreffile->Get("h_mapDepth4AmplE34_HO");
   Map_RefAmpl[4][1] = (TH2F*)hreffile->Get("h_mapDepth1AmplE34_HF");
   Map_RefAmpl[4][2] = (TH2F*)hreffile->Get("h_mapDepth2AmplE34_HF");   
+  Map_RefAmpl[4][3] = (TH2F*)hreffile->Get("h_mapDepth3AmplE34_HF");   
+  Map_RefAmpl[4][4] = (TH2F*)hreffile->Get("h_mapDepth4AmplE34_HF");   
 
   Map_RefSUB[1][1] = (TH2F*)hreffile->Get("h_mapDepth1_HB");
   Map_RefSUB[1][2] = (TH2F*)hreffile->Get("h_mapDepth2_HB");   
   Map_RefSUB[2][1] = (TH2F*)hreffile->Get("h_mapDepth1_HE");
   Map_RefSUB[2][2] = (TH2F*)hreffile->Get("h_mapDepth2_HE"); 
   Map_RefSUB[2][3] = (TH2F*)hreffile->Get("h_mapDepth3_HE"); 
+  Map_RefSUB[2][4] = (TH2F*)hreffile->Get("h_mapDepth4_HE"); 
+  Map_RefSUB[2][5] = (TH2F*)hreffile->Get("h_mapDepth5_HE"); 
+  Map_RefSUB[2][6] = (TH2F*)hreffile->Get("h_mapDepth6_HE"); 
+  Map_RefSUB[2][7] = (TH2F*)hreffile->Get("h_mapDepth7_HE"); 
   Map_RefSUB[3][4] = (TH2F*)hreffile->Get("h_mapDepth4_HO");
   Map_RefSUB[4][1] = (TH2F*)hreffile->Get("h_mapDepth1_HF");
   Map_RefSUB[4][2] = (TH2F*)hreffile->Get("h_mapDepth2_HF");  
+  Map_RefSUB[4][3] = (TH2F*)hreffile->Get("h_mapDepth3_HF");  
+  Map_RefSUB[4][4] = (TH2F*)hreffile->Get("h_mapDepth4_HF");  
   
   HistAmplDepth[21][1][1] = new TH1F("diffAmpl_Depth1_HB","", 100, -10., 10.); 
   HistAmplDepth[21][1][2] = new TH1F("diffAmpl_Depth2_HB","", 100, -10., 10.); 
   HistAmplDepth[21][2][1] = new TH1F("diffAmpl_Depth1_HE","", 100, -10., 10.); 
   HistAmplDepth[21][2][2] = new TH1F("diffAmpl_Depth2_HE","", 100, -10., 10.);
   HistAmplDepth[21][2][3] = new TH1F("diffAmpl_Depth3_HE","", 100, -10., 10.); 
+  HistAmplDepth[21][2][4] = new TH1F("diffAmpl_Depth4_HE","", 100, -10., 10.); 
+  HistAmplDepth[21][2][5] = new TH1F("diffAmpl_Depth5_HE","", 100, -10., 10.); 
+  HistAmplDepth[21][2][6] = new TH1F("diffAmpl_Depth6_HE","", 100, -10., 10.); 
+  HistAmplDepth[21][2][7] = new TH1F("diffAmpl_Depth7_HE","", 100, -10., 10.); 
   HistAmplDepth[21][3][4] = new TH1F("diffAmpl_Depth4_HO","", 100, -10., 10.); 
   HistAmplDepth[21][4][1] = new TH1F("diffAmpl_Depth1_HF","", 100, -10., 10.);
   HistAmplDepth[21][4][2] = new TH1F("diffAmpl_Depth2_HF","", 100, -10., 10.);
+  HistAmplDepth[21][4][3] = new TH1F("diffAmpl_Depth3_HF","", 100, -10., 10.);
+  HistAmplDepth[21][4][4] = new TH1F("diffAmpl_Depth4_HF","", 100, -10., 10.);
   
   for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
        if (sub==1) cHB->Divide(2,1);
-       if (sub==2) cHE->Divide(3,1);
+       //     if (sub==2) cHE->Divide(3,1);
+       if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
-       if (sub==4) cHB->Divide(2,1);
+       //     if (sub==4) cHF->Divide(2,1);
+       if (sub==4) cHF->Divide(2,2);
        int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
-       int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+       //     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+       int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
        for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
             if (sub==1) cHB->cd(k); 
             if (sub==2) cHE->cd(k);
 	    if (sub==3) cONE->cd(k-3);
-	    if (sub==4) cHB->cd(k);
+	    if (sub==4) cHF->cd(k);
 	    Map_Ampl[21][sub][k]->Divide(Map_Ampl[21][sub][k], Map_SUB[sub][k], 1, 1, "B"); 
             gPad->SetGridy();
             gPad->SetGridx();
@@ -830,23 +977,25 @@ int main(int argc, char *argv[])
             if (sub==1) {cHB->Modified(); cHB->Update();} 
             if (sub==2) {cHE->Modified(); cHE->Update();}
             if (sub==3) {cONE->Modified();cONE->Update();}
-            if (sub==4) {cHB->Modified(); cHB->Update();}             
+            if (sub==4) {cHF->Modified(); cHF->Update();}             
        } //end depth 
        if (sub==1) {cHB->Print("MapRateAmpl1HB.png"); cHB->Clear();} 
        if (sub==2) {cHE->Print("MapRateAmpl1HE.png"); cHE->Clear();}
        if (sub==3) {cONE->Print("MapRateAmpl1HO.png"); cONE->Clear();}
-       if (sub==4) {cHB->Print("MapRateAmpl1HF.png"); cHB->Clear();}  
+       if (sub==4) {cHF->Print("MapRateAmpl1HF.png"); cHF->Clear();}  
        
        if (sub==1) cHB->Divide(2,1);
-       if (sub==2) cHE->Divide(3,1);
+       //     if (sub==2) cHE->Divide(3,1);
+       if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
-       if (sub==4) cHB->Divide(2,1);   
+       //     if (sub==4) cHF->Divide(2,1);   
+       if (sub==4) cHF->Divide(2,2);   
        
        for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
             if (sub==1) cHB->cd(k); 
             if (sub==2) cHE->cd(k);
 	    if (sub==3) cONE->cd(k-3);
-	    if (sub==4) cHB->cd(k);
+	    if (sub==4) cHF->cd(k);
             Map_RefAmpl[sub][k]->Divide(Map_RefAmpl[sub][k], Map_RefSUB[sub][k], 1, 1, "B");
             gPad->SetGridy();
             gPad->SetGridx();
@@ -866,23 +1015,25 @@ int main(int argc, char *argv[])
             if (sub==1) {cHB->Modified(); cHB->Update();} 
             if (sub==2) {cHE->Modified(); cHE->Update();}
             if (sub==3) {cONE->Modified();cONE->Update();}
-            if (sub==4) {cHB->Modified(); cHB->Update();}             
+            if (sub==4) {cHF->Modified(); cHF->Update();}             
        }//end depth  
        if (sub==1) {cHB->Print("MapRateAmpl2HB.png"); cHB->Clear();} 
        if (sub==2) {cHE->Print("MapRateAmpl2HE.png"); cHE->Clear();}
        if (sub==3) {cONE->Print("MapRateAmpl2HO.png"); cONE->Clear();}
-       if (sub==4) {cHB->Print("MapRateAmpl2HF.png"); cHB->Clear();}   
-       ///////////////////////////////////////////////////////////////////////////////////////////////////////////         
+       if (sub==4) {cHF->Print("MapRateAmpl2HF.png"); cHF->Clear();}   
+         
        if (sub==1) cHB->Divide(2,1);
-       if (sub==2) cHE->Divide(3,1);
+       //     if (sub==2) cHE->Divide(3,1);
+       if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
-       if (sub==4) cHB->Divide(2,1);   
+       //     if (sub==4) cHF->Divide(2,1);   
+       if (sub==4) cHF->Divide(2,2);   
           
        for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth
             if (sub==1) cHB->cd(k); 
             if (sub==2) cHE->cd(k);
 	    if (sub==3) cONE->cd(k-3);
-	    if (sub==4) cHB->cd(k); 
+	    if (sub==4) cHF->cd(k); 
 	    TH2F* TTT = new TH2F("Map","Map", 82, -41, 40, 72, 0, 71);    
 	    for (int x=1;x<=Map_Ampl[21][sub][k]->GetXaxis()->GetNbins();x++) {
                 for (int y=1;y<=Map_Ampl[21][sub][k]->GetYaxis()->GetNbins(); y++) {
@@ -914,25 +1065,29 @@ int main(int argc, char *argv[])
             if (sub==1) {cHB->Modified(); cHB->Update();} 
             if (sub==2) {cHE->Modified(); cHE->Update();}
             if (sub==3) {cONE->Modified();cONE->Update();}
-            if (sub==4) {cHB->Modified(); cHB->Update();} 
-	    if(TTT) delete TTT;
+            if (sub==4) {cHF->Modified(); cHF->Update();} 
        }//end depth
     
        if (sub==1) {cHB->Print("MapRateAmplDriftHB.png"); cHB->Clear(); } 
        if (sub==2) {cHE->Print("MapRateAmplDriftHE.png"); cHE->Clear();}
        if (sub==3) {cONE->Print("MapRateAmplDriftHO.png"); cONE->Clear();}
-       if (sub==4) {cHB->Print("MapRateAmplDriftHF.png"); cHB->Clear();} 
-       
+       if (sub==4) {cHF->Print("MapRateAmplDriftHF.png"); cHF->Clear();} 
+       ////////////////////////////////////////////////////////////////////////////////////
+
+
+
        if (sub==1) cHB->Divide(2,1);
-       if (sub==2) cHE->Divide(3,1);
+       //     if (sub==2) cHE->Divide(3,1);
+       if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
-       if (sub==4) cHB->Divide(2,1);   
+       //     if (sub==4) cHF->Divide(2,1);   
+       if (sub==4) cHF->Divide(2,2);   
           
        for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth
             if (sub==1) cHB->cd(k); 
             if (sub==2) cHE->cd(k);
 	    if (sub==3) cONE->cd(k-3);
-	    if (sub==4) cHB->cd(k); 
+	    if (sub==4) cHF->cd(k); 
             gPad->SetGridy();
             gPad->SetGridx();
             gPad->SetLogy();
@@ -952,9 +1107,9 @@ int main(int argc, char *argv[])
             if (sub==1) {cHB->Modified(); cHB->Update();} 
             if (sub==2) {cHE->Modified(); cHE->Update();}
             if (sub==3) {cONE->Modified();cONE->Update();}
-            if (sub==4) {cHB->Modified(); cHB->Update();} 
-	    float min_x[] = {-1*(float)(porog[sub]),-1*(float)(porog[sub])};
-            float min_y[] = {0.,100000000.};
+            if (sub==4) {cHF->Modified(); cHF->Update();} 
+	    double min_x[] = {-1*porog[sub],-1*porog[sub]};
+            double min_y[] = {0.,100000000.};
             TGraph* MIN = new TGraph(2, min_x, min_y);
             MIN->SetLineStyle(2);
             MIN->SetLineColor(2);
@@ -962,8 +1117,8 @@ int main(int argc, char *argv[])
             MIN->SetFillStyle(3005);
             MIN->SetFillColor(2);
             MIN->Draw("L"); 
-            float max_x[] = {(float)(porog[sub]),(float)(porog[sub])};
-            float max_y[] = {0.,100000000.};
+            double max_x[] = {porog[sub],porog[sub]};
+            double max_y[] = {0.,100000000.};
             TGraph* MAX = new TGraph(2, max_x, max_y);
             MAX->SetLineStyle(2);
             MAX->SetLineColor(2);
@@ -975,11 +1130,10 @@ int main(int argc, char *argv[])
        if (sub==1) {cHB->Print("HistAmplDriftDepthHB.png"); cHB->Clear();} 
        if (sub==2) {cHE->Print("HistAmplDriftDepthHE.png"); cHE->Clear();}
        if (sub==3) {cONE->Print("HistAmplDriftDepthHO.png"); cONE->Clear();}
-       if (sub==4) {cHB->Print("HistAmplDriftDepthHF.png"); cHB->Clear();}  
-  } //end sub 
-  
-  
-  
+       if (sub==4) {cHF->Print("HistAmplDriftDepthHF.png"); cHF->Clear();}   
+ } //end sub 
+ 
+ 
  //+++++++++++++++++++++++++++++++++++  
 //Test 31, 32 Pedestal, pedestalWidths   
 //++++++++++++++++++++++++++++++++++++
@@ -989,17 +1143,30 @@ int main(int argc, char *argv[])
   Map_Ampl[31][2][1] = (TH2F*)hfile->Get("h_mapDepth1pedestal_HE");
   Map_Ampl[31][2][2] = (TH2F*)hfile->Get("h_mapDepth2pedestal_HE"); 
   Map_Ampl[31][2][3] = (TH2F*)hfile->Get("h_mapDepth3pedestal_HE"); 
+  Map_Ampl[31][2][4] = (TH2F*)hfile->Get("h_mapDepth4pedestal_HE"); 
+  Map_Ampl[31][2][5] = (TH2F*)hfile->Get("h_mapDepth5pedestal_HE"); 
+  Map_Ampl[31][2][6] = (TH2F*)hfile->Get("h_mapDepth6pedestal_HE"); 
+  Map_Ampl[31][2][7] = (TH2F*)hfile->Get("h_mapDepth7pedestal_HE"); 
   Map_Ampl[31][3][4] = (TH2F*)hfile->Get("h_mapDepth4pedestal_HO");
   Map_Ampl[31][4][1] = (TH2F*)hfile->Get("h_mapDepth1pedestal_HF");
   Map_Ampl[31][4][2] = (TH2F*)hfile->Get("h_mapDepth2pedestal_HF");
+  Map_Ampl[31][4][3] = (TH2F*)hfile->Get("h_mapDepth3pedestal_HF");
+  Map_Ampl[31][4][4] = (TH2F*)hfile->Get("h_mapDepth4pedestal_HF");
+
   Map_Ampl[32][1][1] = (TH2F*)hfile->Get("h_mapDepth1pedestalw_HB");
   Map_Ampl[32][1][2] = (TH2F*)hfile->Get("h_mapDepth2pedestalw_HB");   
   Map_Ampl[32][2][1] = (TH2F*)hfile->Get("h_mapDepth1pedestalw_HE");
   Map_Ampl[32][2][2] = (TH2F*)hfile->Get("h_mapDepth2pedestalw_HE"); 
   Map_Ampl[32][2][3] = (TH2F*)hfile->Get("h_mapDepth3pedestalw_HE"); 
+  Map_Ampl[32][2][4] = (TH2F*)hfile->Get("h_mapDepth4pedestalw_HE"); 
+  Map_Ampl[32][2][5] = (TH2F*)hfile->Get("h_mapDepth5pedestalw_HE"); 
+  Map_Ampl[32][2][6] = (TH2F*)hfile->Get("h_mapDepth6pedestalw_HE"); 
+  Map_Ampl[32][2][7] = (TH2F*)hfile->Get("h_mapDepth7pedestalw_HE"); 
   Map_Ampl[32][3][4] = (TH2F*)hfile->Get("h_mapDepth4pedestalw_HO");
   Map_Ampl[32][4][1] = (TH2F*)hfile->Get("h_mapDepth1pedestalw_HF");
   Map_Ampl[32][4][2] = (TH2F*)hfile->Get("h_mapDepth2pedestalw_HF");
+  Map_Ampl[32][4][3] = (TH2F*)hfile->Get("h_mapDepth3pedestalw_HF");
+  Map_Ampl[32][4][4] = (TH2F*)hfile->Get("h_mapDepth4pedestalw_HF");
   
   HistPed[1][1][0] = (TH1F*)hfile->Get("h_pedestal0_HB");
   HistPed[1][1][1] = (TH1F*)hfile->Get("h_pedestal1_HB");
@@ -1041,16 +1208,19 @@ int main(int argc, char *argv[])
   for (int test=31;test<=32;test++) { //Test: 31-Pedestals, 32-pedestal Widths,
       for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
           if (sub==1) cHB->Divide(2,1);
-          if (sub==2) cHE->Divide(3,1);
+	  //        if (sub==2) cHE->Divide(3,1);
+          if (sub==2) cHE->Divide(3,3);
           if (sub==3) cONE->Divide(1,1);
-          if (sub==4) cHB->Divide(2,1);
+	  //        if (sub==4) cHF->Divide(2,1);
+          if (sub==4) cHF->Divide(2,2);
           int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
-          int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+	  //        int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+          int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
           for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depths 
       	      if (sub==1) cHB->cd(k); 
               if (sub==2) cHE->cd(k);
 	      if (sub==3) cONE->cd(k-3);
-	      if (sub==4) cHB->cd(k);  
+	      if (sub==4) cHF->cd(k);  
               Map_Ampl[test][sub][k]->Divide(Map_Ampl[test][sub][k],Map_SUB[sub][k], 1, 1, "B"); 
               gPad->SetGridy();
               gPad->SetGridx();
@@ -1070,21 +1240,27 @@ int main(int argc, char *argv[])
               if (sub==1) {cHB->Modified(); cHB->Update();} 
               if (sub==2) {cHE->Modified(); cHE->Update();}
               if (sub==3) {cONE->Modified();cONE->Update();}
-              if (sub==4) {cHB->Modified(); cHB->Update();} 
+              if (sub==4) {cHF->Modified(); cHF->Update();} 
           }//end depth    
           if (test==31){ 
 	     if (sub==1) {cHB->Print("MapRatePedHB.png"); cHB->Clear();} 
              if (sub==2) {cHE->Print("MapRatePedHE.png"); cHE->Clear();}
              if (sub==3) {cONE->Print("MapRatePedHO.png"); cONE->Clear();}
-             if (sub==4) {cHB->Print("MapRatePedHF.png"); cHB->Clear();} 
+             if (sub==4) {cHF->Print("MapRatePedHF.png"); cHF->Clear();} 
 	  }   
 	  if (test==32){ 
 	     if (sub==1) {cHB->Print("MapRatePedWidthsHB.png"); cHB->Clear();} 
              if (sub==2) {cHE->Print("MapRatePedWidthsHE.png"); cHE->Clear();}
              if (sub==3) {cONE->Print("MapRatePedWidthsHO.png"); cONE->Clear();}
-             if (sub==4) {cHB->Print("MapRatePedWidthsHF.png"); cHB->Clear();} 
+             if (sub==4) {cHF->Print("MapRatePedWidthsHF.png"); cHF->Clear();} 
 	  }
    
+
+
+
+
+	  ///////////////////////////////////////////////
+
           cPED->Divide(2,2);        
 	  for(int cap=0;cap<=3;cap++) {
 	      cPED->cd(cap+1);
@@ -1113,8 +1289,8 @@ int main(int argc, char *argv[])
 
 	      cPED->Modified(); 
               cPED->Update(); 
-	      float min_x[] = {(float)(Pedest[test-31][sub]),(float)(Pedest[test-31][sub])};
-              float min_y[] = {0.,100000000.};
+	      double min_x[] = {Pedest[test-31][sub],Pedest[test-31][sub]};
+              double min_y[] = {0.,100000000.};
               TGraph* MIN = new TGraph(2, min_x, min_y);
               MIN->SetLineStyle(2);
               MIN->SetLineColor(2);
@@ -1134,15 +1310,12 @@ int main(int argc, char *argv[])
              if (sub==2) {cPED->Print("HistPedestalWidthsHE.png"); cPED->Clear();}
              if (sub==3) {cPED->Print("HistPedestalWidthsHO.png"); cPED->Clear();}
              if (sub==4) {cPED->Print("HistPedestalWidthsHF.png"); cPED->Clear();}  
-	  } 
-
-
+	  } 	  	  	  
       }// end sub      
   }//end test 31,32
 
-
-  //+++++++++++++++++++++++++++++++++++  
-  //Test 33 Correlation of Pedestal, pedestalWidths Vs fullAmplitude   
+ //+++++++++++++++++++++++++++++++++++  
+//Test 33 Correlation of Pedestal, pedestalWidths Vs fullAmplitude   
 //++++++++++++++++++++++++++++++++++++
   
   cHB->Clear();   
@@ -1178,13 +1351,15 @@ int main(int argc, char *argv[])
     if (sub==3) {cHB->Print("CorrelationsMapPedestalVsfullAmplitudeHO.png"); cHB->Clear();}
     if (sub==4) {cHB->Print("CorrelationsMapPedestalVsfullAmplitudeHF.png"); cHB->Clear();} 
   }// end sub      
+  
+  
 
  //+++++++++++++++++++++++++++++++++++  
 //Test 41 Time Slices shape for good and bad channels   
 //++++++++++++++++++++++++++++++++++++
+
   
   cONE->Clear();   
-  cONE->Divide(1,1);
   hist_GoodTSshape[1] = (TH1F*)hfile->Get("h_shape_good_channels_HB");
   hist_GoodTSshape[2] = (TH1F*)hfile->Get("h_shape_good_channels_HE");
   hist_GoodTSshape[3] = (TH1F*)hfile->Get("h_shape_good_channels_HO");
@@ -1205,6 +1380,7 @@ int main(int argc, char *argv[])
   hist_BadTSshape0[3] = (TH1F*)hfile->Get("h_shape0_bad_channels_HO");
   hist_BadTSshape0[4] = (TH1F*)hfile->Get("h_shape0_bad_channels_HF");
 
+
   cONE->cd(1);
 
   for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
@@ -1215,8 +1391,8 @@ int main(int argc, char *argv[])
       gPad->SetLogz();
       hist_GoodTSshape[sub]->Divide(hist_GoodTSshape[sub],hist_GoodTSshape0[sub], 1, 1, "B"); 
       hist_GoodTSshape[sub]->SetXTitle("Time slice \b");
-      hist_GoodTSshape[sub]->SetYTitle("Amplitude \b");
-      sprintf(str,"Time Slices \b");
+      hist_GoodTSshape[sub]->SetYTitle("ADC counts \b");
+      sprintf(str,"Mean ADC Shape \b");
       hist_GoodTSshape[sub]->SetTitle(str);
       hist_GoodTSshape[sub]->Draw("");
       // hist_GoodTSshape[sub]->GetYaxis()->SetRangeUser(0, 72.);
@@ -1238,7 +1414,7 @@ int main(int argc, char *argv[])
       hist_BadTSshape[sub]->Divide(hist_BadTSshape[sub],hist_BadTSshape0[sub], 1, 1, "B"); 
       hist_BadTSshape[sub]->SetXTitle("Time slice \b");
       hist_BadTSshape[sub]->SetYTitle("ADC counts \b");
-      sprintf(str,"Mean AMC shape \b");
+      sprintf(str,"Mean ADC Shape \b");
       hist_BadTSshape[sub]->SetTitle(str);
       hist_BadTSshape[sub]->Draw("");
       // hist_BadTSshape[sub]->GetYaxis()->SetRangeUser(0, 72.);
@@ -1250,12 +1426,12 @@ int main(int argc, char *argv[])
     if (sub==4) {cONE->Print("HistBadTSshapesHF.png"); cONE->Clear();} 
   }// end sub      
     
-  
   /*
  //+++++++++++++++++++++++++++++++++++  
 //Test 42 ADC in TS distributions   
 //++++++++++++++++++++++++++++++++++++
-  
+ 
+std::cout<<" We are here to print ADC "<<std::endl; 
 
   hist_ADC_All[1] = (TH1F*)hfile->Get("h_ADC_HB");
   hist_ADC_All[2] = (TH1F*)hfile->Get("h_ADC_HE");
@@ -1290,7 +1466,7 @@ int main(int argc, char *argv[])
       hist_ADC_All[sub]->SetTitle(str);
       hist_ADC_All[sub]->Draw("");
       // hist_ADC_All[sub]->GetYaxis()->SetRangeUser(0, 72.);
-      // hist_ADC_All[sub]->GetZaxis()->SetRangeUser(0.0001, 1.);
+      hist_ADC_All[sub]->GetXaxis()->SetRangeUser(0.000, 1000.);
       cONE->Modified(); cONE->Update();
       if (sub==1) {cONE->Print("Hist_ADC_HB_All.png"); cONE->Clear();} 
       if (sub==2) {cONE->Print("Hist_ADC_HE_All.png"); cONE->Clear();}
@@ -1323,7 +1499,7 @@ int main(int argc, char *argv[])
               hist_ADC_DS[sub][k]->SetTitle(str);
               hist_ADC_DS[sub][k]->Draw("");
            // hist_ADC_DS[sub][k]->GetYaxis()->SetRangeUser(0, 72.);
-           // hist_ADC_DS[sub][k]->GetZaxis()->SetRangeUser(0.0001, 1.);
+              hist_ADC_DS[sub][k]->GetXaxis()->SetRangeUser(0.000, 1000.);
               if (sub==1) {cHB->Modified(); cHB->Update();} 
               if (sub==2) {cHE->Modified(); cHE->Update();}
               if (sub==3) {cONE->Modified();cONE->Update();}
@@ -1335,7 +1511,6 @@ int main(int argc, char *argv[])
           if (sub==4) {cHB->Print("Hist_ADC_HF_DS.png"); cHB->Clear();} 
   }// end sub
 
-  
 
  //+++++++++++++++++++++++++++++++++++  
 //Test 43 Sum ADC in TS distributions   
@@ -1476,14 +1651,18 @@ int main(int argc, char *argv[])
           if (sub==3) {cONE->Print("Hist_SumADC_HO1.png"); cONE->Clear();}
           if (sub==4) {cHB->Print("Hist_SumADC_HF1.png"); cHB->Clear();} 
   }// end sub
+
 */
+
+
+
+//======================================================================
+   std::cout<<" We are here to print 2017 MAPs "<<std::endl;
+
 //======================================================================
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //======================================================================
 /// Prepare maps of good/bad channels:
-
 
     TH2F *Map_ALL = new TH2F("Map_All","Map_all", 82, -41, 40, 72, 0, 71);             
     int nx = Map_ALL->GetXaxis()->GetNbins();
@@ -1502,36 +1681,26 @@ int main(int argc, char *argv[])
     int flag_W = 0;
     int flag_B = 0;
     int flag_P = 0;
-
-//    std::cout << "************>>>   1" << std::endl;
-
+    
     for (int i=1;i<=nx;i++) {  //Eta
        for (int j=1;j<=ny;j++) {	// Phi  
           for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
 	     int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
-	     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-//	     std::cout << "************>>>   2 i = " << i << "j = " << j << "sub = " << sub << std::endl;
+	     //	     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+	     int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
 	     for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
-//	       std::cout << "************>>>   3    k = " << k << std::endl;
-//	       std::cout << "************>>>   3  Map_SUB[sub][k]->GetBinContent(i,j)=   " <<Map_SUB[sub][k]->GetBinContent(i,j) << "k = " << k << std::endl;
-	       if (Map_SUB[sub][k]->GetBinContent(i,j)!=0) {Map_SUB[sub][k]->SetBinContent(i,j,0.5);
-//		 std::cout << "************>>>   4" << std::endl;
-		 Map_ALL->SetBinContent(i,j,0.5);}
-//		 std::cout << "************>>>   5" << std::endl;
+	         if (Map_SUB[sub][k]->GetBinContent(i,j)!=0) {Map_SUB[sub][k]->SetBinContent(i,j,0.5);Map_ALL->SetBinContent(i,j,0.5);}
 	     }	
-//  std::cout << "************>>>   6" << std::endl;
           }
-//  std::cout << "************>>>   7" << std::endl;
        }
-//  std::cout << "************>>>   8" << std::endl;
-    }
+    }   	  
 
-//  std::cout << "************>>>   9" << std::endl;
     for (int i=1;i<=nx;i++) {  //Eta
        for (int j=1;j<=ny;j++) {	// Phi  
           for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
 	     int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
-	     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+	     //	     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+	     int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
 	     for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
 	        flag_W = 0;
 	        flag_B = 0;
@@ -1596,11 +1765,12 @@ int main(int argc, char *argv[])
 		} //end test
 */
 //Gain stabil
+/*
 		 for (int test=21;test<=21;test++) {
                    if (abs(Map_Ampl[test][sub][k]->GetBinContent(i,j)) > porog[sub])  {
-	              if (Map_SUB[sub][k]->GetBinContent(i,j)!=1.0) Map_SUB[sub][k]->SetBinContent(i,j,0.75);
-		      if (Map_ALL->GetBinContent(i,j)!=1.) {
-		          Map_ALL->SetBinContent(i,j,0.75);		      
+		     	              if (Map_SUB[sub][k]->GetBinContent(i,j)!=1.0) Map_SUB[sub][k]->SetBinContent(i,j,0.75);
+		     		      if (Map_ALL->GetBinContent(i,j)!=1.) {
+		     		          Map_ALL->SetBinContent(i,j,0.75);		      
 		          if (flag_W == 0) {
                               NWarn +=1; 
 		              Eta[1][NWarn]=i-41;
@@ -1612,11 +1782,11 @@ int main(int argc, char *argv[])
 		          else Comment[1][NWarn]+=", "+Text[test];
 		          flag_W = 1;
 		      		      		 
-//		      cout<<"Map_Ampl["<<test<<"]["<<sub<<"]["<<k<<"]->GetBinContent("<<i<<","<<j<<")= "<<Map_Ampl[test][sub][k]->GetBinContent(i,j)<<endl;
+		      cout<<"Map_Ampl["<<test<<"]["<<sub<<"]["<<k<<"]->GetBinContent("<<i<<","<<j<<")= "<<Map_Ampl[test][sub][k]->GetBinContent(i,j)<<endl;
                       }     
                   } 
 		} //end test
-		
+*/		
 //Pedestals
 		 for (int test=31;test<=32;test++) {
                    if (Map_Ampl[test][sub][k]->GetBinContent(i,j) > 0.1)  {
@@ -1642,20 +1812,25 @@ int main(int argc, char *argv[])
 	  }//end Sub 	  	  
        }//end Phi
     }//end Eta 
-
+                   
 // subdet maps
-  for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
+  for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
+
+       std::cout<<" 2017 MAPS_SUB "<<sub<<std::endl;
        if (sub==1) cHB->Divide(2,1);
-       if (sub==2) cHE->Divide(3,1);
+       //     if (sub==2) cHE->Divide(3,1);
+       if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
-       if (sub==4) cHB->Divide(2,1);
+       //     if (sub==4) cHB->Divide(2,1);
+       if (sub==4) cHF->Divide(2,2);
        int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
-       int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+       //     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+       int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
        for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
             if (sub==1) cHB->cd(k); 
             if (sub==2) cHE->cd(k);
 	    if (sub==3) cONE->cd(k-3);
-	    if (sub==4) cHB->cd(k); 
+	    if (sub==4) cHF->cd(k); 
             gPad->SetGridy();
             gPad->SetGridx();
 //          gPad->SetLogz();
@@ -1673,17 +1848,83 @@ int main(int argc, char *argv[])
             if (sub==1) {cHB->Modified(); cHB->Update();} 
             if (sub==2) {cHE->Modified(); cHE->Update();}
             if (sub==3) {cONE->Modified();cONE->Update();}
-            if (sub==4) {cHB->Modified(); cHB->Update();}      
+            if (sub==4) {cHF->Modified(); cHF->Update();}      
        } //end depth   
        if (sub==1) {cHB->Print("MAPHB.png"); cHB->Clear();} 
        if (sub==2) {cHE->Print("MAPHE.png"); cHE->Clear();}
        if (sub==3) {cONE->Print("MAPHO.png"); cONE->Clear();}
-       if (sub==4) {cHB->Print("MAPHF.png"); cHB->Clear();} 
+       if (sub==4) {cHF->Print("MAPHF.png"); cHF->Clear();} 
   }
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  TCanvas *cmain1 = new TCanvas("cmain1","MAP",200,10,1400,1800);
+  cmain1->Divide(2,2);
+  
+  cmain1->cd(1);
+  TH1F *JDBEYESJ0= (TH1F*)hfile->Get("h_totalAmplitudeHBperEvent");
+  JDBEYESJ0->SetStats(0);
+  JDBEYESJ0->SetMarkerStyle(20);
+  JDBEYESJ0->SetMarkerSize(0.8);
+  JDBEYESJ0->GetYaxis()->SetLabelSize(0.04);
+  JDBEYESJ0->SetXTitle("iEvent \b");
+  JDBEYESJ0->SetYTitle("totalAmplitude perEvent \b");
+  JDBEYESJ0->SetTitle("HB \b");
+  JDBEYESJ0->SetMarkerColor(2);
+  JDBEYESJ0->SetLineColor(1);
+  JDBEYESJ0->SetMinimum(0.8);
+  JDBEYESJ0->Draw("HIST same P0");
+  
+  cmain1->cd(2);
+  TH1F *JDBEYESJ1= (TH1F*)hfile->Get("h_totalAmplitudeHEperEvent");
+  JDBEYESJ1->SetStats(0);
+  JDBEYESJ1->SetMarkerStyle(20);
+  JDBEYESJ1->SetMarkerSize(0.8);
+  JDBEYESJ1->GetYaxis()->SetLabelSize(0.04);
+  JDBEYESJ1->SetXTitle("iEvent \b");
+  JDBEYESJ1->SetYTitle("totalAmplitude perEvent \b");
+  JDBEYESJ1->SetTitle("HE \b");
+  JDBEYESJ1->SetMarkerColor(2);
+  JDBEYESJ1->SetLineColor(1);
+  JDBEYESJ1->SetMinimum(0.8);
+  JDBEYESJ1->Draw("HIST same P0");
+  
+  cmain1->cd(3);
+  TH1F *JDBEYESJ2= (TH1F*)hfile->Get("h_totalAmplitudeHFperEvent");
+  JDBEYESJ2->SetStats(0);
+  JDBEYESJ2->SetMarkerStyle(20);
+  JDBEYESJ2->SetMarkerSize(0.8);
+  JDBEYESJ2->GetYaxis()->SetLabelSize(0.04);
+  JDBEYESJ2->SetXTitle("iEvent \b");
+  JDBEYESJ2->SetYTitle("totalAmplitude perEvent \b");
+  JDBEYESJ2->SetTitle("HF \b");
+  JDBEYESJ2->SetMarkerColor(2);
+  JDBEYESJ2->SetLineColor(1);
+  JDBEYESJ2->SetMinimum(0.8);
+  JDBEYESJ2->Draw("HIST same P0");
+  
+  cmain1->cd(4);
+  TH1F *JDBEYESJ3= (TH1F*)hfile->Get("h_totalAmplitudeHOperEvent");
+  JDBEYESJ3->SetStats(0);
+  JDBEYESJ3->SetMarkerStyle(20);
+  JDBEYESJ3->SetMarkerSize(0.8);
+  JDBEYESJ3->GetYaxis()->SetLabelSize(0.04);
+  JDBEYESJ3->SetXTitle("iEvent \b");
+  JDBEYESJ3->SetYTitle("totalAmplitude perEvent \b");
+  JDBEYESJ3->SetTitle("HO \b");
+  JDBEYESJ3->SetMarkerColor(2);
+  JDBEYESJ3->SetLineColor(1);
+  JDBEYESJ3->SetMinimum(0.8);
+  JDBEYESJ3->Draw("HIST same P0");
+  
+  cmain1->Modified(); 
+  cmain1->Update();   
+  cmain1->Print("EVENTDEPENDENCE.png"); 
+  
+  std::cout<<" EVENTDEPENDENCE "<<std::endl;
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ALL SubDet  
   gStyle->SetOptTitle(0);
-  TCanvas *cmain = new TCanvas("cmain","MAP",800,800);
+  TCanvas *cmain = new TCanvas("cmain","MAP",1000,1000);
   gPad->SetGridy();
   gPad->SetGridx();
 //   gPad->SetLogz();
@@ -1696,6 +1937,8 @@ int main(int argc, char *argv[])
   cmain->Modified(); 
   cmain->Update();   
   cmain->Print("MAP.png"); 
+
+    std::cout<<" MAP_ALL "<<std::endl;
             
 //======================================================================
 
@@ -2218,7 +2461,8 @@ int main(int argc, char *argv[])
      if (sub==3) htmlFile << "<h2> 1. Analysis results for HO</h2>"<< std::endl;
      if (sub==4) htmlFile << "<h2> 1. Analysis results for HF</h2>"<< std::endl;
      htmlFile << "<table width=\"400\">"<< std::endl;
-     htmlFile << "<tr>"<< std::endl;    
+     htmlFile << "<tr>"<< std::endl;   
+ 
      if (sub==1) {
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HB_Tile.html\">Megatile Channels</a></td>"<< std::endl;
 //       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HB_Calib.html\">Calibration Channels</a></td>"<< std::endl;
@@ -2227,7 +2471,9 @@ int main(int argc, char *argv[])
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HB_Shapes.html\">ADC Shapes</a></td>"<< std::endl;
      }
      if (sub==2) {
-       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HE_Tile.html\">Megatile Channels</a></td>"<< std::endl;
+       // AZ 18.03.2018
+            htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HE_Tile.html\">Megatile Channels</a></td>"<< std::endl;
+	    //     htmlFile << "  <td><a href=\"HE_Tile.html\">Megatile Channels</a></td>"<< std::endl;
 //       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HE_Calib.html\">Calibration Channels</a></td>"<< std::endl;
 //       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HE_Drift.html\">Gain Stability</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HE_Pedestals.html\">Pedestals</a></td>"<< std::endl;
@@ -2263,14 +2509,17 @@ int main(int argc, char *argv[])
 
      htmlFile << "<a name=\"ChannelMap\"></a>\n";
      htmlFile << "<h3> 2.A.Channel map for each Depth </h3>"<< std::endl;
-     htmlFile << "<h4> Channel legend: green - good, red - bad (rate of failures at least 0.1), yellow - at least 2% gain drift, white - not applicable or out of range </h4>"<< std::endl;
+     htmlFile << "<h4> Channel legend: green - good, not yellow - suspicious(rate of failures at least 0.1), white - not applicable or out of range </h4>"<< std::endl;
      if (sub==1) htmlFile << " <img src=\"MAPHB.png\" />" << std::endl;      
      if (sub==2) htmlFile << " <img src=\"MAPHE.png\" />" << std::endl;      
      if (sub==3) htmlFile << " <img src=\"MAPHO.png\" />" << std::endl;      
      if (sub==4) htmlFile << " <img src=\"MAPHF.png\" />" << std::endl;      
      htmlFile << "<br>"<< std::endl;
      htmlFile << "<a href=\"#Top\">to top</a><br>\n";
-     
+
+
+     /////////////////////////////////////////////////////////////////   AZ 19.03
+     /*     
 //     htmlFile << "<h3> 2.B.List of Bad channels (rate > 0.1) and its rates for each RMT criteria (for GS - %) </h3>"<< std::endl;
 
      htmlFile << "<a name=\"BadChannels\"></a>\n";
@@ -2332,26 +2581,29 @@ int main(int argc, char *argv[])
         const CellDB db;
         CellDB ce;
 	if ((ce.size()>=1)&&(Sub[2][i]==sub)) {
-           if (Sub[2][i]==1) {
-	      ce = db.find("subdet", "HB").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl; continue;}
-	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HB, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}
-	      }
-	   if (Sub[2][i]==2) {
-	      ce = db.find("subdet", "HE").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;continue;}
-	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HE, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}	   
-	      }
-	   if (Sub[2][i]==3) {
-	      ce = db.find("subdet", "HO").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;continue;}
-	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HO, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}	   
-	      }	   
-	   if (Sub[2][i]==4) {
-	      ce = db.find("subdet", "HF").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;continue;}
-	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HF, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}	   
-	      }	
+	// AZ 19.03.2018
+	
+// AZ 19           if (Sub[2][i]==1) {
+// AZ 19	      ce = db.find("subdet", "HB").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
+// AZ 19	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl; continue;}
+// AZ 19	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HB, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}
+// AZ 19	      }
+// AZ 19	   if (Sub[2][i]==2) {
+// AZ 19	      ce = db.find("subdet", "HE").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
+// AZ 19	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;continue;}
+// AZ 19	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HE, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}	   
+// AZ 19	      }
+// AZ 19	   if (Sub[2][i]==3) {
+// AZ 19	      ce = db.find("subdet", "HO").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
+// AZ 19	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;continue;}
+// AZ 19	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HO, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}	   
+// AZ 19	      }	   
+// AZ 19	   if (Sub[2][i]==4) {
+// AZ 19	      ce = db.find("subdet", "HF").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
+// AZ 19	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;continue;}
+// AZ 19	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HF, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}	   
+// AZ 19	      }
+	
 	   htmlFile << "<tr>"<< std::endl;
            htmlFile << "<td class=\"s4\" align=\"center\">" << ind+1 <<"</td>"<< std::endl;
            htmlFile << raw_class<< Eta[2][i]<<"</td>"<< std::endl;
@@ -2394,7 +2646,7 @@ int main(int argc, char *argv[])
      htmlFile << "<br>"<< std::endl;
      htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 
-/*     
+    
      htmlFile << "<h3> 2.C.List of Gain unstable channels and its value in % (for other criterias - rate)</h3>"<< std::endl;
      htmlFile << "<table>"<< std::endl;         
      htmlFile << "<tr>";
@@ -2507,7 +2759,7 @@ int main(int argc, char *argv[])
      } 
      htmlFile << "</table>" << std::endl; 
      htmlFile << "<br>"<< std::endl;
- */    
+    
      
 //     htmlFile << "<h3> 2.D.List of channels with Bad Pedestals (rate > 0.1) and its rates (for GS - %)</h3>"<< std::endl;
      htmlFile << "<a name=\"BadPedestals\"></a>\n";
@@ -2564,26 +2816,29 @@ int main(int argc, char *argv[])
         const CellDB db;
         CellDB ce;
 	if ((ce.size()>=1)&&(Sub[3][i]==sub)) {
-           if (Sub[3][i]==1) {
-	      ce = db.find("subdet", "HB").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
-	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HB, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}
-	      }
-	   if (Sub[3][i]==2) {
-	      ce = db.find("subdet", "HE").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
-	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HE, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}	   
-	      }
-	   if (Sub[3][i]==3) {
-	      ce = db.find("subdet", "HO").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
-	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HO, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}	   
-	      }	   
-	   if (Sub[3][i]==4) {
-	      ce = db.find("subdet", "HF").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
-	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HF, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}	   
-	      }	
+	
+	// AZ 19.03.2018
+// AZ 19           if (Sub[3][i]==1) {
+// AZ 19	      ce = db.find("subdet", "HB").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
+// AZ 19	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
+// AZ 19	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HB, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}
+// AZ 19	      }
+// AZ 19	   if (Sub[3][i]==2) {
+// AZ 19	      ce = db.find("subdet", "HE").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
+// AZ 19	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
+// AZ 19	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HE, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}	   
+// AZ 19	      }
+// AZ 19	   if (Sub[3][i]==3) {
+// AZ 19	      ce = db.find("subdet", "HO").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
+// AZ 19	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
+// AZ 19	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HO, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}	   
+// AZ 19	      }	   
+// AZ 19	   if (Sub[3][i]==4) {
+// AZ 19	      ce = db.find("subdet", "HF").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
+// AZ 19	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
+// AZ 19	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HF, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}	   
+// AZ 19	      }	
+	   
            htmlFile << "<td class=\"s4\" align=\"center\">" << ind+1 <<"</td>"<< std::endl;
            htmlFile << raw_class<< Eta[3][i]<<"</td>"<< std::endl;
            htmlFile << raw_class<< Phi[3][i]<<"</td>"<< std::endl;
@@ -2608,7 +2863,7 @@ int main(int argc, char *argv[])
 	   htmlFile << raw_class1<< Map_Ampl[5][Sub[3][i]][Depth[3][i]]->GetBinContent(Eta[3][i]+41,Phi[3][i]+1)<<"</td>"<< std::endl;
 	   htmlFile << raw_class1<< Map_Ampl[6][Sub[3][i]][Depth[3][i]]->GetBinContent(Eta[3][i]+41,Phi[3][i]+1)<<"</td>"<< std::endl;
 //	   htmlFile << raw_class2<< Map_Ampl[11][Sub[3][i]][Depth[3][i]]->GetBinContent(Eta[3][i]+41,Phi[3][i]+1)<<"</td>"<< std::endl;
-//           htmlFile << raw_class2<< Map_Ampl[12][Sub[3][i]][Depth[3][i]]->GetBinContent(Eta[3][i]+41,Phi[3][i]+1)<<"</td>"<< std::endl;	 
+//         htmlFile << raw_class2<< Map_Ampl[12][Sub[3][i]][Depth[3][i]]->GetBinContent(Eta[3][i]+41,Phi[3][i]+1)<<"</td>"<< std::endl;	 
 //	   htmlFile << raw_class2<< Map_Ampl[13][Sub[3][i]][Depth[3][i]]->GetBinContent(Eta[3][i]+41,Phi[3][i]+1)<<"</td>"<< std::endl;
 //	   htmlFile << raw_class2<< Map_Ampl[14][Sub[3][i]][Depth[3][i]]->GetBinContent(Eta[3][i]+41,Phi[3][i]+1)<<"</td>"<< std::endl;
 //	   htmlFile << raw_class2<< Map_Ampl[15][Sub[3][i]][Depth[3][i]]->GetBinContent(Eta[3][i]+41,Phi[3][i]+1)<<"</td>"<< std::endl;
@@ -2623,8 +2878,8 @@ int main(int argc, char *argv[])
      } 
      htmlFile << "</table><br>" << std::endl;
      htmlFile << "<a href=\"#Top\">to top</a><br>\n";
-
-
+*/
+     ///////////////////////////////////////////////////////////////   AZ 19.03.2018
 
 
      htmlFile << "</body> " << std::endl;
@@ -2706,16 +2961,25 @@ int main(int argc, char *argv[])
      htmlFile << "<h2> 1. Analysis results for subdetectors </h2>"<< std::endl;   
      htmlFile << "<table width=\"400\">"<< std::endl;
      htmlFile << "<tr>"<< std::endl;
+
+
+
+
+     // AZ 18.03.2018
      /*
      htmlFile << "  <td><a href=\"HB.html\">HB</a></td>"<< std::endl;
      htmlFile << "  <td><a href=\"HE.html\">HE</a></td>"<< std::endl;
      htmlFile << "  <td><a href=\"HO.html\">HO</a></td>"<< std::endl;
      htmlFile << "  <td><a href=\"HF.html\">HF</a></td>"<< std::endl;    
-     */
+*/   
      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HB.html\">HB</a></td>"<< std::endl;
      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HE.html\">HE</a></td>"<< std::endl;
      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HO.html\">HO</a></td>"<< std::endl;
      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HF.html\">HF</a></td>"<< std::endl;
+     
+
+
+
          
      htmlFile << "</tr>"<< std::endl;
      htmlFile << "</table>"<< std::endl;
@@ -2723,7 +2987,7 @@ int main(int argc, char *argv[])
         
      htmlFile << "<h2> 2. HCAL status over all criteria and subdetectors </h2>"<< std::endl;   
      htmlFile << "<h3> 2.A. Channels in detector space </h3>"<< std::endl;
-     htmlFile << "<h4> Legend for channel status: green - good, red - bad, yellow - at least 2% gain drift, white - not applicable or out of range </h4>"<< std::endl;
+     htmlFile << "<h4> Legend for channel status: green - good, others - may be a problems, white - not applicable or out of range </h4>"<< std::endl;
      htmlFile << " <img src=\"MAP.png\" />" << std::endl;      
      htmlFile << "<br>"<< std::endl;
      
@@ -2757,7 +3021,8 @@ int main(int argc, char *argv[])
      htmlFile << "</tr>"   << std::endl;     
    
      ind = 0;
-     
+     // AZ 19.03.2018
+     /*     
      for (int i=1;i<=NBad;i++) {
         if((ind%2)==1){
            raw_class="<td class=\"s2\" align=\"center\">";
@@ -2768,7 +3033,7 @@ int main(int argc, char *argv[])
         }
         const CellDB db;
         const CellDB ce = db.find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-             if (ce.size()==0) {cout<<"Error: No such Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;continue;}
+	//           if (ce.size()==0) {cout<<"Error: No such Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;continue;}
 //	else if (ce.size()>1) { cout<<"Warning: More than one line correspond to such Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}
 	
 	if (ce.size()>=1) {
@@ -2795,10 +3060,11 @@ int main(int argc, char *argv[])
 
         ind+=1;
 	}
-     } 
+     } /// end loop
+*/
      htmlFile << "</table>" << std::endl;
      htmlFile << "<br>"<< std::endl;
-     
+     /*     
      htmlFile << "<h3> 2.C.List of Gain unstable channels </h3>"<< std::endl;
      //htmlFile << "  <td><a href=\"HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
      //   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HELP.html\"> Description of criteria for bad channel selection</a></td>"<< std::endl;
@@ -2836,7 +3102,7 @@ int main(int argc, char *argv[])
         }
         const CellDB db;
         const CellDB ce = db.find("Eta", Eta[1][i]).find("Phi", Phi[1][i]).find("Depth", Depth[1][i]);
-	    if (ce.size()==0) {cout<<"Error: No such Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;continue;}
+	//	    if (ce.size()==0) {cout<<"Error: No such Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;continue;}
 //	else if (ce.size()>1) { cout<<"Warning: More than one line correspond to such Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}
 	
 	if (ce.size()>=1) {
@@ -2907,7 +3173,7 @@ int main(int argc, char *argv[])
         }
         const CellDB db;
         const CellDB ce = db.find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	    if (ce.size()==0) {cout<<"Error: No such Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
+	//	    if (ce.size()==0) {cout<<"Error: No such Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;continue;}
 //	else if (ce.size()>1) { cout<<"Warning: More than one line correspond to such Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}
 	
 	if (ce.size()>=1) {
@@ -2938,7 +3204,7 @@ int main(int argc, char *argv[])
     
    
      htmlFile << "</table>" << std::endl;
-     
+*/     
      htmlFile << "</body> " << std::endl;
      htmlFile << "</html> " << std::endl; 
      htmlFile.close();  
