@@ -8788,7 +8788,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	  if (verbosity == -56) std::cout << "***BAD HE channels from ADCAmpl: "  <<" ieta= " << ieta <<" iphi= " << iphi <<" amplitude= " << amplitude << std::endl;
 	}// if
 	//	if(amplitude > 700.) averSIGNALoccupancy_HE += 1.;
-	if(amplitude < 40.) {
+	if(amplitude < 500.) {
 	  if(mdepth==1) h_mapDepth1ADCAmpl225Copy_HE->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==2) h_mapDepth2ADCAmpl225Copy_HE->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==3) h_mapDepth3ADCAmpl225Copy_HE->Fill(double(ieta), double(iphi), 1.);
@@ -9041,9 +9041,9 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
     int c4=0;
     double errorBtype = 0.;  
     
-    //    int TSsize = 10;
-    int TSsize =10;
-    //     if(qie10df.size() != 10) std::cout << "TSsize QIE11 !=10 and = " <<qie11df.size()<< std::endl;
+    int TSsize = 10;// sub= 1 HB 
+    if( sub == 2 ) TSsize = 8; // sub = 2 HE
+
     if(nTS !=  TSsize) errorBtype = 1.; 
     TSsize=nTS;
     //  if(qie10df.size() !=  TSsize) errorBtype = 1.; 
@@ -9769,7 +9769,7 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
 	  if (verbosity == -56) std::cout << "***BAD HE channels from ADCAmpl: "  <<" ieta= " << ieta <<" iphi= " << iphi <<" amplitude= " << amplitude << std::endl;
 	}// if
 	//	if(amplitude > 700.) averSIGNALoccupancy_HE += 1.;
-	if(amplitude < 40.) {
+	if(amplitude < 500.) {
 	  if(mdepth==1) h_mapDepth1ADCAmpl225Copy_HE->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==2) h_mapDepth2ADCAmpl225Copy_HE->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==3) h_mapDepth3ADCAmpl225Copy_HE->Fill(double(ieta), double(iphi), 1.);
