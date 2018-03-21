@@ -2452,8 +2452,8 @@ std::cout<<" We are here to print ADC "<<std::endl;
      htmlFile << "1. <a href=\"#AnalysisResults\">Analysis results</a><br>\n";
      htmlFile << "2. <a href=\"#Status\">Status</a><br>\n";
      htmlFile << "2A. <a href=\"#ChannelMap\">Channel map</a><br>\n";
-     htmlFile << "2B. <a href=\"#BadChannels\">List of bad channels</a><br>\n";
-     htmlFile << "2C. <a href=\"#BadPedestals\">List of channels with bad pedestals</a><br>\n";
+     //   htmlFile << "2B. <a href=\"#BadChannels\">List of bad channels</a><br>\n";
+     //   htmlFile << "2C. <a href=\"#BadPedestals\">List of channels with bad pedestals</a><br>\n";
      
      htmlFile << "<a name=\"AnalysisResults\"></a>\n";
      if (sub==1) htmlFile << "<h2> 1. Analysis results for HB</h2>"<< std::endl;   
