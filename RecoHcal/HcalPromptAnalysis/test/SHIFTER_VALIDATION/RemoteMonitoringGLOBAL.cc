@@ -2599,14 +2599,14 @@ int main(int argc, char *argv[])
     if (h2Ceff) {
       // TO IDENTIFY: see red bins in eta-phi space 
       h2Diffe = (TH2F*)h2Ceff->Clone(Form("Diffe_Depth%d_HE",depth));
-      h2Diffe->SetTitle(Form("HE Depth %d. Cut avg(ADCAmpl) > 33 \b",depth));
+      h2Diffe->SetTitle(Form("HE Depth %d. Cut avg(ADCAmpl) > 1000. fC \b",depth));
       int nx = h2Ceff->GetXaxis()->GetNbins();
       int ny = h2Ceff->GetYaxis()->GetNbins();
       for (int i=1;i<=nx;i++) {
 	for (int j=1;j<=ny;j++) {
 	  double ccc1 =  h2Ceff->GetBinContent(i,j)   ;
 	  h2Diffe->SetBinContent(i,j,0.);
-	  if(ccc1 > 20.)  h2Diffe->SetBinContent(i,j,ccc1);
+	  if(ccc1 > 1000.)  h2Diffe->SetBinContent(i,j,ccc1);
 	}
       }
       gPad->SetGridy();
@@ -2617,7 +2617,7 @@ int main(int argc, char *argv[])
       //h2Diffe->GetZaxis()->SetLabelSize(0.08);
       h2Diffe->SetXTitle("#eta \b");
       h2Diffe->SetYTitle("#phi \b");
-      h2Diffe->SetZTitle("<ADCAmpl> bigger 33.- HE Depth1 \b");
+      h2Diffe->SetZTitle("<ADCAmpl> bigger 1000.fC- HE Depth1 \b");
       h2Diffe->SetMarkerColor(2);
       h2Diffe->SetLineColor(2);
       h2Diffe->Draw("COLZ");
@@ -3998,7 +3998,7 @@ int main(int argc, char *argv[])
 
 	       htmlFile << "<a name=\"ErrorB\"></a>\n";
 	       htmlFile << "<h2> 7. Error type B\n";
-	       htmlFile << "<h3> ErrorB identification: digi-collection size !=10.</h3>\n";
+	       htmlFile << "<h3> ErrorB identification: digi-collection size != 10. </h3>\n";
 	       htmlFile << " <img src=\"HistErrB_HB_1.png\" />\n<br>\n";
 	       htmlFile << " <img src=\"HistErrB_HB_2.png\" />\n<br>\n";
 	       htmlFile << "<br>\n";
@@ -4021,7 +4021,7 @@ int main(int argc, char *argv[])
        htmlFile << "<a name=\"ErrorAaverage\"></a>\n";
 
        htmlFile << "<h2> 5. Error type A cross check: see 2D pattern of channels   </h2>\n";
-       htmlFile << "<h2> 1) with average channel Amplitudes(No cut), 2) with average channel Amplitudes(<A> >35), 3) with channel Amplitude (A<40);  </h2>\n";
+       htmlFile << "<h2> 1) with average channel Amplitudes(No cut), 2) with average channel Amplitudes(<A> >1000.fC), 3) with channel Amplitude (A<500fC);  </h2>\n";
        htmlFile << " <img src=\"ChkErrA_HE1.png\" /><br><br>\n";
        htmlFile << " <img src=\"ChkErrA_HE2.png\" /><br>\n";
        htmlFile << " <img src=\"ChkErrA_HE3.png\" /><br>\n";
@@ -4039,7 +4039,7 @@ int main(int argc, char *argv[])
 
 	       htmlFile << "<a name=\"ErrorB\"></a>\n";
 	       htmlFile << "<h2> 7. Error type B\n";
-	       htmlFile << "<h3> ErrorB identification: digi-collection size !=10.</h3>\n";
+	       htmlFile << "<h3> ErrorB identification: digi-collection size != 8.</h3>\n";
 	       htmlFile << " <img src=\"HistErrB_HE_1.png\" />\n<br>\n";
 	       htmlFile << " <img src=\"HistErrB_HE_2.png\" />\n<br>\n";
 	       htmlFile << " <img src=\"HistErrB_HE_3.png\" />\n<br>\n";
@@ -4083,7 +4083,7 @@ int main(int argc, char *argv[])
 
 	       htmlFile << "<a name=\"ErrorB\"></a>\n";
 	       htmlFile << "<h2> 7. Error type B\n";
-	       htmlFile << "<h3> ErrorB identification: digi-collection size !=10. </h3>\n";
+	       htmlFile << "<h3> ErrorB identification: digi-collection size != 10. </h3>\n";
 	       htmlFile << " <img src=\"HistErrB_HO_4.png\" />\n<br>\n";
 	       htmlFile << "<br>\n";
 	       htmlFile <<"<h3> if Error type B is available, it start from:    " << LSofFirstErrB_HO  << "  LS </h3>\n";
@@ -4127,7 +4127,7 @@ int main(int argc, char *argv[])
 
 	       htmlFile << "<a name=\"ErrorB\"></a>\n";
 	       htmlFile << "<h2> 7. Error type B\n";
-	       htmlFile << "<h3> ErrorB identification: digi-collection size !=4. </h3>\n";
+	       htmlFile << "<h3> ErrorB identification: digi-collection size != 4. </h3>\n";
 	       htmlFile << " <img src=\"HistErrB_HF_1.png\" />\n<br>\n";
 	       htmlFile << " <img src=\"HistErrB_HF_2.png\" />\n<br>\n";
 	       htmlFile << "<br>\n";
