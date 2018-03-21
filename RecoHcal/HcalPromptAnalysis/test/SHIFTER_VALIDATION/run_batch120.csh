@@ -12,8 +12,8 @@ set k=`echo ${i} | awk -F _ '{print $3}'`
 echo ${i} ${j} ${k} ${1}
 #./batchjobs120.csh ${1} ${j} ${k} `pwd` 
 
-bsub -q 1nh batchjobs120.csh ${1} ${j} ${k} `pwd` 
-#bsub -q 8nh batchjobs120.csh ${1} ${j} ${k} `pwd` 
+#bsub -q 1nh batchjobs120.csh ${1} ${j} ${k} `pwd` 
+bsub -q 8nh batchjobs120.csh ${1} ${j} ${k} `pwd` 
 ##bsub -q 1nd batchjobs120.csh ${1} ${j} ${k} `pwd`
 
 end
