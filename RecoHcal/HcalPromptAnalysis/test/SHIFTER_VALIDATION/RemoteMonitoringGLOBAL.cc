@@ -4030,8 +4030,8 @@ int main(int argc, char *argv[])
        htmlFile << "<a name=\"ErrorAoccupancy\"></a>\n";
        htmlFile << "<h2> 6. Error type A: min/ave ratio for occupancy distributions with Amplitude bigger 35 (HEM:neg.eta;HEP:pos.eta) </h2>\n";
        htmlFile << "<h2> FOR CROSS-CHECK OLNY !!!</h2>\n";
-       htmlFile << "<h2> TO IDENTIFY A-type errors: for most of LSs the ratio to be lower 0.8 at least for HF- or HF+ </h2>\n";
-       htmlFile << "<h2> For runs without A-type errors: for most of LSs the ratio is higher 0.8 and is the same for HF- and HF+ </h2>\n";
+       htmlFile << "<h2> TO IDENTIFY A-type errors: for most of LSs the ratio to be lower 0.3 at least for HF- or HF+ </h2>\n";
+       htmlFile << "<h2> For runs without A-type errors: for most of LSs the ratio is higher 0.3 and is the same for HF- and HF+ </h2>\n";
        htmlFile << " <img src=\"OccPlots_HE.png\" /><br><br>\n";
        htmlFile << "<br>\n";
        htmlFile << "<a href=\"#Top\">to top</a><br>\n";
