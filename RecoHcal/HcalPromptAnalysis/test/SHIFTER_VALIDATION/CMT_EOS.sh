@@ -184,10 +184,10 @@ for i in ${runList} ; do
 	    exit 2
 	fi
 	for f in ${files} ; do
-	    echo "eos cp ${local_WebDir}/${f} $WebDir/CMT/GLOBAL_$runnumber/${f}"
-	    eos cp ${local_WebDir}/${f} $WebDir/CMT/GLOBAL_$runnumber/${f}
+	    echo "eoscp ${local_WebDir}/${f} $WebDir/CMT/GLOBAL_$runnumber/${f}"
+	    eoscp ${local_WebDir}/${f} $WebDir/CMT/GLOBAL_$runnumber/${f}
 	    if [ ! $? -eq 0 ] ; then
-		echo "CMT eos cp failed for ${f}"
+		echo "CMT eoscp failed for ${f}"
 #		exit 2
 	    fi
 	done
