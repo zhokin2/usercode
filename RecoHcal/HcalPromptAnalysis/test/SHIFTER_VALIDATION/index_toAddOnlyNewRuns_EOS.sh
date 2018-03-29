@@ -156,7 +156,7 @@ echo -e "Full runList for EOS complete\n"
 echo 'next message is Fine: '
 rm index.html
 #cmsStage $WebDir/CMT/index.html index.html
-eos cp $WebDir/CMT/index.html index.html
+eoscp $WebDir/CMT/index.html index.html
 cp index.html OLDindex.html
 
 # delete last line of copied index_draft.html which close the table
@@ -167,7 +167,7 @@ cat index.html | head -n -1 > index_draft.html
 #for i in ${runListEOSall} ; do
 #let "k = k + 1"
 #done
-k=1498
+k=1525
 ########################################## type by hands number of new runs k=k-number:
 #let "k = k - 1"
 echo ' ================>>>    k in old list = '$k
@@ -194,24 +194,43 @@ if [ ${dasCache} -eq 1 ] ; then
 	cp ${dasInfo} tmp
 	got=1
     else
-	echo "no ${dasInfo} found. Will use das_client.py"
+	echo "no ${dasInfo} found. Will use dasgoclient"
     fi
 fi
+
 if [ ${got} -eq 0 ] ; then
-    ./das_client.py --query="run=${i} | grep run.beam_e,run.bfield,run.nlumis,run.lhcFill,run.delivered_lumi,run.duration,run.start_time,run.end_time" --limit=0 > tmp
-    if [ ${dasCache} -eq 1 ] ; then cp tmp ${dasInfo}; fi
+#####  old:                                       1            2          3           4            5               6                 7 8            
+##   ./das_client.py --query="run=${i} | grep run.beam_e,run.bfield,run.nlumis,run.lhcFill,run.delivered_lumi,run.duration,run.start_time,run.end_time" --limit=0 > tmp
+###### AZ  used now:                                   1            2          3           4            5               6                 7 8 9      10 11 12  
+dasgoclient  --query="run=${i} | grep run.lhcEnergy ,run.bfield ,run.lsCount ,run.lhcFill ,  run.lsRanges ,    run.runClassName ,run.startTime ,run.stopTime "  > tmp
+# for test:
+#dasgoclient  --query="run=${i} | grep run.aaa ,run.lhcEnergy ,run.bfield ,run.lsCount,run.lhcFill ,  run.lsRanges ,    run.runClassName ,run.startTime ,run.stopTime , run.runCreated ,run.modified " > tmp
+
+#    if [ ${dasCache} -eq 1 ] ; then cp tmp ${dasInfo}; fi
 fi
 
-#cat tmp
-date=`cat tmp | awk '{print $7" "$8}'`
-date_end=`cat tmp | awk '{print $9" "$10}'`
-E=`cat tmp | awk '{print $1}'`
-B=`cat tmp | awk '{print $2}'`
-nL=`cat tmp | awk '{print $3}'`
-Fill=`cat tmp | awk '{print $4}'`
-dLumi=`cat tmp | awk '{print $5}'`
-D=`cat tmp | awk '{print $6}'`
+
+##### AZ used now:                          
+# delete last lines of copied tmp file
+cat tmp | head -n -1 > ztmp
 rm tmp
+#cat ztmp 
+
+###### AZ  used now:                          
+date=`cat ztmp | awk '{print $7" "$8" "$9}'`
+date_end=`cat ztmp | awk '{print $10" "$11" "$12}'`
+#old:
+#date=`cat ztmp | awk '{print $7" "$8}'`
+#date_end=`cat ztmp | awk '{print $9" "$10}'`
+E=`cat ztmp | awk '{print $1}'`
+B=`cat ztmp | awk '{print $2}'`
+nL=`cat ztmp | awk '{print $3}'`
+Fill=`cat ztmp | awk '{print $4}'`
+dLumi=`cat ztmp | awk '{print $5}'`
+D=`cat ztmp | awk '{print $6}'`
+
+###### AZ  used now:                          
+rm ztmp
 
 #echo 'ver 1'
 #${eos} ls $HistoDir/Global_$i.root
@@ -221,7 +240,7 @@ rm tmp
 
 fileinfo=`${eos} ls -l $HistoDir/Global_$i.root`
 Date_obr=`echo ${fileinfo} | awk '{print $6" "$7" "$8}'`
-echo "Date_obr=$Date_obr"
+#echo "Date_obr=$Date_obr"
 
 # extract run type, data, time and number of events
 type='Cosmic'
@@ -290,9 +309,9 @@ if [ ${debug} -gt 0 ] ; then
     echo "debug=${debug}. No upload to eos"
     status=-1
 else
-###    echo "Commented by me:  eos cp index_draft.html $WebDir/CMT/index.html No upload to eos"
-#  eos cp OLDindex.html $WebDir/CMT/OLDindex.html
-#  eos cp index_draft.html $WebDir/CMT/index.html
+###    echo "Commented by me:  eoscp index_draft.html $WebDir/CMT/index.html No upload to eos"
+#  eoscp OLDindex.html $WebDir/CMT/OLDindex.html
+#  eoscp index_draft.html $WebDir/CMT/index.html
 
 
     status="$?"
