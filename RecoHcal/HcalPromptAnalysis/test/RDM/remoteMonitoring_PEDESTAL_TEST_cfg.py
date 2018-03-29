@@ -385,11 +385,6 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   hfDigiCollectionTag = cms.InputTag('hcalDigis'),
                                   #
                                   #
-                                   #
-                                  #
-                                  splashesUpperLimit = cms.int32(10000),
-                                  #
-                                  #
                                   #
                                   #for upgrade: ---------------------------------------------------------
                                   hbheQIE11DigiCollectionTag = cms.InputTag('hcalDigis'),
@@ -413,11 +408,24 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   # 10       +        -       -     +     2017 w/o HEP17
                                   # 
                                   flagupgradeqie1011 = cms.int32(6),
-                                  #end upgrade: ---------------------------------------------------------
+                                  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+                                  # flaguseshunt = 1 or 6 (6 is default for global runs) 
+                                  flaguseshunt = cms.int32(6),
+                                  # flagsipmcorrection: != 0 yes,apply; = 0 do not use;
+                                  flagsipmcorrection = cms.int32(1),
+                                  #end upgrade: --------------------------------------------------------- end upgrade
                                   #
                                   #
                                   # for local LASER runs ONLY!!! to be > 0    (,else = 0)
                                   flagLaserRaddam = cms.int32(0),
+                                  # for gaussian fit for local shunt1 (Gsel0) led low-intensity or ped ONLY!!! to be  > 0    (,else = 0)
+                                  flagfitshunt1pedorledlowintensity = cms.int32(0),
+                                  #
+                                  #
+                                  #
+                                  splashesUpperLimit = cms.int32(10000),
+                                  #
+                                  #
                                   #
                                   #
                                   #
