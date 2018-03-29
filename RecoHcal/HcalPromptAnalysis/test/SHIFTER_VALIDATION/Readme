@@ -1,3 +1,9 @@
+see description in ROC instruction:
+https://twiki.cern.ch/twiki/bin/view/CMS/OfflineHcalShift#using_GitHub_branch_CMSSW_10_0_X
+
+
+
+
 ssh lxplus
 cd roc5
 setenv SCRAM_ARCH slc6_amd64_gcc630 
@@ -37,14 +43,14 @@ cd -
 
 ---------------------------------------------------------------------------------------
 
-eos cp Global_297169.root 
+eoscp Global_297169.root 
 /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Global_297169.root
 
 eos ls -l /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/
 
 ./index_toAddOnlyNewRuns_EOS.sh runlist_test
-eos cp OLDindex.html /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/OLDindex.html
-eos cp index_draft.html /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/index.html
+eoscp OLDindex.html /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/OLDindex.html
+eoscp index_draft.html /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/index.html
 
 ---------------------------------------------------------------------------------------
 ./compile.csh RemoteMonitoringGLOBAL.cc
