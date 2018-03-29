@@ -50,7 +50,7 @@ process.source = cms.Source("HcalTBSource",
 #
 ### 
 #                '/store/group/dpg_hcal/comm_hcal/USC/run307971/USC_307971.root'
-                '/store/group/dpg_hcal/comm_hcal/USC/run308701/USC_308701.root'
+#                '/store/group/dpg_hcal/comm_hcal/USC/run308701/USC_308701.root'
 #                '/store/group/dpg_hcal/comm_hcal/USC/run308234/USC_308234.root'
 #                '/store/group/dpg_hcal/comm_hcal/USC/run308383/USC_308383.root'
 
@@ -99,7 +99,7 @@ process.source = cms.Source("HcalTBSource",
 #               '/store/group/dpg_hcal/comm_hcal/USC/run311369/USC_311369.root'
 #               '/store/group/dpg_hcal/comm_hcal/USC/run311413/USC_311413.root'
 #               '/store/group/dpg_hcal/comm_hcal/USC/run311457/USC_311457.root'
-#               '/store/group/dpg_hcal/comm_hcal/USC/run311566/USC_311566.root'
+               '/store/group/dpg_hcal/comm_hcal/USC/run311566/USC_311566.root'
 
 
                ), 
@@ -476,7 +476,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
                                   #end upgrade: --------------------------------------------------------- end upgrade
                                   # flaguseshunt = 1 or 6 (6 is default for global runs) 
-                                  flaguseshunt = cms.int32(1),
+                                  flaguseshunt = cms.int32(6),
                                   # flagsipmcorrection: != 0 yes,apply; = 0 do not use;
                                   flagsipmcorrection = cms.int32(1),
                                   #
@@ -484,7 +484,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   # for local LASER runs ONLY!!! to be > 0    (,else = 0)
                                   flagLaserRaddam = cms.int32(0),
                                   # for gaussian fit for local shunt1 (Gsel0) led low-intensity or ped ONLY!!! to be  > 0    (,else = 0)
-                                  flagfitshunt1pedorledlowintensity = cms.int32(1),
+                                  flagfitshunt1pedorledlowintensity = cms.int32(0),
                                   #
                                   #
                                   #
@@ -497,7 +497,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #HistOutFile = cms.untracked.string(histodir+'/LED_'+runnumber+'.root'),
                                   #
                                   #HistOutFile = cms.untracked.string('LEDtest307971.root'),
-                                  HistOutFile = cms.untracked.string('LEDtest308701.root'),
+                                  #HistOutFile = cms.untracked.string('LEDtest308701.root'),
                                   #HistOutFile = cms.untracked.string('LEDtest308234.root'),
                                   #HistOutFile = cms.untracked.string('LEDtest308383.root'),
                                   #
@@ -546,7 +546,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #HistOutFile = cms.untracked.string('LEDtest311369.root'),
                                   #HistOutFile = cms.untracked.string('LEDtest311413.root'),
                                   #HistOutFile = cms.untracked.string('LEDtest311457.root'),
-                                  #HistOutFile = cms.untracked.string('LEDtest311566.root'),
+                                  HistOutFile = cms.untracked.string('LEDtest311566.root'),
 
                                   #
                                   MAPOutFile = cms.untracked.string('LogEleMapdb.h')
@@ -562,8 +562,19 @@ process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
 )
 
 
+######################################################################################## Global Tags for 2018 data taking :
+# use twiki site to specify HLT reconstruction Global tags:
+#   https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFrontierConditions
+#
+#   100X_dataRun2_HLT_v2        for CMSSW_10_0_3 onwards        CRUZET 2018     update of 0T templates for SiPixels
+#   100X_dataRun2_HLT_v1        for CMSSW_10_0_0 onwards        MWGRs 2018      first HLT GT for 2018 
+#
+#
+############################################################################ GlobalTag :1+ good as 5
 #from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-#process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data_FULL', '')
+#process.GlobalTag = GlobalTag(process.GlobalTag, '100X_dataRun2_HLT_v2', '')
+##from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
+##process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data_FULL', '')
 ############################################################################
 # V.EPSHTEIN:
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
