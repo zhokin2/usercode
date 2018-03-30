@@ -2,7 +2,7 @@
 
 ### set DAT=`date '+%Y-%m-%d_%H_%M_%S'`
 set DAT="2015-09-15_18_50_34"
-set RELEASE=CMSSW_10_0_0
+set RELEASE=CMSSW_10_1_0
 ### Get list of done from RDM webpage ###
 set TYPE=${1}
 echo ${TYPE}
