@@ -35,5 +35,5 @@ end
 endif
 cd ..
 end
-cd /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_10_0_0/src/RecoHcal/HcalPromptAnalysis/test/RDM
+cd /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_10_1_0/src/RecoHcal/HcalPromptAnalysis/test/RDM
 
