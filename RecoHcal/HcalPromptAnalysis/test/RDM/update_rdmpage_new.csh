@@ -1,7 +1,7 @@
 #!/bin/csh
 
 set WebDir='/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb'
-set WD='/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_10_0_0/src/RecoHcal/HcalPromptAnalysis/test/RDM'
+set WD='/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_10_1_0/src/RecoHcal/HcalPromptAnalysis/test/RDM'
 
 touch ${WD}/index_test.html
 cat ${WD}/header_led.txt >> ${WD}/index_test.html
