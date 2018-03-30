@@ -5,7 +5,7 @@ set refnumber=${3}
 set runNevents=${4}
 set CALIB=${5}
 
-set RELEASE=CMSSW_10_0_0
+set RELEASE=CMSSW_10_1_0
 
 #eos ls /eos/cms/store/group/dpg_hcal/comm_hcal/USC > ${WD}/${CALIB}_LIST/fullSrc0_list_${2}
 #touch ${WD}/${CALIB}_LIST/fullSrc1_list_${2}
