@@ -13,7 +13,7 @@ set runoriglas=286766
 # ATTENTION:
 # for laser and pedestal we put runorig = run current
 #
-set RELEASE=CMSSW_10_0_0
+set RELEASE=CMSSW_10_1_0
 set WD=/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/${RELEASE}/src/RecoHcal/HcalPromptAnalysis/test/RDM
 
 set LAST=0
