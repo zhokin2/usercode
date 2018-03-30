@@ -3,7 +3,7 @@
 echo  "Start batch_root_2017int job "
 ### set DAT=`date '+%Y-%m-%d_%H_%M_%S'`
 set DAT="2017-05-24_17_14_37"
-set RELEASE=CMSSW_10_0_0
+set RELEASE=CMSSW_10_1_0
 ### Get list of done from RDM webpage ###
 set TYPE=${1}
 echo ${TYPE}
