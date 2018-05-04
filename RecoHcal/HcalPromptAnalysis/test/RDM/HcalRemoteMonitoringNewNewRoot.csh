@@ -5,7 +5,7 @@ set refnumber=${3}
 set runNevents=${4}
 set CALIB=${5}
 
-set RELEASE=CMSSW_10_0_0
+set RELEASE=CMSSW_10_1_0
 
 set fullSrc0='/store/group/dpg_hcal/comm_hcal/USC'
 set fullSrc1='/store/group/dpg_hcal/comm_hcal/LS1'
