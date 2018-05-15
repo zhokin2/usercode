@@ -167,7 +167,7 @@ cat index.html | head -n -1 > index_draft.html
 #for i in ${runListEOSall} ; do
 #let "k = k + 1"
 #done
-k=1525
+k=1594
 ########################################## type by hands number of new runs k=k-number:
 #let "k = k - 1"
 echo ' ================>>>    k in old list = '$k
@@ -284,7 +284,7 @@ echo '<td class="s'$raw'" align="center"><a href="'$WebSite'/GlobalRMT/GLOBAL_'$
 echo '<td class="s'$raw'" align="center">'$B' T</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$E' GeV</td>'>> index_draft.html
 #echo '<td class="s'$raw'" align="center">'$dLumi' /nb</td>'>> index_draft.html
-echo '<td class="s'$raw'" align="center">'$Date_obr' /nb</td>'>> index_draft.html
+echo '<td class="s'$raw'" align="center">'$Date_obr'</td>'>> index_draft.html
 if [ ${#comment} -gt 0 ] ; then
     #echo "runList=${runList}, check ${runnumber}"
     temp_var=${runList/${runnumber}/}
@@ -321,7 +321,7 @@ fi
 # delete temp files
 
 if [ ${debug} -eq 0 ] ; then
-    rm -f *.root
+#    rm -f *.root
     rm -f _runlist_
     rm -f _runlistEOSall_
 fi
