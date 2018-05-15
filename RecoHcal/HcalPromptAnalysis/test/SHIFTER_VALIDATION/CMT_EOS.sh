@@ -178,14 +178,14 @@ for i in ${runList} ; do
     #echo "CMT files=${files}"
 
     if [ ${debug} -eq 0 ] ; then
-	eos mkdir $WebDir/CMT/GLOBAL_$runnumber
+	eos mkdir -p $WebDir/CMT/GLOBAL_$runnumber
 	if [ ! $? -eq 0 ] ; then
 	    echo "CMT eos mkdir failed"
 	    exit 2
 	fi
 	for f in ${files} ; do
 	    echo "eoscp ${local_WebDir}/${f} $WebDir/CMT/GLOBAL_$runnumber/${f}"
-	    eoscp ${local_WebDir}/${f} $WebDir/CMT/GLOBAL_$runnumber/${f}
+	    eos cp ${local_WebDir}/${f} $WebDir/CMT/GLOBAL_$runnumber/${f}
 	    if [ ! $? -eq 0 ] ; then
 		echo "CMT eoscp failed for ${f}"
 #		exit 2
