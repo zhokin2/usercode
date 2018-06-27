@@ -140,6 +140,18 @@ runListEOS=`echo $runList | tee _runlist_`
 echo "${runListEOS}"
 echo -e "Full runList for EOS complete\n"
 
+
+
+
+
+### use to clarify full list of runs:
+#echo "Get OLD list of runs in ${HistoDir}"
+#echo -e '\n\nRun numbers to be on EOS:'
+#runListEOS=`echo $histoFiles `
+#echo "${runListEOS}"
+#echo -e "OLD list complete\n"
+
+
 #############                 making table
 
 # skip/comment header:
@@ -167,7 +179,7 @@ cat index.html | head -n -1 > index_draft.html
 #for i in ${runListEOSall} ; do
 #let "k = k + 1"
 #done
-k=1594
+k=1429
 ########################################## type by hands number of new runs k=k-number:
 #let "k = k - 1"
 echo ' ================>>>    k in old list = '$k
