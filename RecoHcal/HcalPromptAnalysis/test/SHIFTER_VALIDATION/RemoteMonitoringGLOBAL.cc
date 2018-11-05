@@ -989,7 +989,9 @@ int main(int argc, char *argv[])
 	    if (test != 0) HistNumBadChanDepth[test][sub][k]->SetYTitle("Averaged estimator \b");
 	    HistNumBadChanDepth[test][sub][k]->SetMarkerColor(2);
 	    HistNumBadChanDepth[test][sub][k]->SetLineColor(0);
-	    gPad->SetGridx();
+	    //	    gPad->SetGridx();
+      gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();  
+	    //	    if (test == 1) HistNumBadChanDepth[test][sub][k]->SetMinimum(0.1);
 	    HistNumBadChanDepth[test][sub][k]->Draw("Error");
 	    /*
 		  if (k == 1) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 1\b");
@@ -1014,6 +1016,7 @@ int main(int argc, char *argv[])
 		  HistNumBadChanDepth[test][sub][k]->Draw("L");
 		  }	
 	    */
+	    /*
 	    float min_x[] = {0,10000};
 	    float min_y[] = {(float)(Cut0[test][sub][k]),(float)(Cut0[test][sub][k])};
 	    TGraph* MIN = new TGraph(2, min_x, min_y);
@@ -1025,7 +1028,7 @@ int main(int argc, char *argv[])
 	    gPad->SetGridy();
 	    gPad->SetGridx();
 	    MIN->Draw("L");
-
+*/
  
 	    if (sub==1) { cHE->Modified();} 
 	    if (sub==2 && test!=1) { cHE->Modified();}
