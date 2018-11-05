@@ -141,9 +141,9 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   # -56 for  BAD HBHEHOHF channels from study on ADC Amplitude
                                   #Verbosity = cms.untracked.int32(-56),
                                   ADCAmplHBMin = cms.double(0.),
-                                  ADCAmplHBMax = cms.double(900.),
+                                  ADCAmplHBMax = cms.double(1000.),
                                   ADCAmplHEMin = cms.double(0.),
-                                  ADCAmplHEMax = cms.double(900.),
+                                  ADCAmplHEMax = cms.double(100000.),
                                   ADCAmplHFMin = cms.double(0.),
                                   ADCAmplHFMax = cms.double(3000.),
                                   ADCAmplHOMin = cms.double(0.),
@@ -402,7 +402,9 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   # for gaussian fit for local shunt1 (Gsel0) led low-intensity or ped ONLY!!! to be  > 0    (,else = 0)
                                   flagfitshunt1pedorledlowintensity = cms.int32(0),
                                   #
-                                  #
+                                  # ls - range for gain stability via abort gap:
+                                  lsmin = cms.int32(1),
+                                  lsmax = cms.int32(620),
                                   #
                                   splashesUpperLimit = cms.int32(10000),
                                   #
