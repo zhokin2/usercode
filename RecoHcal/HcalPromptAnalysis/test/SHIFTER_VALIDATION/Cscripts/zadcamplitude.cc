@@ -31,18 +31,18 @@ int main(int argc, char *argv[])
       printf("reco: gROOT Reset \n");
         gROOT->Reset();
         gROOT->SetStyle("Plain");
-				gStyle->SetOptStat(0);   //  no statistics _or_
+	//		gStyle->SetOptStat(0);   //  no statistics _or_
 	//	        	  gStyle->SetOptStat(11111111);
 	//gStyle->SetOptStat(1101);// name mean and rms 
 	//	gStyle->SetOptStat(0101);// name and entries
 	//	   gStyle->SetOptStat(1100);// mean and rms only !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//	gStyle->SetOptStat(1110000);// und over, integral !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		gStyle->SetOptStat(1110000);// und over, integral !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	//	gStyle->SetOptStat(101110);                                          // entries, mean, rms, overflow !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		  			//	gStyle->SetOptStat(100000);//  over !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		//
 	//gStyle->SetOptFit(00010);// constant, mean and sigma only !!
 		//	gStyle->SetOptFit(00001);// hi2/nu, constant, mean and sigma only !!
-		gStyle->SetOptFit(0010);// constant, mean and sigma only !!
+	//	gStyle->SetOptFit(0010);// constant, mean and sigma only !!
 	//	gStyle->SetOptFit(00011);// constant, mean and sigma only !!
 	// gStyle->SetOptFit(1101);
 		//	   gStyle->SetOptFit(1011);
@@ -141,18 +141,35 @@ int main(int argc, char *argv[])
 //	TFile *hfile1= new TFile("LED_280702.root", "READ");        
 	//	TFile *hfile2= new TFile("LED_287824.root", "READ");
 
-	TFile *hfile1= new TFile("LED_284352.root", "READ");        
-//	TFile *hfile2= new TFile("LED_284902.root", "READ");
+//	TFile *hfile1= new TFile("LED_284352.root", "READ");        
+////	TFile *hfile2= new TFile("LED_284902.root", "READ");
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//	TFile *hfile1= new TFile("Global_321177_41.root", "READ");
+//	TFile *hfile1= new TFile("Global_321177_ls1to600.root", "READ");
+//	TFile *hfile1= new TFile("Global_321177_ls1to600.root_no41", "READ");
+
+//	TFile *hfile1= new TFile("Global_325001_ls1to600.root", "READ");
+
+//	TFile *hfile1= new TFile("Global_RBX_325001_40.root", "READ");
+	TFile *hfile1= new TFile("Global_RBX_325001_ls1to600.root", "READ");
+
+////////////////////////////////////////////////////////////
+
+//	TFile *hfile1= new TFile("Global_321177_41_abortgap.root", "READ");
+//	TFile *hfile1= new TFile("Global_321177_ls1to600_abortgap.root", "READ");
+//	TFile *hfile1= new TFile("Global_321177_ls1to600_abortgap_no41.root", "READ");
+
+//	TFile *hfile1= new TFile("Global_325001_ls1to600_abortgap.root", "READ");
 
 
 
 
-	//	TFile *hfile2= new TFile("LED_284902.root", "READ");
-	//	TFile *hfile2= new TFile("LED_284499.root", "READ");
-	//	TFile *hfile2= new TFile("LED_284352.root", "READ");
 
-	//	TFile *hfile2= new TFile("LED_286590.root", "READ");
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 	//    getchar();
@@ -179,9 +196,13 @@ int main(int argc, char *argv[])
       twoddepth1hb0->Sumw2();
       //    if(twoddepth1hb0->IsA()->InheritsFrom("TH2F")){
 	TH2F* Cdepth1hbff = (TH2F*)twoddepth1hb1->Clone("Cdepth1hbff");
-	Cdepth1hbff->Divide(twoddepth1hb1,twoddepth1hb0, 1, 1, "B");
+	Cdepth1hbff->Divide(twoddepth1hb1,twoddepth1hb0, 1, 1, "B");// average A
 	Cdepth1hbff->Sumw2();
 	//    }
+
+
+
+
       c1->cd(1);
       TH2F *twoedepth1hb1= (TH2F*)hfile1->Get("h_mapDepth1ADCAmpl225_HB");
       TH2F *twoedepth1hb0= (TH2F*)hfile1->Get("h_mapDepth1_HB");
@@ -189,7 +210,7 @@ int main(int argc, char *argv[])
       twoedepth1hb0->Sumw2();
       //    if(twoe0->IsA()->InheritsFrom("TH2F")){
 	TH2F* Cdepth1hbfz225= (TH2F*)twoedepth1hb1->Clone("Cdepth1hbfz225");
-	Cdepth1hbfz225->Divide(twoedepth1hb1,twoedepth1hb0, 1, 1, "B");
+	Cdepth1hbfz225->Divide(twoedepth1hb1,twoedepth1hb0, 1, 1, "B");// just RATE
 	Cdepth1hbfz225->Sumw2();
 	//    }
       gPad->SetGridy();
@@ -212,8 +233,8 @@ int main(int argc, char *argv[])
       c1->cd(2);
       
  //         TH1F *adepth1hb= (TH1F*)hfile1->Get("h_ADCAmpl_HB");
-      TH1F *adepth1hb= (TH1F*)hfile1->Get("h_ADCAmplZoom1_HB");
-//      TH1F *adepth1hb= (TH1F*)hfile1->Get("h_ADCAmplZoom_HB");
+      //    TH1F *adepth1hb= (TH1F*)hfile1->Get("h_ADCAmplZoom1_HB");
+      TH1F *adepth1hb= (TH1F*)hfile1->Get("h_ADCAmplZoom_HB");
       gPad->SetLogy();
 //      gPad->SetLogx();
       adepth1hb->SetMarkerStyle(20);
@@ -230,10 +251,14 @@ int main(int argc, char *argv[])
     TH2F* Diffe_Depth1hb = (TH2F*)Cdepth1hbff->Clone("Diffe_Depth1hb");
     for (int i=1;i<=Cdepth1hbff->GetXaxis()->GetNbins();i++) {
       for (int j=1;j<=Cdepth1hbff->GetYaxis()->GetNbins();j++) {
-	TH2F* Cdepth1hbff = (TH2F*)twoddepth1hb1->Clone("Cdepth1hbff");
+	//	TH2F* Cdepth1hbff = (TH2F*)twoddepth1hb1->Clone("Cdepth1hbff");
 	double ccc1 =  Cdepth1hbff->GetBinContent(i,j)   ;
 	Diffe_Depth1hb->SetBinContent(i,j,0.);
-	if(ccc1 <18|| ccc1>30.)  Diffe_Depth1hb->SetBinContent(i,j,ccc1);
+	//	if(ccc1>0.) cout<<" ibin=     "<< i <<" jbin=     "<< j <<" nevents=     "<< ccc1 <<endl;
+
+	//	if(ccc1 <18|| ccc1>30.)  Diffe_Depth1hb->SetBinContent(i,j,ccc1);
+	//	if(ccc1 <500.)  Diffe_Depth1hb->SetBinContent(i,j,ccc1);
+	Diffe_Depth1hb->SetBinContent(i,j,ccc1);
       }
     }
       gPad->SetGridy();
@@ -245,7 +270,7 @@ int main(int argc, char *argv[])
       //    Diffe_Depth1hb->SetTitle("any Error, HB Depth1hb \n");
       Diffe_Depth1hb->SetXTitle("#eta \b");
       Diffe_Depth1hb->SetYTitle("#phi \b");
-      Diffe_Depth1hb->SetZTitle("<ADCAmpl> bigger 30.& smalle 18 - HB Depth1hb \b");
+      Diffe_Depth1hb->SetZTitle("<ADCAmpl> - HB Depth1 \b");
       Diffe_Depth1hb->SetMarkerColor(2);
       Diffe_Depth1hb->SetLineColor(2);
       //      Diffe_Depth1hb->SetMaximum(1.000);
@@ -255,8 +280,9 @@ int main(int argc, char *argv[])
 
       c1->cd(4);
       //    TH1F* diffADCAmpl_Depth1hb = new TH1F("diffADCAmpl_Depth1hb","", 100, 0.,3000.);
-      TH1F* diffADCAmpl_Depth1hb = new TH1F("diffADCAmpl_Depth1hb","", 100, 0.,100.);
-      TH2F* Cdepth1hbfw = (TH2F*)twoddepth1hb1->Clone("diffADCAmpl_Depth1hb");
+      TH1F* diffADCAmpl_Depth1hb = new TH1F("diffADCAmpl_Depth1hb","", 250, 0.,1000.);
+      TH2F* Cdepth1hbfw = (TH2F*)Cdepth1hbff->Clone("Cdepth1hbfw");
+      //    TH2F* Cdepth1hbfw = (TH2F*)twoddepth1hb1->Clone("diffADCAmpl_Depth1hb");
       for (int i=1;i<=Cdepth1hbfw->GetXaxis()->GetNbins();i++) {
 	for (int j=1;j<=Cdepth1hbfw->GetYaxis()->GetNbins();j++) {
 	  if(Cdepth1hbfw->GetBinContent(i,j) !=0 ) {
@@ -349,10 +375,10 @@ int main(int argc, char *argv[])
     TH2F* Diffe_Depth2hb = (TH2F*)Cdepth2hbff->Clone("Diffe_Depth2hb");
     for (int i=1;i<=Cdepth2hbff->GetXaxis()->GetNbins();i++) {
       for (int j=1;j<=Cdepth2hbff->GetYaxis()->GetNbins();j++) {
-	TH2F* Cdepth2hbff = (TH2F*)twoddepth2hb1->Clone("Cdepth2hbff");
+	//	TH2F* Cdepth2hbff = (TH2F*)twoddepth2hb1->Clone("Cdepth2hbff");
 	double ccc1 =  Cdepth2hbff->GetBinContent(i,j)   ;
 	Diffe_Depth2hb->SetBinContent(i,j,0.);
-	if(ccc1 <18|| ccc1>30.)  Diffe_Depth2hb->SetBinContent(i,j,ccc1);
+	if(ccc1 <500.)  Diffe_Depth2hb->SetBinContent(i,j,ccc1);
       }
     }
       gPad->SetGridy();
@@ -364,7 +390,7 @@ int main(int argc, char *argv[])
       //    Diffe_Depth2hb->SetTitle("any Error, HB Depth2hb \n");
       Diffe_Depth2hb->SetXTitle("#eta \b");
       Diffe_Depth2hb->SetYTitle("#phi \b");
-      Diffe_Depth2hb->SetZTitle("<ADCAmpl> bigger 30.& smalle 18 - HB Depth2hb \b");
+      Diffe_Depth2hb->SetZTitle("<ADCAmpl> smalle 508 - HB Depth2hb \b");
       Diffe_Depth2hb->SetMarkerColor(2);
       Diffe_Depth2hb->SetLineColor(2);
       //      Diffe_Depth2hb->SetMaximum(1.000);
@@ -374,8 +400,9 @@ int main(int argc, char *argv[])
 
       c1->cd(4);
       //    TH1F* diffADCAmpl_Depth2hb = new TH1F("diffADCAmpl_Depth2hb","", 100, 0.,3000.);
-      TH1F* diffADCAmpl_Depth2hb = new TH1F("diffADCAmpl_Depth2hb","", 100, 0.,100.);
-      TH2F* Cdepth2hbfw = (TH2F*)twoddepth2hb1->Clone("diffADCAmpl_Depth2hb");
+      TH1F* diffADCAmpl_Depth2hb = new TH1F("diffADCAmpl_Depth2hb","", 250, 0.,1000.);
+      TH2F* Cdepth2hbfw = (TH2F*)Cdepth2hbff->Clone("diffADCAmpl_Depth2hb");
+      //      TH2F* Cdepth2hbfw = (TH2F*)twoddepth2hb1->Clone("diffADCAmpl_Depth2hb");
       for (int i=1;i<=Cdepth2hbfw->GetXaxis()->GetNbins();i++) {
 	for (int j=1;j<=Cdepth2hbfw->GetYaxis()->GetNbins();j++) {
 	  if(Cdepth2hbfw->GetBinContent(i,j) !=0 ) {
@@ -451,7 +478,7 @@ int main(int argc, char *argv[])
       c1->cd(2);
       
  //         TH1F *adepth1he= (TH1F*)hfile1->Get("h_ADCAmpl_HE");
-      TH1F *adepth1he= (TH1F*)hfile1->Get("h_ADCAmplZoom1_HE");
+      TH1F *adepth1he= (TH1F*)hfile1->Get("h_ADCAmpl345_HE");
 //      TH1F *adepth1he= (TH1F*)hfile1->Get("h_ADCAmplZoom_HE");
       gPad->SetLogy();
 //      gPad->SetLogx();
@@ -469,10 +496,11 @@ int main(int argc, char *argv[])
     TH2F* Diffe_Depth1he = (TH2F*)Cdepth1heff->Clone("Diffe_Depth1he");
     for (int i=1;i<=Cdepth1heff->GetXaxis()->GetNbins();i++) {
       for (int j=1;j<=Cdepth1heff->GetYaxis()->GetNbins();j++) {
-	TH2F* Cdepth1heff = (TH2F*)twoddepth1he1->Clone("Cdepth1heff");
+	//	TH2F* Cdepth1heff = (TH2F*)twoddepth1he1->Clone("Cdepth1heff");
 	double ccc1 =  Cdepth1heff->GetBinContent(i,j)   ;
+	//	if(ccc1>0.) cout<<"HE ibin=     "<< i <<" jbin=     "<< j <<" nevents=     "<< ccc1 <<endl;
 	Diffe_Depth1he->SetBinContent(i,j,0.);
-	if(ccc1 <18|| ccc1>30.)  Diffe_Depth1he->SetBinContent(i,j,ccc1);
+	if(ccc1 <20000000.)  Diffe_Depth1he->SetBinContent(i,j,ccc1);
       }
     }
       gPad->SetGridy();
@@ -484,7 +512,7 @@ int main(int argc, char *argv[])
       //    Diffe_Depth1he->SetTitle("any Error, HE Depth1he \n");
       Diffe_Depth1he->SetXTitle("#eta \b");
       Diffe_Depth1he->SetYTitle("#phi \b");
-      Diffe_Depth1he->SetZTitle("<ADCAmpl> bigger 30.& smalle 18 - HE Depth1he \b");
+      Diffe_Depth1he->SetZTitle("<ADCAmpl> smalle 20000008 - HE Depth1he \b");
       Diffe_Depth1he->SetMarkerColor(2);
       Diffe_Depth1he->SetLineColor(2);
       //      Diffe_Depth1he->SetMaximum(1.000);
@@ -494,8 +522,9 @@ int main(int argc, char *argv[])
 
       c1->cd(4);
       //    TH1F* diffADCAmpl_Depth1he = new TH1F("diffADCAmpl_Depth1he","", 100, 0.,3000.);
-      TH1F* diffADCAmpl_Depth1he = new TH1F("diffADCAmpl_Depth1he","", 100, 0.,100.);
-      TH2F* Cdepth1hefw = (TH2F*)twoddepth1he1->Clone("diffADCAmpl_Depth1he");
+      TH1F* diffADCAmpl_Depth1he = new TH1F("diffADCAmpl_Depth1he","", 100, 0.,5000.);
+      TH2F* Cdepth1hefw = (TH2F*)Cdepth1heff->Clone("diffADCAmpl_Depth1he");
+      //      TH2F* Cdepth1hefw = (TH2F*)twoddepth1he1->Clone("diffADCAmpl_Depth1he");
       for (int i=1;i<=Cdepth1hefw->GetXaxis()->GetNbins();i++) {
 	for (int j=1;j<=Cdepth1hefw->GetYaxis()->GetNbins();j++) {
 	  if(Cdepth1hefw->GetBinContent(i,j) !=0 ) {
@@ -589,10 +618,10 @@ int main(int argc, char *argv[])
     TH2F* Diffe_Depth2he = (TH2F*)Cdepth2heff->Clone("Diffe_Depth2he");
     for (int i=1;i<=Cdepth2heff->GetXaxis()->GetNbins();i++) {
       for (int j=1;j<=Cdepth2heff->GetYaxis()->GetNbins();j++) {
-	TH2F* Cdepth2heff = (TH2F*)twoddepth2he1->Clone("Cdepth2heff");
+	//	TH2F* Cdepth2heff = (TH2F*)twoddepth2he1->Clone("Cdepth2heff");
 	double ccc1 =  Cdepth2heff->GetBinContent(i,j)   ;
 	Diffe_Depth2he->SetBinContent(i,j,0.);
-	if(ccc1 <18|| ccc1>30.)  Diffe_Depth2he->SetBinContent(i,j,ccc1);
+	if(ccc1 <20000000.)  Diffe_Depth2he->SetBinContent(i,j,ccc1);
       }
     }
       gPad->SetGridy();
@@ -604,7 +633,7 @@ int main(int argc, char *argv[])
       //    Diffe_Depth2he->SetTitle("any Error, HE Depth2he \n");
       Diffe_Depth2he->SetXTitle("#eta \b");
       Diffe_Depth2he->SetYTitle("#phi \b");
-      Diffe_Depth2he->SetZTitle("<ADCAmpl> bigger 30.& smalle 18 - HE Depth2he \b");
+      Diffe_Depth2he->SetZTitle("<ADCAmpl> smalle 20000000 - HE Depth2he \b");
       Diffe_Depth2he->SetMarkerColor(2);
       Diffe_Depth2he->SetLineColor(2);
       //      Diffe_Depth2he->SetMaximum(1.000);
@@ -614,8 +643,9 @@ int main(int argc, char *argv[])
 
       c1->cd(4);
       //    TH1F* diffADCAmpl_Depth2he = new TH1F("diffADCAmpl_Depth2he","", 100, 0.,3000.);
-      TH1F* diffADCAmpl_Depth2he = new TH1F("diffADCAmpl_Depth2he","", 100, 0.,100.);
-      TH2F* Cdepth2hefw = (TH2F*)twoddepth2he1->Clone("diffADCAmpl_Depth2he");
+      TH1F* diffADCAmpl_Depth2he = new TH1F("diffADCAmpl_Depth2he","", 100, 0.,5000.);
+      TH2F* Cdepth2hefw = (TH2F*)Cdepth2heff->Clone("diffADCAmpl_Depth2he");
+      //      TH2F* Cdepth2hefw = (TH2F*)twoddepth2he1->Clone("diffADCAmpl_Depth2he");
       for (int i=1;i<=Cdepth2hefw->GetXaxis()->GetNbins();i++) {
 	for (int j=1;j<=Cdepth2hefw->GetYaxis()->GetNbins();j++) {
 	  if(Cdepth2hefw->GetBinContent(i,j) !=0 ) {
@@ -709,10 +739,10 @@ int main(int argc, char *argv[])
     TH2F* Diffe_Depth3he = (TH2F*)Cdepth3heff->Clone("Diffe_Depth3he");
     for (int i=1;i<=Cdepth3heff->GetXaxis()->GetNbins();i++) {
       for (int j=1;j<=Cdepth3heff->GetYaxis()->GetNbins();j++) {
-	TH2F* Cdepth3heff = (TH2F*)twoddepth3he1->Clone("Cdepth3heff");
+	//	TH2F* Cdepth3heff = (TH2F*)twoddepth3he1->Clone("Cdepth3heff");
 	double ccc1 =  Cdepth3heff->GetBinContent(i,j)   ;
 	Diffe_Depth3he->SetBinContent(i,j,0.);
-	if(ccc1 <18|| ccc1>30.)  Diffe_Depth3he->SetBinContent(i,j,ccc1);
+	if(ccc1 <20000000.)  Diffe_Depth3he->SetBinContent(i,j,ccc1);
       }
     }
       gPad->SetGridy();
@@ -724,7 +754,7 @@ int main(int argc, char *argv[])
       //    Diffe_Depth3he->SetTitle("any Error, HE Depth3he \n");
       Diffe_Depth3he->SetXTitle("#eta \b");
       Diffe_Depth3he->SetYTitle("#phi \b");
-      Diffe_Depth3he->SetZTitle("<ADCAmpl> bigger 30.& smalle 18 - HE Depth3he \b");
+      Diffe_Depth3he->SetZTitle("<ADCAmpl>smalle 20000000 - HE Depth3he \b");
       Diffe_Depth3he->SetMarkerColor(2);
       Diffe_Depth3he->SetLineColor(2);
       //      Diffe_Depth3he->SetMaximum(1.000);
@@ -734,8 +764,9 @@ int main(int argc, char *argv[])
 
       c1->cd(4);
       //    TH1F* diffADCAmpl_Depth3he = new TH1F("diffADCAmpl_Depth3he","", 100, 0.,3000.);
-      TH1F* diffADCAmpl_Depth3he = new TH1F("diffADCAmpl_Depth3he","", 100, 0.,100.);
-      TH2F* Cdepth3hefw = (TH2F*)twoddepth3he1->Clone("diffADCAmpl_Depth3he");
+      TH1F* diffADCAmpl_Depth3he = new TH1F("diffADCAmpl_Depth3he","", 100, 0.,5000.);
+      TH2F* Cdepth3hefw = (TH2F*)Cdepth3heff->Clone("diffADCAmpl_Depth3he");
+      //      TH2F* Cdepth3hefw = (TH2F*)twoddepth3he1->Clone("diffADCAmpl_Depth3he");
       for (int i=1;i<=Cdepth3hefw->GetXaxis()->GetNbins();i++) {
 	for (int j=1;j<=Cdepth3hefw->GetYaxis()->GetNbins();j++) {
 	  if(Cdepth3hefw->GetBinContent(i,j) !=0 ) {
@@ -811,8 +842,8 @@ int main(int argc, char *argv[])
       
       c1->cd(2);
       
- //         TH1F *adepth1hf= (TH1F*)hfile1->Get("h_ADCAmpl_HF");
-      TH1F *adepth1hf= (TH1F*)hfile1->Get("h_ADCAmplZoom1_HF");
+         TH1F *adepth1hf= (TH1F*)hfile1->Get("h_ADCAmpl_HF");
+	 //      TH1F *adepth1hf= (TH1F*)hfile1->Get("h_ADCAmplZoom1_HF");
 //      TH1F *adepth1hf= (TH1F*)hfile1->Get("h_ADCAmplZoom_HF");
       gPad->SetLogy();
 //      gPad->SetLogx();
@@ -830,10 +861,10 @@ int main(int argc, char *argv[])
     TH2F* Diffe_Depth1hf = (TH2F*)Cdepth1hfff->Clone("Diffe_Depth1hf");
     for (int i=1;i<=Cdepth1hfff->GetXaxis()->GetNbins();i++) {
       for (int j=1;j<=Cdepth1hfff->GetYaxis()->GetNbins();j++) {
-	TH2F* Cdepth1hfff = (TH2F*)twoddepth1hf1->Clone("Cdepth1hfff");
+	//	TH2F* Cdepth1hfff = (TH2F*)twoddepth1hf1->Clone("Cdepth1hfff");
 	double ccc1 =  Cdepth1hfff->GetBinContent(i,j)   ;
 	Diffe_Depth1hf->SetBinContent(i,j,0.);
-	if(ccc1 <18|| ccc1>30.)  Diffe_Depth1hf->SetBinContent(i,j,ccc1);
+	if(ccc1 <20000000.)  Diffe_Depth1hf->SetBinContent(i,j,ccc1);
       }
     }
       gPad->SetGridy();
@@ -845,7 +876,7 @@ int main(int argc, char *argv[])
       //    Diffe_Depth1hf->SetTitle("any Error, HF Depth1hf \n");
       Diffe_Depth1hf->SetXTitle("#eta \b");
       Diffe_Depth1hf->SetYTitle("#phi \b");
-      Diffe_Depth1hf->SetZTitle("<ADCAmpl> bigger 30.& smalle 18 - HF Depth1hf \b");
+      Diffe_Depth1hf->SetZTitle("<ADCAmpl> smalle 20000000 - HF Depth1hf \b");
       Diffe_Depth1hf->SetMarkerColor(2);
       Diffe_Depth1hf->SetLineColor(2);
       //      Diffe_Depth1hf->SetMaximum(1.000);
@@ -854,9 +885,10 @@ int main(int argc, char *argv[])
             
 
       c1->cd(4);
-      //    TH1F* diffADCAmpl_Depth1hf = new TH1F("diffADCAmpl_Depth1hf","", 100, 0.,3000.);
-      TH1F* diffADCAmpl_Depth1hf = new TH1F("diffADCAmpl_Depth1hf","", 100, 0.,100.);
-      TH2F* Cdepth1hffw = (TH2F*)twoddepth1hf1->Clone("diffADCAmpl_Depth1hf");
+      TH1F* diffADCAmpl_Depth1hf = new TH1F("diffADCAmpl_Depth1hf","", 100, 0.,300.);
+      //      TH1F* diffADCAmpl_Depth1hf = new TH1F("diffADCAmpl_Depth1hf","", 1000, 0.,1000.);
+      TH2F* Cdepth1hffw = (TH2F*)Cdepth1hfff->Clone("diffADCAmpl_Depth1hf");
+      //      TH2F* Cdepth1hffw = (TH2F*)twoddepth1hf1->Clone("diffADCAmpl_Depth1hf");
       for (int i=1;i<=Cdepth1hffw->GetXaxis()->GetNbins();i++) {
 	for (int j=1;j<=Cdepth1hffw->GetYaxis()->GetNbins();j++) {
 	  if(Cdepth1hffw->GetBinContent(i,j) !=0 ) {
@@ -950,10 +982,10 @@ int main(int argc, char *argv[])
     TH2F* Diffe_Depth2hf = (TH2F*)Cdepth2hfff->Clone("Diffe_Depth2hf");
     for (int i=1;i<=Cdepth2hfff->GetXaxis()->GetNbins();i++) {
       for (int j=1;j<=Cdepth2hfff->GetYaxis()->GetNbins();j++) {
-	TH2F* Cdepth2hfff = (TH2F*)twoddepth2hf1->Clone("Cdepth2hfff");
+	//	TH2F* Cdepth2hfff = (TH2F*)twoddepth2hf1->Clone("Cdepth2hfff");
 	double ccc1 =  Cdepth2hfff->GetBinContent(i,j)   ;
 	Diffe_Depth2hf->SetBinContent(i,j,0.);
-	if(ccc1 <18|| ccc1>30.)  Diffe_Depth2hf->SetBinContent(i,j,ccc1);
+	if(ccc1 <20000000.)  Diffe_Depth2hf->SetBinContent(i,j,ccc1);
       }
     }
       gPad->SetGridy();
@@ -965,7 +997,7 @@ int main(int argc, char *argv[])
       //    Diffe_Depth2hf->SetTitle("any Error, HF Depth2hf \n");
       Diffe_Depth2hf->SetXTitle("#eta \b");
       Diffe_Depth2hf->SetYTitle("#phi \b");
-      Diffe_Depth2hf->SetZTitle("<ADCAmpl> bigger 30.& smalle 18 - HF Depth2hf \b");
+      Diffe_Depth2hf->SetZTitle("<ADCAmpl> smalle 20000000 - HF Depth2hf \b");
       Diffe_Depth2hf->SetMarkerColor(2);
       Diffe_Depth2hf->SetLineColor(2);
       //      Diffe_Depth2hf->SetMaximum(1.000);
@@ -974,9 +1006,10 @@ int main(int argc, char *argv[])
             
 
       c1->cd(4);
-      //    TH1F* diffADCAmpl_Depth2hf = new TH1F("diffADCAmpl_Depth2hf","", 100, 0.,3000.);
-      TH1F* diffADCAmpl_Depth2hf = new TH1F("diffADCAmpl_Depth2hf","", 100, 0.,100.);
-      TH2F* Cdepth2hffw = (TH2F*)twoddepth2hf1->Clone("diffADCAmpl_Depth2hf");
+      TH1F* diffADCAmpl_Depth2hf = new TH1F("diffADCAmpl_Depth2hf","", 100, 0.,300.);
+      //      TH1F* diffADCAmpl_Depth2hf = new TH1F("diffADCAmpl_Depth2hf","", 1000, 0.,1000.);
+      TH2F* Cdepth2hffw = (TH2F*)Cdepth2hfff->Clone("diffADCAmpl_Depth2hf");
+      //      TH2F* Cdepth2hffw = (TH2F*)twoddepth2hf1->Clone("diffADCAmpl_Depth2hf");
       for (int i=1;i<=Cdepth2hffw->GetXaxis()->GetNbins();i++) {
 	for (int j=1;j<=Cdepth2hffw->GetYaxis()->GetNbins();j++) {
 	  if(Cdepth2hffw->GetBinContent(i,j) !=0 ) {
@@ -1032,6 +1065,12 @@ int main(int argc, char *argv[])
 	Cdepth4hofz225->Divide(twoedepth4ho1,twoedepth4ho0, 1, 1, "B");
 	Cdepth4hofz225->Sumw2();
 	//    }
+    for (int i=1;i<=Cdepth4hofz225->GetXaxis()->GetNbins();i++) {
+      for (int j=1;j<=Cdepth4hofz225->GetYaxis()->GetNbins();j++) {
+	double ccc1 =  Cdepth4hofz225->GetBinContent(i,j)   ;
+	if(ccc1> 0.1) cout<<"HO ibin=     "<< i <<" jbin=     "<< j <<" Rate=     "<< ccc1 <<endl;
+      }
+    }
       gPad->SetGridy();
       gPad->SetGridx();
       gPad->SetLogz();
@@ -1045,7 +1084,7 @@ int main(int argc, char *argv[])
       Cdepth4hofz225->SetMarkerColor(2);
       Cdepth4hofz225->SetLineColor(2);
       Cdepth4hofz225->SetMaximum(1.000);
-      Cdepth4hofz225->SetMinimum(0.00001);
+      Cdepth4hofz225->SetMinimum(0.1);
 //      Cdepth4hofz225->SetMinimum(0.0001);
       Cdepth4hofz225->Draw("COLZ");
       
@@ -1070,10 +1109,13 @@ int main(int argc, char *argv[])
     TH2F* Diffe_Depth4ho = (TH2F*)Cdepth4hoff->Clone("Diffe_Depth4ho");
     for (int i=1;i<=Cdepth4hoff->GetXaxis()->GetNbins();i++) {
       for (int j=1;j<=Cdepth4hoff->GetYaxis()->GetNbins();j++) {
-	TH2F* Cdepth4hoff = (TH2F*)twoddepth4ho1->Clone("Cdepth4hoff");
+	//	TH2F* Cdepth4hoff = (TH2F*)twoddepth4ho1->Clone("Cdepth4hoff");
 	double ccc1 =  Cdepth4hoff->GetBinContent(i,j)   ;
 	Diffe_Depth4ho->SetBinContent(i,j,0.);
-	if(ccc1 <18|| ccc1>30.)  Diffe_Depth4ho->SetBinContent(i,j,ccc1);
+	//	if(ccc1> 1000.|| (ccc1>0.&&ccc1<27.)) cout<<"HO ibin=     "<< i <<" jbin=     "<< j <<" A=     "<< ccc1 <<endl;
+	if(ccc1> 1000.|| (i==46&&j==5)|| (i==56&&j==13)) cout<<"HO ibin=     "<< i <<" jbin=     "<< j <<" A=     "<< ccc1 <<endl;
+	//	if(ccc1 < 20000000.)  Diffe_Depth4ho->SetBinContent(i,j,ccc1);
+	Diffe_Depth4ho->SetBinContent(i,j,ccc1);
       }
     }
       gPad->SetGridy();
@@ -1085,7 +1127,7 @@ int main(int argc, char *argv[])
       //    Diffe_Depth4ho->SetTitle("any Error, HO Depth4ho \n");
       Diffe_Depth4ho->SetXTitle("#eta \b");
       Diffe_Depth4ho->SetYTitle("#phi \b");
-      Diffe_Depth4ho->SetZTitle("<ADCAmpl> bigger 30.& smalle 18 - HO Depth4ho \b");
+      Diffe_Depth4ho->SetZTitle("<ADCAmpl> smalle 20000000 - HO Depth4ho \b");
       Diffe_Depth4ho->SetMarkerColor(2);
       Diffe_Depth4ho->SetLineColor(2);
       //      Diffe_Depth4ho->SetMaximum(1.000);
@@ -1095,12 +1137,16 @@ int main(int argc, char *argv[])
 
       c1->cd(4);
       //    TH1F* diffADCAmpl_Depth4ho = new TH1F("diffADCAmpl_Depth4ho","", 100, 0.,3000.);
-      TH1F* diffADCAmpl_Depth4ho = new TH1F("diffADCAmpl_Depth4ho","", 100, 0.,100.);
-      TH2F* Cdepth4hofw = (TH2F*)twoddepth4ho1->Clone("diffADCAmpl_Depth4ho");
-      for (int i=1;i<=Cdepth4hofw->GetXaxis()->GetNbins();i++) {
-	for (int j=1;j<=Cdepth4hofw->GetYaxis()->GetNbins();j++) {
-	  if(Cdepth4hofw->GetBinContent(i,j) !=0 ) {
-	    double ccc1 =  Cdepth4hofw->GetBinContent(i,j) ;
+      TH1F* diffADCAmpl_Depth4ho = new TH1F("diffADCAmpl_Depth4ho","", 250, 0.,1000.);
+
+      //      TH2F* Cdepth4hofw = (TH2F*)Cdepth4hoff->Clone("diffADCAmpl_Depth4ho");
+      //      TH2F* Cdepth4hofw = (TH2F*)twoddepth4ho1->Clone("diffADCAmpl_Depth4ho");
+
+
+      for (int i=1;i<=Cdepth4hoff->GetXaxis()->GetNbins();i++) {
+	for (int j=1;j<=Cdepth4hoff->GetYaxis()->GetNbins();j++) {
+	  if(Cdepth4hoff->GetBinContent(i,j) !=0 ) {
+	    double ccc1 =  Cdepth4hoff->GetBinContent(i,j) ;
 	    diffADCAmpl_Depth4ho->Fill(ccc1);
 	  }
 	}
@@ -1112,6 +1158,7 @@ int main(int argc, char *argv[])
       diffADCAmpl_Depth4ho->SetXTitle("<ADCAmpl> in each cell \b");
       diffADCAmpl_Depth4ho->SetMarkerColor(2);
       diffADCAmpl_Depth4ho->SetLineColor(2);
+      diffADCAmpl_Depth4ho->SetMinimum(0.8);
       diffADCAmpl_Depth4ho->Draw("");
              
       c1->Update();
@@ -1125,14 +1172,30 @@ int main(int argc, char *argv[])
       delete Diffe_Depth4ho;
       
             
-    //========================================================================================== 9    
+    //========================================================================================== 9
       //======================================================================
     //======================================================================
     //================
+      /*
+    // fullAmplitude:
+///////////////////////////////////////////////////////////////////////////////////////
+    h_ADCAmpl345Zoom_HB = new TH1F("h_ADCAmpl345Zoom_HB"," ", 100, 0.,400.);
+    h_ADCAmpl345Zoom1_HB = new TH1F("h_ADCAmpl345Zoom1_HB"," ", 100, 0.,100.);
+    h_ADCAmpl345_HB = new TH1F("h_ADCAmpl345_HB"," ", 100, 10.,3000.);
+
+    h_ADCAmplZoom_HB = new TH1F("h_ADCAmplZoom_HB"," ", 100, 0.,400.);
+    h_ADCAmplZoom1_HB = new TH1F("h_ADCAmplZoom1_HB"," ", 100, -20.,80.);
+    h_ADCAmpl_HB = new TH1F("h_ADCAmpl_HB"," ", 100, 10.,5000.);
+
+    h_AmplitudeHBrest = new TH1F("h_AmplitudeHBrest"," ", 100, 0.,10000.);
+    h_AmplitudeHBrest1 = new TH1F("h_AmplitudeHBrest1"," ", 100, 0.,1000000.);
+    h_AmplitudeHBrest6 = new TH1F("h_AmplitudeHBrest6"," ", 100, 0.,2000000.);
+*/
     //======================================================================
       c1->Clear();
-      c1->Divide(1,3);
+      c1->Divide(2,3);
       
+
       c1->cd(1);
       TH1F *aaaaaa0= (TH1F*)hfile1->Get("h_ADCAmplZoom_HB");
       gPad->SetLogy();
@@ -1140,20 +1203,10 @@ int main(int argc, char *argv[])
       aaaaaa0->SetMarkerStyle(20);
       aaaaaa0->SetMarkerSize(0.8);
       aaaaaa0->GetYaxis()->SetLabelSize(0.04);
-      aaaaaa0->SetXTitle("ADCAmpl in each event & cell HB \b");
+      aaaaaa0->SetXTitle("h_ADCAmplZoom_HB \b");
       aaaaaa0->SetMarkerColor(2);
       aaaaaa0->SetLineColor(2);
       aaaaaa0->Draw("");
-      TH1F *aaaaaa2= (TH1F*)hfile1->Get("h_ADCAmpl345Zoom_HB");
-      gPad->SetLogy();
-      // gPad->SetLogx();
-      aaaaaa2->SetMarkerStyle(20);
-      aaaaaa2->SetMarkerSize(0.8);
-      aaaaaa2->GetYaxis()->SetLabelSize(0.04);
-      aaaaaa2->SetXTitle("ADCAmpl in each event & cell HB \b");
-      aaaaaa2->SetMarkerColor(4);
-      aaaaaa2->SetLineColor(4);
-      //      aaaaaa2->Draw("Same");
       
       c1->cd(2);
       TH1F *aaaaaa3= (TH1F*)hfile1->Get("h_ADCAmplZoom1_HB");
@@ -1166,16 +1219,6 @@ int main(int argc, char *argv[])
       aaaaaa3->SetMarkerColor(2);
       aaaaaa3->SetLineColor(2);
       aaaaaa3->Draw("");
-      TH1F *aaaaaa4= (TH1F*)hfile1->Get("h_ADCAmpl345Zoom1_HB");
-            gPad->SetLogy();
-      //    gPad->SetLogx();
-      aaaaaa4->SetMarkerStyle(20);
-      aaaaaa4->SetMarkerSize(0.8);
-      aaaaaa4->GetYaxis()->SetLabelSize(0.04);
-      aaaaaa4->SetXTitle("ADCAmpl in each event & cell HB \b");
-      aaaaaa4->SetMarkerColor(4);
-      aaaaaa4->SetLineColor(4);
-      //      aaaaaa1->Draw("Same");
       
       c1->cd(3);
       TH1F *aaaaaa5= (TH1F*)hfile1->Get("h_ADCAmpl_HB");
@@ -1188,16 +1231,293 @@ int main(int argc, char *argv[])
       aaaaaa5->SetMarkerColor(2);
       aaaaaa5->SetLineColor(2);
       aaaaaa5->Draw("");
-      TH1F *aaaaaa6= (TH1F*)hfile1->Get("h_ADCAmpl345_HB");
+
+
+      c1->cd(4);
+      TH1F *aaaaaa1= (TH1F*)hfile1->Get("h_AmplitudeHBrest");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      aaaaaa1->SetMarkerStyle(20);
+      aaaaaa1->SetMarkerSize(0.8);
+      aaaaaa1->GetYaxis()->SetLabelSize(0.04);
+      aaaaaa1->SetXTitle("h_AmplitudeHBrest \b");
+      aaaaaa1->SetMarkerColor(2);
+      aaaaaa1->SetLineColor(2);
+      aaaaaa1->Draw("");
+
+      c1->cd(5);
+      TH1F *aaaaaa2= (TH1F*)hfile1->Get("h_AmplitudeHBrest1");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      aaaaaa2->SetMarkerStyle(20);
+      aaaaaa2->SetMarkerSize(0.8);
+      aaaaaa2->GetYaxis()->SetLabelSize(0.04);
+      aaaaaa2->SetXTitle("h_AmplitudeHBrest1 \b");
+      aaaaaa2->SetMarkerColor(2);
+      aaaaaa2->SetLineColor(2);
+      aaaaaa2->Draw("");
+
+      c1->cd(6);
+      TH1F *aaaaaa4= (TH1F*)hfile1->Get("h_AmplitudeHBrest6");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      aaaaaa4->SetMarkerStyle(20);
+      aaaaaa4->SetMarkerSize(0.8);
+      aaaaaa4->GetYaxis()->SetLabelSize(0.04);
+      aaaaaa4->SetXTitle("h_AmplitudeHBrest6 \b");
+      aaaaaa4->SetMarkerColor(2);
+      aaaaaa4->SetLineColor(2);
+      aaaaaa4->Draw("");
+
+      
+      c1->Update();
+      
+      
+    //========================================================================================== 10
+      //======================================================================
+    //======================================================================
+    //================
+      /*
+    // fullAmplitude:
+///////////////////////////////////////////////////////////////////////////////////////
+
+    h_ADCAmpl_HE = new TH1F("h_ADCAmpl_HE"," ", 200, 0.,2000000.);
+    h_ADCAmpl345_HE = new TH1F("h_ADCAmpl345_HE"," ", 70, 0.,700000.);
+
+// for SiPM:
+const int npfit = 220; float anpfit = 220.;
+    h_ADCAmplZoom1_HE = new TH1F("h_ADCAmplZoom1_HE"," ",npfit, 0.,anpfit);// for amplmaxts 1TS w/ max
+    h_ADCAmpl345Zoom1_HE = new TH1F("h_ADCAmpl345Zoom1_HE"," ", npfit, 0.,anpfit);// for ampl3ts 3TSs
+    h_ADCAmpl345Zoom_HE = new TH1F("h_ADCAmpl345Zoom_HE"," ", npfit, 0.,anpfit); // for ampl 4TSs
+*/
+    //======================================================================
+      c1->Clear();
+      c1->Divide(2,3);
+      
+      c1->cd(1);
+      TH1F *aaaaab0= (TH1F*)hfile1->Get("h_ADCAmpl345_HE");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      aaaaab0->SetMarkerStyle(20);
+      aaaaab0->SetMarkerSize(0.8);
+      aaaaab0->GetYaxis()->SetLabelSize(0.04);
+      aaaaab0->SetXTitle("h_ADCAmpl345_HE \b");
+      aaaaab0->SetMarkerColor(2);
+      aaaaab0->SetLineColor(2);
+      aaaaab0->Draw("");
+      
+      c1->cd(2);
+      TH1F *aaaaab3= (TH1F*)hfile1->Get("h_ADCAmplZoom1_HE");
             gPad->SetLogy();
       //    gPad->SetLogx();
-      aaaaaa6->SetMarkerStyle(20);
-      aaaaaa6->SetMarkerSize(0.8);
-      aaaaaa6->GetYaxis()->SetLabelSize(0.04);
-      aaaaaa6->SetXTitle("ADCAmpl in each event & cell HB \b");
-      aaaaaa6->SetMarkerColor(4);
-      aaaaaa6->SetLineColor(4);
-      //      aaaaaa1->Draw("Same");
+      aaaaab3->SetMarkerStyle(20);
+      aaaaab3->SetMarkerSize(0.8);
+      aaaaab3->GetYaxis()->SetLabelSize(0.04);
+      aaaaab3->SetXTitle("for amplmaxts 1TS w/ max HE \b");
+      aaaaab3->SetMarkerColor(2);
+      aaaaab3->SetLineColor(2);
+      aaaaab3->Draw("");
+      TH1F *aaaaab4= (TH1F*)hfile1->Get("h_ADCAmpl345Zoom1_HE");
+            gPad->SetLogy();
+      //    gPad->SetLogx();
+      aaaaab4->SetMarkerStyle(20);
+      aaaaab4->SetMarkerSize(0.8);
+      aaaaab4->GetYaxis()->SetLabelSize(0.04);
+      aaaaab4->SetMarkerColor(4);
+      aaaaab4->SetLineColor(4);
+      aaaaab4->Draw("Same");
+      
+      c1->cd(3);
+      TH1F *aaaaab5= (TH1F*)hfile1->Get("h_ADCAmpl_HE");
+            gPad->SetLogy();
+      //    gPad->SetLogx();
+      aaaaab5->SetMarkerStyle(20);
+      aaaaab5->SetMarkerSize(0.8);
+      aaaaab5->GetYaxis()->SetLabelSize(0.04);
+      aaaaab5->SetXTitle("ADCAmpl in each event & cell HE \b");
+      aaaaab5->SetMarkerColor(2);
+      aaaaab5->SetLineColor(2);
+      aaaaab5->Draw("");
+      
+      c1->cd(4);
+      TH1F *aaaaab1= (TH1F*)hfile1->Get("h_ADCAmplrest_HE");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      aaaaab1->SetMarkerStyle(20);
+      aaaaab1->SetMarkerSize(0.8);
+      aaaaab1->GetYaxis()->SetLabelSize(0.04);
+      aaaaab1->SetXTitle("h_ADCAmplrest_HE \b");
+      aaaaab1->SetMarkerColor(2);
+      aaaaab1->SetLineColor(2);
+      aaaaab1->Draw("");
+
+      c1->cd(5);
+      TH1F *aaaaab2= (TH1F*)hfile1->Get("h_ADCAmplrest1_HE");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      aaaaab2->SetMarkerStyle(20);
+      aaaaab2->SetMarkerSize(0.8);
+      aaaaab2->GetYaxis()->SetLabelSize(0.04);
+      aaaaab2->SetXTitle("h_ADCAmplrest1_HE \b");
+      aaaaab2->SetMarkerColor(2);
+      aaaaab2->SetLineColor(2);
+      aaaaab2->Draw("");
+
+      c1->cd(6);
+      TH1F *aaaaab6= (TH1F*)hfile1->Get("h_ADCAmplrest6_HE");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      aaaaab6->SetMarkerStyle(20);
+      aaaaab6->SetMarkerSize(0.8);
+      aaaaab6->GetYaxis()->SetLabelSize(0.04);
+      aaaaab6->SetXTitle("h_ADCAmplrest6_HE \b");
+      aaaaab6->SetMarkerColor(2);
+      aaaaab6->SetLineColor(2);
+      aaaaab6->Draw("");
+
+      c1->Update();
+      
+      
+    //========================================================================================== 11
+      //======================================================================
+    //======================================================================
+    //================
+      /*
+    // fullAmplitude:
+///////////////////////////////////////////////////////////////////////////////////////
+    h_ADCAmplZoom1_HF = new TH1F("h_ADCAmplZoom1_HF"," ", 100, 0.,1000000.);
+    h_ADCAmpl_HF = new TH1F("h_ADCAmpl_HF"," ", 250, 0.,500000.);
+
+*/
+    //======================================================================
+      c1->Clear();
+      c1->Divide(2,2);
+      
+      c1->cd(1);
+      TH1F *aaaaac0= (TH1F*)hfile1->Get("h_ADCAmplZoom1_HF");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      aaaaac0->SetMarkerStyle(20);
+      aaaaac0->SetMarkerSize(0.8);
+      aaaaac0->GetYaxis()->SetLabelSize(0.04);
+      aaaaac0->SetXTitle("h_ADCAmplZoom1_HF \b");
+      aaaaac0->SetMarkerColor(2);
+      aaaaac0->SetLineColor(2);
+      aaaaac0->Draw("");
+      
+      c1->cd(2);
+      TH1F *aaaaac3= (TH1F*)hfile1->Get("h_ADCAmpl_HF");
+            gPad->SetLogy();
+      //    gPad->SetLogx();
+      aaaaac3->SetMarkerStyle(20);
+      aaaaac3->SetMarkerSize(0.8);
+      aaaaac3->GetYaxis()->SetLabelSize(0.04);
+      aaaaac3->SetXTitle("h_ADCAmpl_HF \b");
+      aaaaac3->SetMarkerColor(2);
+      aaaaac3->SetLineColor(2);
+      aaaaac3->Draw("");
+      
+      c1->cd(3);
+      TH1F *aaaaac5= (TH1F*)hfile1->Get("h_ADCAmplrest1_HF");
+            gPad->SetLogy();
+      //    gPad->SetLogx();
+      aaaaac5->SetMarkerStyle(20);
+      aaaaac5->SetMarkerSize(0.8);
+      aaaaac5->GetYaxis()->SetLabelSize(0.04);
+      aaaaac5->SetXTitle("h_ADCAmplrest1_HF  \b");
+      aaaaac5->SetMarkerColor(2);
+      aaaaac5->SetLineColor(2);
+      aaaaac5->Draw("");
+      
+      c1->cd(4);
+      TH1F *aaaaac1= (TH1F*)hfile1->Get("h_ADCAmplrest6_HF");
+            gPad->SetLogy();
+      //    gPad->SetLogx();
+      aaaaac1->SetMarkerStyle(20);
+      aaaaac1->SetMarkerSize(0.8);
+      aaaaac1->GetYaxis()->SetLabelSize(0.04);
+      aaaaac1->SetXTitle("h_ADCAmplrest6_HF \b");
+      aaaaac1->SetMarkerColor(2);
+      aaaaac1->SetLineColor(2);
+      aaaaac1->Draw("");
+      
+      c1->Update();
+      
+      
+    //========================================================================================== 12
+      //======================================================================
+    //======================================================================
+    //================
+      /*
+    // fullAmplitude:
+///////////////////////////////////////////////////////////////////////////////////////
+    h_ADCAmpl_HO = new TH1F("h_ADCAmpl_HO"," ", 100, 0.,7000.);
+    h_ADCAmplZoom1_HO = new TH1F("h_ADCAmplZoom1_HO"," ", 100, -20.,280.);
+    h_ADCAmpl_HO_copy = new TH1F("h_ADCAmpl_HO_copy"," ", 100, 0.,30000.);
+*/
+    //======================================================================
+      c1->Clear();
+      c1->Divide(2,3);
+      
+      c1->cd(1);
+      TH1F *aaaaad0= (TH1F*)hfile1->Get("h_ADCAmplrest1_HF");
+      gPad->SetLogy();
+      // gPad->SetLogx();
+      aaaaad0->SetMarkerStyle(20);
+      aaaaad0->SetMarkerSize(0.8);
+      aaaaad0->GetYaxis()->SetLabelSize(0.04);
+      aaaaad0->SetXTitle("h_ADCAmplrest1_HF \b");
+      aaaaad0->SetMarkerColor(2);
+      aaaaad0->SetLineColor(2);
+      aaaaad0->Draw("");
+      
+      c1->cd(2);
+      TH1F *aaaaad3= (TH1F*)hfile1->Get("h_ADCAmplrest6_HF");
+            gPad->SetLogy();
+      //    gPad->SetLogx();
+      aaaaad3->SetMarkerStyle(20);
+      aaaaad3->SetMarkerSize(0.8);
+      aaaaad3->GetYaxis()->SetLabelSize(0.04);
+      aaaaad3->SetXTitle("h_ADCAmplrest6_HF \b");
+      aaaaad3->SetMarkerColor(2);
+      aaaaad3->SetLineColor(2);
+      aaaaad3->Draw("");
+      
+      c1->cd(3);
+      TH1F *aaaaad5= (TH1F*)hfile1->Get("h_ADCAmpl_HO");
+            gPad->SetLogy();
+      //    gPad->SetLogx();
+      aaaaad5->SetMarkerStyle(20);
+      aaaaad5->SetMarkerSize(0.8);
+      aaaaad5->GetYaxis()->SetLabelSize(0.04);
+      aaaaad5->SetXTitle("h_ADCAmpl_HO \b");
+      aaaaad5->SetMarkerColor(2);
+      aaaaad5->SetLineColor(2);
+      aaaaad5->Draw("");
+      
+      c1->cd(4);
+      TH1F *aaaaad1= (TH1F*)hfile1->Get("h_ADCAmplZoom1_HO");
+            gPad->SetLogy();
+      //    gPad->SetLogx();
+      aaaaad1->SetMarkerStyle(20);
+      aaaaad1->SetMarkerSize(0.8);
+      aaaaad1->GetYaxis()->SetLabelSize(0.04);
+      aaaaad1->SetXTitle("h_ADCAmplZoom1_HO \b");
+      aaaaad1->SetMarkerColor(2);
+      aaaaad1->SetLineColor(2);
+      aaaaad1->Draw("");
+      
+      c1->cd(5);
+      TH1F *aaaaad2= (TH1F*)hfile1->Get("h_ADCAmpl_HO_copy");
+            gPad->SetLogy();
+      //    gPad->SetLogx();
+      aaaaad2->SetMarkerStyle(20);
+      aaaaad2->SetMarkerSize(0.8);
+      aaaaad2->GetYaxis()->SetLabelSize(0.04);
+      aaaaad2->SetXTitle("h_ADCAmpl_HO_copy \b");
+      aaaaad2->SetMarkerColor(2);
+      aaaaad2->SetLineColor(2);
+      aaaaad2->Draw("");
       
       c1->Update();
       
