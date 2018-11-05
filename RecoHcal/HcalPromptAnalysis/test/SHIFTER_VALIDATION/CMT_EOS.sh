@@ -153,7 +153,8 @@ for i in ${runList} ; do
     
     #CMT processing
     echo -e "\nRemoteMonitoringGLOBAL\n" >> ${logFile}
-    ./RemoteMonitoringGLOBAL.cc.exe Global_$runnumber.root 2>&1 | tee -a ${logFile}
+#    ./RemoteMonitoringGLOBAL.cc.exe Global_$runnumber.root 2>&1 | tee -a ${logFile}
+    ./RemoteMonitoringGLOBALTEST.cc.exe Global_$runnumber.root 2>&1 | tee -a ${logFile}
     if [ ! $? -eq 0 ] ; then
 	echo "GLOBAL processing failed"
 	exit 2
