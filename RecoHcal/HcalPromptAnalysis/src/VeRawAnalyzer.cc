@@ -257,10 +257,10 @@ static const float adc2fC[128]={-0.5,0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5, 10
 const int nsub = 4;  const int ndepth = 7; 
 // eta & phi
 const int neta = 82;  const int nphi = 72;   float bphi = 72.;
+const int zneta = 22;  const int znphi = 18;   float zbphi= 18.;
 
 // for SiPM:
 const int npfit = 220; float anpfit = 220.;
-
 
 
 class VeRawAnalyzer : public edm::EDAnalyzer 
@@ -474,6 +474,9 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   double TSmeanHOMin_;
   double TSmeanHOMax_;
 
+  int lsmin_;
+  int lsmax_;
+
   /////////////////////////////////////////////
   double ADCAmplHBMin_;
   double ADCAmplHEMin_;
@@ -545,8 +548,8 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   int nnnnnn4;
   int nnnnnn5;
   int nnnnnn6;
-  //  int nnnnnn7;
-  //  int nnnnnn8;
+  //  int nnnnnn7; 
+  //  int nnnnnn8; 
 
   double pedestalwHBMax_;
   double pedestalwHEMax_;
@@ -557,6 +560,110 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   double pedestalHFMax_;
   double pedestalHOMax_;
   /////////////////////////////////////////////
+  TH1F* h_bcnvsamplitude_HB;
+  TH1F* h_bcnvsamplitude0_HB;
+  TH1F* h_bcnvsamplitude_HE;
+  TH1F* h_bcnvsamplitude0_HE;
+  TH1F* h_bcnvsamplitude_HF;
+  TH1F* h_bcnvsamplitude0_HF;
+  TH1F* h_bcnvsamplitude_HO;
+  TH1F* h_bcnvsamplitude0_HO;
+
+    TH1F* h_orbitNumvsamplitude_HB ;
+    TH1F* h_orbitNumvsamplitude0_HB;
+    TH1F* h_orbitNumvsamplitude_HE ;
+    TH1F* h_orbitNumvsamplitude0_HE;
+    TH1F* h_orbitNumvsamplitude_HF ;
+    TH1F* h_orbitNumvsamplitude0_HF;
+    TH1F* h_orbitNumvsamplitude_HO ;
+    TH1F* h_orbitNumvsamplitude0_HO;
+
+  TH2F* h_2DsumADCAmplEtaPhiLs0;
+  TH2F* h_2DsumADCAmplEtaPhiLs1;
+  TH2F* h_2DsumADCAmplEtaPhiLs2;
+  TH2F* h_2DsumADCAmplEtaPhiLs3;
+
+  TH2F* h_2DsumADCAmplEtaPhiLs00;
+  TH2F* h_2DsumADCAmplEtaPhiLs10;
+  TH2F* h_2DsumADCAmplEtaPhiLs20;
+  TH2F* h_2DsumADCAmplEtaPhiLs30;
+
+  TH1F* h_sumADCAmplEtaPhiLs;
+  TH1F* h_sumADCAmplEtaPhiLs_bbbc;
+  TH1F* h_sumADCAmplEtaPhiLs_bbb1;
+  TH1F* h_sumADCAmplEtaPhiLs_lscounterM1;
+  TH1F* h_sumADCAmplEtaPhiLs_ietaphi;
+  TH1F* h_sumADCAmplEtaPhiLs_lscounterM1orbitNum;
+  TH1F* h_sumADCAmplEtaPhiLs_orbitNum;
+
+   TH1F* h_AiForLS_11_HB; 
+   TH1F* h_AiForLS_12_HB; 
+   TH1F* h_AiForLS_13_HB; 
+   TH1F* h_AiForLS_75_HB; 
+   TH1F* h_AiForLS_66_HB; 
+   TH1F* h_AiForLS_100_HB; 
+   TH1F* h_AiForLS_215_HB; 
+   TH1F* h_AiForLS_233_HB; 
+   TH1F* h_AiForLS_456_HB; 
+   TH1F* h_AiForLS_bad_HB; 
+   TH1F* h_AiForLS_444_HB; 
+   TH1F* h_AiForLS_good_HB;
+
+   TH1F* h_AiForLS_11_HE; 
+   TH1F* h_AiForLS_12_HE; 
+   TH1F* h_AiForLS_13_HE; 
+   TH1F* h_AiForLS_75_HE; 
+   TH1F* h_AiForLS_66_HE; 
+   TH1F* h_AiForLS_100_HE; 
+   TH1F* h_AiForLS_215_HE; 
+   TH1F* h_AiForLS_233_HE; 
+   TH1F* h_AiForLS_456_HE; 
+   TH1F* h_AiForLS_bad_HE; 
+   TH1F* h_AiForLS_444_HE; 
+   TH1F* h_AiForLS_good_HE;
+
+   TH1F* h_AiForLS_11_HO; 
+   TH1F* h_AiForLS_12_HO; 
+   TH1F* h_AiForLS_13_HO; 
+   TH1F* h_AiForLS_75_HO; 
+   TH1F* h_AiForLS_66_HO; 
+   TH1F* h_AiForLS_100_HO; 
+   TH1F* h_AiForLS_215_HO; 
+   TH1F* h_AiForLS_233_HO; 
+   TH1F* h_AiForLS_456_HO; 
+   TH1F* h_AiForLS_bad_HO; 
+   TH1F* h_AiForLS_444_HO; 
+   TH1F* h_AiForLS_good_HO;
+
+   TH1F* h_AiForLS_11_HF; 
+   TH1F* h_AiForLS_12_HF; 
+   TH1F* h_AiForLS_13_HF; 
+   TH1F* h_AiForLS_75_HF; 
+   TH1F* h_AiForLS_66_HF; 
+   TH1F* h_AiForLS_100_HF; 
+   TH1F* h_AiForLS_215_HF; 
+   TH1F* h_AiForLS_233_HF; 
+   TH1F* h_AiForLS_456_HF; 
+   TH1F* h_AiForLS_bad_HF; 
+   TH1F* h_AiForLS_444_HF; 
+   TH1F* h_AiForLS_good_HF;
+
+  TH2F* h_mapAiForLS_bad_HB;
+  TH2F* h_map0AiForLS_bad_HB;
+  TH2F* h_mapAiForLS_good_HB;
+  TH2F* h_map0AiForLS_good_HB;
+  TH2F* h_mapAiForLS_bad_HE;
+  TH2F* h_map0AiForLS_bad_HE;
+  TH2F* h_mapAiForLS_good_HE;
+  TH2F* h_map0AiForLS_good_HE;
+  TH2F* h_mapAiForLS_bad_HO;
+  TH2F* h_map0AiForLS_bad_HO;
+  TH2F* h_mapAiForLS_good_HO;
+  TH2F* h_map0AiForLS_good_HO;
+  TH2F* h_mapAiForLS_bad_HF;
+  TH2F* h_map0AiForLS_bad_HF;
+  TH2F* h_mapAiForLS_good_HF;
+  TH2F* h_map0AiForLS_good_HF;
 
    TH1F*   h_numberofhitsHBtest;
    TH1F*   h_numberofhitsHEtest;
@@ -695,6 +802,12 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   TH1F* h_ADCAmplZoom_HB;
   TH1F* h_ADCAmplZoom1_HB;
   TH1F* h_ADCAmpl_HB;
+
+  TH1F* h_AmplitudeHBrest;
+  TH1F* h_AmplitudeHBrest1;
+  TH1F* h_AmplitudeHBrest6;
+  
+
   TH2F* h_mapDepth1ADCAmpl_HB;
   TH2F* h_mapDepth2ADCAmpl_HB;
   TH2F* h_mapDepth1ADCAmpl225_HB;
@@ -752,6 +865,9 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   TH2F* h_mapDepth3linADCAmpl12_HE;
   /////////////////////////////////////////////
   TH1F* h_ADCAmpl_HF;
+  TH1F* h_ADCAmplrest1_HF;
+  TH1F* h_ADCAmplrest6_HF;
+
   TH1F* h_ADCAmplZoom1_HF;
   TH2F* h_mapDepth1ADCAmpl_HF;
   TH2F* h_mapDepth2ADCAmpl_HF;
@@ -811,6 +927,9 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   TH2F* h_mapDepth4_HF;
   /////////////////////////////////////////////
   TH1F* h_ADCAmpl_HO;
+  TH1F* h_ADCAmplrest1_HO;
+  TH1F* h_ADCAmplrest6_HO;
+
   TH1F* h_ADCAmplZoom1_HO;
   TH1F* h_ADCAmpl_HO_copy;
   TH2F* h_mapDepth4ADCAmpl_HO;
@@ -932,6 +1051,10 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   
 
   TH1F* h_ADCAmpl_HE;
+  TH1F* h_ADCAmplrest_HE;
+  TH1F* h_ADCAmplrest1_HE;
+  TH1F* h_ADCAmplrest6_HE;
+
   TH1F* h_ADCAmplZoom1_HE;
 
   TH2F* h_mapDepth1ADCAmpl_HE;
@@ -1205,6 +1328,20 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH1F*    h_sumPedestalperLS8        ;
   TH2F*    h_2D0sumPedestalLS8         ;
   TH1F*    h_sum0PedestalperLS8         ;
+
+// for gain stability vs LS:
+  TH2F*    h_2DsumADCAmplLSdepth4HEu    ;
+  TH2F*    h_2D0sumADCAmplLSdepth4HEu    ;
+  TH2F*    h_2DsumADCAmplLSdepth5HEu    ;
+  TH2F*    h_2D0sumADCAmplLSdepth5HEu    ;
+  TH2F*    h_2DsumADCAmplLSdepth6HEu    ;
+  TH2F*    h_2D0sumADCAmplLSdepth6HEu    ;
+  TH2F*    h_2DsumADCAmplLSdepth7HEu    ;
+  TH2F*    h_2D0sumADCAmplLSdepth7HEu    ;
+  TH2F*    h_2DsumADCAmplLSdepth3HFu    ;
+  TH2F*    h_2D0sumADCAmplLSdepth3HFu    ;
+  TH2F*    h_2DsumADCAmplLSdepth4HFu    ;
+  TH2F*    h_2D0sumADCAmplLSdepth4HFu    ;
 
   // LS dependencies for estimator1:
   TH1F*    h_sumADCAmplLS1copy1    ;
@@ -2202,13 +2339,15 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   long int gsmdepth1sipm[npfit][neta][nphi][ndepth];
   ///////////////////////////////////////////// end massives
   
-  int Nevent;
+  long int Nevent;
   int Run;
   int run0 ;
   //int run1 ;
   int runcounter ;
   int eventcounter;
+  long int orbitNum; 
 
+  int bcn;
   int lumi;
   int ls0 ;
   int lscounter ;
@@ -2278,6 +2417,12 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   int numOfLaserEv;
 
   int testmetka;
+
+
+
+  float alsmin;
+  float blsmax;
+  int nlsminmax;
   
 };
 
@@ -2533,6 +2678,13 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   TSmeanHFMax_      = iConfig.getParameter<double>("TSmeanHFMax");//
   TSmeanHOMin_      = iConfig.getParameter<double>("TSmeanHOMin");//
   TSmeanHOMax_      = iConfig.getParameter<double>("TSmeanHOMax");//
+
+
+  lsmin_ = iConfig.getParameter<int>("lsmin");//
+  lsmax_ = iConfig.getParameter<int>("lsmax");//
+
+
+
   
   std::cout<<" Look on parameters you booked:" << std::endl;   
   std::cout<<" recordNtuples_ = " <<recordNtuples_ << std::endl;  
@@ -2666,10 +2818,16 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   std::cout<<" TSmeanHFMax_ = " <<TSmeanHFMax_ << std::endl;   
   std::cout<<" TSmeanHOMin_ = " <<TSmeanHOMin_ << std::endl;   
   std::cout<<" TSmeanHOMax_ = " <<TSmeanHOMax_ << std::endl;   
+
+  std::cout<<" lsmin_ = " <<lsmin_ << std::endl;   
+  std::cout<<" lsmax_ = " <<lsmax_ << std::endl;   
   
   std::cout << "ONLY in use of led run (low-intensityGsel0 =shunt1): npfit = " <<npfit << " anpfit = " <<anpfit << " binanpfit = " <<binanpfit << std::endl;
   
-
+//
+  alsmin = lsmin_;
+  blsmax = lsmax_;
+  nlsminmax = lsmax_ - lsmin_ + 1 ;
   //
   numOfLaserEv=0;
   local_event=0;
@@ -2798,9 +2956,11 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   nevent++;
   nevent50 = nevent/50;
   Run=iEvent.id().run();
-  Nevent=iEvent.id().event();    // event number 
+  Nevent=iEvent.id().event();    // event number = global_event
   lumi=iEvent.luminosityBlock(); // lumi section
-  int bcn = iEvent.bunchCrossing();
+  bcn = iEvent.bunchCrossing();
+  orbitNum=iEvent.orbitNumber();
+
 
    if(verbosity > 0 ) std::cout  <<  " nevent =  "  << nevent  <<  " Run =  "  << Run  <<  " bcn =  "  << bcn  <<  " LS =  "  << lumi  <<  " event =  "  << Nevent  <<  endl;
 
@@ -2850,7 +3010,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       if(verbosity > 0 ) std::cout  <<  " lscounter =  "  << lscounter  <<  endl;
 
     ////////////////////////////////////////////////////////////////
-
+      // in pyhthon: usecontinuousnumbering = cms.untracked.bool(False);
     if(usecontinuousnumbering_) { lscounterM1 = lscounter - 1; }
     else {lscounterM1 = ls0; }
     if(ls0 != -1) h_nevents_per_eachRealLS->Fill( float(lscounterM1) ,float(nevcounter) );//
@@ -2879,6 +3039,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   if(verbosity > 0 ) std::cout  <<  " nevcounter =  "  << nevcounter  <<  endl;
    //////
   //11.04.14 - to study time dependencies  
+  // flagtoaskrunsorls   =0-runs, =1-LSs
   if(flagtoaskrunsorls_ == 0 ) {
     lscounterM1 = runcounter;
     nevcounter0=nevcounter00;
@@ -2982,7 +3143,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	      }
 	      // HE:
 	      if(k0==1) {
-		// HBdepth1
+		// HEdepth1
 		if(k1+1  ==1) {
 		  h_sumPedestalLS3->Fill(bbbc/bbb1);
 		  h_2DsumPedestalLS3->Fill(double(ieta), double(k3), bbbc);
@@ -3007,7 +3168,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	      }
 	      // HF:
 	      if(k0==3) {
-		// HBdepth1
+		// HFdepth1
 		if(k1+1  ==1) {
 		  h_sumPedestalLS6->Fill(bbbc/bbb1);
 		  h_2DsumPedestalLS6->Fill(double(ieta), double(k3), bbbc);
@@ -3025,7 +3186,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	      }
 	      // HO:
 	      if(k0==2) {
-		// HBdepth1
+		// HOdepth4
 		if(k1+1  ==4) {
 		  h_sumPedestalLS8->Fill(bbbc/bbb1);
 		  h_2DsumPedestalLS8->Fill(double(ieta), double(k3), bbbc);
@@ -3052,6 +3213,60 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 
 	      if (verbosity == -77777778 && k0==1 && k1+1 >4 && k2 > 0 && k3>0 && bbb1 > 0. ) std::cout << "  lscounterM1 = " <<lscounterM1 <<" mdepth= " << k1+1 <<" ieta= " << k2 <<" iphi= " << k3 << "bbbc= "  << bbbc  << "bbb1= "  << bbb1  << std::endl;	
 
+
+	      ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	      ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	      // zhokin 18.10.2018 STUDY:               CALL  HFF2 (ID,NID,X,Y,W)
+	      //		  std::cout << "  lscounterM1 = " <<lscounterM1 <<" HB index= " <<k0 <<" mdepth= " << k1+1 <<" ieta= " << k2 <<" iphi= " << k3 << " bbbc= "  << bbbc  << " bbb1= "  << bbb1  << std::endl;	
+	      if( lscounterM1 >= lsmin_ && lscounterM1 < lsmax_ ) {
+
+		//                                       INDEXIES:
+		int kkkk2 = (k2-1)/4;	if(k2==0) kkkk2=1.;else kkkk2+=2; //kkkk2= 1-22
+		int kkkk3 = (k3)/4 + 1 ;//kkkk3= 1-18
+		//                                       PACKING
+		//kkkk2= 1-22 ;kkkk3= 1-18
+		int ietaphi = 0; ietaphi = ((kkkk2)-1)*znphi + (kkkk3) ; 
+		//  Outout is       ietaphi = 1 - 396 ( # =396; in histo,booking is: 1 - 397 )
+
+		//if(lscounterM1 == 187 && ietaphi == 5904 ) std::cout <<"ALL SubDet index= " <<k0 <<" mdepth= " << k1+1 <<" ieta= " << k2 <<" iphi= " << k3 << " bbbc= "  << bbbc  << " bbb1= "  << bbb1  << " nevcounter0= "  << nevcounter0  << std::endl;	
+		//if(lscounterM1 == 188 && ietaphi == 1 )std::cout <<"ALL********** SubDet index= " <<k0 <<" mdepth= " << k1+1 <<" ieta= " << k2 <<" iphi= " << k3 << " bbbc= "  << bbbc  << " bbb1= "  << bbb1  << " nevcounter0= "  << nevcounter0  << std::endl;	
+		
+		
+		double bbb3=0.;if(bbb1 != 0.) bbb3 = bbbc/bbb1;
+		if(bbb3 != 0.) {
+
+		  if(k0==0) {
+		    h_2DsumADCAmplEtaPhiLs0->Fill(float(lscounterM1), float(ietaphi), bbbc);//HB
+		    h_2DsumADCAmplEtaPhiLs00->Fill(float(lscounterM1), float(ietaphi), bbb1);//HB
+		  }
+		  if(k0==1) {
+		    h_2DsumADCAmplEtaPhiLs1->Fill(float(lscounterM1), float(ietaphi), bbbc);//HE
+		    h_2DsumADCAmplEtaPhiLs10->Fill(float(lscounterM1), float(ietaphi), bbb1);//HE
+		  }
+		  if(k0==2) {
+		    h_2DsumADCAmplEtaPhiLs2->Fill(float(lscounterM1), float(ietaphi), bbbc);//HO
+		    h_2DsumADCAmplEtaPhiLs20->Fill(float(lscounterM1), float(ietaphi), bbb1);//HO
+		  }
+		  if(k0==3) {
+		    h_2DsumADCAmplEtaPhiLs3->Fill(float(lscounterM1), float(ietaphi), bbbc);//HF
+		    h_2DsumADCAmplEtaPhiLs30->Fill(float(lscounterM1), float(ietaphi), bbb1);//HF
+		  }
+
+		  h_sumADCAmplEtaPhiLs->Fill(bbb3);
+		  h_sumADCAmplEtaPhiLs_bbbc->Fill(bbbc);
+		  h_sumADCAmplEtaPhiLs_bbb1->Fill(bbb1);
+		  h_sumADCAmplEtaPhiLs_lscounterM1orbitNum->Fill(float(lscounterM1), float(orbitNum));
+		  h_sumADCAmplEtaPhiLs_orbitNum->Fill(float(orbitNum), 1.);
+		  h_sumADCAmplEtaPhiLs_lscounterM1->Fill(float(lscounterM1), 1.);
+		  h_sumADCAmplEtaPhiLs_ietaphi->Fill(float(ietaphi));
+
+		}// bb3
+		
+	      }// lscounterM1 >= lsmin_ && lscounterM1 < lsmax_
+	      
+	    
+
+
 	      // HB:
 	      if(k0==0) {
 		// HBdepth1
@@ -3064,14 +3279,24 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		  h_sumADCAmplLS1copy4->Fill(bbbc/bbb1);
 		  h_sumADCAmplLS1copy5->Fill(bbbc/bbb1);
 		  h_sumADCAmplLS1->Fill(bbbc/bbb1);
-		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth1_  || bbbc/bbb1 < 0. ) h_2DsumADCAmplLS1->Fill(double(ieta), double(k3), bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth1_   ) h_2DsumADCAmplLS1->Fill(double(ieta), double(k3), bbbc);
 		  if(bbbc/bbb1 > 2.*lsdep_estimator1_HBdepth1_ ) h_2DsumADCAmplLS1_LSselected->Fill(double(ieta), double(k3), bbbc);
 //		  if( ( lscounterM1 == 734 || lscounterM1 == 758 || lscounterM1 == 759 || lscounterM1 == 853 || lscounterM1 == 1436 ) ) h_2DsumADCAmplLS1_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		  if( ( lscounterM1 == 504 || lscounterM1 == 867 ) ) h_2DsumADCAmplLS1_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumADCAmplLS1->Fill(double(ieta), double(k3), bbb1);
+
 		  h_sumADCAmplperLS1->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth1_  || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS1->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth1_   ) h_sumCutADCAmplperLS1->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS1->Fill( float(lscounterM1) ,bbb1);
+
+		  // zhokin 18.10.2018 STUDY:
+		  //		  std::cout << "  lscounterM1 = " <<lscounterM1 <<" HB index= " <<k0 <<" mdepth= " << k1+1 <<" ieta= " << k2 <<" iphi= " << k3 << " bbbc= "  << bbbc  << " bbb1= "  << bbb1  << std::endl;	
+
+
+
+
+
+
 		  if(ieta>0 ){
 		    if(k3<36) {
 		      h_sumADCAmplperLS1_P1->Fill( float(lscounterM1) ,bbbc);
@@ -3111,13 +3336,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		// HBdepth2
 		if(k1+1  ==2) {
 		  h_sumADCAmplLS2->Fill(bbbc/bbb1);
-		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth2_   || bbbc/bbb1 < 0. ) h_2DsumADCAmplLS2->Fill(double(ieta), double(k3), bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth2_    ) h_2DsumADCAmplLS2->Fill(double(ieta), double(k3), bbbc);
 		  if(bbbc/bbb1 > 2.*lsdep_estimator1_HBdepth2_  ) h_2DsumADCAmplLS2_LSselected->Fill(double(ieta), double(k3), bbbc);
 //		  if( ( lscounterM1 == 734 || lscounterM1 == 758 || lscounterM1 == 759 || lscounterM1 == 853 || lscounterM1 == 1436 ) ) h_2DsumADCAmplLS2_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		  if( ( lscounterM1 == 504 || lscounterM1 == 867 ) ) h_2DsumADCAmplLS2_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumADCAmplLS2->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS2->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth2_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS2->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth2_    ) h_sumCutADCAmplperLS2->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS2->Fill( float(lscounterM1) ,bbb1);
 		  if(ieta>0 ){
 		    if(k3<36) {
@@ -3147,13 +3372,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		// HEdepth1
 		if(k1+1  ==1) {
 		  h_sumADCAmplLS3->Fill(bbbc/bbb1);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth1_   || bbbc/bbb1 < 0. ) h_2DsumADCAmplLS3->Fill(double(ieta), double(k3), bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth1_    ) h_2DsumADCAmplLS3->Fill(double(ieta), double(k3), bbbc);
 		  if(bbbc/bbb1 > 2.*lsdep_estimator1_HEdepth1_  ) h_2DsumADCAmplLS3_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 146 || lscounterM1 == 515 ) ) h_2DsumADCAmplLS3_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 504 || lscounterM1 == 867 ) ) h_2DsumADCAmplLS3_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumADCAmplLS3->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS3->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth1_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS3->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth1_    ) h_sumCutADCAmplperLS3->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS3->Fill( float(lscounterM1) ,bbb1);
 		  if(ieta>0 ){
 		    if(k3<36) {
@@ -3196,13 +3421,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		// HEdepth2
 		if(k1+1  ==2) {
 		  h_sumADCAmplLS4->Fill(bbbc/bbb1);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth2_   || bbbc/bbb1 < 0. ) h_2DsumADCAmplLS4->Fill(double(ieta), double(k3), bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth2_    ) h_2DsumADCAmplLS4->Fill(double(ieta), double(k3), bbbc);
 		  if(bbbc/bbb1 > 2.*lsdep_estimator1_HEdepth2_  ) h_2DsumADCAmplLS4_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 146 || lscounterM1 == 515 ) ) h_2DsumADCAmplLS4_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 504 || lscounterM1 == 867 ) ) h_2DsumADCAmplLS4_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumADCAmplLS4->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS4->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth2_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS4->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth2_    ) h_sumCutADCAmplperLS4->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS4->Fill( float(lscounterM1) ,bbb1);
 		  if(ieta>0 ){
 		    if(k3<36) {
@@ -3229,13 +3454,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		// HEdepth3
 		if(k1+1  ==3) {
 		  h_sumADCAmplLS5->Fill(bbbc/bbb1);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth3_   || bbbc/bbb1 < 0. ) h_2DsumADCAmplLS5->Fill(double(ieta), double(k3), bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth3_    ) h_2DsumADCAmplLS5->Fill(double(ieta), double(k3), bbbc);
 		  if(bbbc/bbb1 > 2.*lsdep_estimator1_HEdepth3_  ) h_2DsumADCAmplLS5_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 146 || lscounterM1 == 515 ) ) h_2DsumADCAmplLS5_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 504 || lscounterM1 == 867 ) ) h_2DsumADCAmplLS5_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumADCAmplLS5->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS5->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth3_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS5->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth3_    ) h_sumCutADCAmplperLS5->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS5->Fill( float(lscounterM1) ,bbb1);
 		  if(ieta>0 ){
 		    if(k3<36) {
@@ -3260,32 +3485,46 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 
 		}//if(k1+1  ==3
 
+
+
 		// HEdepth4 upgrade
 		if(k1+1  ==4) {
 		  h_sumADCAmplperLSdepth4HEu->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth4_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLSdepth4HEu->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth4_    ) h_sumCutADCAmplperLSdepth4HEu->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLSdepth4HEu->Fill( float(lscounterM1) ,bbb1);
+
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth4_    ) h_2DsumADCAmplLSdepth4HEu->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumADCAmplLSdepth4HEu->Fill(double(ieta), double(k3), bbb1);
 		}//if(k1+1  ==4)
 
 		// HEdepth5 upgrade
 		if(k1+1  ==5) {
 		  h_sumADCAmplperLSdepth5HEu->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth5_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLSdepth5HEu->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth5_    ) h_sumCutADCAmplperLSdepth5HEu->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLSdepth5HEu->Fill( float(lscounterM1) ,bbb1);
+
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth5_    ) h_2DsumADCAmplLSdepth5HEu->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumADCAmplLSdepth5HEu->Fill(double(ieta), double(k3), bbb1);
 		}//if(k1+1  ==5)
 
 		// HEdepth6 upgrade
 		if(k1+1  ==6) {
 		  h_sumADCAmplperLSdepth6HEu->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth6_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLSdepth6HEu->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth6_    ) h_sumCutADCAmplperLSdepth6HEu->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLSdepth6HEu->Fill( float(lscounterM1) ,bbb1);
+
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth6_    ) h_2DsumADCAmplLSdepth6HEu->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumADCAmplLSdepth6HEu->Fill(double(ieta), double(k3), bbb1);
 		}//if(k1+1  ==6)
 
 		// HEdepth7 upgrade
 		if(k1+1  ==7) {
 		  h_sumADCAmplperLSdepth7HEu->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth7_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLSdepth7HEu->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth7_    ) h_sumCutADCAmplperLSdepth7HEu->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLSdepth7HEu->Fill( float(lscounterM1) ,bbb1);
+
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth7_    ) h_2DsumADCAmplLSdepth7HEu->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumADCAmplLSdepth7HEu->Fill(double(ieta), double(k3), bbb1);
 		}//if(k1+1  ==7)
 
 
@@ -3299,13 +3538,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		if(k1+1  ==1) {
 	  	  if (verbosity == -7777 ) std::cout << "HF***sumEstimator1= "  << sumEstimator1[k0][k1][k2][k3] << "sum0Estimator= "  << sum0Estimator[k0][k1][k2][k3] <<" nevcounter0= " << nevcounter0 <<" bbbc= " << bbbc << std::endl;
 		  h_sumADCAmplLS6->Fill(bbbc/bbb1);
-		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth1_ || bbbc/bbb1 < 0. ) h_2DsumADCAmplLS6->Fill(double(ieta), double(k3), bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth1_  ) h_2DsumADCAmplLS6->Fill(double(ieta), double(k3), bbbc);
 		  if(bbbc/bbb1 > 2.*lsdep_estimator1_HFdepth1_  ) h_2DsumADCAmplLS6_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 1810 ) ) h_2DsumADCAmplLS6_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 504 || lscounterM1 == 867 ) ) h_2DsumADCAmplLS6_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumADCAmplLS6->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS6->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth1_  || bbbc/bbb1 < 0.  ) h_sumCutADCAmplperLS6->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth1_    ) h_sumCutADCAmplperLS6->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS6->Fill( float(lscounterM1) ,bbb1);
 
 		  ///////////////////////////////////////////////////////// error-A
@@ -3349,13 +3588,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		// HFdepth2
 		if(k1+1  ==2) {
 		  h_sumADCAmplLS7->Fill(bbbc/bbb1);
-		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth2_   || bbbc/bbb1 < 0. ) h_2DsumADCAmplLS7->Fill(double(ieta), double(k3), bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth2_    ) h_2DsumADCAmplLS7->Fill(double(ieta), double(k3), bbbc);
 		  if(bbbc/bbb1 > 2.*lsdep_estimator1_HFdepth2_  ) h_2DsumADCAmplLS7_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 1810 ) ) h_2DsumADCAmplLS7_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		    if( ( lscounterM1 == 504 || lscounterM1 == 867 ) ) h_2DsumADCAmplLS7_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumADCAmplLS7->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS7->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth2_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS7->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth2_    ) h_sumCutADCAmplperLS7->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS7->Fill( float(lscounterM1) ,bbb1);
 
 
@@ -3384,15 +3623,21 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		// HFdepth3 upgrade
 		if(k1+1  ==3) {
 		  h_sumADCAmplperLS6u->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth3_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS6u->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth3_    ) h_sumCutADCAmplperLS6u->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS6u->Fill( float(lscounterM1) ,bbb1);
+
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth3_    ) h_2DsumADCAmplLSdepth3HFu->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumADCAmplLSdepth3HFu->Fill(double(ieta), double(k3), bbb1);
 		}//if(k1+1  ==3)
 
 		// HFdepth4 upgrade
 		if(k1+1  ==4) {
 		  h_sumADCAmplperLS7u->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth4_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS7u->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth4_    ) h_sumCutADCAmplperLS7u->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS7u->Fill( float(lscounterM1) ,bbb1);
+
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth4_    ) h_2DsumADCAmplLSdepth4HFu->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumADCAmplLSdepth4HFu->Fill(double(ieta), double(k3), bbb1);
 		}//if(k1+1  ==4)
 
 	      }//end HF
@@ -3403,13 +3648,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		// HOdepth4
 		if(k1+1  ==4) {
 		  h_sumADCAmplLS8->Fill(bbbc/bbb1);
-		  if(bbbc/bbb1 > lsdep_estimator1_HOdepth4_   || bbbc/bbb1 < 0. ) h_2DsumADCAmplLS8->Fill(double(ieta), double(k3), bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HOdepth4_    ) h_2DsumADCAmplLS8->Fill(double(ieta), double(k3), bbbc);
 		  if(bbbc/bbb1 > 2.*lsdep_estimator1_HOdepth4_  ) h_2DsumADCAmplLS8_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		  if( ( lscounterM1 == 14 ) ) h_2DsumADCAmplLS8_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  //		  if( ( lscounterM1 == 504 || lscounterM1 == 867 ) ) h_2DsumADCAmplLS8_LSselected->Fill(double(ieta), double(k3), bbbc);
 		  h_2D0sumADCAmplLS8->Fill(double(ieta), double(k3), bbb1);
 		  h_sumADCAmplperLS8->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HOdepth4_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS8->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HOdepth4_    ) h_sumCutADCAmplperLS8->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS8->Fill( float(lscounterM1) ,bbb1);
 
 		  ///////////////////////////////////////////////////////// error-A
@@ -5708,6 +5953,32 @@ void VeRawAnalyzer::beginJob()
 
 
   //////////////////////////////////////////////////////////////////////////////////    book histoes
+
+
+  //  float alsmin = lsmin_;
+  //  float blsmax = lsmax_;
+  //  int nlsminmax = lsmax_ - lsmin_ + 1 ;
+
+//  Outout is       ietaphi = 1 - 396 ( # =396; in histo,booking is: 1 - 397 )
+  // znphi*zneta = 396     0 - HB; 1 - HE; 2 - HO; 3 - HF;
+  h_2DsumADCAmplEtaPhiLs0 = new TH2F("h_2DsumADCAmplEtaPhiLs0"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
+  h_2DsumADCAmplEtaPhiLs1 = new TH2F("h_2DsumADCAmplEtaPhiLs1"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
+  h_2DsumADCAmplEtaPhiLs2 = new TH2F("h_2DsumADCAmplEtaPhiLs2"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
+  h_2DsumADCAmplEtaPhiLs3 = new TH2F("h_2DsumADCAmplEtaPhiLs3"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
+
+  h_2DsumADCAmplEtaPhiLs00 = new TH2F("h_2DsumADCAmplEtaPhiLs00"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
+  h_2DsumADCAmplEtaPhiLs10 = new TH2F("h_2DsumADCAmplEtaPhiLs10"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
+  h_2DsumADCAmplEtaPhiLs20 = new TH2F("h_2DsumADCAmplEtaPhiLs20"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
+  h_2DsumADCAmplEtaPhiLs30 = new TH2F("h_2DsumADCAmplEtaPhiLs30"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
+
+  h_sumADCAmplEtaPhiLs = new TH1F("h_sumADCAmplEtaPhiLs"," ", 1000, 0.,20000.);
+  h_sumADCAmplEtaPhiLs_bbbc = new TH1F("h_sumADCAmplEtaPhiLs_bbbc"," ", 1000, 0.,250000.);
+  h_sumADCAmplEtaPhiLs_bbb1 = new TH1F("h_sumADCAmplEtaPhiLs_bbb1"," ", 100, 0.,10000.);
+  h_sumADCAmplEtaPhiLs_lscounterM1 = new TH1F("h_sumADCAmplEtaPhiLs_lscounterM1"," ", 600, 0.,600.);
+  h_sumADCAmplEtaPhiLs_ietaphi = new TH1F("h_sumADCAmplEtaPhiLs_ietaphi"," ", 1000, 0.,6000.);
+  h_sumADCAmplEtaPhiLs_lscounterM1orbitNum = new TH1F("h_sumADCAmplEtaPhiLs_lscounterM1orbitNum"," ", 600, 0.,600.);
+  h_sumADCAmplEtaPhiLs_orbitNum = new TH1F("h_sumADCAmplEtaPhiLs_orbitNum"," ", 1000, 25000000.,40000000.);
+  
   if(recordHistoes_) {
     //  ha2 = new TH2F("ha2"," ", neta, -41., 41., nphi, 0., bphi);
     
@@ -5793,6 +6064,24 @@ void VeRawAnalyzer::beginJob()
     h_repetedcapid_HO = new TH1F("h_repetedcapid_HO"," ", 5, 0., 5.);
     
     /////////////////////////////////////////////////////////////////////////////////////////////////             HB
+	h_AiForLS_11_HB = new TH1F("h_AiForLS_11_HB"," ",     100, 0.,3000.);
+	h_AiForLS_12_HB = new TH1F("h_AiForLS_12_HB"," ",     100, 0.,3000.);
+	h_AiForLS_13_HB = new TH1F("h_AiForLS_13_HB"," ",     100, 0.,3000.);
+	h_AiForLS_75_HB = new TH1F("h_AiForLS_75_HB"," ",     100, 0.,3000.);
+	h_AiForLS_66_HB = new TH1F("h_AiForLS_66_HB"," ",     100, 0.,3000.);
+	h_AiForLS_100_HB = new TH1F("h_AiForLS_100_HB"," ",   100, 0.,3000.);
+	h_AiForLS_215_HB = new TH1F("h_AiForLS_215_HB"," ",   100, 0.,3000.);
+	h_AiForLS_233_HB = new TH1F("h_AiForLS_233_HB"," ",   100, 0.,3000.);
+	h_AiForLS_456_HB = new TH1F("h_AiForLS_456_HB"," ",   100, 0.,3000.);
+	h_AiForLS_bad_HB = new TH1F("h_AiForLS_bad_HB"," ",   100, 0.,3000.);
+	h_AiForLS_444_HB = new TH1F("h_AiForLS_444_HB"," ",   100, 0.,3000.);
+	h_AiForLS_good_HB = new TH1F("h_AiForLS_good_HB"," ", 100, 0.,3000.);
+	h_mapAiForLS_bad_HB = new TH2F("h_mapAiForLS_bad_HB"," ", neta, -41., 41., nphi, 0., bphi);
+	h_map0AiForLS_bad_HB = new TH2F("h_map0AiForLS_bad_HB"," ", neta, -41., 41., nphi, 0., bphi);
+	h_mapAiForLS_good_HB = new TH2F("h_mapAiForLS_good_HB"," ", neta, -41., 41., nphi, 0., bphi);
+	h_map0AiForLS_good_HB = new TH2F("h_map0AiForLS_good_HB"," ", neta, -41., 41., nphi, 0., bphi);
+
+
     h_numberofhitsHBtest = new TH1F("h_numberofhitsHBtest"," ", 100, 0.,100.);
     h_AmplitudeHBtest = new TH1F("h_AmplitudeHBtest"," ", 100, 0.,10000.);
     h_AmplitudeHBtest1 = new TH1F("h_AmplitudeHBtest1"," ", 100, 0.,1000000.);
@@ -5803,6 +6092,10 @@ void VeRawAnalyzer::beginJob()
     h_ADCAmpl345Zoom_HB = new TH1F("h_ADCAmpl345Zoom_HB"," ", 100, 0.,400.);
     h_ADCAmpl345Zoom1_HB = new TH1F("h_ADCAmpl345Zoom1_HB"," ", 100, 0.,100.);
     h_ADCAmpl345_HB = new TH1F("h_ADCAmpl345_HB"," ", 100, 10.,3000.);
+
+    h_AmplitudeHBrest = new TH1F("h_AmplitudeHBrest"," ", 100, 0.,10000.);
+    h_AmplitudeHBrest1 = new TH1F("h_AmplitudeHBrest1"," ", 100, 0.,1000000.);
+    h_AmplitudeHBrest6 = new TH1F("h_AmplitudeHBrest6"," ", 100, 0.,2000000.);
 
     h_ADCAmpl345_HBCapIdError = new TH1F("h_ADCAmpl345_HBCapIdError"," ", 100, 10.,3000.);
     h_ADCAmpl345_HBCapIdNoError = new TH1F("h_ADCAmpl345_HBCapIdNoError"," ", 100, 10.,3000.);
@@ -5847,6 +6140,24 @@ void VeRawAnalyzer::beginJob()
     h_mapDepth2_HB = new TH2F("h_mapDepth2_HB"," ", neta, -41., 41., nphi, 0., bphi);
     
     //////////////////////////////////////////////////////////////////////////////////////////////             HE
+	h_AiForLS_11_HE = new TH1F("h_AiForLS_11_HE"," ",     100, 0.,300000.);
+	h_AiForLS_12_HE = new TH1F("h_AiForLS_12_HE"," ",     100, 0.,300000.);
+	h_AiForLS_13_HE = new TH1F("h_AiForLS_13_HE"," ",     100, 0.,300000.);
+	h_AiForLS_75_HE = new TH1F("h_AiForLS_75_HE"," ",     100, 0.,300000.);
+	h_AiForLS_66_HE = new TH1F("h_AiForLS_66_HE"," ",     100, 0.,300000.);
+	h_AiForLS_100_HE = new TH1F("h_AiForLS_100_HE"," ",   100, 0.,300000.);
+	h_AiForLS_215_HE = new TH1F("h_AiForLS_215_HE"," ",   100, 0.,300000.);
+	h_AiForLS_233_HE = new TH1F("h_AiForLS_233_HE"," ",   100, 0.,300000.);
+	h_AiForLS_456_HE = new TH1F("h_AiForLS_456_HE"," ",   100, 0.,300000.);
+	h_AiForLS_bad_HE = new TH1F("h_AiForLS_bad_HE"," ",   100, 0.,300000.);
+	h_AiForLS_444_HE = new TH1F("h_AiForLS_444_HE"," ",   100, 0.,300000.);
+	h_AiForLS_good_HE = new TH1F("h_AiForLS_good_HE"," ", 100, 0.,300000.);
+	h_mapAiForLS_bad_HE = new TH2F("h_mapAiForLS_bad_HE"," ", neta, -41., 41., nphi, 0., bphi);
+	h_map0AiForLS_bad_HE = new TH2F("h_map0AiForLS_bad_HE"," ", neta, -41., 41., nphi, 0., bphi);
+	h_mapAiForLS_good_HE = new TH2F("h_mapAiForLS_good_HE"," ", neta, -41., 41., nphi, 0., bphi);
+	h_map0AiForLS_good_HE = new TH2F("h_map0AiForLS_good_HE"," ", neta, -41., 41., nphi, 0., bphi);
+
+
     // stuff regarding summed(total) Amplitude vs iEvent (histo-name is  h_totalAmplitudeHEperEvent) 
     // to see from which event ALL channels are available(related to quality of the run)
     h_numberofhitsHEtest = new TH1F("h_numberofhitsHEtest"," ", 100, 0.,10000.);
@@ -5890,6 +6201,11 @@ void VeRawAnalyzer::beginJob()
 
     // Aijk Amplitude:
     h_ADCAmpl_HE = new TH1F("h_ADCAmpl_HE"," ", 200, 0.,2000000.);
+    h_ADCAmplrest_HE = new TH1F("h_ADCAmplrest_HE"," ", 100, 0.,500.);
+    h_ADCAmplrest1_HE = new TH1F("h_ADCAmplrest1_HE"," ", 100, 0.,100.);
+    h_ADCAmplrest6_HE = new TH1F("h_ADCAmplrest6_HE"," ", 100, 0.,10000.);
+
+
     h_ADCAmpl345_HE = new TH1F("h_ADCAmpl345_HE"," ", 70, 0.,700000.);
 
     // SiPM corrections:
@@ -6091,6 +6407,23 @@ void VeRawAnalyzer::beginJob()
     
 
   ////////////////////////////////////////////////////////////////////////////////////////////////                    HF
+	h_AiForLS_11_HF = new TH1F("h_AiForLS_11_HF"," ",     100, 0.,20000.);
+	h_AiForLS_12_HF = new TH1F("h_AiForLS_12_HF"," ",     100, 0.,20000.);
+	h_AiForLS_13_HF = new TH1F("h_AiForLS_13_HF"," ",     100, 0.,20000.);
+	h_AiForLS_75_HF = new TH1F("h_AiForLS_75_HF"," ",     100, 0.,20000.);
+	h_AiForLS_66_HF = new TH1F("h_AiForLS_66_HF"," ",     100, 0.,20000.);
+	h_AiForLS_100_HF = new TH1F("h_AiForLS_100_HF"," ",     100, 0.,20000.);
+	h_AiForLS_215_HF = new TH1F("h_AiForLS_215_HF"," ",   100, 0.,20000.);
+	h_AiForLS_233_HF = new TH1F("h_AiForLS_233_HF"," ",   100, 0.,20000.);
+	h_AiForLS_456_HF = new TH1F("h_AiForLS_456_HF"," ",   100, 0.,20000.);
+	h_AiForLS_bad_HF = new TH1F("h_AiForLS_bad_HF"," ",   100, 0.,20000.);
+	h_AiForLS_444_HF = new TH1F("h_AiForLS_444_HF"," ",   100, 0.,20000.);
+	h_AiForLS_good_HF = new TH1F("h_AiForLS_good_HF"," ", 100, 0.,20000.);
+	h_mapAiForLS_bad_HF = new TH2F("h_mapAiForLS_bad_HF"," ", neta, -41., 41., nphi, 0., bphi);
+	h_map0AiForLS_bad_HF = new TH2F("h_map0AiForLS_bad_HF"," ", neta, -41., 41., nphi, 0., bphi);
+	h_mapAiForLS_good_HF = new TH2F("h_mapAiForLS_good_HF"," ", neta, -41., 41., nphi, 0., bphi);
+	h_map0AiForLS_good_HF = new TH2F("h_map0AiForLS_good_HF"," ", neta, -41., 41., nphi, 0., bphi);
+
     h_numberofhitsHFtest = new TH1F("h_numberofhitsHFtest"," ", 100, 0.,30000.);
     h_AmplitudeHFtest = new TH1F("h_AmplitudeHFtest"," ", 100, 0.,300000.);
     h_totalAmplitudeHF = new TH1F("h_totalAmplitudeHF"," ", 100, 0.,100000000000.);
@@ -6098,6 +6431,9 @@ void VeRawAnalyzer::beginJob()
     // fullAmplitude:
     h_ADCAmplZoom1_HF = new TH1F("h_ADCAmplZoom1_HF"," ", 100, 0.,1000000.);
     h_ADCAmpl_HF = new TH1F("h_ADCAmpl_HF"," ", 250, 0.,500000.);
+    h_ADCAmplrest1_HF = new TH1F("h_ADCAmplrest1_HF"," ", 100, 0.,1000.);
+    h_ADCAmplrest6_HF = new TH1F("h_ADCAmplrest6_HF"," ", 100, 0.,10000.);
+
     h_mapDepth1ADCAmpl225_HF = new TH2F("h_mapDepth1ADCAmpl225_HF"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2ADCAmpl225_HF = new TH2F("h_mapDepth2ADCAmpl225_HF"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth1ADCAmpl225Copy_HF = new TH2F("h_mapDepth1ADCAmpl225Copy_HF"," ", neta, -41., 41., nphi, 0., bphi);
@@ -6158,12 +6494,33 @@ void VeRawAnalyzer::beginJob()
     h_mapDepth4_HF = new TH2F("h_mapDepth4_HF"," ", neta, -41., 41., nphi, 0., bphi);
     
     ////////////////////////////////////////////////////////////////////////////////////////////////                  HO
+	h_AiForLS_11_HO = new TH1F("h_AiForLS_11_HO"," ",     100, 0.,10000.);
+	h_AiForLS_12_HO = new TH1F("h_AiForLS_12_HO"," ",     100, 0.,10000.);
+	h_AiForLS_13_HO = new TH1F("h_AiForLS_13_HO"," ",     100, 0.,10000.);
+	h_AiForLS_75_HO = new TH1F("h_AiForLS_75_HO"," ",     100, 0.,10000.);
+	h_AiForLS_66_HO = new TH1F("h_AiForLS_66_HO"," ",     100, 0.,10000.);
+	h_AiForLS_100_HO = new TH1F("h_AiForLS_100_HO"," ",   100, 0.,10000.);
+	h_AiForLS_215_HO = new TH1F("h_AiForLS_215_HO"," ",   100, 0.,10000.);
+	h_AiForLS_233_HO = new TH1F("h_AiForLS_233_HO"," ",   100, 0.,10000.);
+	h_AiForLS_456_HO = new TH1F("h_AiForLS_456_HO"," ",   100, 0.,10000.);
+	h_AiForLS_bad_HO = new TH1F("h_AiForLS_bad_HO"," ",   100, 0.,10000.);
+	h_AiForLS_444_HO = new TH1F("h_AiForLS_444_HO"," ",   100, 0.,10000.);
+	h_AiForLS_good_HO = new TH1F("h_AiForLS_good_HO"," ", 100, 0.,10000.);
+	h_mapAiForLS_bad_HO = new TH2F("h_mapAiForLS_bad_HO"," ", neta, -41., 41., nphi, 0., bphi);
+	h_map0AiForLS_bad_HO = new TH2F("h_map0AiForLS_bad_HO"," ", neta, -41., 41., nphi, 0., bphi);
+	h_mapAiForLS_good_HO = new TH2F("h_mapAiForLS_good_HO"," ", neta, -41., 41., nphi, 0., bphi);
+	h_map0AiForLS_good_HO = new TH2F("h_map0AiForLS_good_HO"," ", neta, -41., 41., nphi, 0., bphi);
+
+
     h_numberofhitsHOtest = new TH1F("h_numberofhitsHOtest"," ", 100, 0.,30000.);
     h_AmplitudeHOtest = new TH1F("h_AmplitudeHOtest"," ", 100, 0.,300000.);
     h_totalAmplitudeHO = new TH1F("h_totalAmplitudeHO"," ", 100, 0.,100000000.);
     h_totalAmplitudeHOperEvent = new TH1F("h_totalAmplitudeHOperEvent"," ", 1000, 1.,1001.);
     // fullAmplitude:
     h_ADCAmpl_HO = new TH1F("h_ADCAmpl_HO"," ", 100, 0.,7000.);
+    h_ADCAmplrest1_HO = new TH1F("h_ADCAmplrest1_HO"," ", 100, 0.,150.);
+    h_ADCAmplrest6_HO = new TH1F("h_ADCAmplrest6_HO"," ", 100, 0.,500.);
+
     h_ADCAmplZoom1_HO = new TH1F("h_ADCAmplZoom1_HO"," ", 100, -20.,280.);
     h_ADCAmpl_HO_copy = new TH1F("h_ADCAmpl_HO_copy"," ", 100, 0.,30000.);
     h_mapDepth4ADCAmpl225_HO = new TH2F("h_mapDepth4ADCAmpl225_HO"," ", neta, -41., 41., nphi, 0., bphi);
@@ -6186,26 +6543,47 @@ void VeRawAnalyzer::beginJob()
     h_mapDepth4_HO = new TH2F("h_mapDepth4_HO"," ", neta, -41., 41., nphi, 0., bphi);
 
     //////////////////////////////////////////////////////////////////////////////////////
-    int baP= 1000;
-    int baR= 4000;
-    float baR2=baR;
-    h_bcnnbadchannels_depth1_HB = new TH1F("h_bcnnbadchannels_depth1_HB"," ",   baP, 1.,baR2);
-    h_bcnnbadchannels_depth2_HB = new TH1F("h_bcnnbadchannels_depth2_HB"," ",   baP, 1.,baR2);
-    h_bcnnbadchannels_depth1_HE = new TH1F("h_bcnnbadchannels_depth1_HE"," ",   baP, 1.,baR2);
-    h_bcnnbadchannels_depth2_HE = new TH1F("h_bcnnbadchannels_depth2_HE"," ",   baP, 1.,baR2);
-    h_bcnnbadchannels_depth3_HE = new TH1F("h_bcnnbadchannels_depth3_HE"," ",   baP, 1.,baR2);
-    h_bcnnbadchannels_depth4_HO = new TH1F("h_bcnnbadchannels_depth4_HO"," ",   baP, 1.,baR2);
-    h_bcnnbadchannels_depth1_HF = new TH1F("h_bcnnbadchannels_depth1_HF"," ",   baP, 1.,baR2);
-    h_bcnnbadchannels_depth2_HF = new TH1F("h_bcnnbadchannels_depth2_HF"," ",   baP, 1.,baR2);
-    h_bcnbadrate0_depth1_HB = new TH1F("h_bcnbadrate0_depth1_HB"," ",           baP, 1.,baR2);
-    h_bcnbadrate0_depth2_HB = new TH1F("h_bcnbadrate0_depth2_HB"," ",           baP, 1.,baR2);
-    h_bcnbadrate0_depth1_HE = new TH1F("h_bcnbadrate0_depth1_HE"," ",           baP, 1.,baR2);
-    h_bcnbadrate0_depth2_HE = new TH1F("h_bcnbadrate0_depth2_HE"," ",           baP, 1.,baR2);
-    h_bcnbadrate0_depth3_HE = new TH1F("h_bcnbadrate0_depth3_HE"," ",           baP, 1.,baR2);
-    h_bcnbadrate0_depth4_HO = new TH1F("h_bcnbadrate0_depth4_HO"," ",           baP, 1.,baR2);
-    h_bcnbadrate0_depth1_HF = new TH1F("h_bcnbadrate0_depth1_HF"," ",           baP, 1.,baR2);
-    h_bcnbadrate0_depth2_HF = new TH1F("h_bcnbadrate0_depth2_HF"," ",           baP, 1.,baR2);
+    int baP= 4000;
+    float baR= 0.;
+    float baR2=baP;
+    h_bcnnbadchannels_depth1_HB = new TH1F("h_bcnnbadchannels_depth1_HB"," ",   baP, baR, baR2);
+    h_bcnnbadchannels_depth2_HB = new TH1F("h_bcnnbadchannels_depth2_HB"," ",   baP, baR, baR2);
+    h_bcnnbadchannels_depth1_HE = new TH1F("h_bcnnbadchannels_depth1_HE"," ",   baP, baR, baR2);
+    h_bcnnbadchannels_depth2_HE = new TH1F("h_bcnnbadchannels_depth2_HE"," ",   baP, baR, baR2);
+    h_bcnnbadchannels_depth3_HE = new TH1F("h_bcnnbadchannels_depth3_HE"," ",   baP, baR, baR2);
+    h_bcnnbadchannels_depth4_HO = new TH1F("h_bcnnbadchannels_depth4_HO"," ",   baP, baR, baR2);
+    h_bcnnbadchannels_depth1_HF = new TH1F("h_bcnnbadchannels_depth1_HF"," ",   baP, baR, baR2);
+    h_bcnnbadchannels_depth2_HF = new TH1F("h_bcnnbadchannels_depth2_HF"," ",   baP, baR, baR2);
+    h_bcnbadrate0_depth1_HB = new TH1F("h_bcnbadrate0_depth1_HB"," ",           baP, baR, baR2);
+    h_bcnbadrate0_depth2_HB = new TH1F("h_bcnbadrate0_depth2_HB"," ",           baP, baR, baR2);
+    h_bcnbadrate0_depth1_HE = new TH1F("h_bcnbadrate0_depth1_HE"," ",           baP, baR, baR2);
+    h_bcnbadrate0_depth2_HE = new TH1F("h_bcnbadrate0_depth2_HE"," ",           baP, baR, baR2);
+    h_bcnbadrate0_depth3_HE = new TH1F("h_bcnbadrate0_depth3_HE"," ",           baP, baR, baR2);
+    h_bcnbadrate0_depth4_HO = new TH1F("h_bcnbadrate0_depth4_HO"," ",           baP, baR, baR2);
+    h_bcnbadrate0_depth1_HF = new TH1F("h_bcnbadrate0_depth1_HF"," ",           baP, baR, baR2);
+    h_bcnbadrate0_depth2_HF = new TH1F("h_bcnbadrate0_depth2_HF"," ",           baP, baR, baR2);
 
+
+    h_bcnvsamplitude_HB = new TH1F("h_bcnvsamplitude_HB"," ",   baP, baR, baR2);
+    h_bcnvsamplitude_HE = new TH1F("h_bcnvsamplitude_HE"," ",   baP, baR, baR2);
+    h_bcnvsamplitude_HF = new TH1F("h_bcnvsamplitude_HF"," ",   baP, baR, baR2);
+    h_bcnvsamplitude_HO = new TH1F("h_bcnvsamplitude_HO"," ",   baP, baR, baR2);
+    h_bcnvsamplitude0_HB = new TH1F("h_bcnvsamplitude0_HB"," ",   baP, baR, baR2);
+    h_bcnvsamplitude0_HE = new TH1F("h_bcnvsamplitude0_HE"," ",   baP, baR, baR2);
+    h_bcnvsamplitude0_HF = new TH1F("h_bcnvsamplitude0_HF"," ",   baP, baR, baR2);
+    h_bcnvsamplitude0_HO = new TH1F("h_bcnvsamplitude0_HO"," ",   baP, baR, baR2);
+
+    int zaP= 1000;
+    float zaR= 10000000.;
+    float zaR2=50000000.;
+    h_orbitNumvsamplitude_HB = new TH1F("h_orbitNumvsamplitude_HB"," ",     zaP, zaR, zaR2);
+    h_orbitNumvsamplitude_HE = new TH1F("h_orbitNumvsamplitude_HE"," ",     zaP, zaR, zaR2);
+    h_orbitNumvsamplitude_HF = new TH1F("h_orbitNumvsamplitude_HF"," ",     zaP, zaR, zaR2);
+    h_orbitNumvsamplitude_HO = new TH1F("h_orbitNumvsamplitude_HO"," ",     zaP, zaR, zaR2);
+    h_orbitNumvsamplitude0_HB = new TH1F("h_orbitNumvsamplitude0_HB"," ",   zaP, zaR, zaR2);
+    h_orbitNumvsamplitude0_HE = new TH1F("h_orbitNumvsamplitude0_HE"," ",   zaP, zaR, zaR2);
+    h_orbitNumvsamplitude0_HF = new TH1F("h_orbitNumvsamplitude0_HF"," ",   zaP, zaR, zaR2);
+    h_orbitNumvsamplitude0_HO = new TH1F("h_orbitNumvsamplitude0_HO"," ",    zaP, zaR, zaR2);
 
     int bac= howmanybinsonplots_;
     //  int bac= 15;
@@ -6477,6 +6855,7 @@ void VeRawAnalyzer::beginJob()
     h_sumADCAmplperLSdepth4HEu = new TH1F("h_sumADCAmplperLSdepth4HEu"," ",     bac, 1.,bac2);
     h_sumCutADCAmplperLSdepth4HEu = new TH1F("h_sumCutADCAmplperLSdepth4HEu"," ",     bac, 1.,bac2);
     h_sum0ADCAmplperLSdepth4HEu = new TH1F("h_sum0ADCAmplperLSdepth4HEu"," ",     bac, 1.,bac2);
+
     // HE upgrade depth5
     h_sumADCAmplperLSdepth5HEu = new TH1F("h_sumADCAmplperLSdepth5HEu"," ",     bac, 1.,bac2);
     h_sumCutADCAmplperLSdepth5HEu = new TH1F("h_sumCutADCAmplperLSdepth5HEu"," ",     bac, 1.,bac2);
@@ -6489,6 +6868,19 @@ void VeRawAnalyzer::beginJob()
     h_sumADCAmplperLSdepth7HEu = new TH1F("h_sumADCAmplperLSdepth7HEu"," ",     bac, 1.,bac2);
     h_sumCutADCAmplperLSdepth7HEu = new TH1F("h_sumCutADCAmplperLSdepth7HEu"," ",     bac, 1.,bac2);
     h_sum0ADCAmplperLSdepth7HEu = new TH1F("h_sum0ADCAmplperLSdepth7HEu"," ",     bac, 1.,bac2);
+		// for gain stability vs LS:
+    h_2DsumADCAmplLSdepth4HEu   = new TH2F("h_2DsumADCAmplLSdepth4HEu"," ",    neta, -41., 41., nphi, 0., bphi);
+    h_2D0sumADCAmplLSdepth4HEu   = new TH2F("h_2D0sumADCAmplLSdepth4HEu"," ",    neta, -41., 41., nphi, 0., bphi);
+    h_2DsumADCAmplLSdepth5HEu   = new TH2F("h_2DsumADCAmplLSdepth5HEu"," ",    neta, -41., 41., nphi, 0., bphi);
+    h_2D0sumADCAmplLSdepth5HEu   = new TH2F("h_2D0sumADCAmplLSdepth5HEu"," ",    neta, -41., 41., nphi, 0., bphi);
+    h_2DsumADCAmplLSdepth6HEu   = new TH2F("h_2DsumADCAmplLSdepth6HEu"," ",    neta, -41., 41., nphi, 0., bphi);
+    h_2D0sumADCAmplLSdepth6HEu   = new TH2F("h_2D0sumADCAmplLSdepth6HEu"," ",    neta, -41., 41., nphi, 0., bphi);
+    h_2DsumADCAmplLSdepth7HEu   = new TH2F("h_2DsumADCAmplLSdepth7HEu"," ",    neta, -41., 41., nphi, 0., bphi);
+    h_2D0sumADCAmplLSdepth7HEu   = new TH2F("h_2D0sumADCAmplLSdepth7HEu"," ",    neta, -41., 41., nphi, 0., bphi);
+    h_2DsumADCAmplLSdepth3HFu   = new TH2F("h_2DsumADCAmplLSdepth3HFu"," ",    neta, -41., 41., nphi, 0., bphi);
+    h_2D0sumADCAmplLSdepth3HFu   = new TH2F("h_2D0sumADCAmplLSdepth3HFu"," ",    neta, -41., 41., nphi, 0., bphi);
+    h_2DsumADCAmplLSdepth4HFu   = new TH2F("h_2DsumADCAmplLSdepth4HFu"," ",    neta, -41., 41., nphi, 0., bphi);
+    h_2D0sumADCAmplLSdepth4HFu   = new TH2F("h_2D0sumADCAmplLSdepth4HFu"," ",    neta, -41., 41., nphi, 0., bphi);
 
     h_sumADCAmplLS6   = new TH1F("h_sumADCAmplLS6"," ",      100,  0.,lsdep_estimator1_HFdepth1_);
     h_2DsumADCAmplLS6    = new TH2F("h_2DsumADCAmplLS6"," ",    neta, -41., 41., nphi, 0., bphi);
@@ -7585,7 +7977,7 @@ void VeRawAnalyzer::fillDigiErrorsQIE11(QIE11DataFrame qie11df)
   HcalDetId hcaldetid = HcalDetId(detid);
   int ieta = hcaldetid.ieta();
   if(ieta > 0) ieta -= 1;
-  int iphi = hcaldetid.iphi();
+  int iphi = hcaldetid.iphi()-1;
   int mdepth = hcaldetid.depth();
   int sub   = hcaldetid.subdet(); // 1-HB, 2-HE (HFDigiCollection: 4-HF)
   if (verbosity == -22) std::cout << " HBHE DIGI ->  "  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
@@ -7781,7 +8173,7 @@ void VeRawAnalyzer::fillDigiErrorsHFQIE10(QIE10DataFrame qie10df)
   HcalDetId hcaldetid = HcalDetId(detid);
   int ieta = hcaldetid.ieta();
   if(ieta > 0) ieta -= 1;
-  int iphi = hcaldetid.iphi();
+  int iphi = hcaldetid.iphi()-1;
   int mdepth = hcaldetid.depth();
   int sub   = hcaldetid.subdet(); // 1-HB, 2-HE (HFDigiCollection: 4-HF)
   if (verbosity == -22) std::cout << " HF DIGI ->  "  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
@@ -8592,6 +8984,13 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	h_ADCAmplZoom_HB->Fill(amplitude,1.);
 	h_ADCAmplZoom1_HB->Fill(amplitude,1.);
 	h_ADCAmpl_HB->Fill(amplitude,1.);
+
+	h_AmplitudeHBrest->Fill(amplitude,1.);
+	h_AmplitudeHBrest1->Fill(amplitude,1.);
+	h_AmplitudeHBrest6->Fill(amplitude,1.);
+
+
+
 	if(amplitude < ADCAmplHBMin_ || amplitude > ADCAmplHBMax_) {
 	  if(studyRunDependenceHist_ && flagtodefinebadchannel_==5) ++badchannels[sub-1][mdepth-1][ieta+41][iphi];// 0-neta ; 0-71
 	  if(mdepth==1) h_mapDepth1ADCAmpl225_HB->Fill(double(ieta), double(iphi), 1.);
@@ -8608,6 +9007,39 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	if(mdepth==2) h_mapDepth2ADCAmpl_HB->Fill(double(ieta), double(iphi), amplitude);
 	if(mdepth==1) h_mapDepth1ADCAmpl12_HB->Fill(double(ieta), double(iphi), ampl);
 	if(mdepth==2) h_mapDepth2ADCAmpl12_HB->Fill(double(ieta), double(iphi), ampl);
+
+	///////////////////////////////////////////////////////////////////////////////	//AZ: 21.09.2018 for Pavel Bunin:
+	if(lscounterM1 == 11 ) {h_AiForLS_11_HB->Fill(amplitude, 1.);}
+	else if(lscounterM1 == 12 ) {h_AiForLS_12_HB->Fill(amplitude, 1.);}
+	else if(lscounterM1 == 13 ) {h_AiForLS_13_HB->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 75 ) {h_AiForLS_75_HB->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 66 ) {h_AiForLS_66_HB->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 100 ) {h_AiForLS_100_HB->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 215 ) {h_AiForLS_215_HB->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 233 ) {h_AiForLS_233_HB->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 456 ) {h_AiForLS_456_HB->Fill(amplitude, 1.);} 
+	else if(lscounterM1 >  456 && lscounterM1 <521 ) {
+	  h_AiForLS_bad_HB->Fill(amplitude, 1.);
+	  h_mapAiForLS_bad_HB->Fill(double(ieta), double(iphi), amplitude);
+	  h_map0AiForLS_bad_HB->Fill(double(ieta), double(iphi), 1.);
+	} 
+	else if(lscounterM1 == 444 ) {h_AiForLS_444_HB->Fill(amplitude, 1.);} 
+	else if(lscounterM1 >  100 && lscounterM1 <200 ) {
+	  h_AiForLS_good_HB->Fill(amplitude, 1.);
+	  h_mapAiForLS_good_HB->Fill(double(ieta), double(iphi), amplitude);
+	  h_map0AiForLS_good_HB->Fill(double(ieta), double(iphi), 1.);
+	}
+
+
+	///////////////////////////////////////////////////////////////////////////////	//AZ: 25.10.2018 for Pavel Bunin: gain stability vs LSs using LED from abort gap
+	h_bcnvsamplitude_HB->Fill( float(bcn) , amplitude );
+	h_bcnvsamplitude0_HB->Fill( float(bcn) , 1. );
+
+	h_orbitNumvsamplitude_HB->Fill(float(orbitNum), amplitude);
+	h_orbitNumvsamplitude0_HB->Fill(float(orbitNum), 1.);
+	//	std::cout <<"orbitNum= " <<orbitNum << std::endl;
+
+	//////////////////////////////////////////////////////////////////////////////////////////////
 
 	if(amplitude > forallestimators_amplitude_bigger_) sumEstimator1[sub-1][mdepth-1][ieta+41][iphi] += amplitude;
 	if (verbosity == -5555 && sub==1 && mdepth==1&&ieta==15&&iphi==18) std::cout << "***ADCAmpl: "  <<" ieta= " << ieta <<" iphi= " << iphi <<" aveamplitude1= " << aveamplitude1 <<" amplitude= " << amplitude << "sumEstimator1[sub-1][mdepth-1][ieta+41][iphi]= "  << sumEstimator1[sub-1][mdepth-1][ieta+41][iphi]  << std::endl;	
@@ -8779,6 +9211,11 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	h_ADCAmpl345Zoom1_HE->Fill(amplitude345,1.);
 	h_ADCAmpl345_HE->Fill(amplitude345,1.);
 	h_ADCAmpl_HE->Fill(amplitude,1.);
+
+	h_ADCAmplrest_HE->Fill(amplitude,1.);
+	h_ADCAmplrest1_HE->Fill(amplitude,1.);
+	h_ADCAmplrest6_HE->Fill(amplitude,1.);
+
 	h_ADCAmplZoom1_HE->Fill(amplitude,1.);
 	if(amplitude < ADCAmplHEMin_  || amplitude > ADCAmplHEMax_) {
 	  if(studyRunDependenceHist_ && flagtodefinebadchannel_==5) ++badchannels[sub-1][mdepth-1][ieta+41][iphi];// 0-neta ; 0-71
@@ -8802,6 +9239,37 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	if(mdepth==2) {h_mapDepth2ADCAmpl12_HE->Fill(double(ieta), double(iphi), ampl);  h_mapDepth2linADCAmpl12_HE->Fill(double(ieta), double(iphi), linamplitudewithoutPedSubtr);}
 	if(mdepth==3) {h_mapDepth3ADCAmpl12_HE->Fill(double(ieta), double(iphi), ampl);  h_mapDepth3linADCAmpl12_HE->Fill(double(ieta), double(iphi), linamplitudewithoutPedSubtr);}
 	
+	///////////////////////////////////////////////////////////////////////////////	//AZ: 21.09.2018 for Pavel Bunin:
+	if(lscounterM1 == 11 ) {h_AiForLS_11_HE->Fill(amplitude, 1.);}
+	else if(lscounterM1 == 12 ) {h_AiForLS_12_HE->Fill(amplitude, 1.);}
+	else if(lscounterM1 == 13 ) {h_AiForLS_13_HE->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 75 ) {h_AiForLS_75_HE->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 66 ) {h_AiForLS_66_HE->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 100 ) {h_AiForLS_100_HE->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 215 ) {h_AiForLS_215_HE->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 233 ) {h_AiForLS_233_HE->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 456 ) {h_AiForLS_456_HE->Fill(amplitude, 1.);} 
+	else if(lscounterM1 >  456 && lscounterM1 <521 ) {
+	  h_AiForLS_bad_HE->Fill(amplitude, 1.);
+	  h_mapAiForLS_bad_HE->Fill(double(ieta), double(iphi), amplitude);
+	  h_map0AiForLS_bad_HE->Fill(double(ieta), double(iphi), 1.);
+	} 
+	else if(lscounterM1 == 444 ) {h_AiForLS_444_HE->Fill(amplitude, 1.);} 
+	else if(lscounterM1 >  100 && lscounterM1 <200 ) {
+	  h_AiForLS_good_HE->Fill(amplitude, 1.);
+	  h_mapAiForLS_good_HE->Fill(double(ieta), double(iphi), amplitude);
+	  h_map0AiForLS_good_HE->Fill(double(ieta), double(iphi), 1.);
+	}
+
+	///////////////////////////////////////////////////////////////////////////////	//AZ: 25.10.2018 for Pavel Bunin: gain stability vs LSs using LED from abort gap
+	h_bcnvsamplitude_HE->Fill( float(bcn) , amplitude );
+	h_bcnvsamplitude0_HE->Fill( float(bcn) , 1. );
+	h_orbitNumvsamplitude_HE->Fill(float(orbitNum), amplitude);
+	h_orbitNumvsamplitude0_HE->Fill(float(orbitNum), 1.);
+	//	std::cout <<"orbitNum= " <<orbitNum << std::endl;
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	if(amplitude > forallestimators_amplitude_bigger_) sumEstimator1[sub-1][mdepth-1][ieta+41][iphi] += amplitude;
 
       }//if(studyADCAmplHist_
@@ -8968,7 +9436,7 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
   HcalDetId hcaldetid = HcalDetId(detid);
   int ieta = hcaldetid.ieta();
   if(ieta > 0) ieta -= 1;
-  int iphi = hcaldetid.iphi();
+  int iphi = hcaldetid.iphi()-1;
   int mdepth = hcaldetid.depth();
   int sub   = hcaldetid.subdet(); // 1-HB, 2-HE QIE11DigiCollection
   if (verbosity == -2324) std::cout << " fillDigiAmplitude QIE11    DIGI ->  "  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
@@ -9562,6 +10030,11 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
 	h_ADCAmplZoom_HB->Fill(amplitude,1.);
 	h_ADCAmplZoom1_HB->Fill(amplitude,1.);
 	h_ADCAmpl_HB->Fill(amplitude,1.);
+
+	h_AmplitudeHBrest->Fill(amplitude,1.);
+	h_AmplitudeHBrest1->Fill(amplitude,1.);
+	h_AmplitudeHBrest6->Fill(amplitude,1.);
+
 	if(amplitude < ADCAmplHBMin_ || amplitude > ADCAmplHBMax_) {
 	  if(studyRunDependenceHist_ && flagtodefinebadchannel_==5) ++badchannels[sub-1][mdepth-1][ieta+41][iphi];// 0-neta ; 0-71
 	  if(mdepth==1) h_mapDepth1ADCAmpl225_HB->Fill(double(ieta), double(iphi), 1.);
@@ -9578,6 +10051,37 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
 	if(mdepth==2) h_mapDepth2ADCAmpl_HB->Fill(double(ieta), double(iphi), amplitude);
 	if(mdepth==1) h_mapDepth1ADCAmpl12_HB->Fill(double(ieta), double(iphi), ampl);
 	if(mdepth==2) h_mapDepth2ADCAmpl12_HB->Fill(double(ieta), double(iphi), ampl);
+	///////////////////////////////////////////////////////////////////////////////	//AZ: 21.09.2018 for Pavel Bunin:
+	if(lscounterM1 == 11 ) {h_AiForLS_11_HB->Fill(amplitude, 1.);}
+	else if(lscounterM1 == 12 ) {h_AiForLS_12_HB->Fill(amplitude, 1.);}
+	else if(lscounterM1 == 13 ) {h_AiForLS_13_HB->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 75 ) {h_AiForLS_75_HB->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 66 ) {h_AiForLS_66_HB->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 100 ) {h_AiForLS_100_HB->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 215 ) {h_AiForLS_215_HB->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 233 ) {h_AiForLS_233_HB->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 456 ) {h_AiForLS_456_HB->Fill(amplitude, 1.);} 
+	else if(lscounterM1 >  456 && lscounterM1 <521 ) {
+	  h_AiForLS_bad_HE->Fill(amplitude, 1.);
+	  h_mapAiForLS_bad_HE->Fill(double(ieta), double(iphi), amplitude);
+	  h_map0AiForLS_bad_HE->Fill(double(ieta), double(iphi), 1.);
+	} 
+	else if(lscounterM1 == 444 ) {h_AiForLS_444_HE->Fill(amplitude, 1.);} 
+	else if(lscounterM1 >  100 && lscounterM1 <200 ) {
+	  h_AiForLS_good_HE->Fill(amplitude, 1.);
+	  h_mapAiForLS_good_HE->Fill(double(ieta), double(iphi), amplitude);
+	  h_map0AiForLS_good_HE->Fill(double(ieta), double(iphi), 1.);
+	}
+
+	///////////////////////////////////////////////////////////////////////////////	//AZ: 25.10.2018 for Pavel Bunin: gain stability vs LSs using LED from abort gap
+	h_bcnvsamplitude_HB->Fill( float(bcn) , amplitude );
+	h_bcnvsamplitude0_HB->Fill( float(bcn) , 1. );
+	h_orbitNumvsamplitude_HB->Fill(float(orbitNum), amplitude);
+	h_orbitNumvsamplitude0_HB->Fill(float(orbitNum), 1.);
+	//	std::cout <<"orbitNum= " <<orbitNum << std::endl;
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 	if(amplitude > forallestimators_amplitude_bigger_) sumEstimator1[sub-1][mdepth-1][ieta+41][iphi] += amplitude;
 	if (verbosity == -5555 && sub==1 && mdepth==1&&ieta==15&&iphi==18) std::cout << "***ADCAmpl: "  <<" ieta= " << ieta <<" iphi= " << iphi <<" aveamplitude1= " << aveamplitude1 <<" amplitude= " << amplitude << "sumEstimator1[sub-1][mdepth-1][ieta+41][iphi]= "  << sumEstimator1[sub-1][mdepth-1][ieta+41][iphi]  << std::endl;	
@@ -9755,6 +10259,9 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
 	h_ADCAmpl_HE->Fill(amplitude,1.);
 	//	if( ieta <0) h_ADCAmpl_HEM->Fill(amplitude,1.);
 	//	if( ieta >0) h_ADCAmpl_HEP->Fill(amplitude,1.);
+	h_ADCAmplrest_HE->Fill(amplitude,1.);
+	h_ADCAmplrest1_HE->Fill(amplitude,1.);
+	h_ADCAmplrest6_HE->Fill(amplitude,1.);
 
 
 	if(amplitude < ADCAmplHEMin_  || amplitude > ADCAmplHEMax_) {
@@ -9858,6 +10365,38 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
 	if(mdepth==2) h_mapDepth2ADCAmpl12SiPM_HE->Fill(double(ieta), double(iphi), ampl);
 	if(mdepth==3) h_mapDepth3ADCAmpl12SiPM_HE->Fill(double(ieta), double(iphi), ampl);
 	//
+	///////////////////////////////////////////////////////////////////////////////	//AZ: 21.09.2018 for Pavel Bunin:
+	if(lscounterM1 == 11 ) {h_AiForLS_11_HE->Fill(amplitude, 1.);}
+	else if(lscounterM1 == 12 ) {h_AiForLS_12_HE->Fill(amplitude, 1.);}
+	else if(lscounterM1 == 13 ) {h_AiForLS_13_HE->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 75 ) {h_AiForLS_75_HE->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 66 ) {h_AiForLS_66_HE->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 100 ) {h_AiForLS_100_HE->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 215 ) {h_AiForLS_215_HE->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 233 ) {h_AiForLS_233_HE->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 456 ) {h_AiForLS_456_HE->Fill(amplitude, 1.);} 
+	else if(lscounterM1 >  456 && lscounterM1 <521 ) {
+	  h_AiForLS_bad_HE->Fill(amplitude, 1.);
+	  h_mapAiForLS_bad_HE->Fill(double(ieta), double(iphi), amplitude);
+	  h_map0AiForLS_bad_HE->Fill(double(ieta), double(iphi), 1.);
+	} 
+	else if(lscounterM1 == 444 ) {h_AiForLS_444_HE->Fill(amplitude, 1.);} 
+	else if(lscounterM1 >  100 && lscounterM1 <200 ) {
+	  h_AiForLS_good_HE->Fill(amplitude, 1.);
+	  h_mapAiForLS_good_HE->Fill(double(ieta), double(iphi), amplitude);
+	  h_map0AiForLS_good_HE->Fill(double(ieta), double(iphi), 1.);
+	}
+
+	///////////////////////////////////////////////////////////////////////////////	//AZ: 25.10.2018 for Pavel Bunin: gain stability vs LSs using LED from abort gap
+	h_bcnvsamplitude_HE->Fill( float(bcn) , amplitude );
+	h_bcnvsamplitude0_HE->Fill( float(bcn) , 1. );
+	h_orbitNumvsamplitude_HE->Fill(float(orbitNum), amplitude);
+	h_orbitNumvsamplitude0_HE->Fill(float(orbitNum), 1.);
+	//	std::cout <<"orbitNum= " <<orbitNum << std::endl;
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 	if(amplitude > forallestimators_amplitude_bigger_) sumEstimator1[sub-1][mdepth-1][ieta+41][iphi] += amplitude;
 	if (verbosity == -77777778 && mdepth >4 && ieta > 0 && iphi> 0) std::cout << "***ADCAmpl: "  <<" mdepth= " << mdepth <<" ieta= " << ieta <<" iphi= " << iphi <<" TSmeanA_HE=aveamplitude1= " << aveamplitude1 <<" amplitude= " << amplitude << "sumEstimator1[sub-1][mdepth-1][ieta+41][iphi]= "  << sumEstimator1[sub-1][mdepth-1][ieta+41][iphi]  << "sum0Estimator[sub-1][mdepth-1][ieta+41][iphi]= "  << sum0Estimator[sub-1][mdepth-1][ieta+41][iphi]  << std::endl;	
 	//
@@ -10363,6 +10902,9 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
       //   //   //   //   //   //   //   //   //  HF       ADCAmpl:
       if(studyADCAmplHist_) {
 	h_ADCAmpl_HF->Fill(amplitude,1.);
+	h_ADCAmplrest1_HF->Fill(amplitude,1.);
+	h_ADCAmplrest6_HF->Fill(amplitude,1.);
+
 	h_ADCAmplZoom1_HF->Fill(amplitude,1.);
 	if(amplitude < ADCAmplHFMin_  || amplitude > ADCAmplHFMax_) {
 	  if(studyRunDependenceHist_ && flagtodefinebadchannel_==5) ++badchannels[sub-1][mdepth-1][ieta+41][iphi];// 0-neta ; 0-71
@@ -10382,6 +10924,37 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
 	if(mdepth==1) h_mapDepth1ADCAmpl12_HF->Fill(double(ieta), double(iphi), ampl);
 	if(mdepth==2) h_mapDepth2ADCAmpl12_HF->Fill(double(ieta), double(iphi), ampl);
 	
+	///////////////////////////////////////////////////////////////////////////////	//AZ: 21.09.2018 for Pavel Bunin:
+	if(lscounterM1 == 11 ) {h_AiForLS_11_HF->Fill(amplitude, 1.);}
+	else if(lscounterM1 == 12 ) {h_AiForLS_12_HF->Fill(amplitude, 1.);}
+	else if(lscounterM1 == 13 ) {h_AiForLS_13_HF->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 75 ) {h_AiForLS_75_HF->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 66 ) {h_AiForLS_66_HF->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 100 ) {h_AiForLS_100_HF->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 215 ) {h_AiForLS_215_HF->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 233 ) {h_AiForLS_233_HF->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 456 ) {h_AiForLS_456_HF->Fill(amplitude, 1.);} 
+	else if(lscounterM1 >  456 && lscounterM1 <521 ) {
+	  h_AiForLS_bad_HF->Fill(amplitude, 1.);
+	  h_mapAiForLS_bad_HF->Fill(double(ieta), double(iphi), amplitude);
+	  h_map0AiForLS_bad_HF->Fill(double(ieta), double(iphi), 1.);
+	} 
+	else if(lscounterM1 == 444 ) {h_AiForLS_444_HF->Fill(amplitude, 1.);} 
+	else if(lscounterM1 >  100 && lscounterM1 <200 ) {
+	  h_AiForLS_good_HF->Fill(amplitude, 1.);
+	  h_mapAiForLS_good_HF->Fill(double(ieta), double(iphi), amplitude);
+	  h_map0AiForLS_good_HF->Fill(double(ieta), double(iphi), 1.);
+	}
+
+	///////////////////////////////////////////////////////////////////////////////	//AZ: 25.10.2018 for Pavel Bunin: gain stability vs LSs using LED from abort gap
+	h_bcnvsamplitude_HF->Fill( float(bcn) , amplitude );
+	h_bcnvsamplitude0_HF->Fill( float(bcn) , 1. );
+	h_orbitNumvsamplitude_HF->Fill(float(orbitNum), amplitude);
+	h_orbitNumvsamplitude0_HF->Fill(float(orbitNum), 1.);
+	//	std::cout <<"orbitNum= " <<orbitNum << std::endl;
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	if(amplitude > forallestimators_amplitude_bigger_) sumEstimator1[sub-1][mdepth-1][ieta+41][iphi] += amplitude;
 	//		  	  if (verbosity == -7777 && sub==4 && mdepth==1&&ieta==-35&&iphi==35) std::cout << "***ADCAmpl: "  <<" ieta= " << ieta <<" iphi= " << iphi <<" aveamplitude1= " << aveamplitude1 <<" amplitude= " << amplitude << "sumEstimator1[sub-1][mdepth-1][ieta+41][iphi]= "  << sumEstimator1[sub-1][mdepth-1][ieta+41][iphi]  << std::endl;	  	  
 	
@@ -10486,7 +11059,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHFQIE10(QIE10DataFrame qie10df)
   HcalDetId hcaldetid = HcalDetId(detid);
   int ieta = hcaldetid.ieta();
   if(ieta > 0) ieta -= 1;
-  int iphi = hcaldetid.iphi();
+  int iphi = hcaldetid.iphi()-1;
   int mdepth = hcaldetid.depth();
   int sub   = hcaldetid.subdet(); // 1-HB, 2-HE (HFQIE10DigiCollection: 4-HF)
   if (verbosity == -2424 && mdepth > 2 ) std::cout << " fillDigiAmplitude HFQIE10    DIGI ->  "  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
@@ -10885,6 +11458,9 @@ void VeRawAnalyzer::fillDigiAmplitudeHFQIE10(QIE10DataFrame qie10df)
     //   //   //   //   //   //   //   //   //  HFQIE10       ADCAmpl:
     if(studyADCAmplHist_) {
       h_ADCAmpl_HF->Fill(amplitude,1.);
+      h_ADCAmplrest1_HF->Fill(amplitude,1.);
+      h_ADCAmplrest6_HF->Fill(amplitude,1.);
+
       h_ADCAmplZoom1_HF->Fill(amplitude,1.);
       if(amplitude < ADCAmplHFMin_  || amplitude > ADCAmplHFMax_) {
 	if(studyRunDependenceHist_ && flagtodefinebadchannel_==5) ++badchannels[sub-1][mdepth-1][ieta+41][iphi];// 0-neta ; 0-71
@@ -10912,6 +11488,37 @@ void VeRawAnalyzer::fillDigiAmplitudeHFQIE10(QIE10DataFrame qie10df)
       if(mdepth==3) h_mapDepth3ADCAmpl12_HF->Fill(double(ieta), double(iphi), ampl);
       if(mdepth==4) h_mapDepth4ADCAmpl12_HF->Fill(double(ieta), double(iphi), ampl);
       
+	///////////////////////////////////////////////////////////////////////////////	//AZ: 21.09.2018 for Pavel Bunin:
+	if(lscounterM1 == 11 ) {h_AiForLS_11_HF->Fill(amplitude, 1.);}
+	else if(lscounterM1 == 12 ) {h_AiForLS_12_HF->Fill(amplitude, 1.);}
+	else if(lscounterM1 == 13 ) {h_AiForLS_13_HF->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 75 ) {h_AiForLS_75_HF->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 66 ) {h_AiForLS_66_HF->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 100 ) {h_AiForLS_100_HF->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 215 ) {h_AiForLS_215_HF->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 233 ) {h_AiForLS_233_HF->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 456 ) {h_AiForLS_456_HF->Fill(amplitude, 1.);} 
+	else if(lscounterM1 >  456 && lscounterM1 <521 ) {
+	  h_AiForLS_bad_HF->Fill(amplitude, 1.);
+	  h_mapAiForLS_bad_HF->Fill(double(ieta), double(iphi), amplitude);
+	  h_map0AiForLS_bad_HF->Fill(double(ieta), double(iphi), 1.);
+	} 
+	else if(lscounterM1 == 444 ) {h_AiForLS_444_HF->Fill(amplitude, 1.);} 
+	else if(lscounterM1 >  100 && lscounterM1 <200 ) {
+	  h_AiForLS_good_HF->Fill(amplitude, 1.);
+	  h_mapAiForLS_good_HF->Fill(double(ieta), double(iphi), amplitude);
+	  h_map0AiForLS_good_HF->Fill(double(ieta), double(iphi), 1.);
+	}
+
+	///////////////////////////////////////////////////////////////////////////////	//AZ: 25.10.2018 for Pavel Bunin: gain stability vs LSs using LED from abort gap
+	h_bcnvsamplitude_HF->Fill( float(bcn) , amplitude );
+	h_bcnvsamplitude0_HF->Fill( float(bcn) , 1. );
+	h_orbitNumvsamplitude_HF->Fill(float(orbitNum), amplitude);
+	h_orbitNumvsamplitude0_HF->Fill(float(orbitNum), 1.);
+	//	std::cout <<"orbitNum= " <<orbitNum << std::endl;
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
       if(amplitude > forallestimators_amplitude_bigger_) sumEstimator1[sub-1][mdepth-1][ieta+41][iphi] += amplitude;
       //		  	  if (verbosity == -7777 && sub==4 && mdepth==1&&ieta==-35&&iphi==35) std::cout << "***ADCAmpl: "  <<" ieta= " << ieta <<" iphi= " << iphi <<" aveamplitude1= " << aveamplitude1 <<" amplitude= " << amplitude << "sumEstimator1[sub-1][mdepth-1][ieta+41][iphi]= "  << sumEstimator1[sub-1][mdepth-1][ieta+41][iphi]  << std::endl;	  	  
       
@@ -11401,6 +12008,9 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
       //   //   //   //   //   //   //   //   //  HO       ADCAmpl:
       if(studyADCAmplHist_) {
 	h_ADCAmpl_HO->Fill(amplitude,1.);
+	h_ADCAmplrest1_HO->Fill(amplitude,1.);
+	h_ADCAmplrest6_HO->Fill(amplitude,1.);
+
 	h_ADCAmplZoom1_HO->Fill(amplitude,1.);
 	h_ADCAmpl_HO_copy->Fill(amplitude,1.);
 	if(amplitude < ADCAmplHOMin_  || amplitude > ADCAmplHOMax_) {
@@ -11418,6 +12028,40 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
 	// for averaged values:
 	if(mdepth==4) h_mapDepth4ADCAmpl_HO->Fill(double(ieta), double(iphi), amplitude);
 	if(mdepth==4) h_mapDepth4ADCAmpl12_HO->Fill(double(ieta), double(iphi), ampl);
+
+	///////////////////////////////////////////////////////////////////////////////	//AZ: 21.09.2018 for Pavel Bunin:
+	if(lscounterM1 == 11 ) {h_AiForLS_11_HO->Fill(amplitude, 1.);}
+	else if(lscounterM1 == 12 ) {h_AiForLS_12_HO->Fill(amplitude, 1.);}
+	else if(lscounterM1 == 13 ) {h_AiForLS_13_HO->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 75 ) {h_AiForLS_75_HO->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 66 ) {h_AiForLS_66_HO->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 100 ) {h_AiForLS_100_HO->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 215 ) {h_AiForLS_215_HO->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 233 ) {h_AiForLS_233_HO->Fill(amplitude, 1.);} 
+	else if(lscounterM1 == 456 ) {h_AiForLS_456_HO->Fill(amplitude, 1.);} 
+	else if(lscounterM1 >  456 && lscounterM1 <521 ) {
+	  h_AiForLS_bad_HO->Fill(amplitude, 1.);
+	  h_mapAiForLS_bad_HO->Fill(double(ieta), double(iphi), amplitude);
+	  h_map0AiForLS_bad_HO->Fill(double(ieta), double(iphi), 1.);
+	} 
+	else if(lscounterM1 == 444 ) {h_AiForLS_444_HO->Fill(amplitude, 1.);} 
+	else if(lscounterM1 >  100 && lscounterM1 <200 ) {
+	  h_AiForLS_good_HO->Fill(amplitude, 1.);
+	  h_mapAiForLS_good_HO->Fill(double(ieta), double(iphi), amplitude);
+	  h_map0AiForLS_good_HO->Fill(double(ieta), double(iphi), 1.);
+	}
+
+	///////////////////////////////////////////////////////////////////////////////	//AZ: 25.10.2018 for Pavel Bunin: gain stability vs LSs using LED from abort gap
+	h_bcnvsamplitude_HO->Fill( float(bcn) , amplitude );
+	h_bcnvsamplitude0_HO->Fill( float(bcn) , 1. );
+
+	h_orbitNumvsamplitude_HO->Fill(float(orbitNum), amplitude);
+	h_orbitNumvsamplitude0_HO->Fill(float(orbitNum), 1.);
+	//	std::cout <<"orbitNum= " <<orbitNum << std::endl;
+
+
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	if(amplitude > forallestimators_amplitude_bigger_) sumEstimator1[sub-1][mdepth-1][ieta+41][iphi] += amplitude;
 	/*
@@ -11888,29 +12532,37 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 		// HEdepth4 upgrade
 		if(k1+1  ==4) {
 		  h_sumADCAmplperLSdepth4HEu->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth4_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLSdepth4HEu->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth4_    ) h_sumCutADCAmplperLSdepth4HEu->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLSdepth4HEu->Fill( float(lscounterM1) ,bbb1);
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth4_    ) h_2DsumADCAmplLSdepth4HEu->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumADCAmplLSdepth4HEu->Fill(double(ieta), double(k3), bbb1);
 		}//if(k1+1  ==4)
 
 		// HEdepth5 upgrade
 		if(k1+1  ==5) {
 		  h_sumADCAmplperLSdepth5HEu->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth5_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLSdepth5HEu->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth5_    ) h_sumCutADCAmplperLSdepth5HEu->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLSdepth5HEu->Fill( float(lscounterM1) ,bbb1);
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth5_    ) h_2DsumADCAmplLSdepth5HEu->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumADCAmplLSdepth5HEu->Fill(double(ieta), double(k3), bbb1);
 		}//if(k1+1  ==5)
 
 		// HEdepth6 upgrade
 		if(k1+1  ==6) {
 		  h_sumADCAmplperLSdepth6HEu->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth6_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLSdepth6HEu->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth6_    ) h_sumCutADCAmplperLSdepth6HEu->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLSdepth6HEu->Fill( float(lscounterM1) ,bbb1);
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth6_    ) h_2DsumADCAmplLSdepth6HEu->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumADCAmplLSdepth6HEu->Fill(double(ieta), double(k3), bbb1);
 		}//if(k1+1  ==6)
 
 		// HEdepth7 upgrade
 		if(k1+1  ==7) {
 		  h_sumADCAmplperLSdepth7HEu->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth7_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLSdepth7HEu->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth7_    ) h_sumCutADCAmplperLSdepth7HEu->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLSdepth7HEu->Fill( float(lscounterM1) ,bbb1);
+		  if(bbbc/bbb1 > lsdep_estimator1_HEdepth7_    ) h_2DsumADCAmplLSdepth7HEu->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumADCAmplLSdepth7HEu->Fill(double(ieta), double(k3), bbb1);
 		}//if(k1+1  ==7)
 
 	      }// end HE
@@ -11946,15 +12598,19 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 		// HFdepth3 upgrade
 		if(k1+1  ==3) {
 		  h_sumADCAmplperLS6u->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth3_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS6u->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth3_    ) h_sumCutADCAmplperLS6u->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS6u->Fill( float(lscounterM1) ,bbb1);
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth3_    ) h_2DsumADCAmplLSdepth3HFu->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumADCAmplLSdepth3HFu->Fill(double(ieta), double(k3), bbb1);
 		}//if(k1+1  ==3)
 
 		// HFdepth4 upgrade
 		if(k1+1  ==4) {
 		  h_sumADCAmplperLS7u->Fill( float(lscounterM1) ,bbbc);
-		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth4_   || bbbc/bbb1 < 0. ) h_sumCutADCAmplperLS7u->Fill( float(lscounterM1) ,bbbc); 
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth4_    ) h_sumCutADCAmplperLS7u->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS7u->Fill( float(lscounterM1) ,bbb1);
+		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth4_    ) h_2DsumADCAmplLSdepth4HFu->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumADCAmplLSdepth4HFu->Fill(double(ieta), double(k3), bbb1);
 		}//if(k1+1  ==4)
 
 
@@ -12992,6 +13648,42 @@ void VeRawAnalyzer::endJob(){
   h_nbadchannels_depth2_HF->Scale(ww);
 */
   ///////////////////////////////////////////->Write();
+  h_bcnvsamplitude_HB->Write();
+  h_bcnvsamplitude0_HB->Write();
+  h_bcnvsamplitude_HE->Write();
+  h_bcnvsamplitude0_HE->Write();
+  h_bcnvsamplitude_HF->Write();
+  h_bcnvsamplitude0_HF->Write();
+  h_bcnvsamplitude_HO->Write();
+  h_bcnvsamplitude0_HO->Write();
+
+  h_orbitNumvsamplitude_HB->Write();
+  h_orbitNumvsamplitude0_HB->Write();
+  h_orbitNumvsamplitude_HE->Write();
+  h_orbitNumvsamplitude0_HE->Write();
+  h_orbitNumvsamplitude_HF->Write();
+  h_orbitNumvsamplitude0_HF->Write();
+  h_orbitNumvsamplitude_HO->Write();
+  h_orbitNumvsamplitude0_HO->Write();
+
+  h_2DsumADCAmplEtaPhiLs0->Write();
+  h_2DsumADCAmplEtaPhiLs1->Write();
+  h_2DsumADCAmplEtaPhiLs2->Write();
+  h_2DsumADCAmplEtaPhiLs3->Write();
+
+  h_2DsumADCAmplEtaPhiLs00->Write();
+  h_2DsumADCAmplEtaPhiLs10->Write();
+  h_2DsumADCAmplEtaPhiLs20->Write();
+  h_2DsumADCAmplEtaPhiLs30->Write();
+
+  h_sumADCAmplEtaPhiLs->Write();
+  h_sumADCAmplEtaPhiLs_bbbc->Write();
+  h_sumADCAmplEtaPhiLs_bbb1->Write();
+  h_sumADCAmplEtaPhiLs_lscounterM1->Write();
+  h_sumADCAmplEtaPhiLs_ietaphi->Write();
+  h_sumADCAmplEtaPhiLs_lscounterM1orbitNum->Write();
+  h_sumADCAmplEtaPhiLs_orbitNum->Write();
+
   if(recordHistoes_) {
     h_errorGeneral->Write();
     h_error1->Write();
@@ -13108,6 +13800,12 @@ void VeRawAnalyzer::endJob(){
     h_ADCAmplZoom_HB->Write();
     h_ADCAmplZoom1_HB->Write();
     h_ADCAmpl_HB->Write();
+
+    h_AmplitudeHBrest->Write();
+    h_AmplitudeHBrest1->Write();
+    h_AmplitudeHBrest6->Write();
+    
+
     h_mapDepth1ADCAmpl225_HB->Write();
     h_mapDepth2ADCAmpl225_HB->Write();
     h_mapDepth1ADCAmpl_HB->Write();
@@ -13159,6 +13857,10 @@ void VeRawAnalyzer::endJob(){
     h_mapDepth4ADCAmpl225Copy_HO->Write();
     ///////////////////////
     h_ADCAmpl_HF->Write();
+    h_ADCAmplrest1_HF->Write();
+    h_ADCAmplrest6_HF->Write();
+
+
     h_ADCAmplZoom1_HF->Write();
     h_mapDepth1ADCAmpl225_HF->Write();
     h_mapDepth2ADCAmpl225_HF->Write();
@@ -13224,6 +13926,9 @@ void VeRawAnalyzer::endJob(){
 
     ///////////////////////
     h_ADCAmpl_HO->Write();
+    h_ADCAmplrest1_HO->Write();
+    h_ADCAmplrest6_HO->Write();
+
     h_ADCAmplZoom1_HO->Write();
     h_ADCAmpl_HO_copy->Write();
     h_mapDepth4ADCAmpl225_HO->Write();
@@ -13252,6 +13957,11 @@ void VeRawAnalyzer::endJob(){
     h_ADCAmpl345Zoom1_HE->Write();
     h_ADCAmpl345_HE->Write();
     h_ADCAmpl_HE->Write();
+    h_ADCAmplrest_HE->Write();
+    h_ADCAmplrest1_HE->Write();
+    h_ADCAmplrest6_HE->Write();
+
+
     h_ADCAmplZoom1_HE->Write();
 
     h_corrforxaMAIN_HE ->Write();
@@ -13603,6 +14313,90 @@ void VeRawAnalyzer::endJob(){
   h_sum0PedestalperLS8 ->Write()        ;
 
     // for estimator1:
+h_AiForLS_11_HB->Write(); 
+h_AiForLS_12_HB->Write(); 
+h_AiForLS_13_HB->Write(); 
+h_AiForLS_75_HB->Write(); 
+h_AiForLS_66_HB->Write(); 
+h_AiForLS_100_HB->Write(); 
+h_AiForLS_215_HB->Write(); 
+h_AiForLS_233_HB->Write(); 
+h_AiForLS_456_HB->Write(); 
+h_AiForLS_bad_HB->Write(); 
+h_AiForLS_444_HB->Write(); 
+h_AiForLS_good_HB->Write();
+
+h_mapAiForLS_bad_HB->Write();
+h_map0AiForLS_bad_HB->Write();
+h_mapAiForLS_good_HB->Write();
+h_map0AiForLS_good_HB->Write();
+h_mapAiForLS_bad_HE->Write();
+h_map0AiForLS_bad_HE->Write();
+h_mapAiForLS_good_HE->Write();
+h_map0AiForLS_good_HE->Write();
+h_mapAiForLS_bad_HO->Write();
+h_map0AiForLS_bad_HO->Write();
+h_mapAiForLS_good_HO->Write();
+h_map0AiForLS_good_HO->Write();
+h_mapAiForLS_bad_HF->Write();
+h_map0AiForLS_bad_HF->Write();
+h_mapAiForLS_good_HF->Write();
+h_map0AiForLS_good_HF->Write();
+
+h_AiForLS_11_HE->Write(); 
+h_AiForLS_12_HE->Write(); 
+h_AiForLS_13_HE->Write(); 
+h_AiForLS_75_HE->Write(); 
+h_AiForLS_66_HE->Write(); 
+h_AiForLS_100_HE->Write(); 
+h_AiForLS_215_HE->Write(); 
+h_AiForLS_233_HE->Write(); 
+h_AiForLS_456_HE->Write(); 
+h_AiForLS_bad_HE->Write(); 
+h_AiForLS_444_HE->Write(); 
+h_AiForLS_good_HE->Write();
+
+h_AiForLS_11_HO->Write(); 
+h_AiForLS_12_HO->Write(); 
+h_AiForLS_13_HO->Write(); 
+h_AiForLS_75_HO->Write(); 
+h_AiForLS_66_HO->Write(); 
+h_AiForLS_100_HO->Write(); 
+h_AiForLS_215_HO->Write(); 
+h_AiForLS_233_HO->Write(); 
+h_AiForLS_456_HO->Write(); 
+h_AiForLS_bad_HO->Write(); 
+h_AiForLS_444_HO->Write(); 
+h_AiForLS_good_HO->Write();
+
+h_AiForLS_11_HF->Write(); 
+h_AiForLS_12_HF->Write(); 
+h_AiForLS_13_HF->Write(); 
+h_AiForLS_75_HF->Write(); 
+h_AiForLS_66_HF->Write(); 
+h_AiForLS_100_HF->Write(); 
+h_AiForLS_215_HF->Write(); 
+h_AiForLS_233_HF->Write(); 
+h_AiForLS_456_HF->Write(); 
+h_AiForLS_bad_HF->Write(); 
+h_AiForLS_444_HF->Write(); 
+h_AiForLS_good_HF->Write();
+
+
+// for gain stability vs LS:
+  h_2DsumADCAmplLSdepth4HEu->Write();
+ h_2D0sumADCAmplLSdepth4HEu->Write();
+ h_2DsumADCAmplLSdepth5HEu->Write();
+ h_2D0sumADCAmplLSdepth5HEu->Write();
+ h_2DsumADCAmplLSdepth6HEu->Write();
+ h_2D0sumADCAmplLSdepth6HEu->Write();
+ h_2DsumADCAmplLSdepth7HEu->Write();
+ h_2D0sumADCAmplLSdepth7HEu->Write();
+ h_2DsumADCAmplLSdepth3HFu->Write();
+ h_2D0sumADCAmplLSdepth3HFu->Write();
+ h_2DsumADCAmplLSdepth4HFu->Write();
+ h_2D0sumADCAmplLSdepth4HFu->Write();
+
     h_sumADCAmplLS1copy1->Write();
     h_sumADCAmplLS1copy2->Write();
     h_sumADCAmplLS1copy3->Write();
