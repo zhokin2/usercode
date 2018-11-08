@@ -5955,29 +5955,6 @@ void VeRawAnalyzer::beginJob()
   //////////////////////////////////////////////////////////////////////////////////    book histoes
 
 
-  //  float alsmin = lsmin_;
-  //  float blsmax = lsmax_;
-  //  int nlsminmax = lsmax_ - lsmin_ + 1 ;
-
-//  Outout is       ietaphi = 1 - 396 ( # =396; in histo,booking is: 1 - 397 )
-  // znphi*zneta = 396     0 - HB; 1 - HE; 2 - HO; 3 - HF;
-  h_2DsumADCAmplEtaPhiLs0 = new TH2F("h_2DsumADCAmplEtaPhiLs0"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
-  h_2DsumADCAmplEtaPhiLs1 = new TH2F("h_2DsumADCAmplEtaPhiLs1"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
-  h_2DsumADCAmplEtaPhiLs2 = new TH2F("h_2DsumADCAmplEtaPhiLs2"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
-  h_2DsumADCAmplEtaPhiLs3 = new TH2F("h_2DsumADCAmplEtaPhiLs3"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
-
-  h_2DsumADCAmplEtaPhiLs00 = new TH2F("h_2DsumADCAmplEtaPhiLs00"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
-  h_2DsumADCAmplEtaPhiLs10 = new TH2F("h_2DsumADCAmplEtaPhiLs10"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
-  h_2DsumADCAmplEtaPhiLs20 = new TH2F("h_2DsumADCAmplEtaPhiLs20"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
-  h_2DsumADCAmplEtaPhiLs30 = new TH2F("h_2DsumADCAmplEtaPhiLs30"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
-
-  h_sumADCAmplEtaPhiLs = new TH1F("h_sumADCAmplEtaPhiLs"," ", 1000, 0.,20000.);
-  h_sumADCAmplEtaPhiLs_bbbc = new TH1F("h_sumADCAmplEtaPhiLs_bbbc"," ", 1000, 0.,250000.);
-  h_sumADCAmplEtaPhiLs_bbb1 = new TH1F("h_sumADCAmplEtaPhiLs_bbb1"," ", 100, 0.,10000.);
-  h_sumADCAmplEtaPhiLs_lscounterM1 = new TH1F("h_sumADCAmplEtaPhiLs_lscounterM1"," ", 600, 0.,600.);
-  h_sumADCAmplEtaPhiLs_ietaphi = new TH1F("h_sumADCAmplEtaPhiLs_ietaphi"," ", 1000, 0.,6000.);
-  h_sumADCAmplEtaPhiLs_lscounterM1orbitNum = new TH1F("h_sumADCAmplEtaPhiLs_lscounterM1orbitNum"," ", 600, 0.,600.);
-  h_sumADCAmplEtaPhiLs_orbitNum = new TH1F("h_sumADCAmplEtaPhiLs_orbitNum"," ", 1000, 25000000.,40000000.);
   
   if(recordHistoes_) {
     //  ha2 = new TH2F("ha2"," ", neta, -41., 41., nphi, 0., bphi);
@@ -6585,9 +6562,45 @@ void VeRawAnalyzer::beginJob()
     h_orbitNumvsamplitude0_HF = new TH1F("h_orbitNumvsamplitude0_HF"," ",   zaP, zaR, zaR2);
     h_orbitNumvsamplitude0_HO = new TH1F("h_orbitNumvsamplitude0_HO"," ",    zaP, zaR, zaR2);
 
+
+    //                                                     RBX:
+  //  float alsmin = lsmin_;
+  //  float blsmax = lsmax_;
+  //  int nlsminmax = lsmax_ - lsmin_ + 1 ;
+
+    // nlsminmax, alsmin, blsmax  );
+
+
+//  Outout is       ietaphi = 1 - 396 ( # =396; in histo,booking is: 1 - 397 )
+
+  // znphi*zneta = 396     0 - HB; 1 - HE; 2 - HO; 3 - HF;
+
+  h_2DsumADCAmplEtaPhiLs0 = new TH2F("h_2DsumADCAmplEtaPhiLs0"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
+  h_2DsumADCAmplEtaPhiLs1 = new TH2F("h_2DsumADCAmplEtaPhiLs1"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
+  h_2DsumADCAmplEtaPhiLs2 = new TH2F("h_2DsumADCAmplEtaPhiLs2"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
+  h_2DsumADCAmplEtaPhiLs3 = new TH2F("h_2DsumADCAmplEtaPhiLs3"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
+
+  h_2DsumADCAmplEtaPhiLs00 = new TH2F("h_2DsumADCAmplEtaPhiLs00"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
+  h_2DsumADCAmplEtaPhiLs10 = new TH2F("h_2DsumADCAmplEtaPhiLs10"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
+  h_2DsumADCAmplEtaPhiLs20 = new TH2F("h_2DsumADCAmplEtaPhiLs20"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
+  h_2DsumADCAmplEtaPhiLs30 = new TH2F("h_2DsumADCAmplEtaPhiLs30"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
+
+  h_sumADCAmplEtaPhiLs = new TH1F("h_sumADCAmplEtaPhiLs"," ", 1000, 0.,20000.);
+  h_sumADCAmplEtaPhiLs_bbbc = new TH1F("h_sumADCAmplEtaPhiLs_bbbc"," ", 1000, 0.,250000.);
+  h_sumADCAmplEtaPhiLs_bbb1 = new TH1F("h_sumADCAmplEtaPhiLs_bbb1"," ", 100, 0.,10000.);
+  h_sumADCAmplEtaPhiLs_lscounterM1 = new TH1F("h_sumADCAmplEtaPhiLs_lscounterM1"," ", 600, 0.,600.);
+  h_sumADCAmplEtaPhiLs_ietaphi = new TH1F("h_sumADCAmplEtaPhiLs_ietaphi"," ", 1000, 0.,6000.);
+  h_sumADCAmplEtaPhiLs_lscounterM1orbitNum = new TH1F("h_sumADCAmplEtaPhiLs_lscounterM1orbitNum"," ", 600, 0.,600.);
+  h_sumADCAmplEtaPhiLs_orbitNum = new TH1F("h_sumADCAmplEtaPhiLs_orbitNum"," ", 1000, 25000000.,40000000.);
+
+    // for LS :
+
+    // for LS binning:
     int bac= howmanybinsonplots_;
     //  int bac= 15;
     float bac2=bac+1.;
+    // bac,         1.,     bac2  );
+
 
     h_nbadchannels_depth1_HB = new TH1F("h_nbadchannels_depth1_HB"," ",   100, 1.,3001.);
     h_runnbadchannels_depth1_HB = new TH1F("h_runnbadchannels_depth1_HB"," ",   bac, 1.,bac2);
