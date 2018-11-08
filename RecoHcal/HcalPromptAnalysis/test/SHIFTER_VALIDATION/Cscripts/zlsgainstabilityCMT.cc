@@ -105,22 +105,23 @@ int main(int argc, char *argv[])
 //	TFile *hfile1= new TFile("/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/CMTweb/histos/Global_234556.root", "READ");
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////////////////// normal gap 321177:
 //	TFile *hfile1= new TFile("Global_321177_41.root", "READ");
 //	TFile *hfile1= new TFile("Global_321177_ls1to600.root", "READ");
 //	TFile *hfile1= new TFile("Global_321177_ls1to600.root_no41", "READ");
+//	TFile *hfile1= new TFile("Global_RBX_321177_ls1to600.root", "READ");
 
+//////////////////////////////////////////////////////////////////////////////// normal gap 325001:
 //	TFile *hfile1= new TFile("Global_325001_ls1to600.root", "READ");
 //	TFile *hfile1= new TFile("Global_RBX_325001_40.root", "READ");
 //	TFile *hfile1= new TFile("Global_RBX_325001_ls1to600.root", "READ");
-	TFile *hfile1= new TFile("Global_RBX_321177_ls1to600.root", "READ");
+	TFile *hfile1= new TFile("Global_RBX_325001.root", "READ");
 
 
-////////////////////////////////////////////////////////////
-
+//////////////////////////////////////////////////////////////////////////////// abort gap:
 //	TFile *hfile1= new TFile("Global_321177_41_abortgap.root", "READ");
 //	TFile *hfile1= new TFile("Global_321177_ls1to600_abortgap.root", "READ");
 //	TFile *hfile1= new TFile("Global_321177_ls1to600_abortgap_no41.root", "READ");
-
 //	TFile *hfile1= new TFile("Global_325001_ls1to600_abortgap.root", "READ");
 
 
@@ -159,7 +160,7 @@ int main(int argc, char *argv[])
 	if(ccc1>0.) {maxbins = i; if(i>maxbins) maxbins = i;}
 	//	if(ccc1>0.) cout<<" ibin=     "<< i <<" nevents=     "<< ccc1 <<endl;
       }
-      cout<<" maxbins=     "<< maxbins <<endl;
+      cout<<"111 maxbins=     "<< maxbins <<endl;
 
       TH1F* ADCAmplperLS = new TH1F("ADCAmplperLS","", maxbins, 1., maxbins+1.);
 //          TH1F* ADCAmplperLS  = new TH1F("ADCAmplperLS ","", 600, 1.,601.);
@@ -182,9 +183,14 @@ int main(int argc, char *argv[])
 
       c1->cd(2);
       TH1F *Rate2= (TH1F*)hfile1->Get("h_sumADCAmplEtaPhiLs_lscounterM1");
-      gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
-      Rate2->SetXTitle("lscounterM1 sumADCAmplEtaPhiLs \b");
-      Rate2->Draw("");
+      TH1F* Rate2redone = new TH1F("Rate2redone","", maxbins, 1., maxbins+1.);
+      for (int i=1;i<=Rate2->GetXaxis()->GetNbins();i++) {
+	double ccc1 =  Rate2->GetBinContent(i);
+	if(ccc1>0.) Rate2redone ->Fill(float(i), ccc1);
+      }
+      Rate2redone->SetMarkerStyle(20);Rate2redone->SetMarkerSize(0.4);Rate2redone->GetYaxis()->SetLabelSize(0.04);Rate2redone ->SetXTitle("sumADCAmplEtaPhiLsS \b");Rate2redone->SetMarkerColor(2);Rate2redone->SetLineColor(0);
+      // Rate2redone ->SetMaximum(30.0);Rate2redone ->SetMinimum(20.0);
+      Rate2redone ->Draw("Error");
 
        c1->Update();
 
@@ -194,7 +200,7 @@ int main(int argc, char *argv[])
     //================
     //======================================================================
       c1->Clear();
-      c1->Divide(2,3);
+      c1->Divide(2,2);
 
       c1->cd(1);
       TH1F *Rate3= (TH1F*)hfile1->Get("h_sumADCAmplEtaPhiLs_bbbc");
@@ -264,7 +270,7 @@ int main(int argc, char *argv[])
       int maxbiny = 0;
       nx = Cefz2->GetXaxis()->GetNbins();
       int ny = Cefz2->GetYaxis()->GetNbins();
-      cout<<"HB1        nx=     "<< nx <<" ny=     "<< ny <<endl;
+      cout<<"444 HB1        nx=     "<< nx <<" ny=     "<< ny <<endl;
       TH1F* ADCAmplLSHB1 = new TH1F("ADCAmplLSHB1","", 1000, 0., 1000000.);
       for (int i=1;i<=nx;i++) {
 	for (int j=1;j<=ny;j++) {
@@ -287,7 +293,7 @@ int main(int argc, char *argv[])
       //    gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
           ADCAmplLSHB1 ->Draw("Error");
 	  //   ADCAmplLSHB1 ->Draw("");
-      cout<<"HB1 maxbinx=  "<< maxbinx<<"     maxbiny=  "<< maxbiny <<endl;
+      cout<<"444 HB1 for h_2D0sumADCAmplLS1 maxbinx =  "<< maxbinx<<"     maxbiny=  "<< maxbiny <<endl;
       // int ietaphi = 0; ietaphi = ((k2+1)-1)*nphi + (k3+1) ;  k2=0-neta-1; k3=0-nphi-1; neta=72; nphi=82;
 
 
@@ -472,9 +478,8 @@ int main(int argc, char *argv[])
 	if(ccc1>0.) {if(i>maxls) maxls = i;if(i<minls) minls = i;}
 	//	  if(ccc1>0.)	  cout<<" ASSS2 ;  i = "<<i<<" ccc1= "<<ccc1<<endl;
 	//	if(ccc1>0.) {maxls = i; if(i>maxls) maxls = i;}
-//	if(ccc1>0.) maxbins++;
       }
-      cout<<" minls=     "<< minls <<" maxls=     "<< maxls <<endl;
+      cout<<"Page8: minls=     "<< minls <<" maxls=     "<< maxls <<endl;
       //////////////////////////////////////////////////////////////////////////////////////
       c1->cd(1);
       TH1F* ISSS1 = new TH1F("ISSS1","", maxls-minls+1, float(minls), maxls+1.);
@@ -659,14 +664,14 @@ int main(int argc, char *argv[])
       TH2F* Cefz1 = (TH2F*)Cefz1LLL->Clone("Cefz1");
       Cefz1->Divide(Cefz1KKK,Cefz1LLL, 1, 1, "B");// average A
       Cefz1->Sumw2();
-
+      //  maxbins, 1., maxbins+1.);
       int sumijhb = 0;
       c1->cd(1);
       maxbinx = 0;
       maxbiny = 0;
       nx = Cefz1->GetXaxis()->GetNbins();
       ny = Cefz1->GetYaxis()->GetNbins();
-      cout<<"HB h_2DsumADCAmplEtaPhiLs0         nx=     "<< nx <<" ny=     "<< ny <<endl;
+      cout<<"Page11: HB h_2DsumADCAmplEtaPhiLs0         nx=     "<< nx <<" ny=     "<< ny <<endl;
       TH1F* ADCAmplLS0 = new TH1F("ADCAmplLS0","", 100, 0., 50.);
       // i - # LSs:
       for (int i=1;i<=nx;i++) {
@@ -677,25 +682,25 @@ int main(int argc, char *argv[])
 	  sumijhb++;
 	  maxbinx = i; if(i>maxbinx) maxbinx = i;
 	  maxbiny = j; if(j>maxbiny) maxbiny = j;
-	  //	  cout<<"HB h_2DsumADCAmplEtaPhiLs:  ibin=  "<< i <<"      jbin= "<< j <<"  A= "<< ccc1 <<endl;
+	  //	  cout<<"Page11: HB h_2DsumADCAmplEtaPhiLs:  ibin=  "<< i <<"      jbin= "<< j <<"  A= "<< ccc1 <<endl;
 	  ADCAmplLS0 ->Fill(ccc1);
 	}
       }}
-      cout<<"HB maxbinx=  "<< maxbinx<<"     maxbiny=  "<< maxbiny <<"     sumijhb=  "<< sumijhb <<endl;
+      cout<<"Page11: HB maxbinx=  "<< maxbinx<<"     maxbiny=  "<< maxbiny <<"     sumijhb=  "<< sumijhb <<endl;
       ADCAmplLS0 ->SetMarkerStyle(20);ADCAmplLS0 ->SetMarkerSize(0.4);ADCAmplLS0 ->GetYaxis()->SetLabelSize(0.04);ADCAmplLS0 ->SetXTitle("<A>ijk = <A> averaged per events in k-th LS \b");ADCAmplLS0->SetYTitle("     HB \b");ADCAmplLS0 ->SetMarkerColor(2);ADCAmplLS0 ->SetLineColor(0);//ADCAmplLS0->SetMinimum(10.);
       gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
       //      ADCAmplLS0 ->Draw("L");
             ADCAmplLS0 ->Draw("Error");
-	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  maxbins, 1., maxbins+1.);
       c1->cd(2);
-      TH1F* ADCAmplLS = new TH1F("ADCAmplLS","", 620, 0., 620.);
+      TH1F* ADCAmplLS = new TH1F("ADCAmplLS","", maxbins, 1., maxbins+1.);
       // i - # LSs:
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
       for (int j=1;j<=ny;j++) {
 	double ccc1 =  Cefz1->GetBinContent(i,j);
 	if(ccc1>0.) {
-	  //	  cout<<"HB h_2DsumADCAmplEtaPhiLs:  ibin=  "<< i <<"      jbin= "<< j <<"  A= "<< ccc1 <<endl;
+	  //	  cout<<"Page11: HB h_2DsumADCAmplEtaPhiLs:  ibin=  "<< i <<"      jbin= "<< j <<"  A= "<< ccc1 <<endl;
 	  //	  ADCAmplLS ->Fill(ccc1/maxbinx);
 	  ADCAmplLS ->Fill( float(i), ccc1*maxbinx/sumijhb);
 	}
@@ -717,11 +722,11 @@ int main(int argc, char *argv[])
 	if(ccc1>0.) {
 	  maxbinx = i; if(i>maxbinx) maxbinx = i;
 	  maxbiny = j; if(j>maxbiny) maxbiny = j;
-	  //	  cout<<"HB h_2DsumADCAmplEtaPhiLs:  ibin=  "<< i <<"      jbin= "<< j <<"  A= "<< ccc1 <<endl;
+	  //	  cout<<"Page11: HB h_2DsumADCAmplEtaPhiLs:  ibin=  "<< i <<"      jbin= "<< j <<"  A= "<< ccc1 <<endl;
 	  ADCAmplLS1 ->Fill(ccc1);
 	}
       }}
-      cout<<"HB maxbinx=  "<< maxbinx<<"     maxbiny=  "<< maxbiny <<endl;
+      cout<<"Page11: HB maxbinx=  "<< maxbinx<<"     maxbiny=  "<< maxbiny <<endl;
       ADCAmplLS1 ->SetMarkerStyle(20);ADCAmplLS1 ->SetMarkerSize(0.4);ADCAmplLS1 ->GetYaxis()->SetLabelSize(0.04);ADCAmplLS1 ->SetXTitle("<A>ijk = <A> averaged per events in k-th LS \b");ADCAmplLS1 ->SetMarkerColor(2);ADCAmplLS1 ->SetLineColor(0);  ADCAmplLS1->SetMinimum(0.8);
       gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
       //      ADCAmplLS1 ->Draw("L");
@@ -738,13 +743,13 @@ int main(int argc, char *argv[])
 	      // j - etaphi index:
 	      for (int j=1;j<=ny;j++) {
 		double ccc1 =  Cefz1->GetBinContent(i,j);
-		//if(ccc1>0.) cout<<"HB h_2DsumADCAmplEtaPhiLs:  ibin=  "<< i <<"      jbin= "<< j <<"  A= "<< ccc1/maxbinx <<endl;
+		//if(ccc1>0.) cout<<"Page11: HB h_2DsumADCAmplEtaPhiLs:  ibin=  "<< i <<"      jbin= "<< j <<"  A= "<< ccc1/maxbinx <<endl;
 		//	if(ccc1>0. && ccc1/maxbinx < 2000) {
 		if(ccc1>0.) {
 		  int jeta = (j-1)/18;// jeta = 0-21
 		  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 		  //	  jeta += 1;// jeta = 1-22
-		  //		  if(i==1) cout<<"HB  i= "<< i <<" j= "<< j <<"  jeta= "<< jeta-11 <<" jphi= "<< jphi-1 <<"  A= "<< ccc1/maxbinx <<endl;
+		  //		  if(i==1) cout<<"Page11: HB  i= "<< i <<" j= "<< j <<"  jeta= "<< jeta-11 <<" jphi= "<< jphi-1 <<"  A= "<< ccc1/maxbinx <<endl;
 		  //	  Cefz4 ->Fill(jeta-11,jphi-1,ccc1/maxbinx);
 		  
 		  
@@ -752,7 +757,7 @@ int main(int argc, char *argv[])
 		}
 	      }}
 	    gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
-	    Cefz4->SetMarkerStyle(20); Cefz4->SetMarkerSize(0.4); Cefz4->GetZaxis()->SetLabelSize(0.08); Cefz4->SetXTitle("<A>ij         #eta  \b"); Cefz4->SetYTitle("      #phi \b"); Cefz4->SetZTitle("<A>ij  - All \b"); Cefz4->SetMarkerColor(2); Cefz4->SetLineColor(2);      //      Cefz4->SetMaximum(1.000);  //      Cefz4->SetMinimum(1.0);
+	    Cefz4->SetMarkerStyle(20); Cefz4->SetMarkerSize(0.4); Cefz4->GetZaxis()->SetLabelSize(0.04); Cefz4->SetXTitle("<A>ij         #eta  \b"); Cefz4->SetYTitle("      #phi \b"); Cefz4->SetZTitle("<A>ij  - All \b"); Cefz4->SetMarkerColor(2); Cefz4->SetLineColor(2);      //      Cefz4->SetMaximum(1.000);  //      Cefz4->SetMinimum(1.0);
 	    Cefz4->Draw("COLZ");
 	    
 	    c1->Update();
@@ -770,9 +775,9 @@ int main(int argc, char *argv[])
       nx = Cefz1->GetXaxis()->GetNbins();
       ny = Cefz1->GetYaxis()->GetNbins();
       cout<<"HB GainStability        nx=     "<< nx <<" ny=     "<< ny <<endl;
-      TH1F* GainStability0 = new TH1F("GainStability0","", 620, 0., 620.);
-      TH1F* GainStability1 = new TH1F("GainStability1","", 620, 0., 620.);
-      TH1F* GainStability2 = new TH1F("GainStability2","", 620, 0., 620.);
+      TH1F* GainStability0 = new TH1F("GainStability0","", maxbins, 1., maxbins+1.);
+      TH1F* GainStability1 = new TH1F("GainStability1","", maxbins, 1., maxbins+1.);
+      TH1F* GainStability2 = new TH1F("GainStability2","", maxbins, 1., maxbins+1.);
       // i - # LSs:
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
@@ -823,12 +828,14 @@ int main(int argc, char *argv[])
       int kcount=1;
       cout<<"HB Gforhbjeta0k *********************************************************************       jeta == 7    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhbjeta0k0 = new TH1F("h2CeffGforhbjeta0k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 7) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhbjeta0k0 = new TH1F("Gforhbjeta0k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhbjeta0k0 = new TH1F("Gforhbjeta0k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhbjeta0k0 = (TH1F*)h2CeffGforhbjeta0k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Cefz1->GetBinContent(i,j);
@@ -866,12 +873,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HB Gforhbjeta1k *********************************************************************       jeta == 8    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhbjeta1k0 = new TH1F("h2CeffGforhbjeta1k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 8) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhbjeta1k0 = new TH1F("Gforhbjeta1k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhbjeta1k0 = new TH1F("Gforhbjeta1k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhbjeta1k0 = (TH1F*)h2CeffGforhbjeta1k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Cefz1->GetBinContent(i,j);
@@ -909,12 +918,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HB Gforhbjeta2k *********************************************************************       jeta == 9    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhbjeta2k0 = new TH1F("h2CeffGforhbjeta2k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 9) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhbjeta2k0 = new TH1F("Gforhbjeta2k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhbjeta2k0 = new TH1F("Gforhbjeta2k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhbjeta2k0 = (TH1F*)h2CeffGforhbjeta2k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Cefz1->GetBinContent(i,j);
@@ -952,12 +963,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HB Gforhbjeta3k *********************************************************************       jeta == 10   "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhbjeta3k0 = new TH1F("h2CeffGforhbjeta3k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 10) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhbjeta3k0 = new TH1F("Gforhbjeta3k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhbjeta3k0 = new TH1F("Gforhbjeta3k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhbjeta3k0 = (TH1F*)h2CeffGforhbjeta3k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Cefz1->GetBinContent(i,j);
@@ -995,12 +1008,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HB Gforhbjeta18k *********************************************************************       jeta == 11    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhbjeta18k0 = new TH1F("h2CeffGforhbjeta18k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 11) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhbjeta18k0 = new TH1F("Gforhbjeta18k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhbjeta18k0 = new TH1F("Gforhbjeta18k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhbjeta18k0 = (TH1F*)h2CeffGforhbjeta18k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Cefz1->GetBinContent(i,j);
@@ -1038,12 +1053,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HB Gforhbjeta19k *********************************************************************       jeta == 12    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhbjeta19k0 = new TH1F("h2CeffGforhbjeta19k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 12) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhbjeta19k0 = new TH1F("Gforhbjeta19k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhbjeta19k0 = new TH1F("Gforhbjeta19k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhbjeta19k0 = (TH1F*)h2CeffGforhbjeta19k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Cefz1->GetBinContent(i,j);
@@ -1081,12 +1098,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HB Gforhbjeta20k *********************************************************************       jeta == 13    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhbjeta20k0 = new TH1F("h2CeffGforhbjeta20k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 13) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhbjeta20k0 = new TH1F("Gforhbjeta20k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhbjeta20k0 = new TH1F("Gforhbjeta20k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhbjeta20k0 = (TH1F*)h2CeffGforhbjeta20k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Cefz1->GetBinContent(i,j);
@@ -1124,12 +1143,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HB Gforhbjeta21k *********************************************************************       jeta == 14    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhbjeta21k0 = new TH1F("h2CeffGforhbjeta21k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 14) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhbjeta21k0 = new TH1F("Gforhbjeta21k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhbjeta21k0 = new TH1F("Gforhbjeta21k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhbjeta21k0 = (TH1F*)h2CeffGforhbjeta21k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Cefz1->GetBinContent(i,j);
@@ -1175,7 +1196,7 @@ int main(int argc, char *argv[])
       ny = Sefz1->GetYaxis()->GetNbins();
       cout<<"HE h_2DsumADCAmplEtaPhiLs0         nx=     "<< nx <<" ny=     "<< ny <<endl;
       // i - # LSs:
-      TH1F* Sefw0 = new TH1F("Sefw0","", 200, 0., 9000.);
+      TH1F* Sefw0 = new TH1F("Sefw0","", 200, 0., 15000.);
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
       for (int j=1;j<=ny;j++) {
@@ -1195,7 +1216,7 @@ int main(int argc, char *argv[])
             Sefw0 ->Draw("Error");
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       c1->cd(2);
-      TH1F* Sefw = new TH1F("Sefw","", 620, 0., 620.);
+      TH1F* Sefw = new TH1F("Sefw","", maxbins, 1., maxbins+1.);
       // i - # LSs:
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
@@ -1216,7 +1237,7 @@ int main(int argc, char *argv[])
 
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       c1->cd(3);
-      TH1F* Sefw1 = new TH1F("Sefw1","", 100, 0., 5000.);
+      TH1F* Sefw1 = new TH1F("Sefw1","", 100, 0., 9000.);
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
       for (int j=1;j<=ny;j++) {
@@ -1274,9 +1295,9 @@ int main(int argc, char *argv[])
       nx = Sefz1->GetXaxis()->GetNbins();
       ny = Sefz1->GetYaxis()->GetNbins();
       cout<<"HE Sefk        nx=     "<< nx <<" ny=     "<< ny <<endl;
-      TH1F* Sefk0 = new TH1F("Sefk0","", 620, 0., 620.);
-      TH1F* Sefk1 = new TH1F("Sefk1","", 620, 0., 620.);
-      TH1F* Sefk2 = new TH1F("Sefk2","", 620, 0., 620.);
+      TH1F* Sefk0 = new TH1F("Sefk0","", maxbins, 1., maxbins+1.);
+      TH1F* Sefk1 = new TH1F("Sefk1","", maxbins, 1., maxbins+1.);
+      TH1F* Sefk2 = new TH1F("Sefk2","", maxbins, 1., maxbins+1.);
       // i - # LSs:
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
@@ -1327,12 +1348,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HE Gforhejeta0k *********************************************************************       jeta == 3    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhejeta0k0 = new TH1F("h2CeffGforhejeta0k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 3) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhejeta0k0 = new TH1F("Gforhejeta0k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhejeta0k0 = new TH1F("Gforhejeta0k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhejeta0k0 = (TH1F*)h2CeffGforhejeta0k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Sefz1->GetBinContent(i,j);
@@ -1370,12 +1393,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HE Gforhejeta1k *********************************************************************       jeta == 4    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhejeta1k0 = new TH1F("h2CeffGforhejeta1k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 4) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhejeta1k0 = new TH1F("Gforhejeta1k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhejeta1k0 = new TH1F("Gforhejeta1k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhejeta1k0 = (TH1F*)h2CeffGforhejeta1k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Sefz1->GetBinContent(i,j);
@@ -1413,12 +1438,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HE Gforhejeta2k *********************************************************************       jeta == 5    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhejeta2k0 = new TH1F("h2CeffGforhejeta2k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 5) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhejeta2k0 = new TH1F("Gforhejeta2k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhejeta2k0 = new TH1F("Gforhejeta2k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhejeta2k0 = (TH1F*)h2CeffGforhejeta2k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Sefz1->GetBinContent(i,j);
@@ -1456,12 +1483,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HE Gforhejeta3k *********************************************************************       jeta ==   6  "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhejeta3k0 = new TH1F("h2CeffGforhejeta3k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta ==  6) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhejeta3k0 = new TH1F("Gforhejeta3k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhejeta3k0 = new TH1F("Gforhejeta3k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhejeta3k0 = (TH1F*)h2CeffGforhejeta3k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Sefz1->GetBinContent(i,j);
@@ -1499,12 +1528,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HE Gforhejeta18k *********************************************************************       jeta ==  7    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhejeta18k0 = new TH1F("h2CeffGforhejeta18k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta ==  7) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhejeta18k0 = new TH1F("Gforhejeta18k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhejeta18k0 = new TH1F("Gforhejeta18k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhejeta18k0 = (TH1F*)h2CeffGforhejeta18k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Sefz1->GetBinContent(i,j);
@@ -1542,12 +1573,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HE Gforhejeta19k *********************************************************************       jeta == 14    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhejeta19k0 = new TH1F("h2CeffGforhejeta19k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 14) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhejeta19k0 = new TH1F("Gforhejeta19k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhejeta19k0 = new TH1F("Gforhejeta19k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhejeta19k0 = (TH1F*)h2CeffGforhejeta19k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Sefz1->GetBinContent(i,j);
@@ -1585,12 +1618,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HE Gforhejeta20k *********************************************************************       jeta == 15    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhejeta20k0 = new TH1F("h2CeffGforhejeta20k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 15) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhejeta20k0 = new TH1F("Gforhejeta20k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhejeta20k0 = new TH1F("Gforhejeta20k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhejeta20k0 = (TH1F*)h2CeffGforhejeta20k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Sefz1->GetBinContent(i,j);
@@ -1628,12 +1663,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HE Gforhejeta21k *********************************************************************       jeta ==  16   "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhejeta21k0 = new TH1F("h2CeffGforhejeta21k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 16) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhejeta21k0 = new TH1F("Gforhejeta21k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhejeta21k0 = new TH1F("Gforhejeta21k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhejeta21k0 = (TH1F*)h2CeffGforhejeta21k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Sefz1->GetBinContent(i,j);
@@ -1671,12 +1708,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HE Gforhejeta22k *********************************************************************       jeta == 17    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhejeta22k0 = new TH1F("h2CeffGforhejeta22k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 17) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhejeta22k0 = new TH1F("Gforhejeta22k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhejeta22k0 = new TH1F("Gforhejeta22k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhejeta22k0 = (TH1F*)h2CeffGforhejeta22k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Sefz1->GetBinContent(i,j);
@@ -1714,12 +1753,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HE Gforhejeta23k *********************************************************************       jeta == 18    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhejeta23k0 = new TH1F("h2CeffGforhejeta23k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 18) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhejeta23k0 = new TH1F("Gforhejeta23k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhejeta23k0 = new TH1F("Gforhejeta23k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhejeta23k0 = (TH1F*)h2CeffGforhejeta23k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Sefz1->GetBinContent(i,j);
@@ -1765,7 +1806,7 @@ int main(int argc, char *argv[])
       ny = Yefz1->GetYaxis()->GetNbins();
       cout<<"HO h_2DsumADCAmplEtaPhiLs0         nx=     "<< nx <<" ny=     "<< ny <<endl;
       // i - # LSs:
-      TH1F* Yefw0 = new TH1F("Yefw0","", 200, 0., 200.);
+      TH1F* Yefw0 = new TH1F("Yefw0","", 200, 0., 1000.);
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
       for (int j=1;j<=ny;j++) {
@@ -1786,7 +1827,7 @@ int main(int argc, char *argv[])
             Yefw0 ->Draw("Error");
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       c1->cd(2);
-      TH1F* Yefw = new TH1F("Yefw","", 620, 0., 620.);
+      TH1F* Yefw = new TH1F("Yefw","", maxbins, 1., maxbins+1.);
       // i - # LSs:
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
@@ -1869,9 +1910,9 @@ int main(int argc, char *argv[])
       nx = Yefz1->GetXaxis()->GetNbins();
       ny = Yefz1->GetYaxis()->GetNbins();
       cout<<"HO Yefk        nx=     "<< nx <<" ny=     "<< ny <<endl;
-      TH1F* Yefk0 = new TH1F("Yefk0","", 620, 0., 620.);
-      TH1F* Yefk1 = new TH1F("Yefk1","", 620, 0., 620.);
-      TH1F* Yefk2 = new TH1F("Yefk2","", 620, 0., 620.);
+      TH1F* Yefk0 = new TH1F("Yefk0","", maxbins, 1., maxbins+1.);
+      TH1F* Yefk1 = new TH1F("Yefk1","", maxbins, 1., maxbins+1.);
+      TH1F* Yefk2 = new TH1F("Yefk2","", maxbins, 1., maxbins+1.);
       // i - # LSs:
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
@@ -1922,12 +1963,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HO Gforhojeta0k *********************************************************************       jeta == 7    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhojeta0k0 = new TH1F("h2CeffGforhojeta0k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 7) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhojeta0k0 = new TH1F("Gforhojeta0k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhojeta0k0 = new TH1F("Gforhojeta0k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhojeta0k0 = (TH1F*)h2CeffGforhojeta0k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Yefz1->GetBinContent(i,j);
@@ -1965,12 +2008,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HO Gforhojeta1k *********************************************************************       jeta == 8    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhojeta1k0 = new TH1F("h2CeffGforhojeta1k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 8) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhojeta1k0 = new TH1F("Gforhojeta1k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhojeta1k0 = new TH1F("Gforhojeta1k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhojeta1k0 = (TH1F*)h2CeffGforhojeta1k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Yefz1->GetBinContent(i,j);
@@ -2008,12 +2053,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HO Gforhojeta2k *********************************************************************       jeta == 9    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhojeta2k0 = new TH1F("h2CeffGforhojeta2k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 9) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhojeta2k0 = new TH1F("Gforhojeta2k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhojeta2k0 = new TH1F("Gforhojeta2k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhojeta2k0 = (TH1F*)h2CeffGforhojeta2k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Yefz1->GetBinContent(i,j);
@@ -2051,12 +2098,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HO Gforhojeta3k *********************************************************************       jeta == 10   "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhojeta3k0 = new TH1F("h2CeffGforhojeta3k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 10) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhojeta3k0 = new TH1F("Gforhojeta3k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhojeta3k0 = new TH1F("Gforhojeta3k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhojeta3k0 = (TH1F*)h2CeffGforhojeta3k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Yefz1->GetBinContent(i,j);
@@ -2094,12 +2143,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HO Gforhojeta18k *********************************************************************       jeta == 11    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhojeta18k0 = new TH1F("h2CeffGforhojeta18k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 11) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhojeta18k0 = new TH1F("Gforhojeta18k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhojeta18k0 = new TH1F("Gforhojeta18k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhojeta18k0 = (TH1F*)h2CeffGforhojeta18k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Yefz1->GetBinContent(i,j);
@@ -2137,12 +2188,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HO Gforhojeta19k *********************************************************************       jeta == 12    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhojeta19k0 = new TH1F("h2CeffGforhojeta19k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 12) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhojeta19k0 = new TH1F("Gforhojeta19k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhojeta19k0 = new TH1F("Gforhojeta19k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhojeta19k0 = (TH1F*)h2CeffGforhojeta19k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Yefz1->GetBinContent(i,j);
@@ -2180,12 +2233,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HO Gforhojeta20k *********************************************************************       jeta == 13    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhojeta20k0 = new TH1F("h2CeffGforhojeta20k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 13) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhojeta20k0 = new TH1F("Gforhojeta20k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhojeta20k0 = new TH1F("Gforhojeta20k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhojeta20k0 = (TH1F*)h2CeffGforhojeta20k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Yefz1->GetBinContent(i,j);
@@ -2223,12 +2278,14 @@ int main(int argc, char *argv[])
       kcount=1;
       cout<<"HO Gforhojeta21k *********************************************************************       jeta == 14    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhojeta21k0 = new TH1F("h2CeffGforhojeta21k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 14) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforhojeta21k0 = new TH1F("Gforhojeta21k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhojeta21k0 = new TH1F("Gforhojeta21k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhojeta21k0 = (TH1F*)h2CeffGforhojeta21k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Yefz1->GetBinContent(i,j);
@@ -2275,7 +2332,7 @@ int main(int argc, char *argv[])
       ny = Gefz1->GetYaxis()->GetNbins();
       cout<<"HF h_2DsumADCAmplEtaPhiLs0         nx=     "<< nx <<" ny=     "<< ny <<endl;
       // i - # LSs:
-      TH1F* Gefw0 = new TH1F("Gefw0","", 250, 0., 500.);
+      TH1F* Gefw0 = new TH1F("Gefw0","", 250, 0., 1500.);
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
       for (int j=1;j<=ny;j++) {
@@ -2296,7 +2353,7 @@ int main(int argc, char *argv[])
             Gefw0 ->Draw("Error");
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       c1->cd(2);
-      TH1F* Gefw = new TH1F("Gefw","", 620, 0., 620.);
+      TH1F* Gefw = new TH1F("Gefw","", maxbins, 1., maxbins+1.);
       // i - # LSs:
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
@@ -2316,7 +2373,7 @@ int main(int argc, char *argv[])
 
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       c1->cd(3);
-      TH1F* Gefw1 = new TH1F("Gefw1","", 50, 0., 150.);
+      TH1F* Gefw1 = new TH1F("Gefw1","", 150, 0., 500.);
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
       for (int j=1;j<=ny;j++) {
@@ -2356,14 +2413,14 @@ int main(int argc, char *argv[])
 		}
 	      }}
 	    gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
-	    Gefz4->SetMarkerStyle(20); Gefz4->SetMarkerSize(0.4); Gefz4->GetZaxis()->SetLabelSize(0.08); Gefz4->SetXTitle("<A>ij         #eta  \b"); Gefz4->SetYTitle("      #phi \b"); Gefz4->SetZTitle("<A>ij  - All \b"); Gefz4->SetMarkerColor(2); Gefz4->SetLineColor(2);      //      Gefz4->SetMaximum(1.000);  //      Gefz4->SetMinimum(1.0);
+	    Gefz4->SetMarkerStyle(20); Gefz4->SetMarkerSize(0.4); Gefz4->GetZaxis()->SetLabelSize(0.08); Gefz4->SetXTitle("<A>_RBX         #eta  \b"); Gefz4->SetYTitle("      #phi \b"); Gefz4->SetZTitle("<A>_RBX  - All \b"); Gefz4->SetMarkerColor(2); Gefz4->SetLineColor(2);      //      Gefz4->SetMaximum(1.000);  //      Gefz4->SetMinimum(1.0);
 	    Gefz4->Draw("COLZ");
 	    
 	    c1->Update();
 	    
     //======================================================================
 
-    //========================================================================================== 44
+    //========================================================================================== 44 HF
     //======================================================================
     //======================================================================
     //======================================================================
@@ -2374,9 +2431,9 @@ int main(int argc, char *argv[])
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
       cout<<"HF Gefk        nx=     "<< nx <<" ny=     "<< ny <<endl;
-      TH1F* Gefk0 = new TH1F("Gefk0","", 620, 0., 620.);
-      TH1F* Gefk1 = new TH1F("Gefk1","", 620, 0., 620.);
-      TH1F* Gefk2 = new TH1F("Gefk2","", 620, 0., 620.);
+      TH1F* Gefk0 = new TH1F("Gefk0","", maxbins, 1., maxbins+1.);
+      TH1F* Gefk1 = new TH1F("Gefk1","", maxbins, 1., maxbins+1.);
+      TH1F* Gefk2 = new TH1F("Gefk2","", maxbins, 1., maxbins+1.);
       // i - # LSs:
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
@@ -2408,7 +2465,7 @@ int main(int argc, char *argv[])
       ////////////////////////////////////////////////////////////////////////////////////
        c1->Update();
       ////////////////////////////////////////////////////////////////////////////////////
-    //========================================================================================== 45
+    //========================================================================================== 45 HF
     //======================================================================
     //======================================================================
     //======================================================================
@@ -2420,9 +2477,9 @@ int main(int argc, char *argv[])
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
       cout<<"HF Gefh        nx=     "<< nx <<" ny=     "<< ny <<endl;
-      TH1F* Gefh0 = new TH1F("Gefh0","", 620, 0., 620.);
-      TH1F* Gefh1 = new TH1F("Gefh1","", 620, 0., 620.);
-      TH1F* Gefh2 = new TH1F("Gefh2","", 620, 0., 620.);
+      TH1F* Gefh0 = new TH1F("Gefh0","", maxbins, 1., maxbins+1.);
+      TH1F* Gefh1 = new TH1F("Gefh1","", maxbins, 1., maxbins+1.);
+      TH1F* Gefh2 = new TH1F("Gefh2","", maxbins, 1., maxbins+1.);
       // j - etaphi index:
       int nhistohf = 0.;int nlsohf = -1.;
       for (int j=1;j<=ny;j++) {
@@ -2469,32 +2526,34 @@ int main(int argc, char *argv[])
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
 
-      if( nlsohf > 0.)      nhistohf /= nlsohf;
-      cout<<"HF Gforjeta0k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
+            if( nlsohf > 0.)      nhistohf /= nlsohf;
+            cout<<"HF Gforhfjeta0k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
       kcount=1;
-      cout<<"HF Gforjeta0k *********************************************************************       jeta == 0    "<<endl; 
+      cout<<"HF Gforhfjeta0k *********************************************************************       jeta == 0    "<<endl; 
       // j - etaphi index:
+      TH1F* h2CeffGforhfjeta0k0 = new TH1F("h2CeffGforhfjeta0k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 0) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforjeta0k0 = new TH1F("Gforjeta0k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhfjeta0k0 = new TH1F("Gforhfjeta0k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhfjeta0k0 = (TH1F*)h2CeffGforhfjeta0k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Gefz1->GetBinContent(i,j);
 	    if(ccc1>0.) {
 	      //	      if(i==1)cout<<"HF  i= "<< i <<" j= "<< j <<"  jeta= "<< jeta <<" jphi= "<< jphi <<"      A= "<< ccc1 <<endl;
-	      Gforjeta0k0 ->Fill(i,ccc1);
+	      Gforhfjeta0k0 ->Fill(i,ccc1);
 	    }}
 	  c1->cd(kcount);
-	  //	  cout<<"HF Gforjeta0k        kcount=     "<< kcount <<"   jphi   =     "<<jphi  <<endl;
-	  Gforjeta0k0 ->SetMarkerStyle(20);Gforjeta0k0 ->SetMarkerSize(0.4);Gforjeta0k0 ->GetYaxis()->SetLabelSize(0.04);Gforjeta0k0 ->SetXTitle("Gforjeta0k0 \b");Gforjeta0k0 ->SetMarkerColor(2);Gforjeta0k0 ->SetLineColor(0);
+	  //	  cout<<"HF Gforhfjeta0k        kcount=     "<< kcount <<"   jphi   =     "<<jphi  <<endl;
+	  Gforhfjeta0k0 ->SetMarkerStyle(20);Gforhfjeta0k0 ->SetMarkerSize(0.4);Gforhfjeta0k0 ->GetYaxis()->SetLabelSize(0.04);Gforhfjeta0k0 ->SetXTitle("Gforhfjeta0k0 \b");Gforhfjeta0k0 ->SetMarkerColor(2);Gforhfjeta0k0 ->SetLineColor(0);
 	  // gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
-	  Gforjeta0k0->Draw("Error");
+	  Gforhfjeta0k0->Draw("Error");
 	  kcount++;
 	  //	c1->Update();
-	  //		delete Gforjeta0k0;
+	  //		delete Gforhfjeta0k0;
 	  if(kcount>18) break;
 	}
       }
@@ -2512,32 +2571,34 @@ int main(int argc, char *argv[])
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
 
-      if( nlsohf > 0.)      nhistohf /= nlsohf;
-      cout<<"HF Gforjeta1k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
+      //      if( nlsohf > 0.)      nhistohf /= nlsohf;
+      //      cout<<"HF Gforhfjeta1k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
       kcount=1;
-      cout<<"HF Gforjeta1k *********************************************************************       jeta == 1    "<<endl;
+      cout<<"HF Gforhfjeta1k *********************************************************************       jeta == 1    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhfjeta1k0 = new TH1F("h2CeffGforhfjeta1k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 1) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforjeta1k0 = new TH1F("Gforjeta1k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhfjeta1k0 = new TH1F("Gforhfjeta1k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhfjeta1k0 = (TH1F*)h2CeffGforhfjeta1k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Gefz1->GetBinContent(i,j);
 	    if(ccc1>0.) {
 	      //	      if(i==1)cout<<"HF  i= "<< i <<" j= "<< j <<"  jeta= "<< jeta <<" jphi= "<< jphi <<"      A= "<< ccc1 <<endl;
-	      Gforjeta1k0 ->Fill(i,ccc1);
+	      Gforhfjeta1k0 ->Fill(i,ccc1);
 	    }}
 	  c1->cd(kcount);
-	  //	  cout<<"HF Gforjeta1k        kcount=     "<< kcount <<"   jphi   =     "<<jphi  <<endl;
-	  Gforjeta1k0 ->SetMarkerStyle(20);Gforjeta1k0 ->SetMarkerSize(0.4);Gforjeta1k0 ->GetYaxis()->SetLabelSize(0.04);Gforjeta1k0 ->SetXTitle("Gforjeta1k0 \b");Gforjeta1k0 ->SetMarkerColor(2);Gforjeta1k0 ->SetLineColor(0);
+	  //	  cout<<"HF Gforhfjeta1k        kcount=     "<< kcount <<"   jphi   =     "<<jphi  <<endl;
+	  Gforhfjeta1k0 ->SetMarkerStyle(20);Gforhfjeta1k0 ->SetMarkerSize(0.4);Gforhfjeta1k0 ->GetYaxis()->SetLabelSize(0.04);Gforhfjeta1k0 ->SetXTitle("Gforhfjeta1k0 \b");Gforhfjeta1k0 ->SetMarkerColor(2);Gforhfjeta1k0 ->SetLineColor(0);
 	  // gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
-	  Gforjeta1k0->Draw("Error");
+	  Gforhfjeta1k0->Draw("Error");
 	  kcount++;
 	  //	c1->Update();
-	  //		delete Gforjeta1k0;
+	  //		delete Gforhfjeta1k0;
 	  if(kcount>18) break;
 	}
       }
@@ -2555,32 +2616,34 @@ int main(int argc, char *argv[])
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
 
-      if( nlsohf > 0.)      nhistohf /= nlsohf;
-      cout<<"HF Gforjeta2k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
+      //      if( nlsohf > 0.)      nhistohf /= nlsohf;
+      //      cout<<"HF Gforhfjeta2k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
       kcount=1;
-      cout<<"HF Gforjeta2k *********************************************************************       jeta == 2    "<<endl;
+      cout<<"HF Gforhfjeta2k *********************************************************************       jeta == 2    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhfjeta2k0 = new TH1F("h2CeffGforhfjeta2k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 2) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforjeta2k0 = new TH1F("Gforjeta2k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhfjeta2k0 = new TH1F("Gforhfjeta2k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhfjeta2k0 = (TH1F*)h2CeffGforhfjeta2k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Gefz1->GetBinContent(i,j);
 	    if(ccc1>0.) {
 	      //	      if(i==1)cout<<"HF  i= "<< i <<" j= "<< j <<"  jeta= "<< jeta <<" jphi= "<< jphi <<"      A= "<< ccc1 <<endl;
-	      Gforjeta2k0 ->Fill(i,ccc1);
+	      Gforhfjeta2k0 ->Fill(i,ccc1);
 	    }}
 	  c1->cd(kcount);
-	  //	  cout<<"HF Gforjeta2k        kcount=     "<< kcount <<"   jphi   =     "<<jphi  <<endl;
-	  Gforjeta2k0 ->SetMarkerStyle(20);Gforjeta2k0 ->SetMarkerSize(0.4);Gforjeta2k0 ->GetYaxis()->SetLabelSize(0.04);Gforjeta2k0 ->SetXTitle("Gforjeta2k0 \b");Gforjeta2k0 ->SetMarkerColor(2);Gforjeta2k0 ->SetLineColor(0);
+	  //	  cout<<"HF Gforhfjeta2k        kcount=     "<< kcount <<"   jphi   =     "<<jphi  <<endl;
+	  Gforhfjeta2k0 ->SetMarkerStyle(20);Gforhfjeta2k0 ->SetMarkerSize(0.4);Gforhfjeta2k0 ->GetYaxis()->SetLabelSize(0.04);Gforhfjeta2k0 ->SetXTitle("Gforhfjeta2k0 \b");Gforhfjeta2k0 ->SetMarkerColor(2);Gforhfjeta2k0 ->SetLineColor(0);
 	  // gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
-	  Gforjeta2k0->Draw("Error");
+	  Gforhfjeta2k0->Draw("Error");
 	  kcount++;
 	  //	c1->Update();
-	  //		delete Gforjeta2k0;
+	  //		delete Gforhfjeta2k0;
 	  if(kcount>18) break;
 	}
       }
@@ -2598,32 +2661,34 @@ int main(int argc, char *argv[])
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
 
-      if( nlsohf > 0.)      nhistohf /= nlsohf;
-      cout<<"HF Gforjeta3k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
+      //      if( nlsohf > 0.)      nhistohf /= nlsohf;
+      //      cout<<"HF Gforhfjeta3k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
       kcount=1;
-      cout<<"HF Gforjeta3k *********************************************************************       jeta == 3    "<<endl;
+      cout<<"HF Gforhfjeta3k *********************************************************************       jeta == 3    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhfjeta3k0 = new TH1F("h2CeffGforhfjeta3k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 3) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforjeta3k0 = new TH1F("Gforjeta3k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhfjeta3k0 = new TH1F("Gforhfjeta3k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhfjeta3k0 = (TH1F*)h2CeffGforhfjeta3k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Gefz1->GetBinContent(i,j);
 	    if(ccc1>0.) {
 	      //	      if(i==1)cout<<"HF  i= "<< i <<" j= "<< j <<"  jeta= "<< jeta <<" jphi= "<< jphi <<"      A= "<< ccc1 <<endl;
-	      Gforjeta3k0 ->Fill(i,ccc1);
+	      Gforhfjeta3k0 ->Fill(i,ccc1);
 	    }}
 	  c1->cd(kcount);
-	  //	  cout<<"HF Gforjeta3k        kcount=     "<< kcount <<"   jphi   =     "<<jphi  <<endl;
-	  Gforjeta3k0 ->SetMarkerStyle(20);Gforjeta3k0 ->SetMarkerSize(0.4);Gforjeta3k0 ->GetYaxis()->SetLabelSize(0.04);Gforjeta3k0 ->SetXTitle("Gforjeta3k0 \b");Gforjeta3k0 ->SetMarkerColor(2);Gforjeta3k0 ->SetLineColor(0);
+	  //	  cout<<"HF Gforhfjeta3k        kcount=     "<< kcount <<"   jphi   =     "<<jphi  <<endl;
+	  Gforhfjeta3k0 ->SetMarkerStyle(20);Gforhfjeta3k0 ->SetMarkerSize(0.4);Gforhfjeta3k0 ->GetYaxis()->SetLabelSize(0.04);Gforhfjeta3k0 ->SetXTitle("Gforhfjeta3k0 \b");Gforhfjeta3k0 ->SetMarkerColor(2);Gforhfjeta3k0 ->SetLineColor(0);
 	  // gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
-	  Gforjeta3k0->Draw("Error");
+	  Gforhfjeta3k0->Draw("Error");
 	  kcount++;
 	  //	c1->Update();
-	  //		delete Gforjeta3k0;
+	  //		delete Gforhfjeta3k0;
 	  if(kcount>18) break;
 	}
       }
@@ -2641,32 +2706,34 @@ int main(int argc, char *argv[])
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
 
-      if( nlsohf > 0.)      nhistohf /= nlsohf;
-      cout<<"HF Gforjeta18k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
+      //      if( nlsohf > 0.)      nhistohf /= nlsohf;
+      //      cout<<"HF Gforhfjeta18k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
       kcount=1;
-      cout<<"HF Gforjeta18k *********************************************************************       jeta == 18    "<<endl;
+      cout<<"HF Gforhfjeta18k *********************************************************************       jeta == 18    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhfjeta18k0 = new TH1F("h2CeffGforhfjeta18k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 18) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforjeta18k0 = new TH1F("Gforjeta18k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhfjeta18k0 = new TH1F("Gforhfjeta18k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhfjeta18k0 = (TH1F*)h2CeffGforhfjeta18k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Gefz1->GetBinContent(i,j);
 	    if(ccc1>0.) {
 	      //	      if(i==1)cout<<"HF  i= "<< i <<" j= "<< j <<"  jeta= "<< jeta <<" jphi= "<< jphi <<"      A= "<< ccc1 <<endl;
-	      Gforjeta18k0 ->Fill(i,ccc1);
+	      Gforhfjeta18k0 ->Fill(i,ccc1);
 	    }}
 	  c1->cd(kcount);
-	  //	  cout<<"HF Gforjeta18k        kcount=     "<< kcount <<"   jphi   =     "<<jphi  <<endl;
-	  Gforjeta18k0 ->SetMarkerStyle(20);Gforjeta18k0 ->SetMarkerSize(0.4);Gforjeta18k0 ->GetYaxis()->SetLabelSize(0.04);Gforjeta18k0 ->SetXTitle("Gforjeta18k0 \b");Gforjeta18k0 ->SetMarkerColor(2);Gforjeta18k0 ->SetLineColor(0);
+	  //	  cout<<"HF Gforhfjeta18k        kcount=     "<< kcount <<"   jphi   =     "<<jphi  <<endl;
+	  Gforhfjeta18k0 ->SetMarkerStyle(20);Gforhfjeta18k0 ->SetMarkerSize(0.4);Gforhfjeta18k0 ->GetYaxis()->SetLabelSize(0.04);Gforhfjeta18k0 ->SetXTitle("Gforhfjeta18k0 \b");Gforhfjeta18k0 ->SetMarkerColor(2);Gforhfjeta18k0 ->SetLineColor(0);
 	  // gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
-	  Gforjeta18k0->Draw("Error");
+	  Gforhfjeta18k0->Draw("Error");
 	  kcount++;
 	  //	c1->Update();
-	  //		delete Gforjeta18k0;
+	  //		delete Gforhfjeta18k0;
 	  if(kcount>18) break;
 	}
       }
@@ -2684,32 +2751,34 @@ int main(int argc, char *argv[])
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
 
-      if( nlsohf > 0.)      nhistohf /= nlsohf;
-      cout<<"HF Gforjeta19k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
+      //      if( nlsohf > 0.)      nhistohf /= nlsohf;
+      //      cout<<"HF Gforhfjeta19k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
       kcount=1;
-      cout<<"HF Gforjeta19k *********************************************************************       jeta == 19    "<<endl;
+      cout<<"HF Gforhfjeta19k *********************************************************************       jeta == 19    "<<endl;
       // j - etaphi index:
+      TH1F* h2CeffGforhfjeta19k0 = new TH1F("h2CeffGforhfjeta19k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 19) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforjeta19k0 = new TH1F("Gforjeta19k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhfjeta19k0 = new TH1F("Gforhfjeta19k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhfjeta19k0 = (TH1F*)h2CeffGforhfjeta19k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Gefz1->GetBinContent(i,j);
 	    if(ccc1>0.) {
 	      //	      if(i==1)cout<<"HF  i= "<< i <<" j= "<< j <<"  jeta= "<< jeta <<" jphi= "<< jphi <<"      A= "<< ccc1 <<endl;
-	      Gforjeta19k0 ->Fill(i,ccc1);
+	      Gforhfjeta19k0 ->Fill(i,ccc1);
 	    }}
 	  c1->cd(kcount);
-	  //	  cout<<"HF Gforjeta19k        kcount=     "<< kcount <<"   jphi   =     "<<jphi  <<endl;
-	  Gforjeta19k0 ->SetMarkerStyle(20);Gforjeta19k0 ->SetMarkerSize(0.4);Gforjeta19k0 ->GetYaxis()->SetLabelSize(0.04);Gforjeta19k0 ->SetXTitle("Gforjeta19k0 \b");Gforjeta19k0 ->SetMarkerColor(2);Gforjeta19k0 ->SetLineColor(0);
+	  //	  cout<<"HF Gforhfjeta19k        kcount=     "<< kcount <<"   jphi   =     "<<jphi  <<endl;
+	  Gforhfjeta19k0 ->SetMarkerStyle(20);Gforhfjeta19k0 ->SetMarkerSize(0.4);Gforhfjeta19k0 ->GetYaxis()->SetLabelSize(0.04);Gforhfjeta19k0 ->SetXTitle("Gforhfjeta19k0 \b");Gforhfjeta19k0 ->SetMarkerColor(2);Gforhfjeta19k0 ->SetLineColor(0);
 	  // gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
-	  Gforjeta19k0->Draw("Error");
+	  Gforhfjeta19k0->Draw("Error");
 	  kcount++;
 	  //	c1->Update();
-	  //		delete Gforjeta19k0;
+	  //		delete Gforhfjeta19k0;
 	  if(kcount>18) break;
 	}
       }
@@ -2727,32 +2796,34 @@ int main(int argc, char *argv[])
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
 
-      if( nlsohf > 0.)      nhistohf /= nlsohf;
-      cout<<"HF Gforjeta20k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
+      //      if( nlsohf > 0.)      nhistohf /= nlsohf;
+      //      cout<<"HF Gforhfjeta20k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
       kcount=1;
-      cout<<"HF Gforjeta20k *********************************************************************       jeta == 20    "<<endl;
+      cout<<"HF Gforhfjeta20k *********************************************************************       jeta == 20    "<<endl;
+      TH1F* h2CeffGforhfjeta20k0 = new TH1F("h2CeffGforhfjeta20k0","", maxbins, 1., maxbins+1.);
       // j - etaphi index:
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 20) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforjeta20k0 = new TH1F("Gforjeta20k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhfjeta20k0 = new TH1F("Gforhfjeta20k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhfjeta20k0 = (TH1F*)h2CeffGforhfjeta20k0->Clone("twod1");
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Gefz1->GetBinContent(i,j);
 	    if(ccc1>0.) {
 	      //	      if(i==1)cout<<"HF  i= "<< i <<" j= "<< j <<"  jeta= "<< jeta <<" jphi= "<< jphi <<"      A= "<< ccc1 <<endl;
-	      Gforjeta20k0 ->Fill(i,ccc1);
+	      Gforhfjeta20k0 ->Fill(i,ccc1);
 	    }}
 	  c1->cd(kcount);
-	  //	  cout<<"HF Gforjeta20k        kcount=     "<< kcount <<"   jphi   =     "<<jphi  <<endl;
-	  Gforjeta20k0 ->SetMarkerStyle(20);Gforjeta20k0 ->SetMarkerSize(0.4);Gforjeta20k0 ->GetYaxis()->SetLabelSize(0.04);Gforjeta20k0 ->SetXTitle("Gforjeta20k0 \b");Gforjeta20k0 ->SetMarkerColor(2);Gforjeta20k0 ->SetLineColor(0);
+	  //	  cout<<"HF Gforhfjeta20k        kcount=     "<< kcount <<"   jphi   =     "<<jphi  <<endl;
+	  Gforhfjeta20k0 ->SetMarkerStyle(20);Gforhfjeta20k0 ->SetMarkerSize(0.4);Gforhfjeta20k0 ->GetYaxis()->SetLabelSize(0.04);Gforhfjeta20k0 ->SetXTitle("Gforhfjeta20k0 \b");Gforhfjeta20k0 ->SetMarkerColor(2);Gforhfjeta20k0 ->SetLineColor(0);gPad->SetGridx();
 	  // gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
-	  Gforjeta20k0->Draw("Error");
+	  Gforhfjeta20k0->Draw("Error");
 	  kcount++;
 	  //	c1->Update();
-	  //		delete Gforjeta20k0;
+	  //		delete Gforhfjeta20k0;
 	  if(kcount>18) break;
 	}
       }
@@ -2766,47 +2837,356 @@ int main(int argc, char *argv[])
     //======================================================================
       c1->Clear();
       c1->Divide(3,6);
-      
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
 
-      if( nlsohf > 0.)      nhistohf /= nlsohf;
-      cout<<"HF Gforjeta21k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
+      //      if( nlsohf > 0.)      nhistohf /= nlsohf;
+      //      cout<<"HF Gforhfjeta21k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
       kcount=1;
-      cout<<"HF Gforjeta21k *********************************************************************       jeta == 21    "<<endl;
+      cout<<"HF Gforhfjeta21k *********************************************************************       jeta == 21    "<<endl;
       // j - etaphi index:
+      //    TH1F *Gforhfjeta21k0= NULL;
+      TH1F* h2CeffGforhfjeta21k0 = new TH1F("h2CeffGforhfjeta21k0","", maxbins, 1., maxbins+1.);
       for (int j=1;j<=ny;j++) {
 	int jeta = (j-1)/18;// jeta = 0-21
 	if(jeta == 21) {
 	  int jphi = (j-1)-18*jeta+1;// jphi=1-18 
 	  //	  jeta += 1;// jeta = 1-22
-	  TH1F* Gforjeta21k0 = new TH1F("Gforjeta21k0","", 620, 0., 620.);
+	  //	  TH1F* Gforhfjeta21k0 = new TH1F("Gforhfjeta21k0","", maxbins, 1., maxbins+1.);
+	      TH1F *Gforhfjeta21k0 = (TH1F*)h2CeffGforhfjeta21k0->Clone("twod1");
+
+	  //    h2Ceff = (TH2F*)twod1->Clone(Form("Ceff_HF%d",depth));
+	  //    h2Ceff->SetTitle(Form("HF Depth %d. (No cut) \b",depth));
+	  //    h2Ceff->Divide(twod1,twod0, 1, 1, "B");
+
+
+
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Gefz1->GetBinContent(i,j);
 	    if(ccc1>0.) {
 	      //	      if(i==1)cout<<"HF  i= "<< i <<" j= "<< j <<"  jeta= "<< jeta <<" jphi= "<< jphi <<"      A= "<< ccc1 <<endl;
-	      Gforjeta21k0 ->Fill(i,ccc1);
+	      Gforhfjeta21k0 ->Fill(i,ccc1);
 	    }}
 	  c1->cd(kcount);
-	  //	  cout<<"HF Gforjeta21k        kcount=     "<< kcount <<"   jphi   =     "<<jphi  <<endl;
-	  Gforjeta21k0 ->SetMarkerStyle(20);Gforjeta21k0 ->SetMarkerSize(0.4);Gforjeta21k0 ->GetYaxis()->SetLabelSize(0.04);Gforjeta21k0 ->SetXTitle("Gforjeta21k0 \b");Gforjeta21k0 ->SetMarkerColor(2);Gforjeta21k0 ->SetLineColor(0);
-	  // gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
-	  Gforjeta21k0->Draw("Error");
+	  //	  cout<<"HF Gforhfjeta21k        kcount=     "<< kcount <<"   jphi   =     "<<jphi  <<endl;
+	  Gforhfjeta21k0 ->SetMarkerStyle(20);Gforhfjeta21k0 ->SetMarkerSize(0.4);Gforhfjeta21k0 ->GetYaxis()->SetLabelSize(0.04);Gforhfjeta21k0 ->SetXTitle("Gforhfjeta21k0 \b");Gforhfjeta21k0 ->SetMarkerColor(2);Gforhfjeta21k0 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	  //	   gPad->SetLogy();    
+	  Gforhfjeta21k0->Draw("Error");
 	  kcount++;
 	  //	c1->Update();
-	  //		delete Gforjeta21k0;
+	  //		delete Gforhfjeta21k0;
+						 //	  if (Gforhfjeta21k0) delete Gforhfjeta21k0;
+
 	  if(kcount>18) break;
 	}
       }
       
       /////////////////
        c1->Update();
-      ////////////////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////////////////     HF::
     //======================================================================
     //======================================================================
     //======================================================================
+       int njeta = 22; int njphi = 18;
+       nx = Gefz1->GetXaxis()->GetNbins();
+       ny = Gefz1->GetYaxis()->GetNbins();
+       double alexhf[njeta][njphi][nx];      
+       for (int j=1;j<=ny;j++) {
+	 int jeta = (j-1)/njphi;// jeta = 0-21
+	 if(jeta < 4 || jeta > 17 ) {
+	   int jphi = (j-1)-njphi*jeta;// jphi=0-17 
+	   //	   cout<<"HF 54        jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+	   for (int i=1;i<=nx;i++) {
+	     double ccc1 =  Gefz1->GetBinContent(i,j);
+	     alexhf[jeta][jphi][i-1] = ccc1;
+	     //	     if( i == 1 ) cout<<"HF 54  for LS=1      ccc1=     "<< ccc1 <<endl;
+	   }//i
+	 }//if
+       }//j
+       //------------------------       
 
+
+    //========================================================================================== 54   HF:: jeta = 0,1,2, 3            18,19,20,21       // jphi = 0,1,2,3,4,5
+    //======================================================================
+    //======================================================================
+    //======================================================================
+       c1->Clear();
+       /////////////////
+       c1->Divide(4,6);
+       int kcountHFnegativedirection1=1;
+       // j - etaphi index:
+       TH1F* h2CeffHFnegativedirection1 = new TH1F("h2CeffHFnegativedirection1","", maxbins, 1., maxbins+1.);
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // negativedirection:
+	 if(jeta < 4 ) {
+	   // jphi = 0,1,2,3,4,5
+	   for (int jphi=0;jphi<6;jphi++) {
+	     //	   for (int jphi=0;jphi<njphi;jphi++) {
+	     //	     cout<<"HF 54 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+	     TH1F *HFnegativedirection1 = (TH1F*)h2CeffHFnegativedirection1->Clone("twod1");
+	     for (int i=0;i<nx;i++) {
+	       double ccc1 = alexhf[jeta][jphi][i];
+	       if(ccc1>0.) {HFnegativedirection1 ->Fill(i,ccc1);}
+	       //	       if( i == 0 ) cout<<"HF 54 PLOTTING  for LS=1      ccc1=     "<< ccc1 <<endl;
+	     }// for i
+	     c1->cd(kcountHFnegativedirection1);
+	     HFnegativedirection1 ->SetMarkerStyle(20);HFnegativedirection1 ->SetMarkerSize(0.4);HFnegativedirection1 ->GetYaxis()->SetLabelSize(0.04);HFnegativedirection1 ->SetXTitle("HFnegativedirection1 \b");HFnegativedirection1 ->SetMarkerColor(2);HFnegativedirection1 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	     //	   gPad->SetLogy();    
+	     HFnegativedirection1->Draw("Error");
+	     kcountHFnegativedirection1++;
+	     if(kcountHFnegativedirection1>24) break;// 4x6 = 24 
+	   }// for jphi
+	 }//if
+       }//for jeta
+       /////////////////
+       c1->Update();
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 55   HF:: jeta = 0,1,2, 3            18,19,20,21       jphi = 6,7,8,9,10,11
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       c1->Clear();
+       /////////////////
+       c1->Divide(4,6);
+       int kcountHFnegativedirection2=1;
+       // j - etaphi index:
+       TH1F* h2CeffHFnegativedirection2 = new TH1F("h2CeffHFnegativedirection2","", maxbins, 1., maxbins+1.);
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // negativedirection:
+	 if(jeta < 4 ) {
+	   // jphi = 6,7,8,9,10,11
+	   for (int jphi=6;jphi<12;jphi++) {
+	     //	       	     cout<<"HF 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHFnegativedirection2   =     "<<kcountHFnegativedirection2  <<endl;
+	     TH1F *HFnegativedirection2 = (TH1F*)h2CeffHFnegativedirection2->Clone("twod1");
+	     for (int i=0;i<nx;i++) {
+	       double ccc1 = alexhf[jeta][jphi][i];
+	       if(ccc1>0.) {HFnegativedirection2 ->Fill(i,ccc1);}
+	       //		 	       if( i == 0 ) cout<<"HF 55 PLOTTING  for LS=1      ccc1=     "<< ccc1 <<endl;
+	     }// for i
+	     c1->cd(kcountHFnegativedirection2);
+	     HFnegativedirection2 ->SetMarkerStyle(20);HFnegativedirection2 ->SetMarkerSize(0.4);HFnegativedirection2 ->GetYaxis()->SetLabelSize(0.04);HFnegativedirection2 ->SetXTitle("HFnegativedirection2 \b");HFnegativedirection2 ->SetMarkerColor(2);HFnegativedirection2 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	     //	   gPad->SetLogy();    
+	     HFnegativedirection2->Draw("Error");
+	     kcountHFnegativedirection2++;
+	     if(kcountHFnegativedirection2>24) break;// 4x6 = 24 
+	   }// for jphi
+	 }//if
+       }//for jeta
+       /////////////////
+       c1->Update();
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 56   HF:: jeta = 0,1,2, 3            18,19,20,21       jphi =12,13,14,15,16,17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       c1->Clear();
+       /////////////////
+       c1->Divide(4,6);
+       int kcountHFnegativedirection3=1;
+       // j - etaphi index:
+       TH1F* h2CeffHFnegativedirection3 = new TH1F("h2CeffHFnegativedirection3","", maxbins, 1., maxbins+1.);
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // negativedirection:
+	 if(jeta < 4 ) {
+	   // jphi = 12,13,14,15,16,17
+	   for (int jphi=12;jphi<18;jphi++) {
+	     //	       	     cout<<"HF 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHFnegativedirection3   =     "<<kcountHFnegativedirection3  <<endl;
+	     TH1F *HFnegativedirection3 = (TH1F*)h2CeffHFnegativedirection3->Clone("twod1");
+	     for (int i=0;i<nx;i++) {
+	       double ccc1 = alexhf[jeta][jphi][i];
+	       if(ccc1>0.) {HFnegativedirection3 ->Fill(i,ccc1);}
+	       //		 	       if( i == 0 ) cout<<"HF 55 PLOTTING  for LS=1      ccc1=     "<< ccc1 <<endl;
+	     }// for i
+	     c1->cd(kcountHFnegativedirection3);
+	     HFnegativedirection3 ->SetMarkerStyle(20);HFnegativedirection3 ->SetMarkerSize(0.4);HFnegativedirection3 ->GetYaxis()->SetLabelSize(0.04);HFnegativedirection3 ->SetXTitle("HFnegativedirection3 \b");HFnegativedirection3 ->SetMarkerColor(2);HFnegativedirection3 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	     //	   gPad->SetLogy();    
+	     HFnegativedirection3->Draw("Error");
+	     kcountHFnegativedirection3++;
+	     if(kcountHFnegativedirection3>24) break;// 4x6 = 24 
+	   }// for jphi
+	 }//if
+       }//for jeta
+       /////////////////
+       c1->Update();
+       ////////////////////////////////////////////////////////////////////////////////////
+    //========================================================================================== 57   HF:: jeta = 0,1,2, 3            18,19,20,21       // jphi = 0,1,2,3,4,5
+    //======================================================================
+    //======================================================================
+    //======================================================================
+       c1->Clear();
+       /////////////////
+       c1->Divide(4,6);
+       int kcountHFpositivedirection1=1;
+       // j - etaphi index:
+       TH1F* h2CeffHFpositivedirection1 = new TH1F("h2CeffHFpositivedirection1","", maxbins, 1., maxbins+1.);
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // positivedirection:
+	 if(jeta > 17) {
+	   // jphi = 0,1,2,3,4,5
+	   for (int jphi=0;jphi<6;jphi++) {
+	     //	   for (int jphi=0;jphi<njphi;jphi++) {
+	     //	     cout<<"HF 54 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+	     TH1F *HFpositivedirection1 = (TH1F*)h2CeffHFpositivedirection1->Clone("twod1");
+	     for (int i=0;i<nx;i++) {
+	       double ccc1 = alexhf[jeta][jphi][i];
+	       if(ccc1>0.) {HFpositivedirection1 ->Fill(i,ccc1);}
+	       //	       if( i == 0 ) cout<<"HF 54 PLOTTING  for LS=1      ccc1=     "<< ccc1 <<endl;
+	     }// for i
+	     c1->cd(kcountHFpositivedirection1);
+	     HFpositivedirection1 ->SetMarkerStyle(20);HFpositivedirection1 ->SetMarkerSize(0.4);HFpositivedirection1 ->GetYaxis()->SetLabelSize(0.04);HFpositivedirection1 ->SetXTitle("HFpositivedirection1 \b");HFpositivedirection1 ->SetMarkerColor(2);HFpositivedirection1 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	     //	   gPad->SetLogy();    
+	     HFpositivedirection1->Draw("Error");
+	     kcountHFpositivedirection1++;
+	     if(kcountHFpositivedirection1>24) break;// 4x6 = 24 
+	   }// for jphi
+	 }//if
+       }//for jeta
+       /////////////////
+       c1->Update();
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 58   HF:: jeta = 0,1,2, 3            18,19,20,21       jphi = 6,7,8,9,10,11
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       c1->Clear();
+       /////////////////
+       c1->Divide(4,6);
+       int kcountHFpositivedirection2=1;
+       // j - etaphi index:
+       TH1F* h2CeffHFpositivedirection2 = new TH1F("h2CeffHFpositivedirection2","", maxbins, 1., maxbins+1.);
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // positivedirection:
+	 if(jeta > 17) {
+	   // jphi = 6,7,8,9,10,11
+	   for (int jphi=6;jphi<12;jphi++) {
+	     //	       	     cout<<"HF 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHFpositivedirection2   =     "<<kcountHFpositivedirection2  <<endl;
+	     TH1F *HFpositivedirection2 = (TH1F*)h2CeffHFpositivedirection2->Clone("twod1");
+	     for (int i=0;i<nx;i++) {
+	       double ccc1 = alexhf[jeta][jphi][i];
+	       if(ccc1>0.) {HFpositivedirection2 ->Fill(i,ccc1);}
+	       //		 	       if( i == 0 ) cout<<"HF 55 PLOTTING  for LS=1      ccc1=     "<< ccc1 <<endl;
+	     }// for i
+	     c1->cd(kcountHFpositivedirection2);
+	     HFpositivedirection2 ->SetMarkerStyle(20);HFpositivedirection2 ->SetMarkerSize(0.4);HFpositivedirection2 ->GetYaxis()->SetLabelSize(0.04);HFpositivedirection2 ->SetXTitle("HFpositivedirection2 \b");HFpositivedirection2 ->SetMarkerColor(2);HFpositivedirection2 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	     //	   gPad->SetLogy();    
+	     HFpositivedirection2->Draw("Error");
+	     kcountHFpositivedirection2++;
+	     if(kcountHFpositivedirection2>24) break;// 4x6 = 24 
+	   }// for jphi
+	 }//if
+       }//for jeta
+       /////////////////
+       c1->Update();
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 59   HF:: jeta = 0,1,2, 3            18,19,20,21       jphi =12,13,14,15,16,17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       c1->Clear();
+       /////////////////
+       c1->Divide(4,6);
+       int kcountHFpositivedirection3=1;
+       // j - etaphi index:
+       TH1F* h2CeffHFpositivedirection3 = new TH1F("h2CeffHFpositivedirection3","", maxbins, 1., maxbins+1.); //  h2CeffHFpositivedirection3->Sumw2();
+       for (int jphi=12;jphi<18;jphi++) {
+	 for (int jeta=18;jeta<22;jeta++) {
+	   //	       	     cout<<"HF 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHFpositivedirection3   =     "<<kcountHFpositivedirection3  <<endl;
+	   TH1F *HFpositivedirection3 = (TH1F*)h2CeffHFpositivedirection3->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc1 = alexhf[jeta][jphi][i];
+	     
+	     
+	     if(ccc1>0.) {HFpositivedirection3->Fill(i,ccc1);HFpositivedirection3->SetBinError(i,0.01);}
+	     //	       if(ccc1>0.) {HFpositivedirection3->AddBinContent(int(HFpositivedirection3->FindBin(i)), ccc1);HFpositivedirection3->SetBinError(i,0.);}
+	     
+	     
+	     //		 	       if( i == 0 ) cout<<"HF 55 PLOTTING  for LS=1      ccc1=     "<< ccc1 <<endl;
+	   }// for i
+	   c1->cd(kcountHFpositivedirection3);
+	   HFpositivedirection3 ->SetMarkerStyle(20);HFpositivedirection3 ->SetMarkerSize(0.4);HFpositivedirection3 ->GetYaxis()->SetLabelSize(0.04);HFpositivedirection3 ->SetXTitle("HFpositivedirection3 \b");HFpositivedirection3 ->SetMarkerColor(2);HFpositivedirection3 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy();    
+	   if(kcountHFpositivedirection3 == 1) HFpositivedirection3 ->SetXTitle("HF jeta = 18; jphi = 12 \b");
+	   if(kcountHFpositivedirection3 == 5) HFpositivedirection3 ->SetXTitle("HF jeta = 18; jphi = 13 \b");
+	   if(kcountHFpositivedirection3 == 9) HFpositivedirection3 ->SetXTitle("HF jeta = 18; jphi = 14 \b");
+	   if(kcountHFpositivedirection3 ==13) HFpositivedirection3 ->SetXTitle("HF jeta = 18; jphi = 15 \b");
+	   if(kcountHFpositivedirection3 ==17) HFpositivedirection3 ->SetXTitle("HF jeta = 18; jphi = 16 \b");
+	   if(kcountHFpositivedirection3 ==21) HFpositivedirection3 ->SetXTitle("HF jeta = 18; jphi = 17 \b");
+	   
+	   if(kcountHFpositivedirection3 == 2) HFpositivedirection3 ->SetXTitle("HF jeta = 19; jphi = 12 \b");
+	   if(kcountHFpositivedirection3 == 6) HFpositivedirection3 ->SetXTitle("HF jeta = 19; jphi = 13 \b");
+	   if(kcountHFpositivedirection3 ==10) HFpositivedirection3 ->SetXTitle("HF jeta = 19; jphi = 14 \b");
+	   if(kcountHFpositivedirection3 ==14) HFpositivedirection3 ->SetXTitle("HF jeta = 19; jphi = 15 \b");
+	   if(kcountHFpositivedirection3 ==18) HFpositivedirection3 ->SetXTitle("HF jeta = 19; jphi = 16 \b");
+	   if(kcountHFpositivedirection3 ==22) HFpositivedirection3 ->SetXTitle("HF jeta = 19; jphi = 17 \b");
+	   
+	   if(kcountHFpositivedirection3 == 3) HFpositivedirection3 ->SetXTitle("HF jeta = 20; jphi = 12 \b");
+	   if(kcountHFpositivedirection3 == 7) HFpositivedirection3 ->SetXTitle("HF jeta = 20; jphi = 13 \b");
+	   if(kcountHFpositivedirection3 ==11) HFpositivedirection3 ->SetXTitle("HF jeta = 20; jphi = 14 \b");
+	   if(kcountHFpositivedirection3 ==15) HFpositivedirection3 ->SetXTitle("HF jeta = 20; jphi = 15 \b");
+	   if(kcountHFpositivedirection3 ==19) HFpositivedirection3 ->SetXTitle("HF jeta = 20; jphi = 16 \b");
+	   if(kcountHFpositivedirection3 ==23) HFpositivedirection3 ->SetXTitle("HF jeta = 20; jphi = 17 \b");
+	   
+	   if(kcountHFpositivedirection3 == 4) HFpositivedirection3 ->SetXTitle("HF jeta = 21; jphi = 12 \b");
+	   if(kcountHFpositivedirection3 == 8) HFpositivedirection3 ->SetXTitle("HF jeta = 21; jphi = 13 \b");
+	   if(kcountHFpositivedirection3 ==12) HFpositivedirection3 ->SetXTitle("HF jeta = 21; jphi = 14 \b");
+	   if(kcountHFpositivedirection3 ==16) HFpositivedirection3 ->SetXTitle("HF jeta = 21; jphi = 15 \b");
+	   if(kcountHFpositivedirection3 ==20) HFpositivedirection3 ->SetXTitle("HF jeta = 21; jphi = 16 \b");
+	   if(kcountHFpositivedirection3 ==24) HFpositivedirection3 ->SetXTitle("HF jeta = 21; jphi = 17 \b");
+	   
+	   
+	   HFpositivedirection3->Draw("Error");
+	   
+	   //int bin = HFpositivedirection3->FindBin(i);			//OPTION C This works fine. 
+	   //HFpositivedirection3->AddBinContent(bin, ccc1); 
+	   //HFpositivedirection3->AddBinContent(int(HFpositivedirection3->FindBin(i)), ccc1); 
+	   
+	   //		     HFpositivedirection3->Draw("HIST");
+	   
+	   
+	   
+	   kcountHFpositivedirection3++;
+	   if(kcountHFpositivedirection3>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c1->Update();
+       //////////////////////////////////////////////////////////////////////////////////// Gefz1
+
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 60   HF:: 2D  jeta = 0 - 21       jphi =0 - 17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       c1->Clear();
+       /////////////////
+       c1->Divide(1,1);
+       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       c1->cd(1);
+       // int ietaphi = 0; ietaphi = ((k2+1)-1)*nphi + (k3+1) ;  k2=0-neta-1; k3=0-nphi-1; neta=18; nphi=22;
+       TH2F* Gefz42D      = new TH2F("Gefz42D","",   22, -11., 11., 18, 0., 18. );
+       TH2F* Gefz42D0     = new TH2F("Gefz42D0","",  22, -11., 11., 18, 0., 18. );
+       TH2F* Gefz42DF = (TH2F*)Gefz42D0->Clone("Gefz42DF");
+       for (int jphi=0;jphi<18;jphi++) {
+	 for (int jeta=0;jeta<22;jeta++) {
+	   for (int i=0;i<nx;i++) {
+	     double ccc1 = alexhf[jeta][jphi][i];
+	     if(ccc1>0.) {Gefz42D ->Fill(jeta-11,jphi,ccc1); Gefz42D0 ->Fill(jeta-11,jphi,1.); }
+	   }}}
+       Gefz42DF->Divide(Gefz42D,Gefz42D0, 1, 1, "B");// average A
+       //    Gefz1->Sumw2();
+       gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
+       Gefz42DF->SetMarkerStyle(20); Gefz42DF->SetMarkerSize(0.4); Gefz42DF->GetZaxis()->SetLabelSize(0.08); Gefz42DF->SetXTitle("<A>_RBX         #eta  \b"); Gefz42DF->SetYTitle("      #phi \b"); Gefz42DF->SetZTitle("<A>_RBX  - All \b"); Gefz42DF->SetMarkerColor(2); Gefz42DF->SetLineColor(2);      //      Gefz42DF->SetMaximum(1.000);  //      Gefz42DF->SetMinimum(1.0);
+       Gefz42DF->Draw("COLZ");
+       
+       c1->Update();
+       
+
+       //======================================================================
+       //======================================================================
+       //======================================================================
+        
     //======================================================================
     //======================================================================
     //==================================================================================================== end
