@@ -56,7 +56,8 @@ int main(int argc, char *argv[])
     //                              Empty                         HB                           HE                                                     HO                          HF
     double Cut0[7][5][8]={{{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,1.0,1.0,0.,0.,0.,0.,0.}, {0.,1.,1.,1.,0.,0.,0.,0.},                                {0.,0.,0.,0.,1.,0.,0.,0.},   {0.,1.,1.,0.,0.,0.,0.,0.}         },  //CapID  0,HB,HE,HO,HF 
 		  //      {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.,0.,0.,0.}, {0.,100.,140.,150.,0.,0.,0.,0.},                         {0.,0.,0.,0.,100.,0.,0.,0.}, {0.,170.,110.,170.,110.,0.,0.,0.} },  //Amplitude  0,HB,HE,HO,HF 
-                          {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.,0.,0.,0.}, {0.,1000.,1000.,1000.,1000.,1000.,1000.,1000.}, {0.,0.,0.,0.,200.,0.,0.,0.}, {0.,600000.,600000.,600000.,600000.,0.,0.,0.} },  //Amplitude  0,HB,HE,HO,HF 
+                          {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.,0.,0.,0.}, {0.,12000.,4500.,3500.,3500.,4000.,4500.,5500.}, 
+{0.,0.,0.,0.,200.,0.,0.,0.}, {0.,4500.,4500.,4500.,4500.,0.,0.,0.} },  //Amplitude  0,HB,HE,HO,HF 
 			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,3.,3.,0.,0.,0.,0.,0.},   {0.,3.,3.,3.,0.,0.,0.,0.},                               {0.,0.,0.,0.,3.,0.,0.,0.},   {0.,2.,2.,0.,0.,0.,0.,0.}         }, //Width  0,HB,HE,HO,HF 
 			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,0.4,0.4,0.,0.,0.,0.,0.}, {0.,0.4,0.4,0.4,0.,0.,0.,0.},                            {0.,0.,0.,0.,0.4,0.,0.,0.},  {0.,0.8,0.8,0.,0.,0.,0.,0.}       }, //Ratio  0,HB,HE,HO,HF 
 			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,4.7,4.7,0.,0.,0.,0.,0.}, {0.,4.8,4.8,5.0,0.,0.,0.,0.},                            {0.,0.,0.,0.,4.8,0.,0.,0.},  {0.,4.0,4.0,0.,0.,0.,0.,0.}       }, //TSn  0,HB,HE,HO,HF 
@@ -73,6 +74,7 @@ int main(int argc, char *argv[])
 
 //======================================================================
 // Prepare histograms and plot them to .png files
+	  TCanvas  *c1 = new TCanvas("c1","Hcal4test",200,10,700,900);
 
  
   TCanvas *cHB = new TCanvas("cHB","cHB",1000,500);
@@ -81,6 +83,13 @@ int main(int argc, char *argv[])
   TCanvas *cFour = new TCanvas("cFour","cFour",1500,1000);
   TCanvas *cFour1 = new TCanvas("cFour1","cFour1",1200,800);
   TCanvas *cNine = new TCanvas("cNine","cNine",1500,1500);
+  // RBX:  
+//  TCanvas *c4x6 = new TCanvas("c4x6","c4x6",1500,3000);
+  TCanvas *c4x6 = new TCanvas("c4x6","c4x6",1200,2400);
+  //TCanvas *c5x6 = new TCanvas("c5x6","c5x6",2000,3000);
+  TCanvas *c5x6 = new TCanvas("c5x6","c5x6",1500,2400);
+  //  TCanvas *cRBX1 = new TCanvas("cRBX1","cRBX1",200,10,1300,1110);
+    TCanvas *cRBX1 = new TCanvas("cRBX1","cRBX1",1200,1000);
   
 //  char *str = (char*)alloca(10000);
   
@@ -988,7 +997,9 @@ int main(int argc, char *argv[])
 	    if (test != 0) HistNumBadChanDepth[test][sub][k]->SetYTitle("Averaged estimator \b");
 	    HistNumBadChanDepth[test][sub][k]->SetMarkerColor(2);
 	    HistNumBadChanDepth[test][sub][k]->SetLineColor(0);
-	    gPad->SetGridx();
+	    //	    gPad->SetGridx();
+	    gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();  
+	    //	    if (test == 1) HistNumBadChanDepth[test][sub][k]->SetMinimum(0.1);
 	    HistNumBadChanDepth[test][sub][k]->Draw("Error");
 	    /*
 		  if (k == 1) HistNumBadChanDepth[test][sub][k]->SetTitle("Depth 1\b");
@@ -1013,6 +1024,7 @@ int main(int argc, char *argv[])
 		  HistNumBadChanDepth[test][sub][k]->Draw("L");
 		  }	
 	    */
+	    /*
 	    float min_x[] = {0,10000};
 	    float min_y[] = {(float)(Cut0[test][sub][k]),(float)(Cut0[test][sub][k])};
 	    TGraph* MIN = new TGraph(2, min_x, min_y);
@@ -1024,6 +1036,7 @@ int main(int argc, char *argv[])
 	    gPad->SetGridy();
 	    gPad->SetGridx();
 	    MIN->Draw("L");
+*/
 
  
 	    if (sub==1) { cHE->Modified();} 
@@ -1102,7 +1115,7 @@ int main(int argc, char *argv[])
 	int nx = kfitq->GetXaxis()->GetNbins();
 	for (int i=1;i<=nx;i++) {
 	  double ccc1 =  HistNumBadChanFull[test]->GetBinContent(i);
-	  if(ccc1>0.) kfitq->Fill(float(i), ccc1);
+	  if(ccc1>0.) {kfitq->Fill(float(i), ccc1);kfitq->SetBinError(float(i),0.01);}
 	}
 	kfitq->SetMarkerStyle(20);
 	kfitq->SetMarkerSize(0.4);
@@ -1139,7 +1152,7 @@ int main(int argc, char *argv[])
 	  int nx = lpuio->GetXaxis()->GetNbins();
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  HistNumChanFull[6]->GetBinContent(i);
-	    if(ccc1>0.) lpuio->Fill(float(i), ccc1);
+	    if(ccc1>0.) {lpuio->Fill(float(i), ccc1);lpuio->SetBinError(float(i),0.01);}
 	  }
 	  lpuio->SetMarkerStyle(20);
 	  lpuio->SetMarkerSize(0.4);
@@ -2941,7 +2954,1940 @@ int main(int argc, char *argv[])
 
   std::cout << "************>>>   average Amplitudes done" << std::endl;
 
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+ 
 
+
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// RBX study:
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// RBX study:
+  //////////////////////////////////////////////////////////////////////////////////////////////////////// RBX study:
+  //////////////////////////////////////////////////////////////////////////////////// RBX study:
+
+
+      cout<<" RBX analysis START for HF **************************" <<endl;
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+  int njeta = 22; int njphi = 18; int lsmax=2600;
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>     int njeta = 22; int njphi = 18; int lsmax=2600;                        "              <<endl;
+  double alexhf[njeta][njphi][lsmax];      
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>    alexhf[njeta][njphi][lsmax];                         "              <<endl;
+  int maxbinsRBX = MaxLum;
+  int nx = maxbinsRBX; // # LS
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>   maxbinsRBX = MaxLum;                          "              <<endl;
+  if(MaxLum > 2600 ) cout<<"***********************************   ERROR ERROR ERROR ERROR:   MaxLum > 2600 "              <<endl;
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+
+       for(int jphi=0;jphi<njphi;jphi++){for(int jeta=0;jeta<njeta;jeta++){for(int i=0;i<nx;i++){alexhf[jeta][jphi][i] = 0.;}}}
+
+
+  //////////
+
+
+
+
+  ////////////////////////////////////////////////////////////////////////////////////     HB::  HBSTART HB: j = 7,8,9,10            11,12,13,14
+  //======================================================================
+    //======================================================================
+      //======================================================================
+      cout<<" RBX general for HB **************************" <<endl;
+      TH2F *Ghb1KKK= (TH2F*)hfile->Get("h_2DsumADCAmplEtaPhiLs0");
+      TH2F *Ghb1LLL= (TH2F*)hfile->Get("h_2DsumADCAmplEtaPhiLs00");
+      TH2F* Ghb1 = (TH2F*)Ghb1LLL->Clone("Ghb1");
+      Ghb1->Divide(Ghb1KKK,Ghb1LLL, 1, 1, "B");// average A
+      //    Ghb1->Sumw2();
+      //      int nx = Ghb1->GetXaxis()->GetNbins(); // # LS
+      int ny = Ghb1->GetYaxis()->GetNbins(); // # jetaphi indexes
+       for (int j=1;j<=ny;j++) {
+	 int jeta = (j-1)/njphi;// jeta = 0-21
+	 if(jeta < 15 && jeta > 6 ) {
+	   int jphi = (j-1)-njphi*jeta;// jphi=0-17 
+	   //	   cout<<"HB 54        jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+	   // over LS:
+	   for (int i=1;i<=nx;i++) {
+	     double ccc1 =  Ghb1->GetBinContent(i,j);
+	     alexhf[jeta][jphi][i-1] = ccc1;
+	     //	     if( i == 1 ) cout<<"HB 54  for LS=1      ccc1=     "<< ccc1 <<endl;
+	   }//i
+	 }//if
+       }//j
+      // clean-up
+      if (Ghb1KKK) delete Ghb1KKK;
+      if (Ghb1LLL) delete Ghb1LLL;
+      if (Ghb1) delete Ghb1;
+
+	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 11   HB:: 2D  jeta = 0 - 21       jphi =0 - 17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HB  2D plot *****" <<endl;
+      cRBX1->Clear();
+      /////////////////
+      cRBX1->Divide(1,1);
+      cRBX1->cd(1);
+       // int ietaphi = 0; ietaphi = ((k2+1)-1)*nphi + (k3+1) ;  k2=0-neta-1; k3=0-nphi-1; neta=18; nphi=22;
+       TH2F* Ghb42D      = new TH2F("Ghb42D","",   22, -11., 11., 18, 0., 18. );
+       TH2F* Ghb42D0     = new TH2F("Ghb42D0","",  22, -11., 11., 18, 0., 18. );
+       TH2F* Ghb42DF = (TH2F*)Ghb42D0->Clone("Ghb42DF");
+       for (int jphi=0;jphi<njphi;jphi++) {
+	 for (int jeta=0;jeta<njeta;jeta++) {
+	   for (int i=0;i<nx;i++) {
+	     double ccc1 = alexhf[jeta][jphi][i];
+	     if(ccc1>0.) {Ghb42D ->Fill(jeta-11,jphi,ccc1); Ghb42D0 ->Fill(jeta-11,jphi,1.); }
+	   }}}
+       Ghb42DF->Divide(Ghb42D,Ghb42D0, 1, 1, "B");// average A
+       //    Ghb1->Sumw2();
+       gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
+       Ghb42DF->SetMarkerStyle(20); Ghb42DF->SetMarkerSize(0.4); Ghb42DF->GetZaxis()->SetLabelSize(0.04); Ghb42DF->SetXTitle("<A>_RBX         #eta  \b"); Ghb42DF->SetYTitle("      #phi \b"); Ghb42DF->SetZTitle("<A>_RBX  - All \b"); Ghb42DF->SetMarkerColor(2); Ghb42DF->SetLineColor(2);      //      Ghb42DF->SetMaximum(1.000);  //      Ghb42DF->SetMinimum(1.0);
+       Ghb42DF->Draw("COLZ");
+       
+       /////////////////
+       cRBX1->Update();
+       cRBX1->Print("RBX-HB-2Dplot.png");
+       cRBX1->Clear();
+      // clean-up
+      if (Ghb42D) delete Ghb42D;
+      if (Ghb42D0) delete Ghb42D0;
+      if (Ghb42DF) delete Ghb42DF;
+
+    //========================================================================================== 13   HB:: j = 7,8,9,10            11,12,13,14     // jphi = 0,1,2,3,4,5
+    //======================================================================
+    //======================================================================
+    //======================================================================
+      cout<<"      RBX HB negative direction phisector 1 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHBnegativedirection1=1;
+       // j - etaphi index:
+       TH1F* h2CeffHBnegativedirection1 = new TH1F("h2CeffHBnegativedirection1","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=0;jphi<6;jphi++) {
+	 for (int jeta=7;jeta<11;jeta++) {
+	   //	   for (int jphi=0;jphi<njphi;jphi++) {
+	   //	     cout<<"HB 54 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+	   TH1F *HBnegativedirection1 = (TH1F*)h2CeffHBnegativedirection1->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HBnegativedirection1 ->Fill(i,ccc4x6);HBnegativedirection1->SetBinError(i,0.01);}
+	     //	       if( i == 0 ) cout<<"HB 54 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHBnegativedirection1);
+	   HBnegativedirection1 ->SetMarkerStyle(20);HBnegativedirection1 ->SetMarkerSize(0.4);HBnegativedirection1 ->GetYaxis()->SetLabelSize(0.04);HBnegativedirection1 ->SetMarkerColor(2);HBnegativedirection1 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy();    
+
+	   if(kcountHBnegativedirection1 == 1) HBnegativedirection1 ->SetXTitle("HB jeta = 7; jphi =  0 \b");
+	   if(kcountHBnegativedirection1 == 5) HBnegativedirection1 ->SetXTitle("HB jeta = 7; jphi =  1 \b");
+	   if(kcountHBnegativedirection1 == 9) HBnegativedirection1 ->SetXTitle("HB jeta = 7; jphi =  2 \b");
+	   if(kcountHBnegativedirection1 ==13) HBnegativedirection1 ->SetXTitle("HB jeta = 7; jphi =  3 \b");
+	   if(kcountHBnegativedirection1 ==17) HBnegativedirection1 ->SetXTitle("HB jeta = 7; jphi =  4 \b");
+	   if(kcountHBnegativedirection1 ==21) HBnegativedirection1 ->SetXTitle("HB jeta = 7; jphi =  5 \b");
+	   
+	   if(kcountHBnegativedirection1 == 2) HBnegativedirection1 ->SetXTitle("HB jeta = 8; jphi =  0 \b");
+	   if(kcountHBnegativedirection1 == 6) HBnegativedirection1 ->SetXTitle("HB jeta = 8; jphi =  1 \b");
+	   if(kcountHBnegativedirection1 ==10) HBnegativedirection1 ->SetXTitle("HB jeta = 8; jphi =  2 \b");
+	   if(kcountHBnegativedirection1 ==14) HBnegativedirection1 ->SetXTitle("HB jeta = 8; jphi =  3 \b");
+	   if(kcountHBnegativedirection1 ==18) HBnegativedirection1 ->SetXTitle("HB jeta = 8; jphi =  4 \b");
+	   if(kcountHBnegativedirection1 ==22) HBnegativedirection1 ->SetXTitle("HB jeta = 8; jphi =  5 \b");
+	   
+	   if(kcountHBnegativedirection1 == 3) HBnegativedirection1 ->SetXTitle("HB jeta = 9; jphi =  0 \b");
+	   if(kcountHBnegativedirection1 == 7) HBnegativedirection1 ->SetXTitle("HB jeta = 9; jphi =  1 \b");
+	   if(kcountHBnegativedirection1 ==11) HBnegativedirection1 ->SetXTitle("HB jeta = 9; jphi =  2 \b");
+	   if(kcountHBnegativedirection1 ==15) HBnegativedirection1 ->SetXTitle("HB jeta = 9; jphi =  3 \b");
+	   if(kcountHBnegativedirection1 ==19) HBnegativedirection1 ->SetXTitle("HB jeta = 9; jphi =  4 \b");
+	   if(kcountHBnegativedirection1 ==23) HBnegativedirection1 ->SetXTitle("HB jeta = 9; jphi =  5 \b");
+	   
+	   if(kcountHBnegativedirection1 == 4) HBnegativedirection1 ->SetXTitle("HB jeta =10; jphi =  0 \b");
+	   if(kcountHBnegativedirection1 == 8) HBnegativedirection1 ->SetXTitle("HB jeta =10; jphi =  1 \b");
+	   if(kcountHBnegativedirection1 ==12) HBnegativedirection1 ->SetXTitle("HB jeta =10; jphi =  2 \b");
+	   if(kcountHBnegativedirection1 ==16) HBnegativedirection1 ->SetXTitle("HB jeta =10; jphi =  3 \b");
+	   if(kcountHBnegativedirection1 ==20) HBnegativedirection1 ->SetXTitle("HB jeta =10; jphi =  4 \b");
+	   if(kcountHBnegativedirection1 ==24) HBnegativedirection1 ->SetXTitle("HB jeta =10; jphi =  5 \b");
+
+	   HBnegativedirection1->Draw("Error");
+	   kcountHBnegativedirection1++;
+	   if(kcountHBnegativedirection1>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HB-negative-phirange1.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHBnegativedirection1) delete h2CeffHBnegativedirection1;
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 14   HB:: j = 7,8,9,10            11,12,13,14      jphi = 6,7,8,9,10,11
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HB negative direction phisector 2 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHBnegativedirection2=1;
+       // j - etaphi index:
+       TH1F* h2CeffHBnegativedirection2 = new TH1F("h2CeffHBnegativedirection2","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=6;jphi<12;jphi++) {
+	 for (int jeta=7;jeta<11;jeta++) {
+	   //	       	     cout<<"HB 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHBnegativedirection2   =     "<<kcountHBnegativedirection2  <<endl;
+	   TH1F *HBnegativedirection2 = (TH1F*)h2CeffHBnegativedirection2->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HBnegativedirection2 ->Fill(i,ccc4x6);HBnegativedirection2->SetBinError(i,0.01);}
+	     //		 	       if( i == 0 ) cout<<"HB 55 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHBnegativedirection2);
+	   HBnegativedirection2 ->SetMarkerStyle(20);HBnegativedirection2 ->SetMarkerSize(0.4);HBnegativedirection2 ->GetYaxis()->SetLabelSize(0.04);HBnegativedirection2 ->SetMarkerColor(2);HBnegativedirection2 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy();  
+  
+	   if(kcountHBnegativedirection2 == 1) HBnegativedirection2 ->SetXTitle("HB jeta = 7; jphi =  6 \b");
+	   if(kcountHBnegativedirection2 == 5) HBnegativedirection2 ->SetXTitle("HB jeta = 7; jphi =  7 \b");
+	   if(kcountHBnegativedirection2 == 9) HBnegativedirection2 ->SetXTitle("HB jeta = 7; jphi =  8 \b");
+	   if(kcountHBnegativedirection2 ==13) HBnegativedirection2 ->SetXTitle("HB jeta = 7; jphi =  9 \b");
+	   if(kcountHBnegativedirection2 ==17) HBnegativedirection2 ->SetXTitle("HB jeta = 7; jphi = 10 \b");
+	   if(kcountHBnegativedirection2 ==21) HBnegativedirection2 ->SetXTitle("HB jeta = 7; jphi = 11 \b");
+	   
+	   if(kcountHBnegativedirection2 == 2) HBnegativedirection2 ->SetXTitle("HB jeta = 8; jphi =  6 \b");
+	   if(kcountHBnegativedirection2 == 6) HBnegativedirection2 ->SetXTitle("HB jeta = 8; jphi =  7 \b");
+	   if(kcountHBnegativedirection2 ==10) HBnegativedirection2 ->SetXTitle("HB jeta = 8; jphi =  8 \b");
+	   if(kcountHBnegativedirection2 ==14) HBnegativedirection2 ->SetXTitle("HB jeta = 8; jphi =  9 \b");
+	   if(kcountHBnegativedirection2 ==18) HBnegativedirection2 ->SetXTitle("HB jeta = 8; jphi = 10 \b");
+	   if(kcountHBnegativedirection2 ==22) HBnegativedirection2 ->SetXTitle("HB jeta = 8; jphi = 11 \b");
+	   
+	   if(kcountHBnegativedirection2 == 3) HBnegativedirection2 ->SetXTitle("HB jeta = 9; jphi =  6 \b");
+	   if(kcountHBnegativedirection2 == 7) HBnegativedirection2 ->SetXTitle("HB jeta = 9; jphi =  7 \b");
+	   if(kcountHBnegativedirection2 ==11) HBnegativedirection2 ->SetXTitle("HB jeta = 9; jphi =  8 \b");
+	   if(kcountHBnegativedirection2 ==15) HBnegativedirection2 ->SetXTitle("HB jeta = 9; jphi =  9 \b");
+	   if(kcountHBnegativedirection2 ==19) HBnegativedirection2 ->SetXTitle("HB jeta = 9; jphi = 10 \b");
+	   if(kcountHBnegativedirection2 ==23) HBnegativedirection2 ->SetXTitle("HB jeta = 9; jphi = 11 \b");
+	   
+	   if(kcountHBnegativedirection2 == 4) HBnegativedirection2 ->SetXTitle("HB jeta =10; jphi =  6 \b");
+	   if(kcountHBnegativedirection2 == 8) HBnegativedirection2 ->SetXTitle("HB jeta =10; jphi =  7 \b");
+	   if(kcountHBnegativedirection2 ==12) HBnegativedirection2 ->SetXTitle("HB jeta =10; jphi =  8 \b");
+	   if(kcountHBnegativedirection2 ==16) HBnegativedirection2 ->SetXTitle("HB jeta =10; jphi =  9 \b");
+	   if(kcountHBnegativedirection2 ==20) HBnegativedirection2 ->SetXTitle("HB jeta =10; jphi = 10 \b");
+	   if(kcountHBnegativedirection2 ==24) HBnegativedirection2 ->SetXTitle("HB jeta =10; jphi = 11 \b");
+
+	   HBnegativedirection2->Draw("Error");
+	   kcountHBnegativedirection2++;
+	   if(kcountHBnegativedirection2>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HB-negative-phirange2.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHBnegativedirection2) delete h2CeffHBnegativedirection2;
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 15   HB:: j = 7,8,9,10            11,12,13,14       jphi =12,13,14,15,16,17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HB negative direction phisector 3 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHBnegativedirection3=1;
+       // j - etaphi index:
+       TH1F* h2CeffHBnegativedirection3 = new TH1F("h2CeffHBnegativedirection3","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=12;jphi<18;jphi++) {
+	 for (int jeta=7;jeta<11;jeta++) {
+	   //	       	     cout<<"HB 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHBnegativedirection3   =     "<<kcountHBnegativedirection3  <<endl;
+	   TH1F *HBnegativedirection3 = (TH1F*)h2CeffHBnegativedirection3->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HBnegativedirection3 ->Fill(i,ccc4x6);HBnegativedirection3->SetBinError(i,0.01);}
+	     //		 	       if( i == 0 ) cout<<"HB 55 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHBnegativedirection3);
+	   HBnegativedirection3 ->SetMarkerStyle(20);HBnegativedirection3 ->SetMarkerSize(0.4);HBnegativedirection3 ->GetYaxis()->SetLabelSize(0.04);HBnegativedirection3 ->SetMarkerColor(2);HBnegativedirection3 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy(); 
+
+	   if(kcountHBnegativedirection3 == 1) HBnegativedirection3 ->SetXTitle("HB jeta = 7; jphi = 12 \b");
+	   if(kcountHBnegativedirection3 == 5) HBnegativedirection3 ->SetXTitle("HB jeta = 7; jphi = 13 \b");
+	   if(kcountHBnegativedirection3 == 9) HBnegativedirection3 ->SetXTitle("HB jeta = 7; jphi = 14 \b");
+	   if(kcountHBnegativedirection3 ==13) HBnegativedirection3 ->SetXTitle("HB jeta = 7; jphi = 15 \b");
+	   if(kcountHBnegativedirection3 ==17) HBnegativedirection3 ->SetXTitle("HB jeta = 7; jphi = 16 \b");
+	   if(kcountHBnegativedirection3 ==21) HBnegativedirection3 ->SetXTitle("HB jeta = 7; jphi = 17 \b");
+	   
+	   if(kcountHBnegativedirection3 == 2) HBnegativedirection3 ->SetXTitle("HB jeta = 8; jphi = 12 \b");
+	   if(kcountHBnegativedirection3 == 6) HBnegativedirection3 ->SetXTitle("HB jeta = 8; jphi = 13 \b");
+	   if(kcountHBnegativedirection3 ==10) HBnegativedirection3 ->SetXTitle("HB jeta = 8; jphi = 14 \b");
+	   if(kcountHBnegativedirection3 ==14) HBnegativedirection3 ->SetXTitle("HB jeta = 8; jphi = 15 \b");
+	   if(kcountHBnegativedirection3 ==18) HBnegativedirection3 ->SetXTitle("HB jeta = 8; jphi = 16 \b");
+	   if(kcountHBnegativedirection3 ==22) HBnegativedirection3 ->SetXTitle("HB jeta = 8; jphi = 17 \b");
+	   
+	   if(kcountHBnegativedirection3 == 3) HBnegativedirection3 ->SetXTitle("HB jeta = 9; jphi = 12 \b");
+	   if(kcountHBnegativedirection3 == 7) HBnegativedirection3 ->SetXTitle("HB jeta = 9; jphi = 13 \b");
+	   if(kcountHBnegativedirection3 ==11) HBnegativedirection3 ->SetXTitle("HB jeta = 9; jphi = 14 \b");
+	   if(kcountHBnegativedirection3 ==15) HBnegativedirection3 ->SetXTitle("HB jeta = 9; jphi = 15 \b");
+	   if(kcountHBnegativedirection3 ==19) HBnegativedirection3 ->SetXTitle("HB jeta = 9; jphi = 16 \b");
+	   if(kcountHBnegativedirection3 ==23) HBnegativedirection3 ->SetXTitle("HB jeta = 9; jphi = 17 \b");
+	   
+	   if(kcountHBnegativedirection3 == 4) HBnegativedirection3 ->SetXTitle("HB jeta =10; jphi = 12 \b");
+	   if(kcountHBnegativedirection3 == 8) HBnegativedirection3 ->SetXTitle("HB jeta =10; jphi = 13 \b");
+	   if(kcountHBnegativedirection3 ==12) HBnegativedirection3 ->SetXTitle("HB jeta =10; jphi = 14 \b");
+	   if(kcountHBnegativedirection3 ==16) HBnegativedirection3 ->SetXTitle("HB jeta =10; jphi = 15 \b");
+	   if(kcountHBnegativedirection3 ==20) HBnegativedirection3 ->SetXTitle("HB jeta =10; jphi = 16 \b");
+	   if(kcountHBnegativedirection3 ==24) HBnegativedirection3 ->SetXTitle("HB jeta =10; jphi = 17 \b");
+   
+	   HBnegativedirection3->Draw("Error");
+	   kcountHBnegativedirection3++;
+	   if(kcountHBnegativedirection3>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HB-negative-phirange3.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHBnegativedirection3) delete h2CeffHBnegativedirection3;
+       ////////////////////////////////////////////////////////////////////////////////////
+    //========================================================================================== 16   HB:: j = 7,8,9,10            11,12,13,14     // jphi = 0,1,2,3,4,5
+    //======================================================================
+    //======================================================================
+    //======================================================================
+      cout<<"      RBX HB positive direction phisector 1 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHBpositivedirection1=1;
+       // j - etaphi index:
+       TH1F* h2CeffHBpositivedirection1 = new TH1F("h2CeffHBpositivedirection1","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=0;jphi<6;jphi++) {
+	 for (int jeta=11;jeta<15;jeta++) {
+	   //	   for (int jphi=0;jphi<njphi;jphi++) {
+	   //	     cout<<"HB 54 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+	   TH1F *HBpositivedirection1 = (TH1F*)h2CeffHBpositivedirection1->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HBpositivedirection1 ->Fill(i,ccc4x6);HBpositivedirection1->SetBinError(i,0.01);}
+	     //	       if( i == 0 ) cout<<"HB 54 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHBpositivedirection1);
+	   HBpositivedirection1 ->SetMarkerStyle(20);HBpositivedirection1 ->SetMarkerSize(0.4);HBpositivedirection1 ->GetYaxis()->SetLabelSize(0.04);HBpositivedirection1 ->SetMarkerColor(2);HBpositivedirection1 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy();    
+	   if(kcountHBpositivedirection1 == 1) HBpositivedirection1 ->SetXTitle("HB jeta = 11; jphi =  0 \b");
+	   if(kcountHBpositivedirection1 == 5) HBpositivedirection1 ->SetXTitle("HB jeta = 11; jphi =  1 \b");
+	   if(kcountHBpositivedirection1 == 9) HBpositivedirection1 ->SetXTitle("HB jeta = 11; jphi =  2 \b");
+	   if(kcountHBpositivedirection1 ==13) HBpositivedirection1 ->SetXTitle("HB jeta = 11; jphi =  3 \b");
+	   if(kcountHBpositivedirection1 ==17) HBpositivedirection1 ->SetXTitle("HB jeta = 11; jphi =  4 \b");
+	   if(kcountHBpositivedirection1 ==21) HBpositivedirection1 ->SetXTitle("HB jeta = 11; jphi =  5 \b");
+	   
+	   if(kcountHBpositivedirection1 == 2) HBpositivedirection1 ->SetXTitle("HB jeta = 12; jphi =  0 \b");
+	   if(kcountHBpositivedirection1 == 6) HBpositivedirection1 ->SetXTitle("HB jeta = 12; jphi =  1 \b");
+	   if(kcountHBpositivedirection1 ==10) HBpositivedirection1 ->SetXTitle("HB jeta = 12; jphi =  2 \b");
+	   if(kcountHBpositivedirection1 ==14) HBpositivedirection1 ->SetXTitle("HB jeta = 12; jphi =  3 \b");
+	   if(kcountHBpositivedirection1 ==18) HBpositivedirection1 ->SetXTitle("HB jeta = 12; jphi =  4 \b");
+	   if(kcountHBpositivedirection1 ==22) HBpositivedirection1 ->SetXTitle("HB jeta = 12; jphi =  5 \b");
+	   
+	   if(kcountHBpositivedirection1 == 3) HBpositivedirection1 ->SetXTitle("HB jeta = 13; jphi =  0 \b");
+	   if(kcountHBpositivedirection1 == 7) HBpositivedirection1 ->SetXTitle("HB jeta = 13; jphi =  1 \b");
+	   if(kcountHBpositivedirection1 ==11) HBpositivedirection1 ->SetXTitle("HB jeta = 13; jphi =  2 \b");
+	   if(kcountHBpositivedirection1 ==15) HBpositivedirection1 ->SetXTitle("HB jeta = 13; jphi =  3 \b");
+	   if(kcountHBpositivedirection1 ==19) HBpositivedirection1 ->SetXTitle("HB jeta = 13; jphi =  4 \b");
+	   if(kcountHBpositivedirection1 ==23) HBpositivedirection1 ->SetXTitle("HB jeta = 13; jphi =  5 \b");
+	   
+	   if(kcountHBpositivedirection1 == 4) HBpositivedirection1 ->SetXTitle("HB jeta = 14; jphi =  0 \b");
+	   if(kcountHBpositivedirection1 == 8) HBpositivedirection1 ->SetXTitle("HB jeta = 14; jphi =  1 \b");
+	   if(kcountHBpositivedirection1 ==12) HBpositivedirection1 ->SetXTitle("HB jeta = 14; jphi =  2 \b");
+	   if(kcountHBpositivedirection1 ==16) HBpositivedirection1 ->SetXTitle("HB jeta = 14; jphi =  3 \b");
+	   if(kcountHBpositivedirection1 ==20) HBpositivedirection1 ->SetXTitle("HB jeta = 14; jphi =  4 \b");
+	   if(kcountHBpositivedirection1 ==24) HBpositivedirection1 ->SetXTitle("HB jeta = 14; jphi =  5 \b");
+
+	   HBpositivedirection1->Draw("Error");
+	   kcountHBpositivedirection1++;
+	   if(kcountHBpositivedirection1>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HB-positive-phirange1.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHBpositivedirection1) delete h2CeffHBpositivedirection1;
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 17   HB:: j = 7,8,9,10            11,12,13,14       jphi = 6,7,8,9,10,11
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HB positive direction phisector 2 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHBpositivedirection2=1;
+       // j - etaphi index:
+       TH1F* h2CeffHBpositivedirection2 = new TH1F("h2CeffHBpositivedirection2","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=6;jphi<12;jphi++) {
+	 for (int jeta=11;jeta<15;jeta++) {
+	   //	       	     cout<<"HB 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHBpositivedirection2   =     "<<kcountHBpositivedirection2  <<endl;
+	   TH1F *HBpositivedirection2 = (TH1F*)h2CeffHBpositivedirection2->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HBpositivedirection2 ->Fill(i,ccc4x6);HBpositivedirection2->SetBinError(i,0.01);}
+	     //		 	       if( i == 0 ) cout<<"HB 55 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHBpositivedirection2);
+	   HBpositivedirection2 ->SetMarkerStyle(20);HBpositivedirection2 ->SetMarkerSize(0.4);HBpositivedirection2 ->GetYaxis()->SetLabelSize(0.04);HBpositivedirection2 ->SetMarkerColor(2);HBpositivedirection2 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy(); 
+
+	   if(kcountHBpositivedirection2 == 1) HBpositivedirection2 ->SetXTitle("HB jeta = 11; jphi =  6 \b");
+	   if(kcountHBpositivedirection2 == 5) HBpositivedirection2 ->SetXTitle("HB jeta = 11; jphi =  7 \b");
+	   if(kcountHBpositivedirection2 == 9) HBpositivedirection2 ->SetXTitle("HB jeta = 11; jphi =  8 \b");
+	   if(kcountHBpositivedirection2 ==13) HBpositivedirection2 ->SetXTitle("HB jeta = 11; jphi =  9 \b");
+	   if(kcountHBpositivedirection2 ==17) HBpositivedirection2 ->SetXTitle("HB jeta = 11; jphi = 10 \b");
+	   if(kcountHBpositivedirection2 ==21) HBpositivedirection2 ->SetXTitle("HB jeta = 11; jphi = 11 \b");
+	   
+	   if(kcountHBpositivedirection2 == 2) HBpositivedirection2 ->SetXTitle("HB jeta = 12; jphi =  6 \b");
+	   if(kcountHBpositivedirection2 == 6) HBpositivedirection2 ->SetXTitle("HB jeta = 12; jphi =  7 \b");
+	   if(kcountHBpositivedirection2 ==10) HBpositivedirection2 ->SetXTitle("HB jeta = 12; jphi =  8 \b");
+	   if(kcountHBpositivedirection2 ==14) HBpositivedirection2 ->SetXTitle("HB jeta = 12; jphi =  9 \b");
+	   if(kcountHBpositivedirection2 ==18) HBpositivedirection2 ->SetXTitle("HB jeta = 12; jphi = 10 \b");
+	   if(kcountHBpositivedirection2 ==22) HBpositivedirection2 ->SetXTitle("HB jeta = 12; jphi = 11 \b");
+	   
+	   if(kcountHBpositivedirection2 == 3) HBpositivedirection2 ->SetXTitle("HB jeta = 13; jphi =  6 \b");
+	   if(kcountHBpositivedirection2 == 7) HBpositivedirection2 ->SetXTitle("HB jeta = 13; jphi =  7 \b");
+	   if(kcountHBpositivedirection2 ==11) HBpositivedirection2 ->SetXTitle("HB jeta = 13; jphi =  8 \b");
+	   if(kcountHBpositivedirection2 ==15) HBpositivedirection2 ->SetXTitle("HB jeta = 13; jphi =  9 \b");
+	   if(kcountHBpositivedirection2 ==19) HBpositivedirection2 ->SetXTitle("HB jeta = 13; jphi = 10 \b");
+	   if(kcountHBpositivedirection2 ==23) HBpositivedirection2 ->SetXTitle("HB jeta = 13; jphi = 11 \b");
+	   
+	   if(kcountHBpositivedirection2 == 4) HBpositivedirection2 ->SetXTitle("HB jeta = 14; jphi =  6 \b");
+	   if(kcountHBpositivedirection2 == 8) HBpositivedirection2 ->SetXTitle("HB jeta = 14; jphi =  7 \b");
+	   if(kcountHBpositivedirection2 ==12) HBpositivedirection2 ->SetXTitle("HB jeta = 14; jphi =  8 \b");
+	   if(kcountHBpositivedirection2 ==16) HBpositivedirection2 ->SetXTitle("HB jeta = 14; jphi =  9 \b");
+	   if(kcountHBpositivedirection2 ==20) HBpositivedirection2 ->SetXTitle("HB jeta = 14; jphi = 10 \b");
+	   if(kcountHBpositivedirection2 ==24) HBpositivedirection2 ->SetXTitle("HB jeta = 14; jphi = 11 \b");
+   
+	   HBpositivedirection2->Draw("Error");
+	   kcountHBpositivedirection2++;
+	   if(kcountHBpositivedirection2>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HB-positive-phirange2.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHBpositivedirection2) delete h2CeffHBpositivedirection2;
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 18   HB:: j = 7,8,9,10            11,12,13,14       jphi =12,13,14,15,16,17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HB positive direction phisector 3 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHBpositivedirection3=1;
+       // j - etaphi index:
+       TH1F* h2CeffHBpositivedirection3 = new TH1F("h2CeffHBpositivedirection3","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=12;jphi<18;jphi++) {
+	 for (int jeta=11;jeta<15;jeta++) {
+	   //	       	     cout<<"HB 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHBpositivedirection3   =     "<<kcountHBpositivedirection3  <<endl;
+	   TH1F *HBpositivedirection3 = (TH1F*)h2CeffHBpositivedirection3->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HBpositivedirection3 ->Fill(i,ccc4x6);HBpositivedirection3->SetBinError(i,0.01);}
+	     //		 	       if( i == 0 ) cout<<"HB 55 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHBpositivedirection3);
+	   HBpositivedirection3 ->SetMarkerStyle(20);HBpositivedirection3 ->SetMarkerSize(0.4);HBpositivedirection3 ->GetYaxis()->SetLabelSize(0.04);HBpositivedirection3 ->SetMarkerColor(2);HBpositivedirection3 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy();    
+	   if(kcountHBpositivedirection3 == 1) HBpositivedirection3 ->SetXTitle("HB jeta = 11; jphi = 12 \b");
+	   if(kcountHBpositivedirection3 == 5) HBpositivedirection3 ->SetXTitle("HB jeta = 11; jphi = 13 \b");
+	   if(kcountHBpositivedirection3 == 9) HBpositivedirection3 ->SetXTitle("HB jeta = 11; jphi = 14 \b");
+	   if(kcountHBpositivedirection3 ==13) HBpositivedirection3 ->SetXTitle("HB jeta = 11; jphi = 15 \b");
+	   if(kcountHBpositivedirection3 ==17) HBpositivedirection3 ->SetXTitle("HB jeta = 11; jphi = 16 \b");
+	   if(kcountHBpositivedirection3 ==21) HBpositivedirection3 ->SetXTitle("HB jeta = 11; jphi = 17 \b");
+	   
+	   if(kcountHBpositivedirection3 == 2) HBpositivedirection3 ->SetXTitle("HB jeta = 12; jphi = 12 \b");
+	   if(kcountHBpositivedirection3 == 6) HBpositivedirection3 ->SetXTitle("HB jeta = 12; jphi = 13 \b");
+	   if(kcountHBpositivedirection3 ==10) HBpositivedirection3 ->SetXTitle("HB jeta = 12; jphi = 14 \b");
+	   if(kcountHBpositivedirection3 ==14) HBpositivedirection3 ->SetXTitle("HB jeta = 12; jphi = 15 \b");
+	   if(kcountHBpositivedirection3 ==18) HBpositivedirection3 ->SetXTitle("HB jeta = 12; jphi = 16 \b");
+	   if(kcountHBpositivedirection3 ==22) HBpositivedirection3 ->SetXTitle("HB jeta = 12; jphi = 17 \b");
+	   
+	   if(kcountHBpositivedirection3 == 3) HBpositivedirection3 ->SetXTitle("HB jeta = 13; jphi = 12 \b");
+	   if(kcountHBpositivedirection3 == 7) HBpositivedirection3 ->SetXTitle("HB jeta = 13; jphi = 13 \b");
+	   if(kcountHBpositivedirection3 ==11) HBpositivedirection3 ->SetXTitle("HB jeta = 13; jphi = 14 \b");
+	   if(kcountHBpositivedirection3 ==15) HBpositivedirection3 ->SetXTitle("HB jeta = 13; jphi = 15 \b");
+	   if(kcountHBpositivedirection3 ==19) HBpositivedirection3 ->SetXTitle("HB jeta = 13; jphi = 16 \b");
+	   if(kcountHBpositivedirection3 ==23) HBpositivedirection3 ->SetXTitle("HB jeta = 13; jphi = 17 \b");
+	   
+	   if(kcountHBpositivedirection3 == 4) HBpositivedirection3 ->SetXTitle("HB jeta = 14; jphi = 12 \b");
+	   if(kcountHBpositivedirection3 == 8) HBpositivedirection3 ->SetXTitle("HB jeta = 14; jphi = 13 \b");
+	   if(kcountHBpositivedirection3 ==12) HBpositivedirection3 ->SetXTitle("HB jeta = 14; jphi = 14 \b");
+	   if(kcountHBpositivedirection3 ==16) HBpositivedirection3 ->SetXTitle("HB jeta = 14; jphi = 15 \b");
+	   if(kcountHBpositivedirection3 ==20) HBpositivedirection3 ->SetXTitle("HB jeta = 14; jphi = 16 \b");
+	   if(kcountHBpositivedirection3 ==24) HBpositivedirection3 ->SetXTitle("HB jeta = 14; jphi = 17 \b");
+
+	   HBpositivedirection3->Draw("Error");
+	   kcountHBpositivedirection3++;
+	   if(kcountHBpositivedirection3>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HB-positive-phirange3.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHBpositivedirection3) delete h2CeffHBpositivedirection3;
+       ////////////////////////////////////////////////////////////////////////////////////
+
+       cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+       cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+       cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+       for(int jphi=0;jphi<njphi;jphi++){for(int jeta=0;jeta<njeta;jeta++){for(int i=0;i<nx;i++){alexhf[jeta][jphi][i] = 0.;}}}
+       
+       ////////////////////////////////////////////////////////////////////////////////////   end HB RBX  
+
+
+
+  ////////////////////////////////////////////////////////////////////////////////////     HE::  HESTART HE: j = 3,4,5, 6, 7      14,15,16,17,18  
+  //======================================================================
+    //======================================================================
+      //======================================================================
+      cout<<" RBX general for HE **************************" <<endl;
+      TH2F *Ghe1KKK= (TH2F*)hfile->Get("h_2DsumADCAmplEtaPhiLs1");
+      TH2F *Ghe1LLL= (TH2F*)hfile->Get("h_2DsumADCAmplEtaPhiLs10");
+      TH2F* Ghe1 = (TH2F*)Ghe1LLL->Clone("Ghe1");
+      Ghe1->Divide(Ghe1KKK,Ghe1LLL, 1, 1, "B");// average A
+      //    Ghe1->Sumw2();
+      //      int nx = Ghe1->GetXaxis()->GetNbins(); // # LS
+      //    nx = maxbinsRBX; // # LS
+      ny = Ghe1->GetYaxis()->GetNbins(); // # jetaphi indexes
+       for (int j=1;j<=ny;j++) {
+	 int jeta = (j-1)/njphi;// jeta = 0-21
+	 if( (jeta< 8 && jeta> 2) ||(jeta< 19 && jeta> 13)  ) {
+	   int jphi = (j-1)-njphi*jeta;// jphi=0-17 
+	   //	   cout<<"HE 54        jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+	   // over LS:
+	   for (int i=1;i<=nx;i++) {
+	     double ccc1 =  Ghe1->GetBinContent(i,j);
+	     alexhf[jeta][jphi][i-1] = ccc1;
+	     //	     if( i == 1 ) cout<<"HE 54  for LS=1      ccc1=     "<< ccc1 <<endl;
+	   }//i
+	 }//if
+       }//j
+      // clean-up
+      if (Ghe1KKK) delete Ghe1KKK;
+      if (Ghe1LLL) delete Ghe1LLL;
+      if (Ghe1) delete Ghe1;
+
+	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 22   HE:: 2D  jeta = 0 - 21       jphi =0 - 17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HE  2D plot *****" <<endl;
+      cRBX1->Clear();
+      /////////////////
+      cRBX1->Divide(1,1);
+      cRBX1->cd(1);
+       // int ietaphi = 0; ietaphi = ((k2+1)-1)*nphi + (k3+1) ;  k2=0-neta-1; k3=0-nphi-1; neta=18; nphi=22;
+       TH2F* Ghe42D      = new TH2F("Ghe42D","",   22, -11., 11., 18, 0., 18. );
+       TH2F* Ghe42D0     = new TH2F("Ghe42D0","",  22, -11., 11., 18, 0., 18. );
+       TH2F* Ghe42DF = (TH2F*)Ghe42D0->Clone("Ghe42DF");
+       for (int jphi=0;jphi<njphi;jphi++) {
+	 for (int jeta=0;jeta<njeta;jeta++) {
+	   for (int i=0;i<nx;i++) {
+	     double ccc1 = alexhf[jeta][jphi][i];
+	     if(ccc1>0.) {Ghe42D ->Fill(jeta-11,jphi,ccc1); Ghe42D0 ->Fill(jeta-11,jphi,1.); }
+	   }}}
+       Ghe42DF->Divide(Ghe42D,Ghe42D0, 1, 1, "B");// average A
+       //    Ghe1->Sumw2();
+       gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
+       Ghe42DF->SetMarkerStyle(20); Ghe42DF->SetMarkerSize(0.4); Ghe42DF->GetZaxis()->SetLabelSize(0.04); Ghe42DF->SetXTitle("<A>_RBX         #eta  \b"); Ghe42DF->SetYTitle("      #phi \b"); Ghe42DF->SetZTitle("<A>_RBX  - All \b"); Ghe42DF->SetMarkerColor(2); Ghe42DF->SetLineColor(2);      //      Ghe42DF->SetMaximum(1.000);  //      Ghe42DF->SetMinimum(1.0);
+       Ghe42DF->Draw("COLZ");
+       
+       /////////////////
+       cRBX1->Update();
+       cRBX1->Print("RBX-HE-2Dplot.png");
+       cRBX1->Clear();
+      // clean-up
+      if (Ghe42D) delete Ghe42D;
+      if (Ghe42D0) delete Ghe42D0;
+      if (Ghe42DF) delete Ghe42DF;
+
+    //========================================================================================== 23   HE: j = 3,4,5, 6, 7      14,15,16,17,18      // jphi = 0,1,2,3,4,5
+    //======================================================================
+    //======================================================================
+    //======================================================================
+      cout<<"      RBX HE negative direction phisector 1 *****" <<endl;
+       c5x6->Clear();
+       /////////////////
+       c5x6->Divide(5,6);
+       int kcountHEnegativedirection1=1;
+       // j - etaphi index:
+       TH1F* h2CeffHEnegativedirection1 = new TH1F("h2CeffHEnegativedirection1","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=0;jphi<6;jphi++) {
+	 for (int jeta=3;jeta<8;jeta++) {
+	   //	   for (int jphi=0;jphi<njphi;jphi++) {
+	   //	     cout<<"HE 54 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+	   TH1F *HEnegativedirection1 = (TH1F*)h2CeffHEnegativedirection1->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc5x6 = alexhf[jeta][jphi][i];
+	     if(ccc5x6>0.) {HEnegativedirection1 ->Fill(i,ccc5x6);HEnegativedirection1->SetBinError(i,0.01);}
+	     //	       if( i == 0 ) cout<<"HE 54 PLOTTING  for LS=1      ccc5x6=     "<< ccc5x6 <<endl;
+	   }// for i
+	   c5x6->cd(kcountHEnegativedirection1);
+	   HEnegativedirection1 ->SetMarkerStyle(20);HEnegativedirection1 ->SetMarkerSize(0.4);HEnegativedirection1 ->GetYaxis()->SetLabelSize(0.04);HEnegativedirection1 ->SetMarkerColor(2);HEnegativedirection1 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy();    
+
+	   if(kcountHEnegativedirection1 == 1) HEnegativedirection1 ->SetXTitle("HE jeta = 3; jphi =  0 \b");
+	   if(kcountHEnegativedirection1 == 6) HEnegativedirection1 ->SetXTitle("HE jeta = 3; jphi =  1 \b");
+	   if(kcountHEnegativedirection1 ==11) HEnegativedirection1 ->SetXTitle("HE jeta = 3; jphi =  2 \b");
+	   if(kcountHEnegativedirection1 ==16) HEnegativedirection1 ->SetXTitle("HE jeta = 3; jphi =  3 \b");
+	   if(kcountHEnegativedirection1 ==21) HEnegativedirection1 ->SetXTitle("HE jeta = 3; jphi =  4 \b");
+	   if(kcountHEnegativedirection1 ==26) HEnegativedirection1 ->SetXTitle("HE jeta = 3; jphi =  5 \b");
+	   
+	   if(kcountHEnegativedirection1 == 2) HEnegativedirection1 ->SetXTitle("HE jeta = 4; jphi =  0 \b");
+	   if(kcountHEnegativedirection1 == 7) HEnegativedirection1 ->SetXTitle("HE jeta = 4; jphi =  1 \b");
+	   if(kcountHEnegativedirection1 ==12) HEnegativedirection1 ->SetXTitle("HE jeta = 4; jphi =  2 \b");
+	   if(kcountHEnegativedirection1 ==17) HEnegativedirection1 ->SetXTitle("HE jeta = 4; jphi =  3 \b");
+	   if(kcountHEnegativedirection1 ==22) HEnegativedirection1 ->SetXTitle("HE jeta = 4; jphi =  4 \b");
+	   if(kcountHEnegativedirection1 ==27) HEnegativedirection1 ->SetXTitle("HE jeta = 4; jphi =  5 \b");
+	   
+	   if(kcountHEnegativedirection1 == 3) HEnegativedirection1 ->SetXTitle("HE jeta = 5; jphi =  0 \b");
+	   if(kcountHEnegativedirection1 == 8) HEnegativedirection1 ->SetXTitle("HE jeta = 5; jphi =  1 \b");
+	   if(kcountHEnegativedirection1 ==13) HEnegativedirection1 ->SetXTitle("HE jeta = 5; jphi =  2 \b");
+	   if(kcountHEnegativedirection1 ==18) HEnegativedirection1 ->SetXTitle("HE jeta = 5; jphi =  3 \b");
+	   if(kcountHEnegativedirection1 ==23) HEnegativedirection1 ->SetXTitle("HE jeta = 5; jphi =  4 \b");
+	   if(kcountHEnegativedirection1 ==28) HEnegativedirection1 ->SetXTitle("HE jeta = 5; jphi =  5 \b");
+	   
+	   if(kcountHEnegativedirection1 == 4) HEnegativedirection1 ->SetXTitle("HE jeta = 6; jphi =  0 \b");
+	   if(kcountHEnegativedirection1 == 9) HEnegativedirection1 ->SetXTitle("HE jeta = 6; jphi =  1 \b");
+	   if(kcountHEnegativedirection1 ==14) HEnegativedirection1 ->SetXTitle("HE jeta = 6; jphi =  2 \b");
+	   if(kcountHEnegativedirection1 ==19) HEnegativedirection1 ->SetXTitle("HE jeta = 6; jphi =  3 \b");
+	   if(kcountHEnegativedirection1 ==24) HEnegativedirection1 ->SetXTitle("HE jeta = 6; jphi =  4 \b");
+	   if(kcountHEnegativedirection1 ==29) HEnegativedirection1 ->SetXTitle("HE jeta = 6; jphi =  5 \b");
+
+	   if(kcountHEnegativedirection1 == 5) HEnegativedirection1 ->SetXTitle("HE jeta = 7; jphi =  0 \b");
+	   if(kcountHEnegativedirection1 ==10) HEnegativedirection1 ->SetXTitle("HE jeta = 7; jphi =  1 \b");
+	   if(kcountHEnegativedirection1 ==15) HEnegativedirection1 ->SetXTitle("HE jeta = 7; jphi =  2 \b");
+	   if(kcountHEnegativedirection1 ==20) HEnegativedirection1 ->SetXTitle("HE jeta = 7; jphi =  3 \b");
+	   if(kcountHEnegativedirection1 ==25) HEnegativedirection1 ->SetXTitle("HE jeta = 7; jphi =  4 \b");
+	   if(kcountHEnegativedirection1 ==30) HEnegativedirection1 ->SetXTitle("HE jeta = 7; jphi =  5 \b");
+
+	   HEnegativedirection1->Draw("Error");
+	   kcountHEnegativedirection1++;
+	   if(kcountHEnegativedirection1>30) break;// 5x6 = 30 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c5x6->Update();
+       c5x6->Print("RBX-HE-negative-phirange1.png");
+       c5x6->Clear();
+      // clean-up
+      if (h2CeffHEnegativedirection1) delete h2CeffHEnegativedirection1;
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 24   HE:: j = 3,4,5, 6, 7      14,15,16,17,18      jphi = 6,7,8,9,10,11
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HE negative direction phisector 2 *****" <<endl;
+       c5x6->Clear();
+       /////////////////
+       c5x6->Divide(5,6);
+       int kcountHEnegativedirection2=1;
+       // j - etaphi index:
+       TH1F* h2CeffHEnegativedirection2 = new TH1F("h2CeffHEnegativedirection2","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=6;jphi<12;jphi++) {
+	 for (int jeta=3;jeta<8;jeta++) {
+	   //	       	     cout<<"HE 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHEnegativedirection2   =     "<<kcountHEnegativedirection2  <<endl;
+	   TH1F *HEnegativedirection2 = (TH1F*)h2CeffHEnegativedirection2->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc5x6 = alexhf[jeta][jphi][i];
+	     if(ccc5x6>0.) {HEnegativedirection2 ->Fill(i,ccc5x6);HEnegativedirection2->SetBinError(i,0.01);}
+	     //		 	       if( i == 0 ) cout<<"HE 55 PLOTTING  for LS=1      ccc5x6=     "<< ccc5x6 <<endl;
+	   }// for i
+	   c5x6->cd(kcountHEnegativedirection2);
+	   HEnegativedirection2 ->SetMarkerStyle(20);HEnegativedirection2 ->SetMarkerSize(0.4);HEnegativedirection2 ->GetYaxis()->SetLabelSize(0.04);HEnegativedirection2 ->SetMarkerColor(2);HEnegativedirection2 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy();  
+  
+	   if(kcountHEnegativedirection2 == 1) HEnegativedirection2 ->SetXTitle("HE jeta = 3; jphi =  6 \b");
+	   if(kcountHEnegativedirection2 == 6) HEnegativedirection2 ->SetXTitle("HE jeta = 3; jphi =  7 \b");
+	   if(kcountHEnegativedirection2 ==11) HEnegativedirection2 ->SetXTitle("HE jeta = 3; jphi =  8 \b");
+	   if(kcountHEnegativedirection2 ==16) HEnegativedirection2 ->SetXTitle("HE jeta = 3; jphi =  9 \b");
+	   if(kcountHEnegativedirection2 ==21) HEnegativedirection2 ->SetXTitle("HE jeta = 3; jphi = 10 \b");
+	   if(kcountHEnegativedirection2 ==26) HEnegativedirection2 ->SetXTitle("HE jeta = 3; jphi = 11 \b");
+	   
+	   if(kcountHEnegativedirection2 == 2) HEnegativedirection2 ->SetXTitle("HE jeta = 4; jphi =  6 \b");
+	   if(kcountHEnegativedirection2 == 7) HEnegativedirection2 ->SetXTitle("HE jeta = 4; jphi =  7 \b");
+	   if(kcountHEnegativedirection2 ==12) HEnegativedirection2 ->SetXTitle("HE jeta = 4; jphi =  8 \b");
+	   if(kcountHEnegativedirection2 ==17) HEnegativedirection2 ->SetXTitle("HE jeta = 4; jphi =  9 \b");
+	   if(kcountHEnegativedirection2 ==22) HEnegativedirection2 ->SetXTitle("HE jeta = 4; jphi = 10 \b");
+	   if(kcountHEnegativedirection2 ==27) HEnegativedirection2 ->SetXTitle("HE jeta = 4; jphi = 11 \b");
+	   
+	   if(kcountHEnegativedirection2 == 3) HEnegativedirection2 ->SetXTitle("HE jeta = 5; jphi =  6 \b");
+	   if(kcountHEnegativedirection2 == 8) HEnegativedirection2 ->SetXTitle("HE jeta = 5; jphi =  7 \b");
+	   if(kcountHEnegativedirection2 ==13) HEnegativedirection2 ->SetXTitle("HE jeta = 5; jphi =  8 \b");
+	   if(kcountHEnegativedirection2 ==18) HEnegativedirection2 ->SetXTitle("HE jeta = 5; jphi =  9 \b");
+	   if(kcountHEnegativedirection2 ==23) HEnegativedirection2 ->SetXTitle("HE jeta = 5; jphi = 10 \b");
+	   if(kcountHEnegativedirection2 ==28) HEnegativedirection2 ->SetXTitle("HE jeta = 5; jphi = 11 \b");
+	   
+	   if(kcountHEnegativedirection2 == 4) HEnegativedirection2 ->SetXTitle("HE jeta = 6; jphi =  6 \b");
+	   if(kcountHEnegativedirection2 == 9) HEnegativedirection2 ->SetXTitle("HE jeta = 6; jphi =  7 \b");
+	   if(kcountHEnegativedirection2 ==14) HEnegativedirection2 ->SetXTitle("HE jeta = 6; jphi =  8 \b");
+	   if(kcountHEnegativedirection2 ==19) HEnegativedirection2 ->SetXTitle("HE jeta = 6; jphi =  9 \b");
+	   if(kcountHEnegativedirection2 ==24) HEnegativedirection2 ->SetXTitle("HE jeta = 6; jphi = 10 \b");
+	   if(kcountHEnegativedirection2 ==29) HEnegativedirection2 ->SetXTitle("HE jeta = 6; jphi = 11 \b");
+
+	   if(kcountHEnegativedirection2 == 5) HEnegativedirection2 ->SetXTitle("HE jeta = 7; jphi =  6 \b");
+	   if(kcountHEnegativedirection2 ==10) HEnegativedirection2 ->SetXTitle("HE jeta = 7; jphi =  7 \b");
+	   if(kcountHEnegativedirection2 ==15) HEnegativedirection2 ->SetXTitle("HE jeta = 7; jphi =  8 \b");
+	   if(kcountHEnegativedirection2 ==20) HEnegativedirection2 ->SetXTitle("HE jeta = 7; jphi =  9 \b");
+	   if(kcountHEnegativedirection2 ==25) HEnegativedirection2 ->SetXTitle("HE jeta = 7; jphi = 10 \b");
+	   if(kcountHEnegativedirection2 ==30) HEnegativedirection2 ->SetXTitle("HE jeta = 7; jphi = 11 \b");
+
+	   HEnegativedirection2->Draw("Error");
+	   kcountHEnegativedirection2++;
+	   if(kcountHEnegativedirection2>30) break;// 5x6 = 30 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c5x6->Update();
+       c5x6->Print("RBX-HE-negative-phirange2.png");
+       c5x6->Clear();
+      // clean-up
+      if (h2CeffHEnegativedirection2) delete h2CeffHEnegativedirection2;
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 25   HE:: j = 3,4,5, 6, 7      14,15,16,17,18       jphi =12,13,14,15,16,17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HE negative direction phisector 3 *****" <<endl;
+       c5x6->Clear();
+       /////////////////
+       c5x6->Divide(5,6);
+       int kcountHEnegativedirection3=1;
+       // j - etaphi index:
+       TH1F* h2CeffHEnegativedirection3 = new TH1F("h2CeffHEnegativedirection3","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=12;jphi<18;jphi++) {
+	 for (int jeta=3;jeta<8;jeta++) {
+	   //	       	     cout<<"HE 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHEnegativedirection3   =     "<<kcountHEnegativedirection3  <<endl;
+	   TH1F *HEnegativedirection3 = (TH1F*)h2CeffHEnegativedirection3->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc5x6 = alexhf[jeta][jphi][i];
+	     if(ccc5x6>0.) {HEnegativedirection3 ->Fill(i,ccc5x6);HEnegativedirection3->SetBinError(i,0.01);}
+	     //		 	       if( i == 0 ) cout<<"HE 55 PLOTTING  for LS=1      ccc5x6=     "<< ccc5x6 <<endl;
+	   }// for i
+	   c5x6->cd(kcountHEnegativedirection3);
+	   HEnegativedirection3 ->SetMarkerStyle(20);HEnegativedirection3 ->SetMarkerSize(0.4);HEnegativedirection3 ->GetYaxis()->SetLabelSize(0.04);HEnegativedirection3 ->SetMarkerColor(2);HEnegativedirection3 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy(); 
+
+	   if(kcountHEnegativedirection3 == 1) HEnegativedirection3 ->SetXTitle("HE jeta = 3; jphi = 12 \b");
+	   if(kcountHEnegativedirection3 == 6) HEnegativedirection3 ->SetXTitle("HE jeta = 3; jphi = 13 \b");
+	   if(kcountHEnegativedirection3 ==11) HEnegativedirection3 ->SetXTitle("HE jeta = 3; jphi = 14 \b");
+	   if(kcountHEnegativedirection3 ==16) HEnegativedirection3 ->SetXTitle("HE jeta = 3; jphi = 15 \b");
+	   if(kcountHEnegativedirection3 ==21) HEnegativedirection3 ->SetXTitle("HE jeta = 3; jphi = 16 \b");
+	   if(kcountHEnegativedirection3 ==26) HEnegativedirection3 ->SetXTitle("HE jeta = 3; jphi = 17 \b");
+	   
+	   if(kcountHEnegativedirection3 == 2) HEnegativedirection3 ->SetXTitle("HE jeta = 4; jphi = 12 \b");
+	   if(kcountHEnegativedirection3 == 7) HEnegativedirection3 ->SetXTitle("HE jeta = 4; jphi = 13 \b");
+	   if(kcountHEnegativedirection3 ==12) HEnegativedirection3 ->SetXTitle("HE jeta = 4; jphi = 14 \b");
+	   if(kcountHEnegativedirection3 ==17) HEnegativedirection3 ->SetXTitle("HE jeta = 4; jphi = 15 \b");
+	   if(kcountHEnegativedirection3 ==22) HEnegativedirection3 ->SetXTitle("HE jeta = 4; jphi = 16 \b");
+	   if(kcountHEnegativedirection3 ==27) HEnegativedirection3 ->SetXTitle("HE jeta = 4; jphi = 17 \b");
+	   
+	   if(kcountHEnegativedirection3 == 3) HEnegativedirection3 ->SetXTitle("HE jeta = 5; jphi = 12 \b");
+	   if(kcountHEnegativedirection3 == 8) HEnegativedirection3 ->SetXTitle("HE jeta = 5; jphi = 13 \b");
+	   if(kcountHEnegativedirection3 ==13) HEnegativedirection3 ->SetXTitle("HE jeta = 5; jphi = 14 \b");
+	   if(kcountHEnegativedirection3 ==18) HEnegativedirection3 ->SetXTitle("HE jeta = 5; jphi = 15 \b");
+	   if(kcountHEnegativedirection3 ==23) HEnegativedirection3 ->SetXTitle("HE jeta = 5; jphi = 16 \b");
+	   if(kcountHEnegativedirection3 ==28) HEnegativedirection3 ->SetXTitle("HE jeta = 5; jphi = 17 \b");
+	   
+	   if(kcountHEnegativedirection3 == 4) HEnegativedirection3 ->SetXTitle("HE jeta = 6; jphi = 12 \b");
+	   if(kcountHEnegativedirection3 == 9) HEnegativedirection3 ->SetXTitle("HE jeta = 6; jphi = 13 \b");
+	   if(kcountHEnegativedirection3 ==14) HEnegativedirection3 ->SetXTitle("HE jeta = 6; jphi = 14 \b");
+	   if(kcountHEnegativedirection3 ==19) HEnegativedirection3 ->SetXTitle("HE jeta = 6; jphi = 15 \b");
+	   if(kcountHEnegativedirection3 ==24) HEnegativedirection3 ->SetXTitle("HE jeta = 6; jphi = 16 \b");
+	   if(kcountHEnegativedirection3 ==29) HEnegativedirection3 ->SetXTitle("HE jeta = 6; jphi = 17 \b");
+
+	   if(kcountHEnegativedirection3 == 5) HEnegativedirection3 ->SetXTitle("HE jeta = 7; jphi = 12 \b");
+	   if(kcountHEnegativedirection3 ==10) HEnegativedirection3 ->SetXTitle("HE jeta = 7; jphi = 13 \b");
+	   if(kcountHEnegativedirection3 ==15) HEnegativedirection3 ->SetXTitle("HE jeta = 7; jphi = 14 \b");
+	   if(kcountHEnegativedirection3 ==20) HEnegativedirection3 ->SetXTitle("HE jeta = 7; jphi = 15 \b");
+	   if(kcountHEnegativedirection3 ==25) HEnegativedirection3 ->SetXTitle("HE jeta = 7; jphi = 16 \b");
+	   if(kcountHEnegativedirection3 ==30) HEnegativedirection3 ->SetXTitle("HE jeta = 7; jphi = 17 \b");
+   
+	   HEnegativedirection3->Draw("Error");
+	   kcountHEnegativedirection3++;
+	   if(kcountHEnegativedirection3>30) break;// 5x6 = 30 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c5x6->Update();
+       c5x6->Print("RBX-HE-negative-phirange3.png");
+       c5x6->Clear();
+      // clean-up
+      if (h2CeffHEnegativedirection3) delete h2CeffHEnegativedirection3;
+       ////////////////////////////////////////////////////////////////////////////////////
+    //========================================================================================== 26   HE:: j = 3,4,5, 6, 7      14,15,16,17,18     // jphi = 0,1,2,3,4,5
+    //======================================================================
+    //======================================================================
+    //======================================================================
+      cout<<"      RBX HE positive direction phisector 1 *****" <<endl;
+       c5x6->Clear();
+       /////////////////
+       c5x6->Divide(5,6);
+       int kcountHEpositivedirection1=1;
+       // j - etaphi index:
+       TH1F* h2CeffHEpositivedirection1 = new TH1F("h2CeffHEpositivedirection1","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=0;jphi<6;jphi++) {
+	 for (int jeta=14;jeta<19;jeta++) {
+	   //	   for (int jphi=0;jphi<njphi;jphi++) {
+	   //	     cout<<"HE 54 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+	   TH1F *HEpositivedirection1 = (TH1F*)h2CeffHEpositivedirection1->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc5x6 = alexhf[jeta][jphi][i];
+	     if(ccc5x6>0.) {HEpositivedirection1 ->Fill(i,ccc5x6);HEpositivedirection1->SetBinError(i,0.01);}
+	     //	       if( i == 0 ) cout<<"HE 54 PLOTTING  for LS=1      ccc5x6=     "<< ccc5x6 <<endl;
+	   }// for i
+	   c5x6->cd(kcountHEpositivedirection1);
+	   HEpositivedirection1 ->SetMarkerStyle(20);HEpositivedirection1 ->SetMarkerSize(0.4);HEpositivedirection1 ->GetYaxis()->SetLabelSize(0.04);HEpositivedirection1 ->SetMarkerColor(2);HEpositivedirection1 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy();    
+	   if(kcountHEpositivedirection1 == 1) HEpositivedirection1 ->SetXTitle("HE jeta = 3; jphi =  0 \b");
+	   if(kcountHEpositivedirection1 == 6) HEpositivedirection1 ->SetXTitle("HE jeta = 3; jphi =  1 \b");
+	   if(kcountHEpositivedirection1 ==11) HEpositivedirection1 ->SetXTitle("HE jeta = 3; jphi =  2 \b");
+	   if(kcountHEpositivedirection1 ==16) HEpositivedirection1 ->SetXTitle("HE jeta = 3; jphi =  3 \b");
+	   if(kcountHEpositivedirection1 ==21) HEpositivedirection1 ->SetXTitle("HE jeta = 3; jphi =  4 \b");
+	   if(kcountHEpositivedirection1 ==26) HEpositivedirection1 ->SetXTitle("HE jeta = 3; jphi =  5 \b");
+	   
+	   if(kcountHEpositivedirection1 == 2) HEpositivedirection1 ->SetXTitle("HE jeta = 4; jphi =  0 \b");
+	   if(kcountHEpositivedirection1 == 7) HEpositivedirection1 ->SetXTitle("HE jeta = 4; jphi =  1 \b");
+	   if(kcountHEpositivedirection1 ==12) HEpositivedirection1 ->SetXTitle("HE jeta = 4; jphi =  2 \b");
+	   if(kcountHEpositivedirection1 ==17) HEpositivedirection1 ->SetXTitle("HE jeta = 4; jphi =  3 \b");
+	   if(kcountHEpositivedirection1 ==22) HEpositivedirection1 ->SetXTitle("HE jeta = 4; jphi =  4 \b");
+	   if(kcountHEpositivedirection1 ==27) HEpositivedirection1 ->SetXTitle("HE jeta = 4; jphi =  5 \b");
+	   
+	   if(kcountHEpositivedirection1 == 3) HEpositivedirection1 ->SetXTitle("HE jeta = 5; jphi =  0 \b");
+	   if(kcountHEpositivedirection1 == 8) HEpositivedirection1 ->SetXTitle("HE jeta = 5; jphi =  1 \b");
+	   if(kcountHEpositivedirection1 ==13) HEpositivedirection1 ->SetXTitle("HE jeta = 5; jphi =  2 \b");
+	   if(kcountHEpositivedirection1 ==18) HEpositivedirection1 ->SetXTitle("HE jeta = 5; jphi =  3 \b");
+	   if(kcountHEpositivedirection1 ==23) HEpositivedirection1 ->SetXTitle("HE jeta = 5; jphi =  4 \b");
+	   if(kcountHEpositivedirection1 ==28) HEpositivedirection1 ->SetXTitle("HE jeta = 5; jphi =  5 \b");
+	   
+	   if(kcountHEpositivedirection1 == 4) HEpositivedirection1 ->SetXTitle("HE jeta = 6; jphi =  0 \b");
+	   if(kcountHEpositivedirection1 == 9) HEpositivedirection1 ->SetXTitle("HE jeta = 6; jphi =  1 \b");
+	   if(kcountHEpositivedirection1 ==14) HEpositivedirection1 ->SetXTitle("HE jeta = 6; jphi =  2 \b");
+	   if(kcountHEpositivedirection1 ==19) HEpositivedirection1 ->SetXTitle("HE jeta = 6; jphi =  3 \b");
+	   if(kcountHEpositivedirection1 ==24) HEpositivedirection1 ->SetXTitle("HE jeta = 6; jphi =  4 \b");
+	   if(kcountHEpositivedirection1 ==29) HEpositivedirection1 ->SetXTitle("HE jeta = 6; jphi =  5 \b");
+
+	   if(kcountHEpositivedirection1 == 5) HEpositivedirection1 ->SetXTitle("HE jeta = 7; jphi =  0 \b");
+	   if(kcountHEpositivedirection1 ==10) HEpositivedirection1 ->SetXTitle("HE jeta = 7; jphi =  1 \b");
+	   if(kcountHEpositivedirection1 ==15) HEpositivedirection1 ->SetXTitle("HE jeta = 7; jphi =  2 \b");
+	   if(kcountHEpositivedirection1 ==20) HEpositivedirection1 ->SetXTitle("HE jeta = 7; jphi =  3 \b");
+	   if(kcountHEpositivedirection1 ==25) HEpositivedirection1 ->SetXTitle("HE jeta = 7; jphi =  4 \b");
+	   if(kcountHEpositivedirection1 ==30) HEpositivedirection1 ->SetXTitle("HE jeta = 7; jphi =  5 \b");
+
+	   HEpositivedirection1->Draw("Error");
+	   kcountHEpositivedirection1++;
+	   if(kcountHEpositivedirection1>30) break;// 5x6 = 30 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c5x6->Update();
+       c5x6->Print("RBX-HE-positive-phirange1.png");
+       c5x6->Clear();
+      // clean-up
+      if (h2CeffHEpositivedirection1) delete h2CeffHEpositivedirection1;
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 27   HE:: j = 3,4,5, 6, 7      14,15,16,17,18     jphi = 6,7,8,9,10,11
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HE positive direction phisector 2 *****" <<endl;
+       c5x6->Clear();
+       /////////////////
+       c5x6->Divide(5,6);
+       int kcountHEpositivedirection2=1;
+       // j - etaphi index:
+       TH1F* h2CeffHEpositivedirection2 = new TH1F("h2CeffHEpositivedirection2","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=6;jphi<12;jphi++) {
+	 for (int jeta=14;jeta<19;jeta++) {
+	   //	       	     cout<<"HE 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHEpositivedirection2   =     "<<kcountHEpositivedirection2  <<endl;
+	   TH1F *HEpositivedirection2 = (TH1F*)h2CeffHEpositivedirection2->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc5x6 = alexhf[jeta][jphi][i];
+	     if(ccc5x6>0.) {HEpositivedirection2 ->Fill(i,ccc5x6);HEpositivedirection2->SetBinError(i,0.01);}
+	     //		 	       if( i == 0 ) cout<<"HE 55 PLOTTING  for LS=1      ccc5x6=     "<< ccc5x6 <<endl;
+	   }// for i
+	   c5x6->cd(kcountHEpositivedirection2);
+	   HEpositivedirection2 ->SetMarkerStyle(20);HEpositivedirection2 ->SetMarkerSize(0.4);HEpositivedirection2 ->GetYaxis()->SetLabelSize(0.04);HEpositivedirection2 ->SetMarkerColor(2);HEpositivedirection2 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy(); 
+
+	   if(kcountHEpositivedirection2 == 1) HEpositivedirection2 ->SetXTitle("HE jeta = 3; jphi =  6 \b");
+	   if(kcountHEpositivedirection2 == 6) HEpositivedirection2 ->SetXTitle("HE jeta = 3; jphi =  7 \b");
+	   if(kcountHEpositivedirection2 ==11) HEpositivedirection2 ->SetXTitle("HE jeta = 3; jphi =  8 \b");
+	   if(kcountHEpositivedirection2 ==16) HEpositivedirection2 ->SetXTitle("HE jeta = 3; jphi =  9 \b");
+	   if(kcountHEpositivedirection2 ==21) HEpositivedirection2 ->SetXTitle("HE jeta = 3; jphi = 10 \b");
+	   if(kcountHEpositivedirection2 ==26) HEpositivedirection2 ->SetXTitle("HE jeta = 3; jphi = 11 \b");
+	   
+	   if(kcountHEpositivedirection2 == 2) HEpositivedirection2 ->SetXTitle("HE jeta = 4; jphi =  6 \b");
+	   if(kcountHEpositivedirection2 == 7) HEpositivedirection2 ->SetXTitle("HE jeta = 4; jphi =  7 \b");
+	   if(kcountHEpositivedirection2 ==12) HEpositivedirection2 ->SetXTitle("HE jeta = 4; jphi =  8 \b");
+	   if(kcountHEpositivedirection2 ==17) HEpositivedirection2 ->SetXTitle("HE jeta = 4; jphi =  9 \b");
+	   if(kcountHEpositivedirection2 ==22) HEpositivedirection2 ->SetXTitle("HE jeta = 4; jphi = 10 \b");
+	   if(kcountHEpositivedirection2 ==27) HEpositivedirection2 ->SetXTitle("HE jeta = 4; jphi = 11 \b");
+	   
+	   if(kcountHEpositivedirection2 == 3) HEpositivedirection2 ->SetXTitle("HE jeta = 5; jphi =  6 \b");
+	   if(kcountHEpositivedirection2 == 8) HEpositivedirection2 ->SetXTitle("HE jeta = 5; jphi =  7 \b");
+	   if(kcountHEpositivedirection2 ==13) HEpositivedirection2 ->SetXTitle("HE jeta = 5; jphi =  8 \b");
+	   if(kcountHEpositivedirection2 ==18) HEpositivedirection2 ->SetXTitle("HE jeta = 5; jphi =  9 \b");
+	   if(kcountHEpositivedirection2 ==23) HEpositivedirection2 ->SetXTitle("HE jeta = 5; jphi = 10 \b");
+	   if(kcountHEpositivedirection2 ==28) HEpositivedirection2 ->SetXTitle("HE jeta = 5; jphi = 11 \b");
+	   
+	   if(kcountHEpositivedirection2 == 4) HEpositivedirection2 ->SetXTitle("HE jeta = 6; jphi =  6 \b");
+	   if(kcountHEpositivedirection2 == 9) HEpositivedirection2 ->SetXTitle("HE jeta = 6; jphi =  7 \b");
+	   if(kcountHEpositivedirection2 ==14) HEpositivedirection2 ->SetXTitle("HE jeta = 6; jphi =  8 \b");
+	   if(kcountHEpositivedirection2 ==19) HEpositivedirection2 ->SetXTitle("HE jeta = 6; jphi =  9 \b");
+	   if(kcountHEpositivedirection2 ==24) HEpositivedirection2 ->SetXTitle("HE jeta = 6; jphi = 10 \b");
+	   if(kcountHEpositivedirection2 ==29) HEpositivedirection2 ->SetXTitle("HE jeta = 6; jphi = 11 \b");
+
+	   if(kcountHEpositivedirection2 == 5) HEpositivedirection2 ->SetXTitle("HE jeta = 7; jphi =  6 \b");
+	   if(kcountHEpositivedirection2 ==10) HEpositivedirection2 ->SetXTitle("HE jeta = 7; jphi =  7 \b");
+	   if(kcountHEpositivedirection2 ==15) HEpositivedirection2 ->SetXTitle("HE jeta = 7; jphi =  8 \b");
+	   if(kcountHEpositivedirection2 ==20) HEpositivedirection2 ->SetXTitle("HE jeta = 7; jphi =  9 \b");
+	   if(kcountHEpositivedirection2 ==25) HEpositivedirection2 ->SetXTitle("HE jeta = 7; jphi = 10 \b");
+	   if(kcountHEpositivedirection2 ==30) HEpositivedirection2 ->SetXTitle("HE jeta = 7; jphi = 11 \b");
+   
+	   HEpositivedirection2->Draw("Error");
+	   kcountHEpositivedirection2++;
+	   if(kcountHEpositivedirection2>30) break;// 5x6 = 30 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c5x6->Update();
+       c5x6->Print("RBX-HE-positive-phirange2.png");
+       c5x6->Clear();
+      // clean-up
+      if (h2CeffHEpositivedirection2) delete h2CeffHEpositivedirection2;
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 28   HE:: j = 3,4,5, 6, 7      14,15,16,17,18        jphi =12,13,14,15,16,17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HE positive direction phisector 3 *****" <<endl;
+       c5x6->Clear();
+       /////////////////
+       c5x6->Divide(5,6);
+       int kcountHEpositivedirection3=1;
+       // j - etaphi index:
+       TH1F* h2CeffHEpositivedirection3 = new TH1F("h2CeffHEpositivedirection3","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=12;jphi<18;jphi++) {
+	 for (int jeta=14;jeta<19;jeta++) {
+	   //	       	     cout<<"HE 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHEpositivedirection3   =     "<<kcountHEpositivedirection3  <<endl;
+	   TH1F *HEpositivedirection3 = (TH1F*)h2CeffHEpositivedirection3->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc5x6 = alexhf[jeta][jphi][i];
+	     if(ccc5x6>0.) {HEpositivedirection3 ->Fill(i,ccc5x6);HEpositivedirection3->SetBinError(i,0.01);}
+	     //		 	       if( i == 0 ) cout<<"HE 55 PLOTTING  for LS=1      ccc5x6=     "<< ccc5x6 <<endl;
+	   }// for i
+	   c5x6->cd(kcountHEpositivedirection3);
+	   HEpositivedirection3 ->SetMarkerStyle(20);HEpositivedirection3 ->SetMarkerSize(0.4);HEpositivedirection3 ->GetYaxis()->SetLabelSize(0.04);HEpositivedirection3 ->SetMarkerColor(2);HEpositivedirection3 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy();    
+	   if(kcountHEpositivedirection3 == 1) HEpositivedirection3 ->SetXTitle("HE jeta = 3; jphi = 12 \b");
+	   if(kcountHEpositivedirection3 == 6) HEpositivedirection3 ->SetXTitle("HE jeta = 3; jphi = 13 \b");
+	   if(kcountHEpositivedirection3 ==11) HEpositivedirection3 ->SetXTitle("HE jeta = 3; jphi = 14 \b");
+	   if(kcountHEpositivedirection3 ==16) HEpositivedirection3 ->SetXTitle("HE jeta = 3; jphi = 15 \b");
+	   if(kcountHEpositivedirection3 ==21) HEpositivedirection3 ->SetXTitle("HE jeta = 3; jphi = 16 \b");
+	   if(kcountHEpositivedirection3 ==26) HEpositivedirection3 ->SetXTitle("HE jeta = 3; jphi = 17 \b");
+	   
+	   if(kcountHEpositivedirection3 == 2) HEpositivedirection3 ->SetXTitle("HE jeta = 4; jphi = 12 \b");
+	   if(kcountHEpositivedirection3 == 7) HEpositivedirection3 ->SetXTitle("HE jeta = 4; jphi = 13 \b");
+	   if(kcountHEpositivedirection3 ==12) HEpositivedirection3 ->SetXTitle("HE jeta = 4; jphi = 14 \b");
+	   if(kcountHEpositivedirection3 ==17) HEpositivedirection3 ->SetXTitle("HE jeta = 4; jphi = 15 \b");
+	   if(kcountHEpositivedirection3 ==22) HEpositivedirection3 ->SetXTitle("HE jeta = 4; jphi = 16 \b");
+	   if(kcountHEpositivedirection3 ==27) HEpositivedirection3 ->SetXTitle("HE jeta = 4; jphi = 17 \b");
+	   
+	   if(kcountHEpositivedirection3 == 3) HEpositivedirection3 ->SetXTitle("HE jeta = 5; jphi = 12 \b");
+	   if(kcountHEpositivedirection3 == 8) HEpositivedirection3 ->SetXTitle("HE jeta = 5; jphi = 13 \b");
+	   if(kcountHEpositivedirection3 ==13) HEpositivedirection3 ->SetXTitle("HE jeta = 5; jphi = 14 \b");
+	   if(kcountHEpositivedirection3 ==18) HEpositivedirection3 ->SetXTitle("HE jeta = 5; jphi = 15 \b");
+	   if(kcountHEpositivedirection3 ==23) HEpositivedirection3 ->SetXTitle("HE jeta = 5; jphi = 16 \b");
+	   if(kcountHEpositivedirection3 ==28) HEpositivedirection3 ->SetXTitle("HE jeta = 5; jphi = 17 \b");
+	   
+	   if(kcountHEpositivedirection3 == 4) HEpositivedirection3 ->SetXTitle("HE jeta = 6; jphi = 12 \b");
+	   if(kcountHEpositivedirection3 == 9) HEpositivedirection3 ->SetXTitle("HE jeta = 6; jphi = 13 \b");
+	   if(kcountHEpositivedirection3 ==14) HEpositivedirection3 ->SetXTitle("HE jeta = 6; jphi = 14 \b");
+	   if(kcountHEpositivedirection3 ==19) HEpositivedirection3 ->SetXTitle("HE jeta = 6; jphi = 15 \b");
+	   if(kcountHEpositivedirection3 ==24) HEpositivedirection3 ->SetXTitle("HE jeta = 6; jphi = 16 \b");
+	   if(kcountHEpositivedirection3 ==29) HEpositivedirection3 ->SetXTitle("HE jeta = 6; jphi = 17 \b");
+
+	   if(kcountHEpositivedirection3 == 5) HEpositivedirection3 ->SetXTitle("HE jeta = 7; jphi = 12 \b");
+	   if(kcountHEpositivedirection3 ==10) HEpositivedirection3 ->SetXTitle("HE jeta = 7; jphi = 13 \b");
+	   if(kcountHEpositivedirection3 ==15) HEpositivedirection3 ->SetXTitle("HE jeta = 7; jphi = 14 \b");
+	   if(kcountHEpositivedirection3 ==20) HEpositivedirection3 ->SetXTitle("HE jeta = 7; jphi = 15 \b");
+	   if(kcountHEpositivedirection3 ==25) HEpositivedirection3 ->SetXTitle("HE jeta = 7; jphi = 16 \b");
+	   if(kcountHEpositivedirection3 ==30) HEpositivedirection3 ->SetXTitle("HE jeta = 7; jphi = 17 \b");
+
+	   HEpositivedirection3->Draw("Error");
+	   kcountHEpositivedirection3++;
+	   if(kcountHEpositivedirection3>30) break;// 5x6 = 30 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c5x6->Update();
+       c5x6->Print("RBX-HE-positive-phirange3.png");
+       c5x6->Clear();
+      // clean-up
+      if (h2CeffHEpositivedirection3) delete h2CeffHEpositivedirection3;
+       ////////////////////////////////////////////////////////////////////////////////////
+
+       cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+       cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+       cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+       for(int jphi=0;jphi<njphi;jphi++){for(int jeta=0;jeta<njeta;jeta++){for(int i=0;i<nx;i++){alexhf[jeta][jphi][i] = 0.;}}}
+       
+       ////////////////////////////////////////////////////////////////////////////////////   end HE RBX  
+
+
+
+
+
+  ////////////////////////////////////////////////////////////////////////////////////     HO::  HOSTART HO: j = 7,8,9,10            11,12,13,14
+  //======================================================================
+    //======================================================================
+      //======================================================================
+      cout<<" RBX general for HO **************************" <<endl;
+      TH2F *Gho1KKK= (TH2F*)hfile->Get("h_2DsumADCAmplEtaPhiLs2");
+      TH2F *Gho1LLL= (TH2F*)hfile->Get("h_2DsumADCAmplEtaPhiLs20");
+      TH2F* Gho1 = (TH2F*)Gho1LLL->Clone("Gho1");
+      Gho1->Divide(Gho1KKK,Gho1LLL, 1, 1, "B");// average A
+      //    Gho1->Sumw2();
+      //      int nx = Gho1->GetXaxis()->GetNbins(); // # LS
+      //    nx = maxbinsRBX; // # LS
+      ny = Gho1->GetYaxis()->GetNbins(); // # jetaphi indexes
+       for (int j=1;j<=ny;j++) {
+	 int jeta = (j-1)/njphi;// jeta = 0-21
+	 if(jeta < 15 && jeta > 6 ) {
+	   int jphi = (j-1)-njphi*jeta;// jphi=0-17 
+	   //	   cout<<"HO 54        jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+	   // over LS:
+	   for (int i=1;i<=nx;i++) {
+	     double ccc1 =  Gho1->GetBinContent(i,j);
+	     alexhf[jeta][jphi][i-1] = ccc1;
+	     //	     if( i == 1 ) cout<<"HO 54  for LS=1      ccc1=     "<< ccc1 <<endl;
+	   }//i
+	 }//if
+       }//j
+      // clean-up
+      if (Gho1KKK) delete Gho1KKK;
+      if (Gho1LLL) delete Gho1LLL;
+      if (Gho1) delete Gho1;
+
+	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 33   HO:: 2D  jeta = 0 - 21       jphi =0 - 17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HO  2D plot *****" <<endl;
+      cRBX1->Clear();
+      /////////////////
+      cRBX1->Divide(1,1);
+      cRBX1->cd(1);
+       // int ietaphi = 0; ietaphi = ((k2+1)-1)*nphi + (k3+1) ;  k2=0-neta-1; k3=0-nphi-1; neta=18; nphi=22;
+       TH2F* Gho42D      = new TH2F("Gho42D","",   22, -11., 11., 18, 0., 18. );
+       TH2F* Gho42D0     = new TH2F("Gho42D0","",  22, -11., 11., 18, 0., 18. );
+       TH2F* Gho42DF = (TH2F*)Gho42D0->Clone("Gho42DF");
+       for (int jphi=0;jphi<njphi;jphi++) {
+	 for (int jeta=0;jeta<njeta;jeta++) {
+	   for (int i=0;i<nx;i++) {
+	     double ccc1 = alexhf[jeta][jphi][i];
+	     if(ccc1>0.) {Gho42D ->Fill(jeta-11,jphi,ccc1); Gho42D0 ->Fill(jeta-11,jphi,1.); }
+	   }}}
+       Gho42DF->Divide(Gho42D,Gho42D0, 1, 1, "B");// average A
+       //    Gho1->Sumw2();
+       gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
+       Gho42DF->SetMarkerStyle(20); Gho42DF->SetMarkerSize(0.4); Gho42DF->GetZaxis()->SetLabelSize(0.04); Gho42DF->SetXTitle("<A>_RBX         #eta  \b"); Gho42DF->SetYTitle("      #phi \b"); Gho42DF->SetZTitle("<A>_RBX  - All \b"); Gho42DF->SetMarkerColor(2); Gho42DF->SetLineColor(2);      //      Gho42DF->SetMaximum(1.000);  //      Gho42DF->SetMinimum(1.0);
+       Gho42DF->Draw("COLZ");
+       
+       /////////////////
+       cRBX1->Update();
+       cRBX1->Print("RBX-HO-2Dplot.png");
+       cRBX1->Clear();
+      // clean-up
+      if (Gho42D) delete Gho42D;
+      if (Gho42D0) delete Gho42D0;
+      if (Gho42DF) delete Gho42DF;
+
+    //========================================================================================== 35   HO:: j = 7,8,9,10            11,12,13,14     // jphi = 0,1,2,3,4,5
+    //======================================================================
+    //======================================================================
+    //======================================================================
+      cout<<"      RBX HO negative direction phisector 1 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHOnegativedirection1=1;
+       // j - etaphi index:
+       TH1F* h2CeffHOnegativedirection1 = new TH1F("h2CeffHOnegativedirection1","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=0;jphi<6;jphi++) {
+	 for (int jeta=7;jeta<11;jeta++) {
+	   //	   for (int jphi=0;jphi<njphi;jphi++) {
+	   //	     cout<<"HO 54 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+	   TH1F *HOnegativedirection1 = (TH1F*)h2CeffHOnegativedirection1->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HOnegativedirection1 ->Fill(i,ccc4x6);HOnegativedirection1->SetBinError(i,0.01);}
+	     //	       if( i == 0 ) cout<<"HO 54 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHOnegativedirection1);
+	   HOnegativedirection1 ->SetMarkerStyle(20);HOnegativedirection1 ->SetMarkerSize(0.4);HOnegativedirection1 ->GetYaxis()->SetLabelSize(0.04);HOnegativedirection1 ->SetMarkerColor(2);HOnegativedirection1 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy();    
+
+	   if(kcountHOnegativedirection1 == 1) HOnegativedirection1 ->SetXTitle("HO jeta = 7; jphi =  0 \b");
+	   if(kcountHOnegativedirection1 == 5) HOnegativedirection1 ->SetXTitle("HO jeta = 7; jphi =  1 \b");
+	   if(kcountHOnegativedirection1 == 9) HOnegativedirection1 ->SetXTitle("HO jeta = 7; jphi =  2 \b");
+	   if(kcountHOnegativedirection1 ==13) HOnegativedirection1 ->SetXTitle("HO jeta = 7; jphi =  3 \b");
+	   if(kcountHOnegativedirection1 ==17) HOnegativedirection1 ->SetXTitle("HO jeta = 7; jphi =  4 \b");
+	   if(kcountHOnegativedirection1 ==21) HOnegativedirection1 ->SetXTitle("HO jeta = 7; jphi =  5 \b");
+	   
+	   if(kcountHOnegativedirection1 == 2) HOnegativedirection1 ->SetXTitle("HO jeta = 8; jphi =  0 \b");
+	   if(kcountHOnegativedirection1 == 6) HOnegativedirection1 ->SetXTitle("HO jeta = 8; jphi =  1 \b");
+	   if(kcountHOnegativedirection1 ==10) HOnegativedirection1 ->SetXTitle("HO jeta = 8; jphi =  2 \b");
+	   if(kcountHOnegativedirection1 ==14) HOnegativedirection1 ->SetXTitle("HO jeta = 8; jphi =  3 \b");
+	   if(kcountHOnegativedirection1 ==18) HOnegativedirection1 ->SetXTitle("HO jeta = 8; jphi =  4 \b");
+	   if(kcountHOnegativedirection1 ==22) HOnegativedirection1 ->SetXTitle("HO jeta = 8; jphi =  5 \b");
+	   
+	   if(kcountHOnegativedirection1 == 3) HOnegativedirection1 ->SetXTitle("HO jeta = 9; jphi =  0 \b");
+	   if(kcountHOnegativedirection1 == 7) HOnegativedirection1 ->SetXTitle("HO jeta = 9; jphi =  1 \b");
+	   if(kcountHOnegativedirection1 ==11) HOnegativedirection1 ->SetXTitle("HO jeta = 9; jphi =  2 \b");
+	   if(kcountHOnegativedirection1 ==15) HOnegativedirection1 ->SetXTitle("HO jeta = 9; jphi =  3 \b");
+	   if(kcountHOnegativedirection1 ==19) HOnegativedirection1 ->SetXTitle("HO jeta = 9; jphi =  4 \b");
+	   if(kcountHOnegativedirection1 ==23) HOnegativedirection1 ->SetXTitle("HO jeta = 9; jphi =  5 \b");
+	   
+	   if(kcountHOnegativedirection1 == 4) HOnegativedirection1 ->SetXTitle("HO jeta =10; jphi =  0 \b");
+	   if(kcountHOnegativedirection1 == 8) HOnegativedirection1 ->SetXTitle("HO jeta =10; jphi =  1 \b");
+	   if(kcountHOnegativedirection1 ==12) HOnegativedirection1 ->SetXTitle("HO jeta =10; jphi =  2 \b");
+	   if(kcountHOnegativedirection1 ==16) HOnegativedirection1 ->SetXTitle("HO jeta =10; jphi =  3 \b");
+	   if(kcountHOnegativedirection1 ==20) HOnegativedirection1 ->SetXTitle("HO jeta =10; jphi =  4 \b");
+	   if(kcountHOnegativedirection1 ==24) HOnegativedirection1 ->SetXTitle("HO jeta =10; jphi =  5 \b");
+
+	   HOnegativedirection1->Draw("Error");
+	   kcountHOnegativedirection1++;
+	   if(kcountHOnegativedirection1>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HO-negative-phirange1.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHOnegativedirection1) delete h2CeffHOnegativedirection1;
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 36   HO:: j = 7,8,9,10            11,12,13,14      jphi = 6,7,8,9,10,11
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HO negative direction phisector 2 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHOnegativedirection2=1;
+       // j - etaphi index:
+       TH1F* h2CeffHOnegativedirection2 = new TH1F("h2CeffHOnegativedirection2","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=6;jphi<12;jphi++) {
+	 for (int jeta=7;jeta<11;jeta++) {
+	   //	       	     cout<<"HO 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHOnegativedirection2   =     "<<kcountHOnegativedirection2  <<endl;
+	   TH1F *HOnegativedirection2 = (TH1F*)h2CeffHOnegativedirection2->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HOnegativedirection2 ->Fill(i,ccc4x6);HOnegativedirection2->SetBinError(i,0.01);}
+	     //		 	       if( i == 0 ) cout<<"HO 55 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHOnegativedirection2);
+	   HOnegativedirection2 ->SetMarkerStyle(20);HOnegativedirection2 ->SetMarkerSize(0.4);HOnegativedirection2 ->GetYaxis()->SetLabelSize(0.04);HOnegativedirection2 ->SetMarkerColor(2);HOnegativedirection2 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy();  
+  
+	   if(kcountHOnegativedirection2 == 1) HOnegativedirection2 ->SetXTitle("HO jeta = 7; jphi =  6 \b");
+	   if(kcountHOnegativedirection2 == 5) HOnegativedirection2 ->SetXTitle("HO jeta = 7; jphi =  7 \b");
+	   if(kcountHOnegativedirection2 == 9) HOnegativedirection2 ->SetXTitle("HO jeta = 7; jphi =  8 \b");
+	   if(kcountHOnegativedirection2 ==13) HOnegativedirection2 ->SetXTitle("HO jeta = 7; jphi =  9 \b");
+	   if(kcountHOnegativedirection2 ==17) HOnegativedirection2 ->SetXTitle("HO jeta = 7; jphi = 10 \b");
+	   if(kcountHOnegativedirection2 ==21) HOnegativedirection2 ->SetXTitle("HO jeta = 7; jphi = 11 \b");
+	   
+	   if(kcountHOnegativedirection2 == 2) HOnegativedirection2 ->SetXTitle("HO jeta = 8; jphi =  6 \b");
+	   if(kcountHOnegativedirection2 == 6) HOnegativedirection2 ->SetXTitle("HO jeta = 8; jphi =  7 \b");
+	   if(kcountHOnegativedirection2 ==10) HOnegativedirection2 ->SetXTitle("HO jeta = 8; jphi =  8 \b");
+	   if(kcountHOnegativedirection2 ==14) HOnegativedirection2 ->SetXTitle("HO jeta = 8; jphi =  9 \b");
+	   if(kcountHOnegativedirection2 ==18) HOnegativedirection2 ->SetXTitle("HO jeta = 8; jphi = 10 \b");
+	   if(kcountHOnegativedirection2 ==22) HOnegativedirection2 ->SetXTitle("HO jeta = 8; jphi = 11 \b");
+	   
+	   if(kcountHOnegativedirection2 == 3) HOnegativedirection2 ->SetXTitle("HO jeta = 9; jphi =  6 \b");
+	   if(kcountHOnegativedirection2 == 7) HOnegativedirection2 ->SetXTitle("HO jeta = 9; jphi =  7 \b");
+	   if(kcountHOnegativedirection2 ==11) HOnegativedirection2 ->SetXTitle("HO jeta = 9; jphi =  8 \b");
+	   if(kcountHOnegativedirection2 ==15) HOnegativedirection2 ->SetXTitle("HO jeta = 9; jphi =  9 \b");
+	   if(kcountHOnegativedirection2 ==19) HOnegativedirection2 ->SetXTitle("HO jeta = 9; jphi = 10 \b");
+	   if(kcountHOnegativedirection2 ==23) HOnegativedirection2 ->SetXTitle("HO jeta = 9; jphi = 11 \b");
+	   
+	   if(kcountHOnegativedirection2 == 4) HOnegativedirection2 ->SetXTitle("HO jeta =10; jphi =  6 \b");
+	   if(kcountHOnegativedirection2 == 8) HOnegativedirection2 ->SetXTitle("HO jeta =10; jphi =  7 \b");
+	   if(kcountHOnegativedirection2 ==12) HOnegativedirection2 ->SetXTitle("HO jeta =10; jphi =  8 \b");
+	   if(kcountHOnegativedirection2 ==16) HOnegativedirection2 ->SetXTitle("HO jeta =10; jphi =  9 \b");
+	   if(kcountHOnegativedirection2 ==20) HOnegativedirection2 ->SetXTitle("HO jeta =10; jphi = 10 \b");
+	   if(kcountHOnegativedirection2 ==24) HOnegativedirection2 ->SetXTitle("HO jeta =10; jphi = 11 \b");
+
+	   HOnegativedirection2->Draw("Error");
+	   kcountHOnegativedirection2++;
+	   if(kcountHOnegativedirection2>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HO-negative-phirange2.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHOnegativedirection2) delete h2CeffHOnegativedirection2;
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 37   HO:: j = 7,8,9,10            11,12,13,14       jphi =12,13,14,15,16,17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HO negative direction phisector 3 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHOnegativedirection3=1;
+       // j - etaphi index:
+       TH1F* h2CeffHOnegativedirection3 = new TH1F("h2CeffHOnegativedirection3","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=12;jphi<18;jphi++) {
+	 for (int jeta=7;jeta<11;jeta++) {
+	   //	       	     cout<<"HO 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHOnegativedirection3   =     "<<kcountHOnegativedirection3  <<endl;
+	   TH1F *HOnegativedirection3 = (TH1F*)h2CeffHOnegativedirection3->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HOnegativedirection3 ->Fill(i,ccc4x6);HOnegativedirection3->SetBinError(i,0.01);}
+	     //		 	       if( i == 0 ) cout<<"HO 55 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHOnegativedirection3);
+	   HOnegativedirection3 ->SetMarkerStyle(20);HOnegativedirection3 ->SetMarkerSize(0.4);HOnegativedirection3 ->GetYaxis()->SetLabelSize(0.04);HOnegativedirection3 ->SetMarkerColor(2);HOnegativedirection3 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy(); 
+
+	   if(kcountHOnegativedirection3 == 1) HOnegativedirection3 ->SetXTitle("HO jeta = 7; jphi = 12 \b");
+	   if(kcountHOnegativedirection3 == 5) HOnegativedirection3 ->SetXTitle("HO jeta = 7; jphi = 13 \b");
+	   if(kcountHOnegativedirection3 == 9) HOnegativedirection3 ->SetXTitle("HO jeta = 7; jphi = 14 \b");
+	   if(kcountHOnegativedirection3 ==13) HOnegativedirection3 ->SetXTitle("HO jeta = 7; jphi = 15 \b");
+	   if(kcountHOnegativedirection3 ==17) HOnegativedirection3 ->SetXTitle("HO jeta = 7; jphi = 16 \b");
+	   if(kcountHOnegativedirection3 ==21) HOnegativedirection3 ->SetXTitle("HO jeta = 7; jphi = 17 \b");
+	   
+	   if(kcountHOnegativedirection3 == 2) HOnegativedirection3 ->SetXTitle("HO jeta = 8; jphi = 12 \b");
+	   if(kcountHOnegativedirection3 == 6) HOnegativedirection3 ->SetXTitle("HO jeta = 8; jphi = 13 \b");
+	   if(kcountHOnegativedirection3 ==10) HOnegativedirection3 ->SetXTitle("HO jeta = 8; jphi = 14 \b");
+	   if(kcountHOnegativedirection3 ==14) HOnegativedirection3 ->SetXTitle("HO jeta = 8; jphi = 15 \b");
+	   if(kcountHOnegativedirection3 ==18) HOnegativedirection3 ->SetXTitle("HO jeta = 8; jphi = 16 \b");
+	   if(kcountHOnegativedirection3 ==22) HOnegativedirection3 ->SetXTitle("HO jeta = 8; jphi = 17 \b");
+	   
+	   if(kcountHOnegativedirection3 == 3) HOnegativedirection3 ->SetXTitle("HO jeta = 9; jphi = 12 \b");
+	   if(kcountHOnegativedirection3 == 7) HOnegativedirection3 ->SetXTitle("HO jeta = 9; jphi = 13 \b");
+	   if(kcountHOnegativedirection3 ==11) HOnegativedirection3 ->SetXTitle("HO jeta = 9; jphi = 14 \b");
+	   if(kcountHOnegativedirection3 ==15) HOnegativedirection3 ->SetXTitle("HO jeta = 9; jphi = 15 \b");
+	   if(kcountHOnegativedirection3 ==19) HOnegativedirection3 ->SetXTitle("HO jeta = 9; jphi = 16 \b");
+	   if(kcountHOnegativedirection3 ==23) HOnegativedirection3 ->SetXTitle("HO jeta = 9; jphi = 17 \b");
+	   
+	   if(kcountHOnegativedirection3 == 4) HOnegativedirection3 ->SetXTitle("HO jeta =10; jphi = 12 \b");
+	   if(kcountHOnegativedirection3 == 8) HOnegativedirection3 ->SetXTitle("HO jeta =10; jphi = 13 \b");
+	   if(kcountHOnegativedirection3 ==12) HOnegativedirection3 ->SetXTitle("HO jeta =10; jphi = 14 \b");
+	   if(kcountHOnegativedirection3 ==16) HOnegativedirection3 ->SetXTitle("HO jeta =10; jphi = 15 \b");
+	   if(kcountHOnegativedirection3 ==20) HOnegativedirection3 ->SetXTitle("HO jeta =10; jphi = 16 \b");
+	   if(kcountHOnegativedirection3 ==24) HOnegativedirection3 ->SetXTitle("HO jeta =10; jphi = 17 \b");
+   
+	   HOnegativedirection3->Draw("Error");
+	   kcountHOnegativedirection3++;
+	   if(kcountHOnegativedirection3>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HO-negative-phirange3.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHOnegativedirection3) delete h2CeffHOnegativedirection3;
+       ////////////////////////////////////////////////////////////////////////////////////
+    //========================================================================================== 38   HO:: j = 7,8,9,10            11,12,13,14     // jphi = 0,1,2,3,4,5
+    //======================================================================
+    //======================================================================
+    //======================================================================
+      cout<<"      RBX HO positive direction phisector 1 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHOpositivedirection1=1;
+       // j - etaphi index:
+       TH1F* h2CeffHOpositivedirection1 = new TH1F("h2CeffHOpositivedirection1","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=0;jphi<6;jphi++) {
+	 for (int jeta=11;jeta<15;jeta++) {
+	   //	   for (int jphi=0;jphi<njphi;jphi++) {
+	   //	     cout<<"HO 54 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+	   TH1F *HOpositivedirection1 = (TH1F*)h2CeffHOpositivedirection1->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HOpositivedirection1 ->Fill(i,ccc4x6);HOpositivedirection1->SetBinError(i,0.01);}
+	     //	       if( i == 0 ) cout<<"HO 54 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHOpositivedirection1);
+	   HOpositivedirection1 ->SetMarkerStyle(20);HOpositivedirection1 ->SetMarkerSize(0.4);HOpositivedirection1 ->GetYaxis()->SetLabelSize(0.04);HOpositivedirection1 ->SetMarkerColor(2);HOpositivedirection1 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy();    
+	   if(kcountHOpositivedirection1 == 1) HOpositivedirection1 ->SetXTitle("HO jeta = 11; jphi =  0 \b");
+	   if(kcountHOpositivedirection1 == 5) HOpositivedirection1 ->SetXTitle("HO jeta = 11; jphi =  1 \b");
+	   if(kcountHOpositivedirection1 == 9) HOpositivedirection1 ->SetXTitle("HO jeta = 11; jphi =  2 \b");
+	   if(kcountHOpositivedirection1 ==13) HOpositivedirection1 ->SetXTitle("HO jeta = 11; jphi =  3 \b");
+	   if(kcountHOpositivedirection1 ==17) HOpositivedirection1 ->SetXTitle("HO jeta = 11; jphi =  4 \b");
+	   if(kcountHOpositivedirection1 ==21) HOpositivedirection1 ->SetXTitle("HO jeta = 11; jphi =  5 \b");
+	   
+	   if(kcountHOpositivedirection1 == 2) HOpositivedirection1 ->SetXTitle("HO jeta = 12; jphi =  0 \b");
+	   if(kcountHOpositivedirection1 == 6) HOpositivedirection1 ->SetXTitle("HO jeta = 12; jphi =  1 \b");
+	   if(kcountHOpositivedirection1 ==10) HOpositivedirection1 ->SetXTitle("HO jeta = 12; jphi =  2 \b");
+	   if(kcountHOpositivedirection1 ==14) HOpositivedirection1 ->SetXTitle("HO jeta = 12; jphi =  3 \b");
+	   if(kcountHOpositivedirection1 ==18) HOpositivedirection1 ->SetXTitle("HO jeta = 12; jphi =  4 \b");
+	   if(kcountHOpositivedirection1 ==22) HOpositivedirection1 ->SetXTitle("HO jeta = 12; jphi =  5 \b");
+	   
+	   if(kcountHOpositivedirection1 == 3) HOpositivedirection1 ->SetXTitle("HO jeta = 13; jphi =  0 \b");
+	   if(kcountHOpositivedirection1 == 7) HOpositivedirection1 ->SetXTitle("HO jeta = 13; jphi =  1 \b");
+	   if(kcountHOpositivedirection1 ==11) HOpositivedirection1 ->SetXTitle("HO jeta = 13; jphi =  2 \b");
+	   if(kcountHOpositivedirection1 ==15) HOpositivedirection1 ->SetXTitle("HO jeta = 13; jphi =  3 \b");
+	   if(kcountHOpositivedirection1 ==19) HOpositivedirection1 ->SetXTitle("HO jeta = 13; jphi =  4 \b");
+	   if(kcountHOpositivedirection1 ==23) HOpositivedirection1 ->SetXTitle("HO jeta = 13; jphi =  5 \b");
+	   
+	   if(kcountHOpositivedirection1 == 4) HOpositivedirection1 ->SetXTitle("HO jeta = 14; jphi =  0 \b");
+	   if(kcountHOpositivedirection1 == 8) HOpositivedirection1 ->SetXTitle("HO jeta = 14; jphi =  1 \b");
+	   if(kcountHOpositivedirection1 ==12) HOpositivedirection1 ->SetXTitle("HO jeta = 14; jphi =  2 \b");
+	   if(kcountHOpositivedirection1 ==16) HOpositivedirection1 ->SetXTitle("HO jeta = 14; jphi =  3 \b");
+	   if(kcountHOpositivedirection1 ==20) HOpositivedirection1 ->SetXTitle("HO jeta = 14; jphi =  4 \b");
+	   if(kcountHOpositivedirection1 ==24) HOpositivedirection1 ->SetXTitle("HO jeta = 14; jphi =  5 \b");
+
+	   HOpositivedirection1->Draw("Error");
+	   kcountHOpositivedirection1++;
+	   if(kcountHOpositivedirection1>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HO-positive-phirange1.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHOpositivedirection1) delete h2CeffHOpositivedirection1;
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 39   HO:: j = 7,8,9,10            11,12,13,14       jphi = 6,7,8,9,10,11
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HO positive direction phisector 2 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHOpositivedirection2=1;
+       // j - etaphi index:
+       TH1F* h2CeffHOpositivedirection2 = new TH1F("h2CeffHOpositivedirection2","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=6;jphi<12;jphi++) {
+	 for (int jeta=11;jeta<15;jeta++) {
+	   //	       	     cout<<"HO 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHOpositivedirection2   =     "<<kcountHOpositivedirection2  <<endl;
+	   TH1F *HOpositivedirection2 = (TH1F*)h2CeffHOpositivedirection2->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HOpositivedirection2 ->Fill(i,ccc4x6);HOpositivedirection2->SetBinError(i,0.01);}
+	     //		 	       if( i == 0 ) cout<<"HO 55 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHOpositivedirection2);
+	   HOpositivedirection2 ->SetMarkerStyle(20);HOpositivedirection2 ->SetMarkerSize(0.4);HOpositivedirection2 ->GetYaxis()->SetLabelSize(0.04);HOpositivedirection2 ->SetMarkerColor(2);HOpositivedirection2 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy(); 
+
+	   if(kcountHOpositivedirection2 == 1) HOpositivedirection2 ->SetXTitle("HO jeta = 11; jphi =  6 \b");
+	   if(kcountHOpositivedirection2 == 5) HOpositivedirection2 ->SetXTitle("HO jeta = 11; jphi =  7 \b");
+	   if(kcountHOpositivedirection2 == 9) HOpositivedirection2 ->SetXTitle("HO jeta = 11; jphi =  8 \b");
+	   if(kcountHOpositivedirection2 ==13) HOpositivedirection2 ->SetXTitle("HO jeta = 11; jphi =  9 \b");
+	   if(kcountHOpositivedirection2 ==17) HOpositivedirection2 ->SetXTitle("HO jeta = 11; jphi = 10 \b");
+	   if(kcountHOpositivedirection2 ==21) HOpositivedirection2 ->SetXTitle("HO jeta = 11; jphi = 11 \b");
+	   
+	   if(kcountHOpositivedirection2 == 2) HOpositivedirection2 ->SetXTitle("HO jeta = 12; jphi =  6 \b");
+	   if(kcountHOpositivedirection2 == 6) HOpositivedirection2 ->SetXTitle("HO jeta = 12; jphi =  7 \b");
+	   if(kcountHOpositivedirection2 ==10) HOpositivedirection2 ->SetXTitle("HO jeta = 12; jphi =  8 \b");
+	   if(kcountHOpositivedirection2 ==14) HOpositivedirection2 ->SetXTitle("HO jeta = 12; jphi =  9 \b");
+	   if(kcountHOpositivedirection2 ==18) HOpositivedirection2 ->SetXTitle("HO jeta = 12; jphi = 10 \b");
+	   if(kcountHOpositivedirection2 ==22) HOpositivedirection2 ->SetXTitle("HO jeta = 12; jphi = 11 \b");
+	   
+	   if(kcountHOpositivedirection2 == 3) HOpositivedirection2 ->SetXTitle("HO jeta = 13; jphi =  6 \b");
+	   if(kcountHOpositivedirection2 == 7) HOpositivedirection2 ->SetXTitle("HO jeta = 13; jphi =  7 \b");
+	   if(kcountHOpositivedirection2 ==11) HOpositivedirection2 ->SetXTitle("HO jeta = 13; jphi =  8 \b");
+	   if(kcountHOpositivedirection2 ==15) HOpositivedirection2 ->SetXTitle("HO jeta = 13; jphi =  9 \b");
+	   if(kcountHOpositivedirection2 ==19) HOpositivedirection2 ->SetXTitle("HO jeta = 13; jphi = 10 \b");
+	   if(kcountHOpositivedirection2 ==23) HOpositivedirection2 ->SetXTitle("HO jeta = 13; jphi = 11 \b");
+	   
+	   if(kcountHOpositivedirection2 == 4) HOpositivedirection2 ->SetXTitle("HO jeta = 14; jphi =  6 \b");
+	   if(kcountHOpositivedirection2 == 8) HOpositivedirection2 ->SetXTitle("HO jeta = 14; jphi =  7 \b");
+	   if(kcountHOpositivedirection2 ==12) HOpositivedirection2 ->SetXTitle("HO jeta = 14; jphi =  8 \b");
+	   if(kcountHOpositivedirection2 ==16) HOpositivedirection2 ->SetXTitle("HO jeta = 14; jphi =  9 \b");
+	   if(kcountHOpositivedirection2 ==20) HOpositivedirection2 ->SetXTitle("HO jeta = 14; jphi = 10 \b");
+	   if(kcountHOpositivedirection2 ==24) HOpositivedirection2 ->SetXTitle("HO jeta = 14; jphi = 11 \b");
+   
+	   HOpositivedirection2->Draw("Error");
+	   kcountHOpositivedirection2++;
+	   if(kcountHOpositivedirection2>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HO-positive-phirange2.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHOpositivedirection2) delete h2CeffHOpositivedirection2;
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 40   HO:: j = 7,8,9,10            11,12,13,14       jphi =12,13,14,15,16,17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HO positive direction phisector 3 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHOpositivedirection3=1;
+       // j - etaphi index:
+       TH1F* h2CeffHOpositivedirection3 = new TH1F("h2CeffHOpositivedirection3","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=12;jphi<18;jphi++) {
+	 for (int jeta=11;jeta<15;jeta++) {
+	   //	       	     cout<<"HO 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHOpositivedirection3   =     "<<kcountHOpositivedirection3  <<endl;
+	   TH1F *HOpositivedirection3 = (TH1F*)h2CeffHOpositivedirection3->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HOpositivedirection3 ->Fill(i,ccc4x6);HOpositivedirection3->SetBinError(i,0.01);}
+	     //		 	       if( i == 0 ) cout<<"HO 55 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHOpositivedirection3);
+	   HOpositivedirection3 ->SetMarkerStyle(20);HOpositivedirection3 ->SetMarkerSize(0.4);HOpositivedirection3 ->GetYaxis()->SetLabelSize(0.04);HOpositivedirection3 ->SetMarkerColor(2);HOpositivedirection3 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy();    
+	   if(kcountHOpositivedirection3 == 1) HOpositivedirection3 ->SetXTitle("HO jeta = 11; jphi = 12 \b");
+	   if(kcountHOpositivedirection3 == 5) HOpositivedirection3 ->SetXTitle("HO jeta = 11; jphi = 13 \b");
+	   if(kcountHOpositivedirection3 == 9) HOpositivedirection3 ->SetXTitle("HO jeta = 11; jphi = 14 \b");
+	   if(kcountHOpositivedirection3 ==13) HOpositivedirection3 ->SetXTitle("HO jeta = 11; jphi = 15 \b");
+	   if(kcountHOpositivedirection3 ==17) HOpositivedirection3 ->SetXTitle("HO jeta = 11; jphi = 16 \b");
+	   if(kcountHOpositivedirection3 ==21) HOpositivedirection3 ->SetXTitle("HO jeta = 11; jphi = 17 \b");
+	   
+	   if(kcountHOpositivedirection3 == 2) HOpositivedirection3 ->SetXTitle("HO jeta = 12; jphi = 12 \b");
+	   if(kcountHOpositivedirection3 == 6) HOpositivedirection3 ->SetXTitle("HO jeta = 12; jphi = 13 \b");
+	   if(kcountHOpositivedirection3 ==10) HOpositivedirection3 ->SetXTitle("HO jeta = 12; jphi = 14 \b");
+	   if(kcountHOpositivedirection3 ==14) HOpositivedirection3 ->SetXTitle("HO jeta = 12; jphi = 15 \b");
+	   if(kcountHOpositivedirection3 ==18) HOpositivedirection3 ->SetXTitle("HO jeta = 12; jphi = 16 \b");
+	   if(kcountHOpositivedirection3 ==22) HOpositivedirection3 ->SetXTitle("HO jeta = 12; jphi = 17 \b");
+	   
+	   if(kcountHOpositivedirection3 == 3) HOpositivedirection3 ->SetXTitle("HO jeta = 13; jphi = 12 \b");
+	   if(kcountHOpositivedirection3 == 7) HOpositivedirection3 ->SetXTitle("HO jeta = 13; jphi = 13 \b");
+	   if(kcountHOpositivedirection3 ==11) HOpositivedirection3 ->SetXTitle("HO jeta = 13; jphi = 14 \b");
+	   if(kcountHOpositivedirection3 ==15) HOpositivedirection3 ->SetXTitle("HO jeta = 13; jphi = 15 \b");
+	   if(kcountHOpositivedirection3 ==19) HOpositivedirection3 ->SetXTitle("HO jeta = 13; jphi = 16 \b");
+	   if(kcountHOpositivedirection3 ==23) HOpositivedirection3 ->SetXTitle("HO jeta = 13; jphi = 17 \b");
+	   
+	   if(kcountHOpositivedirection3 == 4) HOpositivedirection3 ->SetXTitle("HO jeta = 14; jphi = 12 \b");
+	   if(kcountHOpositivedirection3 == 8) HOpositivedirection3 ->SetXTitle("HO jeta = 14; jphi = 13 \b");
+	   if(kcountHOpositivedirection3 ==12) HOpositivedirection3 ->SetXTitle("HO jeta = 14; jphi = 14 \b");
+	   if(kcountHOpositivedirection3 ==16) HOpositivedirection3 ->SetXTitle("HO jeta = 14; jphi = 15 \b");
+	   if(kcountHOpositivedirection3 ==20) HOpositivedirection3 ->SetXTitle("HO jeta = 14; jphi = 16 \b");
+	   if(kcountHOpositivedirection3 ==24) HOpositivedirection3 ->SetXTitle("HO jeta = 14; jphi = 17 \b");
+
+	   HOpositivedirection3->Draw("Error");
+	   kcountHOpositivedirection3++;
+	   if(kcountHOpositivedirection3>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HO-positive-phirange3.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHOpositivedirection3) delete h2CeffHOpositivedirection3;
+       ////////////////////////////////////////////////////////////////////////////////////
+
+       cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+       cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+       cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+       for(int jphi=0;jphi<njphi;jphi++){for(int jeta=0;jeta<njeta;jeta++){for(int i=0;i<nx;i++){alexhf[jeta][jphi][i] = 0.;}}}
+       
+       ////////////////////////////////////////////////////////////////////////////////////   end HO RBX  
+
+
+
+
+
+
+
+
+
+
+  ////////////////////////////////////////////////////////////////////////////////////     HF::   HFSTART
+  //======================================================================
+    //======================================================================
+      //======================================================================
+      cout<<" RBX general for HF **************************" <<endl;
+      TH2F *Ghf1KKK= (TH2F*)hfile->Get("h_2DsumADCAmplEtaPhiLs3");
+      TH2F *Ghf1LLL= (TH2F*)hfile->Get("h_2DsumADCAmplEtaPhiLs30");
+      TH2F* Ghf1 = (TH2F*)Ghf1LLL->Clone("Ghf1");
+      Ghf1->Divide(Ghf1KKK,Ghf1LLL, 1, 1, "B");// average A
+      //    Ghf1->Sumw2();
+      //      int nx = Ghf1->GetXaxis()->GetNbins(); // # LS
+      //    nx = maxbinsRBX; // # LS
+      ny = Ghf1->GetYaxis()->GetNbins(); // # jetaphi indexes
+       for (int j=1;j<=ny;j++) {
+	 int jeta = (j-1)/njphi;// jeta = 0-21
+	 if(jeta < 4 || jeta > 17 ) {
+	   int jphi = (j-1)-njphi*jeta;// jphi=0-17 
+	   //	   cout<<"HF 54        jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+	   // over LS:
+	   for (int i=1;i<=nx;i++) {
+	     double ccc1 =  Ghf1->GetBinContent(i,j);
+	     alexhf[jeta][jphi][i-1] = ccc1;
+	     //	     if( i == 1 ) cout<<"HF 54  for LS=1      ccc1=     "<< ccc1 <<endl;
+	   }//i
+	 }//if
+       }//j
+      // clean-up
+      if (Ghf1KKK) delete Ghf1KKK;
+      if (Ghf1LLL) delete Ghf1LLL;
+      if (Ghf1) delete Ghf1;
+
+	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 60   HF:: 2D  jeta = 0 - 21       jphi =0 - 17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HF  2D plot *****" <<endl;
+      cRBX1->Clear();
+      /////////////////
+      cRBX1->Divide(1,1);
+      cRBX1->cd(1);
+       // int ietaphi = 0; ietaphi = ((k2+1)-1)*nphi + (k3+1) ;  k2=0-neta-1; k3=0-nphi-1; neta=18; nphi=22;
+       TH2F* Ghf42D      = new TH2F("Ghf42D","",   22, -11., 11., 18, 0., 18. );
+       TH2F* Ghf42D0     = new TH2F("Ghf42D0","",  22, -11., 11., 18, 0., 18. );
+       TH2F* Ghf42DF = (TH2F*)Ghf42D0->Clone("Ghf42DF");
+       for (int jphi=0;jphi<njphi;jphi++) {
+	 for (int jeta=0;jeta<njeta;jeta++) {
+	   for (int i=0;i<nx;i++) {
+	     double ccc1 = alexhf[jeta][jphi][i];
+	     if(ccc1>0.) {Ghf42D ->Fill(jeta-11,jphi,ccc1); Ghf42D0 ->Fill(jeta-11,jphi,1.); }
+	   }}}
+       Ghf42DF->Divide(Ghf42D,Ghf42D0, 1, 1, "B");// average A
+       //    Ghf1->Sumw2();
+       gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
+       Ghf42DF->SetMarkerStyle(20); Ghf42DF->SetMarkerSize(0.4); Ghf42DF->GetZaxis()->SetLabelSize(0.04); Ghf42DF->SetXTitle("<A>_RBX         #eta  \b"); Ghf42DF->SetYTitle("      #phi \b"); Ghf42DF->SetZTitle("<A>_RBX  - All \b"); Ghf42DF->SetMarkerColor(2); Ghf42DF->SetLineColor(2);      //      Ghf42DF->SetMaximum(1.000);  //      Ghf42DF->SetMinimum(1.0);
+       Ghf42DF->Draw("COLZ");
+       
+       /////////////////
+       cRBX1->Update();
+       cRBX1->Print("RBX-HF-2Dplot.png");
+       cRBX1->Clear();
+      // clean-up
+      if (Ghf42D) delete Ghf42D;
+      if (Ghf42D0) delete Ghf42D0;
+      if (Ghf42DF) delete Ghf42DF;
+
+    //========================================================================================== 54   HF:: jeta = 0,1,2, 3            18,19,20,21       // jphi = 0,1,2,3,4,5
+    //======================================================================
+    //======================================================================
+    //======================================================================
+       cout<<"      RBX HF negative direction phisector 1 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHFnegativedirection1=1;
+       // j - etaphi index:
+       TH1F* h2CeffHFnegativedirection1 = new TH1F("h2CeffHFnegativedirection1","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=0;jphi<6;jphi++) {
+	 for (int jeta=0;jeta<4;jeta++) {
+	   //	   for (int jphi=0;jphi<njphi;jphi++) {
+	   //	     cout<<"HF 54 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+	   TH1F *HFnegativedirection1 = (TH1F*)h2CeffHFnegativedirection1->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HFnegativedirection1 ->Fill(i,ccc4x6);HFnegativedirection1->SetBinError(i,0.01);}
+	     //	       if( i == 0 ) cout<<"HF 54 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHFnegativedirection1);
+	   HFnegativedirection1 ->SetMarkerStyle(20);HFnegativedirection1 ->SetMarkerSize(0.4);HFnegativedirection1 ->GetYaxis()->SetLabelSize(0.04);HFnegativedirection1 ->SetMarkerColor(2);HFnegativedirection1 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy();    
+
+	   if(kcountHFnegativedirection1 == 1) HFnegativedirection1 ->SetXTitle("HF jeta = 0; jphi =  0 \b");
+	   if(kcountHFnegativedirection1 == 5) HFnegativedirection1 ->SetXTitle("HF jeta = 0; jphi =  1 \b");
+	   if(kcountHFnegativedirection1 == 9) HFnegativedirection1 ->SetXTitle("HF jeta = 0; jphi =  2 \b");
+	   if(kcountHFnegativedirection1 ==13) HFnegativedirection1 ->SetXTitle("HF jeta = 0; jphi =  3 \b");
+	   if(kcountHFnegativedirection1 ==17) HFnegativedirection1 ->SetXTitle("HF jeta = 0; jphi =  4 \b");
+	   if(kcountHFnegativedirection1 ==21) HFnegativedirection1 ->SetXTitle("HF jeta = 0; jphi =  5 \b");
+	   
+	   if(kcountHFnegativedirection1 == 2) HFnegativedirection1 ->SetXTitle("HF jeta = 1; jphi =  0 \b");
+	   if(kcountHFnegativedirection1 == 6) HFnegativedirection1 ->SetXTitle("HF jeta = 1; jphi =  1 \b");
+	   if(kcountHFnegativedirection1 ==10) HFnegativedirection1 ->SetXTitle("HF jeta = 1; jphi =  2 \b");
+	   if(kcountHFnegativedirection1 ==14) HFnegativedirection1 ->SetXTitle("HF jeta = 1; jphi =  3 \b");
+	   if(kcountHFnegativedirection1 ==18) HFnegativedirection1 ->SetXTitle("HF jeta = 1; jphi =  4 \b");
+	   if(kcountHFnegativedirection1 ==22) HFnegativedirection1 ->SetXTitle("HF jeta = 1; jphi =  5 \b");
+	   
+	   if(kcountHFnegativedirection1 == 3) HFnegativedirection1 ->SetXTitle("HF jeta = 2; jphi =  0 \b");
+	   if(kcountHFnegativedirection1 == 7) HFnegativedirection1 ->SetXTitle("HF jeta = 2; jphi =  1 \b");
+	   if(kcountHFnegativedirection1 ==11) HFnegativedirection1 ->SetXTitle("HF jeta = 2; jphi =  2 \b");
+	   if(kcountHFnegativedirection1 ==15) HFnegativedirection1 ->SetXTitle("HF jeta = 2; jphi =  3 \b");
+	   if(kcountHFnegativedirection1 ==19) HFnegativedirection1 ->SetXTitle("HF jeta = 2; jphi =  4 \b");
+	   if(kcountHFnegativedirection1 ==23) HFnegativedirection1 ->SetXTitle("HF jeta = 2; jphi =  5 \b");
+	   
+	   if(kcountHFnegativedirection1 == 4) HFnegativedirection1 ->SetXTitle("HF jeta = 3; jphi =  0 \b");
+	   if(kcountHFnegativedirection1 == 8) HFnegativedirection1 ->SetXTitle("HF jeta = 3; jphi =  1 \b");
+	   if(kcountHFnegativedirection1 ==12) HFnegativedirection1 ->SetXTitle("HF jeta = 3; jphi =  2 \b");
+	   if(kcountHFnegativedirection1 ==16) HFnegativedirection1 ->SetXTitle("HF jeta = 3; jphi =  3 \b");
+	   if(kcountHFnegativedirection1 ==20) HFnegativedirection1 ->SetXTitle("HF jeta = 3; jphi =  4 \b");
+	   if(kcountHFnegativedirection1 ==24) HFnegativedirection1 ->SetXTitle("HF jeta = 3; jphi =  5 \b");
+
+	   HFnegativedirection1->Draw("Error");
+	   kcountHFnegativedirection1++;
+	   if(kcountHFnegativedirection1>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HF-negative-phirange1.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHFnegativedirection1) delete h2CeffHFnegativedirection1;
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 55   HF:: jeta = 0,1,2, 3            18,19,20,21       jphi = 6,7,8,9,10,11
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       cout<<"      RBX HF negative direction phisector 2 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHFnegativedirection2=1;
+       // j - etaphi index:
+       TH1F* h2CeffHFnegativedirection2 = new TH1F("h2CeffHFnegativedirection2","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=6;jphi<12;jphi++) {
+	 for (int jeta=0;jeta<4;jeta++) {
+	   //	       	     cout<<"HF 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHFnegativedirection2   =     "<<kcountHFnegativedirection2  <<endl;
+	   TH1F *HFnegativedirection2 = (TH1F*)h2CeffHFnegativedirection2->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HFnegativedirection2 ->Fill(i,ccc4x6);HFnegativedirection2->SetBinError(i,0.01);}
+	     //		 	       if( i == 0 ) cout<<"HF 55 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHFnegativedirection2);
+	   HFnegativedirection2 ->SetMarkerStyle(20);HFnegativedirection2 ->SetMarkerSize(0.4);HFnegativedirection2 ->GetYaxis()->SetLabelSize(0.04);HFnegativedirection2 ->SetMarkerColor(2);HFnegativedirection2 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy();  
+  
+	   if(kcountHFnegativedirection2 == 1) HFnegativedirection2 ->SetXTitle("HF jeta = 0; jphi =  6 \b");
+	   if(kcountHFnegativedirection2 == 5) HFnegativedirection2 ->SetXTitle("HF jeta = 0; jphi =  7 \b");
+	   if(kcountHFnegativedirection2 == 9) HFnegativedirection2 ->SetXTitle("HF jeta = 0; jphi =  8 \b");
+	   if(kcountHFnegativedirection2 ==13) HFnegativedirection2 ->SetXTitle("HF jeta = 0; jphi =  9 \b");
+	   if(kcountHFnegativedirection2 ==17) HFnegativedirection2 ->SetXTitle("HF jeta = 0; jphi = 10 \b");
+	   if(kcountHFnegativedirection2 ==21) HFnegativedirection2 ->SetXTitle("HF jeta = 0; jphi = 11 \b");
+	   
+	   if(kcountHFnegativedirection2 == 2) HFnegativedirection2 ->SetXTitle("HF jeta = 1; jphi =  6 \b");
+	   if(kcountHFnegativedirection2 == 6) HFnegativedirection2 ->SetXTitle("HF jeta = 1; jphi =  7 \b");
+	   if(kcountHFnegativedirection2 ==10) HFnegativedirection2 ->SetXTitle("HF jeta = 1; jphi =  8 \b");
+	   if(kcountHFnegativedirection2 ==14) HFnegativedirection2 ->SetXTitle("HF jeta = 1; jphi =  9 \b");
+	   if(kcountHFnegativedirection2 ==18) HFnegativedirection2 ->SetXTitle("HF jeta = 1; jphi = 10 \b");
+	   if(kcountHFnegativedirection2 ==22) HFnegativedirection2 ->SetXTitle("HF jeta = 1; jphi = 11 \b");
+	   
+	   if(kcountHFnegativedirection2 == 3) HFnegativedirection2 ->SetXTitle("HF jeta = 2; jphi =  6 \b");
+	   if(kcountHFnegativedirection2 == 7) HFnegativedirection2 ->SetXTitle("HF jeta = 2; jphi =  7 \b");
+	   if(kcountHFnegativedirection2 ==11) HFnegativedirection2 ->SetXTitle("HF jeta = 2; jphi =  8 \b");
+	   if(kcountHFnegativedirection2 ==15) HFnegativedirection2 ->SetXTitle("HF jeta = 2; jphi =  9 \b");
+	   if(kcountHFnegativedirection2 ==19) HFnegativedirection2 ->SetXTitle("HF jeta = 2; jphi = 10 \b");
+	   if(kcountHFnegativedirection2 ==23) HFnegativedirection2 ->SetXTitle("HF jeta = 2; jphi = 11 \b");
+	   
+	   if(kcountHFnegativedirection2 == 4) HFnegativedirection2 ->SetXTitle("HF jeta = 3; jphi =  6 \b");
+	   if(kcountHFnegativedirection2 == 8) HFnegativedirection2 ->SetXTitle("HF jeta = 3; jphi =  7 \b");
+	   if(kcountHFnegativedirection2 ==12) HFnegativedirection2 ->SetXTitle("HF jeta = 3; jphi =  8 \b");
+	   if(kcountHFnegativedirection2 ==16) HFnegativedirection2 ->SetXTitle("HF jeta = 3; jphi =  9 \b");
+	   if(kcountHFnegativedirection2 ==20) HFnegativedirection2 ->SetXTitle("HF jeta = 3; jphi = 10 \b");
+	   if(kcountHFnegativedirection2 ==24) HFnegativedirection2 ->SetXTitle("HF jeta = 3; jphi = 11 \b");
+
+	   HFnegativedirection2->Draw("Error");
+	   kcountHFnegativedirection2++;
+	   if(kcountHFnegativedirection2>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HF-negative-phirange2.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHFnegativedirection2) delete h2CeffHFnegativedirection2;
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 56   HF:: jeta = 0,1,2, 3            18,19,20,21       jphi =12,13,14,15,16,17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HF negative direction phisector 3 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHFnegativedirection3=1;
+       // j - etaphi index:
+       TH1F* h2CeffHFnegativedirection3 = new TH1F("h2CeffHFnegativedirection3","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=12;jphi<18;jphi++) {
+	 for (int jeta=0;jeta<4;jeta++) {
+	   //	       	     cout<<"HF 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHFnegativedirection3   =     "<<kcountHFnegativedirection3  <<endl;
+	   TH1F *HFnegativedirection3 = (TH1F*)h2CeffHFnegativedirection3->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HFnegativedirection3 ->Fill(i,ccc4x6);HFnegativedirection3->SetBinError(i,0.01);}
+	     //		 	       if( i == 0 ) cout<<"HF 55 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHFnegativedirection3);
+	   HFnegativedirection3 ->SetMarkerStyle(20);HFnegativedirection3 ->SetMarkerSize(0.4);HFnegativedirection3 ->GetYaxis()->SetLabelSize(0.04);HFnegativedirection3 ->SetMarkerColor(2);HFnegativedirection3 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy(); 
+
+	   if(kcountHFnegativedirection3 == 1) HFnegativedirection3 ->SetXTitle("HF jeta = 0; jphi = 12 \b");
+	   if(kcountHFnegativedirection3 == 5) HFnegativedirection3 ->SetXTitle("HF jeta = 0; jphi = 13 \b");
+	   if(kcountHFnegativedirection3 == 9) HFnegativedirection3 ->SetXTitle("HF jeta = 0; jphi = 14 \b");
+	   if(kcountHFnegativedirection3 ==13) HFnegativedirection3 ->SetXTitle("HF jeta = 0; jphi = 15 \b");
+	   if(kcountHFnegativedirection3 ==17) HFnegativedirection3 ->SetXTitle("HF jeta = 0; jphi = 16 \b");
+	   if(kcountHFnegativedirection3 ==21) HFnegativedirection3 ->SetXTitle("HF jeta = 0; jphi = 17 \b");
+	   
+	   if(kcountHFnegativedirection3 == 2) HFnegativedirection3 ->SetXTitle("HF jeta = 1; jphi = 12 \b");
+	   if(kcountHFnegativedirection3 == 6) HFnegativedirection3 ->SetXTitle("HF jeta = 1; jphi = 13 \b");
+	   if(kcountHFnegativedirection3 ==10) HFnegativedirection3 ->SetXTitle("HF jeta = 1; jphi = 14 \b");
+	   if(kcountHFnegativedirection3 ==14) HFnegativedirection3 ->SetXTitle("HF jeta = 1; jphi = 15 \b");
+	   if(kcountHFnegativedirection3 ==18) HFnegativedirection3 ->SetXTitle("HF jeta = 1; jphi = 16 \b");
+	   if(kcountHFnegativedirection3 ==22) HFnegativedirection3 ->SetXTitle("HF jeta = 1; jphi = 17 \b");
+	   
+	   if(kcountHFnegativedirection3 == 3) HFnegativedirection3 ->SetXTitle("HF jeta = 2; jphi = 12 \b");
+	   if(kcountHFnegativedirection3 == 7) HFnegativedirection3 ->SetXTitle("HF jeta = 2; jphi = 13 \b");
+	   if(kcountHFnegativedirection3 ==11) HFnegativedirection3 ->SetXTitle("HF jeta = 2; jphi = 14 \b");
+	   if(kcountHFnegativedirection3 ==15) HFnegativedirection3 ->SetXTitle("HF jeta = 2; jphi = 15 \b");
+	   if(kcountHFnegativedirection3 ==19) HFnegativedirection3 ->SetXTitle("HF jeta = 2; jphi = 16 \b");
+	   if(kcountHFnegativedirection3 ==23) HFnegativedirection3 ->SetXTitle("HF jeta = 2; jphi = 17 \b");
+	   
+	   if(kcountHFnegativedirection3 == 4) HFnegativedirection3 ->SetXTitle("HF jeta = 3; jphi = 12 \b");
+	   if(kcountHFnegativedirection3 == 8) HFnegativedirection3 ->SetXTitle("HF jeta = 3; jphi = 13 \b");
+	   if(kcountHFnegativedirection3 ==12) HFnegativedirection3 ->SetXTitle("HF jeta = 3; jphi = 14 \b");
+	   if(kcountHFnegativedirection3 ==16) HFnegativedirection3 ->SetXTitle("HF jeta = 3; jphi = 15 \b");
+	   if(kcountHFnegativedirection3 ==20) HFnegativedirection3 ->SetXTitle("HF jeta = 3; jphi = 16 \b");
+	   if(kcountHFnegativedirection3 ==24) HFnegativedirection3 ->SetXTitle("HF jeta = 3; jphi = 17 \b");
+   
+	   HFnegativedirection3->Draw("Error");
+	   kcountHFnegativedirection3++;
+	   if(kcountHFnegativedirection3>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HF-negative-phirange3.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHFnegativedirection3) delete h2CeffHFnegativedirection3;
+       ////////////////////////////////////////////////////////////////////////////////////
+    //========================================================================================== 57   HF:: jeta = 0,1,2, 3            18,19,20,21       // jphi = 0,1,2,3,4,5
+    //======================================================================
+    //======================================================================
+    //======================================================================
+      cout<<"      RBX HF positive direction phisector 1 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHFpositivedirection1=1;
+       // j - etaphi index:
+       TH1F* h2CeffHFpositivedirection1 = new TH1F("h2CeffHFpositivedirection1","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=0;jphi<6;jphi++) {
+	 for (int jeta=18;jeta<22;jeta++) {
+	   //	   for (int jphi=0;jphi<njphi;jphi++) {
+	   //	     cout<<"HF 54 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+	   TH1F *HFpositivedirection1 = (TH1F*)h2CeffHFpositivedirection1->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HFpositivedirection1 ->Fill(i,ccc4x6);HFpositivedirection1->SetBinError(i,0.01);}
+	     //	       if( i == 0 ) cout<<"HF 54 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHFpositivedirection1);
+	   HFpositivedirection1 ->SetMarkerStyle(20);HFpositivedirection1 ->SetMarkerSize(0.4);HFpositivedirection1 ->GetYaxis()->SetLabelSize(0.04);HFpositivedirection1 ->SetMarkerColor(2);HFpositivedirection1 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy();    
+	   if(kcountHFpositivedirection1 == 1) HFpositivedirection1 ->SetXTitle("HF jeta = 18; jphi =  0 \b");
+	   if(kcountHFpositivedirection1 == 5) HFpositivedirection1 ->SetXTitle("HF jeta = 18; jphi =  1 \b");
+	   if(kcountHFpositivedirection1 == 9) HFpositivedirection1 ->SetXTitle("HF jeta = 18; jphi =  2 \b");
+	   if(kcountHFpositivedirection1 ==13) HFpositivedirection1 ->SetXTitle("HF jeta = 18; jphi =  3 \b");
+	   if(kcountHFpositivedirection1 ==17) HFpositivedirection1 ->SetXTitle("HF jeta = 18; jphi =  4 \b");
+	   if(kcountHFpositivedirection1 ==21) HFpositivedirection1 ->SetXTitle("HF jeta = 18; jphi =  5 \b");
+	   
+	   if(kcountHFpositivedirection1 == 2) HFpositivedirection1 ->SetXTitle("HF jeta = 19; jphi =  0 \b");
+	   if(kcountHFpositivedirection1 == 6) HFpositivedirection1 ->SetXTitle("HF jeta = 19; jphi =  1 \b");
+	   if(kcountHFpositivedirection1 ==10) HFpositivedirection1 ->SetXTitle("HF jeta = 19; jphi =  2 \b");
+	   if(kcountHFpositivedirection1 ==14) HFpositivedirection1 ->SetXTitle("HF jeta = 19; jphi =  3 \b");
+	   if(kcountHFpositivedirection1 ==18) HFpositivedirection1 ->SetXTitle("HF jeta = 19; jphi =  4 \b");
+	   if(kcountHFpositivedirection1 ==22) HFpositivedirection1 ->SetXTitle("HF jeta = 19; jphi =  5 \b");
+	   
+	   if(kcountHFpositivedirection1 == 3) HFpositivedirection1 ->SetXTitle("HF jeta = 20; jphi =  0 \b");
+	   if(kcountHFpositivedirection1 == 7) HFpositivedirection1 ->SetXTitle("HF jeta = 20; jphi =  1 \b");
+	   if(kcountHFpositivedirection1 ==11) HFpositivedirection1 ->SetXTitle("HF jeta = 20; jphi =  2 \b");
+	   if(kcountHFpositivedirection1 ==15) HFpositivedirection1 ->SetXTitle("HF jeta = 20; jphi =  3 \b");
+	   if(kcountHFpositivedirection1 ==19) HFpositivedirection1 ->SetXTitle("HF jeta = 20; jphi =  4 \b");
+	   if(kcountHFpositivedirection1 ==23) HFpositivedirection1 ->SetXTitle("HF jeta = 20; jphi =  5 \b");
+	   
+	   if(kcountHFpositivedirection1 == 4) HFpositivedirection1 ->SetXTitle("HF jeta = 21; jphi =  0 \b");
+	   if(kcountHFpositivedirection1 == 8) HFpositivedirection1 ->SetXTitle("HF jeta = 21; jphi =  1 \b");
+	   if(kcountHFpositivedirection1 ==12) HFpositivedirection1 ->SetXTitle("HF jeta = 21; jphi =  2 \b");
+	   if(kcountHFpositivedirection1 ==16) HFpositivedirection1 ->SetXTitle("HF jeta = 21; jphi =  3 \b");
+	   if(kcountHFpositivedirection1 ==20) HFpositivedirection1 ->SetXTitle("HF jeta = 21; jphi =  4 \b");
+	   if(kcountHFpositivedirection1 ==24) HFpositivedirection1 ->SetXTitle("HF jeta = 21; jphi =  5 \b");
+
+	   HFpositivedirection1->Draw("Error");
+	   kcountHFpositivedirection1++;
+	   if(kcountHFpositivedirection1>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HF-positive-phirange1.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHFpositivedirection1) delete h2CeffHFpositivedirection1;
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 58   HF:: jeta = 0,1,2, 3            18,19,20,21       jphi = 6,7,8,9,10,11
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HF positive direction phisector 2 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHFpositivedirection2=1;
+       // j - etaphi index:
+       TH1F* h2CeffHFpositivedirection2 = new TH1F("h2CeffHFpositivedirection2","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=6;jphi<12;jphi++) {
+	 for (int jeta=18;jeta<22;jeta++) {
+	   //	       	     cout<<"HF 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHFpositivedirection2   =     "<<kcountHFpositivedirection2  <<endl;
+	   TH1F *HFpositivedirection2 = (TH1F*)h2CeffHFpositivedirection2->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HFpositivedirection2 ->Fill(i,ccc4x6);HFpositivedirection2->SetBinError(i,0.01);}
+	     //		 	       if( i == 0 ) cout<<"HF 55 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHFpositivedirection2);
+	   HFpositivedirection2 ->SetMarkerStyle(20);HFpositivedirection2 ->SetMarkerSize(0.4);HFpositivedirection2 ->GetYaxis()->SetLabelSize(0.04);HFpositivedirection2 ->SetMarkerColor(2);HFpositivedirection2 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy(); 
+
+	   if(kcountHFpositivedirection2 == 1) HFpositivedirection2 ->SetXTitle("HF jeta = 18; jphi =  6 \b");
+	   if(kcountHFpositivedirection2 == 5) HFpositivedirection2 ->SetXTitle("HF jeta = 18; jphi =  7 \b");
+	   if(kcountHFpositivedirection2 == 9) HFpositivedirection2 ->SetXTitle("HF jeta = 18; jphi =  8 \b");
+	   if(kcountHFpositivedirection2 ==13) HFpositivedirection2 ->SetXTitle("HF jeta = 18; jphi =  9 \b");
+	   if(kcountHFpositivedirection2 ==17) HFpositivedirection2 ->SetXTitle("HF jeta = 18; jphi = 10 \b");
+	   if(kcountHFpositivedirection2 ==21) HFpositivedirection2 ->SetXTitle("HF jeta = 18; jphi = 11 \b");
+	   
+	   if(kcountHFpositivedirection2 == 2) HFpositivedirection2 ->SetXTitle("HF jeta = 19; jphi =  6 \b");
+	   if(kcountHFpositivedirection2 == 6) HFpositivedirection2 ->SetXTitle("HF jeta = 19; jphi =  7 \b");
+	   if(kcountHFpositivedirection2 ==10) HFpositivedirection2 ->SetXTitle("HF jeta = 19; jphi =  8 \b");
+	   if(kcountHFpositivedirection2 ==14) HFpositivedirection2 ->SetXTitle("HF jeta = 19; jphi =  9 \b");
+	   if(kcountHFpositivedirection2 ==18) HFpositivedirection2 ->SetXTitle("HF jeta = 19; jphi = 10 \b");
+	   if(kcountHFpositivedirection2 ==22) HFpositivedirection2 ->SetXTitle("HF jeta = 19; jphi = 11 \b");
+	   
+	   if(kcountHFpositivedirection2 == 3) HFpositivedirection2 ->SetXTitle("HF jeta = 20; jphi =  6 \b");
+	   if(kcountHFpositivedirection2 == 7) HFpositivedirection2 ->SetXTitle("HF jeta = 20; jphi =  7 \b");
+	   if(kcountHFpositivedirection2 ==11) HFpositivedirection2 ->SetXTitle("HF jeta = 20; jphi =  8 \b");
+	   if(kcountHFpositivedirection2 ==15) HFpositivedirection2 ->SetXTitle("HF jeta = 20; jphi =  9 \b");
+	   if(kcountHFpositivedirection2 ==19) HFpositivedirection2 ->SetXTitle("HF jeta = 20; jphi = 10 \b");
+	   if(kcountHFpositivedirection2 ==23) HFpositivedirection2 ->SetXTitle("HF jeta = 20; jphi = 11 \b");
+	   
+	   if(kcountHFpositivedirection2 == 4) HFpositivedirection2 ->SetXTitle("HF jeta = 21; jphi =  6 \b");
+	   if(kcountHFpositivedirection2 == 8) HFpositivedirection2 ->SetXTitle("HF jeta = 21; jphi =  7 \b");
+	   if(kcountHFpositivedirection2 ==12) HFpositivedirection2 ->SetXTitle("HF jeta = 21; jphi =  8 \b");
+	   if(kcountHFpositivedirection2 ==16) HFpositivedirection2 ->SetXTitle("HF jeta = 21; jphi =  9 \b");
+	   if(kcountHFpositivedirection2 ==20) HFpositivedirection2 ->SetXTitle("HF jeta = 21; jphi = 10 \b");
+	   if(kcountHFpositivedirection2 ==24) HFpositivedirection2 ->SetXTitle("HF jeta = 21; jphi = 11 \b");
+   
+	   HFpositivedirection2->Draw("Error");
+	   kcountHFpositivedirection2++;
+	   if(kcountHFpositivedirection2>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HF-positive-phirange2.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHFpositivedirection2) delete h2CeffHFpositivedirection2;
+       ////////////////////////////////////////////////////////////////////////////////////
+       //========================================================================================== 59   HF:: jeta = 0,1,2, 3            18,19,20,21       jphi =12,13,14,15,16,17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HF positive direction phisector 3 *****" <<endl;
+       c4x6->Clear();
+       /////////////////
+       c4x6->Divide(4,6);
+       int kcountHFpositivedirection3=1;
+       // j - etaphi index:
+       TH1F* h2CeffHFpositivedirection3 = new TH1F("h2CeffHFpositivedirection3","", maxbinsRBX, 1., maxbinsRBX+1.);
+       for (int jphi=12;jphi<18;jphi++) {
+	 for (int jeta=18;jeta<22;jeta++) {
+	   //	       	     cout<<"HF 55 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"   kcountHFpositivedirection3   =     "<<kcountHFpositivedirection3  <<endl;
+	   TH1F *HFpositivedirection3 = (TH1F*)h2CeffHFpositivedirection3->Clone("twod1");
+	   for (int i=0;i<nx;i++) {
+	     double ccc4x6 = alexhf[jeta][jphi][i];
+	     if(ccc4x6>0.) {HFpositivedirection3 ->Fill(i,ccc4x6);HFpositivedirection3->SetBinError(i,0.01);}
+	     //		 	       if( i == 0 ) cout<<"HF 55 PLOTTING  for LS=1      ccc4x6=     "<< ccc4x6 <<endl;
+	   }// for i
+	   c4x6->cd(kcountHFpositivedirection3);
+	   HFpositivedirection3 ->SetMarkerStyle(20);HFpositivedirection3 ->SetMarkerSize(0.4);HFpositivedirection3 ->GetYaxis()->SetLabelSize(0.04);HFpositivedirection3 ->SetMarkerColor(2);HFpositivedirection3 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	   //	   gPad->SetLogy();    
+	   if(kcountHFpositivedirection3 == 1) HFpositivedirection3 ->SetXTitle("HF jeta = 18; jphi = 12 \b");
+	   if(kcountHFpositivedirection3 == 5) HFpositivedirection3 ->SetXTitle("HF jeta = 18; jphi = 13 \b");
+	   if(kcountHFpositivedirection3 == 9) HFpositivedirection3 ->SetXTitle("HF jeta = 18; jphi = 14 \b");
+	   if(kcountHFpositivedirection3 ==13) HFpositivedirection3 ->SetXTitle("HF jeta = 18; jphi = 15 \b");
+	   if(kcountHFpositivedirection3 ==17) HFpositivedirection3 ->SetXTitle("HF jeta = 18; jphi = 16 \b");
+	   if(kcountHFpositivedirection3 ==21) HFpositivedirection3 ->SetXTitle("HF jeta = 18; jphi = 17 \b");
+	   
+	   if(kcountHFpositivedirection3 == 2) HFpositivedirection3 ->SetXTitle("HF jeta = 19; jphi = 12 \b");
+	   if(kcountHFpositivedirection3 == 6) HFpositivedirection3 ->SetXTitle("HF jeta = 19; jphi = 13 \b");
+	   if(kcountHFpositivedirection3 ==10) HFpositivedirection3 ->SetXTitle("HF jeta = 19; jphi = 14 \b");
+	   if(kcountHFpositivedirection3 ==14) HFpositivedirection3 ->SetXTitle("HF jeta = 19; jphi = 15 \b");
+	   if(kcountHFpositivedirection3 ==18) HFpositivedirection3 ->SetXTitle("HF jeta = 19; jphi = 16 \b");
+	   if(kcountHFpositivedirection3 ==22) HFpositivedirection3 ->SetXTitle("HF jeta = 19; jphi = 17 \b");
+	   
+	   if(kcountHFpositivedirection3 == 3) HFpositivedirection3 ->SetXTitle("HF jeta = 20; jphi = 12 \b");
+	   if(kcountHFpositivedirection3 == 7) HFpositivedirection3 ->SetXTitle("HF jeta = 20; jphi = 13 \b");
+	   if(kcountHFpositivedirection3 ==11) HFpositivedirection3 ->SetXTitle("HF jeta = 20; jphi = 14 \b");
+	   if(kcountHFpositivedirection3 ==15) HFpositivedirection3 ->SetXTitle("HF jeta = 20; jphi = 15 \b");
+	   if(kcountHFpositivedirection3 ==19) HFpositivedirection3 ->SetXTitle("HF jeta = 20; jphi = 16 \b");
+	   if(kcountHFpositivedirection3 ==23) HFpositivedirection3 ->SetXTitle("HF jeta = 20; jphi = 17 \b");
+	   
+	   if(kcountHFpositivedirection3 == 4) HFpositivedirection3 ->SetXTitle("HF jeta = 21; jphi = 12 \b");
+	   if(kcountHFpositivedirection3 == 8) HFpositivedirection3 ->SetXTitle("HF jeta = 21; jphi = 13 \b");
+	   if(kcountHFpositivedirection3 ==12) HFpositivedirection3 ->SetXTitle("HF jeta = 21; jphi = 14 \b");
+	   if(kcountHFpositivedirection3 ==16) HFpositivedirection3 ->SetXTitle("HF jeta = 21; jphi = 15 \b");
+	   if(kcountHFpositivedirection3 ==20) HFpositivedirection3 ->SetXTitle("HF jeta = 21; jphi = 16 \b");
+	   if(kcountHFpositivedirection3 ==24) HFpositivedirection3 ->SetXTitle("HF jeta = 21; jphi = 17 \b");
+
+	   HFpositivedirection3->Draw("Error");
+	   kcountHFpositivedirection3++;
+	   if(kcountHFpositivedirection3>24) break;// 4x6 = 24 
+	 }// for jphi
+       }//for jeta
+       /////////////////
+       c4x6->Update();
+       c4x6->Print("RBX-HF-positive-phirange3.png");
+       c4x6->Clear();
+      // clean-up
+      if (h2CeffHFpositivedirection3) delete h2CeffHFpositivedirection3;
+       ////////////////////////////////////////////////////////////////////////////////////
+
+       cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+       cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+       cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+       //////////////////////////////////////////////////////////////////////////////////// RBX  HF  study END:
+       
+
+
+
+
+
+
+
+
+
+       //////////////////////////////////////////////////////////////////////////////////// RBX study END:
 
 
 //////////////////////////////////////////////////////////////////////////////////// Special tests:
@@ -3778,6 +5724,7 @@ int main(int argc, char *argv[])
 	     htmlFile << "6. <a href=\"#ErrorAoccupancy\">ErrorA occupancy plots</a><br>\n";
 	     htmlFile << "7. <a href=\"#ErrorB\">Error type B</a><br>\n";
 	     htmlFile << "8. <a href=\"#LSstatus\">LS Status in the table</a><br>\n";
+	     htmlFile << "9. <a href=\"#RBXstatus\">RBX Status </a><br>\n";
 	   }
 	   
 	   //     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
@@ -4198,7 +6145,169 @@ int main(int argc, char *argv[])
 	   htmlFile << "<br>"<< std::endl; 
 	   if (test == 1) 	  htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 	   htmlFile << "<br>"<< std::endl; 
-	   
+
+
+	   /// RBX:
+	   if (test == 1) htmlFile << "<a name=\"RBXstatus\"></a>\n";
+	   // Continue with common sections
+
+	   //HB j = 7,8,9,10            11,12,13,14 
+	   if (sub==1) { 
+	     htmlFile << "<h2> 9. Averaged Amplitudes of RBX for HB </h2>"<< std::endl; 
+	     htmlFile << "<h3> jeta = 7,8,9,10 (Negative direction); ............&& ............  jeta = 11,12,13,14 (Positive direction);  </h3>"<< std::endl; 
+	     htmlFile << "<h3> jphi =  0, 1, 2, 3, 4, 5 (range 1) ............&& ............  jphi =  6, 7, 8, 9,10,11 (range 2) ............&& ............  jphi = 12,13,14,15,16,17 (range 3)</h3>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HB-2Dplot.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> LS dependencies for averaged Amplitudes of RBX </h2>"<< std::endl; 
+	     htmlFile << "<h3> average A : Amplitude averaged over channels of RBX and over events of each LS"<< std::endl;
+	     htmlFile << "<h3> (averaged over depthes as well)"<< std::endl;
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> HB: jeta = 7,8,9,10 (Negative direction); ............&& ............  jphi =  0, 1, 2, 3, 4, 5 (range 1): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HB-negative-phirange1.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> HB: jeta = 7,8,9,10 (Negative direction); ............&& ............  jphi =  6, 7, 8, 9,10,11 (range 2): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HB-negative-phirange2.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> HB: jeta = 7,8,9,10 (Negative direction); ............&& ............  jphi = 12,13,14,15,16,17 (range 3): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HB-negative-phirange3.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> jeta = 11,12,13,14 (Positive direction); ............&& ............  jphi =  0, 1, 2, 3, 4, 5 (range 1): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HB-positive-phirange1.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> jeta = 11,12,13,14 (Positive direction);  ............&& ............  jphi =  6, 7, 8, 9,10,11 (range 2): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HB-positive-phirange2.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> jeta = 11,12,13,14 (Positive direction); ............&& ............   jphi = 12,13,14,15,16,17 (range 3): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HB-positive-phirange3.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+	   }  
+	   // HE: j = 3,4,5, 6, 7      14,15,16,17,18
+	   if (sub==2) {
+	     htmlFile << "<h2> 9. Averaged Amplitudes of RBX for HE </h2>"<< std::endl; 
+	     htmlFile << "<h3> jeta = 3,4,5, 6, 7 (Negative direction); ............&& ............  jeta = 14,15,16,17,18 (Positive direction);  </h3>"<< std::endl; 
+	     htmlFile << "<h3> jphi =  0, 1, 2, 3, 4, 5 (range 1) ............&& ............  jphi =  6, 7, 8, 9,10,11 (range 2) ............&& ............  jphi = 12,13,14,15,16,17 (range 3)</h3>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HE-2Dplot.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> LS dependencies for averaged Amplitudes of RBX </h2>"<< std::endl; 
+	     htmlFile << "<h3> average A : Amplitude averaged over channels of RBX and over events of each LS"<< std::endl;
+	     htmlFile << "<h3> (averaged over depthes as well)"<< std::endl;
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> HE: jeta = 3,4,5, 6, 7 (Negative direction); ............&& ............  jphi =  0, 1, 2, 3, 4, 5 (range 1): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HE-negative-phirange1.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> HE: jeta = 3,4,5, 6, 7 (Negative direction); ............&& ............  jphi =  6, 7, 8, 9,10,11 (range 2): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HE-negative-phirange2.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> HE: jeta = 3,4,5, 6, 7 (Negative direction); ............&& ............  jphi = 12,13,14,15,16,17 (range 3): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HE-negative-phirange3.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> jeta = 14,15,16,17,18 (Positive direction); ............&& ............  jphi =  0, 1, 2, 3, 4, 5 (range 1): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HE-positive-phirange1.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> jeta = 14,15,16,17,18 (Positive direction);  ............&& ............  jphi =  6, 7, 8, 9,10,11 (range 2): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HE-positive-phirange2.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> jeta = 14,15,16,17,18 (Positive direction); ............&& ............   jphi = 12,13,14,15,16,17 (range 3): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HE-positive-phirange3.png\" />\n";
+	     htmlFile << "<br>\n";
+	   }
+	   // HO:   j = 7,8,9,10            11,12,13,14
+	   if (sub==3) {
+	     htmlFile << "<h2> 9. Averaged Amplitudes of RBX for HO </h2>"<< std::endl; 
+	     htmlFile << "<h3> jeta = 7,8,9,10 (Negative direction); ............&& ............  jeta = 11,12,13,14 (Positive direction);  </h3>"<< std::endl; 
+	     htmlFile << "<h3> jphi =  0, 1, 2, 3, 4, 5 (range 1) ............&& ............  jphi =  6, 7, 8, 9,10,11 (range 2) ............&& ............  jphi = 12,13,14,15,16,17 (range 3)</h3>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HO-2Dplot.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> LS dependencies for averaged Amplitudes of RBX </h2>"<< std::endl; 
+	     htmlFile << "<h3> average A : Amplitude averaged over channels of RBX and over events of each LS"<< std::endl;
+	     htmlFile << "<h3> (averaged over depthes as well)"<< std::endl;
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> HO: jeta = 7,8,9,10 (Negative direction); ............&& ............  jphi =  0, 1, 2, 3, 4, 5 (range 1): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HO-negative-phirange1.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> HO: jeta = 7,8,9,10 (Negative direction); ............&& ............  jphi =  6, 7, 8, 9,10,11 (range 2): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HO-negative-phirange2.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> HO: jeta = 7,8,9,10 (Negative direction); ............&& ............  jphi = 12,13,14,15,16,17 (range 3): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HO-negative-phirange3.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> jeta = 11,12,13,14 (Positive direction); ............&& ............  jphi =  0, 1, 2, 3, 4, 5 (range 1): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HO-positive-phirange1.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> jeta = 11,12,13,14 (Positive direction);  ............&& ............  jphi =  6, 7, 8, 9,10,11 (range 2): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HO-positive-phirange2.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> jeta = 11,12,13,14 (Positive direction); ............&& ............   jphi = 12,13,14,15,16,17 (range 3): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HO-positive-phirange3.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+	   }
+	   //HF:j = 0,1,2, 3            18,19,20,21 
+	   if (sub==4) {
+
+	     htmlFile << "<h2> 9. Averaged Amplitudes of RBX for HF </h2>"<< std::endl; 
+	     htmlFile << "<h3> jeta = 0,1,2, 3 (Negative direction); ............&& ............  jeta = 18,19,20,21 (Positive direction);  </h3>"<< std::endl; 
+	     htmlFile << "<h3> jphi =  0, 1, 2, 3, 4, 5 (range 1) ............&& ............  jphi =  6, 7, 8, 9,10,11 (range 2) ............&& ............  jphi = 12,13,14,15,16,17 (range 3)</h3>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HF-2Dplot.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> LS dependencies for averaged Amplitudes of RBX </h2>"<< std::endl; 
+	     htmlFile << "<h3> average A : Amplitude averaged over channels of RBX and over events of each LS"<< std::endl;
+	     htmlFile << "<h3> (averaged over depthes as well)"<< std::endl;
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> HF: jeta = 0,1,2, 3 (Negative direction); ............&& ............  jphi =  0, 1, 2, 3, 4, 5 (range 1): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HF-negative-phirange1.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> HF: jeta = 0,1,2, 3 (Negative direction); ............&& ............  jphi =  6, 7, 8, 9,10,11 (range 2): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HF-negative-phirange2.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> HF: jeta = 0,1,2, 3 (Negative direction); ............&& ............  jphi = 12,13,14,15,16,17 (range 3): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HF-negative-phirange3.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> jeta = 18,19,20,21 (Positive direction); ............&& ............  jphi =  0, 1, 2, 3, 4, 5 (range 1): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HF-positive-phirange1.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> jeta = 18,19,20,21 (Positive direction);  ............&& ............  jphi =  6, 7, 8, 9,10,11 (range 2): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HF-positive-phirange2.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<h2> jeta = 18,19,20,21 (Positive direction); ............&& ............   jphi = 12,13,14,15,16,17 (range 3): </h2>"<< std::endl; 
+	     htmlFile << " <img src=\"RBX-HF-positive-phirange3.png\" />\n";
+	     htmlFile << "<br>\n";
+
+	     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+	   }	  	      
+	   htmlFile << "<br>"<< std::endl;
+
 	   htmlFile.close();	   
       }// sub main loop
   } //test main loop
@@ -4270,12 +6379,18 @@ int main(int argc, char *argv[])
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_CapID.html\">HF</a></td>"<< std::endl;
     }
     if (test==1){
-      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_ADCampl.html\">HB</a></td>"<< std::endl;
+      // AZ 07.11.2018
+      //    htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_ADCampl.html\">HB</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"HB_ADCampl.html\">HB</a></td>"<< std::endl;
       // AZ 18.03.2018
       //      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_ADCampl.html\">HE</a></td>"<< std::endl;
-            htmlFile << "  <td><a href=\"HE_ADCampl.html\">HE</a></td>"<< std::endl;
-      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_ADCampl.html\">HO</a></td>"<< std::endl;
-      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_ADCampl.html\">HF</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"HE_ADCampl.html\">HE</a></td>"<< std::endl;
+      // AZ 07.11.2018
+      //    htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_ADCampl.html\">HO</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"HO_ADCampl.html\">HO</a></td>"<< std::endl;
+      // AZ 07.11.2018
+      //    htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_ADCampl.html\">HF</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"HF_ADCampl.html\">HF</a></td>"<< std::endl;
     }
     if (test==2){
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_Width.html\">HB</a></td>"<< std::endl;
