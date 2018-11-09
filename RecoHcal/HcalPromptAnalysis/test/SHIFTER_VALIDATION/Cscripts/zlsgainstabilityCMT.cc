@@ -3150,6 +3150,7 @@ int main(int argc, char *argv[])
 	 }// for jphi
        }//for jeta
        /////////////////
+      if (h2CeffHFpositivedirection3) delete h2CeffHFpositivedirection3;
        c1->Update();
        //////////////////////////////////////////////////////////////////////////////////// Gefz1
 
