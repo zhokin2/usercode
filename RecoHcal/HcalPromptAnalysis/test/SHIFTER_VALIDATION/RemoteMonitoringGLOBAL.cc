@@ -975,7 +975,12 @@ int main(int argc, char *argv[])
 	      }}//end x
 	    
 		// !!!!!!     change the sense of HistNumBadChanDepth: now it's averaged values(estimators)
-	    HistNumBadChanDepth[test][sub][k]->Divide(HistNumBadChanDepth[test][sub][k],HistNumChanDepth[test][sub][k], 1, 1, "B");	
+	    HistNumBadChanDepth[test][sub][k]->Divide(HistNumBadChanDepth[test][sub][k],HistNumChanDepth[test][sub][k], 1, 1, "B");
+	    // errors abnulling:
+	    for (int x=1;x<=HistNumBadChanDepth[test][sub][k]->GetXaxis()->GetNbins();x++) {
+	      HistNumBadChanDepth[test][sub][k]->SetBinError(float(x),0.01);	  
+	    }
+	    
 	    //		int myMaxLum= HistNumBadChanDepth[test][sub][k]->GetBinContent(HistNumBadChanDepth[test][sub][k]->GetMaximumBin());
 	    //		cout<<"********************>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>     myMaxLum = "<<myMaxLum<<"        MaxLum = "<<MaxLum<<endl;
 	    HistNumBadChanDepth[test][sub][k]->GetXaxis()->SetRangeUser(0, MaxLum);
@@ -2970,6 +2975,7 @@ int main(int argc, char *argv[])
 
       cout<<" RBX analysis START for HF **************************" <<endl;
   cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
+  //  int njeta = 22; int njphi = 18; int lsmax=2600;
   int njeta = 22; int njphi = 18; int lsmax=2600;
   cout<<">>>>>>>>>>>>>>>>>>>>>>>>     int njeta = 22; int njphi = 18; int lsmax=2600;                        "              <<endl;
   double alexhf[njeta][njphi][lsmax];      
@@ -3068,7 +3074,7 @@ int main(int argc, char *argv[])
        for (int jphi=0;jphi<6;jphi++) {
 	 for (int jeta=7;jeta<11;jeta++) {
 	   //	   for (int jphi=0;jphi<njphi;jphi++) {
-	   //	     cout<<"HB 54 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+	   //	   	     cout<<"HB 13 PLOTTING       jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
 	   TH1F *HBnegativedirection1 = (TH1F*)h2CeffHBnegativedirection1->Clone("twod1");
 	   for (int i=0;i<nx;i++) {
 	     double ccc4x6 = alexhf[jeta][jphi][i];
@@ -3114,7 +3120,7 @@ int main(int argc, char *argv[])
        }//for jeta
        /////////////////
        c4x6->Update();
-       c4x6->Print("RBX-HB-negative-phirange1.png");
+       c4x6->Print("RBX-HB-negative-phirange1.png");// take a lot of CPU-time !!!
        c4x6->Clear();
       // clean-up
       if (h2CeffHBnegativedirection1) delete h2CeffHBnegativedirection1;
@@ -6382,13 +6388,10 @@ int main(int argc, char *argv[])
       // AZ 07.11.2018
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_ADCampl.html\">HB</a></td>"<< std::endl;
       //htmlFile << "  <td><a href=\"HB_ADCampl.html\">HB</a></td>"<< std::endl;
-      // AZ 18.03.2018
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_ADCampl.html\">HE</a></td>"<< std::endl;
       //htmlFile << "  <td><a href=\"HE_ADCampl.html\">HE</a></td>"<< std::endl;
-      // AZ 07.11.2018
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_ADCampl.html\">HO</a></td>"<< std::endl;
       //htmlFile << "  <td><a href=\"HO_ADCampl.html\">HO</a></td>"<< std::endl;
-      // AZ 07.11.2018
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_ADCampl.html\">HF</a></td>"<< std::endl;
       //htmlFile << "  <td><a href=\"HF_ADCampl.html\">HF</a></td>"<< std::endl;
     }
@@ -6876,7 +6879,7 @@ htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-softwa
   htmlFile << "<tr>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/CapID_GL.html\">Cap ID errors</a></td>"<< std::endl;
   // AZ 18.03.2018
-    htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
   //  htmlFile << "  <td><a  href=\"ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Width_GL.html\">Width</a></td>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Ratio_GL.html\">Ratio</a></td>"<< std::endl;
