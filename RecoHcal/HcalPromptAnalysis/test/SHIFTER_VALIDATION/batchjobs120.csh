@@ -8,7 +8,7 @@ mkdir `pwd`/TMP_`date '+%Y-%m-%d_%H_%M_%S'`
 setenv SRC ${4}
 setenv SCRIPTDIR ${4}
 ##setenv SCRAM_ARCH slc6_amd64_gcc491
-##setenv SCRAM_ARCH slc6_amd64_gcc700
+setenv SCRAM_ARCH slc6_amd64_gcc700
 
 ### Environment
 cd ${SRC}
@@ -29,7 +29,7 @@ ls -l * >> &log_${2}_${3}
 #cmsStage -f Global.root /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Global_${2}_${3}.root
 
 ### Copy output files to 
-cp Global_${2}_${3}.root /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_10_2_6/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION/Global_${2}_${3}.root
+cp Global_${2}_${3}.root /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_10_3_1/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION/Global_${2}_${3}.root
 ## rm all unnesecery
 #rm log_${2} 
 ##rm Global.root
