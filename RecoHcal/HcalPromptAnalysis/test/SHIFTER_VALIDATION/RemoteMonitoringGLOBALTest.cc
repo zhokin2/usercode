@@ -3060,6 +3060,41 @@ int main(int argc, char *argv[])
       if (Ghb42D0) delete Ghb42D0;
       if (Ghb42DF) delete Ghb42DF;
 
+       //========================================================================================== 61   HB:: 1D  j = 7,8,9,10 ; 11,12,13,14       jphi =0 - 17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HB  1D plot *****" <<endl;
+      cRBX1->Clear();
+      /////////////////
+      cRBX1->Divide(1,1);
+      cRBX1->cd(1);
+       TH1F* GphiHB1D      = new TH1F("GphiHB1D","",   18, 0., 18. );
+       TH1F* GphiHB1D0     = new TH1F("GphiHB1D0","",  18, 0., 18. );
+       TH1F* GphiHB1DF = (TH1F*)GphiHB1D0->Clone("GphiHB1DF");
+       for (int jphi=0;jphi<18;jphi++) {
+	 for (int jeta=0;jeta<22;jeta++) {
+	   for (int i=0;i<nx;i++) {
+	     double ccc1 = alexhf[jeta][jphi][i];
+	     if(ccc1>0.) {GphiHB1D ->Fill(jphi,ccc1); GphiHB1D0 ->Fill(jphi,1.); }
+	   }}}
+       //     GphiHB1D->Sumw2();GphiHB1D0->Sumw2();
+       GphiHB1DF->Divide(GphiHB1D,GphiHB1D0, 1, 1, "B");// average A
+       //     GphiHB1DF->Sumw2();
+            for (int jphi=1;jphi<19;jphi++) {GphiHB1DF->SetBinError(jphi,0.01);}
+       gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
+       GphiHB1DF->SetMarkerStyle(20); GphiHB1DF->SetMarkerSize(1.4); GphiHB1DF->GetZaxis()->SetLabelSize(0.08); GphiHB1DF->SetXTitle("<A>_PHI  \b"); GphiHB1DF->SetYTitle("  #phi \b"); GphiHB1DF->SetZTitle("<A>_PHI  - All \b"); GphiHB1DF->SetMarkerColor(4); GphiHB1DF->SetLineColor(4);  GphiHB1DF->SetMinimum(0.8);     //      GphiHB1DF->SetMaximum(1.000);       
+       GphiHB1DF->Draw("Error");
+       /////////////////
+       cRBX1->Update();
+       cRBX1->Print("RBX-HB-2Dplot.png");
+       cRBX1->Clear();
+      // clean-up
+      if (GphiHB1D)  delete GphiHB1D;
+      if (GphiHB1D0) delete GphiHB1D0;
+      if (GphiHB1DF) delete GphiHB1DF;
+
     //========================================================================================== 13   HB:: j = 7,8,9,10            11,12,13,14     // jphi = 0,1,2,3,4,5
     //======================================================================
     //======================================================================
