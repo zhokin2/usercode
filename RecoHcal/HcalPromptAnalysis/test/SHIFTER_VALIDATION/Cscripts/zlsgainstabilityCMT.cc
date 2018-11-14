@@ -115,6 +115,7 @@ int main(int argc, char *argv[])
 //	TFile *hfile1= new TFile("Global_325001_ls1to600.root", "READ");
 //	TFile *hfile1= new TFile("Global_RBX_325001_40.root", "READ");
 //	TFile *hfile1= new TFile("Global_RBX_325001_ls1to600.root", "READ");
+
 	TFile *hfile1= new TFile("Global_RBX_325001.root", "READ");
 
 
@@ -149,6 +150,7 @@ int main(int argc, char *argv[])
 
       c1->cd(1);
       TH1F *Rate1= (TH1F*)hfile1->Get("h_nevents_per_eachRealLS");
+
       //      gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
       //      Rate1->SetXTitle("nevents_per_eachRealLS \b");
       //      Rate1->Draw("");
@@ -161,14 +163,16 @@ int main(int argc, char *argv[])
 	//	if(ccc1>0.) cout<<" ibin=     "<< i <<" nevents=     "<< ccc1 <<endl;
       }
       cout<<"111 maxbins=     "<< maxbins <<endl;
-
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////
       TH1F* ADCAmplperLS = new TH1F("ADCAmplperLS","", maxbins, 1., maxbins+1.);
 //          TH1F* ADCAmplperLS  = new TH1F("ADCAmplperLS ","", 600, 1.,601.);
       nx = Rate1->GetXaxis()->GetNbins();
-      for (int i=1;i<=nx;i++) {
+      for (int i=1;i<=maxbins;i++) {
 	double ccc1 =  Rate1->GetBinContent(i);
 	//	  if(ccc1>0.)	  cout<<" depth1_HB iLS = "<<i<<" <As> per LS= "<<ccc1<<endl;
-	  if(ccc1>0.) ADCAmplperLS ->Fill(float(i), ccc1);
+	//	cout<<" ibin=     "<< i <<" nevents=     "<< ccc1 <<endl;
+	//	  if(ccc1>0.) ADCAmplperLS ->Fill(float(i), ccc1);
+	  ADCAmplperLS ->Fill(float(i), ccc1);
       }
       //      gPad->SetLogy();
       ADCAmplperLS ->SetMarkerStyle(20);
@@ -182,11 +186,20 @@ int main(int argc, char *argv[])
       ADCAmplperLS ->Draw("Error");
 
       c1->cd(2);
-      TH1F *Rate2= (TH1F*)hfile1->Get("h_sumADCAmplEtaPhiLs_lscounterM1");
+
+      TH1F *Rate2= (TH1F*)hfile1->Get("h_sumADCAmplEtaPhiLs_lscounterM1");// 0 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//      TH1F *Rate2= (TH1F*)hfile1->Get("h_nevents_per_eachRealLS");// norm: no 0
+      //    TH1F *Rate2= (TH1F*)hfile1->Get("h_sumADCAmplperLS1");//Fill( float(lscounterM1) ,bbbc);// norm: no 0
+      //     TH1F *Rate2= (TH1F*)hfile1->Get("h_sum0ADCAmplperLS2");//Fill( float(lscounterM1) ,bbb1);// norm: no 0
+
       TH1F* Rate2redone = new TH1F("Rate2redone","", maxbins, 1., maxbins+1.);
-      for (int i=1;i<=Rate2->GetXaxis()->GetNbins();i++) {
+      //    for (int i=1;i<=Rate2->GetXaxis()->GetNbins();i++) {
+      for (int i=1;i<=maxbins;i++) {
 	double ccc1 =  Rate2->GetBinContent(i);
-	if(ccc1>0.) Rate2redone ->Fill(float(i), ccc1);
+	//if(ccc1 <= 0. )	    	    cout<<"1 Page  i=  "<< i <<"      A= "<< ccc1 <<endl;
+	//	cout<<"1 Page  i=  "<< i <<"      A= "<< ccc1 <<endl;
+	Rate2redone ->Fill(float(i), ccc1);
+	//	if(ccc1>0.) Rate2redone ->Fill(float(i), ccc1);
       }
       Rate2redone->SetMarkerStyle(20);Rate2redone->SetMarkerSize(0.4);Rate2redone->GetYaxis()->SetLabelSize(0.04);Rate2redone ->SetXTitle("sumADCAmplEtaPhiLsS \b");Rate2redone->SetMarkerColor(2);Rate2redone->SetLineColor(0);
       // Rate2redone ->SetMaximum(30.0);Rate2redone ->SetMinimum(20.0);
@@ -235,9 +248,12 @@ int main(int argc, char *argv[])
     //======================================================================
       c1->Clear();
       c1->Divide(1,1);
+//  h_2DsumADCAmplEtaPhiLs00->Fill(float(lscounterM1), float(ietaphi), bbb1);//HB
 //     h_2D0sumADCAmplLS1->Fill(double(ieta), double(k3), bbb1);
       c1->cd(1);
-      TH2F *Cefz2= (TH2F*)hfile1->Get("h_2D0sumADCAmplLS1");
+      TH2F *Cefz2= (TH2F*)hfile1->Get("h_2DsumADCAmplEtaPhiLs0");
+      //TH2F *Cefz2= (TH2F*)hfile1->Get("h_2DsumADCAmplEtaPhiLs00");
+      //    TH2F *Cefz2= (TH2F*)hfile1->Get("h_2D0sumADCAmplLS1");
       gPad->SetGridy();
       gPad->SetGridx();
       //      gPad->SetLogz();
@@ -269,18 +285,23 @@ int main(int argc, char *argv[])
       int maxbinx = 0;
       int maxbiny = 0;
       nx = Cefz2->GetXaxis()->GetNbins();
+      nx = maxbins;
       int ny = Cefz2->GetYaxis()->GetNbins();
       cout<<"444 HB1        nx=     "<< nx <<" ny=     "<< ny <<endl;
-      TH1F* ADCAmplLSHB1 = new TH1F("ADCAmplLSHB1","", 1000, 0., 1000000.);
+      //    TH1F* ADCAmplLSHB1 = new TH1F("ADCAmplLSHB1","", 1000, 0., 1000000.);
+      //    TH1F* ADCAmplLSHB1 = new TH1F("ADCAmplLSHB1","", 1000, 0., 1000.);
+      TH2F* ADCAmplLSHB1 = new TH2F("ADCAmplLSHB1","", 610, 0., 610.,160,120., 280.);
       for (int i=1;i<=nx;i++) {
 	for (int j=1;j<=ny;j++) {
 	  double ccc1 =  Cefz2->GetBinContent(i,j);
-	  if(ccc1>0.) {
+	  //	  if(ccc1>0.) {
+	  if(j>130 && j<270) {
 	    maxbinx = i; if(i>maxbinx) maxbinx = i;
 	    maxbiny = j; if(j>maxbiny) maxbiny = j;
-	    //	    	    cout<<"HB1:  ibin=  "<< i <<"      jbin= "<< j <<"      A= "<< ccc1 <<endl;
-	    ADCAmplLSHB1 ->Fill(ccc1);
-	  }
+	    if(ccc1 <= 0. )	    	    cout<<"HB1:  ibin=  "<< i <<"      jbin= "<< j <<"      A= "<< ccc1 <<endl;
+	    //	    ADCAmplLSHB1 ->Fill(ccc1);
+	    ADCAmplLSHB1 ->Fill(float(i), float(j),ccc1);
+	  }// if
 	}}
       ADCAmplLSHB1 ->SetMarkerStyle(20);
       ADCAmplLSHB1 ->SetMarkerSize(0.4);
@@ -291,7 +312,8 @@ int main(int argc, char *argv[])
       //          ADCAmplLSHB1 ->SetMaximum(30.0);
       //          ADCAmplLSHB1 ->SetMinimum(20.0);
       //    gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
-          ADCAmplLSHB1 ->Draw("Error");
+          ADCAmplLSHB1 ->Draw("COLZ");
+//          ADCAmplLSHB1 ->Draw("Error");
 	  //   ADCAmplLSHB1 ->Draw("");
       cout<<"444 HB1 for h_2D0sumADCAmplLS1 maxbinx =  "<< maxbinx<<"     maxbiny=  "<< maxbiny <<endl;
       // int ietaphi = 0; ietaphi = ((k2+1)-1)*nphi + (k3+1) ;  k2=0-neta-1; k3=0-nphi-1; neta=72; nphi=82;
@@ -671,6 +693,7 @@ int main(int argc, char *argv[])
       maxbiny = 0;
       nx = Cefz1->GetXaxis()->GetNbins();
       ny = Cefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
       cout<<"Page11: HB h_2DsumADCAmplEtaPhiLs0         nx=     "<< nx <<" ny=     "<< ny <<endl;
       TH1F* ADCAmplLS0 = new TH1F("ADCAmplLS0","", 100, 0., 50.);
       // i - # LSs:
@@ -774,6 +797,7 @@ int main(int argc, char *argv[])
       c1->cd(1);
       nx = Cefz1->GetXaxis()->GetNbins();
       ny = Cefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
       cout<<"HB GainStability        nx=     "<< nx <<" ny=     "<< ny <<endl;
       TH1F* GainStability0 = new TH1F("GainStability0","", maxbins, 1., maxbins+1.);
       TH1F* GainStability1 = new TH1F("GainStability1","", maxbins, 1., maxbins+1.);
@@ -822,6 +846,7 @@ int main(int argc, char *argv[])
       
       nx = Cefz1->GetXaxis()->GetNbins();
       ny = Cefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohb > 0.)      nhistohb /= nlsohb;
       //    cout<<"HB Gforhbjeta0k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohb=     "<< nhistohb <<endl;
@@ -867,6 +892,7 @@ int main(int argc, char *argv[])
       
       nx = Cefz1->GetXaxis()->GetNbins();
       ny = Cefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohb > 0.)      nhistohb /= nlsohb;
       //    cout<<"HB Gforhbjeta1k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohb=     "<< nhistohb <<endl;
@@ -912,6 +938,7 @@ int main(int argc, char *argv[])
       
       nx = Cefz1->GetXaxis()->GetNbins();
       ny = Cefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohb > 0.)      nhistohb /= nlsohb;
       //    cout<<"HB Gforhbjeta2k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohb=     "<< nhistohb <<endl;
@@ -957,6 +984,7 @@ int main(int argc, char *argv[])
       
       nx = Cefz1->GetXaxis()->GetNbins();
       ny = Cefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohb > 0.)      nhistohb /= nlsohb;
       //    cout<<"HB Gforhbjeta3k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohb=     "<< nhistohb <<endl;
@@ -1002,6 +1030,7 @@ int main(int argc, char *argv[])
       
       nx = Cefz1->GetXaxis()->GetNbins();
       ny = Cefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohb > 0.)      nhistohb /= nlsohb;
       //    cout<<"HB Gforhbjeta18k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohb=     "<< nhistohb <<endl;
@@ -1047,6 +1076,7 @@ int main(int argc, char *argv[])
       
       nx = Cefz1->GetXaxis()->GetNbins();
       ny = Cefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohb > 0.)      nhistohb /= nlsohb;
       //    cout<<"HB Gforhbjeta19k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohb=     "<< nhistohb <<endl;
@@ -1092,6 +1122,7 @@ int main(int argc, char *argv[])
       
       nx = Cefz1->GetXaxis()->GetNbins();
       ny = Cefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohb > 0.)      nhistohb /= nlsohb;
       //    cout<<"HB Gforhbjeta20k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohb=     "<< nhistohb <<endl;
@@ -1137,6 +1168,7 @@ int main(int argc, char *argv[])
       
       nx = Cefz1->GetXaxis()->GetNbins();
       ny = Cefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohb > 0.)      nhistohb /= nlsohb;
       //    cout<<"HB Gforhbjeta21k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohb=     "<< nhistohb <<endl;
@@ -1194,6 +1226,7 @@ int main(int argc, char *argv[])
       int sumijhe = 0;
       nx = Sefz1->GetXaxis()->GetNbins();
       ny = Sefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
       cout<<"HE h_2DsumADCAmplEtaPhiLs0         nx=     "<< nx <<" ny=     "<< ny <<endl;
       // i - # LSs:
       TH1F* Sefw0 = new TH1F("Sefw0","", 200, 0., 15000.);
@@ -1294,6 +1327,7 @@ int main(int argc, char *argv[])
       c1->cd(1);
       nx = Sefz1->GetXaxis()->GetNbins();
       ny = Sefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
       cout<<"HE Sefk        nx=     "<< nx <<" ny=     "<< ny <<endl;
       TH1F* Sefk0 = new TH1F("Sefk0","", maxbins, 1., maxbins+1.);
       TH1F* Sefk1 = new TH1F("Sefk1","", maxbins, 1., maxbins+1.);
@@ -1342,6 +1376,7 @@ int main(int argc, char *argv[])
       
       nx = Sefz1->GetXaxis()->GetNbins();
       ny = Sefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohe > 0.)      nhistohe /= nlsohe;
       //    cout<<"HE Gforhejeta0k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohe=     "<< nhistohe <<endl;
@@ -1387,6 +1422,7 @@ int main(int argc, char *argv[])
       
       nx = Sefz1->GetXaxis()->GetNbins();
       ny = Sefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohe > 0.)      nhistohe /= nlsohe;
       //    cout<<"HE Gforhejeta1k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohe=     "<< nhistohe <<endl;
@@ -1432,6 +1468,7 @@ int main(int argc, char *argv[])
       
       nx = Sefz1->GetXaxis()->GetNbins();
       ny = Sefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohe > 0.)      nhistohe /= nlsohe;
       //    cout<<"HE Gforhejeta2k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohe=     "<< nhistohe <<endl;
@@ -1477,6 +1514,7 @@ int main(int argc, char *argv[])
       
       nx = Sefz1->GetXaxis()->GetNbins();
       ny = Sefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohe > 0.)      nhistohe /= nlsohe;
       //    cout<<"HE Gforhejeta3k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohe=     "<< nhistohe <<endl;
@@ -1522,6 +1560,7 @@ int main(int argc, char *argv[])
       
       nx = Sefz1->GetXaxis()->GetNbins();
       ny = Sefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohe > 0.)      nhistohe /= nlsohe;
       //    cout<<"HE Gforhejeta18k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohe=     "<< nhistohe <<endl;
@@ -1567,6 +1606,7 @@ int main(int argc, char *argv[])
       
       nx = Sefz1->GetXaxis()->GetNbins();
       ny = Sefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohe > 0.)      nhistohe /= nlsohe;
       //    cout<<"HE Gforhejeta19k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohe=     "<< nhistohe <<endl;
@@ -1612,6 +1652,7 @@ int main(int argc, char *argv[])
       
       nx = Sefz1->GetXaxis()->GetNbins();
       ny = Sefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohe > 0.)      nhistohe /= nlsohe;
       //    cout<<"HE Gforhejeta20k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohe=     "<< nhistohe <<endl;
@@ -1657,6 +1698,7 @@ int main(int argc, char *argv[])
       
       nx = Sefz1->GetXaxis()->GetNbins();
       ny = Sefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohe > 0.)      nhistohe /= nlsohe;
       //    cout<<"HE Gforhejeta21k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohe=     "<< nhistohe <<endl;
@@ -1702,6 +1744,7 @@ int main(int argc, char *argv[])
       
       nx = Sefz1->GetXaxis()->GetNbins();
       ny = Sefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohe > 0.)      nhistohe /= nlsohe;
       //    cout<<"HE Gforhejeta22k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohe=     "<< nhistohe <<endl;
@@ -1747,6 +1790,7 @@ int main(int argc, char *argv[])
       
       nx = Sefz1->GetXaxis()->GetNbins();
       ny = Sefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsohe > 0.)      nhistohe /= nlsohe;
       //    cout<<"HE Gforhejeta23k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohe=     "<< nhistohe <<endl;
@@ -1804,6 +1848,7 @@ int main(int argc, char *argv[])
       int sumijho = 0;
       nx = Yefz1->GetXaxis()->GetNbins();
       ny = Yefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
       cout<<"HO h_2DsumADCAmplEtaPhiLs0         nx=     "<< nx <<" ny=     "<< ny <<endl;
       // i - # LSs:
       TH1F* Yefw0 = new TH1F("Yefw0","", 200, 0., 1000.);
@@ -1909,6 +1954,7 @@ int main(int argc, char *argv[])
       c1->cd(1);
       nx = Yefz1->GetXaxis()->GetNbins();
       ny = Yefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
       cout<<"HO Yefk        nx=     "<< nx <<" ny=     "<< ny <<endl;
       TH1F* Yefk0 = new TH1F("Yefk0","", maxbins, 1., maxbins+1.);
       TH1F* Yefk1 = new TH1F("Yefk1","", maxbins, 1., maxbins+1.);
@@ -1957,6 +2003,7 @@ int main(int argc, char *argv[])
       
       nx = Yefz1->GetXaxis()->GetNbins();
       ny = Yefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsoho > 0.)      nhistoho /= nlsoho;
       //    cout<<"HO Gforhojeta0k        nx=     "<< nx <<" ny=     "<< ny <<" nhistoho=     "<< nhistoho <<endl;
@@ -2002,6 +2049,7 @@ int main(int argc, char *argv[])
       
       nx = Yefz1->GetXaxis()->GetNbins();
       ny = Yefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsoho > 0.)      nhistoho /= nlsoho;
       //    cout<<"HO Gforhojeta1k        nx=     "<< nx <<" ny=     "<< ny <<" nhistoho=     "<< nhistoho <<endl;
@@ -2047,6 +2095,7 @@ int main(int argc, char *argv[])
       
       nx = Yefz1->GetXaxis()->GetNbins();
       ny = Yefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsoho > 0.)      nhistoho /= nlsoho;
       //    cout<<"HO Gforhojeta2k        nx=     "<< nx <<" ny=     "<< ny <<" nhistoho=     "<< nhistoho <<endl;
@@ -2092,6 +2141,7 @@ int main(int argc, char *argv[])
       
       nx = Yefz1->GetXaxis()->GetNbins();
       ny = Yefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsoho > 0.)      nhistoho /= nlsoho;
       //    cout<<"HO Gforhojeta3k        nx=     "<< nx <<" ny=     "<< ny <<" nhistoho=     "<< nhistoho <<endl;
@@ -2137,6 +2187,7 @@ int main(int argc, char *argv[])
       
       nx = Yefz1->GetXaxis()->GetNbins();
       ny = Yefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsoho > 0.)      nhistoho /= nlsoho;
       //    cout<<"HO Gforhojeta18k        nx=     "<< nx <<" ny=     "<< ny <<" nhistoho=     "<< nhistoho <<endl;
@@ -2182,6 +2233,7 @@ int main(int argc, char *argv[])
       
       nx = Yefz1->GetXaxis()->GetNbins();
       ny = Yefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsoho > 0.)      nhistoho /= nlsoho;
       //    cout<<"HO Gforhojeta19k        nx=     "<< nx <<" ny=     "<< ny <<" nhistoho=     "<< nhistoho <<endl;
@@ -2227,6 +2279,7 @@ int main(int argc, char *argv[])
       
       nx = Yefz1->GetXaxis()->GetNbins();
       ny = Yefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsoho > 0.)      nhistoho /= nlsoho;
       //    cout<<"HO Gforhojeta20k        nx=     "<< nx <<" ny=     "<< ny <<" nhistoho=     "<< nhistoho <<endl;
@@ -2272,6 +2325,7 @@ int main(int argc, char *argv[])
       
       nx = Yefz1->GetXaxis()->GetNbins();
       ny = Yefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //    if( nlsoho > 0.)      nhistoho /= nlsoho;
       //    cout<<"HO Gforhojeta21k        nx=     "<< nx <<" ny=     "<< ny <<" nhistoho=     "<< nhistoho <<endl;
@@ -2330,6 +2384,7 @@ int main(int argc, char *argv[])
       int sumijhf = 0;
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
       cout<<"HF h_2DsumADCAmplEtaPhiLs0         nx=     "<< nx <<" ny=     "<< ny <<endl;
       // i - # LSs:
       TH1F* Gefw0 = new TH1F("Gefw0","", 250, 0., 1500.);
@@ -2430,6 +2485,7 @@ int main(int argc, char *argv[])
       c1->cd(1);
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
       cout<<"HF Gefk        nx=     "<< nx <<" ny=     "<< ny <<endl;
       TH1F* Gefk0 = new TH1F("Gefk0","", maxbins, 1., maxbins+1.);
       TH1F* Gefk1 = new TH1F("Gefk1","", maxbins, 1., maxbins+1.);
@@ -2476,6 +2532,7 @@ int main(int argc, char *argv[])
       c1->cd(1);
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
       cout<<"HF Gefh        nx=     "<< nx <<" ny=     "<< ny <<endl;
       TH1F* Gefh0 = new TH1F("Gefh0","", maxbins, 1., maxbins+1.);
       TH1F* Gefh1 = new TH1F("Gefh1","", maxbins, 1., maxbins+1.);
@@ -2525,6 +2582,7 @@ int main(int argc, char *argv[])
       
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
             if( nlsohf > 0.)      nhistohf /= nlsohf;
             cout<<"HF Gforhfjeta0k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
@@ -2570,6 +2628,7 @@ int main(int argc, char *argv[])
       
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //      if( nlsohf > 0.)      nhistohf /= nlsohf;
       //      cout<<"HF Gforhfjeta1k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
@@ -2615,6 +2674,7 @@ int main(int argc, char *argv[])
       
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //      if( nlsohf > 0.)      nhistohf /= nlsohf;
       //      cout<<"HF Gforhfjeta2k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
@@ -2660,6 +2720,7 @@ int main(int argc, char *argv[])
       
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //      if( nlsohf > 0.)      nhistohf /= nlsohf;
       //      cout<<"HF Gforhfjeta3k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
@@ -2705,6 +2766,7 @@ int main(int argc, char *argv[])
       
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //      if( nlsohf > 0.)      nhistohf /= nlsohf;
       //      cout<<"HF Gforhfjeta18k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
@@ -2750,6 +2812,7 @@ int main(int argc, char *argv[])
       
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //      if( nlsohf > 0.)      nhistohf /= nlsohf;
       //      cout<<"HF Gforhfjeta19k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
@@ -2795,6 +2858,7 @@ int main(int argc, char *argv[])
       
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //      if( nlsohf > 0.)      nhistohf /= nlsohf;
       //      cout<<"HF Gforhfjeta20k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
@@ -2839,6 +2903,7 @@ int main(int argc, char *argv[])
       c1->Divide(3,6);
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
 
       //      if( nlsohf > 0.)      nhistohf /= nlsohf;
       //      cout<<"HF Gforhfjeta21k        nx=     "<< nx <<" ny=     "<< ny <<" nhistohf=     "<< nhistohf <<endl;
@@ -2884,30 +2949,87 @@ int main(int argc, char *argv[])
       
       /////////////////
        c1->Update();
-      ////////////////////////////////////////////////////////////////////////////////////     HF::
+      //////////////////////////////////////////////////////////////////////////////////// 533    HF:: jeta = 0,1,2, 3            18,19,20,21       // jphi = 0,1,2,3,4,5.... 17
     //======================================================================
     //======================================================================
     //======================================================================
+       /*
+      c1->Clear();
+      c1->Divide(1,1);
+      c1->cd(1);
+      maxbinx = 0;
+      maxbiny = 0;
+      nx = Gefz1->GetXaxis()->GetNbins();
+      ny = Gefz1->GetYaxis()->GetNbins();
+      nx = maxbins;// ls
+      cout<<"533 HF1     LS   nx=     "<< nx <<" ny=     "<< ny <<endl;
+      TH2F* ADCAmplLSHF1 = new TH2F("ADCAmplLSHF1","", 610, 0., 610.,400,0., 400.);
+      TH2F* ADCAmplLSHF10 = new TH2F("ADCAmplLSHF10","", 610, 0., 610.,400,0., 400.);
+       TH2F* ADCAmplLSHF2 = (TH2F*)ADCAmplLSHF10->Clone("ADCAmplLSHF2");
+      for (int i=1;i<=nx;i++) {
+	for (int j=1;j<=ny;j++) {
+	  double ccc1 =  Gefz1->GetBinContent(i,j);
+	  if(ccc1>0.) {
+	    maxbinx = i; if(i>maxbinx) maxbinx = i;
+	    maxbiny = j; if(j>maxbiny) maxbiny = j;
+	    //	    	    if(ccc1 <= 0.)	    	    cout<<"HF1:  ibin=  "<< i <<"      jbin= "<< j <<"      A= "<< ccc1 <<endl;
+	    //	    ADCAmplLSHF1 ->Fill(ccc1);
+	    ADCAmplLSHF1 ->Fill(float(i), float(j),ccc1);
+	    ADCAmplLSHF10 ->Fill(float(i), float(j),1.);
+	  }
+	}}
+       ADCAmplLSHF2->Divide(ADCAmplLSHF1,ADCAmplLSHF10, 1, 1, "B");// average A
+      ADCAmplLSHF2 ->SetMarkerStyle(20);
+      ADCAmplLSHF2 ->SetMarkerSize(0.4);
+      ADCAmplLSHF2 ->GetYaxis()->SetLabelSize(0.04);
+      ADCAmplLSHF2 ->SetXTitle("nev0-overAllLSs test with ADCAmplLSHF1 \b");
+      ADCAmplLSHF2 ->SetMarkerColor(2);
+      ADCAmplLSHF2 ->SetLineColor(0);
+      //    gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
+          ADCAmplLSHF2 ->Draw("COLZ");
+      cout<<"533 HF1 for h_2D0sumADCAmplLS1 maxbinx =  "<< maxbinx<<"     maxbiny=  "<< maxbiny <<endl;
+       c1->Update();
+*/
+       /*
+       for (int j=1;j<=ny;j++) {
+	 for (int i=1;i<=nx;i++) {
+	   double ccc1 =  Gefz1->GetBinContent(i,j);
+	   if(ccc1 <= 0.) cout<<"HF==================================*:  ibin=  "<< i <<"      jbin= "<< j <<"      A= "<< ccc1 <<endl;
+	 }//i
+       }//j
+*/
+       //======================================================================HF:: jeta = 0,1,2, 3            18,19,20,21       // jphi = 0,1,2,3,4,5.... 17
        int njeta = 22; int njphi = 18;
-       nx = Gefz1->GetXaxis()->GetNbins();
-       ny = Gefz1->GetYaxis()->GetNbins();
-       double alexhf[njeta][njphi][nx];      
+       //       ny = Gefz1->GetYaxis()->GetNbins();// # etaphi indexe
+       //       nx = Gefz1->GetXaxis()->GetNbins();// # LS
+       //       	   	   cout<<"HF 111 54        ny=     "<< ny <<"   nx   =     "<<nx  <<endl;
+       //       nx = maxbins;
+       //       	   	   cout<<"HF 222 54        ny=     "<< ny <<"   nx   =     "<<nx  <<endl;
+       double alexhf[njeta][njphi][nx];  
+       for(int i=0;i<nx;i++){
+	 for(int jeta=0;jeta<njeta;jeta++){
+	   for(int jphi=0;jphi<njphi;jphi++){
+	     alexhf[jeta][jphi][i]=0.;	   }	 }       }
        for (int j=1;j<=ny;j++) {
 	 int jeta = (j-1)/njphi;// jeta = 0-21
 	 if(jeta < 4 || jeta > 17 ) {
 	   int jphi = (j-1)-njphi*jeta;// jphi=0-17 
-	   //	   cout<<"HF 54        jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+	   //	   	   	   cout<<"HF 54        jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<endl;
+
+
 	   for (int i=1;i<=nx;i++) {
 	     double ccc1 =  Gefz1->GetBinContent(i,j);
+	    	    if(ccc1 <= 0.)	    	    cout<<"HF*****************:  ibin=  "<< i <<"      jbin= "<< j <<"      A= "<< ccc1 <<endl;
 	     alexhf[jeta][jphi][i-1] = ccc1;
-	     //	     if( i == 1 ) cout<<"HF 54  for LS=1      ccc1=     "<< ccc1 <<endl;
+	     //	     	     if( i == 1 ) cout<<"HF 54  for LS=1      ccc1=     "<< ccc1 <<endl;
+	     //	     	     if( alexhf[jeta][jphi][i-1] <= 0. ) cout<<"HF 54        jeta=     "<< jeta <<"   jphi   =     "<<jphi  <<"  j   =     "<<j  <<"  i-1   =     "<<i-1  <<"  ccc1   =     "<<ccc1  <<endl;
 	   }//i
 	 }//if
        }//j
        //------------------------       
 
 
-    //========================================================================================== 54   HF:: jeta = 0,1,2, 3            18,19,20,21       // jphi = 0,1,2,3,4,5
+    //========================================================================================== 54   HF:: jeta = 0,1,2, 3            18,19,20,21       // jphi = 0,1,2,3,4,5.... 17
     //======================================================================
     //======================================================================
     //======================================================================
@@ -3095,6 +3217,7 @@ int main(int argc, char *argv[])
 	   TH1F *HFpositivedirection3 = (TH1F*)h2CeffHFpositivedirection3->Clone("twod1");
 	   for (int i=0;i<nx;i++) {
 	     double ccc1 = alexhf[jeta][jphi][i];
+	    if(ccc1 <= 0.)	    	    cout<<"59  HF:  ibin=  "<< i <<"      jphi= "<< jphi <<"      jeta= "<< jeta <<"      A= "<< ccc1 <<endl;
 	     
 	     
 	     if(ccc1>0.) {HFpositivedirection3->Fill(i,ccc1);HFpositivedirection3->SetBinError(i,0.01);}
@@ -3206,6 +3329,7 @@ int main(int argc, char *argv[])
        TH1F* Gefz41D0     = new TH1F("Gefz41D0","",  18, 0., 18. );
        TH1F* Gefz41DF = (TH1F*)Gefz41D0->Clone("Gefz41DF");
        for (int jphi=0;jphi<18;jphi++) {
+
 	 for (int jeta=0;jeta<22;jeta++) {
 	   for (int i=0;i<nx;i++) {
 	     double ccc1 = alexhf[jeta][jphi][i];
