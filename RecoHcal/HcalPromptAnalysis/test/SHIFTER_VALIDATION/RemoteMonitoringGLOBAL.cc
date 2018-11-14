@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 //======================================================================
 
 	     // CUTs FOR IPHI RBX:
-	     int long cutA_HB = 100;int long cutA_HE = 1000000;int long cutA_HO = 150;int long cutA_HF = 500;
+	     int long cutA_HB = 100;int long cutA_HE = 6000;int long cutA_HO = 150;int long cutA_HF = 500;
 
 
 //======================================================================
@@ -3076,14 +3076,18 @@ HF: j = 0,1,2, 3            18,19,20,21
       cRBX1->Divide(1,1);
       cRBX1->cd(1);
        // int ietaphi = 0; ietaphi = ((k2+1)-1)*nphi + (k3+1) ;  k2=0-neta-1; k3=0-nphi-1; neta=18; nphi=22;
-       TH2F* Ghb42D      = new TH2F("Ghb42D","",   22, -11., 11., 18, 0., 18. );
-       TH2F* Ghb42D0     = new TH2F("Ghb42D0","",  22, -11., 11., 18, 0., 18. );
+	    //       TH2F* Ghb42D      = new TH2F("Ghb42D","",   22, -11., 11., 18, 0., 18. );
+	    //       TH2F* Ghb42D0     = new TH2F("Ghb42D0","",  22, -11., 11., 18, 0., 18. );
+       TH2F* Ghb42D      = new TH2F("Ghb42D","",   23, -11.5, 11.5, 18, 0., 18. );
+       TH2F* Ghb42D0     = new TH2F("Ghb42D0","",  23, -11.5, 11.5, 18, 0., 18. );
        TH2F* Ghb42DF = (TH2F*)Ghb42D0->Clone("Ghb42DF");
        for (int jphi=0;jphi<njphi;jphi++) {
 	 for (int jeta=0;jeta<njeta;jeta++) {
 	   for (int i=0;i<nx;i++) {
 	     double ccc1 = alexall[jeta][jphi][i];
-	     if(ccc1>0.) {Ghb42D ->Fill(jeta-11,jphi,ccc1); Ghb42D0 ->Fill(jeta-11,jphi,1.); }
+	     int neweta = jeta-11-0.5; if(jeta>=11) neweta = jeta-11+1.5; 
+	     if(ccc1>0.) {Ghb42D ->Fill(neweta,jphi,ccc1); Ghb42D0 ->Fill(neweta,jphi,1.); }
+	     //	     if(ccc1>0.) {Ghb42D ->Fill(jeta-11,jphi,ccc1); Ghb42D0 ->Fill(jeta-11,jphi,1.); }
 	   }}}
        Ghb42DF->Divide(Ghb42D,Ghb42D0, 1, 1, "B");// average A
        //    Ghb1->Sumw2();
@@ -3200,14 +3204,18 @@ HF: j = 0,1,2, 3            18,19,20,21
       cRBX1->Divide(1,1);
       cRBX1->cd(1);
        // int ietaphi = 0; ietaphi = ((k2+1)-1)*nphi + (k3+1) ;  k2=0-neta-1; k3=0-nphi-1; neta=18; nphi=22;
-       TH2F* Ghe42D      = new TH2F("Ghe42D","",   22, -11., 11., 18, 0., 18. );
-       TH2F* Ghe42D0     = new TH2F("Ghe42D0","",  22, -11., 11., 18, 0., 18. );
+       TH2F* Ghe42D      = new TH2F("Ghe42D","",   23, -11.5, 11.5, 18, 0., 18. );
+       TH2F* Ghe42D0     = new TH2F("Ghe42D0","",  23, -11.5, 11.5, 18, 0., 18. );
+       //       TH2F* Ghe42D      = new TH2F("Ghe42D","",   22, -11., 11., 18, 0., 18. );
+       //       TH2F* Ghe42D0     = new TH2F("Ghe42D0","",  22, -11., 11., 18, 0., 18. );
        TH2F* Ghe42DF = (TH2F*)Ghe42D0->Clone("Ghe42DF");
        for (int jphi=0;jphi<njphi;jphi++) {
 	 for (int jeta=0;jeta<njeta;jeta++) {
 	   for (int i=0;i<nx;i++) {
 	     double ccc1 = alexall[jeta][jphi][i];
-	     if(ccc1>0.) {Ghe42D ->Fill(jeta-11,jphi,ccc1); Ghe42D0 ->Fill(jeta-11,jphi,1.); }
+	     int neweta = jeta-11-0.5; if(jeta>=11) neweta = jeta-11+1.5; 
+	     if(ccc1>0.) {Ghe42D ->Fill(neweta,jphi,ccc1); Ghe42D0 ->Fill(neweta,jphi,1.); }
+	     //	     if(ccc1>0.) {Ghe42D ->Fill(jeta-11,jphi,ccc1); Ghe42D0 ->Fill(jeta-11,jphi,1.); }
 	   }}}
        Ghe42DF->Divide(Ghe42D,Ghe42D0, 1, 1, "B");// average A
        //    Ghe1->Sumw2();
@@ -3326,14 +3334,18 @@ HF: j = 0,1,2, 3            18,19,20,21
       cRBX1->Divide(1,1);
       cRBX1->cd(1);
        // int ietaphi = 0; ietaphi = ((k2+1)-1)*nphi + (k3+1) ;  k2=0-neta-1; k3=0-nphi-1; neta=18; nphi=22;
-       TH2F* Gho42D      = new TH2F("Gho42D","",   22, -11., 11., 18, 0., 18. );
-       TH2F* Gho42D0     = new TH2F("Gho42D0","",  22, -11., 11., 18, 0., 18. );
+       TH2F* Gho42D      = new TH2F("Gho42D","",   23, -11.5, 11.5, 18, 0., 18. );
+       TH2F* Gho42D0     = new TH2F("Gho42D0","",  23, -11.5, 11.5, 18, 0., 18. );
+       //     TH2F* Gho42D      = new TH2F("Gho42D","",   22, -11., 11., 18, 0., 18. );
+       //     TH2F* Gho42D0     = new TH2F("Gho42D0","",  22, -11., 11., 18, 0., 18. );
        TH2F* Gho42DF = (TH2F*)Gho42D0->Clone("Gho42DF");
        for (int jphi=0;jphi<njphi;jphi++) {
 	 for (int jeta=0;jeta<njeta;jeta++) {
 	   for (int i=0;i<nx;i++) {
 	     double ccc1 = alexall[jeta][jphi][i];
-	     if(ccc1>0.) {Gho42D ->Fill(jeta-11,jphi,ccc1); Gho42D0 ->Fill(jeta-11,jphi,1.); }
+	     int neweta = jeta-11-0.5; if(jeta>=11) neweta = jeta-11+1.5; 
+	     if(ccc1>0.) {Gho42D ->Fill(neweta,jphi,ccc1); Gho42D0 ->Fill(neweta,jphi,1.); }
+	     //	     if(ccc1>0.) {Gho42D ->Fill(jeta-11,jphi,ccc1); Gho42D0 ->Fill(jeta-11,jphi,1.); }
 	   }}}
        Gho42DF->Divide(Gho42D,Gho42D0, 1, 1, "B");// average A
        //    Gho1->Sumw2();
@@ -3451,14 +3463,18 @@ HF: j = 0,1,2, 3            18,19,20,21
       cRBX1->Divide(1,1);
       cRBX1->cd(1);
        // int ietaphi = 0; ietaphi = ((k2+1)-1)*nphi + (k3+1) ;  k2=0-neta-1; k3=0-nphi-1; neta=18; nphi=22;
-       TH2F* Ghf42D      = new TH2F("Ghf42D","",   22, -11., 11., 18, 0., 18. );
-       TH2F* Ghf42D0     = new TH2F("Ghf42D0","",  22, -11., 11., 18, 0., 18. );
+       TH2F* Ghf42D      = new TH2F("Ghf42D","",   23, -11.5, 11.5, 18, 0., 18. );
+       TH2F* Ghf42D0     = new TH2F("Ghf42D0","",  23, -11.5, 11.5, 18, 0., 18. );
+       //     TH2F* Ghf42D      = new TH2F("Ghf42D","",   22, -11., 11., 18, 0., 18. );
+       //     TH2F* Ghf42D0     = new TH2F("Ghf42D0","",  22, -11., 11., 18, 0., 18. );
        TH2F* Ghf42DF = (TH2F*)Ghf42D0->Clone("Ghf42DF");
        for (int jphi=0;jphi<njphi;jphi++) {
 	 for (int jeta=0;jeta<njeta;jeta++) {
 	   for (int i=0;i<nx;i++) {
 	     double ccc1 = alexall[jeta][jphi][i];
-	     if(ccc1>0.) {Ghf42D ->Fill(jeta-11,jphi,ccc1); Ghf42D0 ->Fill(jeta-11,jphi,1.); }
+	     int neweta = jeta-11-0.5; if(jeta>=11) neweta = jeta-11+1.5; 
+	     if(ccc1>0.) {Ghf42D ->Fill(neweta,jphi,ccc1); Ghf42D0 ->Fill(neweta,jphi,1.); }
+	     //	     if(ccc1>0.) {Ghf42D ->Fill(jeta-11,jphi,ccc1); Ghf42D0 ->Fill(jeta-11,jphi,1.); }
 	   }}}
        Ghf42DF->Divide(Ghf42D,Ghf42D0, 1, 1, "B");// average A
        //    Ghf1->Sumw2();
@@ -5503,8 +5519,8 @@ htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-softwa
   htmlFile << "<tr>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/CapID_GL.html\">Cap ID errors</a></td>"<< std::endl;
   // AZ 18.03.2018
-  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
-  //  htmlFile << "  <td><a  href=\"ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
+  // htmlFile << "  <td><a  href=\"ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Width_GL.html\">Width</a></td>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Ratio_GL.html\">Ratio</a></td>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Tmean_GL.html\">TS mean</a></td>"<< std::endl;
