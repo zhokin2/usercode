@@ -3289,14 +3289,19 @@ int main(int argc, char *argv[])
        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
        c1->cd(1);
        // int ietaphi = 0; ietaphi = ((k2+1)-1)*nphi + (k3+1) ;  k2=0-neta-1; k3=0-nphi-1; neta=18; nphi=22;
-       TH2F* Gefz42D      = new TH2F("Gefz42D","",   22, -11., 11., 18, 0., 18. );
-       TH2F* Gefz42D0     = new TH2F("Gefz42D0","",  22, -11., 11., 18, 0., 18. );
+            TH2F* Gefz42D      = new TH2F("Gefz42D","",   23, -11.5, 11.5, 18, 0., 18. );
+            TH2F* Gefz42D0     = new TH2F("Gefz42D0","",  23, -11.5, 11.5, 18, 0., 18. );
+       //     TH2F* Gefz42D      = new TH2F("Gefz42D","",   22, -11., 11., 18, 0., 18. );
+       //     TH2F* Gefz42D0     = new TH2F("Gefz42D0","",  22, -11., 11., 18, 0., 18. );
+	    //      TH2F* Gefz42D      = new TH2F("Gefz42D","",   24, -12., 12., 18, 0., 18. );
+	    //     TH2F* Gefz42D0     = new TH2F("Gefz42D0","",  24, -12., 12., 18, 0., 18. );
        TH2F* Gefz42DF = (TH2F*)Gefz42D0->Clone("Gefz42DF");
        for (int jphi=0;jphi<18;jphi++) {
 	 for (int jeta=0;jeta<22;jeta++) {
 	   for (int i=0;i<nx;i++) {
 	     double ccc1 = alexhf[jeta][jphi][i];
-	     if(ccc1>0.) {Gefz42D ->Fill(jeta-11,jphi,ccc1); Gefz42D0 ->Fill(jeta-11,jphi,1.); }
+	     int neweta = jeta-11-0.5; if(jeta>=11) neweta = jeta-11+1.5; 
+	     if(ccc1>0.) {Gefz42D ->Fill(neweta,jphi,ccc1); Gefz42D0 ->Fill(neweta,jphi,1.); }
 	   }}}
        Gefz42DF->Divide(Gefz42D,Gefz42D0, 1, 1, "B");// average A
        //    Gefz1->Sumw2();
