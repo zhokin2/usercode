@@ -427,13 +427,21 @@ process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
 # use twiki site to specify HLT reconstruction Global tags:
 #   https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFrontierConditions
 #
+#   103X_dataRun2_HLT_v1 	for CMSSW_10_3_0 onwards 	Heavy Ion 2018 	first HLT GT for Heavy Ion collision in 2018 
+#   101X_dataRun2_HLT_v7 	for CMSSW_10_1_1 onwards 	Collisions 2018 	first HLT GT for collisions 
 #   100X_dataRun2_HLT_v2 	for CMSSW_10_0_3 onwards 	CRUZET 2018 	update of 0T templates for SiPixels
 #   100X_dataRun2_HLT_v1 	for CMSSW_10_0_0 onwards 	MWGRs 2018 	first HLT GT for 2018 
 #
 #
-############################################################################ GlobalTag :1+ good as 5
+############################################################################ GlobalTag :
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '100X_dataRun2_HLT_v2', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, '103X_dataRun2_HLT_v1', '')
+############################################################################ GlobalTag :
+#from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
+#process.GlobalTag = GlobalTag(process.GlobalTag, '101X_dataRun2_HLT_v7', '')
+############################################################################ GlobalTag :1+ good as 5
+#from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
+#process.GlobalTag = GlobalTag(process.GlobalTag, '100X_dataRun2_HLT_v2', '')
 ############################################################################ GlobalTag :2- error no running
 #process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 #process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data_FULL', '')
