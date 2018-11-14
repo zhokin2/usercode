@@ -3233,7 +3233,8 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		
 		
 		double bbb3=0.;if(bbb1 != 0.) bbb3 = bbbc/bbb1;
-		if(bbb3 != 0.) {
+		// very very wrong if below:
+		//		if(bbb3 != 0.) {
 
 		  if(k0==0) {
 		    h_2DsumADCAmplEtaPhiLs0->Fill(float(lscounterM1), float(ietaphi), bbbc);//HB
@@ -3260,7 +3261,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		  h_sumADCAmplEtaPhiLs_lscounterM1->Fill(float(lscounterM1), 1.);
 		  h_sumADCAmplEtaPhiLs_ietaphi->Fill(float(ietaphi));
 
-		}// bb3
+		  //		}// bb3
 		
 	      }// lscounterM1 >= lsmin_ && lscounterM1 < lsmax_
 	      
@@ -6585,12 +6586,12 @@ void VeRawAnalyzer::beginJob()
   h_2DsumADCAmplEtaPhiLs20 = new TH2F("h_2DsumADCAmplEtaPhiLs20"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
   h_2DsumADCAmplEtaPhiLs30 = new TH2F("h_2DsumADCAmplEtaPhiLs30"," ", nlsminmax, alsmin, blsmax, znphi*zneta, 1., znphi*zneta+1.);
 
-  h_sumADCAmplEtaPhiLs = new TH1F("h_sumADCAmplEtaPhiLs"," ", 1000, 0.,20000.);
-  h_sumADCAmplEtaPhiLs_bbbc = new TH1F("h_sumADCAmplEtaPhiLs_bbbc"," ", 1000, 0.,250000.);
-  h_sumADCAmplEtaPhiLs_bbb1 = new TH1F("h_sumADCAmplEtaPhiLs_bbb1"," ", 100, 0.,10000.);
-  h_sumADCAmplEtaPhiLs_lscounterM1 = new TH1F("h_sumADCAmplEtaPhiLs_lscounterM1"," ", 600, 0.,600.);
-  h_sumADCAmplEtaPhiLs_ietaphi = new TH1F("h_sumADCAmplEtaPhiLs_ietaphi"," ", 1000, 0.,6000.);
-  h_sumADCAmplEtaPhiLs_lscounterM1orbitNum = new TH1F("h_sumADCAmplEtaPhiLs_lscounterM1orbitNum"," ", 600, 0.,600.);
+  h_sumADCAmplEtaPhiLs = new TH1F("h_sumADCAmplEtaPhiLs"," ", 1000, 0.,14000.);
+  h_sumADCAmplEtaPhiLs_bbbc = new TH1F("h_sumADCAmplEtaPhiLs_bbbc"," ", 1000, 0.,300000.);
+  h_sumADCAmplEtaPhiLs_bbb1 = new TH1F("h_sumADCAmplEtaPhiLs_bbb1"," ", 100, 0.,3000.);
+  h_sumADCAmplEtaPhiLs_lscounterM1 = new TH1F("h_sumADCAmplEtaPhiLs_lscounterM1"," ", 600, 1.,601.);
+  h_sumADCAmplEtaPhiLs_ietaphi = new TH1F("h_sumADCAmplEtaPhiLs_ietaphi"," ", 400, 0.,400.);
+  h_sumADCAmplEtaPhiLs_lscounterM1orbitNum = new TH1F("h_sumADCAmplEtaPhiLs_lscounterM1orbitNum"," ", 600, 1.,601.);
   h_sumADCAmplEtaPhiLs_orbitNum = new TH1F("h_sumADCAmplEtaPhiLs_orbitNum"," ", 1000, 25000000.,40000000.);
 
     // for LS :
@@ -12467,6 +12468,67 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      double bbb1=1.;
 	      if(flagestimatornormalization_ == 2 ) {bbbc = sumEstimator1[k0][k1][k2][k3]; bbb1 = sum0Estimator[k0][k1][k2][k3];}
 	      
+
+
+
+	      ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	      ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	      // zhokin 18.10.2018 STUDY:               CALL  HFF2 (ID,NID,X,Y,W)
+	      //		  std::cout << "  lscounterM1 = " <<lscounterM1 <<" HB index= " <<k0 <<" mdepth= " << k1+1 <<" ieta= " << k2 <<" iphi= " << k3 << " bbbc= "  << bbbc  << " bbb1= "  << bbb1  << std::endl;	
+	      if( lscounterM1 >= lsmin_ && lscounterM1 < lsmax_ ) {
+
+		//                                       INDEXIES:
+		int kkkk2 = (k2-1)/4;	if(k2==0) kkkk2=1.;else kkkk2+=2; //kkkk2= 1-22
+		int kkkk3 = (k3)/4 + 1 ;//kkkk3= 1-18
+		//                                       PACKING
+		//kkkk2= 1-22 ;kkkk3= 1-18
+		int ietaphi = 0; ietaphi = ((kkkk2)-1)*znphi + (kkkk3) ; 
+		//  Outout is       ietaphi = 1 - 396 ( # =396; in histo,booking is: 1 - 397 )
+
+		//if(lscounterM1 == 187 && ietaphi == 5904 ) std::cout <<"ALL SubDet index= " <<k0 <<" mdepth= " << k1+1 <<" ieta= " << k2 <<" iphi= " << k3 << " bbbc= "  << bbbc  << " bbb1= "  << bbb1  << " nevcounter0= "  << nevcounter0  << std::endl;	
+		//if(lscounterM1 == 188 && ietaphi == 1 )std::cout <<"ALL********** SubDet index= " <<k0 <<" mdepth= " << k1+1 <<" ieta= " << k2 <<" iphi= " << k3 << " bbbc= "  << bbbc  << " bbb1= "  << bbb1  << " nevcounter0= "  << nevcounter0  << std::endl;	
+		
+		
+		double bbb3=0.;if(bbb1 != 0.) bbb3 = bbbc/bbb1;
+		// very very wrong if below:
+		//		if(bbb3 != 0.) {
+
+		  if(k0==0) {
+		    h_2DsumADCAmplEtaPhiLs0->Fill(float(lscounterM1), float(ietaphi), bbbc);//HB
+		    h_2DsumADCAmplEtaPhiLs00->Fill(float(lscounterM1), float(ietaphi), bbb1);//HB
+		  }
+		  if(k0==1) {
+		    h_2DsumADCAmplEtaPhiLs1->Fill(float(lscounterM1), float(ietaphi), bbbc);//HE
+		    h_2DsumADCAmplEtaPhiLs10->Fill(float(lscounterM1), float(ietaphi), bbb1);//HE
+		  }
+		  if(k0==2) {
+		    h_2DsumADCAmplEtaPhiLs2->Fill(float(lscounterM1), float(ietaphi), bbbc);//HO
+		    h_2DsumADCAmplEtaPhiLs20->Fill(float(lscounterM1), float(ietaphi), bbb1);//HO
+		  }
+		  if(k0==3) {
+		    h_2DsumADCAmplEtaPhiLs3->Fill(float(lscounterM1), float(ietaphi), bbbc);//HF
+		    h_2DsumADCAmplEtaPhiLs30->Fill(float(lscounterM1), float(ietaphi), bbb1);//HF
+		  }
+
+		  h_sumADCAmplEtaPhiLs->Fill(bbb3);
+		  h_sumADCAmplEtaPhiLs_bbbc->Fill(bbbc);
+		  h_sumADCAmplEtaPhiLs_bbb1->Fill(bbb1);
+		  h_sumADCAmplEtaPhiLs_lscounterM1orbitNum->Fill(float(lscounterM1), float(orbitNum));
+		  h_sumADCAmplEtaPhiLs_orbitNum->Fill(float(orbitNum), 1.);
+		  h_sumADCAmplEtaPhiLs_lscounterM1->Fill(float(lscounterM1), 1.);
+		  h_sumADCAmplEtaPhiLs_ietaphi->Fill(float(ietaphi));
+
+		  //		}// bb3
+		
+	      }// lscounterM1 >= lsmin_ && lscounterM1 < lsmax_
+	      
+
+
+
+
+
+
+
 	      // HB:
 	      if(k0==0) {
 		// HBdepth1
