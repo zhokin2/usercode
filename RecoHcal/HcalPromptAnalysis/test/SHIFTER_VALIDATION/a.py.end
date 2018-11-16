@@ -365,14 +365,16 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   usecontinuousnumbering = cms.untracked.bool(False),
                                   #usecontinuousnumbering = cms.untracked.bool(True),
                                   #
-                                  #
+                                  ######### name of DigiCollection for p-p collisions is 'hcalDigis':
                                   hcalCalibDigiCollectionTag = cms.InputTag('hcalDigis'),
                                   hbheDigiCollectionTag = cms.InputTag('hcalDigis'),
                                   hoDigiCollectionTag = cms.InputTag('hcalDigis'),
                                   hfDigiCollectionTag = cms.InputTag('hcalDigis'),
-                                  #for upgrade:
+                                  ###for upgrade:
                                   hbheQIE11DigiCollectionTag = cms.InputTag('hcalDigis'),
                                   hbheQIE10DigiCollectionTag = cms.InputTag('hcalDigis'),
+				  #
+				  #
                                   # flag to use either only old QIE8 digiCollections or only new QIE10,11 digiCollections
                                   #=0-all digiCollections(default for normal running), =1-only old QIE8 digiCollections, 
                                   #=2-only new QIE1011 digiCollections, =3-only new QIE1011 digiCollections w/o new high depthes
@@ -456,6 +458,10 @@ process.GlobalTag = GlobalTag(process.GlobalTag, '103X_dataRun2_HLT_v1', '')
 #process.GlobalTag.globaltag = '100X_dataRun2_Prompt_Candidate_2018_01_31_16_01_36'
 ###########################################################################
 # V.EPSHTEIN:
+#
+#process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+#process.GlobalTag.globaltag='103X_dataRun2_Express_v2'
+#
 #process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 #process.GlobalTag.globaltag = '100X_dataRun2_Prompt_Candidate_2018_01_31_16_01_36'
 ###
@@ -477,13 +483,16 @@ process.GlobalTag = GlobalTag(process.GlobalTag, '103X_dataRun2_HLT_v1', '')
 #        'RespCorrs')
 #)
 ###
-#process.hcalDigis= cms.EDProducer("HcalRawToDigi",
-#    FilterDataQuality = cms.bool(True),
-#    HcalFirstFED = cms.untracked.int32(700),
+process.hcalDigis= cms.EDProducer("HcalRawToDigi",
+    FilterDataQuality = cms.bool(True),
+#    FilterDataQuality = cms.bool(False),
+    HcalFirstFED = cms.untracked.int32(700),
 #    InputLabel = cms.InputTag("source"),
 #    UnpackCalib = cms.untracked.bool(True),
-#    FEDs = cms.untracked.vint32(1100, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1109, 1110, 1111, 1112, 1113, 1114, 1115, 1116, 1117),
-#)
+    InputLabel = cms.InputTag("rawDataRepacker"),
+    UnpackCalib = cms.untracked.bool(False),
+    FEDs = cms.untracked.vint32(1100, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1109, 1110, 1111, 1112, 1113, 1114, 1115, 1116, 1117),
+)
 ###
 ############################################################################
 #process.hcalDigis.InputLabel = "hltFEDSelector"
