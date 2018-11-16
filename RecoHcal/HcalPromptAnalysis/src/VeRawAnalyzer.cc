@@ -28,7 +28,7 @@ Implementation:
 //#include "TTree.h"
 
 using namespace std;
-// user include files   
+// user include files   calCalibDigiCollection
 
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
@@ -5501,7 +5501,8 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       gotCALIBDigis=false; //if it is not there, leave it false
     }
   if(!gotCALIBDigis) {
-    cout<<" No HcalCalibDigiCollection collection is found "<<endl;
+    // zhokin 15.11.2018 : commented to run ions collisions
+    //  cout<<" No HcalCalibDigiCollection collection is found "<<endl;
   } else {
     for(HcalCalibDigiCollection::const_iterator digi=calib->begin();digi!=calib->end();digi++){
       int cal_det=digi->id().hcalSubdet(); // 1-HB,2-HE,3-HO,4-HF
