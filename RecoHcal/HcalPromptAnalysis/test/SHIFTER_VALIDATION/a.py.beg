@@ -39,4 +39,5 @@ process.maxEvents = cms.untracked.PSet(
 
 # Input source
 process.source = cms.Source("PoolSource",
+	       	skipBadFiles=cms.untracked.bool(True),	
     fileNames = cms.untracked.vstring(
