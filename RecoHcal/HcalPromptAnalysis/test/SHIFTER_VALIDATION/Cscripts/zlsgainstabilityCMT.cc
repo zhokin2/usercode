@@ -31,12 +31,12 @@ int main(int argc, char *argv[])
       printf("reco: gROOT Reset \n");
         gROOT->Reset();
         gROOT->SetStyle("Plain");
-	//			gStyle->SetOptStat(0);   //  no statistics _or_
+				gStyle->SetOptStat(0);   //  no statistics _or_
 	//	        	  gStyle->SetOptStat(11111111);
 	//gStyle->SetOptStat(1101);// name mean and rms 
 	//	gStyle->SetOptStat(0101);// name and entries
 	//	   gStyle->SetOptStat(1100);// mean and rms only !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		gStyle->SetOptStat(1110000);// und over, integral !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//	gStyle->SetOptStat(1110000);// und over, integral !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	//	gStyle->SetOptStat(101110);                                          // entries, mean, rms, overflow !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		  			//	gStyle->SetOptStat(100000);//  over !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		//
@@ -3313,7 +3313,6 @@ int main(int argc, char *argv[])
        
 
        //======================================================================
-       ////////////////////////////////////////////////////////////////////////////////////
        //========================================================================================== 61   HF:: 2D  jeta = 0 - 21       jphi =0 - 17
        //======================================================================
        //======================================================================
@@ -3325,10 +3324,6 @@ int main(int argc, char *argv[])
        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
        c1->cd(1);
        // int ietaphi = 0; ietaphi = ((k2+1)-1)*nphi + (k3+1) ;  k2=0-neta-1; k3=0-nphi-1; neta=18; nphi=22;
-
-       //     TH2F* Gefz42D      = new TH2F("Gefz42D","",   22, -11., 11., 18, 0., 18. );
-       //     TH2F* Gefz42D0     = new TH2F("Gefz42D0","",  22, -11., 11., 18, 0., 18. );
-       //     TH2F* Gefz42DF = (TH2F*)Gefz42D0->Clone("Gefz42DF");
 
        TH1F* Gefz41D      = new TH1F("Gefz41D","",   18, 0., 18. );
        TH1F* Gefz41D0     = new TH1F("Gefz41D0","",  18, 0., 18. );
@@ -3345,8 +3340,48 @@ int main(int argc, char *argv[])
        //     Gefz41DF->Sumw2();
             for (int jphi=1;jphi<19;jphi++) {Gefz41DF->SetBinError(jphi,0.01);}
        gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
-       Gefz41DF->SetMarkerStyle(20); Gefz41DF->SetMarkerSize(1.4); Gefz41DF->GetZaxis()->SetLabelSize(0.08); Gefz41DF->SetXTitle("<A>_PHI  \b"); Gefz41DF->SetYTitle("  #phi \b"); Gefz41DF->SetZTitle("<A>_PHI  - All \b"); Gefz41DF->SetMarkerColor(4); Gefz41DF->SetLineColor(4);  Gefz41DF->SetMinimum(0.8);     //      Gefz41DF->SetMaximum(1.000);       
+       Gefz41DF->SetMarkerStyle(20); Gefz41DF->SetMarkerSize(1.4); Gefz41DF->GetZaxis()->SetLabelSize(0.08); Gefz41DF->SetXTitle("#phi  \b"); Gefz41DF->SetYTitle("  <A> \b"); Gefz41DF->SetZTitle("<A>_PHI  - All \b"); Gefz41DF->SetMarkerColor(4); Gefz41DF->SetLineColor(4);  Gefz41DF->SetMinimum(0.8);     //      Gefz41DF->SetMaximum(1.000);       
        Gefz41DF->Draw("Error");
+       
+       c1->Update();
+       
+
+       //======================================================================
+       //======================================================================       
+//========================================================================================== 62   HF:: 2D  jeta = 0 - 21       jphi =0 - 17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       c1->Clear();
+       /////////////////
+       c1->Divide(1,1);
+       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       c1->cd(1);
+       // int ietaphi = 0; ietaphi = ((k2+1)-1)*nphi + (k3+1) ;  k2=0-neta-1; k3=0-nphi-1; neta=18; nphi=22;
+       // jeta = 0 - 21       jphi = 0 - 17
+       TH1F* Gjeta41D      = new TH1F("Gjeta41D","",   23, -11.5, 11.5 );
+       TH1F* Gjeta41D0     = new TH1F("Gjeta41D0","",  23, -11.5, 11.5 );
+       TH1F* Gjeta41DF = (TH1F*)Gjeta41D0->Clone("Gjeta41DF");
+
+       for (int jeta=0;jeta<22;jeta++) {
+	 for (int jphi=0;jphi<18;jphi++) {
+	   
+	   for (int i=0;i<nx;i++) {
+	     double ccc1 = alexhf[jeta][jphi][i];
+	     int neweta = jeta-11-0.5; if(jeta>=11) neweta = jeta-11+1.5; 
+	     if(ccc1>0.) {
+	       Gjeta41D ->Fill(neweta,ccc1); Gjeta41D0 ->Fill(neweta,1.); 
+	       if( i == 0 ) cout<<"62  HF:  ibin=  "<< i <<"      jphi= "<< jphi <<"      jeta= "<< jeta <<"      A= "<< ccc1 <<endl;
+	     }
+	   }}}
+       //     Gjeta41D->Sumw2();Gjeta41D0->Sumw2();
+       Gjeta41DF->Divide(Gjeta41D,Gjeta41D0, 1, 1, "B");// average A
+       //     Gjeta41DF->Sumw2();
+            for (int jeta=1;jeta<24;jeta++) {Gjeta41DF->SetBinError(jeta,0.01);}
+       gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
+       Gjeta41DF->SetMarkerStyle(20); Gjeta41DF->SetMarkerSize(1.4); Gjeta41DF->GetZaxis()->SetLabelSize(0.08); Gjeta41DF->SetXTitle("#eta  \b"); Gjeta41DF->SetYTitle("  <A> \b"); Gjeta41DF->SetZTitle("<A>_ETA  - All \b"); Gjeta41DF->SetMarkerColor(4); Gjeta41DF->SetLineColor(4);  Gjeta41DF->SetMinimum(0.8);     //      Gjeta41DF->SetMaximum(1.000);       
+       Gjeta41DF->Draw("Error");
        
        c1->Update();
        
@@ -3354,7 +3389,12 @@ int main(int argc, char *argv[])
        //======================================================================
        //======================================================================
        //======================================================================
-        
+       ////////////////////////////////////////////////////////////////////////////////////
+       ////////////////////////////////////////////////////////////////////////////////////
+       ////////////////////////////////////////////////////////////////////////////////////
+       ////////////////////////////////////////////////////////////////////////////////////
+       ////////////////////////////////////////////////////////////////////////////////////
+       ////////////////////////////////////////////////////////////////////////////////////
     //======================================================================
     //======================================================================
     //==================================================================================================== end
