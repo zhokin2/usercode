@@ -71,7 +71,9 @@ int main(int argc, char *argv[])
 //======================================================================
 
 	     // CUTs FOR IPHI RBX:
-	     int long cutA_HB = 100;int long cutA_HE = 6000;int long cutA_HO = 150;int long cutA_HF = 500;
+	     int cutA_HB = 100;int cutA_HE = 6000;int cutA_HO = 150;int cutA_HF = 500;
+	     // CUTs FOR IETA RBX:
+	     int cutB_HB = 100;int cutB_HE = 10000;int cutB_HO = 150;int cutB_HF = 500;
 
 
 //======================================================================
@@ -2980,12 +2982,21 @@ int main(int argc, char *argv[])
   //  int njeta = 22; int njphi = 18; int lsmax=2600;
   int njeta = 22; int njphi = 18; int lsmax=2600;
   cout<<">>>>>>>>>>>>>>>>>>>>>>>>     int njeta = 22; int njphi = 18; int lsmax=2600;                        "              <<endl;
+
   double alexall[njeta][njphi][lsmax];      
 
+  // for phi tables(!):
   double alexhb[njphi][lsmax];      
   double alexhe[njphi][lsmax];      
   double alexho[njphi][lsmax];      
-  double alexhf[njphi][lsmax];      
+  double alexhf[njphi][lsmax]; 
+     
+  // for eta tables(!):
+  double blexhb[njeta][lsmax];      
+  double blexhe[njeta][lsmax];      
+  double blexho[njeta][lsmax];      
+  double blexhf[njeta][lsmax]; 
+     
   cout<<">>>>>>>>>>>>>>>>>>>>>>>>  alexall   [njeta][njphi][lsmax];                         "              <<endl;
   int maxbinsRBX = MaxLum;
   int nx = maxbinsRBX; // # LS
@@ -2994,10 +3005,15 @@ int main(int argc, char *argv[])
   cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
   
   for(int i=0;i<nx;i++){
+
     for(int jphi=0;jphi<njphi;jphi++){
       alexhb[jphi][i]=0.;alexhe[jphi][i]=0.;alexho[jphi][i]=0.;alexhf[jphi][i]=0.;
+
       for(int jeta=0;jeta<njeta;jeta++){
+	if(jphi==0){blexhb[jeta][i]=0.;blexhe[jeta][i]=0.;blexho[jeta][i]=0.;blexhf[jeta][i]=0.;}
+
 	alexall[jeta][jphi][i]=0.;}
+      
     }
   }
   
@@ -3064,6 +3080,19 @@ HF: j = 0,1,2, 3            18,19,20,21
 	  if(isum>0.) sumccc1 /= isum;
 	  alexhb[jphi][i] = sumccc1;
 	}}//for for
+
+    //====================================================================== blexhb[k][i]
+      for (int keta=0;keta<njeta;keta++) {
+	for (int i=0;i<nx;i++) {
+	  double sumccc1 = 0.; int isum = 0;
+	  for (int kphi=0;kphi<njphi;kphi++) {	   
+	    double ccc1 = alexall[keta][kphi][i];
+	    if(ccc1>0.) {sumccc1 += ccc1; isum++;} 
+	  }// for kphi
+	  if(isum>0.) sumccc1 /= isum;
+	  blexhb[keta][i] = sumccc1;
+	}}//for for
+
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
        //========================================================================================== 11   HB:: 2D  jeta = 0 - 21       jphi =0 - 17
        //======================================================================
@@ -3139,6 +3168,47 @@ HF: j = 0,1,2, 3            18,19,20,21
       if (GphiHB1D0) delete GphiHB1D0;
       if (GphiHB1DF) delete GphiHB1DF;
 
+       //========================================================================================== 62   HB:: 1D  j = 7,8,9,10 ; 11,12,13,14       jphi =0 - 17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HB 11D plot *eta*" <<endl;
+      cRBX1->Clear();
+      /////////////////
+      cRBX1->Divide(1,1);
+      cRBX1->cd(1);
+       TH1F* GetaHB11D      = new TH1F("GetaHB11D","",   23, -11.5, 11.5 );
+       TH1F* GetaHB11D0     = new TH1F("GetaHB11D0","",  23, -11.5, 11.5 );
+       TH1F* GetaHB11DF = (TH1F*)GetaHB11D0->Clone("GetaHB11DF");
+
+       for (int jeta=0;jeta<22;jeta++) {
+	 for (int jphi=0;jphi<18;jphi++) {
+	   
+	   for (int i=0;i<nx;i++) {
+	     double ccc1 = alexall[jeta][jphi][i];
+	     int neweta = jeta-11-0.5; if(jeta>=11) neweta = jeta-11+1.5; 
+	     if(ccc1>0.) {
+	       GetaHB11D ->Fill(neweta,ccc1); GetaHB11D0 ->Fill(neweta,1.); 
+	       //	       if( i == 0 ) cout<<"62  HB:  ibin=  "<< i <<"      jphi= "<< jphi <<"      jeta= "<< jeta <<"      A= "<< ccc1 <<endl;
+	     }
+	   }}}
+       //     GetaHB11D->Sumw2();GetaHB11D0->Sumw2();
+       GetaHB11DF->Divide(GetaHB11D,GetaHB11D0, 1, 1, "B");// average A
+       //     GetaHB11DF->Sumw2();
+            for (int jeta=1;jeta<24;jeta++) {GetaHB11DF->SetBinError(jeta,0.01);}
+       gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
+       GetaHB11DF->SetMarkerStyle(20); GetaHB11DF->SetMarkerSize(1.4); GetaHB11DF->GetZaxis()->SetLabelSize(0.08); GetaHB11DF->SetXTitle("#eta  \b"); GetaHB11DF->SetYTitle("  <A> \b"); GetaHB11DF->SetZTitle("<A>_ETA  - All \b"); GetaHB11DF->SetMarkerColor(4); GetaHB11DF->SetLineColor(4);  GetaHB11DF->SetMinimum(0.8);     //      GetaHB11DF->SetMaximum(1.000);       
+       GetaHB11DF->Draw("Error");
+
+       /////////////////
+       cRBX1->Update();
+       cRBX1->Print("RBX-HB-11Dplot.png");
+       cRBX1->Clear();
+      // clean-up
+      if (GetaHB11D)  delete GetaHB11D;
+      if (GetaHB11D0) delete GetaHB11D0;
+      if (GetaHB11DF) delete GetaHB11DF;
        ////////////////////////////////////////////////////////////////////////////////////
 
        cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
@@ -3192,6 +3262,17 @@ HF: j = 0,1,2, 3            18,19,20,21
 	  if(isum>0.) sumccc1 /= isum;
 	  alexhe[jphi][i] = sumccc1;
 	}}//for for
+    //====================================================================== blexhb[k][i]
+      for (int keta=0;keta<njeta;keta++) {
+	for (int i=0;i<nx;i++) {
+	  double sumccc1 = 0.; int isum = 0;
+	  for (int kphi=0;kphi<njphi;kphi++) {	   
+	    double ccc1 = alexall[keta][kphi][i];
+	    if(ccc1>0.) {sumccc1 += ccc1; isum++;} 
+	  }// for kphi
+	  if(isum>0.) sumccc1 /= isum;
+	  blexhe[keta][i] = sumccc1;
+	}}//for for
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
        //========================================================================================== 22   HE:: 2D  jeta = 0 - 21       jphi =0 - 17
        //======================================================================
@@ -3232,7 +3313,7 @@ HF: j = 0,1,2, 3            18,19,20,21
       if (Ghe42D0) delete Ghe42D0;
       if (Ghe42DF) delete Ghe42DF;
 
-       //========================================================================================== 61   HE:: 1D  j = 7,8,9,10 ; 11,12,13,14       jphi =0 - 17
+       //========================================================================================== 61   HE:: 1D  j = 3,4,5, 6, 7      14,15,16,17,18         jphi =0 - 17
        //======================================================================
        //======================================================================
        //======================================================================
@@ -3267,6 +3348,47 @@ HF: j = 0,1,2, 3            18,19,20,21
       if (GphiHE1D0) delete GphiHE1D0;
       if (GphiHE1DF) delete GphiHE1DF;
 
+       //========================================================================================== 62   HE:: 1D  j = 3,4,5, 6, 7      14,15,16,17,18        jphi =0 - 17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HE 11D plot *eta*" <<endl;
+      cRBX1->Clear();
+      /////////////////
+      cRBX1->Divide(1,1);
+      cRBX1->cd(1);
+       TH1F* GetaHE11D      = new TH1F("GetaHE11D","",   23, -11.5, 11.5 );
+       TH1F* GetaHE11D0     = new TH1F("GetaHE11D0","",  23, -11.5, 11.5 );
+       TH1F* GetaHE11DF = (TH1F*)GetaHE11D0->Clone("GetaHE11DF");
+
+       for (int jeta=0;jeta<22;jeta++) {
+	 for (int jphi=0;jphi<18;jphi++) {
+	   
+	   for (int i=0;i<nx;i++) {
+	     double ccc1 = alexall[jeta][jphi][i];
+	     int neweta = jeta-11-0.5; if(jeta>=11) neweta = jeta-11+1.5; 
+	     if(ccc1>0.) {
+	       GetaHE11D ->Fill(neweta,ccc1); GetaHE11D0 ->Fill(neweta,1.); 
+	       //	       if( i == 0 ) cout<<"62  HE:  ibin=  "<< i <<"      jphi= "<< jphi <<"      jeta= "<< jeta <<"      A= "<< ccc1 <<endl;
+	     }
+	   }}}
+       //     GetaHE11D->Sumw2();GetaHE11D0->Sumw2();
+       GetaHE11DF->Divide(GetaHE11D,GetaHE11D0, 1, 1, "B");// average A
+       //     GetaHE11DF->Sumw2();
+            for (int jeta=1;jeta<24;jeta++) {GetaHE11DF->SetBinError(jeta,0.01);}
+       gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
+       GetaHE11DF->SetMarkerStyle(20); GetaHE11DF->SetMarkerSize(1.4); GetaHE11DF->GetZaxis()->SetLabelSize(0.08); GetaHE11DF->SetXTitle("#eta  \b"); GetaHE11DF->SetYTitle("  <A> \b"); GetaHE11DF->SetZTitle("<A>_ETA  - All \b"); GetaHE11DF->SetMarkerColor(4); GetaHE11DF->SetLineColor(4);  GetaHE11DF->SetMinimum(0.8);     //      GetaHE11DF->SetMaximum(1.000);       
+       GetaHE11DF->Draw("Error");
+
+       /////////////////
+       cRBX1->Update();
+       cRBX1->Print("RBX-HE-11Dplot.png");
+       cRBX1->Clear();
+      // clean-up
+      if (GetaHE11D)  delete GetaHE11D;
+      if (GetaHE11D0) delete GetaHE11D0;
+      if (GetaHE11DF) delete GetaHE11DF;
        ////////////////////////////////////////////////////////////////////////////////////
 
        cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
@@ -3322,6 +3444,18 @@ HF: j = 0,1,2, 3            18,19,20,21
 	  if(isum>0.) sumccc1 /= isum;
 	  alexho[jphi][i] = sumccc1;
 	}}//for for
+    //====================================================================== blexhb[k][i]
+      for (int keta=0;keta<njeta;keta++) {
+	for (int i=0;i<nx;i++) {
+	  double sumccc1 = 0.; int isum = 0;
+	  for (int kphi=0;kphi<njphi;kphi++) {	   
+	    double ccc1 = alexall[keta][kphi][i];
+	    if(ccc1>0.) {sumccc1 += ccc1; isum++;} 
+	  }// for kphi
+	  if(isum>0.) sumccc1 /= isum;
+	  blexho[keta][i] = sumccc1;
+	}}//for for
+
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
        //========================================================================================== 33   HO:: 2D  jeta = 0 - 21       jphi =0 - 17
        //======================================================================
@@ -3397,6 +3531,47 @@ HF: j = 0,1,2, 3            18,19,20,21
       if (GphiHO1D0) delete GphiHO1D0;
       if (GphiHO1DF) delete GphiHO1DF;
 
+       //========================================================================================== 62   HO:: 1D  j = 7,8,9,10 ; 11,12,13,14       jphi =0 - 17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HO 11D plot *eta*" <<endl;
+      cRBX1->Clear();
+      /////////////////
+      cRBX1->Divide(1,1);
+      cRBX1->cd(1);
+       TH1F* GetaHO11D      = new TH1F("GetaHO11D","",   23, -11.5, 11.5 );
+       TH1F* GetaHO11D0     = new TH1F("GetaHO11D0","",  23, -11.5, 11.5 );
+       TH1F* GetaHO11DF = (TH1F*)GetaHO11D0->Clone("GetaHO11DF");
+
+       for (int jeta=0;jeta<22;jeta++) {
+	 for (int jphi=0;jphi<18;jphi++) {
+	   
+	   for (int i=0;i<nx;i++) {
+	     double ccc1 = alexall[jeta][jphi][i];
+	     int neweta = jeta-11-0.5; if(jeta>=11) neweta = jeta-11+1.5; 
+	     if(ccc1>0.) {
+	       GetaHO11D ->Fill(neweta,ccc1); GetaHO11D0 ->Fill(neweta,1.); 
+	       //	       if( i == 0 ) cout<<"62  HO:  ibin=  "<< i <<"      jphi= "<< jphi <<"      jeta= "<< jeta <<"      A= "<< ccc1 <<endl;
+	     }
+	   }}}
+       //     GetaHO11D->Sumw2();GetaHO11D0->Sumw2();
+       GetaHO11DF->Divide(GetaHO11D,GetaHO11D0, 1, 1, "B");// average A
+       //     GetaHO11DF->Sumw2();
+            for (int jeta=1;jeta<24;jeta++) {GetaHO11DF->SetBinError(jeta,0.01);}
+       gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
+       GetaHO11DF->SetMarkerStyle(20); GetaHO11DF->SetMarkerSize(1.4); GetaHO11DF->GetZaxis()->SetLabelSize(0.08); GetaHO11DF->SetXTitle("#eta  \b"); GetaHO11DF->SetYTitle("  <A> \b"); GetaHO11DF->SetZTitle("<A>_ETA  - All \b"); GetaHO11DF->SetMarkerColor(4); GetaHO11DF->SetLineColor(4);  GetaHO11DF->SetMinimum(0.8);     //      GetaHO11DF->SetMaximum(1.000);       
+       GetaHO11DF->Draw("Error");
+
+       /////////////////
+       cRBX1->Update();
+       cRBX1->Print("RBX-HO-11Dplot.png");
+       cRBX1->Clear();
+      // clean-up
+      if (GetaHO11D)  delete GetaHO11D;
+      if (GetaHO11D0) delete GetaHO11D0;
+      if (GetaHO11DF) delete GetaHO11DF;
        ////////////////////////////////////////////////////////////////////////////////////
 
        cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
@@ -3450,6 +3625,17 @@ HF: j = 0,1,2, 3            18,19,20,21
 	  }// for jeta
 	  if(isum>0.) sumccc1 /= isum;
 	  alexhf[jphi][i] = sumccc1;
+	}}//for for
+    //====================================================================== blexhb[k][i]
+      for (int keta=0;keta<njeta;keta++) {
+	for (int i=0;i<nx;i++) {
+	  double sumccc1 = 0.; int isum = 0;
+	  for (int kphi=0;kphi<njphi;kphi++) {	   
+	    double ccc1 = alexall[keta][kphi][i];
+	    if(ccc1>0.) {sumccc1 += ccc1; isum++;} 
+	  }// for kphi
+	  if(isum>0.) sumccc1 /= isum;
+	  blexhf[keta][i] = sumccc1;
 	}}//for for
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
        //========================================================================================== 60   HF:: 2D  jeta = 0 - 21       jphi =0 - 17
@@ -3525,6 +3711,49 @@ HF: j = 0,1,2, 3            18,19,20,21
       if (GphiHF1D)  delete GphiHF1D;
       if (GphiHF1D0) delete GphiHF1D0;
       if (GphiHF1DF) delete GphiHF1DF;
+
+
+       //========================================================================================== 62   HF:: 1D  j = 7,8,9,10 ; 11,12,13,14       jphi =0 - 17
+       //======================================================================
+       //======================================================================
+       //======================================================================
+       //======================================================================
+      cout<<"      RBX HF 11D plot *eta*" <<endl;
+      cRBX1->Clear();
+      /////////////////
+      cRBX1->Divide(1,1);
+      cRBX1->cd(1);
+       TH1F* GetaHF11D      = new TH1F("GetaHF11D","",   23, -11.5, 11.5 );
+       TH1F* GetaHF11D0     = new TH1F("GetaHF11D0","",  23, -11.5, 11.5 );
+       TH1F* GetaHF11DF = (TH1F*)GetaHF11D0->Clone("GetaHF11DF");
+
+       for (int jeta=0;jeta<22;jeta++) {
+	 for (int jphi=0;jphi<18;jphi++) {
+	   
+	   for (int i=0;i<nx;i++) {
+	     double ccc1 = alexall[jeta][jphi][i];
+	     int neweta = jeta-11-0.5; if(jeta>=11) neweta = jeta-11+1.5; 
+	     if(ccc1>0.) {
+	       GetaHF11D ->Fill(neweta,ccc1); GetaHF11D0 ->Fill(neweta,1.); 
+	       //	       if( i == 0 ) cout<<"62  HF:  ibin=  "<< i <<"      jphi= "<< jphi <<"      jeta= "<< jeta <<"      A= "<< ccc1 <<endl;
+	     }
+	   }}}
+       //     GetaHF11D->Sumw2();GetaHF11D0->Sumw2();
+       GetaHF11DF->Divide(GetaHF11D,GetaHF11D0, 1, 1, "B");// average A
+       //     GetaHF11DF->Sumw2();
+            for (int jeta=1;jeta<24;jeta++) {GetaHF11DF->SetBinError(jeta,0.01);}
+       gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
+       GetaHF11DF->SetMarkerStyle(20); GetaHF11DF->SetMarkerSize(1.4); GetaHF11DF->GetZaxis()->SetLabelSize(0.08); GetaHF11DF->SetXTitle("#eta  \b"); GetaHF11DF->SetYTitle("  <A> \b"); GetaHF11DF->SetZTitle("<A>_ETA  - All \b"); GetaHF11DF->SetMarkerColor(4); GetaHF11DF->SetLineColor(4);  GetaHF11DF->SetMinimum(0.8);     //      GetaHF11DF->SetMaximum(1.000);       
+       GetaHF11DF->Draw("Error");
+
+       /////////////////
+       cRBX1->Update();
+       cRBX1->Print("RBX-HF-11Dplot.png");
+       cRBX1->Clear();
+      // clean-up
+      if (GetaHF11D)  delete GetaHF11D;
+      if (GetaHF11D0) delete GetaHF11D0;
+      if (GetaHF11DF) delete GetaHF11DF;
 
 
        cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
@@ -4372,6 +4601,7 @@ HF: j = 0,1,2, 3            18,19,20,21
 	     htmlFile << "8. <a href=\"#LSstatus\">Table of Average channel-Amplitude in Depthes over LSs </a><br>\n";
 	     htmlFile << "9. <a href=\"#RBXstatus\">RBX Status </a><br>\n";
 	     htmlFile << "10. <a href=\"#RBXPHItable\">Table of Average RBX-Amplitude in Phi over LSs </a><br>\n";
+	     htmlFile << "11. <a href=\"#RBXETAtable\">Table of Average RBX-Amplitude in Eta over LSs </a><br>\n";
 	   }
 	   
 	   //     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
@@ -4817,6 +5047,10 @@ HF: j = 0,1,2, 3            18,19,20,21
 	       htmlFile << " <img src=\"RBX-HB-1Dplot.png\" />\n";
 	       htmlFile << "<br>\n";
 	       
+	       htmlFile << "<h2> Average Amplitudes of RBX-ETA for HB: </h2>"<< std::endl; 
+	       htmlFile << " <img src=\"RBX-HB-11Dplot.png\" />\n";
+	       htmlFile << "<br>\n";
+	       
 	       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 	     }  
 	     // HE: j = 3,4,5, 6, 7      14,15,16,17,18
@@ -4833,6 +5067,10 @@ HF: j = 0,1,2, 3            18,19,20,21
 	       htmlFile << " <img src=\"RBX-HE-1Dplot.png\" />\n";
 	       htmlFile << "<br>\n";
 	       
+	       htmlFile << "<h2> Average Amplitudes of RBX-ETA for HE: </h2>"<< std::endl; 
+	       htmlFile << " <img src=\"RBX-HE-11Dplot.png\" />\n";
+	       htmlFile << "<br>\n";
+	       
 	       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 	     }
 	     // HO:   j = 7,8,9,10            11,12,13,14
@@ -4847,6 +5085,10 @@ HF: j = 0,1,2, 3            18,19,20,21
 	       
 	       htmlFile << "<h2> Average Amplitudes of RBX-PHI for HO: </h2>"<< std::endl; 
 	       htmlFile << " <img src=\"RBX-HO-1Dplot.png\" />\n";
+	       htmlFile << "<br>\n";
+	       
+	       htmlFile << "<h2> Average Amplitudes of RBX-ETA for HO: </h2>"<< std::endl; 
+	       htmlFile << " <img src=\"RBX-HO-11Dplot.png\" />\n";
 	       htmlFile << "<br>\n";
 	       
 	       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
@@ -4866,14 +5108,20 @@ HF: j = 0,1,2, 3            18,19,20,21
 	       htmlFile << " <img src=\"RBX-HF-1Dplot.png\" />\n";
 	       htmlFile << "<br>\n";
 	       
+	       htmlFile << "<h2> Average Amplitudes of RBX-ETA for HF: </h2>"<< std::endl; 
+	       htmlFile << " <img src=\"RBX-HF-11Dplot.png\" />\n";
+	       htmlFile << "<br>\n";
+	       
 	       htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 	     }	  	      
 	     htmlFile << "<br>"<< std::endl;
 
-	     ////////////////////////////////////////////////////////////////////
+
+	     ///////////////////////////////////////////////////////////////////////////////////////////////////
+	     ////////////////////////////////////////////////////////////////////    10. RBXPHItable 
 
 	     htmlFile << "<a name=\"RBXPHItable\"></a>\n";
-	     int long cutA_ALL = 0;
+	     int cutA_ALL = 0;
 	     //	     float cutA_HB = 100.;float cutA_HE = 1000000.;float cutA_HO = 150.;float cutA_HF = 500.;
 	     if (sub==1) {
 	       htmlFile << "<h2> 10. Average RBX-Amplitude in Phi over LSs for HB: </h2>"<< std::endl;
@@ -4902,7 +5150,7 @@ HF: j = 0,1,2, 3            18,19,20,21
 	     htmlFile << "<td class=\"s4\" align=\"center\">LS</td>"    << std::endl;
 	     //              htmlFile << "<td class=\"s1\" align=\"center\">LS</td>"  << std::endl;
 	     htmlFile << "<td class=\"s1\" align=\"center\">Number of events</td>"  << std::endl;
-	     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	     /////////////////////////////////////////////////////
 	     
 	     // k is jphi	     
 	     for (int k=0;k<njphi; k++) htmlFile << "<td class=\"s1\" align=\"center\"> iPHI "<< k <<" </td>"  << std::endl;
@@ -4943,16 +5191,102 @@ HF: j = 0,1,2, 3            18,19,20,21
 	       ind+=1;
 	     }// i over LSs	                
 	     htmlFile << "</table>" << std::endl; 
-	     
 	     htmlFile << "<br>"<< std::endl; 
 	     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 	     htmlFile << "<br>"<< std::endl; 
+	     ////////////////////////////////////////////////////////////////////    11. RBXETAtable 
+
+	     htmlFile << "<a name=\"RBXETAtable\"></a>\n";
+	     int cutB_ALL = 0;
+	     //	     float cutB_HB = 100.;float cutB_HE = 1000000.;float cutB_HO = 150.;float cutB_HF = 500.;
+	     if (sub==1) {
+	       htmlFile << "<h2> 11. Average RBX-Amplitude in Eta over LSs for HB: </h2>"<< std::endl;
+	       htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with cut =  <td class=\"s6\" align=\"center\">"<<cutB_HB<< std::endl;
+	       cutB_ALL = cutB_HB;
+	     }
+	     if (sub==2) {
+	       htmlFile << "<h2> 11. Average RBX-Amplitude in Eta over LSs for HE: </h2>"<< std::endl;
+	       htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with cut =  <td class=\"s6\" align=\"center\">"<<cutB_HE<< std::endl;
+	       cutB_ALL = cutB_HE;
+	     }
+	     if (sub==3) {
+	       htmlFile << "<h2> 11. Average RBX-Amplitude in Eta over LSs for HO: </h2>"<< std::endl;
+	       htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with cut =  <td class=\"s6\" align=\"center\">"<<cutB_HO<< std::endl;
+	       cutB_ALL = cutB_HO;
+	     }
+	     if (sub==4) {
+	       htmlFile << "<h2> 11. Average RBX-Amplitude in Eta over LSs for HF: </h2>"<< std::endl;
+	       htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with cut =  <td class=\"s6\" align=\"center\">"<<cutB_HF<< std::endl;
+	       cutB_ALL = cutB_HF;
+	     }
+	     
+	     htmlFile << "<br>"<< std::endl;
+	     htmlFile << "<table>"<< std::endl;        
+	     htmlFile << "<tr>";
+	     htmlFile << "<td class=\"s4\" align=\"center\">LS</td>"    << std::endl;
+	     //              htmlFile << "<td class=\"s1\" align=\"center\">LS</td>"  << std::endl;
+	     htmlFile << "<td class=\"s1\" align=\"center\">Number of events</td>"  << std::endl;
+	     /////////////////////////////////////////////////////
+	     
+	     // k is jeta	     
+	     for (int k=0;k<njeta; k++) htmlFile << "<td class=\"s1\" align=\"center\"> iETA "<< k <<" </td>"  << std::endl;
+	     htmlFile << "</tr>"   << std::endl;    
+	     //////////////
+
+	     ind = 0;              
+	     // i is LS
+	     for (int i=1;i<=MaxLum;i++) {
+	       if ((ind%2)==1)   raw_class="<td class=\"s2\" align=\"center\">";
+	       else              raw_class="<td class=\"s3\" align=\"center\">";              
+	       htmlFile << "<tr>"<< std::endl;
+	       htmlFile << "<td class=\"s4\" align=\"center\">" << i <<"</td>"<< std::endl;
+	       //                  htmlFile << raw_class<< LumLum->GetBinContent(i)<<"</td>"<< std::endl;	
+	       htmlFile << raw_class<< LumiEv->GetBinContent(i)<<"</td>"<< std::endl;
+	      
+	     // k is jeta	     
+	       for (int k=0;k<njeta; k++) {
+		 if (sub==1) {
+		   if (int (blexhb[k][i-1]) > cutB_ALL ){htmlFile << "<td class=\"s6\" align=\"center\">"<< int (blexhb[k][i-1])<<"</td>"<< std::endl;}
+		   else               {htmlFile << raw_class << int (blexhb[k][i-1])<<"</td>"<< std::endl;}
+		 }// HB end
+		 if (sub==2) {
+		   if (int (blexhe[k][i-1]) > cutB_ALL ) {htmlFile << "<td class=\"s6\" align=\"center\">"<< int (blexhe[k][i-1])<<"</td>"<< std::endl;}
+		   else                    {htmlFile << raw_class << int (blexhe[k][i-1])<<"</td>"<< std::endl;}
+		 }// HE end
+		 if (sub==3) {
+		   if (int (blexho[k][i-1]) > cutB_ALL ) {htmlFile << "<td class=\"s6\" align=\"center\">"<< int (blexho[k][i-1])<<"</td>"<< std::endl;}
+		   else                    {htmlFile << raw_class << int (blexho[k][i-1])<<"</td>"<< std::endl;}
+		 }// HO end
+		 if (sub==4) {
+		   if (int (blexhf[k][i-1]) > cutB_ALL ) {htmlFile << "<td class=\"s6\" align=\"center\">"<< int (blexhf[k][i-1])<<"</td>"<< std::endl;}
+		   else                    {htmlFile << raw_class << int (blexhf[k][i-1])<<"</td>"<< std::endl;}
+		 }// HF end
+		 ////////////////////////		 
+	       }// k over ETA-RBX
+	       htmlFile << "</tr>" << std::endl;
+	       ind+=1;
+	     }// i over LSs	                
+	     htmlFile << "</table>" << std::endl; 
+	     htmlFile << "<br>"<< std::endl; 
+	     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+	     htmlFile << "<br>"<< std::endl; 
+	     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  //=========================================================
+
 	   }// test=1
+
+
+  //===============================================================================
 	   
 
 	   htmlFile.close();	   
       }// sub main loop
   } //test main loop
+  //===============================================================================
+  //===============================================================================
+  //===============================================================================
+  //===============================================================================
   //===============================================================================
   
   
