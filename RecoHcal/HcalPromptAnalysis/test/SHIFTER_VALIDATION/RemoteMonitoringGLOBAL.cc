@@ -78,22 +78,27 @@ int main(int argc, char *argv[])
 
 //======================================================================
 // Prepare histograms and plot them to .png files
-	  TCanvas  *c1 = new TCanvas("c1","Hcal4test",200,10,700,900);
+	     TCanvas  *c1 = new TCanvas("c1","Hcal4test",200,10,700,900);
 
  
-  TCanvas *cHB = new TCanvas("cHB","cHB",1000,500);
-  TCanvas *cHE = new TCanvas("cHE","cHE",1500,500);
-  TCanvas *cONE = new TCanvas("cONE","cONE",500,500);
-  TCanvas *cFour = new TCanvas("cFour","cFour",1500,1000);
-  TCanvas *cFour1 = new TCanvas("cFour1","cFour1",1200,800);
-  TCanvas *cNine = new TCanvas("cNine","cNine",1500,1500);
-  // RBX:  
-//  TCanvas *c4x6 = new TCanvas("c4x6","c4x6",1500,3000);
-  TCanvas *c4x6 = new TCanvas("c4x6","c4x6",1200,2400);
-  //TCanvas *c5x6 = new TCanvas("c5x6","c5x6",2000,3000);
-  TCanvas *c5x6 = new TCanvas("c5x6","c5x6",1500,2400);
-  //  TCanvas *cRBX1 = new TCanvas("cRBX1","cRBX1",200,10,1300,1110);
-    TCanvas *cRBX1 = new TCanvas("cRBX1","cRBX1",1200,1000);
+	     TCanvas *cHB = new TCanvas("cHB","cHB",1000,500);
+	     TCanvas *cHE = new TCanvas("cHE","cHE",1500,500);
+	     TCanvas *cONE = new TCanvas("cONE","cONE",500,500);
+	     TCanvas *cFour = new TCanvas("cFour","cFour",1500,1000);
+	     TCanvas *cFour1 = new TCanvas("cFour1","cFour1",1200,800);
+	     TCanvas *cNine = new TCanvas("cNine","cNine",1500,1500);
+
+	     // RBX:  
+	     //  TCanvas *c4x6 = new TCanvas("c4x6","c4x6",1500,3000);
+	     TCanvas *c4x6 = new TCanvas("c4x6","c4x6",1200,2400);
+	     //TCanvas *c5x6 = new TCanvas("c5x6","c5x6",2000,3000);
+	     TCanvas *c5x6 = new TCanvas("c5x6","c5x6",1500,2400);
+	     //  TCanvas *cRBX1 = new TCanvas("cRBX1","cRBX1",200,10,1300,1110);
+	     TCanvas *cRBX1 = new TCanvas("cRBX1","cRBX1",1200,1000);
+	     //
+	     //	     TCanvas *cRBX31 = new TCanvas("cRBX31","cRBX31",1800,600);
+	     	     TCanvas *cRBX31 = new TCanvas("cRBX31","cRBX31",1860,600);
+	     //	     TCanvas *cRBX31 = new TCanvas("cRBX31","cRBX31",200,10,,1800,600);
   
 //  char *str = (char*)alloca(10000);
   
@@ -2977,7 +2982,7 @@ int main(int argc, char *argv[])
   //////////////////////////////////////////////////////////////////////////////////// RBX study:
 
 
-      cout<<" RBX analysis START for HF **************************" <<endl;
+      cout<<" RBX analysis START for  **************************" <<endl;
   cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
   //  int njeta = 22; int njphi = 18; int lsmax=2600;
   int njeta = 22; int njphi = 18; int lsmax=2600;
@@ -3067,7 +3072,7 @@ HF: j = 0,1,2, 3            18,19,20,21
       // clean-up
       if (Ghb1KKK) delete Ghb1KKK;
       if (Ghb1LLL) delete Ghb1LLL;
-      if (Ghb1) delete Ghb1;
+      //    if (Ghb1) delete Ghb1;
 
     //====================================================================== alexhb[k][i]
       for (int jphi=0;jphi<njphi;jphi++) {
@@ -3209,6 +3214,147 @@ HF: j = 0,1,2, 3            18,19,20,21
       if (GetaHB11D)  delete GetaHB11D;
       if (GetaHB11D0) delete GetaHB11D0;
       if (GetaHB11DF) delete GetaHB11DF;
+
+
+       //========================================================================================== 22   HB:: Ratio plots   jeta = 0 - 21       jphi =0 - 17
+       //======================================================================
+       //======================================================================22.11.2018
+       //======================================================================
+       //======================================================================      
+
+      gStyle->SetOptStat(1110000);                     
+      cout<<"      RBX HB  Ratio plots *****" <<endl;
+      cRBX31->Clear();
+      /////////////////
+      // gain stabilitY:
+      // Rij = Aij / A1j , where i-over LSs, j-channels
+      //
+      //    nx = maxbinsRBX; // # LS
+      //
+      double ccc0HB = 0.;
+      cRBX31->Divide(3,1);
+      //================
+      cRBX31->cd(1);
+      TH1F* Ghb5 = new TH1F("Ghb5","", nx, 1., nx+1.);
+      //    TH1F* Ghb51 = new TH1F("Ghb51","", nx, 1., nx+1.);
+      //    TH1F* Ghb50= new TH1F("Ghb50","", nx, 1., nx+1.);
+      //    TH1F* Ghb5 = (TH1F*)Ghb50->Clone("Ghb5");
+      // j - etaphi index:
+      for (int j=1;j<=ny;j++) {
+	ccc0HB =  Ghb1->GetBinContent(1,j);
+	//	if(ccc0HB <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghb1->GetBinContent(i,j);if(ccc2>0.){ccc0HB=ccc2;cout<<"!!! ccc0HB= "<<ccc0HB<<endl;break;} }
+	if(ccc0HB <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghb1->GetBinContent(i,j);if(ccc2>0.){ccc0HB=ccc2;break;} }
+	if(ccc0HB>0.) { 
+	  // i - # LSs:
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  Ghb1->GetBinContent(i,j);
+	    if(ccc1>0.) {
+	      double Rij = ccc1/ccc0HB;		  
+	      Ghb5 ->Fill( float(i), Rij);
+	      //	      Ghb51 ->Fill( float(i), Rij);
+	      //	      Ghb50->Fill( float(i), 1.);
+	    }}}}
+      //    Ghb5->Divide(Ghb51,Ghb50, 1, 1, "B");// average A
+      for (int i=1;i<=nx;i++) {Ghb5->SetBinError(i,0.0001);}
+      Ghb5 ->SetMarkerStyle(20);Ghb5 ->SetMarkerSize(0.4);Ghb5 ->GetYaxis()->SetLabelSize(0.04);Ghb5 ->SetMarkerColor(2);Ghb5 ->SetLineColor(0);
+      Ghb5->SetXTitle("        iLS  \b");  Ghb5->SetYTitle("     <R> \b"); Ghb5->SetTitle("<Ri> vs iLS \b");
+      Ghb5->SetMinimum(0.);//Ghb5->SetMaximum(2.5);
+      //            gPad->SetLogy();
+      gPad->SetGridy();gPad->SetGridx();     
+      Ghb5->SetStats(0);
+      Ghb5->GetYaxis()->SetLabelSize(0.025);
+      Ghb5 ->Draw("Error");
+//================
+      cRBX31->cd(2);
+      TH2F* Ghb60    = new TH2F("Ghb60","",  22, -11., 11., 18, 0., 18. );
+      TH2F* Ghb61    = new TH2F("Ghb61","",  22, -11., 11., 18, 0., 18. );
+      TH2F* Ghb6     = new TH2F("Ghb6","",   22, -11., 11., 18, 0., 18. );
+      // j - etaphi index; i - # LSs; 
+      //
+      // define mean and RMS:
+      double sumjHB=0.; int njHB=0;double meanjHB=0.;
+      for (int j=1;j<=ny;j++) {ccc0HB =  Ghb1->GetBinContent(1,j);
+	if(ccc0HB <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghb1->GetBinContent(i,j);if(ccc2>0.){ccc0HB=ccc2;break;} }
+	if(ccc0HB>0.){for (int i=1;i<=nx;i++) {double ccc1 =  Ghb1->GetBinContent(i,j)/ccc0HB;if(ccc1>0.){sumjHB += ccc1;njHB++;}} meanjHB=sumjHB/njHB;} }// j
+      
+      double ssumjHB=0.; njHB=0;double sigmajHB=0.;
+      for (int j=1;j<=ny;j++) {ccc0HB =  Ghb1->GetBinContent(1,j);
+	if(ccc0HB <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghb1->GetBinContent(i,j);if(ccc2>0.){ccc0HB=ccc2;break;} }
+	if(ccc0HB>0.){for (int i=1;i<=nx;i++) {double ccc1 =  Ghb1->GetBinContent(i,j)/ccc0HB;if(ccc1>0.){ssumjHB += (ccc1-meanjHB)*(ccc1-meanjHB);njHB++;}} sigmajHB = sqrt(ssumjHB/njHB);} }// j
+      
+      double dif3rmsHBMIN = meanjHB-3*sigmajHB;if(dif3rmsHBMIN<0.) dif3rmsHBMIN = 0.;  double dif3rmsHBMAX = meanjHB+3*sigmajHB;
+      cout<<"22HB-2    meanjHB=  "<< meanjHB <<"  sigmajHB=  "<< sigmajHB <<"  dif3rmsHBMIN=  "<< dif3rmsHBMIN <<"  dif3rmsHBMAX=  "<< dif3rmsHBMAX <<endl;
+      
+      double MAXdif3rmsHBMIN =dif3rmsHBMIN;double MINdif3rmsHBMAX = dif3rmsHBMAX;
+      if(MAXdif3rmsHBMIN<0.95) MAXdif3rmsHBMIN=0.95;if(MINdif3rmsHBMAX>1.05) MINdif3rmsHBMAX=1.05;
+      cout<< "22HB-2     MAXdif3rmsHBMIN=  " <<MAXdif3rmsHBMIN  << "     MINdif3rmsHBMAX=  " <<MINdif3rmsHBMAX  <<endl;
+      //
+      for (int j=1;j<=ny;j++) {
+	ccc0HB =  Ghb1->GetBinContent(1,j);
+	if(ccc0HB <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghb1->GetBinContent(i,j);if(ccc2>0.){ccc0HB=ccc2;break;} }
+	if(ccc0HB>0.) { 
+	  int jeta = (j-1)/18;// jeta = 0-21
+	  int jphi = (j-1)-18*jeta;// jphi=0-17 
+	  // i - # LSs:
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  Ghb1->GetBinContent(i,j);
+	    if(ccc1>0.) {
+	      double Rij = ccc1/ccc0HB;		  
+	      if(Rij<MAXdif3rmsHBMIN || Rij>MINdif3rmsHBMAX) { Ghb61->Fill(jeta-11,jphi,Rij); Ghb60->Fill(jeta-11,jphi,1.); }
+	    }//if(ccc1>0.
+	  }// i
+	}//if(ccc0HB>0 
+      }// j
+      Ghb6->Divide(Ghb61,Ghb60, 1, 1, "B");// average R
+      //      Ghb6->SetLabelOffset (Float_t offset=0.005, Option_t *axis="X")//Set offset between axis and axis' labels
+      //      Ghb6->GetZaxis()->SetLabelOffset(-0.05);
+      Ghb6->GetZaxis()->SetLabelSize(0.025);
+
+      Ghb6->SetXTitle("             #eta  \b"); Ghb6->SetYTitle("      #phi \b"); Ghb6->SetTitle("<Rj> for |1-<R>| > 0.05 \b");     //      Ghb6->SetMaximum(1.000);  //      Ghb6->SetMinimum(1.0); //Ghb6->SetZTitle("Rij averaged over LSs \b"); //Ghb6->GetZaxis()->SetLabelSize(0.04); //Ghb6->SetMarkerStyle(20);// Ghb6->SetMarkerSize(0.4);//Ghb6->SetMarkerColor(2); //Ghb6->SetLineColor(2); 
+      //gStyle->SetOptStat(kFALSE);
+      Ghb6->SetStats(0);
+      Ghb6->Draw("COLZ");
+      //================
+      cRBX31->cd(3);
+      TH1F* Ghb7 = new TH1F("Ghb7","", 120, 0.4, 1.6);
+      // j - etaphi index:
+      for (int j=1;j<=ny;j++) {
+	ccc0HB =  Ghb1->GetBinContent(1,j);
+	if(ccc0HB <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghb1->GetBinContent(i,j);if(ccc2>0.){ccc0HB=ccc2;break;} }
+	if(ccc0HB>0.) { 
+	  // i - # LSs:
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  Ghb1->GetBinContent(i,j);
+	    if(ccc1>0.) {
+	      double Rij = ccc1/ccc0HB;		  
+	      Ghb7 ->Fill( Rij );
+	    }}}}
+      Ghb7 ->SetMarkerStyle(20);Ghb7 ->SetMarkerSize(0.4);Ghb7 ->GetYaxis()->SetLabelSize(0.04);Ghb7 ->SetMarkerColor(2);Ghb7 ->SetLineColor(0);
+      Ghb7->SetYTitle("        N  \b");  Ghb7->SetXTitle("     Rij \b");Ghb7->SetTitle(" Rij \b");
+      //Ghb7->SetMinimum(0.8);Ghb7->SetMaximum(500.);
+      gPad->SetGridy();gPad->SetGridx(); //            gPad->SetLogy();    
+      //      Ghb7->SetStats(1110000);
+      Ghb7->GetYaxis()->SetLabelSize(0.025);
+      Ghb7 ->Draw("Error");
+      Float_t ymaxHB = Ghb7->GetMaximum();
+      cout<< "22HB-3   ymaxHB=  " <<ymaxHB  << "       MAXdif3rmsHBMIN=  " <<MAXdif3rmsHBMIN  << "         MINdif3rmsHBMAX=  " <<MINdif3rmsHBMAX  <<endl;
+      TLine *lineHB = new TLine(MAXdif3rmsHBMIN,0.,MAXdif3rmsHBMIN,ymaxHB);lineHB->SetLineColor(kBlue);lineHB->Draw();
+      TLine *line1HB= new TLine(MINdif3rmsHBMAX,0.,MINdif3rmsHBMAX,ymaxHB);line1HB->SetLineColor(kBlue);line1HB->Draw();      
+//================
+       /////////////////
+       cRBX31->Update();
+       cRBX31->Print("RBX-HB-3plots.png");
+       cRBX31->Clear();
+      // clean-up
+      if (Ghb5) delete Ghb5;
+      if (Ghb60) delete Ghb60;
+      if (Ghb61) delete Ghb61;
+      if (Ghb6) delete Ghb6;
+      if (Ghb7) delete Ghb7;
+
+      if (Ghb1) delete Ghb1;
+            gStyle->SetOptStat(0);
+
        ////////////////////////////////////////////////////////////////////////////////////
 
        cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
@@ -3249,7 +3395,7 @@ HF: j = 0,1,2, 3            18,19,20,21
       // clean-up
       if (Ghe1KKK) delete Ghe1KKK;
       if (Ghe1LLL) delete Ghe1LLL;
-      if (Ghe1) delete Ghe1;
+      //    if (Ghe1) delete Ghe1;
 
     //====================================================================== alexhe[k][i]
       for (int jphi=0;jphi<njphi;jphi++) {
@@ -3262,7 +3408,7 @@ HF: j = 0,1,2, 3            18,19,20,21
 	  if(isum>0.) sumccc1 /= isum;
 	  alexhe[jphi][i] = sumccc1;
 	}}//for for
-    //====================================================================== blexhb[k][i]
+    //====================================================================== blexhe[k][i]
       for (int keta=0;keta<njeta;keta++) {
 	for (int i=0;i<nx;i++) {
 	  double sumccc1 = 0.; int isum = 0;
@@ -3274,7 +3420,7 @@ HF: j = 0,1,2, 3            18,19,20,21
 	  blexhe[keta][i] = sumccc1;
 	}}//for for
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-       //========================================================================================== 22   HE:: 2D  jeta = 0 - 21       jphi =0 - 17
+       //========================================================================================== 21   HE:: 2D  jeta = 0 - 21       jphi =0 - 17
        //======================================================================
        //======================================================================
        //======================================================================
@@ -3389,6 +3535,146 @@ HF: j = 0,1,2, 3            18,19,20,21
       if (GetaHE11D)  delete GetaHE11D;
       if (GetaHE11D0) delete GetaHE11D0;
       if (GetaHE11DF) delete GetaHE11DF;
+
+       //========================================================================================== 22   HE:: Ratio plots   jeta = 0 - 21       jphi =0 - 17
+       //======================================================================
+       //======================================================================22.11.2018
+       //======================================================================
+       //======================================================================      
+
+      gStyle->SetOptStat(1110000);                     
+      cout<<"      RBX HE  Ratio plots *****" <<endl;
+      cRBX31->Clear();
+      /////////////////
+      // gain stabilitY:
+      // Rij = Aij / A1j , where i-over LSs, j-channels
+      //
+      //    nx = maxbinsRBX; // # LS
+      //
+      double ccc0HE = 0.;
+      cRBX31->Divide(3,1);
+      //================
+      cRBX31->cd(1);
+      TH1F* Ghe5 = new TH1F("Ghe5","", nx, 1., nx+1.);
+      //    TH1F* Ghe51 = new TH1F("Ghe51","", nx, 1., nx+1.);
+      //    TH1F* Ghe50= new TH1F("Ghe50","", nx, 1., nx+1.);
+      //    TH1F* Ghe5 = (TH1F*)Ghe50->Clone("Ghe5");
+      // j - etaphi index:
+      for (int j=1;j<=ny;j++) {
+	ccc0HE =  Ghe1->GetBinContent(1,j);
+	//	if(ccc0HE <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghe1->GetBinContent(i,j);if(ccc2>0.){ccc0HE=ccc2;cout<<"!!! ccc0HE= "<<ccc0HE<<endl;break;} }
+	if(ccc0HE <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghe1->GetBinContent(i,j);if(ccc2>0.){ccc0HE=ccc2;break;} }
+	if(ccc0HE>0.) { 
+	  // i - # LSs:
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  Ghe1->GetBinContent(i,j);
+	    if(ccc1>0.) {
+	      double Rij = ccc1/ccc0HE;		  
+	      Ghe5 ->Fill( float(i), Rij);
+	      //	      Ghe51 ->Fill( float(i), Rij);
+	      //	      Ghe50->Fill( float(i), 1.);
+	    }}}}
+      //    Ghe5->Divide(Ghe51,Ghe50, 1, 1, "B");// average A
+      for (int i=1;i<=nx;i++) {Ghe5->SetBinError(i,0.0001);}
+      Ghe5 ->SetMarkerStyle(20);Ghe5 ->SetMarkerSize(0.4);Ghe5 ->GetYaxis()->SetLabelSize(0.04);Ghe5 ->SetMarkerColor(2);Ghe5 ->SetLineColor(0);
+      Ghe5->SetXTitle("        iLS  \b");  Ghe5->SetYTitle("     <R> \b"); Ghe5->SetTitle("<Ri> vs iLS \b");
+      Ghe5->SetMinimum(0.);//Ghe5->SetMaximum(2.5);
+      //            gPad->SetLogy();
+      gPad->SetGridy();gPad->SetGridx();     
+      Ghe5->SetStats(0);
+      Ghe5->GetYaxis()->SetLabelSize(0.025);
+      Ghe5 ->Draw("Error");
+//================
+      cRBX31->cd(2);
+      TH2F* Ghe60    = new TH2F("Ghe60","",  22, -11., 11., 18, 0., 18. );
+      TH2F* Ghe61    = new TH2F("Ghe61","",  22, -11., 11., 18, 0., 18. );
+      TH2F* Ghe6     = new TH2F("Ghe6","",   22, -11., 11., 18, 0., 18. );
+      // j - etaphi index; i - # LSs; 
+      //
+      // define mean and RMS:
+      double sumjHE=0.; int njHE=0;double meanjHE=0.;
+      for (int j=1;j<=ny;j++) {ccc0HE =  Ghe1->GetBinContent(1,j);
+	if(ccc0HE <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghe1->GetBinContent(i,j);if(ccc2>0.){ccc0HE=ccc2;break;} }
+	if(ccc0HE>0.){for (int i=1;i<=nx;i++) {double ccc1 =  Ghe1->GetBinContent(i,j)/ccc0HE;if(ccc1>0.){sumjHE += ccc1;njHE++;}} meanjHE=sumjHE/njHE;} }// j
+      
+      double ssumjHE=0.; njHE=0;double sigmajHE=0.;
+      for (int j=1;j<=ny;j++) {ccc0HE =  Ghe1->GetBinContent(1,j);
+	if(ccc0HE <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghe1->GetBinContent(i,j);if(ccc2>0.){ccc0HE=ccc2;break;} }
+	if(ccc0HE>0.){for (int i=1;i<=nx;i++) {double ccc1 =  Ghe1->GetBinContent(i,j)/ccc0HE;if(ccc1>0.){ssumjHE += (ccc1-meanjHE)*(ccc1-meanjHE);njHE++;}} sigmajHE = sqrt(ssumjHE/njHE);} }// j
+      
+      double dif3rmsHEMIN = meanjHE-3*sigmajHE;if(dif3rmsHEMIN<0.) dif3rmsHEMIN = 0.;  double dif3rmsHEMAX = meanjHE+3*sigmajHE;
+      cout<<"22HE-2    meanjHE=  "<< meanjHE <<"  sigmajHE=  "<< sigmajHE <<"  dif3rmsHEMIN=  "<< dif3rmsHEMIN <<"  dif3rmsHEMAX=  "<< dif3rmsHEMAX <<endl;
+      
+      double MAXdif3rmsHEMIN =dif3rmsHEMIN;double MINdif3rmsHEMAX = dif3rmsHEMAX;
+      if(MAXdif3rmsHEMIN<0.95) MAXdif3rmsHEMIN=0.95;if(MINdif3rmsHEMAX>1.05) MINdif3rmsHEMAX=1.05;
+      cout<< "22HE-2     MAXdif3rmsHEMIN=  " <<MAXdif3rmsHEMIN  << "     MINdif3rmsHEMAX=  " <<MINdif3rmsHEMAX  <<endl;
+      //
+      for (int j=1;j<=ny;j++) {
+	ccc0HE =  Ghe1->GetBinContent(1,j);
+	if(ccc0HE <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghe1->GetBinContent(i,j);if(ccc2>0.){ccc0HE=ccc2;break;} }
+	if(ccc0HE>0.) { 
+	  int jeta = (j-1)/18;// jeta = 0-21
+	  int jphi = (j-1)-18*jeta;// jphi=0-17 
+	  // i - # LSs:
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  Ghe1->GetBinContent(i,j);
+	    if(ccc1>0.) {
+	      double Rij = ccc1/ccc0HE;		  
+	      if(Rij<MAXdif3rmsHEMIN || Rij>MINdif3rmsHEMAX) { Ghe61->Fill(jeta-11,jphi,Rij); Ghe60->Fill(jeta-11,jphi,1.); }
+	    }//if(ccc1>0.
+	  }// i
+	}//if(ccc0HE>0 
+      }// j
+      Ghe6->Divide(Ghe61,Ghe60, 1, 1, "B");// average R
+      //      Ghe6->SetLabelOffset (Float_t offset=0.005, Option_t *axis="X")//Set offset between axis and axis' labels
+      //      Ghe6->GetZaxis()->SetLabelOffset(-0.05);
+      Ghe6->GetZaxis()->SetLabelSize(0.025);
+
+      Ghe6->SetXTitle("             #eta  \b"); Ghe6->SetYTitle("      #phi \b"); Ghe6->SetTitle("<Rj> for |1-<R>| > 0.05 \b");     //      Ghe6->SetMaximum(1.000);  //      Ghe6->SetMinimum(1.0); //Ghe6->SetZTitle("Rij averaged over LSs \b"); //Ghe6->GetZaxis()->SetLabelSize(0.04); //Ghe6->SetMarkerStyle(20);// Ghe6->SetMarkerSize(0.4);//Ghe6->SetMarkerColor(2); //Ghe6->SetLineColor(2); 
+      //gStyle->SetOptStat(kFALSE);
+      Ghe6->SetStats(0);
+      Ghe6->Draw("COLZ");
+      //================
+      cRBX31->cd(3);
+      TH1F* Ghe7 = new TH1F("Ghe7","", 120, 0.4, 1.6);
+      // j - etaphi index:
+      for (int j=1;j<=ny;j++) {
+	ccc0HE =  Ghe1->GetBinContent(1,j);
+	if(ccc0HE <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghe1->GetBinContent(i,j);if(ccc2>0.){ccc0HE=ccc2;break;} }
+	if(ccc0HE>0.) { 
+	  // i - # LSs:
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  Ghe1->GetBinContent(i,j);
+	    if(ccc1>0.) {
+	      double Rij = ccc1/ccc0HE;		  
+	      Ghe7 ->Fill( Rij );
+	    }}}}
+      Ghe7 ->SetMarkerStyle(20);Ghe7 ->SetMarkerSize(0.4);Ghe7 ->GetYaxis()->SetLabelSize(0.04);Ghe7 ->SetMarkerColor(2);Ghe7 ->SetLineColor(0);
+      Ghe7->SetYTitle("        N  \b");  Ghe7->SetXTitle("     Rij \b");Ghe7->SetTitle(" Rij \b");
+      //Ghe7->SetMinimum(0.8);Ghe7->SetMaximum(500.);
+      gPad->SetGridy();gPad->SetGridx(); //            gPad->SetLogy();    
+      //      Ghe7->SetStats(1110000);
+      Ghe7->GetYaxis()->SetLabelSize(0.025);
+      Ghe7 ->Draw("Error");
+      Float_t ymaxHE = Ghe7->GetMaximum();
+      cout<< "22HE-3   ymaxHE=  " <<ymaxHE  << "       MAXdif3rmsHEMIN=  " <<MAXdif3rmsHEMIN  << "         MINdif3rmsHEMAX=  " <<MINdif3rmsHEMAX  <<endl;
+      TLine *lineHE = new TLine(MAXdif3rmsHEMIN,0.,MAXdif3rmsHEMIN,ymaxHE);lineHE->SetLineColor(kBlue);lineHE->Draw();
+      TLine *line1HE= new TLine(MINdif3rmsHEMAX,0.,MINdif3rmsHEMAX,ymaxHE);line1HE->SetLineColor(kBlue);line1HE->Draw();      
+//================
+       /////////////////
+       cRBX31->Update();
+       cRBX31->Print("RBX-HE-3plots.png");
+       cRBX31->Clear();
+      // clean-up
+      if (Ghe5) delete Ghe5;
+      if (Ghe60) delete Ghe60;
+      if (Ghe61) delete Ghe61;
+      if (Ghe6) delete Ghe6;
+      if (Ghe7) delete Ghe7;
+
+      if (Ghe1) delete Ghe1;
+            gStyle->SetOptStat(0);
+
        ////////////////////////////////////////////////////////////////////////////////////
 
        cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
@@ -3431,7 +3717,7 @@ HF: j = 0,1,2, 3            18,19,20,21
       // clean-up
       if (Gho1KKK) delete Gho1KKK;
       if (Gho1LLL) delete Gho1LLL;
-      if (Gho1) delete Gho1;
+      //    if (Gho1) delete Gho1;
 
     //====================================================================== alexho[k][i]
       for (int jphi=0;jphi<njphi;jphi++) {
@@ -3444,7 +3730,7 @@ HF: j = 0,1,2, 3            18,19,20,21
 	  if(isum>0.) sumccc1 /= isum;
 	  alexho[jphi][i] = sumccc1;
 	}}//for for
-    //====================================================================== blexhb[k][i]
+    //====================================================================== blexho[k][i]
       for (int keta=0;keta<njeta;keta++) {
 	for (int i=0;i<nx;i++) {
 	  double sumccc1 = 0.; int isum = 0;
@@ -3572,6 +3858,148 @@ HF: j = 0,1,2, 3            18,19,20,21
       if (GetaHO11D)  delete GetaHO11D;
       if (GetaHO11D0) delete GetaHO11D0;
       if (GetaHO11DF) delete GetaHO11DF;
+
+
+
+       //========================================================================================== 22   HO:: Ratio plots   jeta = 0 - 21       jphi =0 - 17
+       //======================================================================
+       //======================================================================22.11.2018
+       //======================================================================
+       //======================================================================      
+
+      gStyle->SetOptStat(1110000);                     
+      cout<<"      RBX HO  Ratio plots *****" <<endl;
+      cRBX31->Clear();
+      /////////////////
+      // gain stabilitY:
+      // Rij = Aij / A1j , where i-over LSs, j-channels
+      //
+      //    nx = maxbinsRBX; // # LS
+      //
+      double ccc0HO = 0.;
+      cRBX31->Divide(3,1);
+      //================
+      cRBX31->cd(1);
+      TH1F* Gho5 = new TH1F("Gho5","", nx, 1., nx+1.);
+      //    TH1F* Gho51 = new TH1F("Gho51","", nx, 1., nx+1.);
+      //    TH1F* Gho50= new TH1F("Gho50","", nx, 1., nx+1.);
+      //    TH1F* Gho5 = (TH1F*)Gho50->Clone("Gho5");
+      // j - etaphi index:
+      for (int j=1;j<=ny;j++) {
+	ccc0HO =  Gho1->GetBinContent(1,j);
+	//	if(ccc0HO <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Gho1->GetBinContent(i,j);if(ccc2>0.){ccc0HO=ccc2;cout<<"!!! ccc0HO= "<<ccc0HO<<endl;break;} }
+	if(ccc0HO <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Gho1->GetBinContent(i,j);if(ccc2>0.){ccc0HO=ccc2;break;} }
+	if(ccc0HO>0.) { 
+	  // i - # LSs:
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  Gho1->GetBinContent(i,j);
+	    if(ccc1>0.) {
+	      double Rij = ccc1/ccc0HO;		  
+	      Gho5 ->Fill( float(i), Rij);
+	      //	      Gho51 ->Fill( float(i), Rij);
+	      //	      Gho50->Fill( float(i), 1.);
+	    }}}}
+      //    Gho5->Divide(Gho51,Gho50, 1, 1, "B");// average A
+      for (int i=1;i<=nx;i++) {Gho5->SetBinError(i,0.0001);}
+      Gho5 ->SetMarkerStyle(20);Gho5 ->SetMarkerSize(0.4);Gho5 ->GetYaxis()->SetLabelSize(0.04);Gho5 ->SetMarkerColor(2);Gho5 ->SetLineColor(0);
+      Gho5->SetXTitle("        iLS  \b");  Gho5->SetYTitle("     <R> \b"); Gho5->SetTitle("<Ri> vs iLS \b");
+      Gho5->SetMinimum(0.);//Gho5->SetMaximum(2.5);
+      //            gPad->SetLogy();
+      gPad->SetGridy();gPad->SetGridx();     
+      Gho5->SetStats(0);
+      Gho5->GetYaxis()->SetLabelSize(0.025);
+      Gho5 ->Draw("Error");
+//================
+      cRBX31->cd(2);
+      TH2F* Gho60    = new TH2F("Gho60","",  22, -11., 11., 18, 0., 18. );
+      TH2F* Gho61    = new TH2F("Gho61","",  22, -11., 11., 18, 0., 18. );
+      TH2F* Gho6     = new TH2F("Gho6","",   22, -11., 11., 18, 0., 18. );
+      // j - etaphi index; i - # LSs; 
+      //
+      // define mean and RMS:
+      double sumjHO=0.; int njHO=0;double meanjHO=0.;
+      for (int j=1;j<=ny;j++) {ccc0HO =  Gho1->GetBinContent(1,j);
+	if(ccc0HO <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Gho1->GetBinContent(i,j);if(ccc2>0.){ccc0HO=ccc2;break;} }
+	if(ccc0HO>0.){for (int i=1;i<=nx;i++) {double ccc1 =  Gho1->GetBinContent(i,j)/ccc0HO;if(ccc1>0.){sumjHO += ccc1;njHO++;}} meanjHO=sumjHO/njHO;} }// j
+      
+      double ssumjHO=0.; njHO=0;double sigmajHO=0.;
+      for (int j=1;j<=ny;j++) {ccc0HO =  Gho1->GetBinContent(1,j);
+	if(ccc0HO <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Gho1->GetBinContent(i,j);if(ccc2>0.){ccc0HO=ccc2;break;} }
+	if(ccc0HO>0.){for (int i=1;i<=nx;i++) {double ccc1 =  Gho1->GetBinContent(i,j)/ccc0HO;if(ccc1>0.){ssumjHO += (ccc1-meanjHO)*(ccc1-meanjHO);njHO++;}} sigmajHO = sqrt(ssumjHO/njHO);} }// j
+      
+      double dif3rmsHOMIN = meanjHO-3*sigmajHO;if(dif3rmsHOMIN<0.) dif3rmsHOMIN = 0.;  double dif3rmsHOMAX = meanjHO+3*sigmajHO;
+      cout<<"22HO-2    meanjHO=  "<< meanjHO <<"  sigmajHO=  "<< sigmajHO <<"  dif3rmsHOMIN=  "<< dif3rmsHOMIN <<"  dif3rmsHOMAX=  "<< dif3rmsHOMAX <<endl;
+      
+      double MAXdif3rmsHOMIN =dif3rmsHOMIN;double MINdif3rmsHOMAX = dif3rmsHOMAX;
+      if(MAXdif3rmsHOMIN<0.95) MAXdif3rmsHOMIN=0.95;if(MINdif3rmsHOMAX>1.05) MINdif3rmsHOMAX=1.05;
+      cout<< "22HO-2     MAXdif3rmsHOMIN=  " <<MAXdif3rmsHOMIN  << "     MINdif3rmsHOMAX=  " <<MINdif3rmsHOMAX  <<endl;
+      //
+      for (int j=1;j<=ny;j++) {
+	ccc0HO =  Gho1->GetBinContent(1,j);
+	if(ccc0HO <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Gho1->GetBinContent(i,j);if(ccc2>0.){ccc0HO=ccc2;break;} }
+	if(ccc0HO>0.) { 
+	  int jeta = (j-1)/18;// jeta = 0-21
+	  int jphi = (j-1)-18*jeta;// jphi=0-17 
+	  // i - # LSs:
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  Gho1->GetBinContent(i,j);
+	    if(ccc1>0.) {
+	      double Rij = ccc1/ccc0HO;		  
+	      if(Rij<MAXdif3rmsHOMIN || Rij>MINdif3rmsHOMAX) { Gho61->Fill(jeta-11,jphi,Rij); Gho60->Fill(jeta-11,jphi,1.); }
+	    }//if(ccc1>0.
+	  }// i
+	}//if(ccc0HO>0 
+      }// j
+      Gho6->Divide(Gho61,Gho60, 1, 1, "B");// average R
+      //      Gho6->SetLabelOffset (Float_t offset=0.005, Option_t *axis="X")//Set offset between axis and axis' labels
+      //      Gho6->GetZaxis()->SetLabelOffset(-0.05);
+      Gho6->GetZaxis()->SetLabelSize(0.025);
+
+      Gho6->SetXTitle("             #eta  \b"); Gho6->SetYTitle("      #phi \b"); Gho6->SetTitle("<Rj> for |1-<R>| > 0.05 \b");     //      Gho6->SetMaximum(1.000);  //      Gho6->SetMinimum(1.0); //Gho6->SetZTitle("Rij averaged over LSs \b"); //Gho6->GetZaxis()->SetLabelSize(0.04); //Gho6->SetMarkerStyle(20);// Gho6->SetMarkerSize(0.4);//Gho6->SetMarkerColor(2); //Gho6->SetLineColor(2); 
+      //gStyle->SetOptStat(kFALSE);
+      Gho6->SetStats(0);
+      Gho6->Draw("COLZ");
+      //================
+      cRBX31->cd(3);
+      TH1F* Gho7 = new TH1F("Gho7","", 120, 0.4, 1.6);
+      // j - etaphi index:
+      for (int j=1;j<=ny;j++) {
+	ccc0HO =  Gho1->GetBinContent(1,j);
+	if(ccc0HO <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Gho1->GetBinContent(i,j);if(ccc2>0.){ccc0HO=ccc2;break;} }
+	if(ccc0HO>0.) { 
+	  // i - # LSs:
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  Gho1->GetBinContent(i,j);
+	    if(ccc1>0.) {
+	      double Rij = ccc1/ccc0HO;		  
+	      Gho7 ->Fill( Rij );
+	    }}}}
+      Gho7 ->SetMarkerStyle(20);Gho7 ->SetMarkerSize(0.4);Gho7 ->GetYaxis()->SetLabelSize(0.04);Gho7 ->SetMarkerColor(2);Gho7 ->SetLineColor(0);
+      Gho7->SetYTitle("        N  \b");  Gho7->SetXTitle("     Rij \b");Gho7->SetTitle(" Rij \b");
+      //Gho7->SetMinimum(0.8);Gho7->SetMaximum(500.);
+      gPad->SetGridy();gPad->SetGridx(); //            gPad->SetLogy();    
+      //      Gho7->SetStats(1110000);
+      Gho7->GetYaxis()->SetLabelSize(0.025);
+      Gho7 ->Draw("Error");
+      Float_t ymaxHO = Gho7->GetMaximum();
+      cout<< "22HO-3   ymaxHO=  " <<ymaxHO  << "       MAXdif3rmsHOMIN=  " <<MAXdif3rmsHOMIN  << "         MINdif3rmsHOMAX=  " <<MINdif3rmsHOMAX  <<endl;
+      TLine *lineHO = new TLine(MAXdif3rmsHOMIN,0.,MAXdif3rmsHOMIN,ymaxHO);lineHO->SetLineColor(kBlue);lineHO->Draw();
+      TLine *line1HO= new TLine(MINdif3rmsHOMAX,0.,MINdif3rmsHOMAX,ymaxHO);line1HO->SetLineColor(kBlue);line1HO->Draw();      
+//================
+       /////////////////
+       cRBX31->Update();
+       cRBX31->Print("RBX-HO-3plots.png");
+       cRBX31->Clear();
+      // clean-up
+      if (Gho5) delete Gho5;
+      if (Gho60) delete Gho60;
+      if (Gho61) delete Gho61;
+      if (Gho6) delete Gho6;
+      if (Gho7) delete Gho7;
+
+      if (Gho1) delete Gho1;
+            gStyle->SetOptStat(0);
+
        ////////////////////////////////////////////////////////////////////////////////////
 
        cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
@@ -3613,7 +4041,7 @@ HF: j = 0,1,2, 3            18,19,20,21
       // clean-up
       if (Ghf1KKK) delete Ghf1KKK;
       if (Ghf1LLL) delete Ghf1LLL;
-      if (Ghf1) delete Ghf1;
+      //    if (Ghf1) delete Ghf1;
 
     //====================================================================== alexhf[k][i]
       for (int jphi=0;jphi<njphi;jphi++) {
@@ -3626,7 +4054,7 @@ HF: j = 0,1,2, 3            18,19,20,21
 	  if(isum>0.) sumccc1 /= isum;
 	  alexhf[jphi][i] = sumccc1;
 	}}//for for
-    //====================================================================== blexhb[k][i]
+    //====================================================================== blexhf[k][i]
       for (int keta=0;keta<njeta;keta++) {
 	for (int i=0;i<nx;i++) {
 	  double sumccc1 = 0.; int isum = 0;
@@ -3756,6 +4184,146 @@ HF: j = 0,1,2, 3            18,19,20,21
       if (GetaHF11DF) delete GetaHF11DF;
 
 
+       //========================================================================================== 22   HF:: Ratio plots   jeta = 0 - 21       jphi =0 - 17
+       //======================================================================
+       //======================================================================22.11.2018
+       //======================================================================
+       //======================================================================      
+
+      gStyle->SetOptStat(1110000);                     
+      cout<<"      RBX HF  Ratio plots *****" <<endl;
+      cRBX31->Clear();
+      /////////////////
+      // gain stabilitY:
+      // Rij = Aij / A1j , where i-over LSs, j-channels
+      //
+      //    nx = maxbinsRBX; // # LS
+      //
+      double ccc0HF = 0.;
+      cRBX31->Divide(3,1);
+      //================
+      cRBX31->cd(1);
+      TH1F* Ghf5 = new TH1F("Ghf5","", nx, 1., nx+1.);
+      //    TH1F* Ghf51 = new TH1F("Ghf51","", nx, 1., nx+1.);
+      //    TH1F* Ghf50= new TH1F("Ghf50","", nx, 1., nx+1.);
+      //    TH1F* Ghf5 = (TH1F*)Ghf50->Clone("Ghf5");
+      // j - etaphi index:
+      for (int j=1;j<=ny;j++) {
+	ccc0HF =  Ghf1->GetBinContent(1,j);
+	//	if(ccc0HF <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghf1->GetBinContent(i,j);if(ccc2>0.){ccc0HF=ccc2;cout<<"!!! ccc0HF= "<<ccc0HF<<endl;break;} }
+	if(ccc0HF <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghf1->GetBinContent(i,j);if(ccc2>0.){ccc0HF=ccc2;break;} }
+	if(ccc0HF>0.) { 
+	  // i - # LSs:
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  Ghf1->GetBinContent(i,j);
+	    if(ccc1>0.) {
+	      double Rij = ccc1/ccc0HF;		  
+	      Ghf5 ->Fill( float(i), Rij);
+	      //	      Ghf51 ->Fill( float(i), Rij);
+	      //	      Ghf50->Fill( float(i), 1.);
+	    }}}}
+      //    Ghf5->Divide(Ghf51,Ghf50, 1, 1, "B");// average A
+      for (int i=1;i<=nx;i++) {Ghf5->SetBinError(i,0.0001);}
+      Ghf5 ->SetMarkerStyle(20);Ghf5 ->SetMarkerSize(0.4);Ghf5 ->GetYaxis()->SetLabelSize(0.04);Ghf5 ->SetMarkerColor(2);Ghf5 ->SetLineColor(0);
+      Ghf5->SetXTitle("        iLS  \b");  Ghf5->SetYTitle("     <R> \b"); Ghf5->SetTitle("<Ri> vs iLS \b");
+      Ghf5->SetMinimum(0.);//Ghf5->SetMaximum(2.5);
+      //            gPad->SetLogy();
+      gPad->SetGridy();gPad->SetGridx();     
+      Ghf5->SetStats(0);
+      Ghf5->GetYaxis()->SetLabelSize(0.025);
+      Ghf5 ->Draw("Error");
+//================
+      cRBX31->cd(2);
+      TH2F* Ghf60    = new TH2F("Ghf60","",  22, -11., 11., 18, 0., 18. );
+      TH2F* Ghf61    = new TH2F("Ghf61","",  22, -11., 11., 18, 0., 18. );
+      TH2F* Ghf6     = new TH2F("Ghf6","",   22, -11., 11., 18, 0., 18. );
+      // j - etaphi index; i - # LSs; 
+      //
+      // define mean and RMS:
+      double sumjHF=0.; int njHF=0;double meanjHF=0.;
+      for (int j=1;j<=ny;j++) {ccc0HF =  Ghf1->GetBinContent(1,j);
+	if(ccc0HF <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghf1->GetBinContent(i,j);if(ccc2>0.){ccc0HF=ccc2;break;} }
+	if(ccc0HF>0.){for (int i=1;i<=nx;i++) {double ccc1 =  Ghf1->GetBinContent(i,j)/ccc0HF;if(ccc1>0.){sumjHF += ccc1;njHF++;}} meanjHF=sumjHF/njHF;} }// j
+      
+      double ssumjHF=0.; njHF=0;double sigmajHF=0.;
+      for (int j=1;j<=ny;j++) {ccc0HF =  Ghf1->GetBinContent(1,j);
+	if(ccc0HF <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghf1->GetBinContent(i,j);if(ccc2>0.){ccc0HF=ccc2;break;} }
+	if(ccc0HF>0.){for (int i=1;i<=nx;i++) {double ccc1 =  Ghf1->GetBinContent(i,j)/ccc0HF;if(ccc1>0.){ssumjHF += (ccc1-meanjHF)*(ccc1-meanjHF);njHF++;}} sigmajHF = sqrt(ssumjHF/njHF);} }// j
+      
+      double dif3rmsHFMIN = meanjHF-3*sigmajHF;if(dif3rmsHFMIN<0.) dif3rmsHFMIN = 0.;  double dif3rmsHFMAX = meanjHF+3*sigmajHF;
+      cout<<"22HF-2    meanjHF=  "<< meanjHF <<"  sigmajHF=  "<< sigmajHF <<"  dif3rmsHFMIN=  "<< dif3rmsHFMIN <<"  dif3rmsHFMAX=  "<< dif3rmsHFMAX <<endl;
+      
+      double MAXdif3rmsHFMIN =dif3rmsHFMIN;double MINdif3rmsHFMAX = dif3rmsHFMAX;
+      if(MAXdif3rmsHFMIN<0.95) MAXdif3rmsHFMIN=0.95;if(MINdif3rmsHFMAX>1.05) MINdif3rmsHFMAX=1.05;
+      cout<< "22HF-2     MAXdif3rmsHFMIN=  " <<MAXdif3rmsHFMIN  << "     MINdif3rmsHFMAX=  " <<MINdif3rmsHFMAX  <<endl;
+      //
+      for (int j=1;j<=ny;j++) {
+	ccc0HF =  Ghf1->GetBinContent(1,j);
+	if(ccc0HF <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghf1->GetBinContent(i,j);if(ccc2>0.){ccc0HF=ccc2;break;} }
+	if(ccc0HF>0.) { 
+	  int jeta = (j-1)/18;// jeta = 0-21
+	  int jphi = (j-1)-18*jeta;// jphi=0-17 
+	  // i - # LSs:
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  Ghf1->GetBinContent(i,j);
+	    if(ccc1>0.) {
+	      double Rij = ccc1/ccc0HF;		  
+	      if(Rij<MAXdif3rmsHFMIN || Rij>MINdif3rmsHFMAX) { Ghf61->Fill(jeta-11,jphi,Rij); Ghf60->Fill(jeta-11,jphi,1.); }
+	    }//if(ccc1>0.
+	  }// i
+	}//if(ccc0HF>0 
+      }// j
+      Ghf6->Divide(Ghf61,Ghf60, 1, 1, "B");// average R
+      //      Ghf6->SetLabelOffset (Float_t offset=0.005, Option_t *axis="X")//Set offset between axis and axis' labels
+      //      Ghf6->GetZaxis()->SetLabelOffset(-0.05);
+      Ghf6->GetZaxis()->SetLabelSize(0.025);
+
+      Ghf6->SetXTitle("             #eta  \b"); Ghf6->SetYTitle("      #phi \b"); Ghf6->SetTitle("<Rj> for |1-<R>| > 0.05 \b");     //      Ghf6->SetMaximum(1.000);  //      Ghf6->SetMinimum(1.0); //Ghf6->SetZTitle("Rij averaged over LSs \b"); //Ghf6->GetZaxis()->SetLabelSize(0.04); //Ghf6->SetMarkerStyle(20);// Ghf6->SetMarkerSize(0.4);//Ghf6->SetMarkerColor(2); //Ghf6->SetLineColor(2); 
+      //gStyle->SetOptStat(kFALSE);
+      Ghf6->SetStats(0);
+      Ghf6->Draw("COLZ");
+      //================
+      cRBX31->cd(3);
+      TH1F* Ghf7 = new TH1F("Ghf7","", 120, 0.4, 1.6);
+      // j - etaphi index:
+      for (int j=1;j<=ny;j++) {
+	ccc0HF =  Ghf1->GetBinContent(1,j);
+	if(ccc0HF <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Ghf1->GetBinContent(i,j);if(ccc2>0.){ccc0HF=ccc2;break;} }
+	if(ccc0HF>0.) { 
+	  // i - # LSs:
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  Ghf1->GetBinContent(i,j);
+	    if(ccc1>0.) {
+	      double Rij = ccc1/ccc0HF;		  
+	      Ghf7 ->Fill( Rij );
+	    }}}}
+      Ghf7 ->SetMarkerStyle(20);Ghf7 ->SetMarkerSize(0.4);Ghf7 ->GetYaxis()->SetLabelSize(0.04);Ghf7 ->SetMarkerColor(2);Ghf7 ->SetLineColor(0);
+      Ghf7->SetYTitle("        N  \b");  Ghf7->SetXTitle("     Rij \b");Ghf7->SetTitle(" Rij \b");
+      //Ghf7->SetMinimum(0.8);Ghf7->SetMaximum(500.);
+      gPad->SetGridy();gPad->SetGridx(); //            gPad->SetLogy();    
+      //      Ghf7->SetStats(1110000);
+      Ghf7->GetYaxis()->SetLabelSize(0.025);
+      Ghf7 ->Draw("Error");
+      Float_t ymaxHF = Ghf7->GetMaximum();
+      cout<< "22HF-3   ymaxHF=  " <<ymaxHF  << "       MAXdif3rmsHFMIN=  " <<MAXdif3rmsHFMIN  << "         MINdif3rmsHFMAX=  " <<MINdif3rmsHFMAX  <<endl;
+      TLine *lineHF = new TLine(MAXdif3rmsHFMIN,0.,MAXdif3rmsHFMIN,ymaxHF);lineHF->SetLineColor(kBlue);lineHF->Draw();
+      TLine *line1HF= new TLine(MINdif3rmsHFMAX,0.,MINdif3rmsHFMAX,ymaxHF);line1HF->SetLineColor(kBlue);line1HF->Draw();      
+//================
+       /////////////////
+       cRBX31->Update();
+       cRBX31->Print("RBX-HF-3plots.png");
+       cRBX31->Clear();
+      // clean-up
+      if (Ghf5) delete Ghf5;
+      if (Ghf60) delete Ghf60;
+      if (Ghf61) delete Ghf61;
+      if (Ghf6) delete Ghf6;
+      if (Ghf7) delete Ghf7;
+
+      if (Ghf1) delete Ghf1;
+            gStyle->SetOptStat(0);
+
+       //////////////////////////////////////////////////////////////////////////////////// 
        cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
        cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
        cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
@@ -4602,6 +5170,9 @@ HF: j = 0,1,2, 3            18,19,20,21
 	     htmlFile << "9. <a href=\"#RBXstatus\">RBX Status </a><br>\n";
 	     htmlFile << "10. <a href=\"#RBXPHItable\">Table of Average RBX-Amplitude in Phi over LSs </a><br>\n";
 	     htmlFile << "11. <a href=\"#RBXETAtable\">Table of Average RBX-Amplitude in Eta over LSs </a><br>\n";
+	     htmlFile << "12. <a href=\"#RBX3plots\">RBX A-Ratio to 1st LS: 3 plots </a><br>\n";
+	     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+
 	   }
 	   
 	   //     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
@@ -5031,6 +5602,9 @@ HF: j = 0,1,2, 3            18,19,20,21
 	   // Only for Amplitudes (test=1):
 	   /// RBX:
 	   if (test == 1) { 
+
+	     ///////////////////////////////////////////////////////////////////////////////////////////////////
+	     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    9. RBXstatus
 	     htmlFile << "<a name=\"RBXstatus\"></a>\n";
 	     
 	     //HB j = 7,8,9,10            11,12,13,14 
@@ -5118,7 +5692,7 @@ HF: j = 0,1,2, 3            18,19,20,21
 
 
 	     ///////////////////////////////////////////////////////////////////////////////////////////////////
-	     ////////////////////////////////////////////////////////////////////    10. RBXPHItable 
+	     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    10. RBXPHItable 
 
 	     htmlFile << "<a name=\"RBXPHItable\"></a>\n";
 	     int cutA_ALL = 0;
@@ -5194,7 +5768,7 @@ HF: j = 0,1,2, 3            18,19,20,21
 	     htmlFile << "<br>"<< std::endl; 
 	     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 	     htmlFile << "<br>"<< std::endl; 
-	     ////////////////////////////////////////////////////////////////////    11. RBXETAtable 
+	     //////////////////////////////////////////////////////////////////////////////////////////    11. RBXETAtable 
 
 	     htmlFile << "<a name=\"RBXETAtable\"></a>\n";
 	     int cutB_ALL = 0;
@@ -5271,6 +5845,24 @@ HF: j = 0,1,2, 3            18,19,20,21
 	     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 	     htmlFile << "<br>"<< std::endl; 
 	     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	     ///////////////////////////////////////////////////////////////////////////////////////////////////
+	     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    12. RBX3plots 
+	     htmlFile << "<a name=\"RBX3plots\"></a>\n";
+	     htmlFile << "<br>\n";
+	     htmlFile << "<h2> 12. (Rij) - RBX-amplitudes normilized on reference LS (~=1st) </h2>"<< std::endl;
+	     htmlFile << "<h3> ( Rji . . is ratio of . . . . A_j_i . . to . . A_j_ref . . . . for . . j-RBX . . and . . i-LS . ) </h3>"<< std::endl; 
+	     htmlFile << "<br>\n";
+	     htmlFile << "<h2> . . . . . . . . . . . . . . 1) . average Ri vs iLS . . . . . . . . . . . . . . . . . . . . . . . 2) . average Rj shown for Rij outside meanValue range either 0.95-1.05 or 3RMS  . . . . . . . . . . . . . . . . . . . . . . . . . 3) . Rij </h2>"<< std::endl; 
+
+
+	     htmlFile << "<br>\n";
+	     if (sub==1) { htmlFile << " <img src=\"RBX-HB-3plots.png\" />\n";}
+	     if (sub==2) { htmlFile << " <img src=\"RBX-HE-3plots.png\" />\n";}
+	     if (sub==3) { htmlFile << " <img src=\"RBX-HO-3plots.png\" />\n";}
+	     if (sub==4) { htmlFile << " <img src=\"RBX-HF-3plots.png\" />\n";}
+	     htmlFile << "<br>\n";
+	     	     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 
   //=========================================================
 
@@ -5366,7 +5958,6 @@ HF: j = 0,1,2, 3            18,19,20,21
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_ADCampl.html\">HE</a></td>"<< std::endl;
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_ADCampl.html\">HO</a></td>"<< std::endl;
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_ADCampl.html\">HF</a></td>"<< std::endl;
-
     }
     if (test==2){
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_Width.html\">HB</a></td>"<< std::endl;
@@ -5852,7 +6443,7 @@ htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-softwa
   htmlFile << "<tr>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/CapID_GL.html\">Cap ID errors</a></td>"<< std::endl;
   // AZ 18.03.2018
-      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
+  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
   //  htmlFile << "  <td><a  href=\"ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Width_GL.html\">Width</a></td>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Ratio_GL.html\">Ratio</a></td>"<< std::endl;
