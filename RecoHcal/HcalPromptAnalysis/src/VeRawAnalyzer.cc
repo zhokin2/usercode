@@ -3262,7 +3262,10 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		  h_sumADCAmplEtaPhiLs_ietaphi->Fill(float(ietaphi));
 
 		  //		}// bb3
-		
+
+
+
+
 	      }// lscounterM1 >= lsmin_ && lscounterM1 < lsmax_
 	      
 	    
