@@ -114,24 +114,27 @@ int main(int argc, char *argv[])
 
 //	TFile *hfile1= new TFile("Global_321177_9_abortgap.root", "READ");
 
-	TFile *hfile1= new TFile("Global_321177_ls1to600_abortgap.root", "READ");
+//	TFile *hfile1= new TFile("Global_321177_ls1to600_abortgap.root", "READ");
 //	TFile *hfile1= new TFile("Global_325001_ls1to600_abortgap.root", "READ");
 
 //	TFile *hfile1= new TFile("Global_RBX_325001_40.root", "READ");
 //	TFile *hfile1= new TFile("Global_RBX_325001_ls1to600.root", "READ");
 
 
+//	TFile *hfile1= new TFile("Global_321624_1.root", "READ");
+	TFile *hfile1= new TFile("Global_321625.root", "READ");
 
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//    getchar();
 	//
           TPostScript psfile ("zlsgainstabilityCMTinabortgap.ps", 111);
-
-
 //
-
 	  TCanvas  *c1 = new TCanvas("c1","Hcal4test",200,10,700,900);
-
-
     //========================================================================================== 1
     //======================================================================
     //======================================================================
