@@ -129,8 +129,8 @@ int main(int argc, char *argv[])
 //	TFile *hfile1= new TFile("Global_321177_ls1to600_abortgap_no41.root", "READ");
 //	TFile *hfile1= new TFile("Global_325001_ls1to600_abortgap.root", "READ");
 
-//	TFile *hfile1= new TFile("Global_RBX_325001.root", "READ");
-	TFile *hfile1= new TFile("Global_RBX_321177.root", "READ");
+	TFile *hfile1= new TFile("Global_RBX_325001.root", "READ");
+//	TFile *hfile1= new TFile("Global_RBX_321177.root", "READ");
 
         //	TFile *hfile1= new TFile("Global_321758.root", "READ");
 	//	TFile *hfile1= new TFile("Global_321773.root", "READ");
@@ -797,6 +797,8 @@ int main(int argc, char *argv[])
     //======================================================================
       c1->Clear();
       //    c1->Divide(1,3);
+      double ccc0HB = 0.;
+      gStyle->SetOptStat(1110000);                     
       c1->Divide(2,3);
       
       c1->cd(1);
@@ -835,12 +837,122 @@ int main(int argc, char *argv[])
       GainStability2 ->SetMarkerStyle(20);GainStability2 ->SetMarkerSize(0.4);GainStability2 ->GetYaxis()->SetLabelSize(0.04);GainStability2 ->SetXTitle("GainStability2 \b");GainStability2 ->SetMarkerColor(2);GainStability2 ->SetLineColor(0);// GainStability2 ->SetMaximum(30.0);// GainStability2 ->SetMinimum(20.0); // gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
       GainStability2 ->Draw("Error");
       
-       //======================================================================
+       //====================================================================== 
+      //================
+      c1->cd(4);
+      TH1F* Ghb5 = new TH1F("Ghb5","", nx, 1., nx+1.);
+      //    TH1F* Ghb51 = new TH1F("Ghb51","", nx, 1., nx+1.);
+      //    TH1F* Ghb50= new TH1F("Ghb50","", nx, 1., nx+1.);
+      //    TH1F* Ghb5 = (TH1F*)Ghb50->Clone("Ghb5");
+      // j - etaphi index:
+      for (int j=1;j<=ny;j++) {
+	ccc0HB =  Cefz1->GetBinContent(1,j);
+	//	if(ccc0HB <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Cefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HB=ccc2;cout<<"!!! ccc0HB= "<<ccc0HB<<endl;break;} }
+	if(ccc0HB <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Cefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HB=ccc2;break;} }
+	if(ccc0HB>0.) { 
+	  // i - # LSs:
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  Cefz1->GetBinContent(i,j);
+	    if(ccc1>0.) {
+	      double Rij = ccc1/ccc0HB;		  
+	      Ghb5 ->Fill( float(i), Rij);
+	      //	      Ghb51 ->Fill( float(i), Rij);
+	      //	      Ghb50->Fill( float(i), 1.);
+	    }}}}
+      //    Ghb5->Divide(Ghb51,Ghb50, 1, 1, "B");// average A
+      for (int i=1;i<=nx;i++) {Ghb5->SetBinError(i,0.0001);}
+      Ghb5 ->SetMarkerStyle(20);Ghb5 ->SetMarkerSize(0.4);Ghb5 ->GetYaxis()->SetLabelSize(0.04);Ghb5 ->SetMarkerColor(2);Ghb5 ->SetLineColor(0);
+      Ghb5->SetXTitle("        iLS  \b");  Ghb5->SetYTitle("     <R> \b"); Ghb5->SetTitle("<Ri> vs iLS \b");
+      Ghb5->SetMinimum(0.);//Ghb5->SetMaximum(2.5);
+      //            gPad->SetLogy();
+      gPad->SetGridy();gPad->SetGridx();     
+      Ghb5->SetStats(0);
+      Ghb5->GetYaxis()->SetLabelSize(0.025);
+      Ghb5 ->Draw("Error");
+//================
+      c1->cd(5);
+      TH2F* Ghb60    = new TH2F("Ghb60","",  22, -11., 11., 18, 0., 18. );
+      TH2F* Ghb61    = new TH2F("Ghb61","",  22, -11., 11., 18, 0., 18. );
+      TH2F* Ghb6     = new TH2F("Ghb6","",   22, -11., 11., 18, 0., 18. );
+      // j - etaphi index; i - # LSs; 
+      //
+      // define mean and RMS:
+      double sumjHB=0.; int njHB=0;double meanjHB=0.;
+      for (int j=1;j<=ny;j++) {ccc0HB =  Cefz1->GetBinContent(1,j);
+	if(ccc0HB <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Cefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HB=ccc2;break;} }
+	if(ccc0HB>0.){for (int i=1;i<=nx;i++) {double ccc1 =  Cefz1->GetBinContent(i,j)/ccc0HB;if(ccc1>0.){sumjHB += ccc1;njHB++;}} meanjHB=sumjHB/njHB;} }// j
+      
+      double ssumjHB=0.; njHB=0;double sigmajHB=0.;
+      for (int j=1;j<=ny;j++) {ccc0HB =  Cefz1->GetBinContent(1,j);
+	if(ccc0HB <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Cefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HB=ccc2;break;} }
+	if(ccc0HB>0.){for (int i=1;i<=nx;i++) {double ccc1 =  Cefz1->GetBinContent(i,j)/ccc0HB;if(ccc1>0.){ssumjHB += (ccc1-meanjHB)*(ccc1-meanjHB);njHB++;}} sigmajHB = sqrt(ssumjHB/njHB);} }// j
+      
+      double dif3rmsHBMIN = meanjHB-3*sigmajHB;if(dif3rmsHBMIN<0.) dif3rmsHBMIN = 0.;  double dif3rmsHBMAX = meanjHB+3*sigmajHB;
+      cout<<"22HB-2    meanjHB=  "<< meanjHB <<"  sigmajHB=  "<< sigmajHB <<"  dif3rmsHBMIN=  "<< dif3rmsHBMIN <<"  dif3rmsHBMAX=  "<< dif3rmsHBMAX <<endl;
+      
+      double MAXdif3rmsHBMIN =dif3rmsHBMIN;double MINdif3rmsHBMAX = dif3rmsHBMAX;
+      if(MAXdif3rmsHBMIN<0.95) MAXdif3rmsHBMIN=0.95;if(MINdif3rmsHBMAX>1.05) MINdif3rmsHBMAX=1.05;
+      cout<< "22HB-2     MAXdif3rmsHBMIN=  " <<MAXdif3rmsHBMIN  << "     MINdif3rmsHBMAX=  " <<MINdif3rmsHBMAX  <<endl;
+      //
+      for (int j=1;j<=ny;j++) {
+	ccc0HB =  Cefz1->GetBinContent(1,j);
+	if(ccc0HB <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Cefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HB=ccc2;break;} }
+	if(ccc0HB>0.) { 
+	  int jeta = (j-1)/18;// jeta = 0-21
+	  int jphi = (j-1)-18*jeta;// jphi=0-17 
+	  // i - # LSs:
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  Cefz1->GetBinContent(i,j);
+	    if(ccc1>0.) {
+	      double Rij = ccc1/ccc0HB;		  
+	      if(Rij<MAXdif3rmsHBMIN || Rij>MINdif3rmsHBMAX) { Ghb61->Fill(jeta-11,jphi,Rij); Ghb60->Fill(jeta-11,jphi,1.); }
+	    }//if(ccc1>0.
+	  }// i
+	}//if(ccc0HB>0 
+      }// j
+      Ghb6->Divide(Ghb61,Ghb60, 1, 1, "B");// average R
+      //      Ghb6->SetLabelOffset (Float_t offset=0.005, Option_t *axis="X")//Set offset between axis and axis' labels
+      //      Ghb6->GetZaxis()->SetLabelOffset(-0.05);
+      Ghb6->GetZaxis()->SetLabelSize(0.025);
+
+      Ghb6->SetXTitle("             #eta  \b"); Ghb6->SetYTitle("      #phi \b"); Ghb6->SetTitle("<Rj> for |1-<R>| > 0.05 \b");     //      Ghb6->SetMaximum(1.000);  //      Ghb6->SetMinimum(1.0); //Ghb6->SetZTitle("Rij averaged over LSs \b"); //Ghb6->GetZaxis()->SetLabelSize(0.04); //Ghb6->SetMarkerStyle(20);// Ghb6->SetMarkerSize(0.4);//Ghb6->SetMarkerColor(2); //Ghb6->SetLineColor(2); 
+      //gStyle->SetOptStat(kFALSE);
+      Ghb6->SetStats(0);
+      Ghb6->Draw("COLZ");
+      //================
+      c1->cd(6);
+      TH1F* Ghb7 = new TH1F("Ghb7","", 120, 0.4, 1.6);
+      // j - etaphi index:
+      for (int j=1;j<=ny;j++) {
+	ccc0HB =  Cefz1->GetBinContent(1,j);
+	if(ccc0HB <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Cefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HB=ccc2;break;} }
+	if(ccc0HB>0.) { 
+	  // i - # LSs:
+	  for (int i=1;i<=nx;i++) {
+	    double ccc1 =  Cefz1->GetBinContent(i,j);
+	    if(ccc1>0.) {
+	      double Rij = ccc1/ccc0HB;		  
+	      Ghb7 ->Fill( Rij );
+	    }}}}
+      Ghb7 ->SetMarkerStyle(20);Ghb7 ->SetMarkerSize(0.4);Ghb7 ->GetYaxis()->SetLabelSize(0.04);Ghb7 ->SetMarkerColor(2);Ghb7 ->SetLineColor(0);
+      Ghb7->SetYTitle("        N  \b");  Ghb7->SetXTitle("     Rij \b");Ghb7->SetTitle(" Rij \b");
+      //Ghb7->SetMinimum(0.8);Ghb7->SetMaximum(500.);
+      gPad->SetGridy();gPad->SetGridx(); //            gPad->SetLogy();    
+      //      Ghb7->SetStats(1110000);
+      Ghb7->GetYaxis()->SetLabelSize(0.025);
+      Ghb7 ->Draw("Error");
+      Float_t ymaxHB = Ghb7->GetMaximum();
+      cout<< "22HB-3   ymaxHB=  " <<ymaxHB  << "       MAXdif3rmsHBMIN=  " <<MAXdif3rmsHBMIN  << "         MINdif3rmsHBMAX=  " <<MINdif3rmsHBMAX  <<endl;
+      TLine *lineHB = new TLine(MAXdif3rmsHBMIN,0.,MAXdif3rmsHBMIN,ymaxHB);lineHB->SetLineColor(kBlue);lineHB->Draw();
+      TLine *line1HB= new TLine(MINdif3rmsHBMAX,0.,MINdif3rmsHBMAX,ymaxHB);line1HB->SetLineColor(kBlue);line1HB->Draw();      
+
     //================
       //	
       // gain stabilitY:
       // Rij = Aij / A1j , where i-over LSs, j-channels
       //
+
+      /*
       double ccc0 = 0.;
 //================      
       c1->cd(4);
@@ -926,10 +1038,13 @@ int main(int argc, char *argv[])
       TLine *line = new TLine(mincutR,0.,mincutR,ymax);line->SetLineColor(4);line->Draw();
       TLine *line1= new TLine(maxcutR,0.,maxcutR,ymax);line1->SetLineColor(4);line1->Draw();      
       //================
+
+*/
       ////////////////////////////////////////////////////////////////////////////////////
       
       
        c1->Update();
+            gStyle->SetOptStat(0);
 
 
 
