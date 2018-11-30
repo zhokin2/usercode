@@ -3269,6 +3269,16 @@ HF: j = 0,1,2, 3            18,19,20,21
       TH2F* Ghb60    = new TH2F("Ghb60","",  22, -11., 11., 18, 0., 18. );
       TH2F* Ghb61    = new TH2F("Ghb61","",  22, -11., 11., 18, 0., 18. );
       TH2F* Ghb6     = new TH2F("Ghb6","",   22, -11., 11., 18, 0., 18. );
+
+      TH2F* G20hb60    = new TH2F("G20hb60","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G20hb61    = new TH2F("G20hb61","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G20hb6     = new TH2F("G20hb6","",   22, -11., 11., 18, 0., 18. );
+      TH2F* G30hb60    = new TH2F("G30hb60","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G30hb61    = new TH2F("G30hb61","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G30hb6     = new TH2F("G30hb6","",   22, -11., 11., 18, 0., 18. );
+      TH2F* G40hb60    = new TH2F("G40hb60","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G40hb61    = new TH2F("G40hb61","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G40hb6     = new TH2F("G40hb6","",   22, -11., 11., 18, 0., 18. );
       // j - etaphi index; i - # LSs; 
       //
       // define mean and RMS:
@@ -3301,17 +3311,20 @@ HF: j = 0,1,2, 3            18,19,20,21
 	    if(ccc1>0.) {
 	      double Rij = ccc1/ccc0HB;		  
 	      if(Rij<MAXdif3rmsHBMIN || Rij>MINdif3rmsHBMAX) { Ghb61->Fill(jeta-11,jphi,Rij); Ghb60->Fill(jeta-11,jphi,1.); }
+	      if(Rij<0.8 || Rij>1.2) { G20hb61->Fill(jeta-11,jphi,Rij); G20hb60->Fill(jeta-11,jphi,1.); }
+	      if(Rij<0.7 || Rij>1.3) { G30hb61->Fill(jeta-11,jphi,Rij); G30hb60->Fill(jeta-11,jphi,1.); }
+	      if(Rij<0.6 || Rij>1.4) { G40hb61->Fill(jeta-11,jphi,Rij); G40hb60->Fill(jeta-11,jphi,1.); }
 	    }//if(ccc1>0.
 	  }// i
 	}//if(ccc0HB>0 
       }// j
       Ghb6->Divide(Ghb61,Ghb60, 1, 1, "B");// average R
-      //      Ghb6->SetLabelOffset (Float_t offset=0.005, Option_t *axis="X")//Set offset between axis and axis' labels
-      //      Ghb6->GetZaxis()->SetLabelOffset(-0.05);
-      Ghb6->GetZaxis()->SetLabelSize(0.025);
+      G20hb6->Divide(G20hb61,G20hb60, 1, 1, "B");// average R
+      G30hb6->Divide(G30hb61,G30hb60, 1, 1, "B");// average R
+      G40hb6->Divide(G40hb61,G40hb60, 1, 1, "B");// average R
 
-      Ghb6->SetXTitle("             #eta  \b"); Ghb6->SetYTitle("      #phi \b"); Ghb6->SetTitle("<Rj> for |1-<R>| > 0.05 \b");     //      Ghb6->SetMaximum(1.000);  //      Ghb6->SetMinimum(1.0); //Ghb6->SetZTitle("Rij averaged over LSs \b"); //Ghb6->GetZaxis()->SetLabelSize(0.04); //Ghb6->SetMarkerStyle(20);// Ghb6->SetMarkerSize(0.4);//Ghb6->SetMarkerColor(2); //Ghb6->SetLineColor(2); 
-      //gStyle->SetOptStat(kFALSE);
+      Ghb6->GetZaxis()->SetLabelSize(0.025);
+      Ghb6->SetXTitle("             #eta  \b"); Ghb6->SetYTitle("      #phi \b"); Ghb6->SetTitle("<Rj> for |1-<R>| > 0.05 \b");     
       Ghb6->SetStats(0);
       Ghb6->Draw("COLZ");
       //================
@@ -3352,7 +3365,54 @@ HF: j = 0,1,2, 3            18,19,20,21
       if (Ghb6) delete Ghb6;
       if (Ghb7) delete Ghb7;
 
+      if (G20hb60) delete G20hb60;
+      if (G20hb61) delete G20hb61;
+      if (G30hb60) delete G30hb60;
+      if (G30hb61) delete G30hb61;
+      if (G40hb60) delete G40hb60;
+      if (G40hb61) delete G40hb61;
+
       if (Ghb1) delete Ghb1;
+       //========================================================================================== 22-1   HB:: Ratio plots   jeta = 0 - 21       jphi =0 - 17
+       //======================================================================
+       //======================================================================28.11.2018
+       //======================================================================
+       //======================================================================      
+
+      gStyle->SetOptStat(1110000);                     
+      cout<<"      RBX HB  Ratio plotsmore *****" <<endl;
+      cRBX31->Clear();
+      /////////////////
+      cRBX31->Divide(3,1);
+      //================
+      cRBX31->cd(1);
+      G20hb6->GetZaxis()->SetLabelSize(0.025);
+      G20hb6->SetXTitle("             #eta  \b"); G20hb6->SetYTitle("      #phi \b"); G20hb6->SetTitle("<Rj> for |1-<R>| > 0.20 \b");     
+      G20hb6->SetStats(0);
+      G20hb6->Draw("COLZ");
+      //================
+      cRBX31->cd(2);
+      G30hb6->GetZaxis()->SetLabelSize(0.025);
+      G30hb6->SetXTitle("             #eta  \b"); G30hb6->SetYTitle("      #phi \b"); G30hb6->SetTitle("<Rj> for |1-<R>| > 0.30 \b");     
+      G30hb6->SetStats(0);
+      G30hb6->Draw("COLZ");
+      //================
+      cRBX31->cd(3);
+      G40hb6->GetZaxis()->SetLabelSize(0.025);
+      G40hb6->SetXTitle("             #eta  \b"); G40hb6->SetYTitle("      #phi \b"); G40hb6->SetTitle("<Rj> for |1-<R>| > 0.40 \b");     
+      G40hb6->SetStats(0);
+      G40hb6->Draw("COLZ");
+      //================
+
+       /////////////////
+       cRBX31->Update();
+       cRBX31->Print("RBX-HB-3plotsmore.png");
+       cRBX31->Clear();
+
+      // clean-up
+      if (G20hb6) delete G20hb6;
+      if (G30hb6) delete G30hb6;
+      if (G40hb6) delete G40hb6;
             gStyle->SetOptStat(0);
 
        ////////////////////////////////////////////////////////////////////////////////////
@@ -3589,6 +3649,16 @@ HF: j = 0,1,2, 3            18,19,20,21
       TH2F* Ghe60    = new TH2F("Ghe60","",  22, -11., 11., 18, 0., 18. );
       TH2F* Ghe61    = new TH2F("Ghe61","",  22, -11., 11., 18, 0., 18. );
       TH2F* Ghe6     = new TH2F("Ghe6","",   22, -11., 11., 18, 0., 18. );
+
+      TH2F* G20he60    = new TH2F("G20he60","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G20he61    = new TH2F("G20he61","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G20he6     = new TH2F("G20he6","",   22, -11., 11., 18, 0., 18. );
+      TH2F* G30he60    = new TH2F("G30he60","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G30he61    = new TH2F("G30he61","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G30he6     = new TH2F("G30he6","",   22, -11., 11., 18, 0., 18. );
+      TH2F* G40he60    = new TH2F("G40he60","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G40he61    = new TH2F("G40he61","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G40he6     = new TH2F("G40he6","",   22, -11., 11., 18, 0., 18. );
       // j - etaphi index; i - # LSs; 
       //
       // define mean and RMS:
@@ -3621,11 +3691,18 @@ HF: j = 0,1,2, 3            18,19,20,21
 	    if(ccc1>0.) {
 	      double Rij = ccc1/ccc0HE;		  
 	      if(Rij<MAXdif3rmsHEMIN || Rij>MINdif3rmsHEMAX) { Ghe61->Fill(jeta-11,jphi,Rij); Ghe60->Fill(jeta-11,jphi,1.); }
+	      if(Rij<0.8 || Rij>1.2) { G20he61->Fill(jeta-11,jphi,Rij); G20he60->Fill(jeta-11,jphi,1.); }
+	      if(Rij<0.7 || Rij>1.3) { G30he61->Fill(jeta-11,jphi,Rij); G30he60->Fill(jeta-11,jphi,1.); }
+	      if(Rij<0.6 || Rij>1.4) { G40he61->Fill(jeta-11,jphi,Rij); G40he60->Fill(jeta-11,jphi,1.); }
 	    }//if(ccc1>0.
 	  }// i
 	}//if(ccc0HE>0 
       }// j
       Ghe6->Divide(Ghe61,Ghe60, 1, 1, "B");// average R
+      G20he6->Divide(G20he61,G20he60, 1, 1, "B");// average R
+      G30he6->Divide(G30he61,G30he60, 1, 1, "B");// average R
+      G40he6->Divide(G40he61,G40he60, 1, 1, "B");// average R
+
       //      Ghe6->SetLabelOffset (Float_t offset=0.005, Option_t *axis="X")//Set offset between axis and axis' labels
       //      Ghe6->GetZaxis()->SetLabelOffset(-0.05);
       Ghe6->GetZaxis()->SetLabelSize(0.025);
@@ -3672,9 +3749,55 @@ HF: j = 0,1,2, 3            18,19,20,21
       if (Ghe6) delete Ghe6;
       if (Ghe7) delete Ghe7;
 
-      if (Ghe1) delete Ghe1;
-            gStyle->SetOptStat(0);
+      if (G20he60) delete G20he60;
+      if (G20he61) delete G20he61;
+      if (G30he60) delete G30he60;
+      if (G30he61) delete G30he61;
+      if (G40he60) delete G40he60;
+      if (G40he61) delete G40he61;
 
+      if (Ghe1) delete Ghe1;
+       //========================================================================================== 22-1   HE:: Ratio plots   jeta = 0 - 21       jphi =0 - 17
+       //======================================================================
+       //======================================================================28.11.2018
+       //======================================================================
+       //======================================================================      
+
+      gStyle->SetOptStat(1110000);                     
+      cout<<"      RBX HE  Ratio plotsmore *****" <<endl;
+      cRBX31->Clear();
+      /////////////////
+      cRBX31->Divide(3,1);
+      //================
+      cRBX31->cd(1);
+      G20he6->GetZaxis()->SetLabelSize(0.025);
+      G20he6->SetXTitle("             #eta  \b"); G20he6->SetYTitle("      #phi \b"); G20he6->SetTitle("<Rj> for |1-<R>| > 0.20 \b");     
+      G20he6->SetStats(0);
+      G20he6->Draw("COLZ");
+      //================
+      cRBX31->cd(2);
+      G30he6->GetZaxis()->SetLabelSize(0.025);
+      G30he6->SetXTitle("             #eta  \b"); G30he6->SetYTitle("      #phi \b"); G30he6->SetTitle("<Rj> for |1-<R>| > 0.30 \b");     
+      G30he6->SetStats(0);
+      G30he6->Draw("COLZ");
+      //================
+      cRBX31->cd(3);
+      G40he6->GetZaxis()->SetLabelSize(0.025);
+      G40he6->SetXTitle("             #eta  \b"); G40he6->SetYTitle("      #phi \b"); G40he6->SetTitle("<Rj> for |1-<R>| > 0.40 \b");     
+      G40he6->SetStats(0);
+      G40he6->Draw("COLZ");
+      //================
+
+       /////////////////
+       cRBX31->Update();
+       cRBX31->Print("RBX-HE-3plotsmore.png");
+       cRBX31->Clear();
+
+      // clean-up
+      if (G20he6) delete G20he6;
+      if (G30he6) delete G30he6;
+      if (G40he6) delete G40he6;
+            gStyle->SetOptStat(0);
        ////////////////////////////////////////////////////////////////////////////////////
 
        cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
@@ -3914,6 +4037,17 @@ HF: j = 0,1,2, 3            18,19,20,21
       TH2F* Gho60    = new TH2F("Gho60","",  22, -11., 11., 18, 0., 18. );
       TH2F* Gho61    = new TH2F("Gho61","",  22, -11., 11., 18, 0., 18. );
       TH2F* Gho6     = new TH2F("Gho6","",   22, -11., 11., 18, 0., 18. );
+
+      TH2F* G20ho60    = new TH2F("G20ho60","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G20ho61    = new TH2F("G20ho61","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G20ho6     = new TH2F("G20ho6","",   22, -11., 11., 18, 0., 18. );
+      TH2F* G30ho60    = new TH2F("G30ho60","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G30ho61    = new TH2F("G30ho61","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G30ho6     = new TH2F("G30ho6","",   22, -11., 11., 18, 0., 18. );
+      TH2F* G40ho60    = new TH2F("G40ho60","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G40ho61    = new TH2F("G40ho61","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G40ho6     = new TH2F("G40ho6","",   22, -11., 11., 18, 0., 18. );
+
       // j - etaphi index; i - # LSs; 
       //
       // define mean and RMS:
@@ -3946,11 +4080,17 @@ HF: j = 0,1,2, 3            18,19,20,21
 	    if(ccc1>0.) {
 	      double Rij = ccc1/ccc0HO;		  
 	      if(Rij<MAXdif3rmsHOMIN || Rij>MINdif3rmsHOMAX) { Gho61->Fill(jeta-11,jphi,Rij); Gho60->Fill(jeta-11,jphi,1.); }
+	      if(Rij<0.8 || Rij>1.2) { G20ho61->Fill(jeta-11,jphi,Rij); G20ho60->Fill(jeta-11,jphi,1.); }
+	      if(Rij<0.7 || Rij>1.3) { G30ho61->Fill(jeta-11,jphi,Rij); G30ho60->Fill(jeta-11,jphi,1.); }
+	      if(Rij<0.6 || Rij>1.4) { G40ho61->Fill(jeta-11,jphi,Rij); G40ho60->Fill(jeta-11,jphi,1.); }
 	    }//if(ccc1>0.
 	  }// i
 	}//if(ccc0HO>0 
       }// j
       Gho6->Divide(Gho61,Gho60, 1, 1, "B");// average R
+      G20ho6->Divide(G20ho61,G20ho60, 1, 1, "B");// average R
+      G30ho6->Divide(G30ho61,G30ho60, 1, 1, "B");// average R
+      G40ho6->Divide(G40ho61,G40ho60, 1, 1, "B");// average R
       //      Gho6->SetLabelOffset (Float_t offset=0.005, Option_t *axis="X")//Set offset between axis and axis' labels
       //      Gho6->GetZaxis()->SetLabelOffset(-0.05);
       Gho6->GetZaxis()->SetLabelSize(0.025);
@@ -3997,9 +4137,55 @@ HF: j = 0,1,2, 3            18,19,20,21
       if (Gho6) delete Gho6;
       if (Gho7) delete Gho7;
 
-      if (Gho1) delete Gho1;
-            gStyle->SetOptStat(0);
+      if (G20ho60) delete G20ho60;
+      if (G20ho61) delete G20ho61;
+      if (G30ho60) delete G30ho60;
+      if (G30ho61) delete G30ho61;
+      if (G40ho60) delete G40ho60;
+      if (G40ho61) delete G40ho61;
 
+      if (Gho1) delete Gho1;
+       //========================================================================================== 22-1   HO:: Ratio plots   jeta = 0 - 21       jphi =0 - 17
+       //======================================================================
+       //======================================================================28.11.2018
+       //======================================================================
+       //======================================================================      
+
+      gStyle->SetOptStat(1110000);                     
+      cout<<"      RBX HO  Ratio plotsmore *****" <<endl;
+      cRBX31->Clear();
+      /////////////////
+      cRBX31->Divide(3,1);
+      //================
+      cRBX31->cd(1);
+      G20ho6->GetZaxis()->SetLabelSize(0.025);
+      G20ho6->SetXTitle("             #eta  \b"); G20ho6->SetYTitle("      #phi \b"); G20ho6->SetTitle("<Rj> for |1-<R>| > 0.20 \b");     
+      G20ho6->SetStats(0);
+      G20ho6->Draw("COLZ");
+      //================
+      cRBX31->cd(2);
+      G30ho6->GetZaxis()->SetLabelSize(0.025);
+      G30ho6->SetXTitle("             #eta  \b"); G30ho6->SetYTitle("      #phi \b"); G30ho6->SetTitle("<Rj> for |1-<R>| > 0.30 \b");     
+      G30ho6->SetStats(0);
+      G30ho6->Draw("COLZ");
+      //================
+      cRBX31->cd(3);
+      G40ho6->GetZaxis()->SetLabelSize(0.025);
+      G40ho6->SetXTitle("             #eta  \b"); G40ho6->SetYTitle("      #phi \b"); G40ho6->SetTitle("<Rj> for |1-<R>| > 0.40 \b");     
+      G40ho6->SetStats(0);
+      G40ho6->Draw("COLZ");
+      //================
+
+       /////////////////
+       cRBX31->Update();
+       cRBX31->Print("RBX-HO-3plotsmore.png");
+       cRBX31->Clear();
+
+      // clean-up
+      if (G20ho6) delete G20ho6;
+      if (G30ho6) delete G30ho6;
+      if (G40ho6) delete G40ho6;
+            gStyle->SetOptStat(0);
        ////////////////////////////////////////////////////////////////////////////////////
 
        cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
@@ -4237,6 +4423,16 @@ HF: j = 0,1,2, 3            18,19,20,21
       TH2F* Ghf60    = new TH2F("Ghf60","",  22, -11., 11., 18, 0., 18. );
       TH2F* Ghf61    = new TH2F("Ghf61","",  22, -11., 11., 18, 0., 18. );
       TH2F* Ghf6     = new TH2F("Ghf6","",   22, -11., 11., 18, 0., 18. );
+
+      TH2F* G20hf60    = new TH2F("G20hf60","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G20hf61    = new TH2F("G20hf61","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G20hf6     = new TH2F("G20hf6","",   22, -11., 11., 18, 0., 18. );
+      TH2F* G30hf60    = new TH2F("G30hf60","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G30hf61    = new TH2F("G30hf61","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G30hf6     = new TH2F("G30hf6","",   22, -11., 11., 18, 0., 18. );
+      TH2F* G40hf60    = new TH2F("G40hf60","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G40hf61    = new TH2F("G40hf61","",  22, -11., 11., 18, 0., 18. );
+      TH2F* G40hf6     = new TH2F("G40hf6","",   22, -11., 11., 18, 0., 18. );
       // j - etaphi index; i - # LSs; 
       //
       // define mean and RMS:
@@ -4269,11 +4465,17 @@ HF: j = 0,1,2, 3            18,19,20,21
 	    if(ccc1>0.) {
 	      double Rij = ccc1/ccc0HF;		  
 	      if(Rij<MAXdif3rmsHFMIN || Rij>MINdif3rmsHFMAX) { Ghf61->Fill(jeta-11,jphi,Rij); Ghf60->Fill(jeta-11,jphi,1.); }
+	      if(Rij<0.8 || Rij>1.2) { G20hf61->Fill(jeta-11,jphi,Rij); G20hf60->Fill(jeta-11,jphi,1.); }
+	      if(Rij<0.7 || Rij>1.3) { G30hf61->Fill(jeta-11,jphi,Rij); G30hf60->Fill(jeta-11,jphi,1.); }
+	      if(Rij<0.6 || Rij>1.4) { G40hf61->Fill(jeta-11,jphi,Rij); G40hf60->Fill(jeta-11,jphi,1.); }
 	    }//if(ccc1>0.
 	  }// i
 	}//if(ccc0HF>0 
       }// j
       Ghf6->Divide(Ghf61,Ghf60, 1, 1, "B");// average R
+      G20hf6->Divide(G20hf61,G20hf60, 1, 1, "B");// average R
+      G30hf6->Divide(G30hf61,G30hf60, 1, 1, "B");// average R
+      G40hf6->Divide(G40hf61,G40hf60, 1, 1, "B");// average R
       //      Ghf6->SetLabelOffset (Float_t offset=0.005, Option_t *axis="X")//Set offset between axis and axis' labels
       //      Ghf6->GetZaxis()->SetLabelOffset(-0.05);
       Ghf6->GetZaxis()->SetLabelSize(0.025);
@@ -4320,9 +4522,55 @@ HF: j = 0,1,2, 3            18,19,20,21
       if (Ghf6) delete Ghf6;
       if (Ghf7) delete Ghf7;
 
-      if (Ghf1) delete Ghf1;
-            gStyle->SetOptStat(0);
+      if (G20hf60) delete G20hf60;
+      if (G20hf61) delete G20hf61;
+      if (G30hf60) delete G30hf60;
+      if (G30hf61) delete G30hf61;
+      if (G40hf60) delete G40hf60;
+      if (G40hf61) delete G40hf61;
 
+      if (Ghf1) delete Ghf1;
+       //========================================================================================== 22-1   HF:: Ratio plots   jeta = 0 - 21       jphi =0 - 17
+       //======================================================================
+       //======================================================================28.11.2018
+       //======================================================================
+       //======================================================================      
+
+      gStyle->SetOptStat(1110000);                     
+      cout<<"      RBX HF  Ratio plotsmore *****" <<endl;
+      cRBX31->Clear();
+      /////////////////
+      cRBX31->Divide(3,1);
+      //================
+      cRBX31->cd(1);
+      G20hf6->GetZaxis()->SetLabelSize(0.025);
+      G20hf6->SetXTitle("             #eta  \b"); G20hf6->SetYTitle("      #phi \b"); G20hf6->SetTitle("<Rj> for |1-<R>| > 0.20 \b");     
+      G20hf6->SetStats(0);
+      G20hf6->Draw("COLZ");
+      //================
+      cRBX31->cd(2);
+      G30hf6->GetZaxis()->SetLabelSize(0.025);
+      G30hf6->SetXTitle("             #eta  \b"); G30hf6->SetYTitle("      #phi \b"); G30hf6->SetTitle("<Rj> for |1-<R>| > 0.30 \b");     
+      G30hf6->SetStats(0);
+      G30hf6->Draw("COLZ");
+      //================
+      cRBX31->cd(3);
+      G40hf6->GetZaxis()->SetLabelSize(0.025);
+      G40hf6->SetXTitle("             #eta  \b"); G40hf6->SetYTitle("      #phi \b"); G40hf6->SetTitle("<Rj> for |1-<R>| > 0.40 \b");     
+      G40hf6->SetStats(0);
+      G40hf6->Draw("COLZ");
+      //================
+
+       /////////////////
+       cRBX31->Update();
+       cRBX31->Print("RBX-HF-3plotsmore.png");
+       cRBX31->Clear();
+
+      // clean-up
+      if (G20hf6) delete G20hf6;
+      if (G30hf6) delete G30hf6;
+      if (G40hf6) delete G40hf6;
+            gStyle->SetOptStat(0);
        //////////////////////////////////////////////////////////////////////////////////// 
        cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
        cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
@@ -5852,17 +6100,28 @@ HF: j = 0,1,2, 3            18,19,20,21
 	     htmlFile << "<br>\n";
 	     htmlFile << "<h2> 12. (Rij) - RBX-amplitudes normilized on reference LS (~=1st) </h2>"<< std::endl;
 	     htmlFile << "<h3> ( Rji . . is ratio of . . . . A_j_i . . to . . A_j_ref . . . . for . . j-RBX . . and . . i-LS . ) </h3>"<< std::endl; 
+
 	     htmlFile << "<br>\n";
-	     htmlFile << "<h2> . . . . . . . . . . . . . . 1) . average Ri vs iLS . . . . . . . . . . . . . . . . . . . . . . . 2) . average Rj shown for Rij outside meanValue range either 0.95-1.05 or 3RMS  . . . . . . . . . . . . . . . . . . . . . . . . . 3) . Rij </h2>"<< std::endl; 
-
-
+	     htmlFile << "<h2> . . . . . . . . . . . . . . 1) . average Ri vs iLS:. . . . . . . . . . . . . . . . . . . . . . . 2) . average Rj shown for Rij outside meanValue range either 0.95-1.05 or 3RMS: . . . . . . . . . . . . . . . . . . . . . . . . . 3) . Rij: </h2>"<< std::endl; 
 	     htmlFile << "<br>\n";
 	     if (sub==1) { htmlFile << " <img src=\"RBX-HB-3plots.png\" />\n";}
 	     if (sub==2) { htmlFile << " <img src=\"RBX-HE-3plots.png\" />\n";}
 	     if (sub==3) { htmlFile << " <img src=\"RBX-HO-3plots.png\" />\n";}
 	     if (sub==4) { htmlFile << " <img src=\"RBX-HF-3plots.png\" />\n";}
 	     htmlFile << "<br>\n";
-	     	     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
+
+	     htmlFile << "<br>\n";
+	     htmlFile << "<h2> . 4). average Rj shown for Rij outside meanValue range 0.80-1.20: . . . . . . . .5) . average Rj shown for Rij outside meanValue range 0.70-1.30:   . . . . . . . .6). average Rj shown for Rij outside meanValue range 0.60-1.40: </h2>"<< std::endl; 
+	     htmlFile << "<br>\n";
+	     if (sub==1) { htmlFile << " <img src=\"RBX-HB-3plotsmore.png\" />\n";}
+	     if (sub==2) { htmlFile << " <img src=\"RBX-HE-3plotsmore.png\" />\n";}
+	     if (sub==3) { htmlFile << " <img src=\"RBX-HO-3plotsmore.png\" />\n";}
+	     if (sub==4) { htmlFile << " <img src=\"RBX-HF-3plotsmore.png\" />\n";}
+	     htmlFile << "<br>\n";
+
+
+
+	     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 
   //=========================================================
 
@@ -5954,10 +6213,12 @@ HF: j = 0,1,2, 3            18,19,20,21
       htmlFile << "  <td><a href=\"HO_ADCampl.html\">HO</a></td>"<< std::endl;
       htmlFile << "  <td><a href=\"HF_ADCampl.html\">HF</a></td>"<< std::endl;
 */
+      
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_ADCampl.html\">HB</a></td>"<< std::endl;
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_ADCampl.html\">HE</a></td>"<< std::endl;
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_ADCampl.html\">HO</a></td>"<< std::endl;
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_ADCampl.html\">HF</a></td>"<< std::endl;
+
     }
     if (test==2){
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_Width.html\">HB</a></td>"<< std::endl;
@@ -6443,7 +6704,7 @@ htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-softwa
   htmlFile << "<tr>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/CapID_GL.html\">Cap ID errors</a></td>"<< std::endl;
   // AZ 18.03.2018
-  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
+      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
   //  htmlFile << "  <td><a  href=\"ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Width_GL.html\">Width</a></td>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Ratio_GL.html\">Ratio</a></td>"<< std::endl;
