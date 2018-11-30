@@ -247,8 +247,8 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #lsmax = cms.int32(620),
                                   lsmax = cms.int32(2600),
                                   #
-                                  #
-                                  flagabortgaprejected = cms.int32(1),
+                                  # flagabortgaprejected = 0 means, that take only abort gap;
+                                  flagabortgaprejected = cms.int32(0),
                                   bcnrejectedlow = cms.int32(3446),
                                   bcnrejectedhigh= cms.int32(3564),
                                   #
@@ -436,11 +436,11 @@ process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
 #
 #
 ############################################################################ GlobalTag :
-from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '103X_dataRun2_HLT_v1', '')
-############################################################################ GlobalTag :
 #from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-#process.GlobalTag = GlobalTag(process.GlobalTag, '101X_dataRun2_HLT_v7', '')
+#process.GlobalTag = GlobalTag(process.GlobalTag, '103X_dataRun2_HLT_v1', '')
+############################################################################ GlobalTag :
+from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
+process.GlobalTag = GlobalTag(process.GlobalTag, '101X_dataRun2_HLT_v7', '')
 ############################################################################ GlobalTag :1+ good as 5
 #from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
 #process.GlobalTag = GlobalTag(process.GlobalTag, '100X_dataRun2_HLT_v2', '')
@@ -482,17 +482,22 @@ process.GlobalTag = GlobalTag(process.GlobalTag, '103X_dataRun2_HLT_v1', '')
 #        'ZSThresholds',
 #        'RespCorrs')
 #)
-###
-process.hcalDigis= cms.EDProducer("HcalRawToDigi",
-    FilterDataQuality = cms.bool(True),
+###         
+##   FEDRawDataCollection is available
+##   hltHcalCalibrationRaw
+#process.hcalDigis= cms.EDProducer("HcalRawToDigi",
+##   FilterDataQuality = cms.bool(True),
 #    FilterDataQuality = cms.bool(False),
-    HcalFirstFED = cms.untracked.int32(700),
-#    InputLabel = cms.InputTag("source"),
-#    UnpackCalib = cms.untracked.bool(True),
-    InputLabel = cms.InputTag("rawDataRepacker"),
-    UnpackCalib = cms.untracked.bool(False),
-    FEDs = cms.untracked.vint32(1100, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1109, 1110, 1111, 1112, 1113, 1114, 1115, 1116, 1117),
-)
+#    HcalFirstFED = cms.untracked.int32(700),
+#    InputLabel = cms.InputTag("hltHcalCalibrationRaw"),
+##    InputLabel = cms.InputTag("source"),
+##    UnpackCalib = cms.untracked.bool(True),
+## rawDataRepacker is for ions:
+##    InputLabel = cms.InputTag("rawDataRepacker"),
+#    UnpackCalib = cms.untracked.bool(False),
+#    FEDs = cms.untracked.vint32(1100, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1109, 1110, 1111, 1112, 1113, 1114, 1115, 1116, 1117),
+#)
+###
 ###
 ############################################################################
 #process.hcalDigis.InputLabel = "hltFEDSelector"
