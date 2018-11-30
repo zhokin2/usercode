@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
 //	TFile *hfile1= new TFile("Global_325001_ls1to600.root", "READ");
 
 //	TFile *hfile1= new TFile("Global_RBX_325001_40.root", "READ");
-	TFile *hfile1= new TFile("Global_RBX_325001_ls1to600.root", "READ");
+//	TFile *hfile1= new TFile("Global_RBX_325001_ls1to600.root", "READ");
 
 ////////////////////////////////////////////////////////////
 
@@ -163,6 +163,13 @@ int main(int argc, char *argv[])
 
 //	TFile *hfile1= new TFile("Global_325001_ls1to600_abortgap.root", "READ");
 
+	TFile *hfile1= new TFile("Global_RBX_325001.root", "READ");
+//	TFile *hfile1= new TFile("Global_RBX_321177.root", "READ");
+
+        //	TFile *hfile1= new TFile("Global_321758.root", "READ");
+	//	TFile *hfile1= new TFile("Global_321773.root", "READ");
+	//	TFile *hfile1= new TFile("Global_321774.root", "READ");
+	//	TFile *hfile1= new TFile("Global_321775.root", "READ");
 
 
 
@@ -248,19 +255,17 @@ int main(int argc, char *argv[])
       c1->cd(3);
       
     ///////////////////////////////////////
-    TH2F* Diffe_Depth1hb = (TH2F*)Cdepth1hbff->Clone("Diffe_Depth1hb");
-    for (int i=1;i<=Cdepth1hbff->GetXaxis()->GetNbins();i++) {
-      for (int j=1;j<=Cdepth1hbff->GetYaxis()->GetNbins();j++) {
-	//	TH2F* Cdepth1hbff = (TH2F*)twoddepth1hb1->Clone("Cdepth1hbff");
-	double ccc1 =  Cdepth1hbff->GetBinContent(i,j)   ;
-	Diffe_Depth1hb->SetBinContent(i,j,0.);
-	//	if(ccc1>0.) cout<<" ibin=     "<< i <<" jbin=     "<< j <<" nevents=     "<< ccc1 <<endl;
-
-	//	if(ccc1 <18|| ccc1>30.)  Diffe_Depth1hb->SetBinContent(i,j,ccc1);
-	//	if(ccc1 <500.)  Diffe_Depth1hb->SetBinContent(i,j,ccc1);
-	Diffe_Depth1hb->SetBinContent(i,j,ccc1);
+      TH2F* Diffe_Depth1hb = (TH2F*)Cdepth1hbff->Clone("Diffe_Depth1hb");
+      for (int i=1;i<=Cdepth1hbff->GetXaxis()->GetNbins();i++) {
+	for (int j=1;j<=Cdepth1hbff->GetYaxis()->GetNbins();j++) {
+	  //	TH2F* Cdepth1hbff = (TH2F*)twoddepth1hb1->Clone("Cdepth1hbff");
+	  double ccc1 =  Cdepth1hbff->GetBinContent(i,j)   ;
+	  Diffe_Depth1hb->SetBinContent(i,j,0.);
+	  //	if(ccc1>0.) cout<<" ibin=     "<< i <<" jbin=     "<< j <<" nevents=     "<< ccc1 <<endl;
+	  if(ccc1 >50.)  Diffe_Depth1hb->SetBinContent(i,j,ccc1);
+	  //	Diffe_Depth1hb->SetBinContent(i,j,ccc1);
+	}
       }
-    }
       gPad->SetGridy();
       gPad->SetGridx();
       gPad->SetLogz();
@@ -1460,25 +1465,25 @@ const int npfit = 220; float anpfit = 220.;
       c1->Divide(2,3);
       
       c1->cd(1);
-      TH1F *aaaaad0= (TH1F*)hfile1->Get("h_ADCAmplrest1_HF");
+      TH1F *aaaaad0= (TH1F*)hfile1->Get("h_ADCAmplrest1_HO");
       gPad->SetLogy();
       // gPad->SetLogx();
       aaaaad0->SetMarkerStyle(20);
       aaaaad0->SetMarkerSize(0.8);
       aaaaad0->GetYaxis()->SetLabelSize(0.04);
-      aaaaad0->SetXTitle("h_ADCAmplrest1_HF \b");
+      aaaaad0->SetXTitle("h_ADCAmplrest1_HO \b");
       aaaaad0->SetMarkerColor(2);
       aaaaad0->SetLineColor(2);
       aaaaad0->Draw("");
       
       c1->cd(2);
-      TH1F *aaaaad3= (TH1F*)hfile1->Get("h_ADCAmplrest6_HF");
+      TH1F *aaaaad3= (TH1F*)hfile1->Get("h_ADCAmplrest6_HO");
             gPad->SetLogy();
       //    gPad->SetLogx();
       aaaaad3->SetMarkerStyle(20);
       aaaaad3->SetMarkerSize(0.8);
       aaaaad3->GetYaxis()->SetLabelSize(0.04);
-      aaaaad3->SetXTitle("h_ADCAmplrest6_HF \b");
+      aaaaad3->SetXTitle("h_ADCAmplrest6_HO \b");
       aaaaad3->SetMarkerColor(2);
       aaaaad3->SetLineColor(2);
       aaaaad3->Draw("");
