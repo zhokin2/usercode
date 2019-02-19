@@ -102,84 +102,28 @@ int main(int argc, char *argv[])
     //======================================================================
 //  TBrowser *b = new TBrowser
 
-//	TFile *hfile1= new TFile("test.root", "READ"); 
-//
-
-
-//	TFile *hfile1= new TFile("testNZS.root", "READ"); 
-//	TFile *hfile1= new TFile("test.root", "READ"); 
-
-
-//	TFile *hfile1= new TFile("newruns/Global_234034.root", "READ");
-//
-
-
 //	TFile *hfile1= new TFile("/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/CMTweb/histos/Global_234556.root", "READ");
-//	TFile *hfile1= new TFile("Global_234034.root", "READ");
-//	TFile *hfile1= new TFile("test211006.root", "READ");
-//	TFile *hfile1= new TFile("test234457.root", "READ");
-
-//	TFile *hfile1= new TFile("Global_51.root", "READ");
-//	TFile *hfile1= new TFile("Global_235698.root", "READ");
-
-//	TFile *hfile1= new TFile("Global_39.root", "READ");
-//	TFile *hfile1= new TFile("test237165.root", "READ");
-//
-//	TFile *hfile1= new TFile("Laser_238187.root", "READ");
-//	TFile *hfile1= new TFile("Laser_238183.root", "READ");
-
-//	TFile *hfile1= new TFile("Global_255031.root", "READ");
-
-//	TFile *hfile1= new TFile("Global_256001.root", "READ");
-//	TFile *hfile1= new TFile("Global_256167.root", "READ");
-// 	TFile *hfile1= new TFile("Global_256348.root", "READ");
-//	TFile *hfile1= new TFile("Global_256630.root", "READ");
-
-//	TFile *hfile1= new TFile("../PYTHON_runlist_test/Global_283884_1.root", "READ");
-//        TFile *hfile1= new TFile("Global_test.root", "READ");
-
-//	TFile *hfile1= new TFile("LED_280702.root", "READ");        
-	//	TFile *hfile2= new TFile("LED_287824.root", "READ");
-
-//	TFile *hfile1= new TFile("LED_284352.root", "READ");        
-////	TFile *hfile2= new TFile("LED_284902.root", "READ");
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 //	TFile *hfile1= new TFile("Global_321177_41.root", "READ");
 //	TFile *hfile1= new TFile("Global_321177_ls1to600.root", "READ");
 //	TFile *hfile1= new TFile("Global_321177_ls1to600.root_no41", "READ");
-
 //	TFile *hfile1= new TFile("Global_325001_ls1to600.root", "READ");
-
 //	TFile *hfile1= new TFile("Global_RBX_325001_40.root", "READ");
 //	TFile *hfile1= new TFile("Global_RBX_325001_ls1to600.root", "READ");
-
 ////////////////////////////////////////////////////////////
-
 //	TFile *hfile1= new TFile("Global_321177_41_abortgap.root", "READ");
 //	TFile *hfile1= new TFile("Global_321177_ls1to600_abortgap.root", "READ");
 //	TFile *hfile1= new TFile("Global_321177_ls1to600_abortgap_no41.root", "READ");
-
 //	TFile *hfile1= new TFile("Global_325001_ls1to600_abortgap.root", "READ");
-
 //	TFile *hfile1= new TFile("Global_321624_1.root", "READ");
 //	TFile *hfile1= new TFile("Global_321625.root", "READ");
 //	TFile *hfile1= new TFile("Global_321313.root", "READ");
-
-	TFile *hfile1= new TFile("Global_RBX_325001.root", "READ");
-	//	TFile *hfile1= new TFile("Global_RBX_321177.root", "READ");
-
-        //	TFile *hfile1= new TFile("Global_321758.root", "READ");
-	//	TFile *hfile1= new TFile("Global_321773.root", "READ");
-	//	TFile *hfile1= new TFile("Global_321774.root", "READ");
-	//	TFile *hfile1= new TFile("Global_321775.root", "READ");
-
-	//	TFile *hfile1= new TFile("Global_RBX_321177_1.root", "READ");
+//	TFile *hfile1= new TFile("Global_RBX_325001.root", "READ");
 
 
 
-
+//	TFile *hfile1= new TFile("Global_RBX_325001test.root", "READ");
+	TFile *hfile1= new TFile("Global_RBX_321177test.root", "READ");
+//	TFile *hfile1= new TFile("LED_327785test.root", "READ");
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1356,7 +1300,8 @@ const int npfit = 220; float anpfit = 220.;
       aaaaab5->Draw("");
       
       c1->cd(4);
-      TH1F *aaaaab1= (TH1F*)hfile1->Get("h_ADCAmplrest_HE");
+            TH1F *aaaaab1= (TH1F*)hfile1->Get("h_ADCAmplrest_HE");
+      //    TH1F *aaaaab1= (TH1F*)hfile1->Get("h_AmplitudeHEtest");
       gPad->SetLogy();
       // gPad->SetLogx();
       aaaaab1->SetMarkerStyle(20);
@@ -1368,7 +1313,8 @@ const int npfit = 220; float anpfit = 220.;
       aaaaab1->Draw("");
 
       c1->cd(5);
-      TH1F *aaaaab2= (TH1F*)hfile1->Get("h_ADCAmplrest1_HE");
+          TH1F *aaaaab2= (TH1F*)hfile1->Get("h_ADCAmplrest1_HE");
+      //    TH1F *aaaaab2= (TH1F*)hfile1->Get("h_AmplitudeHEtest1");
       gPad->SetLogy();
       // gPad->SetLogx();
       aaaaab2->SetMarkerStyle(20);
@@ -1380,7 +1326,8 @@ const int npfit = 220; float anpfit = 220.;
       aaaaab2->Draw("");
 
       c1->cd(6);
-      TH1F *aaaaab6= (TH1F*)hfile1->Get("h_ADCAmplrest6_HE");
+            TH1F *aaaaab6= (TH1F*)hfile1->Get("h_ADCAmplrest6_HE");
+      //    TH1F *aaaaab6= (TH1F*)hfile1->Get("h_AmplitudeHEtest6");
       gPad->SetLogy();
       // gPad->SetLogx();
       aaaaab6->SetMarkerStyle(20);
@@ -1538,6 +1485,199 @@ const int npfit = 220; float anpfit = 220.;
       c1->Update();
       
       
+      //========================================================================================== 13
+      //======================================================================
+      //======================================================================
+      c1->Clear();
+      c1->Divide(2,2);
+      
+      TH1F *timet= (TH1F*)hfile1->Get("h_tdc_HE_tdc");
+      TH1F *time= (TH1F*)hfile1->Get("h_tdc_HE_time");
+      TH1F *time0= (TH1F*)hfile1->Get("h_tdc_HE_time0");
+      TH1F* timer = (TH1F*)time->Clone("timer");
+      time->Sumw2();
+      time0->Sumw2();
+      timer->Divide(time,time0, 1, 1, "B");// 
+      timer->Sumw2();
+      c1->cd(1);
+      //            gPad->SetLogy();
+      //    gPad->SetLogx();
+      time->SetMarkerStyle(20);
+      time->SetMarkerSize(0.4);
+      time->GetYaxis()->SetLabelSize(0.04);
+      time->SetXTitle("time50 weighted by A  HE \b");
+      time->SetMarkerColor(2);
+      time->SetLineColor(2);
+      time->Draw("");
+      c1->cd(2);
+      time0->SetMarkerStyle(20);
+      time0->SetMarkerSize(0.4);
+      time0->GetYaxis()->SetLabelSize(0.04);
+      time0->SetXTitle("time50 HE \b");
+      time0->SetMarkerColor(2);
+      time0->SetLineColor(2);
+      time0->Draw("");
+      c1->cd(3);
+      timer->SetMarkerStyle(20);
+      timer->SetMarkerSize(0.4);
+      timer->GetYaxis()->SetLabelSize(0.04);
+      timer->SetXTitle("shape HE \b");
+      timer->SetMarkerColor(2);
+      timer->SetLineColor(2);
+      timer->Draw("");
+      c1->cd(4);
+            gPad->SetLogy();
+      timet->SetMarkerStyle(20);
+      timet->SetMarkerSize(0.4);
+      timet->GetYaxis()->SetLabelSize(0.04);
+      timet->SetXTitle("initial tdc HE \b");
+      timet->SetMarkerColor(2);
+      timet->SetLineColor(2);
+      timet->Draw("");
+
+      c1->Update();
+      //======================================================================
+      //========================================================================================== 14
+      //======================================================================
+      //======================================================================
+      c1->Clear();
+      c1->Divide(1,3);
+      
+      TH1F *ampldefault= (TH1F*)hfile1->Get("h_tdc_HE_ampldefault");
+      TH1F *ampldefault50= (TH1F*)hfile1->Get("h_tdc_HE_ampldefault50");
+      TH1F *ampldefault63= (TH1F*)hfile1->Get("h_tdc_HE_ampldefault63");
+      c1->cd(1);
+      //            gPad->SetLogy();
+      //    gPad->SetLogx();
+      ampldefault->SetMarkerStyle(20);
+      ampldefault->SetMarkerSize(0.4);
+      ampldefault->GetYaxis()->SetLabelSize(0.04);
+      ampldefault->SetXTitle("A_TS HE \b");
+      ampldefault->SetMarkerColor(2);
+      ampldefault->SetLineColor(2);
+            gPad->SetLogy();
+      ampldefault->Draw("");
+
+      c1->cd(2);
+      //            gPad->SetLogy();
+      //    gPad->SetLogx();
+      ampldefault50->SetMarkerStyle(20);
+      ampldefault50->SetMarkerSize(0.4);
+      ampldefault50->GetYaxis()->SetLabelSize(0.04);
+      ampldefault50->SetXTitle("A_TS_50 HE \b");
+      ampldefault50->SetMarkerColor(2);
+      ampldefault50->SetLineColor(2);
+            gPad->SetLogy();
+      ampldefault50->Draw("");
+
+      c1->cd(3);
+      //            gPad->SetLogy();
+      //    gPad->SetLogx();
+      ampldefault63->SetMarkerStyle(20);
+      ampldefault63->SetMarkerSize(0.4);
+      ampldefault63->GetYaxis()->SetLabelSize(0.04);
+      ampldefault63->SetXTitle("A_TS_63 HE \b");
+      ampldefault63->SetMarkerColor(2);
+      ampldefault63->SetLineColor(2);
+            gPad->SetLogy();
+      ampldefault63->Draw("");
+
+      c1->Update();
+      //======================================================================
+      //========================================================================================== 15
+      //======================================================================
+      //======================================================================
+      c1->Clear();
+      c1->Divide(1,1);
+      
+      TH1F *timeVSampldefault= (TH1F*)hfile1->Get("h_tdc_HE_timeVSampldefault");
+      c1->cd(1);
+      //            gPad->SetLogy();
+      //    gPad->SetLogx();
+      timeVSampldefault->SetMarkerStyle(20);
+      timeVSampldefault->SetMarkerSize(0.4);
+      timeVSampldefault->GetYaxis()->SetLabelSize(0.04);
+      timeVSampldefault->SetXTitle("timeVStampldefault HE \b");
+      timeVSampldefault->SetMarkerColor(2);
+      timeVSampldefault->SetLineColor(2);
+      timeVSampldefault->Draw("box");
+
+      c1->Update();
+      //========================================================================================== 16
+      //======================================================================
+      //======================================================================
+      c1->Clear();
+      c1->Divide(2,3);
+      
+      TH1F *shape= (TH1F*)hfile1->Get("h_shape_good_channels_HE");
+      TH1F *shape0= (TH1F*)hfile1->Get("h_shape0_good_channels_HE");
+      TH1F* shaper = (TH1F*)shape->Clone("shaper");
+      shape->Sumw2();
+      shape0->Sumw2();
+      shaper->Divide(shape,shape0, 1, 1, "B");// 
+      shaper->Sumw2();
+      c1->cd(1);
+      //            gPad->SetLogy();
+      //    gPad->SetLogx();
+      shape->SetMarkerStyle(20);
+      shape->SetMarkerSize(0.4);
+      shape->GetYaxis()->SetLabelSize(0.04);
+      shape->SetXTitle("TS weighted by A good HE \b");
+      shape->SetMarkerColor(2);
+      shape->SetLineColor(2);
+      shape->Draw("");
+      c1->cd(3);
+      shape0->SetMarkerStyle(20);
+      shape0->SetMarkerSize(0.4);
+      shape0->GetYaxis()->SetLabelSize(0.04);
+      shape0->SetXTitle("TS good HE \b");
+      shape0->SetMarkerColor(2);
+      shape0->SetLineColor(2);
+      shape0->Draw("");
+      c1->cd(5);
+      shaper->SetMarkerStyle(20);
+      shaper->SetMarkerSize(0.4);
+      shaper->GetYaxis()->SetLabelSize(0.04);
+      shaper->SetXTitle("shape good HE per event, per channel\b");
+      shaper->SetMarkerColor(2);
+      shaper->SetLineColor(2);
+      shaper->Draw("");
+
+      TH1F *badsh= (TH1F*)hfile1->Get("h_shape_bad_channels_HE");
+      TH1F *badsh0= (TH1F*)hfile1->Get("h_shape0_bad_channels_HE");
+      TH1F* badshr = (TH1F*)badsh->Clone("badshr");
+      badsh->Sumw2();
+      badsh0->Sumw2();
+      badshr->Divide(badsh,badsh0, 1, 1, "B");// 
+      badshr->Sumw2();
+      c1->cd(2);
+      //            gPad->SetLogy();
+      //    gPad->SetLogx();
+      badsh->SetMarkerStyle(20);
+      badsh->SetMarkerSize(0.4);
+      badsh->GetYaxis()->SetLabelSize(0.04);
+      badsh->SetXTitle("TS weighted by A bad HE \b");
+      badsh->SetMarkerColor(2);
+      badsh->SetLineColor(2);
+      badsh->Draw("");
+      c1->cd(4);
+      badsh0->SetMarkerStyle(20);
+      badsh0->SetMarkerSize(0.4);
+      badsh0->GetYaxis()->SetLabelSize(0.04);
+      badsh0->SetXTitle("TS bad HE \b");
+      badsh0->SetMarkerColor(2);
+      badsh0->SetLineColor(2);
+      badsh0->Draw("");
+      c1->cd(6);
+      badshr->SetMarkerStyle(20);
+      badshr->SetMarkerSize(0.4);
+      badshr->GetYaxis()->SetLabelSize(0.04);
+      badshr->SetXTitle("shape bad HE per event, per channel\b");
+      badshr->SetMarkerColor(2);
+      badshr->SetLineColor(2);
+      badshr->Draw("");
+
+      c1->Update();
     //======================================================================
     //==================================================================================================== end
     //======================================================================
