@@ -1,7 +1,7 @@
 #!/bin/bash
 
 WebDir='/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring'
-WebSite='https://cms-conddb-dev.cern.ch/eosweb/hcal/HcalRemoteMonitoring'
+WebSite='https://cms-conddb.cern.ch/eosweb/hcal/HcalRemoteMonitoring'
 HistoDir='/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos'
 eos='/afs/cern.ch/project/eos/installation/0.3.15/bin/eos.select'
 
@@ -169,7 +169,7 @@ for i in ${runList} ; do
     rm -rf ${local_WebDir}
     if [ ! -d ${local_WebDir} ] ; then mkdir ${local_WebDir}; fi
     for j in $(ls -r *.html); do
-	cat $j | sed 's#cms-cpt-software.web.cern.ch\/cms-cpt-software\/General\/Validation\/SVSuite#cms-conddb-dev.cern.ch\/eosweb\/hcal#g' \
+	cat $j | sed 's#cms-cpt-software.web.cern.ch\/cms-cpt-software\/General\/Validation\/SVSuite#cms-conddb.cern.ch\/eosweb\/hcal#g' \
 	    > ${local_WebDir}/$j
     done
     cp *.png ${local_WebDir}
@@ -218,7 +218,7 @@ for i in ${runList} ; do
     rm -rf ${local_WebDir}
     if [ ! -d ${local_WebDir} ] ; then mkdir ${local_WebDir}; fi
     for j in $(ls -r *.html); do
-	cat $j | sed 's#cms-cpt-software.web.cern.ch\/cms-cpt-software\/General\/Validation\/SVSuite#cms-conddb-dev.cern.ch\/eosweb\/hcal#g' \
+	cat $j | sed 's#cms-cpt-software.web.cern.ch\/cms-cpt-software\/General\/Validation\/SVSuite#cms-conddb.cern.ch\/eosweb\/hcal#g' \
 		> ${local_WebDir}/$j
     done
     cp *.png ${local_WebDir}
