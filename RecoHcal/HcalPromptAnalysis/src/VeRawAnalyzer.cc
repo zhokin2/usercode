@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // Package:    VeRawAnalyzer
-// Class:      VeRawAnalyzer
+// Class:      VeRawAnalyzer   h_shape_good_channels_HE
 // 
 /**\class VeRawAnalyzer VeRawAnalyzer.cc Hcal/VeRawAnalyzer/src/VeRawAnalyzer.cc
    
@@ -595,7 +595,7 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   TH1F* h_sumADCAmplEtaPhiLs_ietaphi;
   TH1F* h_sumADCAmplEtaPhiLs_lscounterM1orbitNum;
   TH1F* h_sumADCAmplEtaPhiLs_orbitNum;
-
+  /*
    TH1F* h_AiForLS_11_HB; 
    TH1F* h_AiForLS_12_HB; 
    TH1F* h_AiForLS_13_HB; 
@@ -647,7 +647,7 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
    TH1F* h_AiForLS_bad_HF; 
    TH1F* h_AiForLS_444_HF; 
    TH1F* h_AiForLS_good_HF;
-
+*/
   TH2F* h_mapAiForLS_bad_HB;
   TH2F* h_map0AiForLS_bad_HB;
   TH2F* h_mapAiForLS_good_HB;
@@ -1044,6 +1044,14 @@ TH1F*         h_Amplitude_notCapIdErrors_HF2;
 TH1F*         h_Amplitude_notCapIdErrors_HO4;
 
   /////////////////////////////////////////////
+  TH1F* h_tdc_HE_tdc;
+  TH1F* h_tdc_HE_time;
+  TH1F* h_tdc_HE_time0;
+  TH1F* h_tdc_HE_ampldefault;
+  TH1F* h_tdc_HE_ampldefault50;
+  TH1F* h_tdc_HE_ampldefault63;
+  TH2F* h_tdc_HE_timeVSampldefault;
+
   TH1F* h_corrforxaMAIN_HE  ;
   TH1F* h_corrforxaMAIN0_HE ;
   TH1F* h_corrforxaADDI_HE  ;
@@ -6046,6 +6054,7 @@ void VeRawAnalyzer::beginJob()
     h_repetedcapid_HO = new TH1F("h_repetedcapid_HO"," ", 5, 0., 5.);
     
     /////////////////////////////////////////////////////////////////////////////////////////////////             HB
+    /*
 	h_AiForLS_11_HB = new TH1F("h_AiForLS_11_HB"," ",     100, 0.,3000.);
 	h_AiForLS_12_HB = new TH1F("h_AiForLS_12_HB"," ",     100, 0.,3000.);
 	h_AiForLS_13_HB = new TH1F("h_AiForLS_13_HB"," ",     100, 0.,3000.);
@@ -6062,7 +6071,7 @@ void VeRawAnalyzer::beginJob()
 	h_map0AiForLS_bad_HB = new TH2F("h_map0AiForLS_bad_HB"," ", neta, -41., 41., nphi, 0., bphi);
 	h_mapAiForLS_good_HB = new TH2F("h_mapAiForLS_good_HB"," ", neta, -41., 41., nphi, 0., bphi);
 	h_map0AiForLS_good_HB = new TH2F("h_map0AiForLS_good_HB"," ", neta, -41., 41., nphi, 0., bphi);
-
+*/
 
     h_numberofhitsHBtest = new TH1F("h_numberofhitsHBtest"," ", 100, 0.,100.);
     h_AmplitudeHBtest = new TH1F("h_AmplitudeHBtest"," ", 100, 0.,10000.);
@@ -6122,6 +6131,14 @@ void VeRawAnalyzer::beginJob()
     h_mapDepth2_HB = new TH2F("h_mapDepth2_HB"," ", neta, -41., 41., nphi, 0., bphi);
     
     //////////////////////////////////////////////////////////////////////////////////////////////             HE
+	h_tdc_HE_tdc = new TH1F("h_tdc_HE_tdc"," ", 100, 0.,100.);
+	h_tdc_HE_time = new TH1F("h_tdc_HE_time"," ", 250, 0.,250.);
+	h_tdc_HE_time0 = new TH1F("h_tdc_HE_time0"," ", 250, 0.,250.);
+	h_tdc_HE_ampldefault = new TH1F("h_tdc_HE_ampldefault"," ", 100, 0.,200000.);
+	h_tdc_HE_ampldefault50 = new TH1F("h_tdc_HE_ampldefault50"," ", 100, 0.,200000.);
+	h_tdc_HE_ampldefault63 = new TH1F("h_tdc_HE_ampldefault63"," ", 100, 0.,200000.);
+	h_tdc_HE_timeVSampldefault = new TH2F("h_tdc_HE_timeVSampldefault"," ",260, 0.,65., 1000, 0.,200000.);
+	/*
 	h_AiForLS_11_HE = new TH1F("h_AiForLS_11_HE"," ",     100, 0.,300000.);
 	h_AiForLS_12_HE = new TH1F("h_AiForLS_12_HE"," ",     100, 0.,300000.);
 	h_AiForLS_13_HE = new TH1F("h_AiForLS_13_HE"," ",     100, 0.,300000.);
@@ -6138,13 +6155,13 @@ void VeRawAnalyzer::beginJob()
 	h_map0AiForLS_bad_HE = new TH2F("h_map0AiForLS_bad_HE"," ", neta, -41., 41., nphi, 0., bphi);
 	h_mapAiForLS_good_HE = new TH2F("h_mapAiForLS_good_HE"," ", neta, -41., 41., nphi, 0., bphi);
 	h_map0AiForLS_good_HE = new TH2F("h_map0AiForLS_good_HE"," ", neta, -41., 41., nphi, 0., bphi);
-
+*/
 
     // stuff regarding summed(total) Amplitude vs iEvent (histo-name is  h_totalAmplitudeHEperEvent) 
     // to see from which event ALL channels are available(related to quality of the run)
     h_numberofhitsHEtest = new TH1F("h_numberofhitsHEtest"," ", 100, 0.,10000.);
     h_AmplitudeHEtest = new TH1F("h_AmplitudeHEtest"," ", 100, 0.,1000000.);
-    h_AmplitudeHEtest1 = new TH1F("h_AmplitudeHEtest1"," ", 100, 0.,1000000.);
+    h_AmplitudeHEtest1 = new TH1F("h_AmplitudeHEtest1"," ", 100, 0.,1000000.);   
     h_AmplitudeHEtest6 = new TH1F("h_AmplitudeHEtest6"," ", 100, 0.,2000000.);
     h_totalAmplitudeHE = new TH1F("h_totalAmplitudeHE"," ", 100, 0.,10000000000.);
     h_totalAmplitudeHEperEvent = new TH1F("h_totalAmplitudeHEperEvent"," ", 1000, 1.,1001.);
@@ -6389,6 +6406,7 @@ void VeRawAnalyzer::beginJob()
     
 
   ////////////////////////////////////////////////////////////////////////////////////////////////                    HF
+    /*
 	h_AiForLS_11_HF = new TH1F("h_AiForLS_11_HF"," ",     100, 0.,20000.);
 	h_AiForLS_12_HF = new TH1F("h_AiForLS_12_HF"," ",     100, 0.,20000.);
 	h_AiForLS_13_HF = new TH1F("h_AiForLS_13_HF"," ",     100, 0.,20000.);
@@ -6405,7 +6423,7 @@ void VeRawAnalyzer::beginJob()
 	h_map0AiForLS_bad_HF = new TH2F("h_map0AiForLS_bad_HF"," ", neta, -41., 41., nphi, 0., bphi);
 	h_mapAiForLS_good_HF = new TH2F("h_mapAiForLS_good_HF"," ", neta, -41., 41., nphi, 0., bphi);
 	h_map0AiForLS_good_HF = new TH2F("h_map0AiForLS_good_HF"," ", neta, -41., 41., nphi, 0., bphi);
-
+*/
     h_numberofhitsHFtest = new TH1F("h_numberofhitsHFtest"," ", 100, 0.,30000.);
     h_AmplitudeHFtest = new TH1F("h_AmplitudeHFtest"," ", 100, 0.,300000.);
     h_totalAmplitudeHF = new TH1F("h_totalAmplitudeHF"," ", 100, 0.,100000000000.);
@@ -6476,6 +6494,7 @@ void VeRawAnalyzer::beginJob()
     h_mapDepth4_HF = new TH2F("h_mapDepth4_HF"," ", neta, -41., 41., nphi, 0., bphi);
     
     ////////////////////////////////////////////////////////////////////////////////////////////////                  HO
+    /*
 	h_AiForLS_11_HO = new TH1F("h_AiForLS_11_HO"," ",     100, 0.,10000.);
 	h_AiForLS_12_HO = new TH1F("h_AiForLS_12_HO"," ",     100, 0.,10000.);
 	h_AiForLS_13_HO = new TH1F("h_AiForLS_13_HO"," ",     100, 0.,10000.);
@@ -6492,7 +6511,7 @@ void VeRawAnalyzer::beginJob()
 	h_map0AiForLS_bad_HO = new TH2F("h_map0AiForLS_bad_HO"," ", neta, -41., 41., nphi, 0., bphi);
 	h_mapAiForLS_good_HO = new TH2F("h_mapAiForLS_good_HO"," ", neta, -41., 41., nphi, 0., bphi);
 	h_map0AiForLS_good_HO = new TH2F("h_map0AiForLS_good_HO"," ", neta, -41., 41., nphi, 0., bphi);
-
+*/
 
     h_numberofhitsHOtest = new TH1F("h_numberofhitsHOtest"," ", 100, 0.,30000.);
     h_AmplitudeHOtest = new TH1F("h_AmplitudeHOtest"," ", 100, 0.,300000.);
@@ -9027,6 +9046,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	if(mdepth==2) h_mapDepth2ADCAmpl12_HB->Fill(double(ieta), double(iphi), ampl);
 
 	///////////////////////////////////////////////////////////////////////////////	//AZ: 21.09.2018 for Pavel Bunin:
+	/*
 	if(lscounterM1 == 11 ) {h_AiForLS_11_HB->Fill(amplitude, 1.);}
 	else if(lscounterM1 == 12 ) {h_AiForLS_12_HB->Fill(amplitude, 1.);}
 	else if(lscounterM1 == 13 ) {h_AiForLS_13_HB->Fill(amplitude, 1.);} 
@@ -9047,7 +9067,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	  h_mapAiForLS_good_HB->Fill(double(ieta), double(iphi), amplitude);
 	  h_map0AiForLS_good_HB->Fill(double(ieta), double(iphi), 1.);
 	}
-
+*/
 
 	///////////////////////////////////////////////////////////////////////////////	//AZ: 25.10.2018 for Pavel Bunin: gain stability vs LSs using LED from abort gap
 	h_bcnvsamplitude_HB->Fill( float(bcn) , amplitude );
@@ -9258,6 +9278,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	if(mdepth==3) {h_mapDepth3ADCAmpl12_HE->Fill(double(ieta), double(iphi), ampl);  h_mapDepth3linADCAmpl12_HE->Fill(double(ieta), double(iphi), linamplitudewithoutPedSubtr);}
 	
 	///////////////////////////////////////////////////////////////////////////////	//AZ: 21.09.2018 for Pavel Bunin:
+	/*
 	if(lscounterM1 == 11 ) {h_AiForLS_11_HE->Fill(amplitude, 1.);}
 	else if(lscounterM1 == 12 ) {h_AiForLS_12_HE->Fill(amplitude, 1.);}
 	else if(lscounterM1 == 13 ) {h_AiForLS_13_HE->Fill(amplitude, 1.);} 
@@ -9278,7 +9299,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	  h_mapAiForLS_good_HE->Fill(double(ieta), double(iphi), amplitude);
 	  h_map0AiForLS_good_HE->Fill(double(ieta), double(iphi), 1.);
 	}
-
+*/
 	///////////////////////////////////////////////////////////////////////////////	//AZ: 25.10.2018 for Pavel Bunin: gain stability vs LSs using LED from abort gap
 	h_bcnvsamplitude_HE->Fill( float(bcn) , amplitude );
 	h_bcnvsamplitude0_HE->Fill( float(bcn) , 1. );
@@ -9478,6 +9499,17 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
     //    HcalCalibrations calib = conditions->getHcalCalibrations(hcaldetid);
     const HcalQIECoder* channelCoder = conditions->getHcalCoder(hcaldetid);
     const HcalPedestalWidth* pedw = conditions->getPedestalWidth(hcaldetid);
+
+
+
+    // zhokin 07.12.2018
+    //    const HcalPedestalWidth* tdc0 =  = conditions->getTDCTimeFromSample(hcaldetid);
+    //  const HcalCellType* tdc0 = conditions->getTDCTime(hcaldetid);
+    //    const HcalTimeCorr* tdc0 = conditions->getTDCTime(hcaldetid);
+    //    const HcalTimeCorr* tdc0 =  = conditions->getTDCTime(const int tdc);
+    //  h_tdc_HE_tdc->Fill(getValue(tdc0));
+
+
     HcalCoderDb coder (*channelCoder, *shape);
     if( useADCfC_ )     coder.adc2fC(qie11df,toolOriginal);
     //    double noiseADC = qie11df[0].adc();
@@ -9535,27 +9567,50 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
     //  if(qie10df.size() !=  TSsize) errorBtype = 1.; 
     //  TSsize=qie10df.size();
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+for (int iTS = 0; iTS < digi.samples(); ++iTS) {
+					_cADCvsTS_SubdetPM.fill(did, iTS, digi[iTS].adc());					
+					if (digi[iTS].tdc() <50) {
+						double time = iTS*25. + (digi[iTS].tdc() / 2.);
+						_cTDCTime_SubdetPM.fill(did, time);
+						_cTDCTime_depth.fill(did, time);
+					}
+}
+	      //	    int tdc = qie10df[i].le_tdc();
+	      //	    int trail = qie10df[i].te_tdc();
+	      //	    int capid = qie10df[i].capid();
+	      //	    int soi = qie10df[i].soi();
+	      // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	      // store pulse information
+	      // THIS NEEDS TO BE UPDATED AND IS ONLY 
+	      // BEING USED AS A PLACE HOLDER UNTIL THE
+	      // REAL LINEARIZATION CONSTANTS ARE DEFINED
+	      // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	      //	    if (verbosity == -2323) {std::cout<< "HFQIE10 adc= " << adc << " tdc= " << tdc << " trail= " << trail << " capid= " << capid << " soi= " << soi << " charge= " << charge << endl;}// Verbosity
+
+
+getTDCTime(const int tdc)
+getTDCTimeFromSample
+
+*/
+      ///////   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     for (int ii=0; ii<TSsize; ii++) {  
       double ampldefault = 0.;
       double ampldefault0 = 0.;
       double ampldefault1 = 0.;
       double ampldefault2 = 0.;
 
-      ///////   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    MAKE A CHOISE OF SHUNT:  shunt1 or shunt6 ????  !!
+      ///////   !!!!!!!!!!!!!!!    MAKE A CHOISE OF SHUNT:  shunt1 or shunt6 ????  !!
+      // adc treatment:
       //    ampldefault0 = adc2fC_QIE11_shunt1[ qie11df[ii].adc() ];// massive !!!!!!
       // ampldefault0 = adc2fC_QIE11_shunt6[ qie11df[ii].adc() ];// massive !!!!!!
-      ampldefault0 =adc2fC_QIE11_shunt6[ qie11df[ii].adc() ];// massive !!!!!!
+      ampldefault0 =adc2fC_QIE11_shunt6[ qie11df[ii].adc() ];// massive !!!!!!    (use for local runs as default shunt6)
       if(flaguseshunt_ == 1) ampldefault0 =adc2fC_QIE11_shunt1[ qie11df[ii].adc() ];// massive !!!!!!
-      ///////   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
       if( useADCfC_ ) ampldefault1 = toolOriginal[ii];//adcfC
       ampldefault2  = qie11df[ii].adc();//ADCcounts
       if( useADCmassive_ ) {ampldefault = ampldefault0;}// !!!!!!
       if( useADCfC_ ) {ampldefault = ampldefault1;}
       if( useADCcounts_ ) {ampldefault = ampldefault2;}
-
-      
 
       int capid = (qie11df[ii]).capid();
       //      double pedestal = calib.pedestal(capid);
@@ -9921,6 +9976,7 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
 	}
       }
     }// sub   HB
+// HE starts:
     if ( sub == 2 ) {
       // bad_channels with C,A,W,P,pW,
       if( error == 1 || amplitude0 < ADCAmplHEMin_ || amplitude0 > ADCAmplHEMax_ ||
@@ -9939,11 +9995,25 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
       // good_channels with C,A,W,P,pW,
       else {
 	for (int ii=0; ii<TSsize; ii++) {  
+	  double time = 0.;float time0 = 0.;
 	  double ampldefault = tool[ii];
 	  h_shape_good_channels_HE->Fill(float(ii),ampldefault);
 	  h_shape0_good_channels_HE->Fill(float(ii),1.);
-	}
-      }
+	  // zhokin 07.12.2018
+	  // tdc treatment:
+	  time0 = qie11df[ii].tdc(); 
+	  h_tdc_HE_tdc->Fill(time0);
+	  h_tdc_HE_ampldefault->Fill(ampldefault);
+	  h_tdc_HE_timeVSampldefault->Fill(time0,ampldefault);
+	  if (time0 <50.) {
+	    h_tdc_HE_ampldefault50->Fill(ampldefault);
+	    time = ii*25. + time0/2.;
+	    h_tdc_HE_time->Fill(time, ampldefault);
+	    h_tdc_HE_time0->Fill(time, 1.);
+	  }//time0<50
+	  else{h_tdc_HE_ampldefault63->Fill(ampldefault);}
+	}// ii
+      }// else for good channels
     }// sub   HE
     ///////////////////////////////////////Digis : over all digiHits    
     sum0Estimator[sub-1][mdepth-1][ieta+41][iphi] += 1.;
@@ -10070,6 +10140,7 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
 	if(mdepth==1) h_mapDepth1ADCAmpl12_HB->Fill(double(ieta), double(iphi), ampl);
 	if(mdepth==2) h_mapDepth2ADCAmpl12_HB->Fill(double(ieta), double(iphi), ampl);
 	///////////////////////////////////////////////////////////////////////////////	//AZ: 21.09.2018 for Pavel Bunin:
+	/*
 	if(lscounterM1 == 11 ) {h_AiForLS_11_HB->Fill(amplitude, 1.);}
 	else if(lscounterM1 == 12 ) {h_AiForLS_12_HB->Fill(amplitude, 1.);}
 	else if(lscounterM1 == 13 ) {h_AiForLS_13_HB->Fill(amplitude, 1.);} 
@@ -10090,7 +10161,7 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
 	  h_mapAiForLS_good_HE->Fill(double(ieta), double(iphi), amplitude);
 	  h_map0AiForLS_good_HE->Fill(double(ieta), double(iphi), 1.);
 	}
-
+*/
 	///////////////////////////////////////////////////////////////////////////////	//AZ: 25.10.2018 for Pavel Bunin: gain stability vs LSs using LED from abort gap
 	h_bcnvsamplitude_HB->Fill( float(bcn) , amplitude );
 	h_bcnvsamplitude0_HB->Fill( float(bcn) , 1. );
@@ -10384,6 +10455,7 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
 	if(mdepth==3) h_mapDepth3ADCAmpl12SiPM_HE->Fill(double(ieta), double(iphi), ampl);
 	//
 	///////////////////////////////////////////////////////////////////////////////	//AZ: 21.09.2018 for Pavel Bunin:
+	/*
 	if(lscounterM1 == 11 ) {h_AiForLS_11_HE->Fill(amplitude, 1.);}
 	else if(lscounterM1 == 12 ) {h_AiForLS_12_HE->Fill(amplitude, 1.);}
 	else if(lscounterM1 == 13 ) {h_AiForLS_13_HE->Fill(amplitude, 1.);} 
@@ -10404,7 +10476,7 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
 	  h_mapAiForLS_good_HE->Fill(double(ieta), double(iphi), amplitude);
 	  h_map0AiForLS_good_HE->Fill(double(ieta), double(iphi), 1.);
 	}
-
+*/
 	///////////////////////////////////////////////////////////////////////////////	//AZ: 25.10.2018 for Pavel Bunin: gain stability vs LSs using LED from abort gap
 	h_bcnvsamplitude_HE->Fill( float(bcn) , amplitude );
 	h_bcnvsamplitude0_HE->Fill( float(bcn) , 1. );
@@ -10943,6 +11015,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
 	if(mdepth==2) h_mapDepth2ADCAmpl12_HF->Fill(double(ieta), double(iphi), ampl);
 	
 	///////////////////////////////////////////////////////////////////////////////	//AZ: 21.09.2018 for Pavel Bunin:
+	/*
 	if(lscounterM1 == 11 ) {h_AiForLS_11_HF->Fill(amplitude, 1.);}
 	else if(lscounterM1 == 12 ) {h_AiForLS_12_HF->Fill(amplitude, 1.);}
 	else if(lscounterM1 == 13 ) {h_AiForLS_13_HF->Fill(amplitude, 1.);} 
@@ -10963,7 +11036,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiIt
 	  h_mapAiForLS_good_HF->Fill(double(ieta), double(iphi), amplitude);
 	  h_map0AiForLS_good_HF->Fill(double(ieta), double(iphi), 1.);
 	}
-
+*/
 	///////////////////////////////////////////////////////////////////////////////	//AZ: 25.10.2018 for Pavel Bunin: gain stability vs LSs using LED from abort gap
 	h_bcnvsamplitude_HF->Fill( float(bcn) , amplitude );
 	h_bcnvsamplitude0_HF->Fill( float(bcn) , 1. );
@@ -11507,6 +11580,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHFQIE10(QIE10DataFrame qie10df)
       if(mdepth==4) h_mapDepth4ADCAmpl12_HF->Fill(double(ieta), double(iphi), ampl);
       
 	///////////////////////////////////////////////////////////////////////////////	//AZ: 21.09.2018 for Pavel Bunin:
+      /*
 	if(lscounterM1 == 11 ) {h_AiForLS_11_HF->Fill(amplitude, 1.);}
 	else if(lscounterM1 == 12 ) {h_AiForLS_12_HF->Fill(amplitude, 1.);}
 	else if(lscounterM1 == 13 ) {h_AiForLS_13_HF->Fill(amplitude, 1.);} 
@@ -11527,7 +11601,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHFQIE10(QIE10DataFrame qie10df)
 	  h_mapAiForLS_good_HF->Fill(double(ieta), double(iphi), amplitude);
 	  h_map0AiForLS_good_HF->Fill(double(ieta), double(iphi), 1.);
 	}
-
+*/
 	///////////////////////////////////////////////////////////////////////////////	//AZ: 25.10.2018 for Pavel Bunin: gain stability vs LSs using LED from abort gap
 	h_bcnvsamplitude_HF->Fill( float(bcn) , amplitude );
 	h_bcnvsamplitude0_HF->Fill( float(bcn) , 1. );
@@ -12048,6 +12122,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
 	if(mdepth==4) h_mapDepth4ADCAmpl12_HO->Fill(double(ieta), double(iphi), ampl);
 
 	///////////////////////////////////////////////////////////////////////////////	//AZ: 21.09.2018 for Pavel Bunin:
+	/*
 	if(lscounterM1 == 11 ) {h_AiForLS_11_HO->Fill(amplitude, 1.);}
 	else if(lscounterM1 == 12 ) {h_AiForLS_12_HO->Fill(amplitude, 1.);}
 	else if(lscounterM1 == 13 ) {h_AiForLS_13_HO->Fill(amplitude, 1.);} 
@@ -12068,7 +12143,7 @@ void VeRawAnalyzer::fillDigiAmplitudeHO(HODigiCollection::const_iterator& digiIt
 	  h_mapAiForLS_good_HO->Fill(double(ieta), double(iphi), amplitude);
 	  h_map0AiForLS_good_HO->Fill(double(ieta), double(iphi), 1.);
 	}
-
+*/
 	///////////////////////////////////////////////////////////////////////////////	//AZ: 25.10.2018 for Pavel Bunin: gain stability vs LSs using LED from abort gap
 	h_bcnvsamplitude_HO->Fill( float(bcn) , amplitude );
 	h_bcnvsamplitude0_HO->Fill( float(bcn) , 1. );
@@ -14031,7 +14106,15 @@ void VeRawAnalyzer::endJob(){
     h_mapDepth4AmplE34_HO->Write();
     h_mapDepth4_HO->Write();
 
-    //////////////////////////////////////////    
+    ////////////////////////////////////////// 
+    h_tdc_HE_tdc->Write();
+    h_tdc_HE_time->Write();
+    h_tdc_HE_time0->Write();
+    h_tdc_HE_ampldefault->Write();
+    h_tdc_HE_ampldefault50->Write();
+    h_tdc_HE_ampldefault63->Write();
+    h_tdc_HE_timeVSampldefault->Write();
+  
     h_ADCAmpl345Zoom_HE->Write();
     h_ADCAmpl345Zoom1_HE->Write();
     h_ADCAmpl345_HE->Write();
@@ -14392,6 +14475,7 @@ void VeRawAnalyzer::endJob(){
   h_sum0PedestalperLS8 ->Write()        ;
 
     // for estimator1:
+  /*
 h_AiForLS_11_HB->Write(); 
 h_AiForLS_12_HB->Write(); 
 h_AiForLS_13_HB->Write(); 
@@ -14404,7 +14488,6 @@ h_AiForLS_456_HB->Write();
 h_AiForLS_bad_HB->Write(); 
 h_AiForLS_444_HB->Write(); 
 h_AiForLS_good_HB->Write();
-
 h_mapAiForLS_bad_HB->Write();
 h_map0AiForLS_bad_HB->Write();
 h_mapAiForLS_good_HB->Write();
@@ -14460,6 +14543,7 @@ h_AiForLS_456_HF->Write();
 h_AiForLS_bad_HF->Write(); 
 h_AiForLS_444_HF->Write(); 
 h_AiForLS_good_HF->Write();
+*/
 
 
 // for gain stability vs LS:
