@@ -1,7 +1,7 @@
 #!/bin/bash
 
 WebDir='/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring'
-WebSite='https://cms-conddb-dev.cern.ch/eosweb/hcal/HcalRemoteMonitoring'
+WebSite='https://cms-conddb.cern.ch/eosweb/hcal/HcalRemoteMonitoring'
 HistoDir='/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos'
 eos='/afs/cern.ch/project/eos/installation/0.3.15/bin/eos.select'
 
@@ -179,7 +179,7 @@ cat index.html | head -n -1 > index_draft.html
 #for i in ${runListEOSall} ; do
 #let "k = k + 1"
 #done
-k=1953
+k=2014
 ########################################## type by hands number of new runs k=k-number:
 #let "k = k - 1"
 echo ' ================>>>    k in old list = '$k
