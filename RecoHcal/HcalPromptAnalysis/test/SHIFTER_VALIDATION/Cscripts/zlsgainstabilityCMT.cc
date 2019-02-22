@@ -31,12 +31,12 @@ int main(int argc, char *argv[])
       printf("reco: gROOT Reset \n");
         gROOT->Reset();
         gROOT->SetStyle("Plain");
-	//		gStyle->SetOptStat(0);   //  no statistics _or_
+				gStyle->SetOptStat(0);   //  no statistics _or_
 	//	        	  gStyle->SetOptStat(11111111);
 	//gStyle->SetOptStat(1101);// name mean and rms 
 	//	gStyle->SetOptStat(0101);// name and entries
 	//	   gStyle->SetOptStat(1100);// mean and rms only !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		gStyle->SetOptStat(1110000);// und over, integral !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//	gStyle->SetOptStat(1110000);// und over, integral !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	//	gStyle->SetOptStat(101110);                                          // entries, mean, rms, overflow !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		  			//	gStyle->SetOptStat(100000);//  over !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		//
@@ -122,21 +122,21 @@ int main(int argc, char *argv[])
 //	TFile *hfile1= new TFile("Global_321625.root", "READ");
 //	TFile *hfile1= new TFile("Global_321313.root", "READ");
 
+
 //////////////////////////////////////////////////////////////////////////////// abort gap:
 //	TFile *hfile1= new TFile("Global_321177_41_abortgap.root", "READ");
 //	TFile *hfile1= new TFile("Global_321177_ls1to600_abortgap.root", "READ");
 //	TFile *hfile1= new TFile("Global_321177_ls1to600_abortgap_no41.root", "READ");
 //	TFile *hfile1= new TFile("Global_325001_ls1to600_abortgap.root", "READ");
 
-//	TFile *hfile1= new TFile("Global_RBX_325001.root", "READ");
-	TFile *hfile1= new TFile("Global_RBX_321177.root", "READ");
+	TFile *hfile1= new TFile("Global_RBX_325001.root", "READ");
+//	TFile *hfile1= new TFile("Global_RBX_321177.root", "READ");
 
         //	TFile *hfile1= new TFile("Global_321758.root", "READ");
 	//	TFile *hfile1= new TFile("Global_321773.root", "READ");
 	//	TFile *hfile1= new TFile("Global_321774.root", "READ");
 	//	TFile *hfile1= new TFile("Global_321775.root", "READ");
 
-	//	TFile *hfile1= new TFile("Global_RBX_321177_1.root", "READ");
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//    getchar();
@@ -687,25 +687,24 @@ int main(int argc, char *argv[])
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       TH2F *Cefz1KKK= (TH2F*)hfile1->Get("h_2DsumADCAmplEtaPhiLs0");
       TH2F *Cefz1LLL= (TH2F*)hfile1->Get("h_2DsumADCAmplEtaPhiLs00");
-      TH2F* Cefz100 = (TH2F*)Cefz1LLL->Clone("Cefz100");
-      Cefz100->Divide(Cefz1KKK,Cefz1LLL, 1, 1, "B");// average A
-      nx = Cefz100->GetXaxis()->GetNbins();
-      ny = Cefz100->GetYaxis()->GetNbins();
-      nx = maxbins;
-
-
+      TH2F* Cefz1 = (TH2F*)Cefz1LLL->Clone("Cefz1");
+      Cefz1->Divide(Cefz1KKK,Cefz1LLL, 1, 1, "B");// average A
+      Cefz1->Sumw2();
       //  maxbins, 1., maxbins+1.);
       int sumijhb = 0;
       c1->cd(1);
       maxbinx = 0;
       maxbiny = 0;
+      nx = Cefz1->GetXaxis()->GetNbins();
+      ny = Cefz1->GetYaxis()->GetNbins();
+      nx = maxbins;
       cout<<"Page11: HB h_2DsumADCAmplEtaPhiLs0         nx=     "<< nx <<" ny=     "<< ny <<endl;
-      TH1F* ADCAmplLS0 = new TH1F("ADCAmplLS0","", 1000, 0., 1000.);
+      TH1F* ADCAmplLS0 = new TH1F("ADCAmplLS0","", 100, 0., 50.);
       // i - # LSs:
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
       for (int j=1;j<=ny;j++) {
-	double ccc1 =  Cefz100->GetBinContent(i,j);
+	double ccc1 =  Cefz1->GetBinContent(i,j);
 	if(ccc1>0.) {
 	  sumijhb++;
 	  maxbinx = i; if(i>maxbinx) maxbinx = i;
@@ -720,21 +719,6 @@ int main(int argc, char *argv[])
       //      ADCAmplLS0 ->Draw("L");
             ADCAmplLS0 ->Draw("Error");
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  maxbins, 1., maxbins+1.);
-      int avA_HB = 100.;
-      cout<<"*******************************************************  avA_HB=  "<<  avA_HB <<endl;
-      TH2F* Cefz1 = (TH2F*)Cefz100->Clone("Cefz1");
-      // i - # LSs:
-      for (int i=1;i<=nx;i++) {
-	// j - etaphi index:
-	for (int j=1;j<=ny;j++) {
-	  double ccc1 =  Cefz100->GetBinContent(i,j)   ;
-	  Cefz1->SetBinContent(i,j,0.);
-	  //	if(ccc1>0.) cout<<" ibin=     "<< i <<" jbin=     "<< j <<" nevents=     "<< ccc1 <<endl;
-	  //	  if(ccc1 >150.&& ccc1<1000.)  Cefz1->SetBinContent(i,j,ccc1);
-	  if(ccc1 > 0. && ccc1 >avA_HB )  Cefz1->SetBinContent(i,j,ccc1);
-	  //	  Cefz1->SetBinContent(i,j,ccc1);
-	}
-      }
       c1->cd(2);
       TH1F* ADCAmplLS = new TH1F("ADCAmplLS","", maxbins, 1., maxbins+1.);
       // i - # LSs:
@@ -757,7 +741,7 @@ int main(int argc, char *argv[])
 
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       c1->cd(3);
-      TH1F* ADCAmplLS1 = new TH1F("ADCAmplLS1","", 200, 0., 1000.);
+      TH1F* ADCAmplLS1 = new TH1F("ADCAmplLS1","", 200, 0., 100.);
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
       for (int j=1;j<=ny;j++) {
@@ -812,12 +796,11 @@ int main(int argc, char *argv[])
     //======================================================================
     //======================================================================
       c1->Clear();
-
+      //    c1->Divide(1,3);
       double ccc0HB = 0.;
       gStyle->SetOptStat(1110000);                     
-
-      c1->Divide(1,3);
-      /*      
+      c1->Divide(2,3);
+      
       c1->cd(1);
       nx = Cefz1->GetXaxis()->GetNbins();
       ny = Cefz1->GetYaxis()->GetNbins();
@@ -853,10 +836,10 @@ int main(int argc, char *argv[])
       c1->cd(3);
       GainStability2 ->SetMarkerStyle(20);GainStability2 ->SetMarkerSize(0.4);GainStability2 ->GetYaxis()->SetLabelSize(0.04);GainStability2 ->SetXTitle("GainStability2 \b");GainStability2 ->SetMarkerColor(2);GainStability2 ->SetLineColor(0);// GainStability2 ->SetMaximum(30.0);// GainStability2 ->SetMinimum(20.0); // gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
       GainStability2 ->Draw("Error");
-*/      
+      
        //====================================================================== 
       //================
-      c1->cd(1);
+      c1->cd(4);
       TH1F* Ghb5 = new TH1F("Ghb5","", nx, 1., nx+1.);
       //    TH1F* Ghb51 = new TH1F("Ghb51","", nx, 1., nx+1.);
       //    TH1F* Ghb50= new TH1F("Ghb50","", nx, 1., nx+1.);
@@ -887,7 +870,7 @@ int main(int argc, char *argv[])
       Ghb5->GetYaxis()->SetLabelSize(0.025);
       Ghb5 ->Draw("Error");
 //================
-      c1->cd(2);
+      c1->cd(5);
       TH2F* Ghb60    = new TH2F("Ghb60","",  22, -11., 11., 18, 0., 18. );
       TH2F* Ghb61    = new TH2F("Ghb61","",  22, -11., 11., 18, 0., 18. );
       TH2F* Ghb6     = new TH2F("Ghb6","",   22, -11., 11., 18, 0., 18. );
@@ -908,9 +891,7 @@ int main(int argc, char *argv[])
       cout<<"22HB-2    meanjHB=  "<< meanjHB <<"  sigmajHB=  "<< sigmajHB <<"  dif3rmsHBMIN=  "<< dif3rmsHBMIN <<"  dif3rmsHBMAX=  "<< dif3rmsHBMAX <<endl;
       
       double MAXdif3rmsHBMIN =dif3rmsHBMIN;double MINdif3rmsHBMAX = dif3rmsHBMAX;
-          if(MAXdif3rmsHBMIN<0.999) MAXdif3rmsHBMIN=0.999;if(MINdif3rmsHBMAX>1.001) MINdif3rmsHBMAX=1.001;
-      //      if(MAXdif3rmsHBMIN<0.55) MAXdif3rmsHBMIN=0.55;if(MINdif3rmsHBMAX>1.45) MINdif3rmsHBMAX=1.45;
-      //      if(MAXdif3rmsHBMIN<0.55) MAXdif3rmsHBMIN=0.55;if(MINdif3rmsHBMAX>40.) MINdif3rmsHBMAX=40.;
+      if(MAXdif3rmsHBMIN<0.95) MAXdif3rmsHBMIN=0.95;if(MINdif3rmsHBMAX>1.05) MINdif3rmsHBMAX=1.05;
       cout<< "22HB-2     MAXdif3rmsHBMIN=  " <<MAXdif3rmsHBMIN  << "     MINdif3rmsHBMAX=  " <<MINdif3rmsHBMAX  <<endl;
       //
       for (int j=1;j<=ny;j++) {
@@ -934,14 +915,13 @@ int main(int argc, char *argv[])
       //      Ghb6->GetZaxis()->SetLabelOffset(-0.05);
       Ghb6->GetZaxis()->SetLabelSize(0.025);
 
-      Ghb6->SetXTitle("<Rj> outside_Cuts         #eta  \b"); Ghb6->SetYTitle("      #phi \b"); Ghb6->SetTitle("<Rj> for |1-<R>| > 0.05 \b");     //      Ghb6->SetMaximum(1.000);  //      Ghb6->SetMinimum(1.0); //Ghb6->SetZTitle("Rij averaged over LSs \b"); //Ghb6->GetZaxis()->SetLabelSize(0.04); //Ghb6->SetMarkerStyle(20);// Ghb6->SetMarkerSize(0.4);//Ghb6->SetMarkerColor(2); //Ghb6->SetLineColor(2); 
+      Ghb6->SetXTitle("             #eta  \b"); Ghb6->SetYTitle("      #phi \b"); Ghb6->SetTitle("<Rj> for |1-<R>| > 0.05 \b");     //      Ghb6->SetMaximum(1.000);  //      Ghb6->SetMinimum(1.0); //Ghb6->SetZTitle("Rij averaged over LSs \b"); //Ghb6->GetZaxis()->SetLabelSize(0.04); //Ghb6->SetMarkerStyle(20);// Ghb6->SetMarkerSize(0.4);//Ghb6->SetMarkerColor(2); //Ghb6->SetLineColor(2); 
       //gStyle->SetOptStat(kFALSE);
       Ghb6->SetStats(0);
       Ghb6->Draw("COLZ");
       //================
-      c1->cd(3);
-          TH1F* Ghb7 = new TH1F("Ghb7","", 100, 0.99, 1.01);
-      //      TH1F* Ghb7 = new TH1F("Ghb7","", 20, 0., 20.);
+      c1->cd(6);
+      TH1F* Ghb7 = new TH1F("Ghb7","", 120, 0.4, 1.6);
       // j - etaphi index:
       for (int j=1;j<=ny;j++) {
 	ccc0HB =  Cefz1->GetBinContent(1,j);
@@ -955,11 +935,10 @@ int main(int argc, char *argv[])
 	      Ghb7 ->Fill( Rij );
 	    }}}}
       Ghb7 ->SetMarkerStyle(20);Ghb7 ->SetMarkerSize(0.4);Ghb7 ->GetYaxis()->SetLabelSize(0.04);Ghb7 ->SetMarkerColor(2);Ghb7 ->SetLineColor(0);
-      Ghb7->SetYTitle("        N  \b");  Ghb7->SetXTitle("HB   Rij \b");
+      Ghb7->SetYTitle("        N  \b");  Ghb7->SetXTitle("     Rij \b");Ghb7->SetTitle(" Rij \b");
       //Ghb7->SetMinimum(0.8);Ghb7->SetMaximum(500.);
       gPad->SetGridy();gPad->SetGridx(); //            gPad->SetLogy();    
       //      Ghb7->SetStats(1110000);
-      // gPad->SetLogy(); 
       Ghb7->GetYaxis()->SetLabelSize(0.025);
       Ghb7 ->Draw("Error");
       Float_t ymaxHB = Ghb7->GetMaximum();
@@ -967,12 +946,12 @@ int main(int argc, char *argv[])
       TLine *lineHB = new TLine(MAXdif3rmsHBMIN,0.,MAXdif3rmsHBMIN,ymaxHB);lineHB->SetLineColor(kBlue);lineHB->Draw();
       TLine *line1HB= new TLine(MINdif3rmsHBMAX,0.,MINdif3rmsHBMAX,ymaxHB);line1HB->SetLineColor(kBlue);line1HB->Draw();      
 
-       //======================================================================
     //================
       //	
       // gain stabilitY:
       // Rij = Aij / A1j , where i-over LSs, j-channels
       //
+
       /*
       double ccc0 = 0.;
 //================      
@@ -1448,24 +1427,24 @@ int main(int argc, char *argv[])
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       TH2F *Sefz1KKK= (TH2F*)hfile1->Get("h_2DsumADCAmplEtaPhiLs1");
       TH2F *Sefz1LLL= (TH2F*)hfile1->Get("h_2DsumADCAmplEtaPhiLs10");
-      TH2F* Sefz100 = (TH2F*)Sefz1LLL->Clone("Sefz100");
-      Sefz100->Divide(Sefz1KKK,Sefz1LLL, 1, 1, "B");// average A
-      Sefz100->Sumw2();
+      TH2F* Sefz1 = (TH2F*)Sefz1LLL->Clone("Sefz1");
+      Sefz1->Divide(Sefz1KKK,Sefz1LLL, 1, 1, "B");// average A
+      Sefz1->Sumw2();
 
       c1->cd(1);
       maxbinx = 0;
       maxbiny = 0;
       int sumijhe = 0;
-      nx = Sefz100->GetXaxis()->GetNbins();
-      ny = Sefz100->GetYaxis()->GetNbins();
+      nx = Sefz1->GetXaxis()->GetNbins();
+      ny = Sefz1->GetYaxis()->GetNbins();
       nx = maxbins;
       cout<<"HE h_2DsumADCAmplEtaPhiLs0         nx=     "<< nx <<" ny=     "<< ny <<endl;
       // i - # LSs:
-      TH1F* Sefw0 = new TH1F("Sefw0","", 500, 800., 1800.);
+      TH1F* Sefw0 = new TH1F("Sefw0","", 200, 0., 15000.);
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
       for (int j=1;j<=ny;j++) {
-	double ccc1 =  Sefz100->GetBinContent(i,j);
+	double ccc1 =  Sefz1->GetBinContent(i,j);
 	if(ccc1>0.) {
 	  sumijhe++;
 	  maxbinx = i; if(i>maxbinx) maxbinx = i;
@@ -1474,27 +1453,12 @@ int main(int argc, char *argv[])
 	  Sefw0 ->Fill(ccc1);
 	}
       }}
-      int avA_HE = 1270.;
-      cout<<"*******************************************************  avA_HE=  "<<  avA_HE <<endl;
       cout<<"HE maxbinx=  "<< maxbinx<<"     maxbiny=  "<< maxbiny <<"     sumijhe=  "<< sumijhe <<endl;
       Sefw0 ->SetMarkerStyle(20);Sefw0 ->SetMarkerSize(0.4);Sefw0 ->GetYaxis()->SetLabelSize(0.04);Sefw0 ->SetXTitle("<A>ijk = <A> averaged per events in k-th LS \b");Sefw0->SetYTitle("     HE \b");Sefw0->SetMarkerColor(2);Sefw0 ->SetLineColor(0);  Sefw0->SetMinimum(10.);
       gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
       //      Sefw0 ->Draw("L");
             Sefw0 ->Draw("Error");
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      TH2F* Sefz1 = (TH2F*)Sefz100->Clone("Sefz1");
-      // i - # LSs:
-      for (int i=1;i<=nx;i++) {
-	// j - etaphi index:
-	for (int j=1;j<=ny;j++) {
-	  double ccc1 =  Sefz100->GetBinContent(i,j)   ;
-	  Sefz1->SetBinContent(i,j,0.);
-	  //	if(ccc1>0.) cout<<" ibin=     "<< i <<" jbin=     "<< j <<" nevents=     "<< ccc1 <<endl;
-	  //	  if(ccc1 >150.&& ccc1<1000.)  Sefz1->SetBinContent(i,j,ccc1);
-	  if(ccc1 > 0. && ccc1 >1270. )  Sefz1->SetBinContent(i,j,ccc1);
-	  //	  Sefz1->SetBinContent(i,j,ccc1);
-	}
-      }
       c1->cd(2);
       TH1F* Sefw = new TH1F("Sefw","", maxbins, 1., maxbins+1.);
       // i - # LSs:
@@ -1517,7 +1481,7 @@ int main(int argc, char *argv[])
 
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       c1->cd(3);
-      TH1F* Sefw1 = new TH1F("Sefw1","", 500, 0., 5000.);
+      TH1F* Sefw1 = new TH1F("Sefw1","", 100, 0., 9000.);
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
       for (int j=1;j<=ny;j++) {
@@ -1569,11 +1533,8 @@ int main(int argc, char *argv[])
     //======================================================================
     //======================================================================
       c1->Clear();
-      gStyle->SetOptStat(1110000);                     
-
-      double ccc0E = 0.;
-      c1->Divide(1,3);
-      /*    
+      c1->Divide(2,3);
+      
       c1->cd(1);
       nx = Sefz1->GetXaxis()->GetNbins();
       ny = Sefz1->GetYaxis()->GetNbins();
@@ -1609,13 +1570,14 @@ int main(int argc, char *argv[])
       c1->cd(3);
       Sefk2 ->SetMarkerStyle(20);Sefk2 ->SetMarkerSize(0.4);Sefk2 ->GetYaxis()->SetLabelSize(0.04);Sefk2 ->SetXTitle("Sefk2 \b");Sefk2 ->SetMarkerColor(2);Sefk2 ->SetLineColor(0);// Sefk2 ->SetMaximum(30.0);// Sefk2 ->SetMinimum(20.0); // gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
       Sefk2 ->Draw("Error");
-*/    
+      
        //======================================================================
     //================
       //	
       // gain stabilitY:
       // Rij = Aij / A1j , where i-over LSs, j-channels
       //
+      double ccc0E = 0.;
 //================      
 /*
       c1->cd(4);
@@ -1658,27 +1620,30 @@ int main(int argc, char *argv[])
 */
 //================      
 
-      c1->cd(1);
-      TH1F* Sefz5 = new TH1F("Sefz5","", maxbins, 1., maxbins+1.);
-      //    TH1F* Sefz51 = new TH1F("Sefz51","", maxbins, 1., maxbins+1.);
-      //    TH1F* Sefz50= new TH1F("Sefz50","", maxbins, 1., maxbins+1.);
-      //    TH1F* Sefz5 = (TH1F*)Sefz50->Clone("Sefz5");
+      c1->cd(4);
+      //    TH1F* Sefz5 = new TH1F("Sefz5","", maxbins, 1., maxbins+1.);
+          TH1F* Sefz51 = new TH1F("Sefz51","", maxbins, 1., maxbins+1.);
+          TH1F* Sefz50= new TH1F("Sefz50","", maxbins, 1., maxbins+1.);
+          TH1F* Sefz5 = (TH1F*)Sefz50->Clone("Sefz5");
       // j - etaphi index:
       for (int j=1;j<=ny;j++) {
 	ccc0E =  Sefz1->GetBinContent(1,j);
 	//	if(ccc0E <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Sefz1->GetBinContent(i,j);if(ccc2>0.){ccc0E=ccc2;cout<<"!!! ccc0E= "<<ccc0E<<endl;break;} }
 	if(ccc0E <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Sefz1->GetBinContent(i,j);if(ccc2>0.){ccc0E=ccc2;break;} }
+
+cout<<"!!! ccc0E= "<<ccc0E<<endl;
+
 	if(ccc0E>0.) { 
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Sefz1->GetBinContent(i,j);
 	    if(ccc1>0.) {
 	      double Rij = ccc1/ccc0E;		  
-	      Sefz5 ->Fill( float(i), Rij);
-	      //	      Sefz51 ->Fill( float(i), Rij);
-	      //	      Sefz50->Fill( float(i), 1.);
+	  //    Sefz5 ->Fill( float(i), Rij);
+	      	      Sefz51 ->Fill( float(i), Rij);
+	      	      Sefz50->Fill( float(i), 1.);
 	    }}}}
-      //    Sefz5->Divide(Sefz51,Sefz50, 1, 1, "B");// average A
+          Sefz5->Divide(Sefz51,Sefz50, 1, 1, "B");// average A
       for (int jeta=1;jeta<=maxbins;jeta++) {Sefz5->SetBinError(jeta,0.0001);}
       Sefz5 ->SetMarkerStyle(20);Sefz5 ->SetMarkerSize(0.4);Sefz5 ->GetYaxis()->SetLabelSize(0.04);Sefz5 ->SetMarkerColor(2);Sefz5 ->SetLineColor(0);
       Sefz5->SetXTitle("        iLS  \b");  Sefz5->SetYTitle("     <R> \b");
@@ -1688,7 +1653,7 @@ int main(int argc, char *argv[])
       Sefz5 ->Draw("Error");
 
 //================
-      c1->cd(2);
+      c1->cd(5);
       TH2F* Sefz60    = new TH2F("Sefz60","",  22, -11., 11., 18, 0., 18. );
       TH2F* Sefz61    = new TH2F("Sefz61","",  22, -11., 11., 18, 0., 18. );
       TH2F* Sefz6     = new TH2F("Sefz6","",  22, -11., 11., 18, 0., 18. );
@@ -1709,7 +1674,7 @@ int main(int argc, char *argv[])
       cout<<"22-5    meanj=  "<< meanj <<"  sigmaj=  "<< sigmaj <<"  dif3rmsMIN=  "<< dif3rmsMIN <<"  dif3rmsMAX=  "<< dif3rmsMAX <<endl;
       
       double MAXdif3rmsMIN =dif3rmsMIN;double MINdif3rmsMAX = dif3rmsMAX;
-      if(MAXdif3rmsMIN<0.999) MAXdif3rmsMIN=0.999;if(MINdif3rmsMAX>1.001) MINdif3rmsMAX=1.001;
+      if(MAXdif3rmsMIN<0.95) MAXdif3rmsMIN=0.95;if(MINdif3rmsMAX>1.05) MINdif3rmsMAX=1.05;
       cout<< "22-5     MAXdif3rmsMIN=  " <<MAXdif3rmsMIN  << "     MINdif3rmsMAX=  " <<MINdif3rmsMAX  <<endl;
       //
       for (int j=1;j<=ny;j++) {
@@ -1733,8 +1698,8 @@ int main(int argc, char *argv[])
       Sefz6->SetMarkerStyle(20); Sefz6->SetMarkerSize(0.4); Sefz6->GetZaxis()->SetLabelSize(0.04); Sefz6->SetXTitle("<Rj> outside_Cuts         #eta  \b"); Sefz6->SetYTitle("      #phi \b"); Sefz6->SetZTitle("Rij averaged over LSs \b"); Sefz6->SetMarkerColor(2); Sefz6->SetLineColor(2);      //      Sefz6->SetMaximum(1.000);  //      Sefz6->SetMinimum(1.0);
       Sefz6->Draw("COLZ");
 //================
-      c1->cd(3);
-      TH1F* Sefz7 = new TH1F("Sefz7","", 100, 0.99, 1.01);
+      c1->cd(6);
+      TH1F* Sefz7 = new TH1F("Sefz7","", 120, 0.4, 1.6);
       // j - etaphi index:
       for (int j=1;j<=ny;j++) {
 	ccc0E =  Sefz1->GetBinContent(1,j);
@@ -1748,7 +1713,7 @@ int main(int argc, char *argv[])
 	      Sefz7 ->Fill( Rij );
 	    }}}}
       Sefz7 ->SetMarkerStyle(20);Sefz7 ->SetMarkerSize(0.4);Sefz7 ->GetYaxis()->SetLabelSize(0.04);Sefz7 ->SetMarkerColor(2);Sefz7 ->SetLineColor(0);
-      Sefz7->SetYTitle("        N  \b");  Sefz7->SetXTitle("HE   Rij \b");
+      Sefz7->SetYTitle("        N  \b");  Sefz7->SetXTitle("     Rij \b");
       //Sefz7->SetMinimum(0.8);Sefz7->SetMaximum(500.);
       //            gPad->SetLogy();
       gPad->SetGridy();gPad->SetGridx();     
@@ -1763,7 +1728,6 @@ int main(int argc, char *argv[])
       
       
        c1->Update();
-            gStyle->SetOptStat(0);
 
 
 
@@ -2238,24 +2202,24 @@ int main(int argc, char *argv[])
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       TH2F *Yefz1KKK= (TH2F*)hfile1->Get("h_2DsumADCAmplEtaPhiLs2");
       TH2F *Yefz1LLL= (TH2F*)hfile1->Get("h_2DsumADCAmplEtaPhiLs20");
-      TH2F* Yefz100 = (TH2F*)Yefz1LLL->Clone("Yefz100");
-      Yefz100->Divide(Yefz1KKK,Yefz1LLL, 1, 1, "B");// average A
-      Yefz100->Sumw2();
+      TH2F* Yefz1 = (TH2F*)Yefz1LLL->Clone("Yefz1");
+      Yefz1->Divide(Yefz1KKK,Yefz1LLL, 1, 1, "B");// average A
+      Yefz1->Sumw2();
 
       c1->cd(1);
       maxbinx = 0;
       maxbiny = 0;
       int sumijho = 0;
-      nx = Yefz100->GetXaxis()->GetNbins();
-      ny = Yefz100->GetYaxis()->GetNbins();
+      nx = Yefz1->GetXaxis()->GetNbins();
+      ny = Yefz1->GetYaxis()->GetNbins();
       nx = maxbins;
       cout<<"HO h_2DsumADCAmplEtaPhiLs0         nx=     "<< nx <<" ny=     "<< ny <<endl;
       // i - # LSs:
-      TH1F* Yefw0 = new TH1F("Yefw0","", 200, 0., 8000.);
+      TH1F* Yefw0 = new TH1F("Yefw0","", 200, 0., 1000.);
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
       for (int j=1;j<=ny;j++) {
-	double ccc1 =  Yefz100->GetBinContent(i,j);
+	double ccc1 =  Yefz1->GetBinContent(i,j);
 	if(ccc1>0.) {
 	  sumijho++;
 	  maxbinx = i; if(i>maxbinx) maxbinx = i;
@@ -2271,22 +2235,6 @@ int main(int argc, char *argv[])
       //      Yefw0 ->Draw("L");
             Yefw0 ->Draw("Error");
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      int avA_HO = 190.;
-      cout<<"*******************************************************  avA_HO=  "<<  avA_HO <<endl;
-      cout<<"HE maxbinx=  "<< maxbinx<<"     maxbiny=  "<< maxbiny <<"     sumijhe=  "<< sumijhe <<endl;
-      TH2F* Yefz1 = (TH2F*)Yefz100->Clone("Yefz1");
-      // i - # LSs:
-      for (int i=1;i<=nx;i++) {
-	// j - etaphi index:
-	for (int j=1;j<=ny;j++) {
-	  double ccc1 =  Yefz100->GetBinContent(i,j)   ;
-	  Yefz1->SetBinContent(i,j,0.);
-	  //	if(ccc1>0.) cout<<" ibin=     "<< i <<" jbin=     "<< j <<" nevents=     "<< ccc1 <<endl;
-	  //	  if(ccc1 >150.&& ccc1<1000.)  Yefz1->SetBinContent(i,j,ccc1);
-	  if(ccc1 > 0. && ccc1 >avA_HO )  Yefz1->SetBinContent(i,j,ccc1);
-	  //	  Yefz1->SetBinContent(i,j,ccc1);
-	}
-      }
       c1->cd(2);
       TH1F* Yefw = new TH1F("Yefw","", maxbins, 1., maxbins+1.);
       // i - # LSs:
@@ -2313,7 +2261,7 @@ int main(int argc, char *argv[])
 
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       c1->cd(3);
-      TH1F* Yefw1 = new TH1F("Yefw1","", 100, 0., 2000.);
+      TH1F* Yefw1 = new TH1F("Yefw1","", 100, 0., 200.);
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
       for (int j=1;j<=ny;j++) {
@@ -2365,11 +2313,8 @@ int main(int argc, char *argv[])
     //======================================================================
     //======================================================================
       c1->Clear();
-      double ccc0HO = 0.;
-      gStyle->SetOptStat(1110000);                     
-
       c1->Divide(1,3);
-      /*    
+      
       c1->cd(1);
       nx = Yefz1->GetXaxis()->GetNbins();
       ny = Yefz1->GetYaxis()->GetNbins();
@@ -2405,123 +2350,11 @@ int main(int argc, char *argv[])
       c1->cd(3);
       Yefk2 ->SetMarkerStyle(20);Yefk2 ->SetMarkerSize(0.4);Yefk2 ->GetYaxis()->SetLabelSize(0.04);Yefk2 ->SetXTitle("Yefk2 \b");Yefk2 ->SetMarkerColor(2);Yefk2 ->SetLineColor(0);// Yefk2 ->SetMaximum(30.0);// Yefk2 ->SetMinimum(20.0); // gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
       Yefk2 ->Draw("Error");
-*/    
+      
       ////////////////////////////////////////////////////////////////////////////////////
-      //================
-      c1->cd(1);
-      TH1F* Gho5 = new TH1F("Gho5","", nx, 1., nx+1.);
-      //    TH1F* Gho51 = new TH1F("Gho51","", nx, 1., nx+1.);
-      //    TH1F* Gho50= new TH1F("Gho50","", nx, 1., nx+1.);
-      //    TH1F* Gho5 = (TH1F*)Gho50->Clone("Gho5");
-      // j - etaphi index:
-      for (int j=1;j<=ny;j++) {
-	ccc0HO =  Yefz1->GetBinContent(1,j);
-	//	if(ccc0HO <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Yefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HO=ccc2;cout<<"!!! ccc0HO= "<<ccc0HO<<endl;break;} }
-	if(ccc0HO <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Yefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HO=ccc2;break;} }
-	if(ccc0HO>0.) { 
-	  // i - # LSs:
-	  for (int i=1;i<=nx;i++) {
-	    double ccc1 =  Yefz1->GetBinContent(i,j);
-	    if(ccc1>0.) {
-	      double Rij = ccc1/ccc0HO;		  
-	      Gho5 ->Fill( float(i), Rij);
-	      //	      Gho51 ->Fill( float(i), Rij);
-	      //	      Gho50->Fill( float(i), 1.);
-	    }}}}
-      //    Gho5->Divide(Gho51,Gho50, 1, 1, "B");// average A
-      for (int i=1;i<=nx;i++) {Gho5->SetBinError(i,0.0001);}
-      Gho5 ->SetMarkerStyle(20);Gho5 ->SetMarkerSize(0.4);Gho5 ->GetYaxis()->SetLabelSize(0.04);Gho5 ->SetMarkerColor(2);Gho5 ->SetLineColor(0);
-      Gho5->SetXTitle("        iLS  \b");  Gho5->SetYTitle("     <R> \b"); Gho5->SetTitle("<Ri> vs iLS \b");
-      Gho5->SetMinimum(0.);//Gho5->SetMaximum(2.5);
-      //            gPad->SetLogy();
-      gPad->SetGridy();gPad->SetGridx();     
-      Gho5->SetStats(0);
-      Gho5->GetYaxis()->SetLabelSize(0.025);
-      Gho5 ->Draw("Error");
-//================
-      c1->cd(2);
-      TH2F* Gho60    = new TH2F("Gho60","",  22, -11., 11., 18, 0., 18. );
-      TH2F* Gho61    = new TH2F("Gho61","",  22, -11., 11., 18, 0., 18. );
-      TH2F* Gho6     = new TH2F("Gho6","",   22, -11., 11., 18, 0., 18. );
-      // j - etaphi index; i - # LSs; 
-      //
-      // define mean and RMS:
-      double sumjHO=0.; int njHO=0;double meanjHO=0.;
-      for (int j=1;j<=ny;j++) {ccc0HO =  Yefz1->GetBinContent(1,j);
-	if(ccc0HO <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Yefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HO=ccc2;break;} }
-	if(ccc0HO>0.){for (int i=1;i<=nx;i++) {double ccc1 =  Yefz1->GetBinContent(i,j)/ccc0HO;if(ccc1>0.){sumjHO += ccc1;njHO++;}} meanjHO=sumjHO/njHO;} }// j
       
-      double ssumjHO=0.; njHO=0;double sigmajHO=0.;
-      for (int j=1;j<=ny;j++) {ccc0HO =  Yefz1->GetBinContent(1,j);
-	if(ccc0HO <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Yefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HO=ccc2;break;} }
-	if(ccc0HO>0.){for (int i=1;i<=nx;i++) {double ccc1 =  Yefz1->GetBinContent(i,j)/ccc0HO;if(ccc1>0.){ssumjHO += (ccc1-meanjHO)*(ccc1-meanjHO);njHO++;}} sigmajHO = sqrt(ssumjHO/njHO);} }// j
       
-      double dif3rmsHOMIN = meanjHO-3*sigmajHO;if(dif3rmsHOMIN<0.) dif3rmsHOMIN = 0.;  double dif3rmsHOMAX = meanjHO+3*sigmajHO;
-      cout<<"22HO-2    meanjHO=  "<< meanjHO <<"  sigmajHO=  "<< sigmajHO <<"  dif3rmsHOMIN=  "<< dif3rmsHOMIN <<"  dif3rmsHOMAX=  "<< dif3rmsHOMAX <<endl;
-      
-      double MAXdif3rmsHOMIN =dif3rmsHOMIN;double MINdif3rmsHOMAX = dif3rmsHOMAX;
-          if(MAXdif3rmsHOMIN<0.999) MAXdif3rmsHOMIN=0.999;if(MINdif3rmsHOMAX>1.001) MINdif3rmsHOMAX=1.001;
-      //      if(MAXdif3rmsHOMIN<0.55) MAXdif3rmsHOMIN=0.55;if(MINdif3rmsHOMAX>1.45) MINdif3rmsHOMAX=1.45;
-      //      if(MAXdif3rmsHOMIN<0.55) MAXdif3rmsHOMIN=0.55;if(MINdif3rmsHOMAX>40.) MINdif3rmsHOMAX=40.;
-      cout<< "22HO-2     MAXdif3rmsHOMIN=  " <<MAXdif3rmsHOMIN  << "     MINdif3rmsHOMAX=  " <<MINdif3rmsHOMAX  <<endl;
-      //
-      for (int j=1;j<=ny;j++) {
-	ccc0HO =  Yefz1->GetBinContent(1,j);
-	if(ccc0HO <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Yefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HO=ccc2;break;} }
-	if(ccc0HO>0.) { 
-	  int jeta = (j-1)/18;// jeta = 0-21
-	  int jphi = (j-1)-18*jeta;// jphi=0-17 
-	  // i - # LSs:
-	  for (int i=1;i<=nx;i++) {
-	    double ccc1 =  Yefz1->GetBinContent(i,j);
-	    if(ccc1>0.) {
-	      double Rij = ccc1/ccc0HO;		  
-	      if(Rij<MAXdif3rmsHOMIN || Rij>MINdif3rmsHOMAX) { Gho61->Fill(jeta-11,jphi,Rij); Gho60->Fill(jeta-11,jphi,1.); }
-	    }//if(ccc1>0.
-	  }// i
-	}//if(ccc0HO>0 
-      }// j
-      Gho6->Divide(Gho61,Gho60, 1, 1, "B");// average R
-      //      Gho6->SetLabelOffset (Float_t offset=0.005, Option_t *axis="X")//Set offset between axis and axis' labels
-      //      Gho6->GetZaxis()->SetLabelOffset(-0.05);
-      Gho6->GetZaxis()->SetLabelSize(0.025);
-
-      Gho6->SetXTitle("<Rj> outside_Cuts         #eta  \b"); Gho6->SetYTitle("      #phi \b"); Gho6->SetTitle("<Rj> for |1-<R>| > 0.05 \b");     //      Gho6->SetMaximum(1.000);  //      Gho6->SetMinimum(1.0); //Gho6->SetZTitle("Rij averaged over LSs \b"); //Gho6->GetZaxis()->SetLabelSize(0.04); //Gho6->SetMarkerStyle(20);// Gho6->SetMarkerSize(0.4);//Gho6->SetMarkerColor(2); //Gho6->SetLineColor(2); 
-      //gStyle->SetOptStat(kFALSE);
-      Gho6->SetStats(0);
-      Gho6->Draw("COLZ");
-      //================
-      c1->cd(3);
-          TH1F* Gho7 = new TH1F("Gho7","", 100, 0.99, 1.01);
-      //      TH1F* Gho7 = new TH1F("Gho7","", 20, 0., 20.);
-      // j - etaphi index:
-      for (int j=1;j<=ny;j++) {
-	ccc0HO =  Yefz1->GetBinContent(1,j);
-	if(ccc0HO <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Yefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HO=ccc2;break;} }
-	if(ccc0HO>0.) { 
-	  // i - # LSs:
-	  for (int i=1;i<=nx;i++) {
-	    double ccc1 =  Yefz1->GetBinContent(i,j);
-	    if(ccc1>0.) {
-	      double Rij = ccc1/ccc0HO;		  
-	      Gho7 ->Fill( Rij );
-	    }}}}
-      Gho7 ->SetMarkerStyle(20);Gho7 ->SetMarkerSize(0.4);Gho7 ->GetYaxis()->SetLabelSize(0.04);Gho7 ->SetMarkerColor(2);Gho7 ->SetLineColor(0);
-      Gho7->SetYTitle("        N  \b");  Gho7->SetXTitle("HO   Rij \b");
-      //Gho7->SetMinimum(0.8);Gho7->SetMaximum(500.);
-      gPad->SetGridy();gPad->SetGridx(); //            gPad->SetLogy();    
-      //      Gho7->SetStats(1110000);
-      // gPad->SetLogy(); 
-      Gho7->GetYaxis()->SetLabelSize(0.025);
-      Gho7 ->Draw("Error");
-      Float_t ymaxHO = Gho7->GetMaximum();
-      cout<< "22HO-3   ymaxHO=  " <<ymaxHO  << "       MAXdif3rmsHOMIN=  " <<MAXdif3rmsHOMIN  << "         MINdif3rmsHOMAX=  " <<MINdif3rmsHOMAX  <<endl;
-      TLine *lineHO = new TLine(MAXdif3rmsHOMIN,0.,MAXdif3rmsHOMIN,ymaxHO);lineHO->SetLineColor(kBlue);lineHO->Draw();
-      TLine *line1HO= new TLine(MINdif3rmsHOMAX,0.,MINdif3rmsHOMAX,ymaxHO);line1HO->SetLineColor(kBlue);line1HO->Draw();      
-
-       //======================================================================
        c1->Update();
-            gStyle->SetOptStat(0);
 
 
 
@@ -2904,25 +2737,25 @@ int main(int argc, char *argv[])
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       TH2F *Gefz1KKK= (TH2F*)hfile1->Get("h_2DsumADCAmplEtaPhiLs3");
       TH2F *Gefz1LLL= (TH2F*)hfile1->Get("h_2DsumADCAmplEtaPhiLs30");
-      TH2F* Gefz100 = (TH2F*)Gefz1LLL->Clone("Gefz100");
-      Gefz100->Divide(Gefz1KKK,Gefz1LLL, 1, 1, "B");// average A
-      Gefz100->Sumw2();
+      TH2F* Gefz1 = (TH2F*)Gefz1LLL->Clone("Gefz1");
+      Gefz1->Divide(Gefz1KKK,Gefz1LLL, 1, 1, "B");// average A
+      Gefz1->Sumw2();
 
 
       c1->cd(1);
       maxbinx = 0;
       maxbiny = 0;
       int sumijhf = 0;
-      nx = Gefz100->GetXaxis()->GetNbins();
-      ny = Gefz100->GetYaxis()->GetNbins();
+      nx = Gefz1->GetXaxis()->GetNbins();
+      ny = Gefz1->GetYaxis()->GetNbins();
       nx = maxbins;
       cout<<"HF h_2DsumADCAmplEtaPhiLs0         nx=     "<< nx <<" ny=     "<< ny <<endl;
       // i - # LSs:
-      TH1F* Gefw0 = new TH1F("Gefw0","", 250, 0., 500.);
+      TH1F* Gefw0 = new TH1F("Gefw0","", 250, 0., 1500.);
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
       for (int j=1;j<=ny;j++) {
-	double ccc1 =  Gefz100->GetBinContent(i,j);
+	double ccc1 =  Gefz1->GetBinContent(i,j);
 	if(ccc1>0.) {
 	  sumijhf++;
 	  maxbinx = i; if(i>maxbinx) maxbinx = i;
@@ -2938,21 +2771,6 @@ int main(int argc, char *argv[])
       //      Gefw0 ->Draw("L");
             Gefw0 ->Draw("Error");
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      int avA_HF = 100.;
-      cout<<"*******************************************************  avA_HF=  "<<  avA_HF <<endl;
-      TH2F* Gefz1 = (TH2F*)Gefz100->Clone("Gefz1");
-      // i - # LSs:
-      for (int i=1;i<=nx;i++) {
-	// j - etaphi index:
-	for (int j=1;j<=ny;j++) {
-	  double ccc1 =  Gefz100->GetBinContent(i,j)   ;
-	  Gefz1->SetBinContent(i,j,0.);
-	  //	if(ccc1>0.) cout<<" ibin=     "<< i <<" jbin=     "<< j <<" nevents=     "<< ccc1 <<endl;
-	  //	  if(ccc1 >150.&& ccc1<1000.)  Gefz1->SetBinContent(i,j,ccc1);
-	  if(ccc1 > 0. && ccc1 >avA_HF )  Gefz1->SetBinContent(i,j,ccc1);
-	  //	  Gefz1->SetBinContent(i,j,ccc1);
-	}
-      }
       c1->cd(2);
       TH1F* Gefw = new TH1F("Gefw","", maxbins, 1., maxbins+1.);
       // i - # LSs:
@@ -2974,7 +2792,7 @@ int main(int argc, char *argv[])
 
 	    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       c1->cd(3);
-      TH1F* Gefw1 = new TH1F("Gefw1","", 200, 0., 200.);
+      TH1F* Gefw1 = new TH1F("Gefw1","", 150, 0., 500.);
       for (int i=1;i<=nx;i++) {
 	// j - etaphi index:
       for (int j=1;j<=ny;j++) {
@@ -3026,11 +2844,8 @@ int main(int argc, char *argv[])
     //======================================================================
     //======================================================================
       c1->Clear();
-      double ccc0HF = 0.;
-      gStyle->SetOptStat(1110000);                     
-
       c1->Divide(1,3);
-      /*    
+      
       c1->cd(1);
       nx = Gefz1->GetXaxis()->GetNbins();
       ny = Gefz1->GetYaxis()->GetNbins();
@@ -3066,124 +2881,9 @@ int main(int argc, char *argv[])
       c1->cd(3);
       Gefk2 ->SetMarkerStyle(20);Gefk2 ->SetMarkerSize(0.4);Gefk2 ->GetYaxis()->SetLabelSize(0.04);Gefk2 ->SetXTitle("Gefk2 \b");Gefk2 ->SetMarkerColor(2);Gefk2 ->SetLineColor(0);// Gefk2 ->SetMaximum(30.0);// Gefk2 ->SetMinimum(20.0); // gPad->SetLogy();gPad->SetGridy();gPad->SetGridx();     
       Gefk2 ->Draw("Error");
-*/    
+      
       ////////////////////////////////////////////////////////////////////////////////////
-      //================
-      c1->cd(1);
-      TH1F* Ghf5 = new TH1F("Ghf5","", nx, 1., nx+1.);
-      //    TH1F* Ghf51 = new TH1F("Ghf51","", nx, 1., nx+1.);
-      //    TH1F* Ghf50= new TH1F("Ghf50","", nx, 1., nx+1.);
-      //    TH1F* Ghf5 = (TH1F*)Ghf50->Clone("Ghf5");
-      // j - etaphi index:
-      for (int j=1;j<=ny;j++) {
-	ccc0HF =  Gefz1->GetBinContent(1,j);
-	//	if(ccc0HF <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Gefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HF=ccc2;cout<<"!!! ccc0HF= "<<ccc0HF<<endl;break;} }
-	if(ccc0HF <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Gefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HF=ccc2;break;} }
-	if(ccc0HF>0.) { 
-	  // i - # LSs:
-	  for (int i=1;i<=nx;i++) {
-	    double ccc1 =  Gefz1->GetBinContent(i,j);
-	    if(ccc1>0.) {
-	      double Rij = ccc1/ccc0HF;		  
-	      Ghf5 ->Fill( float(i), Rij);
-	      //	      Ghf51 ->Fill( float(i), Rij);
-	      //	      Ghf50->Fill( float(i), 1.);
-	    }}}}
-      //    Ghf5->Divide(Ghf51,Ghf50, 1, 1, "B");// average A
-      for (int i=1;i<=nx;i++) {Ghf5->SetBinError(i,0.0001);}
-      Ghf5 ->SetMarkerStyle(20);Ghf5 ->SetMarkerSize(0.4);Ghf5 ->GetYaxis()->SetLabelSize(0.04);Ghf5 ->SetMarkerColor(2);Ghf5 ->SetLineColor(0);
-      Ghf5->SetXTitle("        iLS  \b");  Ghf5->SetYTitle("     <R> \b"); Ghf5->SetTitle("<Ri> vs iLS \b");
-      Ghf5->SetMinimum(0.);//Ghf5->SetMaximum(2.5);
-      //            gPad->SetLogy();
-      gPad->SetGridy();gPad->SetGridx();     
-      Ghf5->SetStats(0);
-      Ghf5->GetYaxis()->SetLabelSize(0.025);
-      Ghf5 ->Draw("Error");
-//================
-      c1->cd(2);
-      TH2F* Ghf60    = new TH2F("Ghf60","",  22, -11., 11., 18, 0., 18. );
-      TH2F* Ghf61    = new TH2F("Ghf61","",  22, -11., 11., 18, 0., 18. );
-      TH2F* Ghf6     = new TH2F("Ghf6","",   22, -11., 11., 18, 0., 18. );
-      // j - etaphi index; i - # LSs; 
-      //
-      // define mean and RMS:
-      double sumjHF=0.; int njHF=0;double meanjHF=0.;
-      for (int j=1;j<=ny;j++) {ccc0HF =  Gefz1->GetBinContent(1,j);
-	if(ccc0HF <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Gefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HF=ccc2;break;} }
-	if(ccc0HF>0.){for (int i=1;i<=nx;i++) {double ccc1 =  Gefz1->GetBinContent(i,j)/ccc0HF;if(ccc1>0.){sumjHF += ccc1;njHF++;}} meanjHF=sumjHF/njHF;} }// j
-      
-      double ssumjHF=0.; njHF=0;double sigmajHF=0.;
-      for (int j=1;j<=ny;j++) {ccc0HF =  Gefz1->GetBinContent(1,j);
-	if(ccc0HF <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Gefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HF=ccc2;break;} }
-	if(ccc0HF>0.){for (int i=1;i<=nx;i++) {double ccc1 =  Gefz1->GetBinContent(i,j)/ccc0HF;if(ccc1>0.){ssumjHF += (ccc1-meanjHF)*(ccc1-meanjHF);njHF++;}} sigmajHF = sqrt(ssumjHF/njHF);} }// j
-      
-      double dif3rmsHFMIN = meanjHF-3*sigmajHF;if(dif3rmsHFMIN<0.) dif3rmsHFMIN = 0.;  double dif3rmsHFMAX = meanjHF+3*sigmajHF;
-      cout<<"22HF-2    meanjHF=  "<< meanjHF <<"  sigmajHF=  "<< sigmajHF <<"  dif3rmsHFMIN=  "<< dif3rmsHFMIN <<"  dif3rmsHFMAX=  "<< dif3rmsHFMAX <<endl;
-      
-      double MAXdif3rmsHFMIN =dif3rmsHFMIN;double MINdif3rmsHFMAX = dif3rmsHFMAX;
-          if(MAXdif3rmsHFMIN<0.999) MAXdif3rmsHFMIN=0.999;if(MINdif3rmsHFMAX>1.001) MINdif3rmsHFMAX=1.001;
-      //      if(MAXdif3rmsHFMIN<0.55) MAXdif3rmsHFMIN=0.55;if(MINdif3rmsHFMAX>1.45) MINdif3rmsHFMAX=1.45;
-      //      if(MAXdif3rmsHFMIN<0.55) MAXdif3rmsHFMIN=0.55;if(MINdif3rmsHFMAX>40.) MINdif3rmsHFMAX=40.;
-      cout<< "22HF-2     MAXdif3rmsHFMIN=  " <<MAXdif3rmsHFMIN  << "     MINdif3rmsHFMAX=  " <<MINdif3rmsHFMAX  <<endl;
-      //
-      for (int j=1;j<=ny;j++) {
-	ccc0HF =  Gefz1->GetBinContent(1,j);
-	if(ccc0HF <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Gefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HF=ccc2;break;} }
-	if(ccc0HF>0.) { 
-	  int jeta = (j-1)/18;// jeta = 0-21
-	  int jphi = (j-1)-18*jeta;// jphi=0-17 
-	  // i - # LSs:
-	  for (int i=1;i<=nx;i++) {
-	    double ccc1 =  Gefz1->GetBinContent(i,j);
-	    if(ccc1>0.) {
-	      double Rij = ccc1/ccc0HF;		  
-	      if(Rij<MAXdif3rmsHFMIN || Rij>MINdif3rmsHFMAX) { Ghf61->Fill(jeta-11,jphi,Rij); Ghf60->Fill(jeta-11,jphi,1.); }
-	    }//if(ccc1>0.
-	  }// i
-	}//if(ccc0HF>0 
-      }// j
-      Ghf6->Divide(Ghf61,Ghf60, 1, 1, "B");// average R
-      //      Ghf6->SetLabelOffset (Float_t offset=0.005, Option_t *axis="X")//Set offset between axis and axis' labels
-      //      Ghf6->GetZaxis()->SetLabelOffset(-0.05);
-      Ghf6->GetZaxis()->SetLabelSize(0.025);
-
-      Ghf6->SetXTitle("<Rj> outside_Cuts         #eta  \b"); Ghf6->SetYTitle("      #phi \b"); Ghf6->SetTitle("<Rj> for |1-<R>| > 0.05 \b");     //      Ghf6->SetMaximum(1.000);  //      Ghf6->SetMinimum(1.0); //Ghf6->SetZTitle("Rij averaged over LSs \b"); //Ghf6->GetZaxis()->SetLabelSize(0.04); //Ghf6->SetMarkerStyle(20);// Ghf6->SetMarkerSize(0.4);//Ghf6->SetMarkerColor(2); //Ghf6->SetLineColor(2); 
-      //gStyle->SetOptStat(kFALSE);
-      Ghf6->SetStats(0);
-      Ghf6->Draw("COLZ");
-      //================
-      c1->cd(3);
-          TH1F* Ghf7 = new TH1F("Ghf7","", 100, 0.99, 1.01);
-      //      TH1F* Ghf7 = new TH1F("Ghf7","", 20, 0., 20.);
-      // j - etaphi index:
-      for (int j=1;j<=ny;j++) {
-	ccc0HF =  Gefz1->GetBinContent(1,j);
-	if(ccc0HF <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Gefz1->GetBinContent(i,j);if(ccc2>0.){ccc0HF=ccc2;break;} }
-	if(ccc0HF>0.) { 
-	  // i - # LSs:
-	  for (int i=1;i<=nx;i++) {
-	    double ccc1 =  Gefz1->GetBinContent(i,j);
-	    if(ccc1>0.) {
-	      double Rij = ccc1/ccc0HF;		  
-	      Ghf7 ->Fill( Rij );
-	    }}}}
-      Ghf7 ->SetMarkerStyle(20);Ghf7 ->SetMarkerSize(0.4);Ghf7 ->GetYaxis()->SetLabelSize(0.04);Ghf7 ->SetMarkerColor(2);Ghf7 ->SetLineColor(0);
-      Ghf7->SetYTitle("        N  \b");  Ghf7->SetXTitle("HF   Rij \b");
-      //Ghf7->SetMinimum(0.8);Ghf7->SetMaximum(500.);
-      gPad->SetGridy();gPad->SetGridx(); //            gPad->SetLogy();    
-      //      Ghf7->SetStats(1110000);
-      // gPad->SetLogy(); 
-      Ghf7->GetYaxis()->SetLabelSize(0.025);
-      Ghf7 ->Draw("Error");
-      Float_t ymaxHF = Ghf7->GetMaximum();
-      cout<< "22HF-3   ymaxHF=  " <<ymaxHF  << "       MAXdif3rmsHFMIN=  " <<MAXdif3rmsHFMIN  << "         MINdif3rmsHFMAX=  " <<MINdif3rmsHFMAX  <<endl;
-      TLine *lineHF = new TLine(MAXdif3rmsHFMIN,0.,MAXdif3rmsHFMIN,ymaxHF);lineHF->SetLineColor(kBlue);lineHF->Draw();
-      TLine *line1HF= new TLine(MINdif3rmsHFMAX,0.,MINdif3rmsHFMAX,ymaxHF);line1HF->SetLineColor(kBlue);line1HF->Draw();      
-
-       //======================================================================
        c1->Update();
-            gStyle->SetOptStat(0);
-
       ////////////////////////////////////////////////////////////////////////////////////
     //========================================================================================== 45 HF
     //======================================================================
