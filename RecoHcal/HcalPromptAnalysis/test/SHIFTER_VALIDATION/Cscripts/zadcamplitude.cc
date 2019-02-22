@@ -122,10 +122,10 @@ int main(int argc, char *argv[])
 
 
 //	TFile *hfile1= new TFile("Global_RBX_325001test.root", "READ");
-	TFile *hfile1= new TFile("Global_RBX_321177test.root", "READ");
+//	TFile *hfile1= new TFile("Global_RBX_321177test.root", "READ");
 //	TFile *hfile1= new TFile("LED_327785test.root", "READ");
 
-
+	TFile *hfile1= new TFile("Global_RBX_325001.root", "READ");
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1491,7 +1491,6 @@ const int npfit = 220; float anpfit = 220.;
       c1->Clear();
       c1->Divide(2,2);
       
-      TH1F *timet= (TH1F*)hfile1->Get("h_tdc_HE_tdc");
       TH1F *time= (TH1F*)hfile1->Get("h_tdc_HE_time");
       TH1F *time0= (TH1F*)hfile1->Get("h_tdc_HE_time0");
       TH1F* timer = (TH1F*)time->Clone("timer");
@@ -1499,6 +1498,7 @@ const int npfit = 220; float anpfit = 220.;
       time0->Sumw2();
       timer->Divide(time,time0, 1, 1, "B");// 
       timer->Sumw2();
+      TH1F *timet= (TH1F*)hfile1->Get("h_tdc_HE_tdc");
       c1->cd(1);
       //            gPad->SetLogy();
       //    gPad->SetLogx();
@@ -1523,7 +1523,9 @@ const int npfit = 220; float anpfit = 220.;
       timer->GetYaxis()->SetLabelSize(0.04);
       timer->SetXTitle("shape HE \b");
       timer->SetMarkerColor(2);
-      timer->SetLineColor(2);
+      timer->SetLineColor(0);
+      timer->SetMinimum(0.);
+      timer->SetMaximum(50000.);
       timer->Draw("");
       c1->cd(4);
             gPad->SetLogy();
@@ -1676,6 +1678,202 @@ const int npfit = 220; float anpfit = 220.;
       badshr->SetMarkerColor(2);
       badshr->SetLineColor(2);
       badshr->Draw("");
+
+      c1->Update();
+    //======================================================================
+      //========================================================================================== 17
+      //======================================================================
+      //======================================================================
+      c1->Clear();
+      c1->Divide(2,2);
+      
+      TH1F *timeHFt= (TH1F*)hfile1->Get("h_tdc_HF_tdc");
+      TH1F *timeHF= (TH1F*)hfile1->Get("h_tdc_HF_time");
+      TH1F *timeHF0= (TH1F*)hfile1->Get("h_tdc_HF_time0");
+      TH1F* timeHFr = (TH1F*)timeHF->Clone("timeHFr");
+      timeHF->Sumw2();
+      timeHF0->Sumw2();
+      timeHFr->Divide(timeHF,timeHF0, 1, 1, "B");// 
+      timeHFr->Sumw2();
+      c1->cd(1);
+      //            gPad->SetLogy();
+      //    gPad->SetLogx();
+      timeHF->SetMarkerStyle(20);
+      timeHF->SetMarkerSize(0.4);
+      timeHF->GetYaxis()->SetLabelSize(0.04);
+      timeHF->SetXTitle("time50 weighted by A  HF \b");
+      timeHF->SetMarkerColor(2);
+      timeHF->SetLineColor(0);
+      timeHF->Draw("");
+      c1->cd(2);
+      timeHF0->SetMarkerStyle(20);
+      timeHF0->SetMarkerSize(0.4);
+      timeHF0->GetYaxis()->SetLabelSize(0.04);
+      timeHF0->SetXTitle("time50 HF \b");
+      timeHF0->SetMarkerColor(2);
+      timeHF0->SetLineColor(0);
+      timeHF0->Draw("");
+      c1->cd(3);
+      timeHFr->SetMarkerStyle(20);
+      timeHFr->SetMarkerSize(0.4);
+      timeHFr->GetYaxis()->SetLabelSize(0.04);
+      timeHFr->SetXTitle("shape HF \b");
+      timeHFr->SetMarkerColor(2);
+      timeHFr->SetLineColor(0);
+      timeHFr->SetMinimum(0.);
+      timeHFr->SetMaximum(1000.);
+      timeHFr->Draw("");
+      c1->cd(4);
+            gPad->SetLogy();
+      timeHFt->SetMarkerStyle(20);
+      timeHFt->SetMarkerSize(0.4);
+      timeHFt->GetYaxis()->SetLabelSize(0.04);
+      timeHFt->SetXTitle("initial tdc HF \b");
+      timeHFt->SetMarkerColor(2);
+      timeHFt->SetLineColor(2);
+      timeHFt->Draw("");
+
+      c1->Update();
+      //======================================================================
+      //========================================================================================== 18
+      //======================================================================
+      //======================================================================
+      c1->Clear();
+      c1->Divide(1,3);
+      
+      TH1F *ampldefaultHF= (TH1F*)hfile1->Get("h_tdc_HF_ampldefault");
+      TH1F *ampldefaultHF50= (TH1F*)hfile1->Get("h_tdc_HF_ampldefault50");
+      TH1F *ampldefaultHF63= (TH1F*)hfile1->Get("h_tdc_HF_ampldefault63");
+      c1->cd(1);
+      //            gPad->SetLogy();
+      //    gPad->SetLogx();
+      ampldefaultHF->SetMarkerStyle(20);
+      ampldefaultHF->SetMarkerSize(0.4);
+      ampldefaultHF->GetYaxis()->SetLabelSize(0.04);
+      ampldefaultHF->SetXTitle("A_TS HF \b");
+      ampldefaultHF->SetMarkerColor(2);
+      ampldefaultHF->SetLineColor(2);
+            gPad->SetLogy();
+      ampldefaultHF->Draw("");
+
+      c1->cd(2);
+      //            gPad->SetLogy();
+      //    gPad->SetLogx();
+      ampldefaultHF50->SetMarkerStyle(20);
+      ampldefaultHF50->SetMarkerSize(0.4);
+      ampldefaultHF50->GetYaxis()->SetLabelSize(0.04);
+      ampldefaultHF50->SetXTitle("A_TS_50 HF \b");
+      ampldefaultHF50->SetMarkerColor(2);
+      ampldefaultHF50->SetLineColor(2);
+            gPad->SetLogy();
+      ampldefaultHF50->Draw("");
+
+      c1->cd(3);
+      //            gPad->SetLogy();
+      //    gPad->SetLogx();
+      ampldefaultHF63->SetMarkerStyle(20);
+      ampldefaultHF63->SetMarkerSize(0.4);
+      ampldefaultHF63->GetYaxis()->SetLabelSize(0.04);
+      ampldefaultHF63->SetXTitle("A_TS_63 HF \b");
+      ampldefaultHF63->SetMarkerColor(2);
+      ampldefaultHF63->SetLineColor(2);
+            gPad->SetLogy();
+      ampldefaultHF63->Draw("");
+
+      c1->Update();
+      //======================================================================
+      //========================================================================================== 19
+      //======================================================================
+      //======================================================================
+      c1->Clear();
+      c1->Divide(1,1);
+      
+      TH1F *timeHFVSampldefault= (TH1F*)hfile1->Get("h_tdc_HF_timeVSampldefault");
+      c1->cd(1);
+      //            gPad->SetLogy();
+      //    gPad->SetLogx();
+      timeHFVSampldefault->SetMarkerStyle(20);
+      timeHFVSampldefault->SetMarkerSize(0.4);
+      timeHFVSampldefault->GetYaxis()->SetLabelSize(0.04);
+      timeHFVSampldefault->SetXTitle("timeVStampldefault HF \b");
+      timeHFVSampldefault->SetMarkerColor(2);
+      timeHFVSampldefault->SetLineColor(2);
+      timeHFVSampldefault->Draw("box");
+
+      c1->Update();
+      //========================================================================================== 20
+      //======================================================================
+      //======================================================================
+      c1->Clear();
+      c1->Divide(2,3);
+      
+      TH1F *shapeHF= (TH1F*)hfile1->Get("h_shape_good_channels_HF");
+      TH1F *shapeHF0= (TH1F*)hfile1->Get("h_shape0_good_channels_HF");
+      TH1F* shapeHFr = (TH1F*)shapeHF->Clone("shapeHFr");
+      shapeHF->Sumw2();
+      shapeHF0->Sumw2();
+      shapeHFr->Divide(shapeHF,shapeHF0, 1, 1, "B");// 
+      shapeHFr->Sumw2();
+      c1->cd(1);
+      //            gPad->SetLogy();
+      //    gPad->SetLogx();
+      shapeHF->SetMarkerStyle(20);
+      shapeHF->SetMarkerSize(0.4);
+      shapeHF->GetYaxis()->SetLabelSize(0.04);
+      shapeHF->SetXTitle("TS weighted by A good HF \b");
+      shapeHF->SetMarkerColor(2);
+      shapeHF->SetLineColor(2);
+      shapeHF->Draw("");
+      c1->cd(3);
+      shapeHF0->SetMarkerStyle(20);
+      shapeHF0->SetMarkerSize(0.4);
+      shapeHF0->GetYaxis()->SetLabelSize(0.04);
+      shapeHF0->SetXTitle("TS good HF \b");
+      shapeHF0->SetMarkerColor(2);
+      shapeHF0->SetLineColor(2);
+      shapeHF0->Draw("");
+      c1->cd(5);
+      shapeHFr->SetMarkerStyle(20);
+      shapeHFr->SetMarkerSize(0.4);
+      shapeHFr->GetYaxis()->SetLabelSize(0.04);
+      shapeHFr->SetXTitle("shape good HF per event, per channel\b");
+      shapeHFr->SetMarkerColor(2);
+      shapeHFr->SetLineColor(2);
+      shapeHFr->Draw("");
+
+      TH1F *badshHF= (TH1F*)hfile1->Get("h_shape_bad_channels_HF");
+      TH1F *badshHF0= (TH1F*)hfile1->Get("h_shape0_bad_channels_HF");
+      TH1F* badshHFr = (TH1F*)badshHF->Clone("badshHFr");
+      badshHF->Sumw2();
+      badshHF0->Sumw2();
+      badshHFr->Divide(badshHF,badshHF0, 1, 1, "B");// 
+      badshHFr->Sumw2();
+      c1->cd(2);
+      //            gPad->SetLogy();
+      //    gPad->SetLogx();
+      badshHF->SetMarkerStyle(20);
+      badshHF->SetMarkerSize(0.4);
+      badshHF->GetYaxis()->SetLabelSize(0.04);
+      badshHF->SetXTitle("TS weighted by A bad HF \b");
+      badshHF->SetMarkerColor(2);
+      badshHF->SetLineColor(2);
+      badshHF->Draw("");
+      c1->cd(4);
+      badshHF0->SetMarkerStyle(20);
+      badshHF0->SetMarkerSize(0.4);
+      badshHF0->GetYaxis()->SetLabelSize(0.04);
+      badshHF0->SetXTitle("TS bad HF \b");
+      badshHF0->SetMarkerColor(2);
+      badshHF0->SetLineColor(2);
+      badshHF0->Draw("");
+      c1->cd(6);
+      badshHFr->SetMarkerStyle(20);
+      badshHFr->SetMarkerSize(0.4);
+      badshHFr->GetYaxis()->SetLabelSize(0.04);
+      badshHFr->SetXTitle("shape bad HF per event, per channel\b");
+      badshHFr->SetMarkerColor(2);
+      badshHFr->SetLineColor(2);
+      badshHFr->Draw("");
 
       c1->Update();
     //======================================================================
