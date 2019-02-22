@@ -29,7 +29,7 @@ ls -l * >> &log_${2}_${3}
 #cmsStage -f Global.root /store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/histos/Global_${2}_${3}.root
 
 ### Copy output files to 
-cp Global_${2}_${3}.root /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_10_4_0_pre2/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION/Global_${2}_${3}.root
+cp Global_${2}_${3}.root /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_10_4_0/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION/Global_${2}_${3}.root
 ## rm all unnesecery
 #rm log_${2} 
 ##rm Global.root
