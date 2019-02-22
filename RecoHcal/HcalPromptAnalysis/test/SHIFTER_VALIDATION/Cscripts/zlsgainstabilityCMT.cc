@@ -1621,26 +1621,29 @@ int main(int argc, char *argv[])
 //================      
 
       c1->cd(4);
-      TH1F* Sefz5 = new TH1F("Sefz5","", maxbins, 1., maxbins+1.);
-      //    TH1F* Sefz51 = new TH1F("Sefz51","", maxbins, 1., maxbins+1.);
-      //    TH1F* Sefz50= new TH1F("Sefz50","", maxbins, 1., maxbins+1.);
-      //    TH1F* Sefz5 = (TH1F*)Sefz50->Clone("Sefz5");
+      //    TH1F* Sefz5 = new TH1F("Sefz5","", maxbins, 1., maxbins+1.);
+          TH1F* Sefz51 = new TH1F("Sefz51","", maxbins, 1., maxbins+1.);
+          TH1F* Sefz50= new TH1F("Sefz50","", maxbins, 1., maxbins+1.);
+          TH1F* Sefz5 = (TH1F*)Sefz50->Clone("Sefz5");
       // j - etaphi index:
       for (int j=1;j<=ny;j++) {
 	ccc0E =  Sefz1->GetBinContent(1,j);
 	//	if(ccc0E <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Sefz1->GetBinContent(i,j);if(ccc2>0.){ccc0E=ccc2;cout<<"!!! ccc0E= "<<ccc0E<<endl;break;} }
 	if(ccc0E <=0.) for (int i=1;i<=nx;i++) {double ccc2 =  Sefz1->GetBinContent(i,j);if(ccc2>0.){ccc0E=ccc2;break;} }
+
+cout<<"!!! ccc0E= "<<ccc0E<<endl;
+
 	if(ccc0E>0.) { 
 	  // i - # LSs:
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Sefz1->GetBinContent(i,j);
 	    if(ccc1>0.) {
 	      double Rij = ccc1/ccc0E;		  
-	      Sefz5 ->Fill( float(i), Rij);
-	      //	      Sefz51 ->Fill( float(i), Rij);
-	      //	      Sefz50->Fill( float(i), 1.);
+	  //    Sefz5 ->Fill( float(i), Rij);
+	      	      Sefz51 ->Fill( float(i), Rij);
+	      	      Sefz50->Fill( float(i), 1.);
 	    }}}}
-      //    Sefz5->Divide(Sefz51,Sefz50, 1, 1, "B");// average A
+          Sefz5->Divide(Sefz51,Sefz50, 1, 1, "B");// average A
       for (int jeta=1;jeta<=maxbins;jeta++) {Sefz5->SetBinError(jeta,0.0001);}
       Sefz5 ->SetMarkerStyle(20);Sefz5 ->SetMarkerSize(0.4);Sefz5 ->GetYaxis()->SetLabelSize(0.04);Sefz5 ->SetMarkerColor(2);Sefz5 ->SetLineColor(0);
       Sefz5->SetXTitle("        iLS  \b");  Sefz5->SetYTitle("     <R> \b");
