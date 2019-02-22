@@ -1,5 +1,12 @@
+# old:
 #how to run: cmsRun remoteMonitoring_LED_cfg.py 211659 file:/afs/cern.ch/work/d/dtlisov/private/Monitoring/data /afs/cern.ch/work/d/dtlisov/private/Monitoring/histos
 #how to run: cmsRun remoteMonitoring_LED_cfg.py 211659 /store/group/comm_hcal/USC /afs/cern.ch/work/d/dtlisov/private/Monitoring/histos
+# new-last:
+#   flagupgradeqie1011 = cms.int32(6)
+#cmsRun remoteMonitoring_LED_cfg.py 327785 file:/afs/cern.ch/work/z/zhokin/hcal/soc6/CMSSW_10_4_0_pre2/src/RecoHcal/HcalPromptAnalysis/test/RDM /afs/cern.ch/work/z/zhokin/hcal/soc6/CMSSW_10_4_0_pre2/src/RecoHcal/HcalPromptAnalysis/test/RDM
+#cmsRun remoteMonitoring_LED_cfg.py 327785 /store/group/dpg_hcal/comm_hcal/USC /afs/cern.ch/work/z/zhokin/hcal/soc6/CMSSW_10_4_0_pre2/src/RecoHcal/HcalPromptAnalysis/test/RDM
+                     #eoscms ls -l /eos/cms/store/group/dpg_hcal/comm_hcal/USC/run327785/USC_327785.root
+                                          #/store/group/dpg_hcal/comm_hcal/USC/run327785/USC_327785.root
 import sys
 import FWCore.ParameterSet.Config as cms
 from Configuration.StandardSequences.Eras import eras
@@ -23,7 +30,8 @@ rundir = sys.argv[3]
 histodir = sys.argv[4]
 
 print 'RUN = '+runnumber
-print 'Input file = '+rundir+'/USC_'+runnumber+'.root'
+print 'Input file = '+rundir+'/run'+runnumber+'/USC_'+runnumber+'.root'
+#print 'Input file = '+rundir+'/USC_'+runnumber+'.root'
 print 'Output file = '+histodir+'/LED_'+runnumber+'.root'
 
 process.maxEvents = cms.untracked.PSet(
@@ -36,7 +44,8 @@ process.source = cms.Source("HcalTBSource",
     fileNames = cms.untracked.vstring(
 #	       'file:/afs/cern.ch/work/d/dtlisov/private/Monitoring/data/USC_209311.root'
 #              '/store/group/comm_hcal/USC/USC_212179.root'
-                rundir+'/USC_'+runnumber+'.root'
+#                rundir+'/USC_'+runnumber+'.root'
+                rundir+'/run'+runnumber+'/USC_'+runnumber+'.root'
                 ), 
     streams = cms.untracked.vstring(
 		  "HCAL_Trigger",
@@ -168,12 +177,12 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #Verbosity = cms.untracked.int32(-56),
                                   ADCAmplHBMin = cms.double(100.),
                                   ADCAmplHBMax = cms.double(3000.),
-                                  ADCAmplHEMin = cms.double(70.),
-                                  ADCAmplHEMax = cms.double(3000.),
+                                  ADCAmplHEMin = cms.double(20000.),  
+                                  ADCAmplHEMax = cms.double(300000.),
                                   ADCAmplHFMin = cms.double(30.),
                                   ADCAmplHFMax = cms.double(3000.),
                                   ADCAmplHOMin = cms.double(40.),
-                                  ADCAmplHOMax = cms.double(3000.),
+                                  ADCAmplHOMax = cms.double(9000.),
                                   #
                                   # to see channels w/ PedestalSigma < cut
                                   #Verbosity = cms.untracked.int32(-57),
@@ -258,6 +267,10 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #how many bins you want on the plots:better to choice (#LS+1)
                                   howmanybinsonplots = cms.int32(25),
                                   #
+                                  # ls - range for RBX study (and ??? perhaps for gain stability via abort gap):
+                                  lsmin = cms.int32(1),
+                                  #lsmax = cms.int32(620),
+                                  lsmax = cms.int32(2600),
                                   #
                                   flagabortgaprejected = cms.int32(1),
                                   bcnrejectedlow = cms.int32(3446),
