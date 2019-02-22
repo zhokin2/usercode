@@ -3235,10 +3235,10 @@ HF: j = 0,1,2, 3            18,19,20,21
       cRBX31->Divide(3,1);
       //================
       cRBX31->cd(1);
-      TH1F* Ghb5 = new TH1F("Ghb5","", nx, 1., nx+1.);
-      //    TH1F* Ghb51 = new TH1F("Ghb51","", nx, 1., nx+1.);
-      //    TH1F* Ghb50= new TH1F("Ghb50","", nx, 1., nx+1.);
-      //    TH1F* Ghb5 = (TH1F*)Ghb50->Clone("Ghb5");
+      //    TH1F* Ghb5 = new TH1F("Ghb5","", nx, 1., nx+1.);
+          TH1F* Ghb51 = new TH1F("Ghb51","", nx, 1., nx+1.);
+          TH1F* Ghb50= new TH1F("Ghb50","", nx, 1., nx+1.);
+          TH1F* Ghb5 = (TH1F*)Ghb50->Clone("Ghb5");
       // j - etaphi index:
       for (int j=1;j<=ny;j++) {
 	ccc0HB =  Ghb1->GetBinContent(1,j);
@@ -3250,11 +3250,11 @@ HF: j = 0,1,2, 3            18,19,20,21
 	    double ccc1 =  Ghb1->GetBinContent(i,j);
 	    if(ccc1>0.) {
 	      double Rij = ccc1/ccc0HB;		  
-	      Ghb5 ->Fill( float(i), Rij);
-	      //	      Ghb51 ->Fill( float(i), Rij);
-	      //	      Ghb50->Fill( float(i), 1.);
+	      //	      Ghb5 ->Fill( float(i), Rij);
+	      Ghb51 ->Fill( float(i), Rij);
+	      Ghb50->Fill( float(i), 1.);
 	    }}}}
-      //    Ghb5->Divide(Ghb51,Ghb50, 1, 1, "B");// average A
+      Ghb5->Divide(Ghb51,Ghb50, 1, 1, "B");// average A
       for (int i=1;i<=nx;i++) {Ghb5->SetBinError(i,0.0001);}
       Ghb5 ->SetMarkerStyle(20);Ghb5 ->SetMarkerSize(0.4);Ghb5 ->GetYaxis()->SetLabelSize(0.04);Ghb5 ->SetMarkerColor(2);Ghb5 ->SetLineColor(0);
       Ghb5->SetXTitle("        iLS  \b");  Ghb5->SetYTitle("     <R> \b"); Ghb5->SetTitle("<Ri> vs iLS \b");
@@ -3309,7 +3309,7 @@ HF: j = 0,1,2, 3            18,19,20,21
 	  for (int i=1;i<=nx;i++) {
 	    double ccc1 =  Ghb1->GetBinContent(i,j);
 	    if(ccc1>0.) {
-	      double Rij = ccc1/ccc0HB;		  
+	      double Rij = ccc1/ccc0HB;	
 	      if(Rij<MAXdif3rmsHBMIN || Rij>MINdif3rmsHBMAX) { Ghb61->Fill(jeta-11,jphi,Rij); Ghb60->Fill(jeta-11,jphi,1.); }
 	      if(Rij<0.8 || Rij>1.2) { G20hb61->Fill(jeta-11,jphi,Rij); G20hb60->Fill(jeta-11,jphi,1.); }
 	      if(Rij<0.7 || Rij>1.3) { G30hb61->Fill(jeta-11,jphi,Rij); G30hb60->Fill(jeta-11,jphi,1.); }
@@ -3615,10 +3615,10 @@ HF: j = 0,1,2, 3            18,19,20,21
       cRBX31->Divide(3,1);
       //================
       cRBX31->cd(1);
-      TH1F* Ghe5 = new TH1F("Ghe5","", nx, 1., nx+1.);
-      //    TH1F* Ghe51 = new TH1F("Ghe51","", nx, 1., nx+1.);
-      //    TH1F* Ghe50= new TH1F("Ghe50","", nx, 1., nx+1.);
-      //    TH1F* Ghe5 = (TH1F*)Ghe50->Clone("Ghe5");
+      //      TH1F* Ghe5 = new TH1F("Ghe5","", nx, 1., nx+1.);
+          TH1F* Ghe51 = new TH1F("Ghe51","", nx, 1., nx+1.);
+          TH1F* Ghe50= new TH1F("Ghe50","", nx, 1., nx+1.);
+          TH1F* Ghe5 = (TH1F*)Ghe50->Clone("Ghe5");
       // j - etaphi index:
       for (int j=1;j<=ny;j++) {
 	ccc0HE =  Ghe1->GetBinContent(1,j);
@@ -3630,11 +3630,11 @@ HF: j = 0,1,2, 3            18,19,20,21
 	    double ccc1 =  Ghe1->GetBinContent(i,j);
 	    if(ccc1>0.) {
 	      double Rij = ccc1/ccc0HE;		  
-	      Ghe5 ->Fill( float(i), Rij);
-	      //	      Ghe51 ->Fill( float(i), Rij);
-	      //	      Ghe50->Fill( float(i), 1.);
+	      //	      Ghe5 ->Fill( float(i), Rij);
+	      Ghe51 ->Fill( float(i), Rij);
+	      Ghe50->Fill( float(i), 1.);
 	    }}}}
-      //    Ghe5->Divide(Ghe51,Ghe50, 1, 1, "B");// average A
+      Ghe5->Divide(Ghe51,Ghe50, 1, 1, "B");// average A
       for (int i=1;i<=nx;i++) {Ghe5->SetBinError(i,0.0001);}
       Ghe5 ->SetMarkerStyle(20);Ghe5 ->SetMarkerSize(0.4);Ghe5 ->GetYaxis()->SetLabelSize(0.04);Ghe5 ->SetMarkerColor(2);Ghe5 ->SetLineColor(0);
       Ghe5->SetXTitle("        iLS  \b");  Ghe5->SetYTitle("     <R> \b"); Ghe5->SetTitle("<Ri> vs iLS \b");
@@ -4003,10 +4003,10 @@ HF: j = 0,1,2, 3            18,19,20,21
       cRBX31->Divide(3,1);
       //================
       cRBX31->cd(1);
-      TH1F* Gho5 = new TH1F("Gho5","", nx, 1., nx+1.);
-      //    TH1F* Gho51 = new TH1F("Gho51","", nx, 1., nx+1.);
-      //    TH1F* Gho50= new TH1F("Gho50","", nx, 1., nx+1.);
-      //    TH1F* Gho5 = (TH1F*)Gho50->Clone("Gho5");
+      //    TH1F* Gho5 = new TH1F("Gho5","", nx, 1., nx+1.);
+          TH1F* Gho51 = new TH1F("Gho51","", nx, 1., nx+1.);
+          TH1F* Gho50= new TH1F("Gho50","", nx, 1., nx+1.);
+          TH1F* Gho5 = (TH1F*)Gho50->Clone("Gho5");
       // j - etaphi index:
       for (int j=1;j<=ny;j++) {
 	ccc0HO =  Gho1->GetBinContent(1,j);
@@ -4018,11 +4018,11 @@ HF: j = 0,1,2, 3            18,19,20,21
 	    double ccc1 =  Gho1->GetBinContent(i,j);
 	    if(ccc1>0.) {
 	      double Rij = ccc1/ccc0HO;		  
-	      Gho5 ->Fill( float(i), Rij);
-	      //	      Gho51 ->Fill( float(i), Rij);
-	      //	      Gho50->Fill( float(i), 1.);
+	      //	      Gho5 ->Fill( float(i), Rij);
+	      Gho51 ->Fill( float(i), Rij);
+	      Gho50->Fill( float(i), 1.);
 	    }}}}
-      //    Gho5->Divide(Gho51,Gho50, 1, 1, "B");// average A
+      Gho5->Divide(Gho51,Gho50, 1, 1, "B");// average A
       for (int i=1;i<=nx;i++) {Gho5->SetBinError(i,0.0001);}
       Gho5 ->SetMarkerStyle(20);Gho5 ->SetMarkerSize(0.4);Gho5 ->GetYaxis()->SetLabelSize(0.04);Gho5 ->SetMarkerColor(2);Gho5 ->SetLineColor(0);
       Gho5->SetXTitle("        iLS  \b");  Gho5->SetYTitle("     <R> \b"); Gho5->SetTitle("<Ri> vs iLS \b");
@@ -4389,10 +4389,10 @@ HF: j = 0,1,2, 3            18,19,20,21
       cRBX31->Divide(3,1);
       //================
       cRBX31->cd(1);
-      TH1F* Ghf5 = new TH1F("Ghf5","", nx, 1., nx+1.);
-      //    TH1F* Ghf51 = new TH1F("Ghf51","", nx, 1., nx+1.);
-      //    TH1F* Ghf50= new TH1F("Ghf50","", nx, 1., nx+1.);
-      //    TH1F* Ghf5 = (TH1F*)Ghf50->Clone("Ghf5");
+      //      TH1F* Ghf5 = new TH1F("Ghf5","", nx, 1., nx+1.);
+          TH1F* Ghf51 = new TH1F("Ghf51","", nx, 1., nx+1.);
+          TH1F* Ghf50= new TH1F("Ghf50","", nx, 1., nx+1.);
+          TH1F* Ghf5 = (TH1F*)Ghf50->Clone("Ghf5");
       // j - etaphi index:
       for (int j=1;j<=ny;j++) {
 	ccc0HF =  Ghf1->GetBinContent(1,j);
@@ -4404,11 +4404,11 @@ HF: j = 0,1,2, 3            18,19,20,21
 	    double ccc1 =  Ghf1->GetBinContent(i,j);
 	    if(ccc1>0.) {
 	      double Rij = ccc1/ccc0HF;		  
-	      Ghf5 ->Fill( float(i), Rij);
-	      //	      Ghf51 ->Fill( float(i), Rij);
-	      //	      Ghf50->Fill( float(i), 1.);
+	      //     Ghf5 ->Fill( float(i), Rij);
+	      Ghf51 ->Fill( float(i), Rij);
+	      Ghf50->Fill( float(i), 1.);
 	    }}}}
-      //    Ghf5->Divide(Ghf51,Ghf50, 1, 1, "B");// average A
+      Ghf5->Divide(Ghf51,Ghf50, 1, 1, "B");// average A
       for (int i=1;i<=nx;i++) {Ghf5->SetBinError(i,0.0001);}
       Ghf5 ->SetMarkerStyle(20);Ghf5 ->SetMarkerSize(0.4);Ghf5 ->GetYaxis()->SetLabelSize(0.04);Ghf5 ->SetMarkerColor(2);Ghf5 ->SetLineColor(0);
       Ghf5->SetXTitle("        iLS  \b");  Ghf5->SetYTitle("     <R> \b"); Ghf5->SetTitle("<Ri> vs iLS \b");
@@ -6213,12 +6213,10 @@ HF: j = 0,1,2, 3            18,19,20,21
       htmlFile << "  <td><a href=\"HO_ADCampl.html\">HO</a></td>"<< std::endl;
       htmlFile << "  <td><a href=\"HF_ADCampl.html\">HF</a></td>"<< std::endl;
 */
-      
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_ADCampl.html\">HB</a></td>"<< std::endl;
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HE_ADCampl.html\">HE</a></td>"<< std::endl;
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HO_ADCampl.html\">HO</a></td>"<< std::endl;
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HF_ADCampl.html\">HF</a></td>"<< std::endl;
-
     }
     if (test==2){
       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/HB_Width.html\">HB</a></td>"<< std::endl;
@@ -6703,9 +6701,9 @@ htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-softwa
   htmlFile << "<table width=\"600\">"<< std::endl;
   htmlFile << "<tr>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/CapID_GL.html\">Cap ID errors</a></td>"<< std::endl;
-  // AZ 18.03.2018
-      htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
-  //  htmlFile << "  <td><a  href=\"ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
+  // AZ 18.03.2018 zhokin 22.02.2019
+  htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
+  //htmlFile << "  <td><a  href=\"ADCampl_GL.html\">Amplitude</a></td>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Width_GL.html\">Width</a></td>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Ratio_GL.html\">Ratio</a></td>"<< std::endl;
   htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/CMT/GLOBAL_"<<runnumber<<"/Tmean_GL.html\">TS mean</a></td>"<< std::endl;
