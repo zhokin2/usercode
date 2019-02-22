@@ -1,11 +1,11 @@
 see description in ROC instruction:
 https://twiki.cern.ch/twiki/bin/view/CMS/OfflineHcalShift#using_GitHub_branch_CMSSW_10_4_X
 
-soc6   CMSSW_10_4_X_cmt_9
+soc7   CMSSW_10_4_X_cmt_10
 
 
 ssh lxplus
-cd soc5
+cd soc7
 setenv SCRAM_ARCH slc6_amd64_gcc700 
 cmsenv
 voms-proxy-init -voms cms -rfc 
