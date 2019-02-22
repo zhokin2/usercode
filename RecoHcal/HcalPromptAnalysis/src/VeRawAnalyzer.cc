@@ -1,14 +1,14 @@
 // -*- C++ -*-
 //
 // Package:    VeRawAnalyzer
-// Class:      VeRawAnalyzer   h_shape_good_channels_HE
+// Class:      VeRawAnalyzer   
 // 
 /**\class VeRawAnalyzer VeRawAnalyzer.cc Hcal/VeRawAnalyzer/src/VeRawAnalyzer.cc
    
 Description: <one line class summary>
 
 Implementation:          
-<Notes on implementation>
+<Notes on implementation> 
 */
 //
 // $Id: VeRawAnalyzer.cc,v 1.10 2013/04/28 19:01:16 dtlisov Exp $ 
@@ -1044,6 +1044,8 @@ TH1F*         h_Amplitude_notCapIdErrors_HF2;
 TH1F*         h_Amplitude_notCapIdErrors_HO4;
 
   /////////////////////////////////////////////
+  /*
+// 22.02.2019 - putted off because of misunderstanding of tdc treatment
   TH1F* h_tdc_HE_tdc;
   TH1F* h_tdc_HE_time;
   TH1F* h_tdc_HE_time0;
@@ -1051,6 +1053,17 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH1F* h_tdc_HE_ampldefault50;
   TH1F* h_tdc_HE_ampldefault63;
   TH2F* h_tdc_HE_timeVSampldefault;
+
+  TH1F* h_tdc_HF_tdc;
+  TH1F* h_tdc_HF_time;
+  TH1F* h_tdc_HF_time0;
+  TH1F* h_tdc_HF_ampldefault;
+  TH1F* h_tdc_HF_ampldefault50;
+  TH1F* h_tdc_HF_ampldefault63;
+  TH2F* h_tdc_HF_timeVSampldefault;
+
+// 22.02.2019 - putted off because of misunderstanding of tdc treatment
+*/
 
   TH1F* h_corrforxaMAIN_HE  ;
   TH1F* h_corrforxaMAIN0_HE ;
@@ -6131,13 +6144,18 @@ void VeRawAnalyzer::beginJob()
     h_mapDepth2_HB = new TH2F("h_mapDepth2_HB"," ", neta, -41., 41., nphi, 0., bphi);
     
     //////////////////////////////////////////////////////////////////////////////////////////////             HE
+    /*
+// 22.02.2019 - putted off because of misunderstanding of tdc treatment
 	h_tdc_HE_tdc = new TH1F("h_tdc_HE_tdc"," ", 100, 0.,100.);
-	h_tdc_HE_time = new TH1F("h_tdc_HE_time"," ", 250, 0.,250.);
-	h_tdc_HE_time0 = new TH1F("h_tdc_HE_time0"," ", 250, 0.,250.);
-	h_tdc_HE_ampldefault = new TH1F("h_tdc_HE_ampldefault"," ", 100, 0.,200000.);
-	h_tdc_HE_ampldefault50 = new TH1F("h_tdc_HE_ampldefault50"," ", 100, 0.,200000.);
-	h_tdc_HE_ampldefault63 = new TH1F("h_tdc_HE_ampldefault63"," ", 100, 0.,200000.);
-	h_tdc_HE_timeVSampldefault = new TH2F("h_tdc_HE_timeVSampldefault"," ",260, 0.,65., 1000, 0.,200000.);
+	h_tdc_HE_time = new TH1F("h_tdc_HE_time"," ", 10, 0.,250.);
+	h_tdc_HE_time0 = new TH1F("h_tdc_HE_time0"," ", 10, 0.,250.);
+	h_tdc_HE_ampldefault = new TH1F("h_tdc_HE_ampldefault"," ", 100, 0.,10000.);
+	h_tdc_HE_ampldefault50 = new TH1F("h_tdc_HE_ampldefault50"," ", 100, 0.,10000.);
+	h_tdc_HE_ampldefault63 = new TH1F("h_tdc_HE_ampldefault63"," ", 100, 0.,10000.);
+	h_tdc_HE_timeVSampldefault = new TH2F("h_tdc_HE_timeVSampldefault"," ",65, 0.,65., 100, 0.,10000.);
+// 22.02.2019 - putted off because of misunderstanding of tdc treatment
+*/
+
 	/*
 	h_AiForLS_11_HE = new TH1F("h_AiForLS_11_HE"," ",     100, 0.,300000.);
 	h_AiForLS_12_HE = new TH1F("h_AiForLS_12_HE"," ",     100, 0.,300000.);
@@ -6424,6 +6442,21 @@ void VeRawAnalyzer::beginJob()
 	h_mapAiForLS_good_HF = new TH2F("h_mapAiForLS_good_HF"," ", neta, -41., 41., nphi, 0., bphi);
 	h_map0AiForLS_good_HF = new TH2F("h_map0AiForLS_good_HF"," ", neta, -41., 41., nphi, 0., bphi);
 */
+    //////////////////////////////////////////////////////////////////////////////////////////////             HF
+    /*
+// 22.02.2019 - putted off because of misunderstanding of tdc treatment
+	h_tdc_HF_tdc = new TH1F("h_tdc_HF_tdc"," ", 100, 0.,100.);
+	h_tdc_HF_time = new TH1F("h_tdc_HF_time"," ", 10, 0.,250.);
+	h_tdc_HF_time0 = new TH1F("h_tdc_HF_time0"," ", 10, 0.,250.);
+	h_tdc_HF_ampldefault = new TH1F("h_tdc_HF_ampldefault"," ", 100, 0.,1000.);
+	h_tdc_HF_ampldefault50 = new TH1F("h_tdc_HF_ampldefault50"," ", 100, 0.,1000.);
+	h_tdc_HF_ampldefault63 = new TH1F("h_tdc_HF_ampldefault63"," ", 100, 0.,1000.);
+	h_tdc_HF_timeVSampldefault = new TH2F("h_tdc_HF_timeVSampldefault"," ",65, 0.,65., 100, 0.,1000.);
+// 22.02.2019 - putted off because of misunderstanding of tdc treatment
+*/
+
+
+
     h_numberofhitsHFtest = new TH1F("h_numberofhitsHFtest"," ", 100, 0.,30000.);
     h_AmplitudeHFtest = new TH1F("h_AmplitudeHFtest"," ", 100, 0.,300000.);
     h_totalAmplitudeHF = new TH1F("h_totalAmplitudeHF"," ", 100, 0.,100000000000.);
@@ -9976,9 +10009,36 @@ getTDCTimeFromSample
 	}
       }
     }// sub   HB
+
 // HE starts:
     if ( sub == 2 ) {
-      // bad_channels with C,A,W,P,pW,
+
+
+    /*
+// 22.02.2019 - putted off because of misunderstanding of tdc treatment
+      // zhokin 20.02.2019
+      // tdc treatment:
+      for (int ii=0; ii<TSsize; ii++) {  
+	double time = 0.;float time0 = 0.;
+	double ampldefault = tool[ii];
+	time0 = qie11df[ii].tdc();
+//	time0 = qie11df[ii].le_tdc();
+	h_tdc_HE_tdc->Fill(time0);
+	h_tdc_HE_ampldefault->Fill(ampldefault);
+	h_tdc_HE_timeVSampldefault->Fill(time0,ampldefault);
+	if (time0 <50.) {
+// Each TDC count is 0.5 ns. 
+// tdc == 62 or 63 means value was below or above threshold for whole time slice. 
+	  h_tdc_HE_ampldefault50->Fill(ampldefault);
+	  time = ii*25. + time0/2.;
+	  h_tdc_HE_time->Fill(time, ampldefault);
+	  h_tdc_HE_time0->Fill(time, 1.);
+	}//time0<50
+	else{h_tdc_HE_ampldefault63->Fill(ampldefault);}
+      }// ii
+// 22.02.2019 - putted off because of misunderstanding of tdc treatment
+*/
+      // shape bad_channels with C,A,W,P,pW,
       if( error == 1 || amplitude0 < ADCAmplHEMin_ || amplitude0 > ADCAmplHEMax_ ||
 	  rmsamplitude < rmsHEMin_ || rmsamplitude > rmsHEMax_ ||
 	  pedestal0 < pedestalHEMax_ || pedestal1 < pedestalHEMax_
@@ -9992,26 +10052,12 @@ getTDCTimeFromSample
 	  h_shape0_bad_channels_HE->Fill(float(ii),1.);
 	}
       }
-      // good_channels with C,A,W,P,pW,
+      // shape good_channels with C,A,W,P,pW,
       else {
 	for (int ii=0; ii<TSsize; ii++) {  
-	  double time = 0.;float time0 = 0.;
 	  double ampldefault = tool[ii];
 	  h_shape_good_channels_HE->Fill(float(ii),ampldefault);
 	  h_shape0_good_channels_HE->Fill(float(ii),1.);
-	  // zhokin 07.12.2018
-	  // tdc treatment:
-	  time0 = qie11df[ii].tdc(); 
-	  h_tdc_HE_tdc->Fill(time0);
-	  h_tdc_HE_ampldefault->Fill(ampldefault);
-	  h_tdc_HE_timeVSampldefault->Fill(time0,ampldefault);
-	  if (time0 <50.) {
-	    h_tdc_HE_ampldefault50->Fill(ampldefault);
-	    time = ii*25. + time0/2.;
-	    h_tdc_HE_time->Fill(time, ampldefault);
-	    h_tdc_HE_time0->Fill(time, 1.);
-	  }//time0<50
-	  else{h_tdc_HE_ampldefault63->Fill(ampldefault);}
 	}// ii
       }// else for good channels
     }// sub   HE
@@ -11438,6 +11484,30 @@ void VeRawAnalyzer::fillDigiAmplitudeHFQIE10(QIE10DataFrame qie10df)
   }
   
   if ( sub == 4 ) {
+    /*
+// 22.02.2019 - putted off because of misunderstanding of tdc treatment
+    // zhokin 20.02.2019
+    // tdc treatment:
+// Each TDC count is 0.5 ns. 
+// tdc == 62 or 63 means value was below or above threshold for whole time slice.
+    for (int ii=0; ii<TSsize; ii++) {  
+      double time = 0.;float time0 = 0.;
+      double ampldefault = tool[ii];
+      time0 = qie10df[ii].le_tdc();
+      h_tdc_HF_tdc->Fill(time0);
+      h_tdc_HF_ampldefault->Fill(ampldefault);
+      h_tdc_HF_timeVSampldefault->Fill(time0,ampldefault);
+      if (time0 <50.) {
+	h_tdc_HF_ampldefault50->Fill(ampldefault);
+	time = ii*25. + time0/2.;
+	h_tdc_HF_time->Fill(time, ampldefault);
+	h_tdc_HF_time0->Fill(time, 1.);
+      }//time0<50
+      else{h_tdc_HF_ampldefault63->Fill(ampldefault);}
+    }// ii
+// 22.02.2019 - putted off because of misunderstanding of tdc treatment
+*/
+    
     // bad_channels with C,A,W,P,pW,
     if( error == 1 ||
 	amplitude < ADCAmplHFMin_ || amplitude > ADCAmplHFMax_ ||
@@ -14107,6 +14177,8 @@ void VeRawAnalyzer::endJob(){
     h_mapDepth4_HO->Write();
 
     ////////////////////////////////////////// 
+    /*
+// 22.02.2019 - putted off because of misunderstanding of tdc treatment
     h_tdc_HE_tdc->Write();
     h_tdc_HE_time->Write();
     h_tdc_HE_time0->Write();
@@ -14114,6 +14186,16 @@ void VeRawAnalyzer::endJob(){
     h_tdc_HE_ampldefault50->Write();
     h_tdc_HE_ampldefault63->Write();
     h_tdc_HE_timeVSampldefault->Write();
+  
+    h_tdc_HF_tdc->Write();
+    h_tdc_HF_time->Write();
+    h_tdc_HF_time0->Write();
+    h_tdc_HF_ampldefault->Write();
+    h_tdc_HF_ampldefault50->Write();
+    h_tdc_HF_ampldefault63->Write();
+    h_tdc_HF_timeVSampldefault->Write();
+// 22.02.2019 - putted off because of misunderstanding of tdc treatment
+*/
   
     h_ADCAmpl345Zoom_HE->Write();
     h_ADCAmpl345Zoom1_HE->Write();
