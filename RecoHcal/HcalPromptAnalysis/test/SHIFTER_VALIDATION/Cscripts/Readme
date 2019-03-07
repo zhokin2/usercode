@@ -15,6 +15,34 @@ for channels: <Aijk> within some limits; for runs: R(see below)  within some lim
 6. Define R = <Ajk>_depth / <Ajk_ref>_depth
 7. Plots: R vs t (days)
 8 Runs selected:
+Use 
+=========================================================================================================  !!! how to see last local runs taken:
+ssh lxplus
+cd /eos/cms/store/group/dpg_hcal/comm_hcal/USC
+ls -latr run309573
+ls -latr
+=========================================================================================================  !!! how can remove dirs in CMT DIRECTLY!!!
+ssh lxplus
+cd /eos/cms/store/group/dpg_hcal/comm_hcal
+ll
+cd /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT
+cd /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/   *root  files
+/afs/cern.ch/work/k/kodolova/public/RDMweb    directories
+/afs/cern.ch/work/k/kodolova/public/RDMweb/histos
+cd /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/
+
+posle zapuska RMT dlya sozdaniya root files:
+cd /afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/
+ll > /afs/cern.ch/work/z/zhokin/hcal/soc7/CMSSW_10_4_0/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION/Cscripts/zzzlist.010319RDMweb
+
+posle zapuska scriptov postroeniya plotov RMT:
+cd /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/RMT/
+ll > /afs/cern.ch/work/z/zhokin/hcal/soc7/CMSSW_10_4_0/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION/Cscripts/zzzlist.010319
+
+
+
+
+======= selected are:
 2016 : 81 runs since 10.05.2016 up to 15.11.2016
 (1st run 272946 in the list below is a reference run)
 "272946","272947","273117","273234","273316","273455","273557","273604","273616","273648", "273757","273763","273770","273894","273961","274752","274890","275013","275265","275430", "275457","275697","275807","275864","276081","276402","276416","276461","276462","276463", "276476","276520","276531","276554","276600","276678","277132","277172","277336","277511", "278596","278897","279058","279096", "279723", "279908","280200","280262","280379","281059","281362","281458","281645","281735","282462", "282726","282775","282776","282847","283010","283013","283098","283099","283101","283102", "283103","283104","283111","283296","283370","283398","283440","283442","283536","284124", "284184","284188", "284878","285101","285224","285349"
@@ -51,7 +79,7 @@ voms-proxy-init -voms cms
 ln -s /afs/cern.ch/work/z/zhokin/hcal/roc4/CMSSW_9_2_14/src/RecoHcal/HcalPromptAnalysis/test/SHIFTER_VALIDATION/Cscripts raddam
 
 cd raddam
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!================================   latest info:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!================================    latest info: see ~/zppt/zzzhcal42.pdf with results (/afs/cern.ch/user/z/zhokin/private/talk_gsm110218  )
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  HE:
 ------------------------------------------------
 for RADDAM:
@@ -65,7 +93,8 @@ zamt6raddamHEP17.cc for HEP17 SiPM 2017                           DONE  testamt6
 zamt6raddamHEP178.cc for HEP17new & SiPM 20178                    DONE  testamt6HEP178
 
 zamt9gsm2018.cc      for SiPM 20178 shunt1 led-low-intensity      DONE  testamt9gsm2018
-zamtshunt6gsm2018.cc for SiPM 20178 shunt6 led                    DONE  testamtshunt6gsm2018
+zamtshunt6gsm2018.cc for SiPM 20178 shunt6 led                    DONE  testamtshunt6gsm2018            
+zamt0shunt6gsm2018.cc for SiPM 2018 shunt6 led                    DONE  testamt0shunt6gsm2018   last          
 
 zamt7raddam.cc for HPD channels 2016                              DONE
 zamt8raddam.cc for HPD channels 2016+2017                         DONE  testamt8
@@ -73,20 +102,23 @@ zamt8raddam.cc for HPD channels 2016+2017                         DONE  testamt8
 zamt9raddam.cc for HPD channels 2016+2017 + between               NOT DONE, no sense
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  HB:
 for GSM:
+zamt5GSMHB.cc for HPD channels 2018                         DONE
 zamt6GSMHB.cc for HPD channels 2017                         DONE
 zamt7GSMHB.cc for HPD channels 2016                         DONE
 zamt8GSMHB.cc for HPD channels 2016+2017                    DONE
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  HO:
 for GSM:
+zamt5GSMHO.cc for HPD channels 2018                         DONE
 zamt6GSMHO.cc for HPD channels 2017                         DONE
 zamt7GSMHO.cc for HPD channels 2016                         DONE
 zamt8GSMHO.cc for HPD channels 2016+2017                    DONE
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  HF:
 for GSM:
+zamt5GSMHF.cc for HPD channels 2018                         DONE
+zamt5GSMHF.cc for HPD channels 2018                         DONE
 zamt6GSMHF.cc for HPD channels 2017                         DONE
 zamt7GSMHF.cc for HPD channels 2016                         DONE
 zamt8GSMHF.cc for HPD channels 2016+2017                    DONE
-
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!================================
