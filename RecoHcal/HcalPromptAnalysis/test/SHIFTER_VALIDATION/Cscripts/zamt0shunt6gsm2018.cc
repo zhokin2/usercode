@@ -287,9 +287,9 @@ int main(int argc, char *argv[])
   // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-	  const Int_t flagHEP17selection = 2;// -> ALL channels w/o bad
+	const Int_t flagHEP17selection = 2;// -> ALL channels w/o bad ones (was used for final !!! result)
 	//  const Int_t flagHEP17selection = 1;// ==1 HEP17; 
-	// const Int_t flagHEP17selection = 0;//  -> ALL channels
+	//	 const Int_t flagHEP17selection = 0;//  -> ALL channels (used to see 2D plots of bad channels)
 
 
 
