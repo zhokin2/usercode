@@ -1,4 +1,4 @@
-// How to run:
+// How to run: 
 //root -b -q -l RemoteMonitoringGLOBAL.C+
 //root -b -q -l 'RemoteMonitoringGLOBAL.C+("/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/CMTweb/histos/Global_190707.root")'
 
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     //                              Empty                         HB                           HE                                                     HO                          HF
     double Cut0[7][5][8]={{{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,1.0,1.0,0.,0.,0.,0.,0.}, {0.,1.,1.,1.,0.,0.,0.,0.},                                {0.,0.,0.,0.,1.,0.,0.,0.},   {0.,1.,1.,0.,0.,0.,0.,0.}         },  //CapID  0,HB,HE,HO,HF 
 		  //      {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.,0.,0.,0.}, {0.,100.,140.,150.,0.,0.,0.,0.},                         {0.,0.,0.,0.,100.,0.,0.,0.}, {0.,170.,110.,170.,110.,0.,0.,0.} },  //Amplitude  0,HB,HE,HO,HF 
-                          {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,35.,35.,0.,0.,0.,0.,0.}, {0.,12000.,4500.,3500.,3500.,4000.,4500.,5500.}, 
+                          {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,3500.,3500.,3500.,3500.,0.,0.,0.}, {0.,12000.,4500.,3500.,3500.,4000.,4500.,5500.}, 
 {0.,0.,0.,0.,200.,0.,0.,0.}, {0.,4500.,4500.,4500.,4500.,0.,0.,0.} },  //Amplitude  0,HB,HE,HO,HF 
 			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,3.,3.,0.,0.,0.,0.,0.},   {0.,3.,3.,3.,0.,0.,0.,0.},                               {0.,0.,0.,0.,3.,0.,0.,0.},   {0.,2.,2.,0.,0.,0.,0.,0.}         }, //Width  0,HB,HE,HO,HF 
 			  {{0.,0.,0.,0.,0.,0.,0.,0.}, {0.,0.4,0.4,0.,0.,0.,0.,0.}, {0.,0.4,0.4,0.4,0.,0.,0.,0.},                            {0.,0.,0.,0.,0.4,0.,0.,0.},  {0.,0.8,0.8,0.,0.,0.,0.,0.}       }, //Ratio  0,HB,HE,HO,HF 
@@ -105,8 +105,8 @@ int main(int argc, char *argv[])
   int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet HB HE HO HF
 
   int k_max[5]         ={0,2,3,4,2}; // maximum depth for each subdet HB HE HO HF	
-  //  int k_maxHFupgrade[5]={0,2,3,4,4}; // maximum depth for each subdet HB HE HO HF	
-  int k_maxHFupgrade[5]={0,2,7,4,4}; // maximum depth for each subdet HB HE HO HF	
+  //  int k_maxupgrade[5]={0,2,3,4,4}; // maximum depth for each subdet HB HE HO HF	
+  int k_maxupgrade[5]={0,4,7,4,4}; // maximum depth for each subdet HB HE HO HF	
 
 //+++++++++++++++++++++++++++++  
 // Lumi iLumi and number of events  
@@ -695,6 +695,9 @@ int main(int argc, char *argv[])
       // HB:
       HistNumBadChanDepth[1][1][1] = (TH1F*)hfile->Get("h_sumADCAmplperLS1");
       HistNumBadChanDepth[1][1][2] = (TH1F*)hfile->Get("h_sumADCAmplperLS2");
+      // HB upgrade:
+      HistNumBadChanDepth[1][1][3] = (TH1F*)hfile->Get("h_sumADCAmplperLSdepth3HBu");
+      HistNumBadChanDepth[1][1][4] = (TH1F*)hfile->Get("h_sumADCAmplperLSdepth4HBu"); 
  
       // HE:
       HistNumBadChanDepth[1][2][1] = (TH1F*)hfile->Get("h_sumADCAmplperLS3");
@@ -723,6 +726,9 @@ int main(int argc, char *argv[])
       // HB:
       HistCutNumBadChanDepth[1][1][1] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS1");
       HistCutNumBadChanDepth[1][1][2] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS2");
+      // HB upgrade:
+      HistCutNumBadChanDepth[1][1][3] = (TH1F*)hfile->Get("h_sumCutADCAmplperLSdepth3HBu");
+      HistCutNumBadChanDepth[1][1][4] = (TH1F*)hfile->Get("h_sumCutADCAmplperLSdepth4HBu"); 
  
       // HE:
       HistCutNumBadChanDepth[1][2][1] = (TH1F*)hfile->Get("h_sumCutADCAmplperLS3");
@@ -749,6 +755,9 @@ int main(int argc, char *argv[])
       // HB:
       HistNumChanDepth[1][1][1] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS1");     
       HistNumChanDepth[1][1][2] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS2"); 
+      // HB upgrade:
+      HistNumChanDepth[1][1][3] = (TH1F*)hfile->Get("h_sum0ADCAmplperLSdepth3HBu");
+      HistNumChanDepth[1][1][4] = (TH1F*)hfile->Get("h_sum0ADCAmplperLSdepth4HBu"); 
  
       // HE:
       HistNumChanDepth[1][2][1] = (TH1F*)hfile->Get("h_sum0ADCAmplperLS3");     
@@ -954,7 +963,8 @@ int main(int argc, char *argv[])
       
       for (int test=0;test<=5;test++) { //Test: =0(CapIdErrors), =1(Amplitude), =2... 
 	for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
-	  if (sub==1) cHE->Divide(2,1);//HB
+	  if (sub==1 && test!=1) cHE->Divide(2,1);//HB
+	  if (sub==1 && test==1) {cFour1->Clear();cFour1->Divide(2,2);}//HB upgrade with new depthes 3,4 for Amplitude test only
 	  if (sub==2 && test!=1) cHE->Divide(3,1);//HE
 	  if (sub==2 && test==1) {cNine->Clear();cNine->Divide(3,3);}//HE upgrade with new depthes 4,5,6,7 for Amplitude test only
 	  if (sub==3) cHB->Divide(1,1);//HO
@@ -962,9 +972,11 @@ int main(int argc, char *argv[])
 	  if (sub==4 && test==1) {cFour1->Clear();cFour1->Divide(2,2);} // HF upgrade with new depthes 3 and 4 for Amplitude test only
 	  
 	  int kkkkkkmax = k_max[sub];
-	  if ( (sub==4 || sub==2) && test==1) kkkkkkmax = k_maxHFupgrade[sub];
+	  //	  if ( (sub==4 || sub==2) && test==1) kkkkkkmax = k_maxupgrade[sub];
+	  if ( (sub==4 || sub==2 || sub==1) && test==1) kkkkkkmax = k_maxupgrade[sub];
 	  for (int k=k_min[sub];k<=kkkkkkmax;k++) {  //Depth 
-	    if (sub==1) cHE->cd(k);//HB 
+	    if (sub==1 && test!=1) cHE->cd(k);//HB 
+	    if (sub==1 && test==1) cFour1->cd(k);//HB 
 	    if (sub==2 && test!=1) cHE->cd(k);//HE
 	    if (sub==2 && test==1) cNine->cd(k);//HE upgrade with new depthes 4,5,6,7 for Amplitude test only
 	    if (sub==3) cHB->cd(k-3);//HO
@@ -1053,7 +1065,8 @@ int main(int argc, char *argv[])
 */
 
  
-	    if (sub==1) { cHE->Modified();} 
+	    if (sub==1 && test!=1) { cHE->Modified();} 
+	    if (sub==1 && test==1) { cFour1->Modified();}   // HB upgrade 
 	    if (sub==2 && test!=1) { cHE->Modified();}
 	    if (sub==2 && test==1) { cNine->Modified();}  // HE upgrade
 	    if (sub==3) { cHB->Modified();}
@@ -1070,11 +1083,10 @@ int main(int argc, char *argv[])
 	  } 
 	  // Amplitude:	  
 	  if (test==1){ 
-	    if (sub==1) {cHE->Print("HistADCamplHB.png"); cHE->Clear();} 
-	    //	    if (sub==2) {cHE->Print("HistADCamplHE.png"); cHE->Clear();}
+	    if (sub==1) {cFour1->Print("HistADCamplHB.png"); cFour1->Clear();} // HB upgrade 
 	    if (sub==2) {cNine->Print("HistADCamplHE.png"); cNine->Clear();}  // HE upgrade
 	    if (sub==3) {cHB->Print("HistADCamplHO.png"); cHB->Clear();}
-	    if (sub==4) {cFour1->Print("HistADCamplHF.png"); cFour1->Clear();}  // HF upgrade
+	    if (sub==4) {cFour1->Print("HistADCamplHF.png"); cFour1->Clear();} // HF upgrade
 	  } 
 	  if (test==2){ 
 	    if (sub==1) {cHE->Print("HistWidthHB.png"); cHE->Clear();} 
@@ -1109,10 +1121,11 @@ int main(int argc, char *argv[])
 	    int depthsubcount = 0.;
 	    for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
 	      int kkkkkkmax = k_max[sub];
-	      if ( sub==4 || sub==2) kkkkkkmax = k_maxHFupgrade[sub];
+	      if ( sub==4 || sub==2 || sub==1) kkkkkkmax = k_maxupgrade[sub];
+	      //	      if ( sub==4 || sub==2) kkkkkkmax = k_maxupgrade[sub];
 	      for (int k=k_min[sub];k<=kkkkkkmax;k++) {  //Depth 
 		// line below is temporary, just to avoid contribution of HEP(M)17 in depthes 4,5,6,7 but keep in depthes 1,2,3
-		if(sub==2 && k>3 ) break;
+		//		if(sub==2 && k>3 ) break;
 		depthsubcount++;
 		double ccc1 =  HistNumBadChanDepth[test][sub][k]->GetBinContent(x);
 		HistNumChanFull[6]->SetBinContent(x,HistNumChanFull[6]->GetBinContent(x) + ccc1);
@@ -5785,7 +5798,8 @@ HF: j = 0,1,2, 3            18,19,20,21
 	   // Continue with common sections
 	   if (sub==1) { 
 	     htmlFile << "<h2> 8.Lumisection Status for HB: </h2>"<< std::endl;
-	     htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: <td class=\"s6\" align=\"center\">"<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2). </td></h3>"<< std::endl;
+	     //	     htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: <td class=\"s6\" align=\"center\">"<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2). </td></h3>"<< std::endl;
+	     htmlFile << "<h3> Legends: Red boxes correspond BAD LS selected with following cuts: "<<Cut0[test][sub][1]<<" (Depth1), "<<Cut0[test][sub][2]<<" (Depth2), "<<Cut0[test][sub][3]<<" (Depth3), "<<Cut0[test][sub][4]<<" (Depth4), </h3>"<< std::endl;
 	   }  
 	   if (sub==2) {
 	     htmlFile << "<h2> 8.Lumisection Status for HE: </h2>"<< std::endl;
@@ -5809,8 +5823,9 @@ HF: j = 0,1,2, 3            18,19,20,21
 	   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	   int kkkkkkmax = k_max[sub];
-	  if ( (sub==4 || sub==2) && test==1) kkkkkkmax = k_maxHFupgrade[sub];
-	  //	   if (test==1 && sub==4) kkkkkkmax = k_maxHFupgrade[sub];
+	  if ( (sub==4 || sub==2 || sub==1) && test==1) kkkkkkmax = k_maxupgrade[sub];
+	  //	  if ( (sub==4 || sub==2) && test==1) kkkkkkmax = k_maxupgrade[sub];
+	  //	   if (test==1 && sub==4) kkkkkkmax = k_maxupgrade[sub];
 
 	   if (test==0) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< Nbcs > Depth "<< k <<" </td>"  << std::endl;
 	   if (test==1) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< A > Depth "<< k <<" </td>"  << std::endl;
@@ -6260,8 +6275,9 @@ HF: j = 0,1,2, 3            18,19,20,21
       
       //    cout<<"Creating each test kind for each subdet html pages:  test=  "<< test << "  sub= "  << sub <<    endl;
       int kkkkkkmax = k_max[sub];
-      if ( (sub==4 || sub==2) && test==1) kkkkkkmax = k_maxHFupgrade[sub];
-      //	   if (test==1 && sub==4) kkkkkkmax = k_maxHFupgrade[sub];
+      if ( (sub==4 || sub==2 || sub==1) && test==1) kkkkkkmax = k_maxupgrade[sub];
+      //      if ( (sub==4 || sub==2) && test==1) kkkkkkmax = k_maxupgrade[sub];
+      //	   if (test==1 && sub==4) kkkkkkmax = k_maxupgrade[sub];
       if(sub==1) {
 	if (test==0) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< Nbcs > HBdep "<< k <<" </td>"  << std::endl;
 	if (test==1) for (int k=k_min[sub];k<=kkkkkkmax; k++) htmlFile << "<td class=\"s1\" align=\"center\">< A > HBdepth "<< k <<" </td>"  << std::endl;
@@ -6320,7 +6336,8 @@ HF: j = 0,1,2, 3            18,19,20,21
       int met =0;
       for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
 	int kkkkkkmax = k_max[sub];
-	if ( (sub==4 || sub==2) && test==1) kkkkkkmax = k_maxHFupgrade[sub];
+	if ( (sub==4 || sub==2 || sub==1) && test==1) kkkkkkmax = k_maxupgrade[sub];
+	//	if ( (sub==4 || sub==2) && test==1) kkkkkkmax = k_maxupgrade[sub];
 	for (int k=k_min[sub];k<=kkkkkkmax; k++)  {
 	  // line below is temporary, just to avoid contribution of HEP(M)17 in depthes 4,5,6,7 but keep in depthes 1,2,3
 	  if(sub==2 && k>3 ) {}else{
@@ -6337,7 +6354,8 @@ HF: j = 0,1,2, 3            18,19,20,21
 	htmlFile << raw_class<< LumiEv->GetBinContent(i)<<"</td>"<< std::endl;
 	for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
 	  int kkkkkkmax = k_max[sub];
-	  if ( (sub==4 || sub==2) && test==1) kkkkkkmax = k_maxHFupgrade[sub];
+	  if ( (sub==4 || sub==2 || sub==1) && test==1) kkkkkkmax = k_maxupgrade[sub];
+	  //	  if ( (sub==4 || sub==2) && test==1) kkkkkkmax = k_maxupgrade[sub];
 	  for (int k=k_min[sub];k<=kkkkkkmax; k++)  {
 	    if (HistNumBadChanDepth[test][sub][k]->GetBinContent(i) > Cut0[test][sub][k]) 
 	      htmlFile << "<td class=\"s6\" align=\"center\">"<<HistNumBadChanDepth[test][sub][k]->GetBinContent(i)<<"</td>"<< std::endl;
