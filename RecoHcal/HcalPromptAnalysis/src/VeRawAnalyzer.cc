@@ -406,6 +406,10 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   double lsdep_estimator1_HFdepth3_;
   double lsdep_estimator1_HFdepth4_;
 
+  // HB upgrade:
+  double lsdep_estimator1_HBdepth3_;
+  double lsdep_estimator1_HBdepth4_;
+
 
   double lsdep_estimator2_HBdepth1_;
   double lsdep_estimator2_HBdepth2_;
@@ -708,6 +712,8 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   TH1F* h_amplFine_HB;
   TH2F* h_mapDepth1Error_HB;
   TH2F* h_mapDepth2Error_HB;
+  TH2F* h_mapDepth3Error_HB;
+  TH2F* h_mapDepth4Error_HB;
   TH1F* h_fiber0_HB;
   TH1F* h_fiber1_HB;
   TH1F* h_fiber2_HB;
@@ -773,6 +779,8 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   /////////////////////////////////////////////
   TH2F*     h_mapDepth1ADCAmpl225Copy_HB  ;
   TH2F*     h_mapDepth2ADCAmpl225Copy_HB  ;
+  TH2F*     h_mapDepth3ADCAmpl225Copy_HB  ;
+  TH2F*     h_mapDepth4ADCAmpl225Copy_HB  ;
   TH2F*     h_mapDepth1ADCAmpl225Copy_HE  ;
   TH2F*     h_mapDepth2ADCAmpl225Copy_HE  ;
   TH2F*     h_mapDepth3ADCAmpl225Copy_HE  ;
@@ -812,23 +820,41 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   TH2F* h_mapDepth2ADCAmpl_HB;
   TH2F* h_mapDepth1ADCAmpl225_HB;
   TH2F* h_mapDepth2ADCAmpl225_HB;
+  TH2F* h_mapDepth3ADCAmpl_HB;
+  TH2F* h_mapDepth4ADCAmpl_HB;
+  TH2F* h_mapDepth3ADCAmpl225_HB;
+  TH2F* h_mapDepth4ADCAmpl225_HB;
 
   TH1F* h_TSmeanA_HB;
   TH2F* h_mapDepth1TSmeanA_HB;
   TH2F* h_mapDepth2TSmeanA_HB;
   TH2F* h_mapDepth1TSmeanA225_HB;
   TH2F* h_mapDepth2TSmeanA225_HB;
+  TH2F* h_mapDepth3TSmeanA_HB;
+  TH2F* h_mapDepth4TSmeanA_HB;
+  TH2F* h_mapDepth3TSmeanA225_HB;
+  TH2F* h_mapDepth4TSmeanA225_HB;
 
   TH1F* h_TSmaxA_HB;
   TH2F* h_mapDepth1TSmaxA_HB;
   TH2F* h_mapDepth2TSmaxA_HB;
   TH2F* h_mapDepth1TSmaxA225_HB;
   TH2F* h_mapDepth2TSmaxA225_HB;
+  TH2F* h_mapDepth3TSmaxA_HB;
+  TH2F* h_mapDepth4TSmaxA_HB;
+  TH2F* h_mapDepth3TSmaxA225_HB;
+  TH2F* h_mapDepth4TSmaxA225_HB;
+
   TH1F* h_Amplitude_HB;
   TH2F* h_mapDepth1Amplitude_HB;
   TH2F* h_mapDepth2Amplitude_HB;
   TH2F* h_mapDepth1Amplitude225_HB;
   TH2F* h_mapDepth2Amplitude225_HB;
+  TH2F* h_mapDepth3Amplitude_HB;
+  TH2F* h_mapDepth4Amplitude_HB;
+  TH2F* h_mapDepth3Amplitude225_HB;
+  TH2F* h_mapDepth4Amplitude225_HB;
+
   TH1F* h_Ampl_HB;
   TH2F* h_mapDepth1Ampl047_HB;
   TH2F* h_mapDepth2Ampl047_HB;
@@ -838,9 +864,19 @@ edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   TH2F* h_mapDepth2AmplE34_HB;
   TH2F* h_mapDepth1_HB;
   TH2F* h_mapDepth2_HB;
+  TH2F* h_mapDepth3Ampl047_HB;
+  TH2F* h_mapDepth4Ampl047_HB;
+  TH2F* h_mapDepth3Ampl_HB;
+  TH2F* h_mapDepth4Ampl_HB;
+  TH2F* h_mapDepth3AmplE34_HB;
+  TH2F* h_mapDepth4AmplE34_HB;
+  TH2F* h_mapDepth3_HB;
+  TH2F* h_mapDepth4_HB;
 
   TH2F* h_mapDepth1ADCAmpl12_HB;
   TH2F* h_mapDepth2ADCAmpl12_HB;
+  TH2F* h_mapDepth3ADCAmpl12_HB;
+  TH2F* h_mapDepth4ADCAmpl12_HB;
 
   TH2F* h_mapDepth1ADCAmpl12_HE;
   TH2F* h_mapDepth2ADCAmpl12_HE;
@@ -1064,7 +1100,7 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
 
 // 22.02.2019 - putted off because of misunderstanding of tdc treatment
 */
-
+  ///////////////////////////////////////
   TH1F* h_corrforxaMAIN_HE  ;
   TH1F* h_corrforxaMAIN0_HE ;
   TH1F* h_corrforxaADDI_HE  ;
@@ -1350,7 +1386,7 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH2F*    h_2D0sumPedestalLS8         ;
   TH1F*    h_sum0PedestalperLS8         ;
 
-// for gain stability vs LS:
+// for HE Hf gain stability vs LS:
   TH2F*    h_2DsumADCAmplLSdepth4HEu    ;
   TH2F*    h_2D0sumADCAmplLSdepth4HEu    ;
   TH2F*    h_2DsumADCAmplLSdepth5HEu    ;
@@ -1363,6 +1399,12 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH2F*    h_2D0sumADCAmplLSdepth3HFu    ;
   TH2F*    h_2DsumADCAmplLSdepth4HFu    ;
   TH2F*    h_2D0sumADCAmplLSdepth4HFu    ;
+
+// for HB gain stability vs LS:
+  TH2F*    h_2DsumADCAmplLSdepth3HBu    ;
+  TH2F*    h_2D0sumADCAmplLSdepth3HBu    ;
+  TH2F*    h_2DsumADCAmplLSdepth4HBu    ;
+  TH2F*    h_2D0sumADCAmplLSdepth4HBu    ;
 
   // LS dependencies for estimator1:
   TH1F*    h_sumADCAmplLS1copy1    ;
@@ -1432,6 +1474,16 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
   TH1F*    h_sum0ADCAmplperLSdepth5HEu         ;
   TH1F*    h_sum0ADCAmplperLSdepth6HEu         ;
   TH1F*    h_sum0ADCAmplperLSdepth7HEu         ;
+
+  // for HB upgrade:
+  TH1F*    h_sumADCAmplperLSdepth3HBu  ;
+  TH1F*    h_sumADCAmplperLSdepth4HBu  ;
+
+  TH1F*    h_sumCutADCAmplperLSdepth3HBu         ;
+  TH1F*    h_sumCutADCAmplperLSdepth4HBu         ;
+
+  TH1F*    h_sum0ADCAmplperLSdepth3HBu         ;
+  TH1F*    h_sum0ADCAmplperLSdepth4HBu         ;
 
   // for HF upgrade:
   TH1F*    h_sumADCAmplperLS6u         ;
@@ -1792,6 +1844,8 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
 
   TH2F*     h_mapDepth1pedestalw_HB;
   TH2F*     h_mapDepth2pedestalw_HB;
+  TH2F*     h_mapDepth3pedestalw_HB;
+  TH2F*     h_mapDepth4pedestalw_HB;
   TH2F*     h_mapDepth1pedestalw_HE;
   TH2F*     h_mapDepth2pedestalw_HE;
   TH2F*     h_mapDepth3pedestalw_HE;
@@ -1807,6 +1861,8 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
 
   TH2F*     h_mapDepth1pedestal_HB;
   TH2F*     h_mapDepth2pedestal_HB;
+  TH2F*     h_mapDepth3pedestal_HB;
+  TH2F*     h_mapDepth4pedestal_HB;
   TH2F*     h_mapDepth1pedestal_HE;
   TH2F*     h_mapDepth2pedestal_HE;
   TH2F*     h_mapDepth3pedestal_HE;
@@ -2566,6 +2622,10 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   // HF upgrade:
   lsdep_estimator1_HFdepth3_ = iConfig.getParameter<double>("lsdep_estimator1_HFdepth3");
   lsdep_estimator1_HFdepth4_ = iConfig.getParameter<double>("lsdep_estimator1_HFdepth4");
+
+  // HB upgrade:
+  lsdep_estimator1_HBdepth3_ = iConfig.getParameter<double>("lsdep_estimator1_HBdepth3");
+  lsdep_estimator1_HBdepth4_ = iConfig.getParameter<double>("lsdep_estimator1_HBdepth4");
 
   lsdep_estimator2_HBdepth1_ = iConfig.getParameter<double>("lsdep_estimator2_HBdepth1");
   lsdep_estimator2_HBdepth2_ = iConfig.getParameter<double>("lsdep_estimator2_HBdepth2");
@@ -3389,9 +3449,30 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 		      h_sum0ADCAmplperLS1_M2->Fill( float(lscounterM1) ,bbb1);
 		    }
 		  }
-
 		}
+		// HBdepth3 upgrade
+		if(k1+1  ==3) {
+		  h_sumADCAmplperLSdepth3HBu->Fill( float(lscounterM1) ,bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth3_    ) h_sumCutADCAmplperLSdepth3HBu->Fill( float(lscounterM1) ,bbbc); 
+		  h_sum0ADCAmplperLSdepth3HBu->Fill( float(lscounterM1) ,bbb1);
+
+		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth3_    ) h_2DsumADCAmplLSdepth3HBu->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumADCAmplLSdepth3HBu->Fill(double(ieta), double(k3), bbb1);
+		}//if(k1+1  ==3)
+
+		// HBdepth4 upgrade
+		if(k1+1  ==4) {
+		  h_sumADCAmplperLSdepth4HBu->Fill( float(lscounterM1) ,bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth4_    ) h_sumCutADCAmplperLSdepth4HBu->Fill( float(lscounterM1) ,bbbc); 
+		  h_sum0ADCAmplperLSdepth4HBu->Fill( float(lscounterM1) ,bbb1);
+
+		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth4_    ) h_2DsumADCAmplLSdepth4HBu->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumADCAmplLSdepth4HBu->Fill(double(ieta), double(k3), bbb1);
+		}//if(k1+1  ==4)
+
+
 	      }
+
 	      // HE:
 	      if(k0==1) {
 		// HEdepth1
@@ -4676,7 +4757,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
   //end upgrade
   //
   //
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// HBHEDigiCollection
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// HBHEDigiCollection  usual, <=2018
   int qwert1= 0; int qwert2= 0;int qwert3= 0;int qwert4= 0;int qwert5= 0;
   if (verbosity > 0 || verbosity == -2324) std::cout << "===================================== HBHEDigiCollection Start " << std::endl;
   if(flagupgradeqie1011_  != 2 && flagupgradeqie1011_  != 3 ) {
@@ -4797,7 +4878,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
     }//hbhe.isValid
   }// end flagupgrade 
   //---------------------------------------------------------------
-  //////////////////////////////////////////////////////////////////////////////////////////////////upgradeHBHE upgradehe  
+  //////////////////////////////////////////////////////////////////////////////////////////////////    upgradeHBHE upgradehe       HBHE with SiPM (both >=2020)
   // upgrade:
   if (verbosity > 0 || verbosity == -2324) std::cout << "===================================== QIE11DigiCollection Start " << std::endl;
   if(flagupgradeqie1011_  != 1 && flagupgradeqie1011_  != 4 && flagupgradeqie1011_  != 5 && flagupgradeqie1011_  != 10 ) {
@@ -4870,6 +4951,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	  //	    TS_data[i]=adc2fC[cell.sample(i).adc()];
 	  //	    TS_data[i]=adc2fC[digi->sample(i).adc()];
 	  //	    TS_data[i]=digi->adc();
+	  // HB:
 	  if(sub == 1 ) { 	  
 	    double amplitudefullTSs1 = 0.;
 	    double amplitudefullTSs6 = 0.;
@@ -4896,6 +4978,7 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	    h_AmplitudeHBtest1->Fill(amplitudefullTSs1,1.); 
 	    h_AmplitudeHBtest6->Fill(amplitudefullTSs6,1.); 
 	  }//HB end
+	  // HE:
 	  if(sub == 2 ) {  
 	    double amplitudefullTSs1 = 0.;
 	    double amplitudefullTSs6 = 0.;
@@ -6004,6 +6087,8 @@ void VeRawAnalyzer::beginJob()
     h_amplFine_HB = new TH1F("h_amplFine_HB"," ", 100, -2.,98.);
     h_mapDepth1Error_HB = new TH2F("h_mapDepth1Error_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2Error_HB = new TH2F("h_mapDepth2Error_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth3Error_HB = new TH2F("h_mapDepth3Error_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth4Error_HB = new TH2F("h_mapDepth4Error_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_fiber0_HB = new TH1F("h_fiber0_HB"," ", 10, 0., 10.);
     h_fiber1_HB = new TH1F("h_fiber1_HB"," ", 10, 0., 10.);
     h_fiber2_HB = new TH1F("h_fiber2_HB"," ", 40, 0., 40.);
@@ -6112,36 +6197,62 @@ void VeRawAnalyzer::beginJob()
     h_ADCAmpl_HB = new TH1F("h_ADCAmpl_HB"," ", 100, 10.,5000.);
     h_mapDepth1ADCAmpl225_HB = new TH2F("h_mapDepth1ADCAmpl225_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2ADCAmpl225_HB = new TH2F("h_mapDepth2ADCAmpl225_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth3ADCAmpl225_HB = new TH2F("h_mapDepth3ADCAmpl225_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth4ADCAmpl225_HB = new TH2F("h_mapDepth4ADCAmpl225_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth1ADCAmpl225Copy_HB = new TH2F("h_mapDepth1ADCAmpl225Copy_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2ADCAmpl225Copy_HB = new TH2F("h_mapDepth2ADCAmpl225Copy_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth3ADCAmpl225Copy_HB = new TH2F("h_mapDepth3ADCAmpl225Copy_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth4ADCAmpl225Copy_HB = new TH2F("h_mapDepth4ADCAmpl225Copy_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth1ADCAmpl_HB = new TH2F("h_mapDepth1ADCAmpl_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2ADCAmpl_HB = new TH2F("h_mapDepth2ADCAmpl_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth3ADCAmpl_HB = new TH2F("h_mapDepth3ADCAmpl_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth4ADCAmpl_HB = new TH2F("h_mapDepth4ADCAmpl_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_TSmeanA_HB = new TH1F("h_TSmeanA_HB"," ", 100, -1.,11.);
     h_mapDepth1TSmeanA225_HB = new TH2F("h_mapDepth1TSmeanA225_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2TSmeanA225_HB = new TH2F("h_mapDepth2TSmeanA225_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth3TSmeanA225_HB = new TH2F("h_mapDepth3TSmeanA225_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth4TSmeanA225_HB = new TH2F("h_mapDepth4TSmeanA225_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth1TSmeanA_HB = new TH2F("h_mapDepth1TSmeanA_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2TSmeanA_HB = new TH2F("h_mapDepth2TSmeanA_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth3TSmeanA_HB = new TH2F("h_mapDepth3TSmeanA_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth4TSmeanA_HB = new TH2F("h_mapDepth4TSmeanA_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_TSmaxA_HB = new TH1F("h_TSmaxA_HB"," ", 100, -1.,11.);
     h_mapDepth1TSmaxA225_HB = new TH2F("h_mapDepth1TSmaxA225_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2TSmaxA225_HB = new TH2F("h_mapDepth2TSmaxA225_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth3TSmaxA225_HB = new TH2F("h_mapDepth3TSmaxA225_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth4TSmaxA225_HB = new TH2F("h_mapDepth4TSmaxA225_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth1TSmaxA_HB = new TH2F("h_mapDepth1TSmaxA_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2TSmaxA_HB = new TH2F("h_mapDepth2TSmaxA_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth3TSmaxA_HB = new TH2F("h_mapDepth3TSmaxA_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth4TSmaxA_HB = new TH2F("h_mapDepth4TSmaxA_HB"," ", neta, -41., 41., nphi, 0., bphi);
     // RMS:
     h_Amplitude_HB = new TH1F("h_Amplitude_HB"," ", 100, 0.,5.);
     h_mapDepth1Amplitude225_HB=new TH2F("h_mapDepth1Amplitude225_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2Amplitude225_HB=new TH2F("h_mapDepth2Amplitude225_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth3Amplitude225_HB=new TH2F("h_mapDepth3Amplitude225_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth4Amplitude225_HB=new TH2F("h_mapDepth4Amplitude225_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth1Amplitude_HB = new TH2F("h_mapDepth1Amplitude_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2Amplitude_HB = new TH2F("h_mapDepth2Amplitude_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth3Amplitude_HB = new TH2F("h_mapDepth3Amplitude_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth4Amplitude_HB = new TH2F("h_mapDepth4Amplitude_HB"," ", neta, -41., 41., nphi, 0., bphi);
     // Ratio:
     h_Ampl_HB = new TH1F("h_Ampl_HB"," ", 100, 0.,1.1);
     h_mapDepth1Ampl047_HB = new TH2F("h_mapDepth1Ampl047_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2Ampl047_HB = new TH2F("h_mapDepth2Ampl047_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth3Ampl047_HB = new TH2F("h_mapDepth3Ampl047_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth4Ampl047_HB = new TH2F("h_mapDepth4Ampl047_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth1Ampl_HB = new TH2F("h_mapDepth1Ampl_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2Ampl_HB = new TH2F("h_mapDepth2Ampl_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth3Ampl_HB = new TH2F("h_mapDepth3Ampl_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth4Ampl_HB = new TH2F("h_mapDepth4Ampl_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth1AmplE34_HB = new TH2F("h_mapDepth1AmplE34_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2AmplE34_HB = new TH2F("h_mapDepth2AmplE34_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth3AmplE34_HB = new TH2F("h_mapDepth3AmplE34_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth4AmplE34_HB = new TH2F("h_mapDepth4AmplE34_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth1_HB = new TH2F("h_mapDepth1_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2_HB = new TH2F("h_mapDepth2_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth3_HB = new TH2F("h_mapDepth3_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth4_HB = new TH2F("h_mapDepth4_HB"," ", neta, -41., 41., nphi, 0., bphi);
     
     //////////////////////////////////////////////////////////////////////////////////////////////             HE
     /*
@@ -6938,7 +7049,7 @@ void VeRawAnalyzer::beginJob()
     h_sumADCAmplperLSdepth7HEu = new TH1F("h_sumADCAmplperLSdepth7HEu"," ",     bac, 1.,bac2);
     h_sumCutADCAmplperLSdepth7HEu = new TH1F("h_sumCutADCAmplperLSdepth7HEu"," ",     bac, 1.,bac2);
     h_sum0ADCAmplperLSdepth7HEu = new TH1F("h_sum0ADCAmplperLSdepth7HEu"," ",     bac, 1.,bac2);
-		// for gain stability vs LS:
+		// for HE gain stability vs LS:
     h_2DsumADCAmplLSdepth4HEu   = new TH2F("h_2DsumADCAmplLSdepth4HEu"," ",    neta, -41., 41., nphi, 0., bphi);
     h_2D0sumADCAmplLSdepth4HEu   = new TH2F("h_2D0sumADCAmplLSdepth4HEu"," ",    neta, -41., 41., nphi, 0., bphi);
     h_2DsumADCAmplLSdepth5HEu   = new TH2F("h_2DsumADCAmplLSdepth5HEu"," ",    neta, -41., 41., nphi, 0., bphi);
@@ -6983,6 +7094,22 @@ void VeRawAnalyzer::beginJob()
     h_sumCutADCAmplperLS8  = new TH1F("h_sumCutADCAmplperLS8"," ",     bac, 1.,bac2);
     h_2D0sumADCAmplLS8    = new TH2F("h_2D0sumADCAmplLS8"," ",    neta, -41., 41., nphi, 0., bphi);
     h_sum0ADCAmplperLS8  = new TH1F("h_sum0ADCAmplperLS8"," ",     bac, 1.,bac2);
+
+    // HB upgrade depth3
+    h_sumADCAmplperLSdepth3HBu = new TH1F("h_sumADCAmplperLSdepth3HBu"," ",     bac, 1.,bac2);
+    h_sumCutADCAmplperLSdepth3HBu = new TH1F("h_sumCutADCAmplperLSdepth3HBu"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLSdepth3HBu = new TH1F("h_sum0ADCAmplperLSdepth3HBu"," ",     bac, 1.,bac2);
+    // HB upgrade depth4
+    h_sumADCAmplperLSdepth4HBu = new TH1F("h_sumADCAmplperLSdepth4HBu"," ",     bac, 1.,bac2);
+    h_sumCutADCAmplperLSdepth4HBu = new TH1F("h_sumCutADCAmplperLSdepth4HBu"," ",     bac, 1.,bac2);
+    h_sum0ADCAmplperLSdepth4HBu = new TH1F("h_sum0ADCAmplperLSdepth4HBu"," ",     bac, 1.,bac2);
+
+
+    // for HB gain stability vs LS:
+    h_2DsumADCAmplLSdepth3HBu   = new TH2F("h_2DsumADCAmplLSdepth3HBu"," ",    neta, -41., 41., nphi, 0., bphi);
+    h_2D0sumADCAmplLSdepth3HBu   = new TH2F("h_2D0sumADCAmplLSdepth3HBu"," ",    neta, -41., 41., nphi, 0., bphi);
+    h_2DsumADCAmplLSdepth4HBu   = new TH2F("h_2DsumADCAmplLSdepth4HBu"," ",    neta, -41., 41., nphi, 0., bphi);
+    h_2D0sumADCAmplLSdepth4HBu   = new TH2F("h_2D0sumADCAmplLSdepth4HBu"," ",    neta, -41., 41., nphi, 0., bphi);
 
     // error-A for HB( depth1 only) 
     h_sumADCAmplperLS1_P1  = new TH1F("h_sumADCAmplperLS1_P1"," ",     bac, 1.,bac2);
@@ -7431,6 +7558,8 @@ void VeRawAnalyzer::beginJob()
     //--------------------------------------------------
     h_mapDepth1pedestalw_HB = new TH2F("h_mapDepth1pedestalw_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2pedestalw_HB = new TH2F("h_mapDepth2pedestalw_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth3pedestalw_HB = new TH2F("h_mapDepth3pedestalw_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth4pedestalw_HB = new TH2F("h_mapDepth4pedestalw_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth1pedestalw_HE = new TH2F("h_mapDepth1pedestalw_HE"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2pedestalw_HE = new TH2F("h_mapDepth2pedestalw_HE"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth3pedestalw_HE = new TH2F("h_mapDepth3pedestalw_HE"," ", neta, -41., 41., nphi, 0., bphi);
@@ -7446,6 +7575,8 @@ void VeRawAnalyzer::beginJob()
 
     h_mapDepth1pedestal_HB = new TH2F("h_mapDepth1pedestal_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2pedestal_HB = new TH2F("h_mapDepth2pedestal_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth3pedestal_HB = new TH2F("h_mapDepth3pedestal_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth4pedestal_HB = new TH2F("h_mapDepth4pedestal_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth1pedestal_HE = new TH2F("h_mapDepth1pedestal_HE"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2pedestal_HE = new TH2F("h_mapDepth2pedestal_HE"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth3pedestal_HE = new TH2F("h_mapDepth3pedestal_HE"," ", neta, -41., 41., nphi, 0., bphi);
@@ -7593,7 +7724,8 @@ void VeRawAnalyzer::beginJob()
     //--------------------------------------------------
     h_mapDepth1ADCAmpl12_HB = new TH2F("h_mapDepth1ADCAmpl12_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2ADCAmpl12_HB = new TH2F("h_mapDepth2ADCAmpl12_HB"," ", neta, -41., 41., nphi, 0., bphi);
-
+    h_mapDepth3ADCAmpl12_HB = new TH2F("h_mapDepth3ADCAmpl12_HB"," ", neta, -41., 41., nphi, 0., bphi);
+    h_mapDepth4ADCAmpl12_HB = new TH2F("h_mapDepth4ADCAmpl12_HB"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth1ADCAmpl12_HE = new TH2F("h_mapDepth1ADCAmpl12_HE"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth2ADCAmpl12_HE = new TH2F("h_mapDepth2ADCAmpl12_HE"," ", neta, -41., 41., nphi, 0., bphi);
     h_mapDepth3ADCAmpl12_HE = new TH2F("h_mapDepth3ADCAmpl12_HE"," ", neta, -41., 41., nphi, 0., bphi);
@@ -9020,11 +9152,15 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
 	   || pedestalw2 < pedestalwHBMax_ || pedestalw3 < pedestalwHBMax_) {
 	  if(mdepth==1) h_mapDepth1pedestalw_HB->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==2) h_mapDepth2pedestalw_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==3) h_mapDepth3pedestalw_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==4) h_mapDepth4pedestalw_HB->Fill(double(ieta), double(iphi), 1.);
 	}
 	if(pedestal0 < pedestalHBMax_ || pedestal1 < pedestalHBMax_
 	   || pedestal2 < pedestalHBMax_ || pedestal3 < pedestalHBMax_) {
 	  if(mdepth==1) h_mapDepth1pedestal_HB->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==2) h_mapDepth2pedestal_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==3) h_mapDepth3pedestal_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==4) h_mapDepth4pedestal_HB->Fill(double(ieta), double(iphi), 1.);
 	}
 	for (int ii=0; ii<TSsize; ii++) {
 	  h_pedestal00_HB->Fill(pedestal00->getValue(ii),1.);
@@ -9511,6 +9647,7 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
   int iphi = hcaldetid.iphi()-1;
   int mdepth = hcaldetid.depth();
   int sub   = hcaldetid.subdet(); // 1-HB, 2-HE QIE11DigiCollection
+
   if (verbosity == -2324) std::cout << " fillDigiAmplitude QIE11    DIGI ->  "  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
   nTS = qie11df.samples();
   if (verbosity == -2324) std::cout <<" fillDigiAmplitude  QIE11   Size of Digi nTS= "<<nTS<<" qie11df.size()= "<<qie11df.size()<<std::endl;
@@ -9596,7 +9733,7 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
     if( sub == 2 ) TSsize = 8; // sub = 2 HE
 
     if(nTS !=  TSsize) errorBtype = 1.; 
-    TSsize=nTS;
+    TSsize=nTS;//nTS = qie11df.samples();
     //  if(qie10df.size() !=  TSsize) errorBtype = 1.; 
     //  TSsize=qie10df.size();
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -9823,6 +9960,9 @@ getTDCTimeFromSample
     //  if(ts_with_max_signal-1 > -1 && ts_with_max_signal-1 < 10) ampl += tool[ts_with_max_signal-1];
     //  if(ts_with_max_signal-2 > -1 && ts_with_max_signal-2 < 10) ampl += tool[ts_with_max_signal-2];
 
+  // test TEST zhokin testzhokin for HBqie11 with old data, but new HB-depthes, 3,4 . Trick: change sub=2 to sub=1 forcibly:
+    ////(sub==2) sub = 1;
+  // end of test
     ///////   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      !!!!!!!!!!!!!!!!!! HE charge correction for SiPMs:
     // HE charge correction for SiPMs:
     if(flagsipmcorrection_ != 0 ) {
@@ -10130,11 +10270,15 @@ getTDCTimeFromSample
 	   || pedestalw2 < pedestalwHBMax_ || pedestalw3 < pedestalwHBMax_) {
 	  if(mdepth==1) h_mapDepth1pedestalw_HB->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==2) h_mapDepth2pedestalw_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==3) h_mapDepth3pedestalw_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==3) h_mapDepth4pedestalw_HB->Fill(double(ieta), double(iphi), 1.);
 	}
 	if(pedestal0 < pedestalHBMax_ || pedestal1 < pedestalHBMax_
 	   || pedestal2 < pedestalHBMax_ || pedestal3 < pedestalHBMax_) {
 	  if(mdepth==1) h_mapDepth1pedestal_HB->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==2) h_mapDepth2pedestal_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==3) h_mapDepth3pedestal_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==4) h_mapDepth4pedestal_HB->Fill(double(ieta), double(iphi), 1.);
 	}
 	for (int ii=0; ii<TSsize; ii++) {
 	  h_pedestal00_HB->Fill(pedestal00->getValue(ii),1.);
@@ -10173,18 +10317,26 @@ getTDCTimeFromSample
 	  if(studyRunDependenceHist_ && flagtodefinebadchannel_==5) ++badchannels[sub-1][mdepth-1][ieta+41][iphi];// 0-neta ; 0-71
 	  if(mdepth==1) h_mapDepth1ADCAmpl225_HB->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==2) h_mapDepth2ADCAmpl225_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==3) h_mapDepth3ADCAmpl225_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==4) h_mapDepth4ADCAmpl225_HB->Fill(double(ieta), double(iphi), 1.);
 	  if (verbosity == -56) std::cout << "***BAD HB channels from ADCAmpl: "  <<" ieta= " << ieta <<" iphi= " << iphi <<" amplitude= " << amplitude << std::endl;
 	}// if
 	//	if(amplitude >400.) averSIGNALoccupancy_HB += 1.;
 	if(amplitude < 35.) {
 	  if(mdepth==1) h_mapDepth1ADCAmpl225Copy_HB->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==2) h_mapDepth2ADCAmpl225Copy_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==3) h_mapDepth3ADCAmpl225Copy_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==4) h_mapDepth4ADCAmpl225Copy_HB->Fill(double(ieta), double(iphi), 1.);
 	}// if
 	// for averaged values:
 	if(mdepth==1) h_mapDepth1ADCAmpl_HB->Fill(double(ieta), double(iphi), amplitude);
 	if(mdepth==2) h_mapDepth2ADCAmpl_HB->Fill(double(ieta), double(iphi), amplitude);
+	if(mdepth==3) h_mapDepth3ADCAmpl_HB->Fill(double(ieta), double(iphi), amplitude);
+	if(mdepth==4) h_mapDepth4ADCAmpl_HB->Fill(double(ieta), double(iphi), amplitude);
 	if(mdepth==1) h_mapDepth1ADCAmpl12_HB->Fill(double(ieta), double(iphi), ampl);
 	if(mdepth==2) h_mapDepth2ADCAmpl12_HB->Fill(double(ieta), double(iphi), ampl);
+	if(mdepth==3) h_mapDepth3ADCAmpl12_HB->Fill(double(ieta), double(iphi), ampl);
+	if(mdepth==4) h_mapDepth4ADCAmpl12_HB->Fill(double(ieta), double(iphi), ampl);
 	///////////////////////////////////////////////////////////////////////////////	//AZ: 21.09.2018 for Pavel Bunin:
 	/*
 	if(lscounterM1 == 11 ) {h_AiForLS_11_HB->Fill(amplitude, 1.);}
@@ -10230,11 +10382,15 @@ getTDCTimeFromSample
 	  if(studyRunDependenceHist_ && flagtodefinebadchannel_==4) ++badchannels[sub-1][mdepth-1][ieta+41][iphi];// 0-neta ; 0-71
 	  if(mdepth==1) h_mapDepth1TSmeanA225_HB->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==2) h_mapDepth2TSmeanA225_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==3) h_mapDepth3TSmeanA225_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==4) h_mapDepth4TSmeanA225_HB->Fill(double(ieta), double(iphi), 1.);
 	  if (verbosity == -55) std::cout << "***BAD HB channels from TSmaxA: "  <<" ieta= " << ieta <<" iphi= " << iphi <<" aveamplitude1= " << aveamplitude1 << std::endl;
 	}// if
 	// for averaged values:
 	if(mdepth==1) h_mapDepth1TSmeanA_HB->Fill(double(ieta), double(iphi), aveamplitude1);
 	if(mdepth==2) h_mapDepth2TSmeanA_HB->Fill(double(ieta), double(iphi), aveamplitude1);
+	if(mdepth==3) h_mapDepth3TSmeanA_HB->Fill(double(ieta), double(iphi), aveamplitude1);
+	if(mdepth==4) h_mapDepth4TSmeanA_HB->Fill(double(ieta), double(iphi), aveamplitude1);
 	if(amplitude > forallestimators_amplitude_bigger_) sumEstimator2[sub-1][mdepth-1][ieta+41][iphi] += aveamplitude1;
       }//if(studyTSmeanShapeHist_
       ///////////////////////////////
@@ -10246,11 +10402,15 @@ getTDCTimeFromSample
 	  if(studyRunDependenceHist_ && flagtodefinebadchannel_==3) ++badchannels[sub-1][mdepth-1][ieta+41][iphi];// 0-neta ; 0-71
 	  if(mdepth==1) h_mapDepth1TSmaxA225_HB->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==2) h_mapDepth2TSmaxA225_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==3) h_mapDepth3TSmaxA225_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==4) h_mapDepth4TSmaxA225_HB->Fill(double(ieta), double(iphi), 1.);
 	  if (verbosity == -55) std::cout << "***BAD HB channels from TSmaxA: "  <<" ieta= " << ieta <<" iphi= " << iphi <<" ts_with_max_signal= " << ts_with_max_signal << std::endl;
 	}// if
 	// for averaged values:
 	if(mdepth==1) h_mapDepth1TSmaxA_HB->Fill(double(ieta),double(iphi),float(ts_with_max_signal));
 	if(mdepth==2) h_mapDepth2TSmaxA_HB->Fill(double(ieta),double(iphi),float(ts_with_max_signal));
+	if(mdepth==3) h_mapDepth3TSmaxA_HB->Fill(double(ieta),double(iphi),float(ts_with_max_signal));
+	if(mdepth==4) h_mapDepth4TSmaxA_HB->Fill(double(ieta),double(iphi),float(ts_with_max_signal));
 	if(amplitude > forallestimators_amplitude_bigger_) sumEstimator3[sub-1][mdepth-1][ieta+41][iphi] += float(ts_with_max_signal);
       }//if(studyTSmaxShapeHist_
       ///////////////////////////////
@@ -10262,11 +10422,15 @@ getTDCTimeFromSample
 	  if(studyRunDependenceHist_ && flagtodefinebadchannel_==2) ++badchannels[sub-1][mdepth-1][ieta+41][iphi];// 0-neta ; 0-71
 	  if(mdepth==1) h_mapDepth1Amplitude225_HB->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==2) h_mapDepth2Amplitude225_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==3) h_mapDepth3Amplitude225_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==4) h_mapDepth4Amplitude225_HB->Fill(double(ieta), double(iphi), 1.);
 	  if (verbosity == -54) std::cout << "***BAD HB channels from shape RMS:  "  <<" ieta= " << ieta <<" iphi= " << iphi << std::endl;
 	}// if
 	// for averaged values:
 	if(mdepth==1) h_mapDepth1Amplitude_HB->Fill(double(ieta), double(iphi), rmsamplitude);    
 	if(mdepth==2) h_mapDepth2Amplitude_HB->Fill(double(ieta), double(iphi), rmsamplitude);    
+	if(mdepth==3) h_mapDepth3Amplitude_HB->Fill(double(ieta), double(iphi), rmsamplitude);    
+	if(mdepth==4) h_mapDepth4Amplitude_HB->Fill(double(ieta), double(iphi), rmsamplitude);    
 	if(amplitude > forallestimators_amplitude_bigger_) sumEstimator4[sub-1][mdepth-1][ieta+41][iphi] += rmsamplitude;
       }//if(studyRMSshapeHist_)
       ///////////////////////////////
@@ -10278,6 +10442,8 @@ getTDCTimeFromSample
 	  if(studyRunDependenceHist_ && flagtodefinebadchannel_==1) ++badchannels[sub-1][mdepth-1][ieta+41][iphi];// 0-neta ; 0-71
 	  if(mdepth==1) h_mapDepth1Ampl047_HB->Fill(double(ieta), double(iphi), 1.);
 	  if(mdepth==2) h_mapDepth2Ampl047_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==3) h_mapDepth3Ampl047_HB->Fill(double(ieta), double(iphi), 1.);
+	  if(mdepth==4) h_mapDepth4Ampl047_HB->Fill(double(ieta), double(iphi), 1.);
 	  // //
 	  if (verbosity == -53) std::cout << "***BAD HB channels from shape Ratio:  " <<" ieta= " << ieta <<" iphi= " << iphi << std::endl;
 	  if (verbosity == -51  ) std::cout << "***BAD HB channels from shape Ratio:  " <<" ieta= " << ieta <<" iphi= " << iphi <<" sub= " << sub <<" mdepth= " << mdepth <<" badchannels= " << badchannels[sub-1][mdepth-1][ieta+41][iphi] << std::endl;
@@ -10285,6 +10451,8 @@ getTDCTimeFromSample
 	// for averaged values:
 	if(mdepth==1) h_mapDepth1Ampl_HB->Fill(double(ieta), double(iphi), ratio);    
 	if(mdepth==2) h_mapDepth2Ampl_HB->Fill(double(ieta), double(iphi), ratio);    
+	if(mdepth==3) h_mapDepth3Ampl_HB->Fill(double(ieta), double(iphi), ratio);    
+	if(mdepth==4) h_mapDepth4Ampl_HB->Fill(double(ieta), double(iphi), ratio);    
 	if(amplitude > forallestimators_amplitude_bigger_) sumEstimator5[sub-1][mdepth-1][ieta+41][iphi] += ratio;
       }//if(studyRatioShapeHist_)
       ///////////////////////////////
@@ -10293,11 +10461,15 @@ getTDCTimeFromSample
       if(studyDiffAmplHist_) {
 	if(mdepth==1) h_mapDepth1AmplE34_HB->Fill(double(ieta), double(iphi), amplitude);    
 	if(mdepth==2) h_mapDepth2AmplE34_HB->Fill(double(ieta), double(iphi), amplitude);    
+	if(mdepth==3) h_mapDepth3AmplE34_HB->Fill(double(ieta), double(iphi), amplitude);    
+	if(mdepth==4) h_mapDepth4AmplE34_HB->Fill(double(ieta), double(iphi), amplitude);    
       }// if(studyDiffAmplHist_)     
       
       ///////////////////////////////    for HB All 
       if(mdepth==1) h_mapDepth1_HB->Fill(double(ieta), double(iphi), 1.);    
       if(mdepth==2) h_mapDepth2_HB->Fill(double(ieta), double(iphi), 1.);    
+      if(mdepth==3) h_mapDepth3_HB->Fill(double(ieta), double(iphi), 1.);    
+      if(mdepth==4) h_mapDepth4_HB->Fill(double(ieta), double(iphi), 1.);    
     }//if ( sub == 1 )
     
     // HE   QIE11
@@ -12553,7 +12725,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      }
 	      // HE:
 	      if(k0==1) {
-		// HBdepth1
+		// HEdepth1
 		if(k1+1  ==1) {
 		  h_sumPedestalLS3->Fill(bbbc/bbb1);
 		  h_2DsumPedestalLS3->Fill(double(ieta), double(k3), bbbc);
@@ -12578,7 +12750,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      }
 	      // HF:
 	      if(k0==3) {
-		// HBdepth1
+		// HFdepth1
 		if(k1+1  ==1) {
 		  h_sumPedestalLS6->Fill(bbbc/bbb1);
 		  h_2DsumPedestalLS6->Fill(double(ieta), double(k3), bbbc);
@@ -12596,7 +12768,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      }
 	      // HO:
 	      if(k0==2) {
-		// HBdepth1
+		// HOdepth1
 		if(k1+1  ==4) {
 		  h_sumPedestalLS8->Fill(bbbc/bbb1);
 		  h_2DsumPedestalLS8->Fill(double(ieta), double(k3), bbbc);
@@ -12698,6 +12870,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 		  h_sum0ADCAmplperLS1->Fill( float(lscounterM1) ,bbb1);
 
 		}
+		// HBdepth2
 		if(k1+1  ==2) {
 		  h_sumADCAmplLS2->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth2_  ) h_2DsumADCAmplLS2->Fill(double(ieta), double(k3), bbbc);
@@ -12708,8 +12881,26 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 		  h_sumADCAmplperLS2->Fill( float(lscounterM1) ,bbbc);
 		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth2_  ) h_sumCutADCAmplperLS2->Fill( float(lscounterM1) ,bbbc); 
 		  h_sum0ADCAmplperLS2->Fill( float(lscounterM1) ,bbb1);
-
 		}
+		// HBdepth3 upgrade
+		if(k1+1  ==3) {
+		  h_sumADCAmplperLSdepth3HBu->Fill( float(lscounterM1) ,bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth3_    ) h_sumCutADCAmplperLSdepth3HBu->Fill( float(lscounterM1) ,bbbc); 
+		  h_sum0ADCAmplperLSdepth3HBu->Fill( float(lscounterM1) ,bbb1);
+		  
+		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth3_    ) h_2DsumADCAmplLSdepth3HBu->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumADCAmplLSdepth3HBu->Fill(double(ieta), double(k3), bbb1);
+		}//if(k1+1  ==3)
+
+		// HBdepth4 upgrade
+		if(k1+1  ==4) {
+		  h_sumADCAmplperLSdepth4HBu->Fill( float(lscounterM1) ,bbbc);
+		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth4_    ) h_sumCutADCAmplperLSdepth4HBu->Fill( float(lscounterM1) ,bbbc); 
+		  h_sum0ADCAmplperLSdepth4HBu->Fill( float(lscounterM1) ,bbb1);
+
+		  if(bbbc/bbb1 > lsdep_estimator1_HBdepth4_    ) h_2DsumADCAmplLSdepth4HBu->Fill(double(ieta), double(k3), bbbc);
+		  h_2D0sumADCAmplLSdepth4HBu->Fill(double(ieta), double(k3), bbb1);
+		}//if(k1+1  ==4)
 	      }
 	      // HE:
 	      if(k0==1) {
@@ -12795,7 +12986,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 
 	      // HF:
 	      if(k0==3) {
-		// HBdepth1
+		// HFdepth1
 		if(k1+1  ==1) {
 		  h_sumADCAmplLS6->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 > lsdep_estimator1_HFdepth1_  ) h_2DsumADCAmplLS6->Fill(double(ieta), double(k3), bbbc);
@@ -12841,7 +13032,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      }
 	      // HO:
 	      if(k0==2) {
-		// HBdepth1
+		// HOdepth1
 		if(k1+1  ==4) {
 		  h_sumADCAmplLS8->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 > lsdep_estimator1_HOdepth4_  ) h_2DsumADCAmplLS8->Fill(double(ieta), double(k3), bbbc);
@@ -12896,7 +13087,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      }
 	      // HE:
 	      if(k0==1) {
-		// HBdepth1
+		// HEdepth1
 		if(k1+1  ==1) {
 		  h_sumTSmeanALS3->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 >  lsdep_estimator2_HEdepth1_  )h_2DsumTSmeanALS3->Fill(double(ieta),double(k3),bbbc);
@@ -12927,7 +13118,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      }
 	      // HF:
 	      if(k0==3) {
-		// HBdepth1
+		// HFdepth1
 		if(k1+1  ==1) {
 		  h_sumTSmeanALS6->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 >  lsdep_estimator2_HFdepth1_  )h_2DsumTSmeanALS6->Fill(double(ieta),double(k3),bbbc);
@@ -12949,7 +13140,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      }
 	      // HO:
 	      if(k0==2) {
-		// HBdepth1
+		// HOdepth1
 		if(k1+1  ==4) {
 		  h_sumTSmeanALS8->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 >  lsdep_estimator2_HOdepth4_  )h_2DsumTSmeanALS8->Fill(double(ieta),double(k3),bbbc);
@@ -13000,7 +13191,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      }
 	      // HE:
 	      if(k0==1) {
-		// HBdepth1
+		// HEdepth1
 		if(k1+1  ==1) {
 		  h_sumTSmaxALS3->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 >  lsdep_estimator3_HEdepth1_  )h_2DsumTSmaxALS3->Fill(double(ieta),double(k3),bbbc);
@@ -13031,7 +13222,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      }
 	      // HF:
 	      if(k0==3) {
-		// HBdepth1
+		// HFdepth1
 		if(k1+1  ==1) {
 		  h_sumTSmaxALS6->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 >  lsdep_estimator3_HFdepth1_  )h_2DsumTSmaxALS6->Fill(double(ieta),double(k3),bbbc);
@@ -13053,7 +13244,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      }
 	      // HO:
 	      if(k0==2) {
-		// HBdepth1
+		// HOdepth1
 		if(k1+1  ==4) {
 		  h_sumTSmaxALS8->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 >  lsdep_estimator3_HOdepth4_  )h_2DsumTSmaxALS8->Fill(double(ieta),double(k3),bbbc);
@@ -13104,7 +13295,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      }
 	      // HE:
 	      if(k0==1) {
-		// HBdepth1
+		// HEdepth1
 		if(k1+1  ==1) {
 		  h_sumAmplitudeLS3->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 > lsdep_estimator4_HEdepth1_  )h_2DsumAmplitudeLS3->Fill(double(ieta),double(k3),bbbc);
@@ -13135,7 +13326,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      }
 	      // HF:
 	      if(k0==3) {
-		// HBdepth1
+		// HFdepth1
 		if(k1+1  ==1) {
 		  h_sumAmplitudeLS6->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 > lsdep_estimator4_HFdepth1_   )h_2DsumAmplitudeLS6->Fill(double(ieta),double(k3),bbbc);
@@ -13157,7 +13348,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      }
 	      // HO:
 	      if(k0==2) {
-		// HBdepth1
+		// HOdepth1
 		if(k1+1  ==4) {
 		  h_sumAmplitudeLS8->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 > lsdep_estimator4_HOdepth4_   )h_2DsumAmplitudeLS8->Fill(double(ieta),double(k3),bbbc);
@@ -13208,7 +13399,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      }
 	      // HE:
 	      if(k0==1) {
-		// HBdepth1
+		// HEdepth1
 		if(k1+1  ==1) {
 		  h_sumAmplLS3->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 >  lsdep_estimator5_HEdepth1_  )h_2DsumAmplLS3->Fill(double(ieta),double(k3),bbbc);
@@ -13239,7 +13430,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      }
 	      // HF:
 	      if(k0==3) {
-		// HBdepth1
+		// HFdepth1
 		if(k1+1  ==1) {
 		  h_sumAmplLS6->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 >  lsdep_estimator5_HFdepth1_  )h_2DsumAmplLS6->Fill(double(ieta),double(k3),bbbc);
@@ -13261,7 +13452,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	      }
 	      // HO:
 	      if(k0==2) {
-		// HBdepth1
+		// HOdepth1
 		if(k1+1  ==4) {
 		  h_sumAmplLS8->Fill(bbbc/bbb1);
 		  if(bbbc/bbb1 >  lsdep_estimator5_HOdepth4_  )h_2DsumAmplLS8->Fill(double(ieta),double(k3),bbbc);
@@ -13928,6 +14119,8 @@ void VeRawAnalyzer::endJob(){
     h_amplFine_HB->Write();
     h_mapDepth1Error_HB->Write();
     h_mapDepth2Error_HB->Write();
+    h_mapDepth3Error_HB->Write();
+    h_mapDepth4Error_HB->Write();
     h_fiber0_HB->Write();
     h_fiber1_HB->Write();
     h_fiber2_HB->Write();
@@ -14037,23 +14230,42 @@ void VeRawAnalyzer::endJob(){
     h_mapDepth1ADCAmpl12_HB->Write();
     h_mapDepth2ADCAmpl12_HB->Write();
 
+    h_mapDepth3ADCAmpl225_HB->Write();
+    h_mapDepth4ADCAmpl225_HB->Write();
+    h_mapDepth3ADCAmpl_HB->Write();
+    h_mapDepth4ADCAmpl_HB->Write();
+    h_mapDepth3ADCAmpl12_HB->Write();
+    h_mapDepth4ADCAmpl12_HB->Write();
+
     h_TSmeanA_HB->Write();
     h_mapDepth1TSmeanA225_HB->Write();
     h_mapDepth2TSmeanA225_HB->Write();
     h_mapDepth1TSmeanA_HB->Write();
     h_mapDepth2TSmeanA_HB->Write();
+    h_mapDepth3TSmeanA225_HB->Write();
+    h_mapDepth4TSmeanA225_HB->Write();
+    h_mapDepth3TSmeanA_HB->Write();
+    h_mapDepth4TSmeanA_HB->Write();
 
     h_TSmaxA_HB->Write();
     h_mapDepth1TSmaxA225_HB->Write();
     h_mapDepth2TSmaxA225_HB->Write();
     h_mapDepth1TSmaxA_HB->Write();
     h_mapDepth2TSmaxA_HB->Write();
+    h_mapDepth3TSmaxA225_HB->Write();
+    h_mapDepth4TSmaxA225_HB->Write();
+    h_mapDepth3TSmaxA_HB->Write();
+    h_mapDepth4TSmaxA_HB->Write();
 
     h_Amplitude_HB->Write();
     h_mapDepth1Amplitude225_HB->Write();
     h_mapDepth2Amplitude225_HB->Write();
     h_mapDepth1Amplitude_HB->Write();
     h_mapDepth2Amplitude_HB->Write();
+    h_mapDepth3Amplitude225_HB->Write();
+    h_mapDepth4Amplitude225_HB->Write();
+    h_mapDepth3Amplitude_HB->Write();
+    h_mapDepth4Amplitude_HB->Write();
 
     h_Ampl_HB->Write();
     h_mapDepth1Ampl047_HB->Write();
@@ -14064,9 +14276,19 @@ void VeRawAnalyzer::endJob(){
     h_mapDepth2AmplE34_HB->Write();
     h_mapDepth1_HB->Write();
     h_mapDepth2_HB->Write();
+    h_mapDepth3Ampl047_HB->Write();
+    h_mapDepth4Ampl047_HB->Write();
+    h_mapDepth3Ampl_HB->Write();
+    h_mapDepth4Ampl_HB->Write();
+    h_mapDepth3AmplE34_HB->Write();
+    h_mapDepth4AmplE34_HB->Write();
+    h_mapDepth3_HB->Write();
+    h_mapDepth4_HB->Write();
 
     h_mapDepth1ADCAmpl225Copy_HB->Write();
     h_mapDepth2ADCAmpl225Copy_HB->Write();
+    h_mapDepth3ADCAmpl225Copy_HB->Write();
+    h_mapDepth4ADCAmpl225Copy_HB->Write();
     h_mapDepth1ADCAmpl225Copy_HE->Write();
     h_mapDepth2ADCAmpl225Copy_HE->Write();
     h_mapDepth3ADCAmpl225Copy_HE->Write();
@@ -14628,7 +14850,7 @@ h_AiForLS_good_HF->Write();
 */
 
 
-// for gain stability vs LS:
+// for HE gain stability vs LS:
   h_2DsumADCAmplLSdepth4HEu->Write();
  h_2D0sumADCAmplLSdepth4HEu->Write();
  h_2DsumADCAmplLSdepth5HEu->Write();
@@ -14641,6 +14863,11 @@ h_AiForLS_good_HF->Write();
  h_2D0sumADCAmplLSdepth3HFu->Write();
  h_2DsumADCAmplLSdepth4HFu->Write();
  h_2D0sumADCAmplLSdepth4HFu->Write();
+// for HB gain stability vs LS:
+ h_2DsumADCAmplLSdepth3HBu->Write();
+ h_2D0sumADCAmplLSdepth3HBu->Write();
+ h_2DsumADCAmplLSdepth4HBu->Write();
+ h_2D0sumADCAmplLSdepth4HBu->Write();
 
     h_sumADCAmplLS1copy1->Write();
     h_sumADCAmplLS1copy2->Write();
@@ -14710,6 +14937,13 @@ h_AiForLS_good_HF->Write();
     h_sum0ADCAmplperLSdepth5HEu->Write();
     h_sum0ADCAmplperLSdepth6HEu->Write();
     h_sum0ADCAmplperLSdepth7HEu->Write();
+
+    h_sumADCAmplperLSdepth3HBu->Write();
+    h_sumADCAmplperLSdepth4HBu->Write();
+    h_sumCutADCAmplperLSdepth3HBu->Write();
+    h_sumCutADCAmplperLSdepth4HBu->Write();
+    h_sum0ADCAmplperLSdepth3HBu->Write();
+    h_sum0ADCAmplperLSdepth4HBu->Write();
 
     h_sumADCAmplperLS1_P1 ->Write();
     h_sum0ADCAmplperLS1_P1 ->Write(); 
@@ -15111,6 +15345,8 @@ h_AiForLS_good_HF->Write();
     
     h_mapDepth1pedestalw_HB->Write();
     h_mapDepth2pedestalw_HB->Write();
+    h_mapDepth3pedestalw_HB->Write();
+    h_mapDepth4pedestalw_HB->Write();
     h_mapDepth1pedestalw_HE->Write();
     h_mapDepth2pedestalw_HE->Write();
     h_mapDepth3pedestalw_HE->Write();
@@ -15126,6 +15362,8 @@ h_AiForLS_good_HF->Write();
     
     h_mapDepth1pedestal_HB->Write();
     h_mapDepth2pedestal_HB->Write();
+    h_mapDepth3pedestal_HB->Write();
+    h_mapDepth4pedestal_HB->Write();
     h_mapDepth1pedestal_HE->Write();
     h_mapDepth2pedestal_HE->Write();
     h_mapDepth3pedestal_HE->Write();
