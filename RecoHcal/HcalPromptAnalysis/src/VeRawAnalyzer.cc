@@ -8246,6 +8246,8 @@ void VeRawAnalyzer::fillDigiErrorsQIE11(QIE11DataFrame qie11df)
 	h_amplError_HB->Fill(ampl,1.);
 	if(mdepth==1) h_mapDepth1Error_HB->Fill(double(ieta), double(iphi));    
 	if(mdepth==2) h_mapDepth2Error_HB->Fill(double(ieta), double(iphi));    
+	if(mdepth==3) h_mapDepth3Error_HB->Fill(double(ieta), double(iphi));    
+	if(mdepth==4) h_mapDepth4Error_HB->Fill(double(ieta), double(iphi));    
 	h_errorGeneral_HB->Fill(double(firstcapid),1.);    
       }
       else { h_amplFine_HB->Fill(ampl,1.);}
