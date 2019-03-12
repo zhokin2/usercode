@@ -74,7 +74,8 @@ int main(int argc, char *argv[])
 // Prepare histograms and plot them to .png files
 
  
-  TCanvas *cHB = new TCanvas("cHB","cHB",1000,500);
+//TCanvas *cHB = new TCanvas("cHB","cHB",1000,500);
+  TCanvas *cHB = new TCanvas("cHB","cHB",1000,1000);
   //TCanvas *cHE = new TCanvas("cHE","cHE",1500,500);
   TCanvas *cHE = new TCanvas("cHE","cHE",1500,1500);
   //  TCanvas *cONE = new TCanvas("cONE","cONE",500,500);
@@ -93,9 +94,19 @@ int main(int argc, char *argv[])
   // depth: HB depth1,2; HE depth1,2,3,4,5,6,7; HO depth4; HF depth1,2,3,4
   // 8 depthes:  0(empty),   1,2,3,4,5,6,7
  
+  // upgrade 2019:
+  // depth: HB depth1,2,3,4; HE depth1,2,3,4,5,6,7; HO depth4; HF depth1,2,3,4
+  // 10 depthes:  0(empty),   1,2,3,4,5,6,7,8,9
+ 
   //  Int_t ALLDEPTH = 5;
-  Int_t ALLDEPTH = 8;
+  //  Int_t ALLDEPTH = 8;
+  Int_t ALLDEPTH = 10;
 
+  int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+  
+  //int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+  //int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+  int k_max[5]={0,4,7,4,4}; // maximum depth for each subdet	
 
   TH2F *Map_Ampl[33][5][ALLDEPTH]; // 2D histogramm for test,subdet,depth
   TH2F *Map_SUB[5][ALLDEPTH];      // 2d histogramm for subdet, depth
@@ -130,20 +141,23 @@ int main(int argc, char *argv[])
   Map_SUB[4][3] = (TH2F*)hfile->Get("h_mapDepth3_HF");
   Map_SUB[4][4] = (TH2F*)hfile->Get("h_mapDepth4_HF");  
 
+  Map_SUB[1][3] = (TH2F*)hfile->Get("h_mapDepth3_HB");
+  Map_SUB[1][4] = (TH2F*)hfile->Get("h_mapDepth4_HB");   
 //+++++++++++++++++++++++++++++  
 //Test 0 Entries   
 //+++++++++++++++++++++++++++++ 
   
   for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-       if (sub==1) cHB->Divide(2,1);
+    //     if (sub==1) cHB->Divide(2,1);
+       if (sub==1) cHB->Divide(2,2);
        //     if (sub==2) cHE->Divide(3,1);
        if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
        //     if (sub==4) cHF->Divide(2,1);
        if (sub==4) cHF->Divide(2,2);
-       int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+       //     int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
        //     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-       int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+       //     int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
        for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
             if (sub==1) cHB->cd(k); 
             if (sub==2) cHE->cd(k);
@@ -198,16 +212,20 @@ int main(int argc, char *argv[])
   Map_Ampl[1][4][3] = (TH2F*)hfile->Get("h_mapDepth3Error_HF");
   Map_Ampl[1][4][4] = (TH2F*)hfile->Get("h_mapDepth4Error_HF");  
 
+  Map_Ampl[1][1][3] = (TH2F*)hfile->Get("h_mapDepth3Error_HB");
+  Map_Ampl[1][1][4] = (TH2F*)hfile->Get("h_mapDepth4Error_HB");   
+
   for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-       if (sub==1) cHB->Divide(2,1);
+    //     if (sub==1) cHB->Divide(2,1);
+       if (sub==1) cHB->Divide(2,2);
        //     if (sub==2) cHE->Divide(3,1);
        if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
        //     if (sub==4) cHF->Divide(2,1);
        if (sub==4) cHF->Divide(2,2);
-       int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+       //     int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
        //     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-       int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+       //     int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
        for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
             if (sub==1) cHB->cd(k); 
             if (sub==2) cHE->cd(k);
@@ -262,6 +280,8 @@ int main(int argc, char *argv[])
   Map_Ampl[2][4][3] = (TH2F*)hfile->Get("h_mapDepth3ADCAmpl225_HF");
   Map_Ampl[2][4][4] = (TH2F*)hfile->Get("h_mapDepth4ADCAmpl225_HF");  
 
+  Map_Ampl[2][1][3] = (TH2F*)hfile->Get("h_mapDepth3ADCAmpl225_HB");
+  Map_Ampl[2][1][4] = (TH2F*)hfile->Get("h_mapDepth4ADCAmpl225_HB");   
   
   HistAmpl[2][1] = (TH1F*)hfile->Get("h_ADCAmpl_HB");
   HistAmpl[2][2] = (TH1F*)hfile->Get("h_ADCAmpl_HE");
@@ -289,6 +309,8 @@ int main(int argc, char *argv[])
   Map_Ampl[3][4][3] = (TH2F*)hfile->Get("h_mapDepth3Amplitude225_HF");
   Map_Ampl[3][4][4] = (TH2F*)hfile->Get("h_mapDepth4Amplitude225_HF");  
 
+  Map_Ampl[3][1][3] = (TH2F*)hfile->Get("h_mapDepth3Amplitude225_HB");
+  Map_Ampl[3][1][4] = (TH2F*)hfile->Get("h_mapDepth4Amplitude225_HB");   
   
   HistAmpl[3][1] = (TH1F*)hfile->Get("h_Amplitude_HB");
   HistAmpl[3][2] = (TH1F*)hfile->Get("h_Amplitude_HE");
@@ -315,6 +337,8 @@ int main(int argc, char *argv[])
   Map_Ampl[4][4][3] = (TH2F*)hfile->Get("h_mapDepth3Ampl047_HF");
   Map_Ampl[4][4][4] = (TH2F*)hfile->Get("h_mapDepth4Ampl047_HF");  
 
+  Map_Ampl[4][1][3] = (TH2F*)hfile->Get("h_mapDepth3Ampl047_HB");
+  Map_Ampl[4][1][4] = (TH2F*)hfile->Get("h_mapDepth4Ampl047_HB");   
   
   HistAmpl[4][1] = (TH1F*)hfile->Get("h_Ampl_HB");
   HistAmpl[4][2] = (TH1F*)hfile->Get("h_Ampl_HE");
@@ -341,6 +365,8 @@ int main(int argc, char *argv[])
   Map_Ampl[5][4][3] = (TH2F*)hfile->Get("h_mapDepth3TSmeanA225_HF");
   Map_Ampl[5][4][4] = (TH2F*)hfile->Get("h_mapDepth4TSmeanA225_HF");  
 
+  Map_Ampl[5][1][3] = (TH2F*)hfile->Get("h_mapDepth3TSmeanA225_HB");
+  Map_Ampl[5][1][4] = (TH2F*)hfile->Get("h_mapDepth4TSmeanA225_HB");   
   
   HistAmpl[5][1] = (TH1F*)hfile->Get("h_TSmeanA_HB");
   HistAmpl[5][2] = (TH1F*)hfile->Get("h_TSmeanA_HE");
@@ -368,6 +394,9 @@ int main(int argc, char *argv[])
   Map_Ampl[6][4][3] = (TH2F*)hfile->Get("h_mapDepth3TSmaxA225_HF");
   Map_Ampl[6][4][4] = (TH2F*)hfile->Get("h_mapDepth4TSmaxA225_HF");  
 
+  Map_Ampl[6][1][3] = (TH2F*)hfile->Get("h_mapDepth3TSmaxA225_HB");
+  Map_Ampl[6][1][4] = (TH2F*)hfile->Get("h_mapDepth4TSmaxA225_HB");   
+
   HistAmpl[6][1] = (TH1F*)hfile->Get("h_TSmaxA_HB");
   HistAmpl[6][2] = (TH1F*)hfile->Get("h_TSmaxA_HE");
   HistAmpl[6][3] = (TH1F*)hfile->Get("h_TSmaxA_HO");
@@ -375,15 +404,16 @@ int main(int argc, char *argv[])
   
   for (int test=2;test<=6;test++) { //Test: 2-Am, 3-Wm, 4-Rm, 5-TNm, 6-TXm, 
       for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-          if (sub==1) cHB->Divide(2,1);
+	//        if (sub==1) cHB->Divide(2,1);
+          if (sub==1) cHB->Divide(2,2);
 	  //        if (sub==2) cHE->Divide(3,1);
           if (sub==2) cHE->Divide(3,3);
           if (sub==3) cONE->Divide(1,1);
 	  //        if (sub==4) cHF->Divide(2,1);
           if (sub==4) cHF->Divide(2,2);
-          int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+	  //        int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
 	  //        int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-          int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+	  //        int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
           for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
               if (sub==1) cHB->cd(k); 
               if (sub==2) cHE->cd(k);
@@ -442,11 +472,32 @@ int main(int argc, char *argv[])
 	  }
    
 	  //          cONE->Divide(1,1);
+	  /*
           cONE->Divide(2,1);
 	  if(test == 2 && sub == 2 ) {
 	    cONE->cd(2);
 	    TH1F *kjkjkhj2= (TH1F*)hfile->Get("h_ADCAmpl_HE");kjkjkhj2->Draw("");kjkjkhj2->SetTitle("HE, All Depth: shunt6");
 	  }
+	  if(test == 2 && sub == 1 ) {
+	    cONE->cd(2);
+	    TH1F *kjkjkhj1= (TH1F*)hfile->Get("h_ADCAmpl_HB");kjkjkhj1->Draw("");kjkjkhj1->SetTitle("HB, All Depth: shunt6");
+	  }
+*/
+	  
+          cONE->Divide(3,1);
+	  if(test == 2 && sub == 2 ) {
+	    cONE->cd(2);
+	    TH1F *kjkjkhj2= (TH1F*)hfile->Get("h_AmplitudeHEtest1");kjkjkhj2->Draw("");kjkjkhj2->SetTitle("HE, All Depth: shunt1");
+	    cONE->cd(3);
+	    TH1F *kjkjkhj3= (TH1F*)hfile->Get("h_AmplitudeHEtest6");kjkjkhj3->Draw("");kjkjkhj3->SetTitle("HE, All Depth: shunt6");
+	  }
+	  if(test == 2 && sub == 1 ) {
+	    cONE->cd(2);
+	    TH1F *kjkjkhb2= (TH1F*)hfile->Get("h_AmplitudeHBtest1");kjkjkhb2->Draw("");kjkjkhb2->SetTitle("HB, All Depth: shunt1");
+	    cONE->cd(3);
+	    TH1F *kjkjkhb3= (TH1F*)hfile->Get("h_AmplitudeHBtest6");kjkjkhb3->Draw("");kjkjkhb3->SetTitle("HB, All Depth: shunt6");
+	  }
+
           cONE->cd(1);
           gPad->SetGridy();
           gPad->SetGridx(); 
@@ -882,6 +933,8 @@ int main(int argc, char *argv[])
  
   Map_Ampl[21][1][1] = (TH2F*)hfile->Get("h_mapDepth1AmplE34_HB");
   Map_Ampl[21][1][2] = (TH2F*)hfile->Get("h_mapDepth2AmplE34_HB");   
+  Map_Ampl[21][1][3] = (TH2F*)hfile->Get("h_mapDepth3AmplE34_HB");
+  Map_Ampl[21][1][4] = (TH2F*)hfile->Get("h_mapDepth4AmplE34_HB");   
   Map_Ampl[21][2][1] = (TH2F*)hfile->Get("h_mapDepth1AmplE34_HE");
   Map_Ampl[21][2][2] = (TH2F*)hfile->Get("h_mapDepth2AmplE34_HE"); 
   Map_Ampl[21][2][3] = (TH2F*)hfile->Get("h_mapDepth3AmplE34_HE"); 
@@ -900,6 +953,8 @@ int main(int argc, char *argv[])
 
   Map_RefAmpl[1][1] = (TH2F*)hreffile->Get("h_mapDepth1AmplE34_HB");
   Map_RefAmpl[1][2] = (TH2F*)hreffile->Get("h_mapDepth2AmplE34_HB");   
+  Map_RefAmpl[1][3] = (TH2F*)hreffile->Get("h_mapDepth3AmplE34_HB");
+  Map_RefAmpl[1][4] = (TH2F*)hreffile->Get("h_mapDepth4AmplE34_HB");   
   Map_RefAmpl[2][1] = (TH2F*)hreffile->Get("h_mapDepth1AmplE34_HE");
   Map_RefAmpl[2][2] = (TH2F*)hreffile->Get("h_mapDepth2AmplE34_HE"); 
   Map_RefAmpl[2][3] = (TH2F*)hreffile->Get("h_mapDepth3AmplE34_HE"); 
@@ -915,6 +970,8 @@ int main(int argc, char *argv[])
 
   Map_RefSUB[1][1] = (TH2F*)hreffile->Get("h_mapDepth1_HB");
   Map_RefSUB[1][2] = (TH2F*)hreffile->Get("h_mapDepth2_HB");   
+  Map_RefSUB[1][3] = (TH2F*)hreffile->Get("h_mapDepth3_HB");
+  Map_RefSUB[1][4] = (TH2F*)hreffile->Get("h_mapDepth4_HB");   
   Map_RefSUB[2][1] = (TH2F*)hreffile->Get("h_mapDepth1_HE");
   Map_RefSUB[2][2] = (TH2F*)hreffile->Get("h_mapDepth2_HE"); 
   Map_RefSUB[2][3] = (TH2F*)hreffile->Get("h_mapDepth3_HE"); 
@@ -930,6 +987,8 @@ int main(int argc, char *argv[])
   
   HistAmplDepth[21][1][1] = new TH1F("diffAmpl_Depth1_HB","", 100, -10., 10.); 
   HistAmplDepth[21][1][2] = new TH1F("diffAmpl_Depth2_HB","", 100, -10., 10.); 
+  HistAmplDepth[21][1][3] = new TH1F("diffAmpl_Depth3_HB","", 100, -10., 10.); 
+  HistAmplDepth[21][1][4] = new TH1F("diffAmpl_Depth4_HB","", 100, -10., 10.); 
   HistAmplDepth[21][2][1] = new TH1F("diffAmpl_Depth1_HE","", 100, -10., 10.); 
   HistAmplDepth[21][2][2] = new TH1F("diffAmpl_Depth2_HE","", 100, -10., 10.);
   HistAmplDepth[21][2][3] = new TH1F("diffAmpl_Depth3_HE","", 100, -10., 10.); 
@@ -944,15 +1003,16 @@ int main(int argc, char *argv[])
   HistAmplDepth[21][4][4] = new TH1F("diffAmpl_Depth4_HF","", 100, -10., 10.);
   
   for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-       if (sub==1) cHB->Divide(2,1);
+    //     if (sub==1) cHB->Divide(2,1);
+       if (sub==1) cHB->Divide(2,2);
        //     if (sub==2) cHE->Divide(3,1);
        if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
        //     if (sub==4) cHF->Divide(2,1);
        if (sub==4) cHF->Divide(2,2);
-       int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+       //     int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
        //     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-       int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+       //     int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
        for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
             if (sub==1) cHB->cd(k); 
             if (sub==2) cHE->cd(k);
@@ -984,7 +1044,8 @@ int main(int argc, char *argv[])
        if (sub==3) {cONE->Print("MapRateAmpl1HO.png"); cONE->Clear();}
        if (sub==4) {cHF->Print("MapRateAmpl1HF.png"); cHF->Clear();}  
        
-       if (sub==1) cHB->Divide(2,1);
+       //     if (sub==1) cHB->Divide(2,1);
+       if (sub==1) cHB->Divide(2,2);
        //     if (sub==2) cHE->Divide(3,1);
        if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
@@ -1022,7 +1083,8 @@ int main(int argc, char *argv[])
        if (sub==3) {cONE->Print("MapRateAmpl2HO.png"); cONE->Clear();}
        if (sub==4) {cHF->Print("MapRateAmpl2HF.png"); cHF->Clear();}   
          
-       if (sub==1) cHB->Divide(2,1);
+       //     if (sub==1) cHB->Divide(2,1);
+       if (sub==1) cHB->Divide(2,2);
        //     if (sub==2) cHE->Divide(3,1);
        if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
@@ -1076,7 +1138,8 @@ int main(int argc, char *argv[])
 
 
 
-       if (sub==1) cHB->Divide(2,1);
+       //     if (sub==1) cHB->Divide(2,1);
+       if (sub==1) cHB->Divide(2,2);
        //     if (sub==2) cHE->Divide(3,1);
        if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
@@ -1140,6 +1203,8 @@ int main(int argc, char *argv[])
  
   Map_Ampl[31][1][1] = (TH2F*)hfile->Get("h_mapDepth1pedestal_HB");
   Map_Ampl[31][1][2] = (TH2F*)hfile->Get("h_mapDepth2pedestal_HB");   
+  Map_Ampl[31][1][3] = (TH2F*)hfile->Get("h_mapDepth3pedestal_HB");
+  Map_Ampl[31][1][4] = (TH2F*)hfile->Get("h_mapDepth4pedestal_HB");   
   Map_Ampl[31][2][1] = (TH2F*)hfile->Get("h_mapDepth1pedestal_HE");
   Map_Ampl[31][2][2] = (TH2F*)hfile->Get("h_mapDepth2pedestal_HE"); 
   Map_Ampl[31][2][3] = (TH2F*)hfile->Get("h_mapDepth3pedestal_HE"); 
@@ -1155,6 +1220,8 @@ int main(int argc, char *argv[])
 
   Map_Ampl[32][1][1] = (TH2F*)hfile->Get("h_mapDepth1pedestalw_HB");
   Map_Ampl[32][1][2] = (TH2F*)hfile->Get("h_mapDepth2pedestalw_HB");   
+  Map_Ampl[32][1][3] = (TH2F*)hfile->Get("h_mapDepth3pedestalw_HB");
+  Map_Ampl[32][1][4] = (TH2F*)hfile->Get("h_mapDepth4pedestalw_HB");   
   Map_Ampl[32][2][1] = (TH2F*)hfile->Get("h_mapDepth1pedestalw_HE");
   Map_Ampl[32][2][2] = (TH2F*)hfile->Get("h_mapDepth2pedestalw_HE"); 
   Map_Ampl[32][2][3] = (TH2F*)hfile->Get("h_mapDepth3pedestalw_HE"); 
@@ -1207,15 +1274,16 @@ int main(int argc, char *argv[])
 
   for (int test=31;test<=32;test++) { //Test: 31-Pedestals, 32-pedestal Widths,
       for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
-          if (sub==1) cHB->Divide(2,1);
+	//        if (sub==1) cHB->Divide(2,1);
+          if (sub==1) cHB->Divide(2,2);
 	  //        if (sub==2) cHE->Divide(3,1);
           if (sub==2) cHE->Divide(3,3);
           if (sub==3) cONE->Divide(1,1);
 	  //        if (sub==4) cHF->Divide(2,1);
           if (sub==4) cHF->Divide(2,2);
-          int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+	  //        int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
 	  //        int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-          int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+	  //        int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
           for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depths 
       	      if (sub==1) cHB->cd(k); 
               if (sub==2) cHE->cd(k);
@@ -1685,9 +1753,9 @@ std::cout<<" We are here to print ADC "<<std::endl;
     for (int i=1;i<=nx;i++) {  //Eta
        for (int j=1;j<=ny;j++) {	// Phi  
           for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
-	     int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+	    //	     int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
 	     //	     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-	     int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+	     //	     int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
 	     for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
 	         if (Map_SUB[sub][k]->GetBinContent(i,j)!=0) {Map_SUB[sub][k]->SetBinContent(i,j,0.5);Map_ALL->SetBinContent(i,j,0.5);}
 	     }	
@@ -1698,9 +1766,9 @@ std::cout<<" We are here to print ADC "<<std::endl;
     for (int i=1;i<=nx;i++) {  //Eta
        for (int j=1;j<=ny;j++) {	// Phi  
           for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-	     int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+	    //	     int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
 	     //	     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-	     int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+	    //	     int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
 	     for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
 	        flag_W = 0;
 	        flag_B = 0;
@@ -1817,15 +1885,16 @@ std::cout<<" We are here to print ADC "<<std::endl;
   for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
 
        std::cout<<" 2017 MAPS_SUB "<<sub<<std::endl;
-       if (sub==1) cHB->Divide(2,1);
+       //     if (sub==1) cHB->Divide(2,1);
+       if (sub==1) cHB->Divide(2,2);
        //     if (sub==2) cHE->Divide(3,1);
        if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
        //     if (sub==4) cHB->Divide(2,1);
        if (sub==4) cHF->Divide(2,2);
-       int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+       //     int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
        //     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-       int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+       //     int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
        for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
             if (sub==1) cHB->cd(k); 
             if (sub==2) cHE->cd(k);
@@ -2464,7 +2533,11 @@ std::cout<<" We are here to print ADC "<<std::endl;
      htmlFile << "<tr>"<< std::endl;   
  
      if (sub==1) {
-       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HB_Tile.html\">Megatile Channels</a></td>"<< std::endl;
+       // AZ 18.03.2018
+       // htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HB_Tile.html\">Megatile Channels</a></td>"<< std::endl;
+       htmlFile << "  <td><a href=\"HB_Tile.html\">Megatile Channels</a></td>"<< std::endl;
+
+
 //       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HB_Calib.html\">Calibration Channels</a></td>"<< std::endl;
 //       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HB_Drift.html\">Gain Stability</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HB_Pedestals.html\">Pedestals</a></td>"<< std::endl;
@@ -2472,8 +2545,10 @@ std::cout<<" We are here to print ADC "<<std::endl;
      }
      if (sub==2) {
        // AZ 18.03.2018
-       //     htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HE_Tile.html\">Megatile Channels</a></td>"<< std::endl;
+       //  htmlFile << " <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HE_Tile.html\">Megatile Channels</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"HE_Tile.html\">Megatile Channels</a></td>"<< std::endl;
+
+
 //       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HE_Calib.html\">Calibration Channels</a></td>"<< std::endl;
 //       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HE_Drift.html\">Gain Stability</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/GlobalRMT/GLOBAL_"<<runnumber<<"/HE_Pedestals.html\">Pedestals</a></td>"<< std::endl;
