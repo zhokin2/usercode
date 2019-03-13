@@ -502,8 +502,8 @@ int main(int argc, char *argv[])
           gPad->SetGridy();
           gPad->SetGridx(); 
           gPad->SetLogy();
-          if (sub==1) HistAmpl[test][sub]->SetTitle("HB, All Depth");
-          if (sub==2) HistAmpl[test][sub]->SetTitle("HE, All Depth");
+          if (sub==1) HistAmpl[test][sub]->SetTitle("HB, All Depth: shunt6");
+          if (sub==2) HistAmpl[test][sub]->SetTitle("HE, All Depth: shunt6");
           if (sub==3) HistAmpl[test][sub]->SetTitle("HO, All Depth");
           if (sub==4) HistAmpl[test][sub]->SetTitle("HF, All Depth");
           if (test==2) HistAmpl[test][sub]->SetXTitle("ADC Amlitude in each event & cell \b");
@@ -1386,7 +1386,7 @@ int main(int argc, char *argv[])
 //Test 33 Correlation of Pedestal, pedestalWidths Vs fullAmplitude   
 //++++++++++++++++++++++++++++++++++++
   
-  cHB->Clear();   
+  cPED->Clear();   
   Map_Ped[1][1] = (TH2F*)hfile->Get("h2_pedvsampl_HB");
   Map_Ped[1][2] = (TH2F*)hfile->Get("h2_pedvsampl_HE");
   Map_Ped[1][3] = (TH2F*)hfile->Get("h2_pedvsampl_HO");
@@ -1396,9 +1396,9 @@ int main(int argc, char *argv[])
   Map_Ped[2][3] = (TH2F*)hfile->Get("h2_pedwvsampl_HO");
   Map_Ped[2][4] = (TH2F*)hfile->Get("h2_pedwvsampl_HF");
   for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
-    cHB->Divide(2,1);
+    cPED->Divide(2,1);
     for(int test=1;test<=2;test++) {
-      cHB->cd(test);      
+      cPED->cd(test);      
       gPad->SetGridy();
       gPad->SetGridx();
       gPad->SetLogz();
@@ -1412,12 +1412,12 @@ int main(int argc, char *argv[])
       Map_Ped[test][sub]->Draw("COLZ");
       // Map_Ped[test][sub]->GetYaxis()->SetRangeUser(0, 72.);
       //      Map_Ped[test][sub]->GetZaxis()->SetRangeUser(0.0001, 1.);
-      cHB->Modified(); cHB->Update();
+      cPED->Modified(); cPED->Update();
     }// test 1,2
-    if (sub==1) {cHB->Print("CorrelationsMapPedestalVsfullAmplitudeHB.png"); cHB->Clear();} 
-    if (sub==2) {cHB->Print("CorrelationsMapPedestalVsfullAmplitudeHE.png"); cHB->Clear();}
-    if (sub==3) {cHB->Print("CorrelationsMapPedestalVsfullAmplitudeHO.png"); cHB->Clear();}
-    if (sub==4) {cHB->Print("CorrelationsMapPedestalVsfullAmplitudeHF.png"); cHB->Clear();} 
+    if (sub==1) {cPED->Print("CorrelationsMapPedestalVsfullAmplitudeHB.png"); cPED->Clear();} 
+    if (sub==2) {cPED->Print("CorrelationsMapPedestalVsfullAmplitudeHE.png"); cPED->Clear();}
+    if (sub==3) {cPED->Print("CorrelationsMapPedestalVsfullAmplitudeHO.png"); cPED->Clear();}
+    if (sub==4) {cPED->Print("CorrelationsMapPedestalVsfullAmplitudeHF.png"); cPED->Clear();} 
   }// end sub      
   
   
