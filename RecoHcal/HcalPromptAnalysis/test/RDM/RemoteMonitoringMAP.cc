@@ -148,7 +148,8 @@ cout<< MIN_M[2][1] << endl;
 // Prepare histograms and plot them to .png files
 
  
-  TCanvas *cHB = new TCanvas("cHB","cHB",1000,500);
+//TCanvas *cHB = new TCanvas("cHB","cHB",1000,500);
+  TCanvas *cHB = new TCanvas("cHB","cHB",1000,1000);
   //TCanvas *cHE = new TCanvas("cHE","cHE",1500,500);
   TCanvas *cHE = new TCanvas("cHE","cHE",1500,1500);
   //TCanvas *cONE = new TCanvas("cONE","cONE",500,500);
@@ -167,9 +168,18 @@ cout<< MIN_M[2][1] << endl;
   // depth: HB depth1,2; HE depth1,2,3,4,5,6,7; HO depth4; HF depth1,2,3,4
   // 8 depthes:  0(empty),   1,2,3,4,5,6,7
  
+  // upgrade 2021:
+  // depth: HB depth1,2,3,4; HE depth1,2,3,4,5,6,7; HO depth4; HF depth1,2,3,4
+  // 10 depthes:  0(empty),   1,2,3,4,5,6,7,8,9
+ 
   //  Int_t ALLDEPTH = 5;
-  Int_t ALLDEPTH = 8;
+  //  Int_t ALLDEPTH = 8;
+  Int_t ALLDEPTH = 10;
 
+  int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+  //     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
+  //       int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+  int k_max[5]={0,4,7,4,4}; // maximum depth for each subdet	
 
   TH2F *Map_Ampl[33][5][ALLDEPTH]; // 2D histogramm for test,subdet,depth
   TH2F *Map_SUB[5][ALLDEPTH];      // 2d histogramm for subdet, depth
@@ -197,6 +207,8 @@ cout<< MIN_M[2][1] << endl;
   Map_SUB[4][1] = (TH2F*)hfile->Get("h_mapDepth1_HF");
   Map_SUB[4][2] = (TH2F*)hfile->Get("h_mapDepth2_HF");  
 
+  Map_SUB[1][3] = (TH2F*)hfile->Get("h_mapDepth3_HB");
+  Map_SUB[1][4] = (TH2F*)hfile->Get("h_mapDepth4_HB");   
   Map_SUB[2][4] = (TH2F*)hfile->Get("h_mapDepth4_HE");
   Map_SUB[2][5] = (TH2F*)hfile->Get("h_mapDepth5_HE"); 
   Map_SUB[2][6] = (TH2F*)hfile->Get("h_mapDepth6_HE"); 
@@ -209,15 +221,16 @@ cout<< MIN_M[2][1] << endl;
 //+++++++++++++++++++++++++++++ 
   
   for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-       if (sub==1) cHB->Divide(2,1);
+    //       if (sub==1) cHB->Divide(2,1);
+       if (sub==1) cHB->Divide(2,2);
        //     if (sub==2) cHE->Divide(3,1);
        if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
        //     if (sub==4) cHF->Divide(2,1);
        if (sub==4) cHF->Divide(2,2);
-       int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+       //       int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
        //     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-       int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+       //       int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
        for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
             if (sub==1) cHB->cd(k); 
             if (sub==2) cHE->cd(k);
@@ -265,6 +278,8 @@ cout<< MIN_M[2][1] << endl;
   Map_Ampl[1][4][1] = (TH2F*)hfile->Get("h_mapDepth1Error_HF");
   Map_Ampl[1][4][2] = (TH2F*)hfile->Get("h_mapDepth2Error_HF"); 
   
+  Map_Ampl[1][1][3] = (TH2F*)hfile->Get("h_mapDepth3Error_HB");
+  Map_Ampl[1][1][4] = (TH2F*)hfile->Get("h_mapDepth4Error_HB");   
   Map_Ampl[1][2][4] = (TH2F*)hfile->Get("h_mapDepth4Error_HE");
   Map_Ampl[1][2][5] = (TH2F*)hfile->Get("h_mapDepth5Error_HE"); 
   Map_Ampl[1][2][6] = (TH2F*)hfile->Get("h_mapDepth6Error_HE"); 
@@ -273,15 +288,16 @@ cout<< MIN_M[2][1] << endl;
   Map_Ampl[1][4][4] = (TH2F*)hfile->Get("h_mapDepth4Error_HF");  
 
   for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-       if (sub==1) cHB->Divide(2,1);
+    //     if (sub==1) cHB->Divide(2,1);
+       if (sub==1) cHB->Divide(2,2);
        //     if (sub==2) cHE->Divide(3,1);
        if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
        //     if (sub==4) cHF->Divide(2,1);
        if (sub==4) cHF->Divide(2,2);
-       int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+       //       int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
        //     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-       int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+       //       int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
        for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
             if (sub==1) cHB->cd(k); 
             if (sub==2) cHE->cd(k);
@@ -329,6 +345,8 @@ cout<< MIN_M[2][1] << endl;
   Map_Ampl[2][4][1] = (TH2F*)hfile->Get("h_mapDepth1ADCAmpl225_HF");
   Map_Ampl[2][4][2] = (TH2F*)hfile->Get("h_mapDepth2ADCAmpl225_HF"); 
   
+  Map_Ampl[2][1][3] = (TH2F*)hfile->Get("h_mapDepth3ADCAmpl225_HB");
+  Map_Ampl[2][1][4] = (TH2F*)hfile->Get("h_mapDepth4ADCAmpl225_HB");   
   Map_Ampl[2][2][4] = (TH2F*)hfile->Get("h_mapDepth4ADCAmpl225_HE");
   Map_Ampl[2][2][5] = (TH2F*)hfile->Get("h_mapDepth5ADCAmpl225_HE"); 
   Map_Ampl[2][2][6] = (TH2F*)hfile->Get("h_mapDepth6ADCAmpl225_HE"); 
@@ -356,6 +374,8 @@ cout<< MIN_M[2][1] << endl;
   Map_Ampl[3][4][1] = (TH2F*)hfile->Get("h_mapDepth1Amplitude225_HF");
   Map_Ampl[3][4][2] = (TH2F*)hfile->Get("h_mapDepth2Amplitude225_HF");   
   
+  Map_Ampl[3][1][3] = (TH2F*)hfile->Get("h_mapDepth3Amplitude225_HB");
+  Map_Ampl[3][1][4] = (TH2F*)hfile->Get("h_mapDepth4Amplitude225_HB");   
   Map_Ampl[3][2][4] = (TH2F*)hfile->Get("h_mapDepth4Amplitude225_HE");
   Map_Ampl[3][2][5] = (TH2F*)hfile->Get("h_mapDepth5Amplitude225_HE"); 
   Map_Ampl[3][2][6] = (TH2F*)hfile->Get("h_mapDepth6Amplitude225_HE"); 
@@ -382,6 +402,8 @@ cout<< MIN_M[2][1] << endl;
   Map_Ampl[4][4][1] = (TH2F*)hfile->Get("h_mapDepth1Ampl047_HF");
   Map_Ampl[4][4][2] = (TH2F*)hfile->Get("h_mapDepth2Ampl047_HF"); 
   
+  Map_Ampl[4][1][3] = (TH2F*)hfile->Get("h_mapDepth3Ampl047_HB");
+  Map_Ampl[4][1][4] = (TH2F*)hfile->Get("h_mapDepth4Ampl047_HB");   
   Map_Ampl[4][2][4] = (TH2F*)hfile->Get("h_mapDepth4Ampl047_HE");
   Map_Ampl[4][2][5] = (TH2F*)hfile->Get("h_mapDepth5Ampl047_HE"); 
   Map_Ampl[4][2][6] = (TH2F*)hfile->Get("h_mapDepth6Ampl047_HE"); 
@@ -408,6 +430,8 @@ cout<< MIN_M[2][1] << endl;
   Map_Ampl[5][4][1] = (TH2F*)hfile->Get("h_mapDepth1TSmeanA225_HF");
   Map_Ampl[5][4][2] = (TH2F*)hfile->Get("h_mapDepth2TSmeanA225_HF"); 
   
+  Map_Ampl[5][1][3] = (TH2F*)hfile->Get("h_mapDepth3TSmeanA225_HB");
+  Map_Ampl[5][1][4] = (TH2F*)hfile->Get("h_mapDepth4TSmeanA225_HB");   
   Map_Ampl[5][2][4] = (TH2F*)hfile->Get("h_mapDepth4TSmeanA225_HE");
   Map_Ampl[5][2][5] = (TH2F*)hfile->Get("h_mapDepth5TSmeanA225_HE"); 
   Map_Ampl[5][2][6] = (TH2F*)hfile->Get("h_mapDepth6TSmeanA225_HE"); 
@@ -435,6 +459,8 @@ cout<< MIN_M[2][1] << endl;
   Map_Ampl[6][4][1] = (TH2F*)hfile->Get("h_mapDepth1TSmaxA225_HF");
   Map_Ampl[6][4][2] = (TH2F*)hfile->Get("h_mapDepth2TSmaxA225_HF"); 
   
+  Map_Ampl[6][1][3] = (TH2F*)hfile->Get("h_mapDepth3TSmaxA225_HB");
+  Map_Ampl[6][1][4] = (TH2F*)hfile->Get("h_mapDepth4TSmaxA225_HB");   
   Map_Ampl[6][2][4] = (TH2F*)hfile->Get("h_mapDepth4TSmaxA225_HE");
   Map_Ampl[6][2][5] = (TH2F*)hfile->Get("h_mapDepth5TSmaxA225_HE"); 
   Map_Ampl[6][2][6] = (TH2F*)hfile->Get("h_mapDepth6TSmaxA225_HE"); 
@@ -449,15 +475,16 @@ cout<< MIN_M[2][1] << endl;
   
   for (int test=2;test<=6;test++) { //Test: 2-Am, 3-Wm, 4-Rm, 5-TNm, 6-TXm, 
       for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-          if (sub==1) cHB->Divide(2,1);
-	  //        if (sub==2) cHE->Divide(3,1);
+	//        if (sub==1) cHB->Divide(2,1);
+       if (sub==1) cHB->Divide(2,2);
+       //        if (sub==2) cHE->Divide(3,1);
           if (sub==2) cHE->Divide(3,3);
           if (sub==3) cONE->Divide(1,1);
 	  //        if (sub==4) cHF->Divide(2,1);
           if (sub==4) cHF->Divide(2,2);
-          int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+	  //          int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
 	  //        int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-          int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+	  //          int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
           for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
               if (sub==1) cHB->cd(k); 
               if (sub==2) cHE->cd(k);
@@ -523,11 +550,17 @@ cout<< MIN_M[2][1] << endl;
 	    cONE->cd(3);
 	    TH1F *kjkjkhj3= (TH1F*)hfile->Get("h_AmplitudeHEtest6");kjkjkhj3->Draw("");kjkjkhj3->SetTitle("HE, All Depth: shunt6");
 	  }
+	  if(test == 2 && sub == 1 ) {
+	    cONE->cd(2);
+	    TH1F *kjkjkhb2= (TH1F*)hfile->Get("h_AmplitudeHBtest1");kjkjkhb2->Draw("");kjkjkhb2->SetTitle("HB, All Depth: shunt1");
+	    cONE->cd(3);
+	    TH1F *kjkjkhb3= (TH1F*)hfile->Get("h_AmplitudeHBtest6");kjkjkhb3->Draw("");kjkjkhb3->SetTitle("HB, All Depth: shunt6");
+	  }
           cONE->cd(1);
           gPad->SetGridy();
           gPad->SetGridx(); 
           gPad->SetLogy();
-          if (sub==1) HistAmpl[test][sub]->SetTitle("HB, All Depth");
+          if (sub==1) HistAmpl[test][sub]->SetTitle("HB, All Depth: shunt6");
           if (sub==2) HistAmpl[test][sub]->SetTitle("HE, All Depth: shunt6");
           if (sub==3) HistAmpl[test][sub]->SetTitle("HO, All Depth");
           if (sub==4) HistAmpl[test][sub]->SetTitle("HF, All Depth");
@@ -958,6 +991,8 @@ cout<< MIN_M[2][1] << endl;
  
   Map_Ampl[21][1][1] = (TH2F*)hfile->Get("h_mapDepth1AmplE34_HB");
   Map_Ampl[21][1][2] = (TH2F*)hfile->Get("h_mapDepth2AmplE34_HB");   
+  Map_Ampl[21][1][3] = (TH2F*)hfile->Get("h_mapDepth3AmplE34_HB");
+  Map_Ampl[21][1][4] = (TH2F*)hfile->Get("h_mapDepth4AmplE34_HB");   
   Map_Ampl[21][2][1] = (TH2F*)hfile->Get("h_mapDepth1AmplE34_HE");
   Map_Ampl[21][2][2] = (TH2F*)hfile->Get("h_mapDepth2AmplE34_HE"); 
   Map_Ampl[21][2][3] = (TH2F*)hfile->Get("h_mapDepth3AmplE34_HE"); 
@@ -976,6 +1011,8 @@ cout<< MIN_M[2][1] << endl;
 
   Map_RefAmpl[1][1] = (TH2F*)hreffile->Get("h_mapDepth1AmplE34_HB");
   Map_RefAmpl[1][2] = (TH2F*)hreffile->Get("h_mapDepth2AmplE34_HB");   
+  Map_RefAmpl[1][3] = (TH2F*)hreffile->Get("h_mapDepth3AmplE34_HB");
+  Map_RefAmpl[1][4] = (TH2F*)hreffile->Get("h_mapDepth4AmplE34_HB");   
   Map_RefAmpl[2][1] = (TH2F*)hreffile->Get("h_mapDepth1AmplE34_HE");
   Map_RefAmpl[2][2] = (TH2F*)hreffile->Get("h_mapDepth2AmplE34_HE"); 
   Map_RefAmpl[2][3] = (TH2F*)hreffile->Get("h_mapDepth3AmplE34_HE"); 
@@ -991,6 +1028,8 @@ cout<< MIN_M[2][1] << endl;
 
   Map_RefSUB[1][1] = (TH2F*)hreffile->Get("h_mapDepth1_HB");
   Map_RefSUB[1][2] = (TH2F*)hreffile->Get("h_mapDepth2_HB");   
+  Map_RefSUB[1][3] = (TH2F*)hreffile->Get("h_mapDepth3_HB");
+  Map_RefSUB[1][4] = (TH2F*)hreffile->Get("h_mapDepth4_HB");   
   Map_RefSUB[2][1] = (TH2F*)hreffile->Get("h_mapDepth1_HE");
   Map_RefSUB[2][2] = (TH2F*)hreffile->Get("h_mapDepth2_HE"); 
   Map_RefSUB[2][3] = (TH2F*)hreffile->Get("h_mapDepth3_HE"); 
@@ -1006,6 +1045,8 @@ cout<< MIN_M[2][1] << endl;
   
   HistAmplDepth[21][1][1] = new TH1F("diffAmpl_Depth1_HB","", 100, -10., 10.); 
   HistAmplDepth[21][1][2] = new TH1F("diffAmpl_Depth2_HB","", 100, -10., 10.); 
+  HistAmplDepth[21][1][3] = new TH1F("diffAmpl_Depth3_HB","", 100, -10., 10.); 
+  HistAmplDepth[21][1][4] = new TH1F("diffAmpl_Depth4_HB","", 100, -10., 10.); 
   HistAmplDepth[21][2][1] = new TH1F("diffAmpl_Depth1_HE","", 100, -10., 10.); 
   HistAmplDepth[21][2][2] = new TH1F("diffAmpl_Depth2_HE","", 100, -10., 10.);
   HistAmplDepth[21][2][3] = new TH1F("diffAmpl_Depth3_HE","", 100, -10., 10.); 
@@ -1020,15 +1061,16 @@ cout<< MIN_M[2][1] << endl;
   HistAmplDepth[21][4][4] = new TH1F("diffAmpl_Depth4_HF","", 100, -10., 10.);
   
   for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-       if (sub==1) cHB->Divide(2,1);
+    //     if (sub==1) cHB->Divide(2,1);
+       if (sub==1) cHB->Divide(2,2);
        //     if (sub==2) cHE->Divide(3,1);
        if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
        //     if (sub==4) cHF->Divide(2,1);
        if (sub==4) cHF->Divide(2,2);
-       int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+       //       int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
        //     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-       int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+       //       int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
        for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
             if (sub==1) cHB->cd(k); 
             if (sub==2) cHE->cd(k);
@@ -1060,7 +1102,8 @@ cout<< MIN_M[2][1] << endl;
        if (sub==3) {cONE->Print("MapRateAmpl1HO.png"); cONE->Clear();}
        if (sub==4) {cHF->Print("MapRateAmpl1HF.png"); cHF->Clear();}  
        
-       if (sub==1) cHB->Divide(2,1);
+       //     if (sub==1) cHB->Divide(2,1);
+       if (sub==1) cHB->Divide(2,2);
        //     if (sub==2) cHE->Divide(3,1);
        if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
@@ -1098,7 +1141,8 @@ cout<< MIN_M[2][1] << endl;
        if (sub==3) {cONE->Print("MapRateAmpl2HO.png"); cONE->Clear();}
        if (sub==4) {cHF->Print("MapRateAmpl2HF.png"); cHF->Clear();}   
          
-       if (sub==1) cHB->Divide(2,1);
+       //     if (sub==1) cHB->Divide(2,1);
+       if (sub==1) cHB->Divide(2,2);
        //     if (sub==2) cHE->Divide(3,1);
        if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
@@ -1152,7 +1196,8 @@ cout<< MIN_M[2][1] << endl;
 
 
 
-       if (sub==1) cHB->Divide(2,1);
+       //     if (sub==1) cHB->Divide(2,1);
+       if (sub==1) cHB->Divide(2,2);
        //     if (sub==2) cHE->Divide(3,1);
        if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
@@ -1216,6 +1261,8 @@ cout<< MIN_M[2][1] << endl;
  
   Map_Ampl[31][1][1] = (TH2F*)hfile->Get("h_mapDepth1pedestal_HB");
   Map_Ampl[31][1][2] = (TH2F*)hfile->Get("h_mapDepth2pedestal_HB");   
+  Map_Ampl[31][1][3] = (TH2F*)hfile->Get("h_mapDepth3pedestal_HB");
+  Map_Ampl[31][1][4] = (TH2F*)hfile->Get("h_mapDepth4pedestal_HB");   
   Map_Ampl[31][2][1] = (TH2F*)hfile->Get("h_mapDepth1pedestal_HE");
   Map_Ampl[31][2][2] = (TH2F*)hfile->Get("h_mapDepth2pedestal_HE"); 
   Map_Ampl[31][2][3] = (TH2F*)hfile->Get("h_mapDepth3pedestal_HE"); 
@@ -1231,6 +1278,8 @@ cout<< MIN_M[2][1] << endl;
 
   Map_Ampl[32][1][1] = (TH2F*)hfile->Get("h_mapDepth1pedestalw_HB");
   Map_Ampl[32][1][2] = (TH2F*)hfile->Get("h_mapDepth2pedestalw_HB");   
+  Map_Ampl[32][1][3] = (TH2F*)hfile->Get("h_mapDepth3pedestalw_HB");
+  Map_Ampl[32][1][4] = (TH2F*)hfile->Get("h_mapDepth4pedestalw_HB");   
   Map_Ampl[32][2][1] = (TH2F*)hfile->Get("h_mapDepth1pedestalw_HE");
   Map_Ampl[32][2][2] = (TH2F*)hfile->Get("h_mapDepth2pedestalw_HE"); 
   Map_Ampl[32][2][3] = (TH2F*)hfile->Get("h_mapDepth3pedestalw_HE"); 
@@ -1283,15 +1332,16 @@ cout<< MIN_M[2][1] << endl;
 
   for (int test=31;test<=32;test++) { //Test: 31-Pedestals, 32-pedestal Widths,
       for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
-          if (sub==1) cHB->Divide(2,1);
+	//        if (sub==1) cHB->Divide(2,1);
+       if (sub==1) cHB->Divide(2,2);
 	  //        if (sub==2) cHE->Divide(3,1);
           if (sub==2) cHE->Divide(3,3);
           if (sub==3) cONE->Divide(1,1);
 	  //        if (sub==4) cHF->Divide(2,1);
           if (sub==4) cHF->Divide(2,2);
-          int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+	  //          int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
 	  //        int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-          int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+	  //          int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
           for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depths 
       	      if (sub==1) cHB->cd(k); 
               if (sub==2) cHE->cd(k);
@@ -1394,7 +1444,7 @@ cout<< MIN_M[2][1] << endl;
 //Test 33 Correlation of Pedestal, pedestalWidths Vs fullAmplitude   
 //++++++++++++++++++++++++++++++++++++
   
-  cHB->Clear();   
+  cPED->Clear();   
   Map_Ped[1][1] = (TH2F*)hfile->Get("h2_pedvsampl_HB");
   Map_Ped[1][2] = (TH2F*)hfile->Get("h2_pedvsampl_HE");
   Map_Ped[1][3] = (TH2F*)hfile->Get("h2_pedvsampl_HO");
@@ -1404,9 +1454,9 @@ cout<< MIN_M[2][1] << endl;
   Map_Ped[2][3] = (TH2F*)hfile->Get("h2_pedwvsampl_HO");
   Map_Ped[2][4] = (TH2F*)hfile->Get("h2_pedwvsampl_HF");
   for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
-    cHB->Divide(2,1);
+    cPED->Divide(2,1);
     for(int test=1;test<=2;test++) {
-      cHB->cd(test);      
+      cPED->cd(test);      
       gPad->SetGridy();
       gPad->SetGridx();
       gPad->SetLogz();
@@ -1420,12 +1470,12 @@ cout<< MIN_M[2][1] << endl;
       Map_Ped[test][sub]->Draw("COLZ");
       // Map_Ped[test][sub]->GetYaxis()->SetRangeUser(0, 72.);
       //      Map_Ped[test][sub]->GetZaxis()->SetRangeUser(0.0001, 1.);
-      cHB->Modified(); cHB->Update();
+      cPED->Modified(); cPED->Update();
     }// test 1,2
-    if (sub==1) {cHB->Print("CorrelationsMapPedestalVsfullAmplitudeHB.png"); cHB->Clear();} 
-    if (sub==2) {cHB->Print("CorrelationsMapPedestalVsfullAmplitudeHE.png"); cHB->Clear();}
-    if (sub==3) {cHB->Print("CorrelationsMapPedestalVsfullAmplitudeHO.png"); cHB->Clear();}
-    if (sub==4) {cHB->Print("CorrelationsMapPedestalVsfullAmplitudeHF.png"); cHB->Clear();} 
+    if (sub==1) {cPED->Print("CorrelationsMapPedestalVsfullAmplitudeHB.png"); cPED->Clear();} 
+    if (sub==2) {cPED->Print("CorrelationsMapPedestalVsfullAmplitudeHE.png"); cPED->Clear();}
+    if (sub==3) {cPED->Print("CorrelationsMapPedestalVsfullAmplitudeHO.png"); cPED->Clear();}
+    if (sub==4) {cPED->Print("CorrelationsMapPedestalVsfullAmplitudeHF.png"); cPED->Clear();} 
   }// end sub      
   
   
@@ -1761,9 +1811,9 @@ std::cout<<" We are here to print ADC "<<std::endl;
     for (int i=1;i<=nx;i++) {  //Eta
        for (int j=1;j<=ny;j++) {	// Phi  
           for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HO, 4-HF
-	     int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+	    //	     int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
 	     //	     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-	     int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+	    //	     int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
 	     for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
 	         if (Map_SUB[sub][k]->GetBinContent(i,j)!=0) {Map_SUB[sub][k]->SetBinContent(i,j,0.5);Map_ALL->SetBinContent(i,j,0.5);}
 	     }	
@@ -1774,9 +1824,9 @@ std::cout<<" We are here to print ADC "<<std::endl;
     for (int i=1;i<=nx;i++) {  //Eta
        for (int j=1;j<=ny;j++) {	// Phi  
           for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-	     int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+	    //	     int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
 	     //	     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-	     int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+	    //	     int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
 	     for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
 	        flag_W = 0;
 	        flag_B = 0;
@@ -1891,15 +1941,16 @@ std::cout<<" We are here to print ADC "<<std::endl;
   for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
 
        std::cout<<" 2017 MAPS_SUB "<<sub<<std::endl;
-       if (sub==1) cHB->Divide(2,1);
+       //     if (sub==1) cHB->Divide(2,1);
+       if (sub==1) cHB->Divide(2,2);
        //     if (sub==2) cHE->Divide(3,1);
        if (sub==2) cHE->Divide(3,3);
        if (sub==3) cONE->Divide(1,1);
        //     if (sub==4) cHB->Divide(2,1);
        if (sub==4) cHF->Divide(2,2);
-       int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
+       //       int k_min[5]={0,1,1,4,1}; // minimum depth for each subdet
        //     int k_max[5]={0,2,3,4,2}; // maximum depth for each subdet	
-       int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
+       //       int k_max[5]={0,2,7,4,4}; // maximum depth for each subdet	
        for (int k=k_min[sub];k<=k_max[sub];k++) {  //Depth 
             if (sub==1) cHB->cd(k); 
             if (sub==2) cHE->cd(k);
@@ -2682,26 +2733,30 @@ std::cout<<" We are here to print ADC "<<std::endl;
 	if ((ce.size()>=1)&&(Sub[2][i]==sub)) {
            if (Sub[2][i]==1) {
 	      ce = db.find("subdet", "HB").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< 
-           Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;continue;}
+	      if (ce.size()==0) {
+		//		cout<<"Error: No such HB, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;
+		continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HB, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}
 	      }
 	   if (Sub[2][i]==2) {
 	      ce = db.find("subdet", "HE").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<
-           ", Depth="<< Depth[2][i] <<" in database"<<endl; continue;}
+	      if (ce.size()==0) {
+		//		cout<<"Error: No such HE, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl; 
+		continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HE, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}	   
 	      }
 	   if (Sub[2][i]==3) {
 	      ce = db.find("subdet", "HO").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[2][i] <<
-          ", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl; continue;}
+	      if (ce.size()==0) {
+		//		cout<<"Error: No such HO, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl; 
+		continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HO, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}	   
 	      }	   
 	   if (Sub[2][i]==4) {
 	      ce = db.find("subdet", "HF").find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[2][i] <<
-        ", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl; continue;}
+	      if (ce.size()==0) {
+		//		cout<<"Error: No such HF, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl; 
+		continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HF, Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}	   
 	      }	
 	   htmlFile << "<tr>"<< std::endl;
@@ -2800,26 +2855,30 @@ std::cout<<" We are here to print ADC "<<std::endl;
 	if ((ce.size()>=1)&&(Sub[1][i]==sub)) {
            if (Sub[1][i]==1) {
 	      ce = db.find("subdet", "HB").find("Eta", Eta[1][i]).find("Phi", Phi[1][i]).find("Depth", Depth[1][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[1][i] <<
-         ", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; continue;}
+	      if (ce.size()==0) {
+		//		cout<<"Error: No such HB, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; 
+		continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HB, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}
 	      }
 	   if (Sub[1][i]==2) {
 	      ce = db.find("subdet", "HE").find("Eta", Eta[1][i]).find("Phi", Phi[1][i]).find("Depth", Depth[1][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[1][i] <<
-             ", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; continue;}
+	      if (ce.size()==0) {
+		//		cout<<"Error: No such HE, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; 
+ 		continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HE, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}	   
 	      }
 	   if (Sub[1][i]==3) {
 	      ce = db.find("subdet", "HO").find("Eta", Eta[1][i]).find("Phi", Phi[1][i]).find("Depth", Depth[1][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[1][i] <<
-            ", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; continue;}
+	      if (ce.size()==0) {
+		//		cout<<"Error: No such HO, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; 
+		continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HO, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}	   
 	      }	   
 	   if (Sub[1][i]==4) {
 	      ce = db.find("subdet", "HF").find("Eta", Eta[1][i]).find("Phi", Phi[1][i]).find("Depth", Depth[1][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[1][i] <<
-            ", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; continue;}
+	      if (ce.size()==0) {
+		//		cout<<"Error: No such HF, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; 
+		continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HF, Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}	   
 	      }	
            htmlFile << "<td class=\"s4\" align=\"center\">" << ind+1 <<"</td>"<< std::endl;
@@ -2918,26 +2977,30 @@ std::cout<<" We are here to print ADC "<<std::endl;
 	if ((ce.size()>=1)&&(Sub[3][i]==sub)) {
            if (Sub[3][i]==1) {
 	      ce = db.find("subdet", "HB").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HB, Eta="<< Eta[3][i] <<", Phi="<< 
-       Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl; continue;}
+	      if (ce.size()==0) {
+		//		cout<<"Error: No such HB, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl; 
+		continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HB, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}
 	      }
 	   if (Sub[3][i]==2) {
 	      ce = db.find("subdet", "HE").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HE, Eta="<< Eta[3][i] 
-           <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl; continue;}
+	      if (ce.size()==0) {
+		//		cout<<"Error: No such HE, Eta="<< Eta[3][i]  <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl; 
+		continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HE, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}	   
 	      }
 	   if (Sub[3][i]==3) {
 	      ce = db.find("subdet", "HO").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HO, Eta="<< Eta[3][i] <<", Phi="<< 
-         Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl; continue;}
+	      if (ce.size()==0) {
+		//		cout<<"Error: No such HO, Eta="<< Eta[3][i] <<", Phi="<<  Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl; 
+		continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HO, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}	   
 	      }	   
 	   if (Sub[3][i]==4) {
 	      ce = db.find("subdet", "HF").find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	      if (ce.size()==0) {cout<<"Error: No such HF, Eta="<< Eta[3][i] <<
-          ", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl; continue;}
+	      if (ce.size()==0) {
+		//		cout<<"Error: No such HF, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl; 
+		continue;}
 	      else if (ce.size()>1) {cout<<"Warning: More than one line correspond to such HF, Eta="<< Eta[3][i] <<", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl;}	   
 	      }	
            htmlFile << "<td class=\"s4\" align=\"center\">" << ind+1 <<"</td>"<< std::endl;
@@ -3128,8 +3191,8 @@ std::cout<<" We are here to print ADC "<<std::endl;
         }
         const CellDB db;
         const CellDB ce = db.find("Eta", Eta[2][i]).find("Phi", Phi[2][i]).find("Depth", Depth[2][i]);
-             if (ce.size()==0) {cout<<"Error: No such Eta="<< Eta[2][i] <<
-                         ", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl; 
+             if (ce.size()==0) {
+	       //	       cout<<"Error: No such Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl; 
                            continue;}
 //	else if (ce.size()>1) { cout<<"Warning: More than one line correspond to such Eta="<< Eta[2][i] <<", Phi="<< Phi[2][i] <<", Depth="<< Depth[2][i] <<" in database"<<endl;}
 	
@@ -3197,8 +3260,9 @@ std::cout<<" We are here to print ADC "<<std::endl;
         }
         const CellDB db;
         const CellDB ce = db.find("Eta", Eta[1][i]).find("Phi", Phi[1][i]).find("Depth", Depth[1][i]);
-	    if (ce.size()==0) {cout<<"Error: No such Eta="<< Eta[1][i] <<
-        ", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; continue;}
+	    if (ce.size()==0) {
+	      //	      cout<<"Error: No such Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl; 
+	      continue;}
 //	else if (ce.size()>1) { cout<<"Warning: More than one line correspond to such Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}
 	
 	if (ce.size()>=1) {
@@ -3268,8 +3332,9 @@ std::cout<<" We are here to print ADC "<<std::endl;
         }
         const CellDB db;
         const CellDB ce = db.find("Eta", Eta[3][i]).find("Phi", Phi[3][i]).find("Depth", Depth[3][i]);
-	    if (ce.size()==0) {cout<<"Error: No such Eta="<< Eta[3][i] <<
-            ", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl; continue;}
+	    if (ce.size()==0) {
+	      //	      cout<<"Error: No such Eta="<< Eta[3][i] << ", Phi="<< Phi[3][i] <<", Depth="<< Depth[3][i] <<" in database"<<endl; 
+	      continue;}
 //	else if (ce.size()>1) { cout<<"Warning: More than one line correspond to such Eta="<< Eta[1][i] <<", Phi="<< Phi[1][i] <<", Depth="<< Depth[1][i] <<" in database"<<endl;}
 	
 	if (ce.size()>=1) {
