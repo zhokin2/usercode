@@ -259,6 +259,12 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   howmanybinsonplots = cms.int32(25),
                                   #
                                   #
+                                  # ls - range for RBX study (and ??? perhaps for gain stability via abort gap):
+                                  lsmin = cms.int32(1),
+                                  #lsmax = cms.int32(620),
+                                  lsmax = cms.int32(2600),
+                                  #
+                                  #
                                   flagabortgaprejected = cms.int32(1),
                                   bcnrejectedlow = cms.int32(3446),
                                   bcnrejectedhigh= cms.int32(3564),
@@ -303,6 +309,8 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   # cuts on Estimator1 to see LS dependences:
                                   lsdep_estimator1_HBdepth1 = cms.double(2500.),
                                   lsdep_estimator1_HBdepth2 = cms.double(2500.),
+                                  lsdep_estimator1_HBdepth3 = cms.double(2500.),
+                                  lsdep_estimator1_HBdepth4 = cms.double(2500.),
                                   lsdep_estimator1_HEdepth1 = cms.double(2500.),
                                   lsdep_estimator1_HEdepth2 = cms.double(2500.),
                                   lsdep_estimator1_HEdepth3 = cms.double(2500.),
@@ -401,7 +409,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #  3       -        +       -     +     new w/o high depthes
                                   #  4       +        -       +     +     2016fall
                                   #  5       +        -       +     +     2016fall w/o high depthes
-                                  #  6       +        +       -     +     2017 && 2018
+                                  #  6       +        +       -     +     2017 && 2018 && 2021
                                   #  7       +        +       -     +     2017begin w/o high depthes in HEonly
                                   #  8       +        +       -     +     2017begin w/o high depthes
                                   #  9       +        +       +     +     all  w/o high depthes
