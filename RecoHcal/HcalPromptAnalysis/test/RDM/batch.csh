@@ -15,7 +15,7 @@ echo ${valdas}
 
 ### set DAT="2015-10-07_14_50_47"
 
-set RELEASE=CMSSW_10_0_0
+set RELEASE=CMSSW_10_4_0
 ### Get list of done from RDM webpage ###
 set TYPE=${1}
 echo ${TYPE}
