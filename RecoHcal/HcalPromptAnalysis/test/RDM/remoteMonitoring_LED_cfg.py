@@ -24,14 +24,14 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
 process.load('RecoLocalCalo.Configuration.hcalLocalReco_cff')
 
-#runnumber = sys.argv[2][4:-5]
+#runnumber = sys.argv[2][4:-5] 
 runnumber = sys.argv[2]
 rundir = sys.argv[3]
 histodir = sys.argv[4]
 
 print 'RUN = '+runnumber
-print 'Input file = '+rundir+'/run'+runnumber+'/USC_'+runnumber+'.root'
-#print 'Input file = '+rundir+'/USC_'+runnumber+'.root'
+#print 'Input file = '+rundir+'/run'+runnumber+'/USC_'+runnumber+'.root'
+print 'Input file = '+rundir+'/USC_'+runnumber+'.root'
 print 'Output file = '+histodir+'/LED_'+runnumber+'.root'
 
 process.maxEvents = cms.untracked.PSet(
@@ -44,8 +44,8 @@ process.source = cms.Source("HcalTBSource",
     fileNames = cms.untracked.vstring(
 #	       'file:/afs/cern.ch/work/d/dtlisov/private/Monitoring/data/USC_209311.root'
 #              '/store/group/comm_hcal/USC/USC_212179.root'
-#                rundir+'/USC_'+runnumber+'.root'
-                rundir+'/run'+runnumber+'/USC_'+runnumber+'.root'
+#                rundir+'/run'+runnumber+'/USC_'+runnumber+'.root'
+                rundir+'/USC_'+runnumber+'.root'
                 ), 
     streams = cms.untracked.vstring(
 		  "HCAL_Trigger",
@@ -175,13 +175,13 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   TSpeakHOMax = cms.double(7.5),
                                   # -56 for  BAD HBHEHOHF channels from study on ADC Amplitude
                                   #Verbosity = cms.untracked.int32(-56),
-                                  ADCAmplHBMin = cms.double(100.),
-                                  ADCAmplHBMax = cms.double(3000.),
+                                  ADCAmplHBMin = cms.double(10000.),
+                                  ADCAmplHBMax = cms.double(300000.),
                                   ADCAmplHEMin = cms.double(20000.),  
                                   ADCAmplHEMax = cms.double(300000.),
-                                  ADCAmplHFMin = cms.double(30.),
-                                  ADCAmplHFMax = cms.double(3000.),
-                                  ADCAmplHOMin = cms.double(40.),
+                                  ADCAmplHFMin = cms.double(50.),
+                                  ADCAmplHFMax = cms.double(9000.),
+                                  ADCAmplHOMin = cms.double(50.),
                                   ADCAmplHOMax = cms.double(9000.),
                                   #
                                   # to see channels w/ PedestalSigma < cut
@@ -316,6 +316,8 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   # cuts on Estimator1 to see LS dependences:
                                   lsdep_estimator1_HBdepth1 = cms.double(2500.),
                                   lsdep_estimator1_HBdepth2 = cms.double(2500.),
+                                  lsdep_estimator1_HBdepth3 = cms.double(2500.),
+                                  lsdep_estimator1_HBdepth4 = cms.double(2500.),
                                   lsdep_estimator1_HEdepth1 = cms.double(2500.),
                                   lsdep_estimator1_HEdepth2 = cms.double(2500.),
                                   lsdep_estimator1_HEdepth3 = cms.double(2500.),
@@ -414,7 +416,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #  3       -        +       -     +     new w/o high depthes
                                   #  4       +        -       +     +     2016fall
                                   #  5       +        -       +     +     2016fall w/o high depthes
-                                  #  6       +        +       -     +     2017 && 2018
+                                  #  6       +        +       -     +     2017 && 2018 && 2021
                                   #  7       +        +       -     +     2017begin w/o high depthes in HEonly
                                   #  8       +        +       -     +     2017begin w/o high depthes
                                   #  9       +        +       +     +     all  w/o high depthes
