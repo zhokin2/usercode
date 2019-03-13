@@ -4,7 +4,7 @@
 set DAT="2014-12-18_11_58_49"
 ### Get list of done from RDM webpage ###
 
-set WD='/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_5_3_21/src/RecoHcal/HcalPromptAnalysis/test/RDM'
+set WD='/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMScript/CMSSW_10_4_0/src/RecoHcal/HcalPromptAnalysis/test/RDM'
 
 #${WD}/myselect.csh ${DAT}
 #ls ${WD}/LED_LIST/runlist.tmp.${DAT}
