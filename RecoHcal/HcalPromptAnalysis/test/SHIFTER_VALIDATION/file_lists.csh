@@ -5,6 +5,9 @@ echo "No input run list. Please use command: ./file_lists.csh runsets"
 exit
 endif
 
+echo "  ***************   myStart file_list  ***************   "
+
+
 foreach i (`cat $1`)
 echo ${i}
 ##
@@ -29,3 +32,6 @@ dasgoclient --query="file dataset=/ZeroBias/Run2018D-v1/RAW run=${i}" --limit=0 
 ##
 
 end
+
+echo "DONE: file_list.csh"
+##
