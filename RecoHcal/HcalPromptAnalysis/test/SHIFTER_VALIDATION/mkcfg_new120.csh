@@ -1,5 +1,5 @@
 #!/bin/csh
-
+echo "myStart mkcfg_new120.csh"
 set j=1
 rm -rf PYTHON_${1}
 rm -rf TXT_${1}
@@ -39,5 +39,7 @@ if( ${nn} != "0" ) cat a.py.end | sed s/Global.root/Global\_${jj}_${kk}.root/g >
 @ j = ${j} + "1"
 
 end
+
+echo "DONE: mkcfg_new120.csh"
 
 ######
