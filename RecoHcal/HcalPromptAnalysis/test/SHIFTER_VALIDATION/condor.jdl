@@ -3,12 +3,12 @@ universe = vanilla
 Proxy_path = /afs/cern.ch/user/z/zhokin/private/x509up
 
 Executable = run_condor.csh 
-arguments  = runlist_3 $(ClusterID) $(ProcId) $(Proxy_path)
+arguments  = runlist_run $(ClusterID) $(ProcId) $(Proxy_path)
 
 Should_Transfer_Files = YES
 WhenToTransferOutput = ON_EXIT
 
-Transfer_Input_Files = run_condor.csh,mkcfg_new120.csh,file_lists.csh,a.py.beg,a.py.end,runlist_3,/afs/cern.ch/work/z/zhokin/hcal/soc7/CMSSW_10_4_0/src/RecoHcal/HcalPromptAnalysis/src/VeRawAnalyzer.cc,/afs/cern.ch/work/z/zhokin/hcal/soc7/CMSSW_10_4_0/src/RecoHcal/HcalPromptAnalysis/BuildFile,/afs/cern.ch/work/z/zhokin/hcal/soc7/CMSSW_10_4_0/src/RecoHcal/HcalPromptAnalysis/BuildFile.xml 
+Transfer_Input_Files = run_condor.csh,mkcfg_new120.csh,file_lists.csh,a.py.beg,a.py.end,runlist_run,/afs/cern.ch/work/z/zhokin/hcal/soc7/CMSSW_10_4_0/src/RecoHcal/HcalPromptAnalysis/src/VeRawAnalyzer.cc,/afs/cern.ch/work/z/zhokin/hcal/soc7/CMSSW_10_4_0/src/RecoHcal/HcalPromptAnalysis/BuildFile,/afs/cern.ch/work/z/zhokin/hcal/soc7/CMSSW_10_4_0/src/RecoHcal/HcalPromptAnalysis/BuildFile.xml 
 
 output                = output/zhokin.$(ClusterId).$(ProcId).out
 error                 = error/zhokin.$(ClusterId).$(ProcId).err
