@@ -1,20 +1,21 @@
 #!/bin/csh
 ###############################################################################
 ###############
-# to create dir. with py files, use: ./mkcfg_new.csh runlist_3  
-# and then, if PYTHON_runlist_3 exist, use: 
-#     ./run_interactive.csh runlist_3 
-#  from main dir., changing 2 lines below: 
+# to create dir. with py files, use: ./mkcfg_new120.csh runlist_run
+# and then, if PYTHON_runlist_run exist, and there NN py-files, use: 
+#    ./run_interactive.csh runlist_run 1 NN 
+#         from main dir.
+#  razbivaya po ~ 15 jobs per PC, 1-15, 15-30, ... NN
 #set nn1=1
 #set nn2=3
-set nn1=36
-set nn2=37
+set nn1=${2}
+set nn2=${3}
 #set nn1=38
 #set nn2=40
 echo ${nn1} ${nn2} 
 echo "Start..."
 ###############
-#./mkcfg_new.csh ${1}
+#./mkcfg_new120.csh ${1}
 #ls PYTHON_${1}/*py
 ###############
 ################################################################ loop:
