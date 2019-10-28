@@ -4,7 +4,7 @@
 // ./RemoteMonitoringMAP.cc.exe root_file1  root_file_ref PEDESTAL
 //./RemoteMonitoringMAP.cc.exe root_file1  root_file_ref LASER
 
-
+//MapRateAmpl2HB
 
 #include "LogEleMapdb.h"
 
@@ -158,6 +158,19 @@ cout<< MIN_M[2][1] << endl;
   //TCanvas *cHF = new TCanvas("cHF","cHF",1000,1000);
   TCanvas *cHF = new TCanvas("cHF","cHF",1000,1000);
   
+
+
+	     // Iteration Method for Calibration Group:
+
+	     TCanvas *c1x0 = new TCanvas("c1x0","c1x0",300,10,800,700);
+
+	     TCanvas *c1x1 = new TCanvas("c1x1","c1x1",100,10,600,700);
+
+	     TCanvas *c3x5 = new TCanvas("c3x5","c3x5",1000,1500);
+	     //
+  
+
+
   char *str = (char*)alloca(10000);
 
   // before upgrade 2017:
@@ -1781,10 +1794,1115 @@ std::cout<<" We are here to print ADC "<<std::endl;
 */
 
 
+  ////////////////////         Iteration Method for Calibration Group:
+  ////////////////////         Iteration Method for Calibration Group:
+  ////////////////////         Iteration Method for Calibration Group:
+  ////////////////////         Iteration Method for Calibration Group:
+  ////////////////////         Iteration Method for Calibration Group:
+  
+  const int nsub = 4;  const int ndepth = 7; const int neta = 82;  const int nphi = 72;
+  int njeta = neta; int njphi = nphi;int njdepth = ndepth;
+  double alexhe[ndepth][njeta][njphi];  
+  double variance[ndepth][njeta][njphi];  
+  
+  const int jposbeg= 57;const int jposend= 71; 
+  
+  const int jnegbeg= 12;const int jnegend= 26; 
+  
+  cout<<"Iteration Method for Calibration Group    nsub=  "<< nsub <<"  ndepth =  "<<ndepth  <<" neta =  "<<neta  <<" nphi =  "<<nphi  <<endl;
+  cout<<"Iteration Method for Calibration Group      njdepth =  "<<njdepth  <<" njeta =  "<<njeta  <<" njphi =  "<<njphi  <<endl;
+  cout<<"Iteration Method for Calibration Group        jposbeg =  "<<jposbeg  <<" jposend =  "<<jposend  <<" jnegbeg =  "<<jnegbeg  <<" jnegend =  "<<jnegend  <<endl;
+  
+  
+  /*
+    depth=5                    all
+    i=1-82 in initial histo
+    j=i-1 in massives
+    
+    j= 13   23 (11)           12    25 (!!!)
+    j-41 in histo
+    -28  -18 (11)          -29    -16
+    
+    j= 59   69 (11)           57    70 (!!!)
+    j-41 in histo
+    18   28 (11)           16    29
+  */
+  
+  //                                   RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR:
+  
+  TH2F *maprphinorm1HE1= (TH2F*)hfile->Get("h_maprphinorm_HE1");
+  TH2F *maprphinorm0HE1= (TH2F*)hfile->Get("h_maprphinorm0_HE1");
+  TH2F* maprphinormHE1 = (TH2F*)maprphinorm1HE1->Clone("maprphinormHE1");
+  maprphinormHE1->Divide(maprphinorm1HE1,maprphinorm0HE1, 1, 1, "B");
+  TH2F *maprphinorm1HE2= (TH2F*)hfile->Get("h_maprphinorm_HE2");
+  TH2F *maprphinorm0HE2= (TH2F*)hfile->Get("h_maprphinorm0_HE2");
+  TH2F* maprphinormHE2 = (TH2F*)maprphinorm1HE2->Clone("maprphinormHE2");
+  maprphinormHE2->Divide(maprphinorm1HE2,maprphinorm0HE2, 1, 1, "B");
+  TH2F *maprphinorm1HE3= (TH2F*)hfile->Get("h_maprphinorm_HE3");
+  TH2F *maprphinorm0HE3= (TH2F*)hfile->Get("h_maprphinorm0_HE3");
+  TH2F* maprphinormHE3 = (TH2F*)maprphinorm1HE3->Clone("maprphinormHE3");
+  maprphinormHE3->Divide(maprphinorm1HE3,maprphinorm0HE3, 1, 1, "B");
+  TH2F *maprphinorm1HE4= (TH2F*)hfile->Get("h_maprphinorm_HE4");
+  TH2F *maprphinorm0HE4= (TH2F*)hfile->Get("h_maprphinorm0_HE4");
+  TH2F* maprphinormHE4 = (TH2F*)maprphinorm1HE4->Clone("maprphinormHE4");
+  maprphinormHE4->Divide(maprphinorm1HE4,maprphinorm0HE4, 1, 1, "B");
+  TH2F *maprphinorm1HE5= (TH2F*)hfile->Get("h_maprphinorm_HE5");
+  TH2F *maprphinorm0HE5= (TH2F*)hfile->Get("h_maprphinorm0_HE5");
+  TH2F* maprphinormHE5 = (TH2F*)maprphinorm1HE5->Clone("maprphinormHE5");
+  maprphinormHE5->Divide(maprphinorm1HE5,maprphinorm0HE5, 1, 1, "B");
+  TH2F *maprphinorm1HE6= (TH2F*)hfile->Get("h_maprphinorm_HE6");
+  TH2F *maprphinorm0HE6= (TH2F*)hfile->Get("h_maprphinorm0_HE6");
+  TH2F* maprphinormHE6 = (TH2F*)maprphinorm1HE6->Clone("maprphinormHE6");
+  maprphinormHE6->Divide(maprphinorm1HE6,maprphinorm0HE6, 1, 1, "B");
+  TH2F *maprphinorm1HE7= (TH2F*)hfile->Get("h_maprphinorm_HE7");
+  TH2F *maprphinorm0HE7= (TH2F*)hfile->Get("h_maprphinorm0_HE7");
+  TH2F* maprphinormHE7 = (TH2F*)maprphinorm1HE7->Clone("maprphinormHE7");
+  maprphinormHE7->Divide(maprphinorm1HE7,maprphinorm0HE7, 1, 1, "B");
+  //=========================== put R into massive alexhe
+  for(int jeta=0;jeta<njeta;jeta++){
+    for(int jphi=0;jphi<njphi;jphi++){
+      alexhe[0][jeta][jphi] = maprphinormHE1->GetBinContent(jeta+1,jphi+1);
+      alexhe[1][jeta][jphi] = maprphinormHE2->GetBinContent(jeta+1,jphi+1);
+      alexhe[2][jeta][jphi] = maprphinormHE3->GetBinContent(jeta+1,jphi+1);
+      alexhe[3][jeta][jphi] = maprphinormHE4->GetBinContent(jeta+1,jphi+1);
+      alexhe[4][jeta][jphi] = maprphinormHE5->GetBinContent(jeta+1,jphi+1);
+      alexhe[5][jeta][jphi] = maprphinormHE6->GetBinContent(jeta+1,jphi+1);
+      alexhe[6][jeta][jphi] = maprphinormHE7->GetBinContent(jeta+1,jphi+1);
+    }	 
+  }
+  
+  //------------------------  2D-eta/phi-plot: R, averaged over depthes
+  //======================================================================
+  //======================================================================
+  cout<<"      R2D-eta/phi-plot: R, averaged over depthes *****" <<endl;
+  c1x0->Clear();
+  /////////////////
+  c1x0->Divide(1,1);
+  c1x0->cd(1);
+  TH2F* Gefz42D      = new TH2F("Gefz42D","",   neta, -41., 41., nphi, 0., 72. );
+  TH2F* Gefz42D0     = new TH2F("Gefz42D0","",  neta, -41., 41., nphi, 0., 72. );
+  TH2F* Gefz42DF = (TH2F*)Gefz42D0->Clone("Gefz42DF");
+  for (int i=0;i<ndepth;i++) {
+    for (int jeta=0;jeta<neta;jeta++) {
+      for (int jphi=0;jphi<nphi;jphi++) {
+	double ccc1 = alexhe[i][jeta][jphi];
+	int k2plot = jeta-41;int kkk = k2plot; //if(k2plot >0 ) kkk=k2plot+1; //-41 +41 !=0
+	if(ccc1!=0.) {Gefz42D ->Fill(kkk,jphi,ccc1); Gefz42D0 ->Fill(kkk,jphi,1.); }
+      }}}
+  Gefz42DF->Divide(Gefz42D,Gefz42D0, 1, 1, "B");// average A
+  gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
+  Gefz42DF->SetMarkerStyle(20); Gefz42DF->SetMarkerSize(0.4); Gefz42DF->GetZaxis()->SetLabelSize(0.08); Gefz42DF->SetXTitle("<R>_depth       #eta  \b"); Gefz42DF->SetYTitle("      #phi \b"); Gefz42DF->SetZTitle("<R>_depth \b"); Gefz42DF->SetMarkerColor(2); Gefz42DF->SetLineColor(0);      //      Gefz42DF->SetMaximum(1.000);  //      Gefz42DF->SetMinimum(1.0);
+  Gefz42DF->Draw("COLZ");
+  
+  /////////////////
+  c1x0->Update();
+  c1x0->Print("Rhist2IterationMethodHE.png");
+  c1x0->Clear();
+  // clean-up
+  if (Gefz42D) delete Gefz42D;
+  if (Gefz42D0) delete Gefz42D0;
+  if (Gefz42DF) delete Gefz42DF;
+  
+  
+  
+  //====================================================================== 1D plot: R vs phi , averaged over depthes & eta
+  //======================================================================
+  cout<<"      1D plot: R vs phi , averaged over depthes & eta *****" <<endl;
+  c1x1->Clear();
+  /////////////////
+  c1x1->Divide(1,1);
+  c1x1->cd(1);
+  TH1F* Gefz41D      = new TH1F("Gefz41D","", nphi, 0., 72. );
+  TH1F* Gefz41D0     = new TH1F("Gefz41D0","",nphi, 0., 72. );
+  TH1F* Gefz41DF = (TH1F*)Gefz41D0->Clone("Gefz41DF");
+  
+  for (int jphi=0;jphi<nphi;jphi++) {
+    for (int jeta=0;jeta<neta;jeta++) {
+      for (int i=0;i<ndepth;i++) {
+	double ccc1 = alexhe[i][jeta][jphi];
+	if(ccc1!=0.) {Gefz41D ->Fill(jphi,ccc1); Gefz41D0 ->Fill(jphi,1.); }
+      }}}
+  //     Gefz41D->Sumw2();Gefz41D0->Sumw2();
+  
+  Gefz41DF->Divide(Gefz41D,Gefz41D0, 1, 1, "B");// R averaged over depthes & eta
+  Gefz41D0->Sumw2();
+  //    for (int jphi=1;jphi<73;jphi++) {Gefz41DF->SetBinError(jphi,0.01);}
+  gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
+  Gefz41DF->SetMarkerStyle(20); Gefz41DF->SetMarkerSize(1.4); Gefz41DF->GetZaxis()->SetLabelSize(0.08); Gefz41DF->SetXTitle("#phi  \b"); Gefz41DF->SetYTitle("  <R> \b"); Gefz41DF->SetZTitle("<R>_PHI  - AllDepthes \b"); Gefz41DF->SetMarkerColor(4); Gefz41DF->SetLineColor(4);  Gefz41DF->SetMinimum(0.8);     //      Gefz41DF->SetMaximum(1.000);       
+  Gefz41DF->Draw("Error");
+  
+  /////////////////
+  c1x1->Update();
+  c1x1->Print("Rhist1IterationMethodHE.png");
+  c1x1->Clear();
+  // clean-up
+  if (Gefz41D) delete Gefz41D;
+  if (Gefz41D0) delete Gefz41D0;
+  if (Gefz41DF) delete Gefz41DF;
+  
 
-//======================================================================
-   std::cout<<" We are here to print 2017 MAPs "<<std::endl;
+  //========================================================================================== 4   
+  //======================================================================
+  //======================================================================1D plot: R vs phi , different eta,  depth=1
+  cout<<"      1D plot: R vs phi , different eta,  depth=1 *****" <<endl;
+  c3x5->Clear();
+  /////////////////
+  c3x5->Divide(3,5);
+  c3x5->cd(1);
+  int kcountHEpositivedirection1=1;
+  TH1F* h2CeffHEpositivedirection1 = new TH1F("h2CeffHEpositivedirection1","", nphi, 0., 72. );
+  
+  for (int jeta=0;jeta<njeta;jeta++) {
+    // positivedirection:
+    if(jeta-41 > 0) {
+      
+      //	     for (int i=0;i<ndepth;i++) {
+      // depth=1
+      for (int i=0;i<1;i++) {
+	
+	TH1F *HEpositivedirection1 = (TH1F*)h2CeffHEpositivedirection1->Clone("twod1");
+	
+	float ccctest = 0; // to avoid empty massive elements
+	for (int jphi=0;jphi<nphi;jphi++) {
+	  
+	  double ccc1 = alexhe[i][jeta][jphi];
+	  if(ccc1!=0.) {HEpositivedirection1 ->Fill(jphi,ccc1);ccctest = 1.;//HEpositivedirection1->SetBinError(i,0.01);
+	  }
+	}// for jphi
+	if(ccctest>0.) {
+	  cout<<"444        kcountHEpositivedirection1   =     "<<kcountHEpositivedirection1  <<"   jeta-41=     "<< jeta-41 <<endl;
+	  c3x5->cd(kcountHEpositivedirection1);
+	  HEpositivedirection1 ->SetMarkerStyle(20);HEpositivedirection1 ->SetMarkerSize(0.4);HEpositivedirection1 ->GetYaxis()->SetLabelSize(0.04);HEpositivedirection1 ->SetXTitle("HEpositivedirection1 \b");HEpositivedirection1 ->SetMarkerColor(2);HEpositivedirection1 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	  //	   gPad->SetLogy();    
+	  if(kcountHEpositivedirection1 == 1) HEpositivedirection1 ->SetXTitle("R for HE+ jeta = 18; depth = 1 \b");
+	  if(kcountHEpositivedirection1 == 2) HEpositivedirection1 ->SetXTitle("R for HE+ jeta = 19; depth = 1 \b");
+	  if(kcountHEpositivedirection1 == 3) HEpositivedirection1 ->SetXTitle("R for HE+ jeta = 20; depth = 1 \b");
+	  if(kcountHEpositivedirection1 == 4) HEpositivedirection1 ->SetXTitle("R for HE+ jeta = 21; depth = 1 \b");
+	  if(kcountHEpositivedirection1 == 5) HEpositivedirection1 ->SetXTitle("R for HE+ jeta = 22; depth = 1 \b");
+	  if(kcountHEpositivedirection1 == 6) HEpositivedirection1 ->SetXTitle("R for HE+ jeta = 23; depth = 1 \b");
+	  if(kcountHEpositivedirection1 == 7) HEpositivedirection1 ->SetXTitle("R for HE+ jeta = 24; depth = 1 \b");
+	  if(kcountHEpositivedirection1 == 8) HEpositivedirection1 ->SetXTitle("R for HE+ jeta = 25; depth = 1 \b");
+	  if(kcountHEpositivedirection1 == 9) HEpositivedirection1 ->SetXTitle("R for HE+ jeta = 26; depth = 1 \b");
+	  if(kcountHEpositivedirection1 ==10) HEpositivedirection1 ->SetXTitle("R for HE+ jeta = 27; depth = 1 \b");
+	  if(kcountHEpositivedirection1 ==11) HEpositivedirection1 ->SetXTitle("R for HE+ jeta = 28; depth = 1 \b");
+	  if(kcountHEpositivedirection1 ==12) HEpositivedirection1 ->SetXTitle("R for HE+ jeta = 29; depth = 1 \b");
+	  HEpositivedirection1->Draw("Error");
+	  kcountHEpositivedirection1++;
+	  if(kcountHEpositivedirection1>15) break;// 4x6 = 24 
+	}//ccctest>0
+	
+      }// for i
+    }//if(jeta-41 > 0)
+  }//for jeta
+  /////////////////
+  c3x5->Update();
+  c3x5->Print("Rhist1IterationMethodDepth1HE.png");
+  c3x5->Clear();
+  // clean-up
+  if (h2CeffHEpositivedirection1) delete h2CeffHEpositivedirection1;
+  
 
+  //========================================================================================== 5   
+  //======================================================================
+  //======================================================================1D plot: R vs phi , different eta,  depth=2
+  cout<<"      1D plot: R vs phi , different eta,  depth=2 *****" <<endl;
+  c3x5->Clear();
+  /////////////////
+  c3x5->Divide(3,5);
+  c3x5->cd(1);
+       int kcountHEpositivedirection2=1;
+       TH1F* h2CeffHEpositivedirection2 = new TH1F("h2CeffHEpositivedirection2","", nphi, 0., 72. );
+
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // positivedirection:
+	 if(jeta-41 > 0) {
+	   
+	   //	     for (int i=0;i<ndepth;i++) {
+	   // depth=2
+	   for (int i=1;i<2;i++) {
+	     
+	     TH1F *HEpositivedirection2 = (TH1F*)h2CeffHEpositivedirection2->Clone("twod1");
+	     
+	     float ccctest = 0; // to avoid empty massive elements
+	     for (int jphi=0;jphi<nphi;jphi++) {
+	       
+	       double ccc1 = alexhe[i][jeta][jphi];
+	       if(ccc1!=0.) {HEpositivedirection2 ->Fill(jphi,ccc1);ccctest = 1.;//HEpositivedirection2->SetBinError(i,0.01);
+	       }
+	     }// for jphi
+	     if(ccctest>0.) {
+	       cout<<"555        kcountHEpositivedirection2   =     "<<kcountHEpositivedirection2  <<"   jeta-41=     "<< jeta-41 <<endl;
+	       c3x5->cd(kcountHEpositivedirection2);
+	       HEpositivedirection2 ->SetMarkerStyle(20);HEpositivedirection2 ->SetMarkerSize(0.4);HEpositivedirection2 ->GetYaxis()->SetLabelSize(0.04);HEpositivedirection2 ->SetXTitle("HEpositivedirection2 \b");HEpositivedirection2 ->SetMarkerColor(2);HEpositivedirection2 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	       //	   gPad->SetLogy();    
+	       if(kcountHEpositivedirection2 == 1) HEpositivedirection2 ->SetXTitle("R for HE+ jeta = 17; depth = 2 \b");
+	       if(kcountHEpositivedirection2 == 2) HEpositivedirection2 ->SetXTitle("R for HE+ jeta = 18; depth = 2 \b");
+	       if(kcountHEpositivedirection2 == 3) HEpositivedirection2 ->SetXTitle("R for HE+ jeta = 19; depth = 2 \b");
+	       if(kcountHEpositivedirection2 == 4) HEpositivedirection2 ->SetXTitle("R for HE+ jeta = 20; depth = 2 \b");
+	       if(kcountHEpositivedirection2 == 5) HEpositivedirection2 ->SetXTitle("R for HE+ jeta = 21; depth = 2 \b");
+	       if(kcountHEpositivedirection2 == 6) HEpositivedirection2 ->SetXTitle("R for HE+ jeta = 22; depth = 2 \b");
+	       if(kcountHEpositivedirection2 == 7) HEpositivedirection2 ->SetXTitle("R for HE+ jeta = 23; depth = 2 \b");
+	       if(kcountHEpositivedirection2 == 8) HEpositivedirection2 ->SetXTitle("R for HE+ jeta = 24; depth = 2 \b");
+	       if(kcountHEpositivedirection2 == 9) HEpositivedirection2 ->SetXTitle("R for HE+ jeta = 25; depth = 2 \b");
+	       if(kcountHEpositivedirection2 ==10) HEpositivedirection2 ->SetXTitle("R for HE+ jeta = 26; depth = 2 \b");
+	       if(kcountHEpositivedirection2 ==11) HEpositivedirection2 ->SetXTitle("R for HE+ jeta = 27; depth = 2 \b");
+	       if(kcountHEpositivedirection2 ==12) HEpositivedirection2 ->SetXTitle("R for HE+ jeta = 28; depth = 2 \b");
+	       if(kcountHEpositivedirection2 ==13) HEpositivedirection2 ->SetXTitle("R for HE+ jeta = 29; depth = 2 \b");
+	       HEpositivedirection2->Draw("Error");
+	       kcountHEpositivedirection2++;
+	       if(kcountHEpositivedirection2>15) break;// 4x6 = 24 
+	     }//ccctest>0
+	     
+	   }// for i
+	 }//if(jeta-41 > 0)
+       }//for jeta
+  /////////////////
+  c3x5->Update();
+  c3x5->Print("Rhist1IterationMethodDepth2HE.png");
+  c3x5->Clear();
+  // clean-up
+  if (h2CeffHEpositivedirection2) delete h2CeffHEpositivedirection2;
+  //========================================================================================== 6   
+  //======================================================================
+  //======================================================================1D plot: R vs phi , different eta,  depth=3
+  cout<<"      1D plot: R vs phi , different eta,  depth=3 *****" <<endl;
+  c3x5->Clear();
+  /////////////////
+  c3x5->Divide(3,5);
+  c3x5->cd(1);
+       int kcountHEpositivedirection3=1;
+       TH1F* h2CeffHEpositivedirection3 = new TH1F("h2CeffHEpositivedirection3","", nphi, 0., 72. );
+
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // positivedirection:
+	 if(jeta-41 > 0) {
+	   
+	   //	     for (int i=0;i<ndepth;i++) {
+	   // depth=3
+	   for (int i=2;i<3;i++) {
+	     
+	     TH1F *HEpositivedirection3 = (TH1F*)h2CeffHEpositivedirection3->Clone("twod1");
+	     
+	     float ccctest = 0; // to avoid empty massive elements
+	     for (int jphi=0;jphi<nphi;jphi++) {
+	       
+	       double ccc1 = alexhe[i][jeta][jphi];
+	       if(ccc1!=0.) {HEpositivedirection3 ->Fill(jphi,ccc1);ccctest = 1.;//HEpositivedirection3->SetBinError(i,0.01);
+	       }
+	     }// for jphi
+	     if(ccctest>0.) {
+	       cout<<"666        kcountHEpositivedirection3   =     "<<kcountHEpositivedirection3  <<"   jeta-41=     "<< jeta-41 <<endl;
+	       c3x5->cd(kcountHEpositivedirection3);
+	       HEpositivedirection3 ->SetMarkerStyle(20);HEpositivedirection3 ->SetMarkerSize(0.4);HEpositivedirection3 ->GetYaxis()->SetLabelSize(0.04);HEpositivedirection3 ->SetXTitle("HEpositivedirection3 \b");HEpositivedirection3 ->SetMarkerColor(2);HEpositivedirection3 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	       //	   gPad->SetLogy();    
+	       if(kcountHEpositivedirection3 == 1) HEpositivedirection3 ->SetXTitle("R for HE+ jeta = 17; depth = 3 \b");
+	       if(kcountHEpositivedirection3 == 2) HEpositivedirection3 ->SetXTitle("R for HE+ jeta = 18; depth = 3 \b");
+	       if(kcountHEpositivedirection3 == 3) HEpositivedirection3 ->SetXTitle("R for HE+ jeta = 19; depth = 3 \b");
+	       if(kcountHEpositivedirection3 == 4) HEpositivedirection3 ->SetXTitle("R for HE+ jeta = 20; depth = 3 \b");
+	       if(kcountHEpositivedirection3 == 5) HEpositivedirection3 ->SetXTitle("R for HE+ jeta = 21; depth = 3 \b");
+	       if(kcountHEpositivedirection3 == 6) HEpositivedirection3 ->SetXTitle("R for HE+ jeta = 22; depth = 3 \b");
+	       if(kcountHEpositivedirection3 == 7) HEpositivedirection3 ->SetXTitle("R for HE+ jeta = 23; depth = 3 \b");
+	       if(kcountHEpositivedirection3 == 8) HEpositivedirection3 ->SetXTitle("R for HE+ jeta = 24; depth = 3 \b");
+	       if(kcountHEpositivedirection3 == 9) HEpositivedirection3 ->SetXTitle("R for HE+ jeta = 25; depth = 3 \b");
+	       if(kcountHEpositivedirection3 ==10) HEpositivedirection3 ->SetXTitle("R for HE+ jeta = 26; depth = 3 \b");
+	       if(kcountHEpositivedirection3 ==11) HEpositivedirection3 ->SetXTitle("R for HE+ jeta = 27; depth = 3 \b");
+	       if(kcountHEpositivedirection3 ==12) HEpositivedirection3 ->SetXTitle("R for HE+ jeta = 28; depth = 3 \b");
+	       if(kcountHEpositivedirection3 ==13) HEpositivedirection3 ->SetXTitle("R for HE+ jeta = 29; depth = 3 \b");
+	       HEpositivedirection3->Draw("Error");
+	       kcountHEpositivedirection3++;
+	       if(kcountHEpositivedirection3>15) break;// 4x6 = 24 
+	     }//ccctest>0
+	     
+	   }// for i
+	 }//if(jeta-41 > 0)
+       }//for jeta
+  /////////////////
+  c3x5->Update();
+  c3x5->Print("Rhist1IterationMethodDepth3HE.png");
+  c3x5->Clear();
+  // clean-up
+  if (h2CeffHEpositivedirection3) delete h2CeffHEpositivedirection3;
+  //========================================================================================== 7   
+  //======================================================================
+  //======================================================================1D plot: R vs phi , different eta,  depth=4
+  cout<<"      1D plot: R vs phi , different eta,  depth=4 *****" <<endl;
+  c3x5->Clear();
+  /////////////////
+  c3x5->Divide(3,5);
+  c3x5->cd(1);
+       int kcountHEpositivedirection4=1;
+       TH1F* h2CeffHEpositivedirection4 = new TH1F("h2CeffHEpositivedirection4","", nphi, 0., 72. );
+
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // positivedirection:
+	 if(jeta-41 > 0) {
+	   
+	   //	     for (int i=0;i<ndepth;i++) {
+	   // depth=4
+	   for (int i=3;i<4;i++) {
+	     
+	     TH1F *HEpositivedirection4 = (TH1F*)h2CeffHEpositivedirection4->Clone("twod1");
+	     
+	     float ccctest = 0; // to avoid empty massive elements
+	     for (int jphi=0;jphi<nphi;jphi++) {
+	       
+	       double ccc1 = alexhe[i][jeta][jphi];
+	       if(ccc1!=0.) {HEpositivedirection4 ->Fill(jphi,ccc1);ccctest = 1.;//HEpositivedirection4->SetBinError(i,0.01);
+	       }
+	     }// for jphi
+	     if(ccctest>0.) {
+	       cout<<"777        kcountHEpositivedirection4   =     "<<kcountHEpositivedirection4  <<"   jeta-41=     "<< jeta-41 <<endl;
+	       c3x5->cd(kcountHEpositivedirection4);
+	       HEpositivedirection4 ->SetMarkerStyle(20);HEpositivedirection4 ->SetMarkerSize(0.4);HEpositivedirection4 ->GetYaxis()->SetLabelSize(0.04);HEpositivedirection4 ->SetXTitle("HEpositivedirection4 \b");HEpositivedirection4 ->SetMarkerColor(2);HEpositivedirection4 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	       //	   gPad->SetLogy();    
+	       if(kcountHEpositivedirection4 == 1) HEpositivedirection4 ->SetXTitle("R for HE+ jeta = 16; depth = 4 \b");
+	       if(kcountHEpositivedirection4 == 2) HEpositivedirection4 ->SetXTitle("R for HE+ jeta = 18; depth = 4 \b");
+	       if(kcountHEpositivedirection4 == 3) HEpositivedirection4 ->SetXTitle("R for HE+ jeta = 19; depth = 4 \b");
+	       if(kcountHEpositivedirection4 == 4) HEpositivedirection4 ->SetXTitle("R for HE+ jeta = 20; depth = 4 \b");
+	       if(kcountHEpositivedirection4 == 5) HEpositivedirection4 ->SetXTitle("R for HE+ jeta = 21; depth = 4 \b");
+	       if(kcountHEpositivedirection4 == 6) HEpositivedirection4 ->SetXTitle("R for HE+ jeta = 22; depth = 4 \b");
+	       if(kcountHEpositivedirection4 == 7) HEpositivedirection4 ->SetXTitle("R for HE+ jeta = 23; depth = 4 \b");
+	       if(kcountHEpositivedirection4 == 8) HEpositivedirection4 ->SetXTitle("R for HE+ jeta = 24; depth = 4 \b");
+	       if(kcountHEpositivedirection4 == 9) HEpositivedirection4 ->SetXTitle("R for HE+ jeta = 25; depth = 4 \b");
+	       if(kcountHEpositivedirection4 ==10) HEpositivedirection4 ->SetXTitle("R for HE+ jeta = 26; depth = 4 \b");
+	       if(kcountHEpositivedirection4 ==11) HEpositivedirection4 ->SetXTitle("R for HE+ jeta = 27; depth = 4 \b");
+	       if(kcountHEpositivedirection4 ==12) HEpositivedirection4 ->SetXTitle("R for HE+ jeta = 28; depth = 4 \b");
+	       HEpositivedirection4->Draw("Error");
+	       kcountHEpositivedirection4++;
+	       if(kcountHEpositivedirection4>15) break;// 4x6 = 24 
+	     }//ccctest>0
+	     
+	   }// for i
+	 }//if(jeta-41 > 0)
+       }//for jeta
+  /////////////////
+  c3x5->Update();
+  c3x5->Print("Rhist1IterationMethodDepth4HE.png");
+  c3x5->Clear();
+  // clean-up
+  if (h2CeffHEpositivedirection4) delete h2CeffHEpositivedirection4;
+  //========================================================================================== 8   
+  //======================================================================
+  //======================================================================1D plot: R vs phi , different eta,  depth=5
+  cout<<"      1D plot: R vs phi , different eta,  depth=5 *****" <<endl;
+  c3x5->Clear();
+  /////////////////
+  c3x5->Divide(3,5);
+  c3x5->cd(1);
+       int kcountHEpositivedirection5=1;
+       TH1F* h2CeffHEpositivedirection5 = new TH1F("h2CeffHEpositivedirection5","", nphi, 0., 72. );
+
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // positivedirection:
+	 if(jeta-41 > 0) {
+	   
+	   //	     for (int i=0;i<ndepth;i++) {
+	   // depth=5
+	   for (int i=4;i<5;i++) {
+	     
+	     TH1F *HEpositivedirection5 = (TH1F*)h2CeffHEpositivedirection5->Clone("twod1");
+	     
+	     float ccctest = 0; // to avoid empty massive elements
+	     for (int jphi=0;jphi<nphi;jphi++) {
+	       //	       cout<<"888  initial      kcountHEpositivedirection5   =     "<<kcountHEpositivedirection5  <<"   jeta-41=     "<< jeta-41 <<"   jphi=     "<< jphi <<"   alexhe[i][jeta][jphi]=     "<< alexhe[i][jeta][jphi] <<"  depth=     "<< i <<endl;
+	       
+	       double ccc1 = alexhe[i][jeta][jphi];
+	       if(ccc1!=0.) {HEpositivedirection5 ->Fill(jphi,ccc1);ccctest = 1.;//HEpositivedirection5->SetBinError(i,0.01);
+	       }
+	     }// for jphi
+	     if(ccctest>0.) {
+	       cout<<"888        kcountHEpositivedirection5   =     "<<kcountHEpositivedirection5  <<"   jeta-41=     "<< jeta-41 <<endl;
+	       c3x5->cd(kcountHEpositivedirection5);
+	       HEpositivedirection5 ->SetMarkerStyle(20);HEpositivedirection5 ->SetMarkerSize(0.4);HEpositivedirection5 ->GetYaxis()->SetLabelSize(0.04);HEpositivedirection5 ->SetXTitle("HEpositivedirection5 \b");HEpositivedirection5 ->SetMarkerColor(2);HEpositivedirection5 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	       //	   gPad->SetLogy();    
+	       if(kcountHEpositivedirection5 == 1) HEpositivedirection5 ->SetXTitle("R for HE+ jeta = 18; depth = 5 \b");
+	       if(kcountHEpositivedirection5 == 2) HEpositivedirection5 ->SetXTitle("R for HE+ jeta = 19; depth = 5 \b");
+	       if(kcountHEpositivedirection5 == 3) HEpositivedirection5 ->SetXTitle("R for HE+ jeta = 20; depth = 5 \b");
+	       if(kcountHEpositivedirection5 == 4) HEpositivedirection5 ->SetXTitle("R for HE+ jeta = 21; depth = 5 \b");
+	       if(kcountHEpositivedirection5 == 5) HEpositivedirection5 ->SetXTitle("R for HE+ jeta = 22; depth = 5 \b");
+	       if(kcountHEpositivedirection5 == 6) HEpositivedirection5 ->SetXTitle("R for HE+ jeta = 23; depth = 5 \b");
+	       if(kcountHEpositivedirection5 == 7) HEpositivedirection5 ->SetXTitle("R for HE+ jeta = 24; depth = 5 \b");
+	       if(kcountHEpositivedirection5 == 8) HEpositivedirection5 ->SetXTitle("R for HE+ jeta = 25; depth = 5 \b");
+	       if(kcountHEpositivedirection5 == 9) HEpositivedirection5 ->SetXTitle("R for HE+ jeta = 26; depth = 5 \b");
+	       if(kcountHEpositivedirection5 ==10) HEpositivedirection5 ->SetXTitle("R for HE+ jeta = 27; depth = 5 \b");
+	       if(kcountHEpositivedirection5 ==11) HEpositivedirection5 ->SetXTitle("R for HE+ jeta = 28; depth = 5 \b");
+	       HEpositivedirection5->Draw("Error");
+	       kcountHEpositivedirection5++;
+	       if(kcountHEpositivedirection5>15) break;// 4x6 = 24 
+	     }//ccctest>0
+	     
+	   }// for i
+	 }//if(jeta-41 > 0)
+       }//for jeta
+  /////////////////
+  c3x5->Update();
+  c3x5->Print("Rhist1IterationMethodDepth5HE.png");
+  c3x5->Clear();
+  // clean-up
+  if (h2CeffHEpositivedirection5) delete h2CeffHEpositivedirection5;
+  //========================================================================================== 9   
+  //======================================================================
+  //======================================================================1D plot: R vs phi , different eta,  depth=6
+  cout<<"      1D plot: R vs phi , different eta,  depth=6 *****" <<endl;
+  c3x5->Clear();
+  /////////////////
+  c3x5->Divide(3,5);
+  c3x5->cd(1);
+       int kcountHEpositivedirection6=1;
+       TH1F* h2CeffHEpositivedirection6 = new TH1F("h2CeffHEpositivedirection6","", nphi, 0., 72. );
+
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // positivedirection:
+	 if(jeta-41 > 0) {
+	   
+	   //	     for (int i=0;i<ndepth;i++) {
+	   // depth=6
+	   for (int i=5;i<6;i++) {
+	     
+	     TH1F *HEpositivedirection6 = (TH1F*)h2CeffHEpositivedirection6->Clone("twod1");
+	     
+	     float ccctest = 0; // to avoid empty massive elements
+	     for (int jphi=0;jphi<nphi;jphi++) {
+	       
+	       double ccc1 = alexhe[i][jeta][jphi];
+	       if(ccc1!=0.) {HEpositivedirection6 ->Fill(jphi,ccc1);ccctest = 1.;//HEpositivedirection6->SetBinError(i,0.01);
+	       }
+	     }// for jphi
+	     if(ccctest>0.) {
+	       cout<<"999        kcountHEpositivedirection6   =     "<<kcountHEpositivedirection6  <<"   jeta-41=     "<< jeta-41 <<endl;
+	       c3x5->cd(kcountHEpositivedirection6);
+	       HEpositivedirection6 ->SetMarkerStyle(20);HEpositivedirection6 ->SetMarkerSize(0.4);HEpositivedirection6 ->GetYaxis()->SetLabelSize(0.04);HEpositivedirection6 ->SetXTitle("HEpositivedirection6 \b");HEpositivedirection6 ->SetMarkerColor(2);HEpositivedirection6 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	       //	   gPad->SetLogy();    
+	       if(kcountHEpositivedirection6 == 1) HEpositivedirection6 ->SetXTitle("R for HE+ jeta = 19; depth = 6 \b");
+	       if(kcountHEpositivedirection6 == 2) HEpositivedirection6 ->SetXTitle("R for HE+ jeta = 20; depth = 6 \b");
+	       if(kcountHEpositivedirection6 == 3) HEpositivedirection6 ->SetXTitle("R for HE+ jeta = 21; depth = 6 \b");
+	       if(kcountHEpositivedirection6 == 4) HEpositivedirection6 ->SetXTitle("R for HE+ jeta = 22; depth = 6 \b");
+	       if(kcountHEpositivedirection6 == 5) HEpositivedirection6 ->SetXTitle("R for HE+ jeta = 23; depth = 6 \b");
+	       if(kcountHEpositivedirection6 == 6) HEpositivedirection6 ->SetXTitle("R for HE+ jeta = 24; depth = 6 \b");
+	       if(kcountHEpositivedirection6 == 7) HEpositivedirection6 ->SetXTitle("R for HE+ jeta = 25; depth = 6 \b");
+	       if(kcountHEpositivedirection6 == 8) HEpositivedirection6 ->SetXTitle("R for HE+ jeta = 26; depth = 6 \b");
+	       if(kcountHEpositivedirection6 == 9) HEpositivedirection6 ->SetXTitle("R for HE+ jeta = 27; depth = 6 \b");
+	       if(kcountHEpositivedirection6 ==10) HEpositivedirection6 ->SetXTitle("R for HE+ jeta = 28; depth = 6 \b");
+	       HEpositivedirection6->Draw("Error");
+	       kcountHEpositivedirection6++;
+	       if(kcountHEpositivedirection6>15) break;// 4x6 = 24 
+	     }//ccctest>0
+	     
+	   }// for i
+	 }//if(jeta-41 > 0)
+       }//for jeta
+  /////////////////
+  c3x5->Update();
+  c3x5->Print("Rhist1IterationMethodDepth6HE.png");
+  c3x5->Clear();
+  // clean-up
+  if (h2CeffHEpositivedirection6) delete h2CeffHEpositivedirection6;
+  //========================================================================================== 10  
+  //======================================================================
+  //======================================================================1D plot: R vs phi , different eta,  depth=7
+  cout<<"      1D plot: R vs phi , different eta,  depth=7 *****" <<endl;
+  c3x5->Clear();
+  /////////////////
+  c3x5->Divide(3,5);
+  c3x5->cd(1);
+       int kcountHEpositivedirection7=1;
+       TH1F* h2CeffHEpositivedirection7 = new TH1F("h2CeffHEpositivedirection7","", nphi, 0., 72. );
+
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // positivedirection:
+	 if(jeta-41 > 0) {
+	   
+	   //	     for (int i=0;i<ndepth;i++) {
+	   // depth=7
+	   for (int i=6;i<7;i++) {
+	     
+	     TH1F *HEpositivedirection7 = (TH1F*)h2CeffHEpositivedirection7->Clone("twod1");
+	     
+	     float ccctest = 0; // to avoid empty massive elements
+	     for (int jphi=0;jphi<nphi;jphi++) {
+	       
+	       double ccc1 = alexhe[i][jeta][jphi];
+	       if(ccc1!=0.) {HEpositivedirection7 ->Fill(jphi,ccc1);ccctest = 1.;//HEpositivedirection7->SetBinError(i,0.01);
+	       }
+	     }// for jphi
+	     if(ccctest>0.) {
+	       cout<<"1010       kcountHEpositivedirection7   =     "<<kcountHEpositivedirection7  <<"   jeta-41=     "<< jeta-41 <<endl;
+	       c3x5->cd(kcountHEpositivedirection7);
+	       HEpositivedirection7 ->SetMarkerStyle(20);HEpositivedirection7 ->SetMarkerSize(0.4);HEpositivedirection7 ->GetYaxis()->SetLabelSize(0.04);HEpositivedirection7 ->SetXTitle("HEpositivedirection7 \b");HEpositivedirection7 ->SetMarkerColor(2);HEpositivedirection7 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	       //	   gPad->SetLogy();    
+	       if(kcountHEpositivedirection7 == 1) HEpositivedirection7 ->SetXTitle("R for HE+ jeta = 26; depth = 7 \b");
+	       if(kcountHEpositivedirection7 == 2) HEpositivedirection7 ->SetXTitle("R for HE+ jeta = 27; depth = 7 \b");
+	       if(kcountHEpositivedirection7 == 3) HEpositivedirection7 ->SetXTitle("R for HE+ jeta = 28; depth = 7 \b");
+	       HEpositivedirection7->Draw("Error");
+	       kcountHEpositivedirection7++;
+	       if(kcountHEpositivedirection7>15) break;// 4x6 = 24 
+	     }//ccctest>0
+	     
+	   }// for i
+	 }//if(jeta-41 > 0)
+       }//for jeta
+  /////////////////
+  c3x5->Update();
+  c3x5->Print("Rhist1IterationMethodDepth7HE.png");
+  c3x5->Clear();
+  // clean-up
+  if (h2CeffHEpositivedirection7) delete h2CeffHEpositivedirection7;
+
+
+
+  //                                   DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD:
+  
+      cout<<"    Start Vaiance: preparation  *****" <<endl;
+  TH2F *mapdphinorm1HE1= (TH2F*)hfile->Get("h_maprphinorm2_HE1");
+  TH2F *mapdphinorm0HE1= (TH2F*)hfile->Get("h_maprphinorm0_HE1");
+  TH2F* mapdphinormHE1 = (TH2F*)mapdphinorm1HE1->Clone("mapdphinormHE1");
+  mapdphinormHE1->Divide(mapdphinorm1HE1,mapdphinorm0HE1, 1, 1, "B");
+  TH2F *mapdphinorm1HE2= (TH2F*)hfile->Get("h_maprphinorm2_HE2");
+  TH2F *mapdphinorm0HE2= (TH2F*)hfile->Get("h_maprphinorm0_HE2");
+  TH2F* mapdphinormHE2 = (TH2F*)mapdphinorm1HE2->Clone("mapdphinormHE2");
+  mapdphinormHE2->Divide(mapdphinorm1HE2,mapdphinorm0HE2, 1, 1, "B");
+  TH2F *mapdphinorm1HE3= (TH2F*)hfile->Get("h_maprphinorm2_HE3");
+  TH2F *mapdphinorm0HE3= (TH2F*)hfile->Get("h_maprphinorm0_HE3");
+  TH2F* mapdphinormHE3 = (TH2F*)mapdphinorm1HE3->Clone("mapdphinormHE3");
+  mapdphinormHE3->Divide(mapdphinorm1HE3,mapdphinorm0HE3, 1, 1, "B");
+  TH2F *mapdphinorm1HE4= (TH2F*)hfile->Get("h_maprphinorm2_HE4");
+  TH2F *mapdphinorm0HE4= (TH2F*)hfile->Get("h_maprphinorm0_HE4");
+  TH2F* mapdphinormHE4 = (TH2F*)mapdphinorm1HE4->Clone("mapdphinormHE4");
+  mapdphinormHE4->Divide(mapdphinorm1HE4,mapdphinorm0HE4, 1, 1, "B");
+  TH2F *mapdphinorm1HE5= (TH2F*)hfile->Get("h_maprphinorm2_HE5");
+  TH2F *mapdphinorm0HE5= (TH2F*)hfile->Get("h_maprphinorm0_HE5");
+  TH2F* mapdphinormHE5 = (TH2F*)mapdphinorm1HE5->Clone("mapdphinormHE5");
+  mapdphinormHE5->Divide(mapdphinorm1HE5,mapdphinorm0HE5, 1, 1, "B");
+  TH2F *mapdphinorm1HE6= (TH2F*)hfile->Get("h_maprphinorm2_HE6");
+  TH2F *mapdphinorm0HE6= (TH2F*)hfile->Get("h_maprphinorm0_HE6");
+  TH2F* mapdphinormHE6 = (TH2F*)mapdphinorm1HE6->Clone("mapdphinormHE6");
+  mapdphinormHE6->Divide(mapdphinorm1HE6,mapdphinorm0HE6, 1, 1, "B");
+  TH2F *mapdphinorm1HE7= (TH2F*)hfile->Get("h_maprphinorm2_HE7");
+  TH2F *mapdphinorm0HE7= (TH2F*)hfile->Get("h_maprphinorm0_HE7");
+  TH2F* mapdphinormHE7 = (TH2F*)mapdphinorm1HE7->Clone("mapdphinormHE7");
+  mapdphinormHE7->Divide(mapdphinorm1HE7,mapdphinorm0HE7, 1, 1, "B");
+      cout<<"      Vaiance: preparation DONE *****" <<endl;
+    //====================================================================== put Vaiance=Dispersia = Sig**2=<R**2> - (<R>)**2 
+      //                                                                                           = sum(R*R)/N - (sum(R)/N)**2 
+      //                                                                                           =  mapdphinormHE1,2,3..7   -  alexhe*alexhe
+      for(int jeta=0;jeta<njeta;jeta++){
+	for(int jphi=0;jphi<njphi;jphi++){
+	  variance[0][jeta][jphi] = fabs(mapdphinormHE1->GetBinContent(jeta+1,jphi+1) - alexhe[0][jeta][jphi]*alexhe[0][jeta][jphi]) ;
+	  if(variance[0][jeta][jphi] < 0.00003) variance[0][jeta][jphi] = 0.000067;
+	  variance[1][jeta][jphi] = fabs(mapdphinormHE2->GetBinContent(jeta+1,jphi+1) - alexhe[1][jeta][jphi]*alexhe[1][jeta][jphi]) ;
+	  if(variance[1][jeta][jphi] < 0.00003) variance[1][jeta][jphi] = 0.000067;
+	  variance[2][jeta][jphi] = fabs(mapdphinormHE3->GetBinContent(jeta+1,jphi+1) - alexhe[2][jeta][jphi]*alexhe[2][jeta][jphi]) ;
+	  if(variance[2][jeta][jphi] < 0.00003) variance[2][jeta][jphi] = 0.000067;
+	  variance[3][jeta][jphi] = fabs(mapdphinormHE4->GetBinContent(jeta+1,jphi+1) - alexhe[3][jeta][jphi]*alexhe[3][jeta][jphi]) ;
+	  if(variance[3][jeta][jphi] < 0.00003) variance[3][jeta][jphi] = 0.000067;
+	  variance[4][jeta][jphi] = fabs(mapdphinormHE5->GetBinContent(jeta+1,jphi+1) - alexhe[4][jeta][jphi]*alexhe[4][jeta][jphi]) ;
+	  if(variance[4][jeta][jphi] < 0.00003) variance[4][jeta][jphi] = 0.000067;
+	  variance[5][jeta][jphi] = fabs(mapdphinormHE6->GetBinContent(jeta+1,jphi+1) - alexhe[5][jeta][jphi]*alexhe[5][jeta][jphi]) ;
+	  if(variance[5][jeta][jphi] < 0.00003) variance[5][jeta][jphi] = 0.000067;
+	  variance[6][jeta][jphi] = fabs(mapdphinormHE7->GetBinContent(jeta+1,jphi+1) - alexhe[6][jeta][jphi]*alexhe[6][jeta][jphi]) ;
+	  if(variance[6][jeta][jphi] < 0.00003) variance[6][jeta][jphi] = 0.000067;
+
+	}	 
+      }
+      cout<<"      Vaiance: DONE*****" <<endl;
+
+  //------------------------  2D-eta/phi-plot: D, averaged over depthes
+  //======================================================================
+  //======================================================================
+      cout<<"      R2D-eta/phi-plot: D, averaged over depthes *****" <<endl;
+      c1x1->Clear();
+      /////////////////
+      c1x0->Divide(1,1);
+      c1x0->cd(1);
+      TH2F* Defz42D      = new TH2F("Defz42D","",   neta, -41., 41., nphi, 0., 72. );
+      TH2F* Defz42D0     = new TH2F("Defz42D0","",  neta, -41., 41., nphi, 0., 72. );
+      TH2F* Defz42DF = (TH2F*)Defz42D0->Clone("Defz42DF");
+      for (int i=0;i<ndepth;i++) {
+	for (int jeta=0;jeta<neta;jeta++) {
+	  for (int jphi=0;jphi<nphi;jphi++) {
+	    double ccc1 = variance[i][jeta][jphi];
+	    int k2plot = jeta-41;int kkk = k2plot; //if(k2plot >0   kkk=k2plot+1; //-41 +41 !=0
+	    if(alexhe[i][jeta][jphi]>0.) {Defz42D ->Fill(kkk,jphi,ccc1); Defz42D0 ->Fill(kkk,jphi,1.); }
+	  }}}
+      Defz42DF->Divide(Defz42D,Defz42D0, 1, 1, "B");// average A
+      //    Defz1->Sumw2();
+      gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
+      Defz42DF->SetMarkerStyle(20); Defz42DF->SetMarkerSize(0.4); Defz42DF->GetZaxis()->SetLabelSize(0.08); Defz42DF->SetXTitle("<D>_depth       #eta  \b"); Defz42DF->SetYTitle("      #phi \b"); Defz42DF->SetZTitle("<D>_depth \b"); Defz42DF->SetMarkerColor(2); Defz42DF->SetLineColor(0);      //      Defz42DF->SetMaximum(1.000);  //      Defz42DF->SetMinimum(1.0);
+      Defz42DF->Draw("COLZ");
+      /////////////////
+      c1x0->Update();
+      c1x0->Print("Dhist2IterationMethodHE.png");
+      c1x0->Clear();
+      // clean-up
+      if (Defz42D) delete Defz42D;
+      if (Defz42D0) delete Defz42D0;
+      if (Defz42DF) delete Defz42DF;
+      
+      
+
+
+
+  //====================================================================== 1D plot: D vs phi , averaged over depthes & eta
+  //======================================================================
+  cout<<"      1D plot: D vs phi , averaged over depthes & eta *****" <<endl;
+  c1x1->Clear();
+  /////////////////
+  c1x1->Divide(1,1);
+  c1x1->cd(1);
+      TH1F* Defz41D      = new TH1F("Defz41D","", nphi, 0., 72. );
+       TH1F* Defz41D0     = new TH1F("Defz41D0","",nphi, 0., 72. );
+       TH1F* Defz41DF = (TH1F*)Defz41D0->Clone("Defz41DF");
+
+       for (int jphi=0;jphi<nphi;jphi++) {
+	 for (int jeta=0;jeta<neta;jeta++) {
+	   for (int i=0;i<ndepth;i++) {
+	     double ccc1 = variance[i][jeta][jphi];
+	     if(alexhe[i][jeta][jphi]>0.) {Defz41D ->Fill(jphi,ccc1); Defz41D0 ->Fill(jphi,1.); }
+	   }}}
+       //     Defz41D->Sumw2();Defz41D0->Sumw2();
+
+       Defz41DF->Divide(Defz41D,Defz41D0, 1, 1, "B");// R averaged over depthes & eta
+            Defz41D0->Sumw2();
+       //    for (int jphi=1;jphi<73;jphi++) {Defz41DF->SetBinError(jphi,0.01);}
+       gPad->SetGridy();      gPad->SetGridx();      //      gPad->SetLogz();
+       Defz41DF->SetMarkerStyle(20); Defz41DF->SetMarkerSize(1.4); Defz41DF->GetZaxis()->SetLabelSize(0.08); Defz41DF->SetXTitle("#phi  \b"); Defz41DF->SetYTitle("  <D> \b"); Defz41DF->SetZTitle("<D>_PHI  - AllDepthes \b"); Defz41DF->SetMarkerColor(4); Defz41DF->SetLineColor(4);  Defz41DF->SetMinimum(0.8);     Defz41DF->SetMinimum(-0.015);       
+       Defz41DF->Draw("Error");
+  /////////////////
+  c1x1->Update();
+  c1x1->Print("Dhist1IterationMethodHE.png");
+  c1x1->Clear();
+  // clean-up
+  if (Defz41D) delete Defz41D;
+  if (Defz41D0) delete Defz41D0;
+  if (Defz41DF) delete Defz41DF;
+  
+
+  //========================================================================================== 14  
+  //======================================================================
+  //======================================================================1D plot: D vs phi , different eta,  depth=1
+  cout<<"      1D plot: D vs phi , different eta,  depth=1 *****" <<endl;
+  c3x5->Clear();
+  /////////////////
+  c3x5->Divide(3,5);
+  c3x5->cd(1);
+
+       int kcountHEpositivedirectionD1=1;
+       TH1F* h2CeffHEpositivedirectionD1 = new TH1F("h2CeffHEpositivedirectionD1","", nphi, 0., 72. );
+
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // positivedirectionD:
+	 if(jeta-41 > 0) {
+	   
+	   //	     for (int i=0;i<ndepth;i++) {
+	   // depth=1
+	   for (int i=0;i<1;i++) {
+	     
+	     TH1F *HEpositivedirectionD1 = (TH1F*)h2CeffHEpositivedirectionD1->Clone("twod1");
+	     
+	     float ccctest = 0; // to avoid empty massive elements
+	     for (int jphi=0;jphi<nphi;jphi++) {
+	       
+	       double ccc1 = variance[i][jeta][jphi];
+	       if(alexhe[i][jeta][jphi]>0.) {HEpositivedirectionD1 ->Fill(jphi,ccc1);ccctest = 1.;//HEpositivedirectionD1->SetBinError(i,0.01);
+	       }
+	     }// for jphi
+	     if(ccctest>0.) {
+	       cout<<"1414       kcountHEpositivedirectionD1   =     "<<kcountHEpositivedirectionD1  <<"   jeta-41=     "<< jeta-41 <<endl;
+	       c3x5->cd(kcountHEpositivedirectionD1);
+	       HEpositivedirectionD1 ->SetMarkerStyle(20);HEpositivedirectionD1 ->SetMarkerSize(0.4);HEpositivedirectionD1 ->GetYaxis()->SetLabelSize(0.04);HEpositivedirectionD1 ->SetXTitle("HEpositivedirectionD1 \b");HEpositivedirectionD1 ->SetMarkerColor(2);HEpositivedirectionD1 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	       //	   gPad->SetLogy();    
+	       if(kcountHEpositivedirectionD1 == 1) HEpositivedirectionD1 ->SetXTitle("D for HE+ jeta = 18; depth = 1 \b");
+	       if(kcountHEpositivedirectionD1 == 2) HEpositivedirectionD1 ->SetXTitle("D for HE+ jeta = 19; depth = 1 \b");
+	       if(kcountHEpositivedirectionD1 == 3) HEpositivedirectionD1 ->SetXTitle("D for HE+ jeta = 20; depth = 1 \b");
+	       if(kcountHEpositivedirectionD1 == 4) HEpositivedirectionD1 ->SetXTitle("D for HE+ jeta = 21; depth = 1 \b");
+	       if(kcountHEpositivedirectionD1 == 5) HEpositivedirectionD1 ->SetXTitle("D for HE+ jeta = 22; depth = 1 \b");
+	       if(kcountHEpositivedirectionD1 == 6) HEpositivedirectionD1 ->SetXTitle("D for HE+ jeta = 23; depth = 1 \b");
+	       if(kcountHEpositivedirectionD1 == 7) HEpositivedirectionD1 ->SetXTitle("D for HE+ jeta = 24; depth = 1 \b");
+	       if(kcountHEpositivedirectionD1 == 8) HEpositivedirectionD1 ->SetXTitle("D for HE+ jeta = 25; depth = 1 \b");
+	       if(kcountHEpositivedirectionD1 == 9) HEpositivedirectionD1 ->SetXTitle("D for HE+ jeta = 26; depth = 1 \b");
+	       if(kcountHEpositivedirectionD1 ==10) HEpositivedirectionD1 ->SetXTitle("D for HE+ jeta = 27; depth = 1 \b");
+	       if(kcountHEpositivedirectionD1 ==11) HEpositivedirectionD1 ->SetXTitle("D for HE+ jeta = 28; depth = 1 \b");
+	       if(kcountHEpositivedirectionD1 ==12) HEpositivedirectionD1 ->SetXTitle("D for HE+ jeta = 29; depth = 1 \b");
+	       HEpositivedirectionD1->Draw("Error");
+	       kcountHEpositivedirectionD1++;
+	       if(kcountHEpositivedirectionD1>15) break;// 4x6 = 24 
+	     }//ccctest>0
+	     
+	   }// for i
+	 }//if(jeta-41 > 0)
+       }//for jeta
+  /////////////////
+  c3x5->Update();
+  c3x5->Print("Dhist1IterationMethodDepth1HE.png");
+  c3x5->Clear();
+  // clean-up
+  if (h2CeffHEpositivedirectionD1) delete h2CeffHEpositivedirectionD1;
+  
+
+  //========================================================================================== 15  
+  //======================================================================
+  //======================================================================1D plot: D vs phi , different eta,  depth=2
+  cout<<"      1D plot: D vs phi , different eta,  depth=2 *****" <<endl;
+  c3x5->Clear();
+  c3x5->Divide(3,5);
+  c3x5->cd(1);
+       int kcountHEpositivedirectionD2=1;
+       TH1F* h2CeffHEpositivedirectionD2 = new TH1F("h2CeffHEpositivedirectionD2","", nphi, 0., 72. );
+
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // positivedirectionD:
+	 if(jeta-41 > 0) {
+	   
+	   //	     for (int i=0;i<ndepth;i++) {
+	   // depth=2
+	   for (int i=1;i<2;i++) {
+	     
+	     TH1F *HEpositivedirectionD2 = (TH1F*)h2CeffHEpositivedirectionD2->Clone("twod1");
+	     
+	     float ccctest = 0; // to avoid empty massive elements
+	     for (int jphi=0;jphi<nphi;jphi++) {
+	       
+	       double ccc1 = variance[i][jeta][jphi];
+	       if(alexhe[i][jeta][jphi]>0.) {HEpositivedirectionD2 ->Fill(jphi,ccc1);ccctest = 1.;//HEpositivedirectionD2->SetBinError(i,0.01);
+	       }
+	     }// for jphi
+	     if(ccctest>0.) {
+	       cout<<"1515       kcountHEpositivedirectionD2   =     "<<kcountHEpositivedirectionD2  <<"   jeta-41=     "<< jeta-41 <<endl;
+	       c3x5->cd(kcountHEpositivedirectionD2);
+	       HEpositivedirectionD2 ->SetMarkerStyle(20);HEpositivedirectionD2 ->SetMarkerSize(0.4);HEpositivedirectionD2 ->GetYaxis()->SetLabelSize(0.04);HEpositivedirectionD2 ->SetXTitle("HEpositivedirectionD2 \b");HEpositivedirectionD2 ->SetMarkerColor(2);HEpositivedirectionD2 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	       //	   gPad->SetLogy();    
+	       if(kcountHEpositivedirectionD2 == 1) HEpositivedirectionD2 ->SetXTitle("D for HE+ jeta = 17; depth = 2 \b");
+	       if(kcountHEpositivedirectionD2 == 2) HEpositivedirectionD2 ->SetXTitle("D for HE+ jeta = 18; depth = 2 \b");
+	       if(kcountHEpositivedirectionD2 == 3) HEpositivedirectionD2 ->SetXTitle("D for HE+ jeta = 19; depth = 2 \b");
+	       if(kcountHEpositivedirectionD2 == 4) HEpositivedirectionD2 ->SetXTitle("D for HE+ jeta = 20; depth = 2 \b");
+	       if(kcountHEpositivedirectionD2 == 5) HEpositivedirectionD2 ->SetXTitle("D for HE+ jeta = 21; depth = 2 \b");
+	       if(kcountHEpositivedirectionD2 == 6) HEpositivedirectionD2 ->SetXTitle("D for HE+ jeta = 22; depth = 2 \b");
+	       if(kcountHEpositivedirectionD2 == 7) HEpositivedirectionD2 ->SetXTitle("D for HE+ jeta = 23; depth = 2 \b");
+	       if(kcountHEpositivedirectionD2 == 8) HEpositivedirectionD2 ->SetXTitle("D for HE+ jeta = 24; depth = 2 \b");
+	       if(kcountHEpositivedirectionD2 == 9) HEpositivedirectionD2 ->SetXTitle("D for HE+ jeta = 25; depth = 2 \b");
+	       if(kcountHEpositivedirectionD2 ==10) HEpositivedirectionD2 ->SetXTitle("D for HE+ jeta = 26; depth = 2 \b");
+	       if(kcountHEpositivedirectionD2 ==11) HEpositivedirectionD2 ->SetXTitle("D for HE+ jeta = 27; depth = 2 \b");
+	       if(kcountHEpositivedirectionD2 ==12) HEpositivedirectionD2 ->SetXTitle("D for HE+ jeta = 28; depth = 2 \b");
+	       if(kcountHEpositivedirectionD2 ==13) HEpositivedirectionD2 ->SetXTitle("D for HE+ jeta = 29; depth = 2 \b");
+	       HEpositivedirectionD2->Draw("Error");
+	       kcountHEpositivedirectionD2++;
+	       if(kcountHEpositivedirectionD2>15) break;// 4x6 = 24 
+	     }//ccctest>0
+	     
+	   }// for i
+	 }//if(jeta-41 > 0)
+       }//for jeta
+  /////////////////
+  c3x5->Update();
+  c3x5->Print("Dhist1IterationMethodDepth2HE.png");
+  c3x5->Clear();
+  // clean-up
+  if (h2CeffHEpositivedirectionD2) delete h2CeffHEpositivedirectionD2;
+
+
+  //========================================================================================== 16  
+  //======================================================================
+  //======================================================================1D plot: D vs phi , different eta,  depth=3
+  cout<<"      1D plot: D vs phi , different eta,  depth=3 *****" <<endl;
+  c3x5->Clear();
+  c3x5->Divide(3,5);
+  c3x5->cd(1);
+       int kcountHEpositivedirectionD3=1;
+       TH1F* h2CeffHEpositivedirectionD3 = new TH1F("h2CeffHEpositivedirectionD3","", nphi, 0., 72. );
+
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // positivedirectionD:
+	 if(jeta-41 > 0) {
+	   
+	   //	     for (int i=0;i<ndepth;i++) {
+	   // depth=3
+	   for (int i=2;i<3;i++) {
+	     
+	     TH1F *HEpositivedirectionD3 = (TH1F*)h2CeffHEpositivedirectionD3->Clone("twod1");
+	     
+	     float ccctest = 0; // to avoid empty massive elements
+	     for (int jphi=0;jphi<nphi;jphi++) {
+	       
+	       double ccc1 = variance[i][jeta][jphi];
+	       if(alexhe[i][jeta][jphi]>0.) {HEpositivedirectionD3 ->Fill(jphi,ccc1);ccctest = 1.;//HEpositivedirectionD3->SetBinError(i,0.01);
+	       }
+	     }// for jphi
+	     if(ccctest>0.) {
+	       cout<<"1616       kcountHEpositivedirectionD3   =     "<<kcountHEpositivedirectionD3  <<"   jeta-41=     "<< jeta-41 <<endl;
+	       c3x5->cd(kcountHEpositivedirectionD3);
+	       HEpositivedirectionD3 ->SetMarkerStyle(20);HEpositivedirectionD3 ->SetMarkerSize(0.4);HEpositivedirectionD3 ->GetYaxis()->SetLabelSize(0.04);HEpositivedirectionD3 ->SetXTitle("HEpositivedirectionD3 \b");HEpositivedirectionD3 ->SetMarkerColor(2);HEpositivedirectionD3 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	       //	   gPad->SetLogy();    
+	       if(kcountHEpositivedirectionD3 == 1) HEpositivedirectionD3 ->SetXTitle("D for HE+ jeta = 17; depth = 3 \b");
+	       if(kcountHEpositivedirectionD3 == 2) HEpositivedirectionD3 ->SetXTitle("D for HE+ jeta = 18; depth = 3 \b");
+	       if(kcountHEpositivedirectionD3 == 3) HEpositivedirectionD3 ->SetXTitle("D for HE+ jeta = 19; depth = 3 \b");
+	       if(kcountHEpositivedirectionD3 == 4) HEpositivedirectionD3 ->SetXTitle("D for HE+ jeta = 20; depth = 3 \b");
+	       if(kcountHEpositivedirectionD3 == 5) HEpositivedirectionD3 ->SetXTitle("D for HE+ jeta = 21; depth = 3 \b");
+	       if(kcountHEpositivedirectionD3 == 6) HEpositivedirectionD3 ->SetXTitle("D for HE+ jeta = 22; depth = 3 \b");
+	       if(kcountHEpositivedirectionD3 == 7) HEpositivedirectionD3 ->SetXTitle("D for HE+ jeta = 23; depth = 3 \b");
+	       if(kcountHEpositivedirectionD3 == 8) HEpositivedirectionD3 ->SetXTitle("D for HE+ jeta = 24; depth = 3 \b");
+	       if(kcountHEpositivedirectionD3 == 9) HEpositivedirectionD3 ->SetXTitle("D for HE+ jeta = 25; depth = 3 \b");
+	       if(kcountHEpositivedirectionD3 ==10) HEpositivedirectionD3 ->SetXTitle("D for HE+ jeta = 26; depth = 3 \b");
+	       if(kcountHEpositivedirectionD3 ==11) HEpositivedirectionD3 ->SetXTitle("D for HE+ jeta = 27; depth = 3 \b");
+	       if(kcountHEpositivedirectionD3 ==12) HEpositivedirectionD3 ->SetXTitle("D for HE+ jeta = 28; depth = 3 \b");
+	       if(kcountHEpositivedirectionD3 ==13) HEpositivedirectionD3 ->SetXTitle("D for HE+ jeta = 29; depth = 3 \b");
+	       HEpositivedirectionD3->Draw("Error");
+	       kcountHEpositivedirectionD3++;
+	       if(kcountHEpositivedirectionD3>15) break;// 4x6 = 24 
+	     }//ccctest>0
+	     
+	   }// for i
+	 }//if(jeta-41 > 0)
+       }//for jeta
+  /////////////////
+  c3x5->Update();
+  c3x5->Print("Dhist1IterationMethodDepth3HE.png");
+  c3x5->Clear();
+  // clean-up
+  if (h2CeffHEpositivedirectionD3) delete h2CeffHEpositivedirectionD3;
+
+
+  //========================================================================================== 17  
+  //======================================================================
+  //======================================================================1D plot: D vs phi , different eta,  depth=4
+  cout<<"      1D plot: D vs phi , different eta,  depth=4 *****" <<endl;
+  c3x5->Clear();
+  c3x5->Divide(3,5);
+  c3x5->cd(1);
+       int kcountHEpositivedirectionD4=1;
+       TH1F* h2CeffHEpositivedirectionD4 = new TH1F("h2CeffHEpositivedirectionD4","", nphi, 0., 72. );
+
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // positivedirectionD:
+	 if(jeta-41 > 0) {
+	   
+	   //	     for (int i=0;i<ndepth;i++) {
+	   // depth=4
+	   for (int i=3;i<4;i++) {
+	     
+	     TH1F *HEpositivedirectionD4 = (TH1F*)h2CeffHEpositivedirectionD4->Clone("twod1");
+	     
+	     float ccctest = 0; // to avoid empty massive elements
+	     for (int jphi=0;jphi<nphi;jphi++) {
+	       
+	       double ccc1 = variance[i][jeta][jphi];
+	       if(alexhe[i][jeta][jphi]>0.) {HEpositivedirectionD4 ->Fill(jphi,ccc1);ccctest = 1.;//HEpositivedirectionD4->SetBinError(i,0.01);
+	       }
+	     }// for jphi
+	     if(ccctest>0.) {
+	       cout<<"1717       kcountHEpositivedirectionD4   =     "<<kcountHEpositivedirectionD4  <<"   jeta-41=     "<< jeta-41 <<endl;
+	       c3x5->cd(kcountHEpositivedirectionD4);
+	       HEpositivedirectionD4 ->SetMarkerStyle(20);HEpositivedirectionD4 ->SetMarkerSize(0.4);HEpositivedirectionD4 ->GetYaxis()->SetLabelSize(0.04);HEpositivedirectionD4 ->SetXTitle("HEpositivedirectionD4 \b");HEpositivedirectionD4 ->SetMarkerColor(2);HEpositivedirectionD4 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	       //	   gPad->SetLogy();    
+	       if(kcountHEpositivedirectionD4 == 1) HEpositivedirectionD4 ->SetXTitle("D for HE+ jeta = 16; depth = 4 \b");
+	       if(kcountHEpositivedirectionD4 == 2) HEpositivedirectionD4 ->SetXTitle("D for HE+ jeta = 18; depth = 4 \b");
+	       if(kcountHEpositivedirectionD4 == 3) HEpositivedirectionD4 ->SetXTitle("D for HE+ jeta = 19; depth = 4 \b");
+	       if(kcountHEpositivedirectionD4 == 4) HEpositivedirectionD4 ->SetXTitle("D for HE+ jeta = 20; depth = 4 \b");
+	       if(kcountHEpositivedirectionD4 == 5) HEpositivedirectionD4 ->SetXTitle("D for HE+ jeta = 21; depth = 4 \b");
+	       if(kcountHEpositivedirectionD4 == 6) HEpositivedirectionD4 ->SetXTitle("D for HE+ jeta = 22; depth = 4 \b");
+	       if(kcountHEpositivedirectionD4 == 7) HEpositivedirectionD4 ->SetXTitle("D for HE+ jeta = 23; depth = 4 \b");
+	       if(kcountHEpositivedirectionD4 == 8) HEpositivedirectionD4 ->SetXTitle("D for HE+ jeta = 24; depth = 4 \b");
+	       if(kcountHEpositivedirectionD4 == 9) HEpositivedirectionD4 ->SetXTitle("D for HE+ jeta = 25; depth = 4 \b");
+	       if(kcountHEpositivedirectionD4 ==10) HEpositivedirectionD4 ->SetXTitle("D for HE+ jeta = 26; depth = 4 \b");
+	       if(kcountHEpositivedirectionD4 ==11) HEpositivedirectionD4 ->SetXTitle("D for HE+ jeta = 27; depth = 4 \b");
+	       if(kcountHEpositivedirectionD4 ==12) HEpositivedirectionD4 ->SetXTitle("D for HE+ jeta = 28; depth = 4 \b");
+	       HEpositivedirectionD4->Draw("Error");
+	       kcountHEpositivedirectionD4++;
+	       if(kcountHEpositivedirectionD4>15) break;// 4x6 = 24 
+	     }//ccctest>0
+	     
+	   }// for i
+	 }//if(jeta-41 > 0)
+       }//for jeta
+  /////////////////
+  c3x5->Update();
+  c3x5->Print("Dhist1IterationMethodDepth4HE.png");
+  c3x5->Clear();
+  // clean-up
+  if (h2CeffHEpositivedirectionD4) delete h2CeffHEpositivedirectionD4;
+
+
+  //========================================================================================== 18  
+  //======================================================================
+  //======================================================================1D plot: D vs phi , different eta,  depth=5
+  cout<<"      1D plot: D vs phi , different eta,  depth=5 *****" <<endl;
+  c3x5->Clear();
+  c3x5->Divide(3,5);
+  c3x5->cd(1);
+       int kcountHEpositivedirectionD5=1;
+       TH1F* h2CeffHEpositivedirectionD5 = new TH1F("h2CeffHEpositivedirectionD5","", nphi, 0., 72. );
+
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // positivedirectionD:
+	 if(jeta-41 > 0) {
+	   
+	   //	     for (int i=0;i<ndepth;i++) {
+	   // depth=5
+	   for (int i=4;i<5;i++) {
+	     
+	     TH1F *HEpositivedirectionD5 = (TH1F*)h2CeffHEpositivedirectionD5->Clone("twod1");
+	     
+	     float ccctest = 0; // to avoid empty massive elements
+	     for (int jphi=0;jphi<nphi;jphi++) {
+	       
+	       double ccc1 = variance[i][jeta][jphi];
+	       if(alexhe[i][jeta][jphi]>0.) {HEpositivedirectionD5 ->Fill(jphi,ccc1);ccctest = 1.;//HEpositivedirectionD5->SetBinError(i,0.01);
+	       }
+	     }// for jphi
+	     if(ccctest>0.) {
+	       cout<<"1818       kcountHEpositivedirectionD5   =     "<<kcountHEpositivedirectionD5  <<"   jeta-41=     "<< jeta-41 <<endl;
+	       c3x5->cd(kcountHEpositivedirectionD5);
+	       HEpositivedirectionD5 ->SetMarkerStyle(20);HEpositivedirectionD5 ->SetMarkerSize(0.4);HEpositivedirectionD5 ->GetYaxis()->SetLabelSize(0.04);HEpositivedirectionD5 ->SetXTitle("HEpositivedirectionD5 \b");HEpositivedirectionD5 ->SetMarkerColor(2);HEpositivedirectionD5 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	       //	   gPad->SetLogy();    
+	       if(kcountHEpositivedirectionD5 == 1) HEpositivedirectionD5 ->SetXTitle("D for HE+ jeta = 18; depth = 5 \b");
+	       if(kcountHEpositivedirectionD5 == 2) HEpositivedirectionD5 ->SetXTitle("D for HE+ jeta = 19; depth = 5 \b");
+	       if(kcountHEpositivedirectionD5 == 3) HEpositivedirectionD5 ->SetXTitle("D for HE+ jeta = 20; depth = 5 \b");
+	       if(kcountHEpositivedirectionD5 == 4) HEpositivedirectionD5 ->SetXTitle("D for HE+ jeta = 21; depth = 5 \b");
+	       if(kcountHEpositivedirectionD5 == 5) HEpositivedirectionD5 ->SetXTitle("D for HE+ jeta = 22; depth = 5 \b");
+	       if(kcountHEpositivedirectionD5 == 6) HEpositivedirectionD5 ->SetXTitle("D for HE+ jeta = 23; depth = 5 \b");
+	       if(kcountHEpositivedirectionD5 == 7) HEpositivedirectionD5 ->SetXTitle("D for HE+ jeta = 24; depth = 5 \b");
+	       if(kcountHEpositivedirectionD5 == 8) HEpositivedirectionD5 ->SetXTitle("D for HE+ jeta = 25; depth = 5 \b");
+	       if(kcountHEpositivedirectionD5 == 9) HEpositivedirectionD5 ->SetXTitle("D for HE+ jeta = 26; depth = 5 \b");
+	       if(kcountHEpositivedirectionD5 ==10) HEpositivedirectionD5 ->SetXTitle("D for HE+ jeta = 27; depth = 5 \b");
+	       if(kcountHEpositivedirectionD5 ==11) HEpositivedirectionD5 ->SetXTitle("D for HE+ jeta = 28; depth = 5 \b");
+	       HEpositivedirectionD5->Draw("Error");
+	       kcountHEpositivedirectionD5++;
+	       if(kcountHEpositivedirectionD5>15) break;// 4x6 = 24 
+	     }//ccctest>0
+	     
+	   }// for i
+	 }//if(jeta-41 > 0)
+       }//for jeta
+  /////////////////
+  c3x5->Update();
+  c3x5->Print("Dhist1IterationMethodDepth5HE.png");
+  c3x5->Clear();
+  // clean-up
+  if (h2CeffHEpositivedirectionD5) delete h2CeffHEpositivedirectionD5;
+
+
+  //========================================================================================== 19  
+  //======================================================================
+  //======================================================================1D plot: D vs phi , different eta,  depth=6
+  cout<<"      1D plot: D vs phi , different eta,  depth=6 *****" <<endl;
+  c3x5->Clear();
+  c3x5->Divide(3,5);
+  c3x5->cd(1);
+       int kcountHEpositivedirectionD6=1;
+       TH1F* h2CeffHEpositivedirectionD6 = new TH1F("h2CeffHEpositivedirectionD6","", nphi, 0., 72. );
+
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // positivedirectionD:
+	 if(jeta-41 > 0) {
+	   
+	   //	     for (int i=0;i<ndepth;i++) {
+	   // depth=6
+	   for (int i=5;i<6;i++) {
+	     
+	     TH1F *HEpositivedirectionD6 = (TH1F*)h2CeffHEpositivedirectionD6->Clone("twod1");
+	     
+	     float ccctest = 0; // to avoid empty massive elements
+	     for (int jphi=0;jphi<nphi;jphi++) {
+	       
+	       double ccc1 = variance[i][jeta][jphi];
+	       if(alexhe[i][jeta][jphi]>0.) {HEpositivedirectionD6 ->Fill(jphi,ccc1);ccctest = 1.;//HEpositivedirectionD6->SetBinError(i,0.01);
+	       }
+	     }// for jphi
+	     if(ccctest>0.) {
+	       cout<<"1919       kcountHEpositivedirectionD6   =     "<<kcountHEpositivedirectionD6  <<"   jeta-41=     "<< jeta-41 <<endl;
+	       c3x5->cd(kcountHEpositivedirectionD6);
+	       HEpositivedirectionD6 ->SetMarkerStyle(20);HEpositivedirectionD6 ->SetMarkerSize(0.4);HEpositivedirectionD6 ->GetYaxis()->SetLabelSize(0.04);HEpositivedirectionD6 ->SetXTitle("HEpositivedirectionD6 \b");HEpositivedirectionD6 ->SetMarkerColor(2);HEpositivedirectionD6 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	       //	   gPad->SetLogy();    
+	       if(kcountHEpositivedirectionD6 == 1) HEpositivedirectionD6 ->SetXTitle("D for HE+ jeta = 19; depth = 6 \b");
+	       if(kcountHEpositivedirectionD6 == 2) HEpositivedirectionD6 ->SetXTitle("D for HE+ jeta = 20; depth = 6 \b");
+	       if(kcountHEpositivedirectionD6 == 3) HEpositivedirectionD6 ->SetXTitle("D for HE+ jeta = 21; depth = 6 \b");
+	       if(kcountHEpositivedirectionD6 == 4) HEpositivedirectionD6 ->SetXTitle("D for HE+ jeta = 22; depth = 6 \b");
+	       if(kcountHEpositivedirectionD6 == 5) HEpositivedirectionD6 ->SetXTitle("D for HE+ jeta = 23; depth = 6 \b");
+	       if(kcountHEpositivedirectionD6 == 6) HEpositivedirectionD6 ->SetXTitle("D for HE+ jeta = 24; depth = 6 \b");
+	       if(kcountHEpositivedirectionD6 == 7) HEpositivedirectionD6 ->SetXTitle("D for HE+ jeta = 25; depth = 6 \b");
+	       if(kcountHEpositivedirectionD6 == 8) HEpositivedirectionD6 ->SetXTitle("D for HE+ jeta = 26; depth = 6 \b");
+	       if(kcountHEpositivedirectionD6 == 9) HEpositivedirectionD6 ->SetXTitle("D for HE+ jeta = 27; depth = 6 \b");
+	       if(kcountHEpositivedirectionD6 ==10) HEpositivedirectionD6 ->SetXTitle("D for HE+ jeta = 28; depth = 6 \b");
+	       HEpositivedirectionD6->Draw("Error");
+	       kcountHEpositivedirectionD6++;
+	       if(kcountHEpositivedirectionD6>15) break;// 4x6 = 24 
+	     }//ccctest>0
+	     
+	   }// for i
+	 }//if(jeta-41 > 0)
+       }//for jeta
+  /////////////////
+  c3x5->Update();
+  c3x5->Print("Dhist1IterationMethodDepth6HE.png");
+  c3x5->Clear();
+  // clean-up
+  if (h2CeffHEpositivedirectionD6) delete h2CeffHEpositivedirectionD6;
+
+
+  //========================================================================================== 20  
+  //======================================================================
+  //======================================================================1D plot: D vs phi , different eta,  depth=7
+  cout<<"      1D plot: D vs phi , different eta,  depth=7 *****" <<endl;
+  c3x5->Clear();
+  c3x5->Divide(3,5);
+  c3x5->cd(1);
+       int kcountHEpositivedirectionD7=1;
+       TH1F* h2CeffHEpositivedirectionD7 = new TH1F("h2CeffHEpositivedirectionD7","", nphi, 0., 72. );
+
+       for (int jeta=0;jeta<njeta;jeta++) {
+	 // positivedirectionD:
+	 if(jeta-41 > 0) {
+	   
+	   //	     for (int i=0;i<ndepth;i++) {
+	   // depth=7
+	   for (int i=6;i<7;i++) {
+	     
+	     TH1F *HEpositivedirectionD7 = (TH1F*)h2CeffHEpositivedirectionD7->Clone("twod1");
+	     
+	     float ccctest = 0; // to avoid empty massive elements
+	     for (int jphi=0;jphi<nphi;jphi++) {
+	       
+	       double ccc1 = variance[i][jeta][jphi];
+	       if(alexhe[i][jeta][jphi]>0.) {HEpositivedirectionD7 ->Fill(jphi,ccc1);ccctest = 1.;//HEpositivedirectionD7->SetBinError(i,0.01);
+	       }
+	     }// for jphi
+	     if(ccctest !=0.) {
+	       cout<<"2020       kcountHEpositivedirectionD7   =     "<<kcountHEpositivedirectionD7  <<"   jeta-41=     "<< jeta-41 <<endl;
+	       c3x5->cd(kcountHEpositivedirectionD7);
+	       HEpositivedirectionD7 ->SetMarkerStyle(20);HEpositivedirectionD7 ->SetMarkerSize(0.4);HEpositivedirectionD7 ->GetYaxis()->SetLabelSize(0.04);HEpositivedirectionD7 ->SetXTitle("HEpositivedirectionD7 \b");HEpositivedirectionD7 ->SetMarkerColor(2);HEpositivedirectionD7 ->SetLineColor(0);gPad->SetGridy();gPad->SetGridx(); 
+	       //	   gPad->SetLogy();    
+	       if(kcountHEpositivedirectionD7 == 1) HEpositivedirectionD7 ->SetXTitle("D for HE+ jeta = 26; depth = 7 \b");
+	       if(kcountHEpositivedirectionD7 == 2) HEpositivedirectionD7 ->SetXTitle("D for HE+ jeta = 27; depth = 7 \b");
+	       if(kcountHEpositivedirectionD7 == 3) HEpositivedirectionD7 ->SetXTitle("D for HE+ jeta = 28; depth = 7 \b");
+	       HEpositivedirectionD7->Draw("Error");
+	       kcountHEpositivedirectionD7++;
+	       if(kcountHEpositivedirectionD7>15) break;// 4x6 = 24 
+	     }//ccctest>0
+	     
+	   }// for i
+	 }//if(jeta-41 > 0)
+       }//for jeta
+  /////////////////
+  c3x5->Update();
+  c3x5->Print("Dhist1IterationMethodDepth7HE.png");
+  c3x5->Clear();
+  // clean-up
+  if (h2CeffHEpositivedirectionD7) delete h2CeffHEpositivedirectionD7;
+
+
+
+
+  //=====================================================================
+  //======================================================================
+  //======================================================================
+  //======================================================================
+  //======================================================================
+  //======================================================================
+
+
+
+
+
+  std::cout<<" We are here to print 2017 MAPs "<<std::endl;
 //======================================================================
 
 //======================================================================
@@ -2066,7 +3184,12 @@ std::cout<<" We are here to print ADC "<<std::endl;
   cmain->Update();   
   cmain->Print("MAP.png"); 
 
-    std::cout<<" MAP_ALL "<<std::endl;
+    std::cout<<"********      MAP_ALL  done"<<std::endl;
+    std::cout<<"********"<<std::endl;
+
+
+    std::cout<<"********"<<std::endl;
+    std::cout<<"************    Start creating each test kind for each subdet html pages:"<<std::endl;
             
 //======================================================================
 
@@ -2076,9 +3199,9 @@ std::cout<<" We are here to print ADC "<<std::endl;
   int ind = 0;
   
   for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
-     ofstream htmlFileT,htmlFileC, htmlFileD,htmlFileP,htmlFileS ;
+     ofstream htmlFileT,htmlFileC, htmlFileD,htmlFileP,htmlFileS,htmlFileM ;
      if (sub==1) {htmlFileT.open("HB_Tile.html"); htmlFileC.open("HB_Calib.html");htmlFileD.open("HB_Drift.html");htmlFileP.open("HB_Pedestals.html");htmlFileS.open("HB_Shapes.html");}
-     if (sub==2) {htmlFileT.open("HE_Tile.html"); htmlFileC.open("HE_Calib.html");htmlFileD.open("HE_Drift.html");htmlFileP.open("HE_Pedestals.html");htmlFileS.open("HE_Shapes.html");}
+     if (sub==2) {htmlFileT.open("HE_Tile.html"); htmlFileC.open("HE_Calib.html");htmlFileD.open("HE_Drift.html");htmlFileP.open("HE_Pedestals.html");htmlFileS.open("HE_Shapes.html"); htmlFileM.open("HE_IterationMethod.html");}
      if (sub==3) {htmlFileT.open("HO_Tile.html"); htmlFileC.open("HO_Calib.html");htmlFileD.open("HO_Drift.html");htmlFileP.open("HO_Pedestals.html");htmlFileS.open("HO_Shapes.html");}
      if (sub==4) {htmlFileT.open("HF_Tile.html"); htmlFileC.open("HF_Calib.html");htmlFileD.open("HF_Drift.html");htmlFileP.open("HF_Pedestals.html");htmlFileS.open("HF_Shapes.html");}
  
@@ -2546,10 +3669,180 @@ std::cout<<" We are here to print ADC "<<std::endl;
      if (sub==4) htmlFileS << " <img src=\"Hist_SumADC_HF1.png\" />" << std::endl;
 */
      htmlFileS.close();
-  }// end sub
+
+     ///////////////////////////////////////////
+
+
+
+// Iteration Method for Calibration Group:
+
+     htmlFileM << "</html><html xmlns=\"http://www.w3.org/1999/xhtml\">"<< std::endl;
+     htmlFileM << "<head>"<< std::endl;
+     htmlFileM << "<meta http-equiv=\"Content-Type\" content=\"text/html\"/>"<< std::endl;
+     htmlFileM << "<title> Remote Monitoring Tool </title>"<< std::endl;
+     htmlFileM << "<style type=\"text/css\">"<< std::endl;
+     htmlFileM << " body,td{ background-color: #FFFFCC; font-family: arial, arial ce, helvetica; font-size: 12px; }"<< std::endl;
+     htmlFileM << "   td.s0 { font-family: arial, arial ce, helvetica; }"<< std::endl;
+     htmlFileM << "   td.s1 { font-family: arial, arial ce, helvetica; font-weight: bold; background-color: #FFC169; text-align: center;}"<< std::endl;
+     htmlFileM << "   td.s2 { font-family: arial, arial ce, helvetica; background-color: #eeeeee; }"<< std::endl;
+     htmlFileM << "   td.s3 { font-family: arial, arial ce, helvetica; background-color: #d0d0d0; }"<< std::endl;
+     htmlFileM << "   td.s4 { font-family: arial, arial ce, helvetica; background-color: #FFC169; }"<< std::endl;
+     htmlFileM << "</style>"<< std::endl;
+     htmlFileM << "<body>"<< std::endl;
+
+          
+     if (sub==1) htmlFileM << "<h1> Iteration Method for Calibration Group, HB, RUN = "<< runnumber <<" </h1>"<< std::endl; 
+     if (sub==2) htmlFileM << "<h1> Iteration Method for Calibration Group, HE, RUN = "<< runnumber <<" </h1>"<< std::endl;
+     if (sub==3) htmlFileM << "<h1> Iteration Method for Calibration Group, HO, RUN = "<< runnumber <<" </h1>"<< std::endl;
+     if (sub==4) htmlFileM << "<h1> Iteration Method for Calibration Group, HF, RUN = "<< runnumber <<" </h1>"<< std::endl; 
+     htmlFileM << "<br>"<< std::endl;
+       
+     htmlFileM << "<h2> 1:  Positive direction, R = R_depth_ieta_iphi = E_depth_ieta_iphi/E_depth_ieta </h3>"<< std::endl;
+
+     htmlFileM << "<h3> 1.A. eta/phi-plot: R, averaged over depthes </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Legend: Bins less "<<Pedest[0][sub]<<" correpond to bad Pedestals </h4>"<< std::endl; 
+     if (sub==1) htmlFileM << " <img src=\"Rhist2IterationMethodHB.png\" />" << std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Rhist2IterationMethodHE.png\" />" << std::endl;    
+     if (sub==3) htmlFileM << " <img src=\"Rhist2IterationMethodHO.png\" />" << std::endl;
+     if (sub==4) htmlFileM << " <img src=\"Rhist2IterationMethodHF.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+     htmlFileM << "<h3> 1B: R vs phi , averaged over depthes & eta </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
+     if (sub==1) htmlFileM << " <img src=\"Rhist1IterationMethodHB.png\" />" << std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Rhist1IterationMethodHE.png\" />" << std::endl;
+     if (sub==3) htmlFileM << " <img src=\"Rhist1IterationMethodHO.png\" />" << std::endl;
+     if (sub==4) htmlFileM << " <img src=\"Rhist1IterationMethodHF.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+
+     /////////////////////////////////////////////// different Depthes:
+
+     htmlFileM << "<h3> 1C: R vs phi , different eta, Depth1 </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
+     if (sub==1) htmlFileM << " <img src=\"Rhist1IterationMethodDepth1HB.png\" />" << std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Rhist1IterationMethodDepth1HE.png\" />" << std::endl;
+     if (sub==4) htmlFileM << " <img src=\"Rhist1IterationMethodDepth1HF.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+     htmlFileM << "<h3> 1D: R vs phi , different eta, Depth2 </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
+     if (sub==1) htmlFileM << " <img src=\"Rhist1IterationMethodDepth2HB.png\" />" << std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Rhist1IterationMethodDepth2HE.png\" />" << std::endl;
+     if (sub==4) htmlFileM << " <img src=\"Rhist1IterationMethodDepth2HF.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+     htmlFileM << "<h3> 1E: R vs phi , different eta, Depth3 </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
+     if (sub==1) htmlFileM << " <img src=\"Rhist1IterationMethodDepth3HB.png\" />" << std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Rhist1IterationMethodDepth3HE.png\" />" << std::endl;
+     if (sub==4) htmlFileM << " <img src=\"Rhist1IterationMethodDepth3HF.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+     htmlFileM << "<h3> 1F: R vs phi , different eta, Depth4 </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
+     if (sub==1) htmlFileM << " <img src=\"Rhist1IterationMethodDepth4HB.png\" />" << std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Rhist1IterationMethodDepth4HE.png\" />" << std::endl;
+     if (sub==3) htmlFileM << " <img src=\"Rhist1IterationMethodDepth4HO.png\" />" << std::endl;
+     if (sub==4) htmlFileM << " <img src=\"Rhist1IterationMethodDepth4HF.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+     htmlFileM << "<h3> 1G: R vs phi , different eta, Depth5 </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Rhist1IterationMethodDepth5HE.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+     htmlFileM << "<h3> 1H: R vs phi , different eta, Depth6 </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Rhist1IterationMethodDepth6HE.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+     htmlFileM << "<h3> 1I: R vs phi , different eta, Depth7 </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Rhist1IterationMethodDepth7HE.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+
+     htmlFileM << "<h2> 2: Positive direction,   D(variance)   </h3>"<< std::endl;
+
+     htmlFileM << "<h3> 2A: eta/phi-plot: D(variance), averaged over depthes </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Legend: Bins less "<<Pedest[0][sub]<<" correpond to bad Pedestals </h4>"<< std::endl; 
+     if (sub==1) htmlFileM << " <img src=\"Dhist2IterationMethodHB.png\" />" << std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Dhist2IterationMethodHE.png\" />" << std::endl;    
+     if (sub==3) htmlFileM << " <img src=\"Dhist2IterationMethodHO.png\" />" << std::endl;
+     if (sub==4) htmlFileM << " <img src=\"Dhist2IterationMethodHF.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+     htmlFileM << "<h3> 2B: D(variance) vs phi , averaged over depthes & eta </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
+     if (sub==1) htmlFileM << " <img src=\"Dhist1IterationMethodHB.png\" />" << std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Dhist1IterationMethodHE.png\" />" << std::endl;
+     if (sub==3) htmlFileM << " <img src=\"Dhist1IterationMethodHO.png\" />" << std::endl;
+     if (sub==4) htmlFileM << " <img src=\"Dhist1IterationMethodHF.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+
+     /////////////////////////////////////////////// different Depthes:
+
+     htmlFileM << "<h3> 2C: D(variance) vs phi , different eta, Depth1 </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
+     if (sub==1) htmlFileM << " <img src=\"Dhist1IterationMethodDepth1HB.png\" />" << std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Dhist1IterationMethodDepth1HE.png\" />" << std::endl;
+     if (sub==4) htmlFileM << " <img src=\"Dhist1IterationMethodDepth1HF.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+     htmlFileM << "<h3> 2.D. D(variance) vs phi , different eta, Depth2 </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
+     if (sub==1) htmlFileM << " <img src=\"Dhist1IterationMethodDepth2HB.png\" />" << std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Dhist1IterationMethodDepth2HE.png\" />" << std::endl;
+     if (sub==4) htmlFileM << " <img src=\"Dhist1IterationMethodDepth2HF.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+     htmlFileM << "<h3> 2E: D(variance) vs phi , different eta, Depth3 </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
+     if (sub==1) htmlFileM << " <img src=\"Dhist1IterationMethodDepth3HB.png\" />" << std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Dhist1IterationMethodDepth3HE.png\" />" << std::endl;
+     if (sub==4) htmlFileM << " <img src=\"Dhist1IterationMethodDepth3HF.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+     htmlFileM << "<h3> 2F: D(variance) vs phi , different eta, Depth4 </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
+     if (sub==1) htmlFileM << " <img src=\"Dhist1IterationMethodDepth4HB.png\" />" << std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Dhist1IterationMethodDepth4HE.png\" />" << std::endl;
+     if (sub==3) htmlFileM << " <img src=\"Dhist1IterationMethodDepth4HO.png\" />" << std::endl;
+     if (sub==4) htmlFileM << " <img src=\"Dhist1IterationMethodDepth4HF.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+     htmlFileM << "<h3> 2G: D(variance) vs phi , different eta, Depth5 </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Dhist1IterationMethodDepth5HE.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+     htmlFileM << "<h3> 2H: D(variance) vs phi , different eta, Depth6 </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Dhist1IterationMethodDepth6HE.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+     htmlFileM << "<h3> 2I: D(variance) vs phi , different eta, Depth7 </h3>"<< std::endl; 
+//     htmlFileM << "<h4> Channel legend: white - good, other colour - bad. </h4>"<< std::endl;
+     if (sub==2) htmlFileM << " <img src=\"Dhist1IterationMethodDepth7HE.png\" />" << std::endl;
+     htmlFileM << "<br>"<< std::endl;
+
+
+
+     htmlFileM.close();
+
+     ///////////////////////////////////////////
+     //
+     //
+  }// end sub  //for (int sub=1;sub<=4;sub++) {  //Subdetector: 1-HB, 2-HE, 3-HF, 4-HO
+
+
 
 //======================================================================
 
+    std::cout<<"********"<<std::endl;
+    std::cout<<"************    Start creating subdet  html pages: - rather long time needed, waiting please"<<std::endl;
 //======================================================================
 // Creating subdet  html pages:
   
@@ -2619,6 +3912,7 @@ std::cout<<" We are here to print ADC "<<std::endl;
        htmlFile << "  <td><a href=\"HE_Drift.html\">Gain Stability</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"HE_Pedestals.html\">Pedestals</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"HE_Shapes.html\">ADC Shapes</a></td>"<< std::endl;
+       htmlFile << "  <td><a href=\"HE_IterationMethod.html\">Iteration Method</a></td>"<< std::endl;
        
        /*
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HE_Tile.html\">Megatile Channels</a></td>"<< std::endl;
@@ -2626,6 +3920,7 @@ std::cout<<" We are here to print ADC "<<std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HE_Drift.html\">Gain Stability</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HE_Pedestals.html\">Pedestals</a></td>"<< std::endl;
        htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HE_Shapes.html\">ADC Shapes</a></td>"<< std::endl;
+       htmlFile << "  <td><a href=\"https://cms-cpt-software.web.cern.ch/cms-cpt-software/General/Validation/SVSuite/HcalRemoteMonitoring/RMT/LED_"<<runnumber<<"/HE_IterationMethod.html\">Iteration Method</a></td>"<< std::endl;
 */
      } 
      if (sub==3) {
@@ -3050,6 +4345,8 @@ std::cout<<" We are here to print ADC "<<std::endl;
 //======================================================================
 
 
+    std::cout<<"********"<<std::endl;
+    std::cout<<"************    Start creating description HELP html file:"<<std::endl;
 //======================================================================
 // Creating description html file: 
      ofstream htmlFile;
@@ -3094,6 +4391,8 @@ std::cout<<" We are here to print ADC "<<std::endl;
 
 //======================================================================
 
+    std::cout<<"********"<<std::endl;
+    std::cout<<"************    Start creating MAP html file: - rather long time needed, waiting please"<<std::endl;
 //======================================================================
 // Creating main html file:   
      htmlFile.open("MAP.html");  
