@@ -100,8 +100,8 @@ process.source = cms.Source("HcalTBSource",
 #               '/store/group/dpg_hcal/comm_hcal/USC/run311413/USC_311413.root'
 #               '/store/group/dpg_hcal/comm_hcal/USC/run311457/USC_311457.root'
 #               '/store/group/dpg_hcal/comm_hcal/USC/run311566/USC_311566.root'
-               '/store/group/dpg_hcal/comm_hcal/USC/run327579/USC_327579.root'
-
+#              '/store/group/dpg_hcal/comm_hcal/USC/run327579/USC_327579.root'
+               '/store/group/dpg_hcal/comm_hcal/USC/run329317/USC_329317.root'
 
                ), 
     streams = cms.untracked.vstring(
@@ -232,14 +232,22 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   TSpeakHOMax = cms.double(7.5),
                                   # -56 for  BAD HBHEHOHF channels from study on ADC Amplitude
                                   #Verbosity = cms.untracked.int32(-56),
-                                  ADCAmplHBMin = cms.double(100.),
-                                  ADCAmplHBMax = cms.double(3000.),
-                                  ADCAmplHEMin = cms.double(70.),
-                                  ADCAmplHEMax = cms.double(3000.),
-                                  ADCAmplHFMin = cms.double(30.),
-                                  ADCAmplHFMax = cms.double(3000.),
-                                  ADCAmplHOMin = cms.double(40.),
-                                  ADCAmplHOMax = cms.double(3000.),
+                                  ADCAmplHBMin = cms.double(10000.),
+                                  ADCAmplHBMax = cms.double(300000.),
+                                  ADCAmplHEMin = cms.double(20000.),  
+                                  ADCAmplHEMax = cms.double(300000.),
+                                  ADCAmplHFMin = cms.double(50.),
+                                  ADCAmplHFMax = cms.double(9000.),
+                                  ADCAmplHOMin = cms.double(50.),
+                                  ADCAmplHOMax = cms.double(9000.),
+#                                 ADCAmplHBMin = cms.double(100.),
+#                                  ADCAmplHBMax = cms.double(3000.),
+#                                  ADCAmplHEMin = cms.double(70.),
+#                                  ADCAmplHEMax = cms.double(3000.),
+#                                  ADCAmplHFMin = cms.double(30.),
+#                                  ADCAmplHFMax = cms.double(3000.),
+#                                  ADCAmplHOMin = cms.double(40.),
+#                                  ADCAmplHOMax = cms.double(3000.),
                                   #
                                   # to see channels w/ PedestalSigma < cut
                                   #Verbosity = cms.untracked.int32(-57),
@@ -555,7 +563,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #HistOutFile = cms.untracked.string('LEDtest311369.root'),
                                   #HistOutFile = cms.untracked.string('LEDtest311413.root'),
                                   #HistOutFile = cms.untracked.string('LEDtest311457.root'),
-                                  HistOutFile = cms.untracked.string('LEDtest311566.root'),
+                                  HistOutFile = cms.untracked.string('LEDtest329317.root'),
 
                                   #
                                   MAPOutFile = cms.untracked.string('LogEleMapdb.h')
