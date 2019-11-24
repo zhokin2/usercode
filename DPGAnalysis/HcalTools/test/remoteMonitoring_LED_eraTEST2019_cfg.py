@@ -2,10 +2,10 @@
 # choose run in /store/group/dpg_hcal/comm_hcal/USC/
 #
 # with GT: 104X_dataRun2_v1
-#how to run: cmsRun remoteMonitoring_LED_eraTEST2019_cfg.py 320117 /store/group/dpg_hcal/comm_hcal/USC/ /afs/cern.ch/work/z/zhokin/hcal/salavat1/CMSSW_10_6_5/src/RecoHcal/HcalPromptAnalysis/python
+#how to run: cmsRun remoteMonitoring_LED_eraTEST2019_cfg.py 320117 /store/group/dpg_hcal/comm_hcal/USC/ your_working_dir 
 #
 # with GT: 106X_dataRun3_HLT_v3
-#how to run: cmsRun remoteMonitoring_LED_eraTEST2019_cfg.py 331370 /store/group/dpg_hcal/comm_hcal/USC/ /afs/cern.ch/work/z/zhokin/hcal/salavat1/CMSSW_10_6_5/src/RecoHcal/HcalPromptAnalysis/python
+#how to run: cmsRun remoteMonitoring_LED_eraTEST2019_cfg.py 331370 /store/group/dpg_hcal/comm_hcal/USC/ your_working_dir
 #
 #
 import sys
@@ -61,7 +61,7 @@ rundir+'/run'+runnumber+'/USC_'+runnumber+'.root'
                             )
 
 #process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
-process.Analyzer = cms.EDAnalyzer("RMTRawAnalyzer",
+process.Analyzer = cms.EDAnalyzer("CMTRawAnalyzer",
                                   #
                                   Verbosity = cms.untracked.int32(0),
                                   #
