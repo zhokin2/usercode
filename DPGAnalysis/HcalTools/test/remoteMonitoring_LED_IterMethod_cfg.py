@@ -29,7 +29,7 @@ process.source = cms.Source("HcalTBSource",
 # eoscms ls -l /eos/cms/store/group/dpg_hcal/comm_hcal/USC/run331388/USC_331388.root
         )
                             )
-process.Analyzer = cms.EDAnalyzer("RMTRawAnalyzer",
+process.Analyzer = cms.EDAnalyzer("CMTRawAnalyzer",
                                   #
                                   Verbosity = cms.untracked.int32(0),
                                   #
