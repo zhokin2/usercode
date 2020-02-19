@@ -406,6 +406,10 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   flagsipmcorrection = cms.int32(1),
                                   #
                                   #
+                                  # for use in IterativeMethod of CalibrationGroup!!! to be > 1    (,else = 0)
+                                  flagIterativeMethodCalibrationGroup = cms.int32(0),
+                                  #
+                                  #
                                   # for local LASER runs ONLY!!! to be > 0    (,else = 0)
                                   flagLaserRaddam = cms.int32(0),
                                   # for gaussian fit for local shunt1 (Gsel0) led low-intensity or ped ONLY!!! to be  > 0    (,else = 0)
