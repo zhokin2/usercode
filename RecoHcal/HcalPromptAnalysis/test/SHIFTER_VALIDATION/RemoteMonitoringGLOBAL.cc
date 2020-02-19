@@ -2998,8 +2998,8 @@ int main(int argc, char *argv[])
       cout<<" RBX analysis START for  **************************" <<endl;
   cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
   //  int njeta = 22; int njphi = 18; int lsmax=2600;
-  int njeta = 22; int njphi = 18; int lsmax=2600;
-  cout<<">>>>>>>>>>>>>>>>>>>>>>>>     int njeta = 22; int njphi = 18; int lsmax=2600;                        "              <<endl;
+  int njeta = 22; int njphi = 18; int lsmax=1800;
+  cout<<">>>>>>>>>>>>>>>>>>>>>>>>     int njeta = 22; int njphi = 18; int lsmax=1800;                        "              <<endl;
 
   double alexall[njeta][njphi][lsmax];      
 
@@ -3019,7 +3019,7 @@ int main(int argc, char *argv[])
   int maxbinsRBX = MaxLum;
   int nx = maxbinsRBX; // # LS
   cout<<">>>>>>>>>>>>>>>>>>>>>>>>   maxbinsRBX = MaxLum;                          "              <<endl;
-  if(MaxLum > lsmax ) cout<<"***********************************   ERROR ERROR ERROR ERROR:   MaxLum > 2600 "              <<endl;
+  if(MaxLum > lsmax ) cout<<"***********************************   ERROR ERROR ERROR ERROR:   MaxLum > 1800 "              <<endl;
   cout<<">>>>>>>>>>>>>>>>>>>>>>>>                             "              <<endl;
   
   for(int i=0;i<nx;i++){
