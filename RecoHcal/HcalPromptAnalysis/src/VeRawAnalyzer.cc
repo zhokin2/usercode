@@ -1,11 +1,11 @@
 // -*- C++ -*-
-//
+// gsmdepth1sipm
 // Package:    VeRawAnalyzer
 // Class:      VeRawAnalyzer   
 // 
 /**\class VeRawAnalyzer VeRawAnalyzer.cc Hcal/VeRawAnalyzer/src/VeRawAnalyzer.cc
    
-Description: <one line class summary>
+Description: <one line class summary> 
 
 Implementation:          
 <Notes on implementation> 
@@ -2458,7 +2458,7 @@ TH1F*         h_Amplitude_notCapIdErrors_HO4;
 
   // for SiPM:
   float binanpfit = anpfit/npfit;
-  long int gsmdepth1sipm[npfit][neta][nphi][ndepth];
+//AZmemory301019:  long int gsmdepth1sipm[npfit][neta][nphi][ndepth];
   ///////////////////////////////////////////// end massives
   
   long int Nevent;
@@ -2976,7 +2976,8 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
   lscounterrun10=0 ;
   nevcounter0=0 ;
   nevcounter00=0 ;
-
+//AZmemory301019:
+/*
   for(int k1 = 0; k1<npfit; k1++) {
     for(int k2 = 0; k2<neta; k2++) {
       for(int k3 = 0; k3<nphi; k3++) {
@@ -2986,7 +2987,7 @@ VeRawAnalyzer::VeRawAnalyzer(const edm::ParameterSet& iConfig)
       }//for  
     }//for  
   }//for  
-  
+*/  
 
   for(int k0 = 0; k0<nsub; k0++) {
     for(int k1 = 0; k1<ndepth; k1++) {
@@ -4980,11 +4981,13 @@ void VeRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
 	///////////////////
 	nnnnnnhbheqie11++;
 	nnnnnn++;
-	if(verbosity > 0 || verbosity == -2324 ) std::cout  <<  "*****************************QIE11Digis;     nTS = "  << nTS <<  endl;
+	if(verbosity == -2324 ) std::cout  <<  "*****************************QIE11Digis;     nTS = "  << nTS <<  endl;
 	////////////////////////////////////////////////////////////  for zerrors.C script:
 	if(recordHistoes_ && studyCapIDErrorsHist_) fillDigiErrorsQIE11(qie11df); 
+	if(verbosity == -2324 ) std::cout  <<  "***************************** fillDigiErrorsQIE11 DONE "  <<  endl;
 	//////////////////////////////////////  for ztsmaxa.C,zratio34.C,zrms.C & zdifampl.C scripts:
 	if(recordHistoes_) fillDigiAmplitudeQIE11(qie11df); 
+	if(verbosity == -2324 ) std::cout  <<  "***************************** fillDigiAmplitudeQIE11 DONE "  <<  endl;
 	///////////////////
 	//////////////////////////////////  counters of event for subdet & depth
 	if(sub == 1 && depth == 1 && qwert1==0 ){nnnnnn1++;qwert1=1;}
@@ -9826,7 +9829,7 @@ void VeRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiIt
       if(mdepth==2) h_mapDepth2_HE->Fill(double(ieta), double(iphi), 1.);    
       if(mdepth==3) h_mapDepth3_HE->Fill(double(ieta), double(iphi), 1.);    
     }//if ( sub == 2 )
-    //    
+    //     
 }// fillDigiAmplitude
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -9842,8 +9845,11 @@ void VeRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df)
   int iphi = hcaldetid.iphi()-1;
   int mdepth = hcaldetid.depth();
   int sub   = hcaldetid.subdet(); // 1-HB, 2-HE QIE11DigiCollection
-if (verbosity == -9504) std::cout << " fillDigiAmplitudeQIE11 "  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
 
+  //  if(sub==1 && (iphi == 0 || iphi == 1) && mdepth == 4 ) {
+  if(sub==1 && mdepth >2 ) {
+    if (verbosity > 0 || verbosity == -9504) std::cout << " fillDigiAmplitudeQIE11 111111"  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
+  }
   if (verbosity == -2324) std::cout << " fillDigiAmplitude QIE11    DIGI ->  "  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
   nTS = qie11df.samples();
   if (verbosity == -2324) std::cout <<" fillDigiAmplitude  QIE11   Size of Digi nTS= "<<nTS<<" qie11df.size()= "<<qie11df.size()<<std::endl;
@@ -9855,23 +9861,32 @@ if (verbosity == -9504) std::cout << " fillDigiAmplitudeQIE11 "  << "sub, ieta, 
   if(mdepth > 3 && flagupgradeqie1011_    == 7  ) return;
   if(mdepth > 3 && flagupgradeqie1011_    == 8  ) return;
   if(mdepth > 3 && flagupgradeqie1011_    == 9  ) return;
+  // upgrade HB for Runn3 (SiPM)
+  if(mdepth ==4  && sub==1  && (ieta == -16 || ieta == 15)   ) return;// HB depth4 eta=-16, 15 since I did:if(ieta > 0) ieta -= 1;
   /////////////////////////////////////////////////////////////////
 if (verbosity == -9504) std::cout<< " =============================== START    get conditions   ==================== " << endl;
 
 
     const HcalGain* gain = conditions->getGain(hcaldetid);
+if ( verbosity == -9504) std::cout<< " =============================== gain conditions DONE !!!   ==================== " << endl;
     const HcalGainWidth* gainWidth = conditions->getGainWidth(hcaldetid);
+if ( verbosity == -9504) std::cout<< " =============================== gainWidth conditions DONE !!!   ==================== " << endl;
     const HcalRespCorr* respcorr = conditions->getHcalRespCorr(hcaldetid);
+if ( verbosity == -9504) std::cout<< " =============================== respcorr conditions DONE !!!   ==================== " << endl;
     const HcalTimeCorr* timecorr = conditions->getHcalTimeCorr(hcaldetid);
+if ( verbosity == -9504) std::cout<< " =============================== timecorr conditions DONE !!!   ==================== " << endl;
     const HcalLUTCorr* lutcorr = conditions->getHcalLUTCorr(hcaldetid);
+if ( verbosity == -9504) std::cout<< " =============================== lutcorr conditions DONE !!!   ==================== " << endl;
     const HcalQIECoder* channelCoder = conditions->getHcalCoder(hcaldetid);
+if ( verbosity == -9504) std::cout<< " =============================== channelCoder conditions DONE !!!   ==================== " << endl;
     const HcalPedestalWidth* pedw = conditions->getPedestalWidth(hcaldetid);
+if ( verbosity == -9504) std::cout<< " =============================== pedw conditions DONE !!!   ==================== " << endl;
     const HcalPedestal* pedestal00 = conditions->getPedestal(hcaldetid);
 
 //    HcalCalibrations calib = conditions->getHcalCalibrations(hcaldetid);
 //if (verbosity == -9504) std::cout<< " =============================== DONE  HcalCalibrations   ==================== " << endl;
 
-if (verbosity == -9504) std::cout<< " =============================== ALL get conditions DONE !!!   ==================== " << endl;
+if ( verbosity == -9504) std::cout<< " =============================== ALL get conditions DONE !!!   ==================== " << endl;
 
     // zhokin 07.12.2018
     //    const HcalPedestalWidth* tdc0 =  = conditions->getTDCTimeFromSample(hcaldetid);
@@ -9882,14 +9897,14 @@ if (verbosity == -9504) std::cout<< " =============================== ALL get co
 
 
     HcalCoderDb coder (*channelCoder, *shape);
-if (verbosity == -9504) std::cout<< " =============================== DONE  HcalCoderDb   ==================== " << endl;
+if ( verbosity == -9504) std::cout<< " =============================== DONE  HcalCoderDb   ==================== " << endl;
 
     if( useADCfC_ )     coder.adc2fC(qie11df,toolOriginal);
     //    double noiseADC = qie11df[0].adc();
-    if (verbosity == -2324) std::cout << "coder done..." << std::endl;
-    if (verbosity == -2324) std::cout << "fillDigiAmplitude    coder done..." << std::endl;
+    if ( verbosity == -2324) std::cout << "coder done..." << std::endl;
+    if ( verbosity == -2324) std::cout << "fillDigiAmplitude    coder done..." << std::endl;
     //    if (pedestal00 && gain && shape && channelCoder && respcorr && timecorr && lutcorr) {
-        if (verbosity == -57 && sub == 1 ) std::cout <<       " pedestal00-0 = " <<pedestal00->getValue(0) <<" pedestal00-1 = " <<pedestal00->getValue(1) <<      " gain0 = " <<gain->getValue(0) <<" gain1 = " <<gain->getValue(1) <<      " gainWidth0 = " <<gainWidth->getValue(0) <<" gainWidth1 = " <<gainWidth->getValue(1) <<      " respcorr = " <<respcorr->getValue() <<" timecorr = " <<timecorr->getValue() <<       " lutcorr = " <<lutcorr->getValue() << std::endl;
+    if (verbosity == -57 && sub == 1 ) std::cout <<       " pedestal00-0 = " <<pedestal00->getValue(0) <<" pedestal00-1 = " <<pedestal00->getValue(1) <<      " gain0 = " <<gain->getValue(0) <<" gain1 = " <<gain->getValue(1) <<      " gainWidth0 = " <<gainWidth->getValue(0) <<" gainWidth1 = " <<gainWidth->getValue(1) <<      " respcorr = " <<respcorr->getValue() <<" timecorr = " <<timecorr->getValue() <<       " lutcorr = " <<lutcorr->getValue() << std::endl;
     //    }
 
     double pedestalaver9 = 0.;
@@ -9989,13 +10004,13 @@ getTDCTimeFromSample
       int capid = (qie11df[ii]).capid();
       double pedestal    = pedestal00->getValue(capid);
       double pedestalw= pedw->getSigma(capid,capid);
-if (verbosity == -9504) std::cout<< " ii = " <<ii << " capid = " <<capid << " tocdefault = " <<tocdefault << " pedestal = " <<pedestal << " pedestalw = " <<pedestalw << endl;
+if ( verbosity == -9504) std::cout<< " ii = " <<ii << " capid = " <<capid << " tocdefault = " <<tocdefault << " pedestal = " <<pedestal << " pedestalw = " <<pedestalw << endl;
 
 
       double pedestalINI = pedestal00->getValue(capid);
       //       double pedestalINI = channelCoder->adc(*shape,(float)pedestal,capid);
      //      double pedestalCALIB = calib.pedestal(capid);
-if (verbosity == -9504) std::cout<< " pedestalINI = " <<pedestalINI << endl;
+if ( verbosity == -9504) std::cout<< " pedestalINI = " <<pedestalINI << endl;
 
       if (verbosity == -81 && sub == 1) std::cout << "HB ii = " <<ii<< " massive = " <<ampldefault0<< " adcfC = " <<ampldefault1<< "  ADCcounts= " <<ampldefault2<< " pedestal = " << pedestal <<  " capid = " <<capid<< std::endl;
 
@@ -10678,6 +10693,9 @@ if (verbosity == -9504) std::cout<< " pedestalINI = " <<pedestalINI << endl;
       }// if(studyDiffAmplHist_)     
       
       ///////////////////////////////    for HB All 
+  if(sub==1 && mdepth >2 ) {
+    if (verbosity > 0 || verbosity == -9504) std::cout << " fillDigiAmplitudeQIE11 222222"  << "sub, ieta, iphi, mdepth = "  <<  sub << ", " << ieta << ", " << iphi << ", " << mdepth << std::endl;
+  }
       if(mdepth==1) h_mapDepth1_HB->Fill(double(ieta), double(iphi), 1.);    
       if(mdepth==2) h_mapDepth2_HB->Fill(double(ieta), double(iphi), 1.);    
       if(mdepth==3) h_mapDepth3_HB->Fill(double(ieta), double(iphi), 1.);    
@@ -10815,7 +10833,7 @@ if (verbosity == -9504) std::cout<< " pedestalINI = " <<pedestalINI << endl;
 	
 	
 	  if(iamplitude>-1 && iamplitude<npfit) { 
-	    ++gsmdepth1sipm[iamplitude][ieta][iphi][mdepth-1];
+	    //AZmemory301019:	    ++gsmdepth1sipm[iamplitude][ieta][iphi][mdepth-1];
 	    //	    std::cout << " ieta= " <<ieta << " iphi= " <<iphi << " mdepth= " <<mdepth << " Naijk = " <<gsmdepth1sipm[iamplitude][ieta][iphi][mdepth-1] << std::endl; 
 	  }	  
 	//ieta = 28iphi = 63     60-61   64-67
@@ -11044,7 +11062,7 @@ if (verbosity == -9504) std::cout<< " pedestalINI = " <<pedestalINI << endl;
       if(mdepth==7) h_mapDepth7_HE->Fill(double(ieta), double(iphi), 1.);    
     }//if ( sub == 2 )
     //    
-
+    if (  verbosity== -53) std::cout << "***end fillDigiAmplitudeQIE11       " << std::endl;
 
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -12783,6 +12801,9 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 
   ////////////////////   fit stuff:
   if(flagfitshunt1pedorledlowintensity_ != 0 ) {
+//AZmemory301019:
+    // AZ: comment this stuff below for memory optimisation:
+    /*
     /////////////////////////////// ------------------------------------------------------------------- gsm gain on: "ped-Gsel0" or "led-low-intensity-Gsel0"
     //  long int gsmdepth1sipm3[npfit][neta][nphi];
     double gsmdepth1sipm3[npfit][neta][nphi];
@@ -12839,14 +12860,14 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	Double_t par[12];
 	//
 	// Fit each function and add it to the list of functions
-	/*
-	  hist.Fit("gaus");
-	  TF1  *f1 = new TF1("f1","sin(x)/x",0,10);
-	  TF1  *f2 = new TF1("f2","f1*2",0,10);
-	  TF1 *f1 = new TF1("f1","[0]*x*sin([1]*x)",-3,3);
-	  f1->SetParameters(10,5);
-	  f1->Draw();
-	*/
+	
+//	  hist.Fit("gaus");
+//	  TF1  *f1 = new TF1("f1","sin(x)/x",0,10);
+//	  TF1  *f2 = new TF1("f2","f1*2",0,10);
+//	  TF1 *f1 = new TF1("f1","[0]*x*sin([1]*x)",-3,3);
+//	  f1->SetParameters(10,5);
+//	  f1->Draw();
+	
 	h_forgaussfit->Fit(g1,"R");
 	h_forgaussfit->Fit(g2,"R+");
 	h_forgaussfit->Fit(g3,"R+");
@@ -12878,6 +12899,7 @@ void VeRawAnalyzer::endRun( const edm::Run& r, const edm::EventSetup& iSetup)
 	
       }// for k3
     }// for k2
+*/
   }// if flag...
   //////////////////////////////////   end of fit stuff
 
