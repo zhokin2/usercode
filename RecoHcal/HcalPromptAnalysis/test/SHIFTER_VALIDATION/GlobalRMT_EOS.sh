@@ -180,16 +180,16 @@ for i in ${runList} ; do
 
 #---------------111
 # first variant:
-#    mkdir $WebDir/GlobalRMT/GLOBAL_$runnumber
-#    cp *.png $WebDir/GlobalRMT/GLOBAL_$runnumber/.
-#    cp *.html $WebDir/GlobalRMT/GLOBAL_$runnumber/.
-# echo "cp  png and html file done"
+    mkdir $WebDir/GlobalRMT/GLOBAL_$runnumber
+    cp *.png $WebDir/GlobalRMT/GLOBAL_$runnumber/.
+    cp *.html $WebDir/GlobalRMT/GLOBAL_$runnumber/.
+ echo "cp  png and html file done"
 
 
-#---------------222
+#---------------222 wrong
 # more simple second variant:
-scp -r ${local_WebDir} $WebDir/GlobalRMT/GLOBAL_$runnumber
-echo "cp -r for dir with png and html file done"
+#scp -r ${local_WebDir} $WebDir/GlobalRMT/GLOBAL_$runnumber
+#echo "cp -r for dir with png and html file done"
 
 
 
