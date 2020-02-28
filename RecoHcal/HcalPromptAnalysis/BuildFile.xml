@@ -33,7 +33,6 @@
 <use   name="CondTools/Hcal"/>
 <use   name="CondFormats/L1TObjects"/>
 <use   name="CondFormats/DataRecord"/>
-<use   name="FastSimulation/BaseParticlePropagator"/>
 <use   name="FastSimulation/CalorimeterProperties"/>
 <use   name="FastSimulation/CaloGeometryTools"/>
 <use   name="DataFormats/FEDRawData"/>
