@@ -10,9 +10,9 @@ echo "myStart: set dir pwd"
 set m=`pwd`
 
 cd ${m}
-setenv SCRAM_ARCH slc6_amd64_gcc700
-scram p -s CMSSW CMSSW_10_4_0
-cd CMSSW_10_4_0/src 
+setenv SCRAM_ARCH slc7_amd64_gcc700
+scram p -s CMSSW_10_6_4_patch2
+cd CMSSW_10_6_4_patch2/src
 
 mkdir RecoHcal
 cd RecoHcal
