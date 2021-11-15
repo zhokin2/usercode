@@ -1,58 +1,71 @@
-#how to run: cmsRun remoteMonitoring_LED_cfg.py 211659 file:/afs/cern.ch/work/d/dtlisov/private/Monitoring/data /afs/cern.ch/work/d/dtlisov/private/Monitoring/histos
-#how to run: cmsRun remoteMonitoring_LED_cfg.py 211659 /store/group/comm_hcal/USC /afs/cern.ch/work/d/dtlisov/private/Monitoring/histos
+#eoscms ls -l /eos/cms/store/group/dpg_hcal/comm_hcal/USC/run327785/USC_327785.root
+# choose run in /store/group/dpg_hcal/comm_hcal/USC/
+#how to run: cmsRun remoteMonitoring_PEDESTAL_era2019_cfg.py 331301 /store/group/dpg_hcal/comm_hcal/USC/ /afs/cern.ch/work/z/zhokin/hcal/voc2/CMSSW_11_1_0_pre3/src/DPGAnalysis/HcalTools/scripts/rmt
+
 import sys
 import FWCore.ParameterSet.Config as cms
 from Configuration.StandardSequences.Eras import eras
-process = cms.Process('TEST',eras.Run2_2018 )
-
-# import of standard configurations
+#process = cms.Process("TEST", eras.Run2_2018)
+process = cms.Process("TEST", eras.Run3)
+process.load("Configuration.StandardSequences.GeometryDB_cff")
+process.load("CondCore.CondDB.CondDB_cfi")
+process.load("EventFilter.L1GlobalTriggerRawToDigi.l1GtUnpack_cfi")
+process.l1GtUnpack.DaqGtInputTag = 'source'
+# from RelValAlCaPedestal_cfg_2018.py
 process.load('Configuration.StandardSequences.Services_cff')
 process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
-process.load('Configuration.StandardSequences.GeometryDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff')
 process.load('Configuration.StandardSequences.Reconstruction_Data_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
-process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
-process.load('RecoLocalCalo.Configuration.hcalLocalReco_cff')
+#process.load('RecoLocalCalo.Configuration.hcalLocalReco_cff')
+process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
+process.load('Configuration.StandardSequences.EndOfProcess_cff')
 
-#runnumber = sys.argv[2][4:-5]
+##runnumber = sys.argv[2][4:-5] 
 runnumber = sys.argv[2]
 rundir = sys.argv[3]
 histodir = sys.argv[4]
 
-print 'RUN = '+runnumber
-print 'Input file = '+rundir+'/USC_'+runnumber+'.root'
-print 'Output file = '+histodir+'/LED_'+runnumber+'.root'
+#print 'RUN = '+runnumber
+#print 'Input file = '+rundir+'/run'+runnumber+'/USC_'+runnumber+'.root'
+##print 'Input file = '+rundir+'/USC_'+runnumber+'.root'
+#print 'Output file = '+histodir+'/PEDESTAL_'+runnumber+'.root'
 
 process.maxEvents = cms.untracked.PSet(
-#    input = cms.untracked.int32(1000)
+#    input = cms.untracked.int32(100)
   input = cms.untracked.int32(-1)
+  )
+
+process.TFileService = cms.Service("TFileService",
+      fileName = cms.string(histodir+'/PEDESTAL_'+runnumber+'.root')
+#      ,closeFileFast = cms.untracked.bool(True)
   )
 
 #process.source = cms.Source("PoolSource",
 process.source = cms.Source("HcalTBSource",
-    firstRun = cms.untracked.uint32(317597),
-    fileNames = cms.untracked.vstring(
-#	       'file:/afs/cern.ch/work/d/dtlisov/private/Monitoring/data/USC_209311.root'
-#              '/store/group/comm_hcal/USC/USC_212179.root'
-                rundir+'/USC_'+runnumber+'.root'
-                ), 
-    streams = cms.untracked.vstring(
-		  "HCAL_Trigger",
-		  "HCAL_DCC700","HCAL_DCC701","HCAL_DCC702","HCAL_DCC703","HCAL_DCC704","HCAL_DCC705",
-		  "HCAL_DCC706","HCAL_DCC707","HCAL_DCC708","HCAL_DCC709","HCAL_DCC710","HCAL_DCC711",
-		  "HCAL_DCC712","HCAL_DCC713","HCAL_DCC714","HCAL_DCC715","HCAL_DCC716","HCAL_DCC717",
-		  "HCAL_DCC718","HCAL_DCC719","HCAL_DCC720","HCAL_DCC721","HCAL_DCC722","HCAL_DCC723",
-		  "HCAL_DCC724","HCAL_DCC725","HCAL_DCC726","HCAL_DCC727","HCAL_DCC728","HCAL_DCC729",
-		  "HCAL_DCC730","HCAL_DCC731"
-		 )	
-  )
+                            skipBadFiles=cms.untracked.bool(True),
+                            firstLuminosityBlockForEachRun = cms.untracked.VLuminosityBlockID([]),
+                            firstRun = cms.untracked.uint32(331370),
+#                            firstRun = cms.untracked.uint32(330153),
+#                            firstRun = cms.untracked.uint32(329416),
+                            fileNames = cms.untracked.vstring(
+rundir+'/run'+runnumber+'/USC_'+runnumber+'.root'
+#rundir+'/USC_'+runnumber+'.root'
+#                       '/store/group/dpg_hcal/comm_hcal/USC/run331370/USC_331370.root'
 
-process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
+), 
+                            secondaryFileNames = cms.untracked.vstring()
+                            )
+
+process.Analyzer = cms.EDAnalyzer("CMTRawAnalyzer",
                                   #
                                   Verbosity = cms.untracked.int32(0),
+                                  #Verbosity = cms.untracked.int32(-9062),
+                                  #Verbosity = cms.untracked.int32(-9063),
+                                  #Verbosity = cms.untracked.int32(-9064),
+                                  #Verbosity = cms.untracked.int32(-9065),
                                   #Verbosity = cms.untracked.int32(-84),
                                   #Verbosity = cms.untracked.int32(-91),
                                   #Verbosity = cms.untracked.int32(-92),
@@ -167,14 +180,14 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   TSpeakHOMax = cms.double(8.5),
                                   # -56 for  BAD HBHEHOHF channels from study on ADC Amplitude
                                   #Verbosity = cms.untracked.int32(-56),
-                                  ADCAmplHBMin = cms.double(10.),
-                                  ADCAmplHBMax = cms.double(2500.),
-                                  ADCAmplHEMin = cms.double(10.),
-                                  ADCAmplHEMax = cms.double(2500.),
-                                  ADCAmplHFMin = cms.double(5.),
-                                  ADCAmplHFMax = cms.double(50.),
-                                  ADCAmplHOMin = cms.double(200.),
-                                  ADCAmplHOMax = cms.double(2500.),
+                                  ADCAmplHBMin = cms.double(10000.),
+                                  ADCAmplHBMax = cms.double(300000.),
+                                  ADCAmplHEMin = cms.double(20000.),  
+                                  ADCAmplHEMax = cms.double(300000.),
+                                  ADCAmplHFMin = cms.double(50.),
+                                  ADCAmplHFMax = cms.double(9000.),
+                                  ADCAmplHOMin = cms.double(50.),
+                                  ADCAmplHOMax = cms.double(9000.),
                                   #
                                   # to see channels w/ PedestalSigma < cut
                                   #Verbosity = cms.untracked.int32(-57),
@@ -198,57 +211,58 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #calibrADCHEMin = cms.double(15.0),
                                   #calibrADCHOMin = cms.double(15.0),
                                   #calibrADCHFMin = cms.double(15.0),
-                                  # cuts for LED runs:
+                                  # cuts for PEDESTAL runs:
                                   calibrADCHBMin = cms.double(1000.),
-                                  calibrADCHBMax = cms.double(100000000.),
+				  calibrADCHBMax = cms.double(100000000.),
                                   calibrADCHEMin = cms.double(1000.),
-                                  calibrADCHEMax = cms.double(100000000.),
+				  calibrADCHEMax = cms.double(100000000.),
                                   calibrADCHOMin = cms.double(1000.),
-                                  calibrADCHOMax = cms.double(100000000.),
+				  calibrADCHOMax = cms.double(100000000.),
                                   calibrADCHFMin = cms.double(100.),
-                                  calibrADCHFMax = cms.double(100000000.),
-                                  # for  BAD HBHEHOHF CALIBRATION channels
+				  calibrADCHFMax = cms.double(100000000.),
+				  
+                                  # for  BAD HBHEHOHF CALIBRATION channels from study on shape Ratio
                                   calibrRatioHBMin = cms.double(0.76),
-                                  calibrRatioHBMax = cms.double(0.94),
+				  calibrRatioHBMax = cms.double(0.94),
                                   calibrRatioHEMin = cms.double(0.76),
-                                  calibrRatioHEMax = cms.double(0.94),
+				  calibrRatioHEMax = cms.double(0.94),
                                   calibrRatioHOMin = cms.double(0.85),
-                                  calibrRatioHOMax = cms.double(0.99),
+				  calibrRatioHOMax = cms.double(0.99),
                                   calibrRatioHFMin = cms.double(0.5),
-                                  calibrRatioHFMax = cms.double(0.8),
+				  calibrRatioHFMax = cms.double(0.8),
                                   # for  BAD HBHEHOHF CALIBRATION channels from study on TSmax
-                                  calibrTSmaxHBMin = cms.double(0.50),
-                                  calibrTSmaxHBMax = cms.double(8.50),
-                                  calibrTSmaxHEMin = cms.double(0.50),
-                                  calibrTSmaxHEMax = cms.double(8.50),
-                                  calibrTSmaxHOMin = cms.double(0.50),
-                                  calibrTSmaxHOMax = cms.double(8.50),
-                                  calibrTSmaxHFMin = cms.double(0.50),
-                                  calibrTSmaxHFMax = cms.double(9.50),
+                                  calibrTSmaxHBMin = cms.double(1.50),
+                                  calibrTSmaxHBMax = cms.double(2.50),
+                                  calibrTSmaxHEMin = cms.double(1.50),
+                                  calibrTSmaxHEMax = cms.double(2.50),
+                                  calibrTSmaxHOMin = cms.double(1.50),
+                                  calibrTSmaxHOMax = cms.double(2.50),
+                                  calibrTSmaxHFMin = cms.double(3.50),
+                                  calibrTSmaxHFMax = cms.double(4.50),
                                   # for  BAD HBHEHOHF CALIBRATION channels from study on TSmean
-                                  calibrTSmeanHBMin = cms.double(1.00),
-                                  calibrTSmeanHBMax = cms.double(5.50),
-                                  calibrTSmeanHEMin = cms.double(1.00),
-                                  calibrTSmeanHEMax = cms.double(5.50),
-                                  calibrTSmeanHOMin = cms.double(1.00),
-                                  calibrTSmeanHOMax = cms.double(3.50),
-                                  calibrTSmeanHFMin = cms.double(1.00),
-                                  calibrTSmeanHFMax = cms.double(5.20),
+                                  calibrTSmeanHBMin = cms.double(2.40),
+                                  calibrTSmeanHBMax = cms.double(3.70),
+                                  calibrTSmeanHEMin = cms.double(2.40),
+                                  calibrTSmeanHEMax = cms.double(3.70),
+                                  calibrTSmeanHOMin = cms.double(1.50),
+                                  calibrTSmeanHOMax = cms.double(2.70),
+                                  calibrTSmeanHFMin = cms.double(3.50),
+                                  calibrTSmeanHFMax = cms.double(4.50),
                                   # for  BAD HBHEHOHF CALIBRATION channels from study on Width
-                                  calibrWidthHBMin = cms.double(1.00),
-                                  calibrWidthHBMax = cms.double(2.30),
-                                  calibrWidthHEMin = cms.double(1.00),
-                                  calibrWidthHEMax = cms.double(2.30),
-                                  calibrWidthHOMin = cms.double(0.50),
-                                  calibrWidthHOMax = cms.double(3.00),
-                                  calibrWidthHFMin = cms.double(0.20),
-                                  calibrWidthHFMax = cms.double(2.30),
+                                  calibrWidthHBMin = cms.double(1.30),
+                                  calibrWidthHBMax = cms.double(1.90),
+                                  calibrWidthHEMin = cms.double(1.30),
+                                  calibrWidthHEMax = cms.double(1.90),
+                                  calibrWidthHOMin = cms.double(0.70),
+                                  calibrWidthHOMax = cms.double(1.65),
+                                  calibrWidthHFMin = cms.double(0.30),
+                                  calibrWidthHFMax = cms.double(1.50),
                                   #
                                   # Special task of run or LS quality:
                                   #
                                   # flag for ask runs of LSs for RMT & CMT accordingly:
                                   #=0-runs, =1-LSs
-                                  # keep for LED runs this flags =0 always
+                                  # keep for PEDESTAL runs this flags =0 always
                                   flagtoaskrunsorls = cms.int32(0),
                                   #
                                   # flag for choice of criterion of bad channels:
@@ -258,12 +272,10 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #how many bins you want on the plots:better to choice (#LS+1)
                                   howmanybinsonplots = cms.int32(25),
                                   #
-                                  #
                                   # ls - range for RBX study (and ??? perhaps for gain stability via abort gap):
                                   lsmin = cms.int32(1),
                                   #lsmax = cms.int32(620),
                                   lsmax = cms.int32(2600),
-                                  #
                                   #
                                   flagabortgaprejected = cms.int32(1),
                                   bcnrejectedlow = cms.int32(3446),
@@ -393,6 +405,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   #
                                   #
                                   #
+                                  #
                                   #for upgrade: ---------------------------------------------------------
                                   hbheQIE11DigiCollectionTag = cms.InputTag('hcalDigis'),
                                   hbheQIE10DigiCollectionTag = cms.InputTag('hcalDigis'),
@@ -415,7 +428,7 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   # 10       +        -       -     +     2017 w/o HEP17
                                   # 
                                   flagupgradeqie1011 = cms.int32(6),
-                                  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+                                  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
                                   # flaguseshunt = 1 or 6 (6 is default for global runs) 
                                   flaguseshunt = cms.int32(6),
                                   # flagsipmcorrection: != 0 yes,apply; = 0 do not use;
@@ -428,18 +441,28 @@ process.Analyzer = cms.EDAnalyzer("VeRawAnalyzer",
                                   # for gaussian fit for local shunt1 (Gsel0) led low-intensity or ped ONLY!!! to be  > 0    (,else = 0)
                                   flagfitshunt1pedorledlowintensity = cms.int32(0),
                                   #
-                                  #
-                                  #
                                   splashesUpperLimit = cms.int32(10000),
                                   #
                                   #
+                                  # for use in IterativeMethod of CalibrationGroup!!! to be > 1    (,else = 0)
+                                  flagIterativeMethodCalibrationGroupDigi = cms.int32(1),
                                   #
-                                  HistOutFile = cms.untracked.string(histodir+'/LED_'+runnumber+'.root'),
-#                                  HistOutFile = cms.untracked.string('testLaser178165.root'),
-#                                  HistOutFile = cms.untracked.string('testLaser141849.root'),
-#                                  HistOutFile = cms.untracked.string('testLaser133070.root'),
-#                                  HistOutFile = cms.untracked.string('testLaser211875.root'),
-                                  MAPOutFile = cms.untracked.string('LogEleMapdb.h')
+                                  # for use in IterativeMethod of CalibrationGroup!!! to be > 1    (,else = 0)
+                                  flagIterativeMethodCalibrationGroupReco = cms.int32(1),
+                                  #
+                                  hbheInputSignalTag = cms.InputTag('hbherecoMBNZS'),
+                                  hbheInputNoiseTag = cms.InputTag('hbherecoNoise'),
+                                  hfInputSignalTag = cms.InputTag('hfrecoMBNZS'),
+                                  hfInputNoiseTag = cms.InputTag('hfrecoNoise'),
+                                  #
+                                  #
+                                  #
+                                  #
+                                  #
+                                  #
+                                  #HistOutFile = cms.untracked.string('PEDESTAL_331370.root'),
+                                  #HistOutFile = cms.untracked.string(histodir+'/PEDESTAL_'+runnumber+'.root'),
+                                  #MAPOutFile = cms.untracked.string('LogEleMapdb.h')
                                   #
                                   ##OutputFilePath = cms.string('/tmp/zhokin/'),        
                                   ##OutputFileExt = cms.string(''),
@@ -450,18 +473,6 @@ process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
     dump = cms.untracked.vstring(''),
     file = cms.untracked.string('')
 )
-#from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-#process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data_FULL', '')
-############################################################################
-# V.EPSHTEIN:
-process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
-process.GlobalTag.globaltag = '100X_dataRun2_Prompt_Candidate_2018_01_31_16_01_36'
-###
-process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
-    dump = cms.untracked.vstring(''),
-    file = cms.untracked.string('')
-)
-
 process.es_hardcode = cms.ESSource("HcalHardcodeCalibrations",
     toGet = cms.untracked.vstring('QIEShape',
         'QIEData',
@@ -474,31 +485,106 @@ process.es_hardcode = cms.ESSource("HcalHardcodeCalibrations",
         'ZSThresholds',
         'RespCorrs')
 )
+
+## Jula's recipe for too many files 
+#process.options = cms.untracked.PSet(
+#   wantSummary = cms.untracked.bool(False),
+#   Rethrow = cms.untracked.vstring("ProductNotFound"), # make this exception fatal
+#   fileMode  =  cms.untracked.string('NOMERGE') # no ordering needed, but calls endRun/beginRun etc. at file boundaries
+#)
+
+######################################################################################## Global Tags for 2018 data taking :
+# use twiki site to specify HLT reconstruction Global tags:
+#   https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideFrontierConditions
+#
+#   100X_dataRun2_HLT_v2        for CMSSW_10_0_3 onwards        CRUZET 2018     update of 0T templates for SiPixels
+#   100X_dataRun2_HLT_v1        for CMSSW_10_0_0 onwards        MWGRs 2018      first HLT GT for 2018 
+#
+#
+############################################################################ GlobalTag :1+ good as 5
+#from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
+#process.GlobalTag = GlobalTag(process.GlobalTag, '100X_dataRun2_HLT_v2', '')
+
+#from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
+#process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data_FULL', '')
+
+
+#from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
+#process.GlobalTag = GlobalTag(process.GlobalTag, '101X_dataRun2_HLT_v7', '')
+
+# 2019 Ultra Legacy 2017
+#process.GlobalTag.globaltag = '106X_dataRun2_trackerAlignment2017_v1'
+# 2019 Ultra Legacy 2018 test TkAl
+#process.GlobalTag.globaltag = '106X_dataRun2_v17'
+# 2019 Ultra Legacy 2018 
+#process.GlobalTag.globaltag = '106X_dataRun2_newTkAl_v18'
+# 2019 Ultra Legacy 2016
+#process.GlobalTag.globaltag = '106X_dataRun2_UL2016TkAl_v24'
+#process.GlobalTag.globaltag = '105X_dataRun2_v8'
+
+process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+from Configuration.AlCa.autoCond import autoCond
+#process.GlobalTag.globaltag = '104X_dataRun2_v1'
+#process.GlobalTag.globaltag = '105X_postLS2_design_v4'
+process.GlobalTag.globaltag = '106X_dataRun3_HLT_v3'
+
+
+############################################################################
+# V.EPSHTEIN:
+#process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+#process.GlobalTag.globaltag = '100X_dataRun2_Prompt_Candidate_2018_01_31_16_01_36'
 ###
-process.hcalDigis= cms.EDProducer("HcalRawToDigi",
-    FilterDataQuality = cms.bool(True),
-    HcalFirstFED = cms.untracked.int32(700),
-    InputLabel = cms.InputTag("source"),
-    UnpackCalib = cms.untracked.bool(True),
-    FEDs = cms.untracked.vint32(1100, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1109, 1110, 1111, 1112, 1113, 1114, 1115, 1116, 1117),
-)
+#process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
+#    dump = cms.untracked.vstring(''),
+#    file = cms.untracked.string('')
+#)
+#
+#process.hcalDigis= cms.EDProducer("HcalRawToDigi",
+#    FilterDataQuality = cms.bool(True),
+#    HcalFirstFED = cms.untracked.int32(700),
+#    InputLabel = cms.InputTag("source"),
+#    UnpackCalib = cms.untracked.bool(True),
+#    FEDs = cms.untracked.vint32(1100, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1109, 1110, 1111, 1112, 1113, 1114, 1115, 1116, 1117),
+#)
 ###
 ############################################################################
-
 process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
 process.hcalDigis.FilterDataQuality = cms.bool(False)
 process.hcalDigis.InputLabel = cms.InputTag("source")
+############################################################################
+process.hcalDigis= cms.EDProducer("HcalRawToDigi",
+#    FilterDataQuality = cms.bool(True),
+    FilterDataQuality = cms.bool(False),
+    HcalFirstFED = cms.untracked.int32(700),
+    InputLabel = cms.InputTag("source"),
+    #InputLabel = cms.InputTag("rawDataCollector"),
+)
+#process.hcalDigis.FilterDataQuality = cms.bool(False)
+#process.hcalDigis.InputLabel = cms.InputTag("source")
+############################################################################
+##process.load("Calibration.HcalAlCaRecoProducers.ALCARECOHcalCalPedestal_cff")
+process.load("Calibration.HcalAlCaRecoProducers.ALCARECOHcalCalPedestalLocal_cff")
+##process.load("Calibration.HcalAlCaRecoProducers.ALCARECOHcalCalMinBias_cff")
+#process.load("ALCARECOHcalCalPedestalLocal_cff")
+############################################################################
+#process.p = cms.Path(process.hcalDigis*process.Analyzer)
+#process.p = cms.Path(process.seqALCARECOHcalCalMinBiasDigiNoHLT*process.seqALCARECOHcalCalMinBias*process.minbiasana)
 
-process.p = cms.Path(process.hcalDigis*process.Analyzer)
+process.p = cms.Path(process.hcalDigis*process.seqALCARECOHcalCalMinBiasDigiNoHLT*process.seqALCARECOHcalCalMinBias*process.Analyzer)
+#process.p = cms.Path(process.seqALCARECOHcalCalMinBiasDigiNoHLT*process.seqALCARECOHcalCalMinBias*process.Analyzer)
 
+# see   /afs/cern.ch/work/z/zhokin/public/CMSSW_10_4_0_patch1/src/Calibration/HcalAlCaRecoProducers/python/ALCARECOHcalCalMinBias_cff.py
+############################################################################
 process.MessageLogger = cms.Service("MessageLogger",
      categories   = cms.untracked.vstring(''),
      destinations = cms.untracked.vstring('cout'),
      debugModules = cms.untracked.vstring('*'),
      cout = cms.untracked.PSet(
          threshold = cms.untracked.string('WARNING'),
-         WARNING = cms.untracked.PSet(limit = cms.untracked.int32(0))
+	 WARNING = cms.untracked.PSet(limit = cms.untracked.int32(0))
      )
  )
+############################################################################
+
 
 
