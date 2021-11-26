@@ -2,11 +2,11 @@
 
 rm index_selection.html
 
-#echo "11111111111111"
+echo "11111111111111"
 runList=`cat ${1}`
 #echo "${runList}"
 
-#echo "22222222222"
+echo "22222222222"
 
 # Check the runList and correct the correctables
 # Replace ',' and ';' by empty spaces
@@ -25,7 +25,7 @@ for r in ${runList} ; do
 	ok=0
     fi
 done
-#echo "333"
+echo "333"
 
 #echo "Tested `wc -w <<< "${runList}"` runs from file ${fileName}"
 if [ ${ok} -eq 0 ] ; then
@@ -36,15 +36,15 @@ else
 	echo "run numbers in ${fileName} verified ok"
     fi
 fi
-#echo "444"
-#echo "555"
+echo "444"
+echo "555"
 
 #echo 'Numbers of NEW runs for processing'
 #echo "${runList}"
 #echo -e "runList complete\n"
 
 #processing skipped
-#echo "6"
+echo "6"
 
 
 # #  #  # # # # # # # # # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # ### # # #####
@@ -52,7 +52,7 @@ fi
 #echo -e '\n\nRun numbers:'
 runListEOS=`echo $runList | tee _runlist_`
 
-#echo "7"
+echo "7"
 
 
 #echo "${runListEOS}"
@@ -60,7 +60,7 @@ runListEOS=`echo $runList | tee _runlist_`
 
 
 
-#echo "8"
+echo "8"
 
 
 
@@ -73,16 +73,25 @@ runnumber=${i}
 #dasgoclient --query="file dataset=/HcalNZS/Run2018A-v1/RAW  run=${i} | grep file.size, file.nevents, file.modification_time "  > tmp
 #dasgoclient --query="file dataset=/HcalNZS/Run2018B-v1/RAW  run=${i} | grep file.size, file.nevents, file.modification_time "  > tmp
 #dasgoclient --query="file dataset=/HcalNZS/Run2018C-v1/RAW  run=${i} | grep file.size, file.nevents, file.modification_time "  > tmp
-dasgoclient --query="file dataset=/HcalNZS/Run2018D-v1/RAW  run=${i} | grep file.size, file.nevents, file.modification_time "  > tmp
+#
+#dasgoclient --query="file dataset=/HcalNZS/Run2018D-v1/RAW  run=${i} | grep file.size, file.nevents, file.modification_time "  > tmp
+#
+echo "runnumber:"
+dasgoclient --query="file dataset=/HcalNZS/Commissioning2021-HcalCalMinBias-PromptReco-v1/ALCARECO  run=${i} | grep file.size, file.nevents, file.modification_time "  > tmp
+
+echo "${runnumber}"
+
+
+#
 #dasgoclient --query="file dataset=/HcalNZS/Run2018E-v1/RAW  run=${i} | grep file.size, file.nevents, file.modification_time "  > tmp
 #dasgoclient --query="run dataset=/HIHcalNZS/HIRun2018A-v1/RAW  run=${i} | grep file.size, file.nevents, file.modification_time "  > tmp
 timetmp=`cat tmp | awk '{print $3}'`
 ############################################################################################################
-type='ZeroBias'
+type='NZS'
 timetmp2=`date -d @${timetmp} +%Y-%m-%d:%H-%M-%S`
 sizetmp=`cat tmp | awk '{print $1}'`
 neventstmp=`cat tmp | awk '{print $2}'`
-commentariy='test 333333'
+commentariy='Com21-ALCARECO'
 ##cat runs_info
 #echo 'RUN Type = '$type
 #echo ${sizetmp} ${neventstmp} ${timetmp2}
@@ -103,12 +112,13 @@ echo '<td class="s'$raw'" align="center">'$commentariy'</td>'>> index_selection.
 
 done
 
-#echo "9"
+echo "9"
 
+mv index_selection.html index_selectionNZS_ALCARECO.html
 #mv index_selection.html index_selectionA.html
 #mv index_selection.html index_selectionB.html
 #mv index_selection.html index_selectionC.html
-mv index_selection.html index_selectionD.html
+#mv index_selection.html index_selectionD.html
 #mv index_selection.html index_selectionE.html
 #mv index_selection.html index_selectionHI.html
 ############################################################################################################

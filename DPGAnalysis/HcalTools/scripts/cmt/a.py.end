@@ -454,7 +454,8 @@ from Configuration.AlCa.autoCond import autoCond
 #process.GlobalTag.globaltag = '104X_dataRun2_v1'
 #process.GlobalTag.globaltag = '105X_postLS2_design_v4'
 #process.GlobalTag.globaltag = '106X_dataRun3_HLT_v3'
-process.GlobalTag.globaltag = '113X_dataRun3_HLT_v3'
+#process.GlobalTag.globaltag = '113X_dataRun3_HLT_v3'
+process.GlobalTag.globaltag = '120X_dataRun3_HLT_v3'
 ###########################################################################
 process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
 #process.hcalDigis.FilterDataQuality = cms.bool(False)
@@ -468,7 +469,7 @@ process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
 #    #InputLabel = cms.InputTag("rawDataCollector"),
 #)
 ###########################################################################
-process.load("Calibration.HcalAlCaRecoProducers.ALCARECOHcalCalMinBias_cff")
+#process.load("Calibration.HcalAlCaRecoProducers.ALCARECOHcalCalMinBias_cff")
 ###########################################################################
 # Schedule definition
 # pure CMT:
@@ -479,9 +480,9 @@ process.p = cms.Path(process.hcalDigis*process.Analyzer)
 ############################################################################
 # customisation of the process.
 # Automatic addition of the customisation function from HLTrigger.Configuration.CustomConfigs
-from HLTrigger.Configuration.CustomConfigs import L1THLT 
+#from HLTrigger.Configuration.CustomConfigs import L1THLT 
 #call to customisation function L1THLT imported from HLTrigger.Configuration.CustomConfigs
-process = L1THLT(process)
+#process = L1THLT(process)
 # End of customisation functions
 ############################################################################
 ############################################################################

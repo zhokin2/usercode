@@ -1,4 +1,8 @@
     ),
+    lumisToProcess = cms.untracked.VLuminosityBlockRange(
+             '346490:17',
+             '346490:413'
+    ),
     secondaryFileNames = cms.untracked.vstring()
 )
 
@@ -395,7 +399,7 @@ process.Analyzer = cms.EDAnalyzer("CMTRawAnalyzer",
                                   #
                                   #   for PSM use 2 next flags as 1
                                   # for use in IterativeMethod of CalibrationGroup!!! to be > 1    (,else = 0)
-                                  flagIterativeMethodCalibrationGroupDigi = cms.int32(1),
+                                  flagIterativeMethodCalibrationGroupDigi = cms.int32(0),
                                   #
                                   # for use in IterativeMethod of CalibrationGroup!!! to be > 1    (,else = 0)
                                   flagIterativeMethodCalibrationGroupReco = cms.int32(1),
@@ -421,6 +425,12 @@ process.Analyzer = cms.EDAnalyzer("CMTRawAnalyzer",
                                   #
                                   )		
 ###########################################################################
+process.TFileService = cms.Service("TFileService",
+      fileName = cms.string("Global.root")
+      ,closeFileFast = cms.untracked.bool(True)
+  )
+
+###########################################################################
 # Other statements
 process.hcal_db_producer = cms.ESProducer("HcalDbProducer",
     dump = cms.untracked.vstring(''),
@@ -439,17 +449,19 @@ process.es_hardcode = cms.ESSource("HcalHardcodeCalibrations",
         'RespCorrs')
 )
 ############################################################################ GlobalTag :
-#process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
-#from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
+#process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
+#from Configuration.AlCa.GlobalTag import GlobalTag
 #process.GlobalTag = GlobalTag(process.GlobalTag, '101X_dataRun2_HLT_v7', '')
-
+#
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.autoCond import autoCond
-process.GlobalTag.globaltag = '104X_dataRun2_v1'
+#process.GlobalTag.globaltag = '104X_dataRun2_v1'
 #process.GlobalTag.globaltag = '105X_postLS2_design_v4'
 #process.GlobalTag.globaltag = '106X_dataRun3_HLT_v3'
+#process.GlobalTag.globaltag = '113X_dataRun3_HLT_v3'
+process.GlobalTag.globaltag = '120X_dataRun3_HLT_v3'
 ###########################################################################
-process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
+#process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
 #process.hcalDigis.FilterDataQuality = cms.bool(False)
 #process.hcalDigis.InputLabel = cms.InputTag("source")
 ###########################################################################
@@ -461,17 +473,23 @@ process.load('Configuration.StandardSequences.RawToDigi_Data_cff')
 #    #InputLabel = cms.InputTag("rawDataCollector"),
 #)
 ###########################################################################
-process.load("Calibration.HcalAlCaRecoProducers.ALCARECOHcalCalMinBias_cff")
+#process.load("Calibration.HcalAlCaRecoProducers.ALCARECOHcalCalPedestalLocal_cff")
+
+#process.load("Calibration.HcalAlCaRecoProducers.ALCARECOHcalCalMinBias_cff")
+
+#process.load("ALCARECOHcalCalPedestalLocal_cff")
+##process.load("Calibration.HcalAlCaRecoProducers.ALCARECOHcalCalPedestal_cff")
 ###########################################################################
 # Schedule definition for PSM:
-process.p = cms.Path(process.hcalDigis*process.seqALCARECOHcalCalMinBiasDigiNoHLT*process.seqALCARECOHcalCalMinBias*process.Analyzer)
+#process.p = cms.Path(process.hcalDigis*process.seqALCARECOHcalCalMinBiasDigiNoHLT*process.seqALCARECOHcalCalMinBias*process.Analyzer)
+process.p = cms.Path(process.Analyzer)
 # see   /afs/cern.ch/work/z/zhokin/public/CMSSW_10_4_0_patch1/src/Calibration/HcalAlCaRecoProducers/python/ALCARECOHcalCalMinBias_cff.py
 ############################################################################
 # customisation of the process.
 # Automatic addition of the customisation function from HLTrigger.Configuration.CustomConfigs
-from HLTrigger.Configuration.CustomConfigs import L1THLT 
+#from HLTrigger.Configuration.CustomConfigs import L1THLT 
 #call to customisation function L1THLT imported from HLTrigger.Configuration.CustomConfigs
-process = L1THLT(process)
+#process = L1THLT(process)
 # End of customisation functions
 ############################################################################
 ############################################################################
