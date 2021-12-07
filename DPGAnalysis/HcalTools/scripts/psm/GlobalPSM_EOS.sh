@@ -228,8 +228,8 @@ for i in ${runList} ; do
 #
     rm *.html
     rm *.png 
-    rm -rf dir-GlobalPSM-GLOBAL_*
-    rm *.root
+#    rm -rf dir-GlobalPSM-GLOBAL_*
+#    rm *.root
 #
 
 #---------------

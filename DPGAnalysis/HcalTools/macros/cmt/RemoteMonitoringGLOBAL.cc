@@ -131,8 +131,7 @@ int main(int argc, char *argv[]) {
 
   //======================================================================
   // Prepare histograms and plot them to .png files
-  TCanvas *c1 = new TCanvas("c1", "Hcal4test", 200, 10, 700, 900);
-
+//  TCanvas *cHB = new TCanvas("cHB", "cHB", 200, 10, 700, 900);
   TCanvas *cHB = new TCanvas("cHB", "cHB", 1000, 500);
   TCanvas *cHE = new TCanvas("cHE", "cHE", 1500, 500);
   TCanvas *cONE = new TCanvas("cONE", "cONE", 500, 500);
@@ -169,9 +168,10 @@ int main(int argc, char *argv[]) {
   TH1F *LumLum = (TH1F *)dir->FindObjectAny("h_lsnumber_per_eachLS");
   int MaxLumDanila = LumLum->GetBinContent(LumLum->GetMaximumBin());  // old variant of Danila
   cout << " MaxLumDanila=     " << MaxLumDanila << endl;
+  gStyle->SetOptStat(110000);
   gPad->SetGridy();
   gPad->SetGridx();
-  LumLum->SetMarkerStyle(10);
+  LumLum->SetMarkerStyle(21);
   LumLum->SetMarkerSize(0.8);
   LumLum->GetYaxis()->SetLabelSize(0.04);
   LumLum->SetTitle("Cont. number per LS  \b");
@@ -180,7 +180,7 @@ int main(int argc, char *argv[]) {
   LumLum->SetMarkerColor(4);
   LumLum->SetLineColor(0);
   LumLum->SetMinimum(0.8);
-  LumLum->GetXaxis()->SetRangeUser(0, MaxLumDanila);
+  LumLum->GetXaxis()->SetRangeUser(0, MaxLumDanila+5.);
   LumLum->Draw("Error");
 
   cHB->cd(2);
@@ -192,8 +192,9 @@ int main(int argc, char *argv[]) {
       MaxLum = i;
     }
   }
-  cout << " MaxLum0=     " << MaxLum0 << " MaxLum=     " << MaxLum << endl;
+  cout << " Nev in bin of MaxLum =     " << MaxLum0 << " MaxLum=     " << MaxLum << endl;
 
+  gStyle->SetOptStat(110000);
   gPad->SetGridy();
   gPad->SetGridx();
   gPad->SetLogy();
@@ -202,12 +203,12 @@ int main(int argc, char *argv[]) {
   LumiEv->SetTitle("Number of events per LS");
   LumiEv->SetXTitle("LS");
   LumiEv->SetYTitle("Number of events ");
-  LumiEv->SetMarkerStyle(10);
+  LumiEv->SetMarkerStyle(21);
   LumiEv->SetMarkerSize(0.8);
   LumiEv->SetMarkerColor(4);
   LumiEv->SetLineColor(0);
   //      LumiEv->SetMinimum(0.8);
-  LumiEv->GetXaxis()->SetRangeUser(0, MaxLum);
+  LumiEv->GetXaxis()->SetRangeUser(0, MaxLum+5.);
   LumiEv->Draw("Error");
 
   cHB->Print("LumiEvent.png");

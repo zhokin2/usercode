@@ -3,7 +3,7 @@
 //root -b -q -l 'RemoteMonitoringMAP.C+("/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/LED_214513.root","/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/LED_214512.root")'
 //root -b -q -l 'RemoteMonitoringMAP.C+(" /afs/cern.ch/work/d/dtlisov/private/Monitoring/histos/LED_211659.root","/afs/cern.ch/cms/CAF/CMSALCA/ALCA_HCALCALIB/HCALMONITORING/RDMweb/histos/LED_214512.root")'
 //
-//  HistBadTSshapesHF.pn    0. Entries for each channel.   MapRateEntryHF.png
+// 
 //
 #include "LogEleMapdb.h"
 
@@ -2247,7 +2247,7 @@ int main(int argc, char *argv[]) {
     htmlFile << "<br>" << std::endl;
     htmlFile << "<a href=\"#Top\">to top</a><br>\n";
 
-    /////////////////////////////////////////////////////////////////   AZ 19.03
+    /////////////////////////////////////////////////////////////////   AZ 19.03.2018
     /*     
 //     htmlFile << "<h3> 2.B.List of Bad channels (rate > 0.1) and its rates for each RMT criteria (for GS - %) </h3>"<< std::endl;
 

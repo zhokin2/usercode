@@ -2,11 +2,12 @@
 
 WebDir='/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring'
 WebSite='https://cms-conddb.cern.ch/eosweb/hcal/HcalRemoteMonitoring'
-HistoDir='/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/GlobalPSM/histos'
+##HistoDir='/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/GlobalPSM/histos'
+##HistoDir='/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/ALCARECOPSM/histos'
 
 
 cmsenv 2>/dev/null
-if [ $? == 0 ] ; then
+if [[ $? == 0 ]] ; then
     eval `scramv1 runtime -sh`
 fi
 
@@ -27,7 +28,7 @@ else
     if [ ${ignoreFile} -eq 0 ] ; then
 	echo " ! no file provided"
     fi
-    echo " ! will produce only the global html page"
+    echo " ! will produce only html page"
 fi
 
 
@@ -74,7 +75,8 @@ echo -e "Full runList for EOS complete\n"
 # copy index.html from EOS:
 echo 'next message is Fine: '
 rm index.html
-eoscp $WebDir/GlobalPSM/index.html index.html
+#eoscp $WebDir/GlobalPSM/index.html index.html
+eoscp $WebDir/ALCARECOPSM/index.html index.html
 cp index.html OLDindex.html
 
 # delete last line of copied index_draft.html which close the table
@@ -86,7 +88,8 @@ cat index.html | head -n -1 > index_draft.html
 #let "k = k + 1"
 #done
 
-k=34
+#k=34
+k=42
 
 ########################################## type by hands number of new runs k=k-number:
 #let "k = k - 1"
@@ -119,17 +122,19 @@ if [ ${dasCache} -eq 1 ] ; then
 fi
 
 if [ ${got} -eq 0 ] ; then
-dasgoclient  --query="file dataset=/HcalNZS/Run2018D-v1/RAW  run=${i} | grep file.size, file.nevents, file.modification_time "  > tmp
+#dasgoclient  --query="file dataset=/HcalNZS/Run2018D-v1/RAW  run=${i} | grep file.size, file.nevents, file.modification_time "  > tmp
+#dasgoclient  --query="file dataset=/HcalNZS/Commissioning2021-v1/RAW  run=${i} | grep file.size, file.nevents, file.modification_time "  > tmp
+dasgoclient  --query="file dataset=/HcalNZS/Commissioning2021-HcalCalMinBias-PromptReco-v1/ALCARECO  run=${i} | grep file.size, file.nevents, file.modification_time "  > tmp
 fi
-
 
 timetmp=`cat tmp | head -n 1  | awk '{print $3}'`
 ############################################################################################################
-type='ZeroBias'
+#type='ZeroBias'
+type='HcalNZS'
 timetmp2=`date -d @${timetmp} +%Y-%m-%d:%H-%M-%S`
 sizetmp=`cat tmp | head -n 1  | awk '{print $1}'`
 neventstmp=`cat tmp | head -n 1  | awk '{print $2}'`
-commentariy='era D'
+commentariy='2021first'
 #cat runs_info
 echo 'RUN Type = '$type
 echo ${sizetmp} ${neventstmp} ${timetmp2}
@@ -146,7 +151,8 @@ echo '<td class="s'$raw'" align="center">'$type'</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$timetmp2'</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$sizetmp'</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$neventstmp'</td>'>> index_draft.html
-echo '<td class="s'$raw'" align="center"><a href="'$WebSite'/GlobalPSM/GLOBAL_'$runnumber'/MAP.html">GlobalPSM_'$runnumber'</a></td>'>> index_draft.html
+#echo '<td class="s'$raw'" align="center"><a href="'$WebSite'/GlobalPSM/GLOBAL_'$runnumber'/MAP.html">GlobalPSM_'$runnumber'</a></td>'>> index_draft.html
+echo '<td class="s'$raw'" align="center"><a href="'$WebSite'/ALCARECOPSM/GLOBAL_'$runnumber'/MAP.html">ALCARECOPSMPSM_'$runnumber'</a></td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$commentariy'</td>'>> index_draft.html
 
 
@@ -181,6 +187,10 @@ else
 ###    echo "Commented by me:  eoscp index_draft.html $WebDir/GlobalPSM/index.html No upload to eos"
 #  eoscp OLDindex.html $WebDir/GlobalPSM/OLDindex.html
 #  eoscp index_draft.html $WebDir/GlobalPSM/index.html
+
+###    echo "Commented by me:  eoscp index_draft.html $WebDir/ALCARECOPSM/index.html No upload to eos"
+#  eoscp OLDindex.html $WebDir/ALCARECOPSM/OLDindex.html
+#  eoscp index_draft.html $WebDir/ALCARECOPSM/index.html
 
 
     status="$?"

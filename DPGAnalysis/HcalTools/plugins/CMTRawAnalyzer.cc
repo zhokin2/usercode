@@ -1,5 +1,6 @@
 // -*- C++ -*-
 //
+//    QIE10DataFrame
 //
 // Package:    CMTRawAnalyzer
 //
@@ -505,6 +506,7 @@ private:
   /////////////////////////////////////////////
   int flagfitshunt1pedorledlowintensity_;
   int flagLaserRaddam_;
+  int flagToUseDigiCollectionsORNot_;
   int flagIterativeMethodCalibrationGroupDigi_;
   int flagIterativeMethodCalibrationGroupReco_;
   int flagtoaskrunsorls_;
@@ -2312,8 +2314,8 @@ private:
   int mapRADDAM0_HE[ndepth][neta][nphi];
   double mapRADDAM_HED2[ndepth][neta];
   int mapRADDAM_HED20[ndepth][neta];
-  float binanpfit = anpfit / npfit;
-  long int gsmdepth1sipm[npfit][neta][nphi][ndepth];
+  //  float binanpfit = anpfit / npfit;
+  //  long int gsmdepth1sipm[npfit][neta][nphi][ndepth];
   ///////////////////////////////////////////// end massives
   long int Nevent;
   int Run;
@@ -2424,10 +2426,10 @@ CMTRawAnalyzer::CMTRawAnalyzer(const edm::ParameterSet& iConfig)
   MAPcreation = iConfig.getUntrackedParameter<int>("MapCreation");
   recordNtuples_ = iConfig.getUntrackedParameter<bool>("recordNtuples");
   maxNeventsInNtuple_ = iConfig.getParameter<int>("maxNeventsInNtuple");
-  tok_calib_ = consumes<HcalCalibDigiCollection>(iConfig.getParameter<edm::InputTag>("hcalCalibDigiCollectionTag"));  //
+  tok_calib_ = consumes<HcalCalibDigiCollection>(iConfig.getParameter<edm::InputTag>("hcalCalibDigiCollectionTag"));  
   tok_hbhe_ = consumes<HBHEDigiCollection>(iConfig.getParameter<edm::InputTag>("hbheDigiCollectionTag"));
   tok_ho_ = consumes<HODigiCollection>(iConfig.getParameter<edm::InputTag>("hoDigiCollectionTag"));
-  tok_hf_ = consumes<HFDigiCollection>(iConfig.getParameter<edm::InputTag>("hfDigiCollectionTag"));  //
+  tok_hf_ = consumes<HFDigiCollection>(iConfig.getParameter<edm::InputTag>("hfDigiCollectionTag"));  
   tok_qie11_ = consumes<QIE11DigiCollection>(iConfig.getParameter<edm::InputTag>("hbheQIE11DigiCollectionTag"));
   tok_qie10_ = consumes<QIE10DigiCollection>(iConfig.getParameter<edm::InputTag>("hbheQIE10DigiCollectionTag"));
   // phi-symmetry monitoring for calibration group:
@@ -2452,30 +2454,31 @@ CMTRawAnalyzer::CMTRawAnalyzer(const edm::ParameterSet& iConfig)
   useADCcounts_ = iConfig.getUntrackedParameter<bool>("useADCcounts");
   usePedestalSubtraction_ = iConfig.getUntrackedParameter<bool>("usePedestalSubtraction");
   usecontinuousnumbering_ = iConfig.getUntrackedParameter<bool>("usecontinuousnumbering");
-  flagLaserRaddam_ = iConfig.getParameter<int>("flagLaserRaddam");                                                  //
-  flagIterativeMethodCalibrationGroupDigi_ = iConfig.getParameter<int>("flagIterativeMethodCalibrationGroupDigi");  //
-  flagIterativeMethodCalibrationGroupReco_ = iConfig.getParameter<int>("flagIterativeMethodCalibrationGroupReco");  //
-  flagfitshunt1pedorledlowintensity_ = iConfig.getParameter<int>("flagfitshunt1pedorledlowintensity");              //
-  flagabortgaprejected_ = iConfig.getParameter<int>("flagabortgaprejected");                                        //
-  bcnrejectedlow_ = iConfig.getParameter<int>("bcnrejectedlow");                                                    //
-  bcnrejectedhigh_ = iConfig.getParameter<int>("bcnrejectedhigh");                                                  //
-  ratioHBMin_ = iConfig.getParameter<double>("ratioHBMin");                                                         //
-  ratioHBMax_ = iConfig.getParameter<double>("ratioHBMax");                                                         //
-  ratioHEMin_ = iConfig.getParameter<double>("ratioHEMin");                                                         //
-  ratioHEMax_ = iConfig.getParameter<double>("ratioHEMax");                                                         //
-  ratioHFMin_ = iConfig.getParameter<double>("ratioHFMin");                                                         //
-  ratioHFMax_ = iConfig.getParameter<double>("ratioHFMax");                                                         //
-  ratioHOMin_ = iConfig.getParameter<double>("ratioHOMin");                                                         //
-  ratioHOMax_ = iConfig.getParameter<double>("ratioHOMax");                                                         //
-  flagtodefinebadchannel_ = iConfig.getParameter<int>("flagtodefinebadchannel");                                    //
-  howmanybinsonplots_ = iConfig.getParameter<int>("howmanybinsonplots");                                            //
-  splashesUpperLimit_ = iConfig.getParameter<int>("splashesUpperLimit");                                            //
-  flagtoaskrunsorls_ = iConfig.getParameter<int>("flagtoaskrunsorls");                                              //
-  flagestimatornormalization_ = iConfig.getParameter<int>("flagestimatornormalization");                            //
-  flagcpuoptimization_ = iConfig.getParameter<int>("flagcpuoptimization");                                          //
-  flagupgradeqie1011_ = iConfig.getParameter<int>("flagupgradeqie1011");                                            //
-  flagsipmcorrection_ = iConfig.getParameter<int>("flagsipmcorrection");                                            //
-  flaguseshunt_ = iConfig.getParameter<int>("flaguseshunt");                                                        //
+  flagLaserRaddam_ = iConfig.getParameter<int>("flagLaserRaddam");                                                  
+  flagToUseDigiCollectionsORNot_ = iConfig.getParameter<int>("flagToUseDigiCollectionsORNot");  
+  flagIterativeMethodCalibrationGroupDigi_ = iConfig.getParameter<int>("flagIterativeMethodCalibrationGroupDigi");  
+  flagIterativeMethodCalibrationGroupReco_ = iConfig.getParameter<int>("flagIterativeMethodCalibrationGroupReco");  
+  flagfitshunt1pedorledlowintensity_ = iConfig.getParameter<int>("flagfitshunt1pedorledlowintensity");                
+  flagabortgaprejected_ = iConfig.getParameter<int>("flagabortgaprejected");                                          
+  bcnrejectedlow_ = iConfig.getParameter<int>("bcnrejectedlow");                                                      
+  bcnrejectedhigh_ = iConfig.getParameter<int>("bcnrejectedhigh");                                                    
+  ratioHBMin_ = iConfig.getParameter<double>("ratioHBMin");                                                           
+  ratioHBMax_ = iConfig.getParameter<double>("ratioHBMax");                                                           
+  ratioHEMin_ = iConfig.getParameter<double>("ratioHEMin");                                                           
+  ratioHEMax_ = iConfig.getParameter<double>("ratioHEMax");                                                           
+  ratioHFMin_ = iConfig.getParameter<double>("ratioHFMin");                                                           
+  ratioHFMax_ = iConfig.getParameter<double>("ratioHFMax");                                                           
+  ratioHOMin_ = iConfig.getParameter<double>("ratioHOMin");                                                           
+  ratioHOMax_ = iConfig.getParameter<double>("ratioHOMax");                                                           
+  flagtodefinebadchannel_ = iConfig.getParameter<int>("flagtodefinebadchannel");                                      
+  howmanybinsonplots_ = iConfig.getParameter<int>("howmanybinsonplots");                                               
+  splashesUpperLimit_ = iConfig.getParameter<int>("splashesUpperLimit");                                              
+  flagtoaskrunsorls_ = iConfig.getParameter<int>("flagtoaskrunsorls");                                                
+  flagestimatornormalization_ = iConfig.getParameter<int>("flagestimatornormalization");                              
+  flagcpuoptimization_ = iConfig.getParameter<int>("flagcpuoptimization");                                            
+  flagupgradeqie1011_ = iConfig.getParameter<int>("flagupgradeqie1011");                                              
+  flagsipmcorrection_ = iConfig.getParameter<int>("flagsipmcorrection");                                              
+  flaguseshunt_ = iConfig.getParameter<int>("flaguseshunt");                                                          
   lsdep_cut1_peak_HBdepth1_ = iConfig.getParameter<int>("lsdep_cut1_peak_HBdepth1");
   lsdep_cut1_peak_HBdepth2_ = iConfig.getParameter<int>("lsdep_cut1_peak_HBdepth2");
   lsdep_cut1_peak_HEdepth1_ = iConfig.getParameter<int>("lsdep_cut1_peak_HEdepth1");
@@ -2541,90 +2544,90 @@ CMTRawAnalyzer::CMTRawAnalyzer(const edm::ParameterSet& iConfig)
   lsdep_estimator5_HFdepth2_ = iConfig.getParameter<double>("lsdep_estimator5_HFdepth2");
   lsdep_estimator5_HOdepth4_ = iConfig.getParameter<double>("lsdep_estimator5_HOdepth4");
   forallestimators_amplitude_bigger_ = iConfig.getParameter<double>("forallestimators_amplitude_bigger");
-  rmsHBMin_ = iConfig.getParameter<double>("rmsHBMin");                    //
-  rmsHBMax_ = iConfig.getParameter<double>("rmsHBMax");                    //
-  rmsHEMin_ = iConfig.getParameter<double>("rmsHEMin");                    //
-  rmsHEMax_ = iConfig.getParameter<double>("rmsHEMax");                    //
-  rmsHFMin_ = iConfig.getParameter<double>("rmsHFMin");                    //
-  rmsHFMax_ = iConfig.getParameter<double>("rmsHFMax");                    //
-  rmsHOMin_ = iConfig.getParameter<double>("rmsHOMin");                    //
-  rmsHOMax_ = iConfig.getParameter<double>("rmsHOMax");                    //
-  ADCAmplHBMin_ = iConfig.getParameter<double>("ADCAmplHBMin");            //
-  ADCAmplHEMin_ = iConfig.getParameter<double>("ADCAmplHEMin");            //
-  ADCAmplHOMin_ = iConfig.getParameter<double>("ADCAmplHOMin");            //
-  ADCAmplHFMin_ = iConfig.getParameter<double>("ADCAmplHFMin");            //
-  ADCAmplHBMax_ = iConfig.getParameter<double>("ADCAmplHBMax");            //
-  ADCAmplHEMax_ = iConfig.getParameter<double>("ADCAmplHEMax");            //
-  ADCAmplHOMax_ = iConfig.getParameter<double>("ADCAmplHOMax");            //
-  ADCAmplHFMax_ = iConfig.getParameter<double>("ADCAmplHFMax");            //
-  pedestalwHBMax_ = iConfig.getParameter<double>("pedestalwHBMax");        //
-  pedestalwHEMax_ = iConfig.getParameter<double>("pedestalwHEMax");        //
-  pedestalwHFMax_ = iConfig.getParameter<double>("pedestalwHFMax");        //
-  pedestalwHOMax_ = iConfig.getParameter<double>("pedestalwHOMax");        //
-  pedestalHBMax_ = iConfig.getParameter<double>("pedestalHBMax");          //
-  pedestalHEMax_ = iConfig.getParameter<double>("pedestalHEMax");          //
-  pedestalHFMax_ = iConfig.getParameter<double>("pedestalHFMax");          //
-  pedestalHOMax_ = iConfig.getParameter<double>("pedestalHOMax");          //
-  calibrADCHBMin_ = iConfig.getParameter<double>("calibrADCHBMin");        //
-  calibrADCHEMin_ = iConfig.getParameter<double>("calibrADCHEMin");        //
-  calibrADCHOMin_ = iConfig.getParameter<double>("calibrADCHOMin");        //
-  calibrADCHFMin_ = iConfig.getParameter<double>("calibrADCHFMin");        //
-  calibrADCHBMax_ = iConfig.getParameter<double>("calibrADCHBMax");        //
-  calibrADCHEMax_ = iConfig.getParameter<double>("calibrADCHEMax");        //
-  calibrADCHOMax_ = iConfig.getParameter<double>("calibrADCHOMax");        //
-  calibrADCHFMax_ = iConfig.getParameter<double>("calibrADCHFMax");        //
-  calibrRatioHBMin_ = iConfig.getParameter<double>("calibrRatioHBMin");    //
-  calibrRatioHEMin_ = iConfig.getParameter<double>("calibrRatioHEMin");    //
-  calibrRatioHOMin_ = iConfig.getParameter<double>("calibrRatioHOMin");    //
-  calibrRatioHFMin_ = iConfig.getParameter<double>("calibrRatioHFMin");    //
-  calibrRatioHBMax_ = iConfig.getParameter<double>("calibrRatioHBMax");    //
-  calibrRatioHEMax_ = iConfig.getParameter<double>("calibrRatioHEMax");    //
-  calibrRatioHOMax_ = iConfig.getParameter<double>("calibrRatioHOMax");    //
-  calibrRatioHFMax_ = iConfig.getParameter<double>("calibrRatioHFMax");    //
-  calibrTSmaxHBMin_ = iConfig.getParameter<double>("calibrTSmaxHBMin");    //
-  calibrTSmaxHEMin_ = iConfig.getParameter<double>("calibrTSmaxHEMin");    //
-  calibrTSmaxHOMin_ = iConfig.getParameter<double>("calibrTSmaxHOMin");    //
-  calibrTSmaxHFMin_ = iConfig.getParameter<double>("calibrTSmaxHFMin");    //
-  calibrTSmaxHBMax_ = iConfig.getParameter<double>("calibrTSmaxHBMax");    //
-  calibrTSmaxHEMax_ = iConfig.getParameter<double>("calibrTSmaxHEMax");    //
-  calibrTSmaxHOMax_ = iConfig.getParameter<double>("calibrTSmaxHOMax");    //
-  calibrTSmaxHFMax_ = iConfig.getParameter<double>("calibrTSmaxHFMax");    //
-  calibrTSmeanHBMin_ = iConfig.getParameter<double>("calibrTSmeanHBMin");  //
-  calibrTSmeanHEMin_ = iConfig.getParameter<double>("calibrTSmeanHEMin");  //
-  calibrTSmeanHOMin_ = iConfig.getParameter<double>("calibrTSmeanHOMin");  //
-  calibrTSmeanHFMin_ = iConfig.getParameter<double>("calibrTSmeanHFMin");  //
-  calibrTSmeanHBMax_ = iConfig.getParameter<double>("calibrTSmeanHBMax");  //
-  calibrTSmeanHEMax_ = iConfig.getParameter<double>("calibrTSmeanHEMax");  //
-  calibrTSmeanHOMax_ = iConfig.getParameter<double>("calibrTSmeanHOMax");  //
-  calibrTSmeanHFMax_ = iConfig.getParameter<double>("calibrTSmeanHFMax");  //
-  calibrWidthHBMin_ = iConfig.getParameter<double>("calibrWidthHBMin");    //
-  calibrWidthHEMin_ = iConfig.getParameter<double>("calibrWidthHEMin");    //
-  calibrWidthHOMin_ = iConfig.getParameter<double>("calibrWidthHOMin");    //
-  calibrWidthHFMin_ = iConfig.getParameter<double>("calibrWidthHFMin");    //
-  calibrWidthHBMax_ = iConfig.getParameter<double>("calibrWidthHBMax");    //
-  calibrWidthHEMax_ = iConfig.getParameter<double>("calibrWidthHEMax");    //
-  calibrWidthHOMax_ = iConfig.getParameter<double>("calibrWidthHOMax");    //
-  calibrWidthHFMax_ = iConfig.getParameter<double>("calibrWidthHFMax");    //
+  rmsHBMin_ = iConfig.getParameter<double>("rmsHBMin");                    
+  rmsHBMax_ = iConfig.getParameter<double>("rmsHBMax");                    
+  rmsHEMin_ = iConfig.getParameter<double>("rmsHEMin");                    
+  rmsHEMax_ = iConfig.getParameter<double>("rmsHEMax");                    
+  rmsHFMin_ = iConfig.getParameter<double>("rmsHFMin");                    
+  rmsHFMax_ = iConfig.getParameter<double>("rmsHFMax");                    
+  rmsHOMin_ = iConfig.getParameter<double>("rmsHOMin");                    
+  rmsHOMax_ = iConfig.getParameter<double>("rmsHOMax");                    
+  ADCAmplHBMin_ = iConfig.getParameter<double>("ADCAmplHBMin");            
+  ADCAmplHEMin_ = iConfig.getParameter<double>("ADCAmplHEMin");            
+  ADCAmplHOMin_ = iConfig.getParameter<double>("ADCAmplHOMin");            
+  ADCAmplHFMin_ = iConfig.getParameter<double>("ADCAmplHFMin");            
+  ADCAmplHBMax_ = iConfig.getParameter<double>("ADCAmplHBMax");            
+  ADCAmplHEMax_ = iConfig.getParameter<double>("ADCAmplHEMax");            
+  ADCAmplHOMax_ = iConfig.getParameter<double>("ADCAmplHOMax");            
+  ADCAmplHFMax_ = iConfig.getParameter<double>("ADCAmplHFMax");            
+  pedestalwHBMax_ = iConfig.getParameter<double>("pedestalwHBMax");        
+  pedestalwHEMax_ = iConfig.getParameter<double>("pedestalwHEMax");        
+  pedestalwHFMax_ = iConfig.getParameter<double>("pedestalwHFMax");        
+  pedestalwHOMax_ = iConfig.getParameter<double>("pedestalwHOMax");        
+  pedestalHBMax_ = iConfig.getParameter<double>("pedestalHBMax");          
+  pedestalHEMax_ = iConfig.getParameter<double>("pedestalHEMax");          
+  pedestalHFMax_ = iConfig.getParameter<double>("pedestalHFMax");          
+  pedestalHOMax_ = iConfig.getParameter<double>("pedestalHOMax");          
+  calibrADCHBMin_ = iConfig.getParameter<double>("calibrADCHBMin");        
+  calibrADCHEMin_ = iConfig.getParameter<double>("calibrADCHEMin");        
+  calibrADCHOMin_ = iConfig.getParameter<double>("calibrADCHOMin");        
+  calibrADCHFMin_ = iConfig.getParameter<double>("calibrADCHFMin");        
+  calibrADCHBMax_ = iConfig.getParameter<double>("calibrADCHBMax");        
+  calibrADCHEMax_ = iConfig.getParameter<double>("calibrADCHEMax");        
+  calibrADCHOMax_ = iConfig.getParameter<double>("calibrADCHOMax");        
+  calibrADCHFMax_ = iConfig.getParameter<double>("calibrADCHFMax");        
+  calibrRatioHBMin_ = iConfig.getParameter<double>("calibrRatioHBMin");    
+  calibrRatioHEMin_ = iConfig.getParameter<double>("calibrRatioHEMin");    
+  calibrRatioHOMin_ = iConfig.getParameter<double>("calibrRatioHOMin");    
+  calibrRatioHFMin_ = iConfig.getParameter<double>("calibrRatioHFMin");    
+  calibrRatioHBMax_ = iConfig.getParameter<double>("calibrRatioHBMax");    
+  calibrRatioHEMax_ = iConfig.getParameter<double>("calibrRatioHEMax");    
+  calibrRatioHOMax_ = iConfig.getParameter<double>("calibrRatioHOMax");    
+  calibrRatioHFMax_ = iConfig.getParameter<double>("calibrRatioHFMax");    
+  calibrTSmaxHBMin_ = iConfig.getParameter<double>("calibrTSmaxHBMin");    
+  calibrTSmaxHEMin_ = iConfig.getParameter<double>("calibrTSmaxHEMin");    
+  calibrTSmaxHOMin_ = iConfig.getParameter<double>("calibrTSmaxHOMin");    
+  calibrTSmaxHFMin_ = iConfig.getParameter<double>("calibrTSmaxHFMin");    
+  calibrTSmaxHBMax_ = iConfig.getParameter<double>("calibrTSmaxHBMax");    
+  calibrTSmaxHEMax_ = iConfig.getParameter<double>("calibrTSmaxHEMax");    
+  calibrTSmaxHOMax_ = iConfig.getParameter<double>("calibrTSmaxHOMax");    
+  calibrTSmaxHFMax_ = iConfig.getParameter<double>("calibrTSmaxHFMax");    
+  calibrTSmeanHBMin_ = iConfig.getParameter<double>("calibrTSmeanHBMin");  
+  calibrTSmeanHEMin_ = iConfig.getParameter<double>("calibrTSmeanHEMin");  
+  calibrTSmeanHOMin_ = iConfig.getParameter<double>("calibrTSmeanHOMin");  
+  calibrTSmeanHFMin_ = iConfig.getParameter<double>("calibrTSmeanHFMin");  
+  calibrTSmeanHBMax_ = iConfig.getParameter<double>("calibrTSmeanHBMax");  
+  calibrTSmeanHEMax_ = iConfig.getParameter<double>("calibrTSmeanHEMax");  
+  calibrTSmeanHOMax_ = iConfig.getParameter<double>("calibrTSmeanHOMax");  
+  calibrTSmeanHFMax_ = iConfig.getParameter<double>("calibrTSmeanHFMax");  
+  calibrWidthHBMin_ = iConfig.getParameter<double>("calibrWidthHBMin");    
+  calibrWidthHEMin_ = iConfig.getParameter<double>("calibrWidthHEMin");    
+  calibrWidthHOMin_ = iConfig.getParameter<double>("calibrWidthHOMin");    
+  calibrWidthHFMin_ = iConfig.getParameter<double>("calibrWidthHFMin");    
+  calibrWidthHBMax_ = iConfig.getParameter<double>("calibrWidthHBMax");    
+  calibrWidthHEMax_ = iConfig.getParameter<double>("calibrWidthHEMax");    
+  calibrWidthHOMax_ = iConfig.getParameter<double>("calibrWidthHOMax");    
+  calibrWidthHFMax_ = iConfig.getParameter<double>("calibrWidthHFMax");    
   //  fOutputFileName = iConfig.getUntrackedParameter<std::string>("HistOutFile");
   //  MAPOutputFileName = iConfig.getUntrackedParameter<std::string>("MAPOutFile");
-  TSpeakHBMin_ = iConfig.getParameter<double>("TSpeakHBMin");  //
-  TSpeakHBMax_ = iConfig.getParameter<double>("TSpeakHBMax");  //
-  TSpeakHEMin_ = iConfig.getParameter<double>("TSpeakHEMin");  //
-  TSpeakHEMax_ = iConfig.getParameter<double>("TSpeakHEMax");  //
-  TSpeakHFMin_ = iConfig.getParameter<double>("TSpeakHFMin");  //
-  TSpeakHFMax_ = iConfig.getParameter<double>("TSpeakHFMax");  //
-  TSpeakHOMin_ = iConfig.getParameter<double>("TSpeakHOMin");  //
-  TSpeakHOMax_ = iConfig.getParameter<double>("TSpeakHOMax");  //
-  TSmeanHBMin_ = iConfig.getParameter<double>("TSmeanHBMin");  //
-  TSmeanHBMax_ = iConfig.getParameter<double>("TSmeanHBMax");  //
-  TSmeanHEMin_ = iConfig.getParameter<double>("TSmeanHEMin");  //
-  TSmeanHEMax_ = iConfig.getParameter<double>("TSmeanHEMax");  //
-  TSmeanHFMin_ = iConfig.getParameter<double>("TSmeanHFMin");  //
-  TSmeanHFMax_ = iConfig.getParameter<double>("TSmeanHFMax");  //
-  TSmeanHOMin_ = iConfig.getParameter<double>("TSmeanHOMin");  //
-  TSmeanHOMax_ = iConfig.getParameter<double>("TSmeanHOMax");  //
-  lsmin_ = iConfig.getParameter<int>("lsmin");                 //
-  lsmax_ = iConfig.getParameter<int>("lsmax");                 //
+  TSpeakHBMin_ = iConfig.getParameter<double>("TSpeakHBMin");  
+  TSpeakHBMax_ = iConfig.getParameter<double>("TSpeakHBMax");  
+  TSpeakHEMin_ = iConfig.getParameter<double>("TSpeakHEMin");  
+  TSpeakHEMax_ = iConfig.getParameter<double>("TSpeakHEMax");  
+  TSpeakHFMin_ = iConfig.getParameter<double>("TSpeakHFMin");  
+  TSpeakHFMax_ = iConfig.getParameter<double>("TSpeakHFMax");  
+  TSpeakHOMin_ = iConfig.getParameter<double>("TSpeakHOMin");  
+  TSpeakHOMax_ = iConfig.getParameter<double>("TSpeakHOMax");  
+  TSmeanHBMin_ = iConfig.getParameter<double>("TSmeanHBMin");  
+  TSmeanHBMax_ = iConfig.getParameter<double>("TSmeanHBMax");  
+  TSmeanHEMin_ = iConfig.getParameter<double>("TSmeanHEMin");  
+  TSmeanHEMax_ = iConfig.getParameter<double>("TSmeanHEMax");  
+  TSmeanHFMin_ = iConfig.getParameter<double>("TSmeanHFMin");  
+  TSmeanHFMax_ = iConfig.getParameter<double>("TSmeanHFMax");  
+  TSmeanHOMin_ = iConfig.getParameter<double>("TSmeanHOMin");  
+  TSmeanHOMax_ = iConfig.getParameter<double>("TSmeanHOMax");  
+  lsmin_ = iConfig.getParameter<int>("lsmin");                 
+  lsmax_ = iConfig.getParameter<int>("lsmax");                 
   alsmin = lsmin_;
   blsmax = lsmax_;
   nlsminmax = lsmax_ - lsmin_ + 1;
@@ -2696,6 +2699,7 @@ CMTRawAnalyzer::CMTRawAnalyzer(const edm::ParameterSet& iConfig)
 }
 CMTRawAnalyzer::~CMTRawAnalyzer() {}
 void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
+  if(verbosity== -300) std::cout << " -------------111111-----------analyze--------------- " << std::endl;
   conditions = &iSetup.getData(tokDB_);
   topo = &iSetup.getData(tokTopo_);
   if (MAPcreation > 0) {
@@ -2703,6 +2707,7 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       fillMAP();
     MAPcreation = 0;
   }
+  if(verbosity== -300) std::cout << " -------------2-----------analyze--------------- " << std::endl;
   nevent++;
   nevent50 = nevent / 50;
   Run = iEvent.id().run();
@@ -2710,12 +2715,14 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   lumi = iEvent.luminosityBlock();  // lumi section
   bcn = iEvent.bunchCrossing();
   orbitNum = iEvent.orbitNumber();
+    if(verbosity == -1959) std::cout << "000000000000000000AZ --Nevent =    " << Nevent << " --lumi =    " << lumi << " --bcn =    " << bcn << " --orbitNum =    " << orbitNum << std::endl;
   int outabortgap = 1;
   if (bcn >= bcnrejectedlow_ && bcn <= bcnrejectedhigh_)
     outabortgap = 0;  //  if(bcn>=3446 && bcn<=3564)
 
   if ((flagabortgaprejected_ == 1 && outabortgap == 1) || (flagabortgaprejected_ == 0 && outabortgap == 0) ||
       flagabortgaprejected_ == 2) {
+  if(verbosity== -300) std::cout << " -------------3-----------analyze--------------- " << std::endl;
     if (run0 != Run) {
       ++runcounter;
       if (runcounter != 1) {
@@ -2741,10 +2748,12 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       nevcounter00 = 0;
     }  //else new run
     ++eventcounter;
+    if(verbosity == -1959) std::cout << "0000000000000000000022222222AZ --ls0 =    " << ls0  << "--lumi =    " << lumi << std::endl;
     if (ls0 != lumi) {
       if (ls0 != -1) {
         h_nevents_per_eachLS->Fill(float(lscounter), float(nevcounter));  //
         nevcounter0 = nevcounter;
+    if(verbosity == -1959) std::cout << "00000000000022222222AZ --nevcounter0 =    " << nevcounter0  << "--ls0 =    " << ls0 << std::endl;
       }  // ls0>-1
       lscounter++;
       lscounterrun++;
@@ -2774,6 +2783,9 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       lscounterM1 = runcounter;
       nevcounter0 = nevcounter00;
     }
+    if(verbosity == -1959) std::cout << "1111111111111AZ --lscounterM1 =    " << lscounterM1 << " --lscounter =    " << lscounter << " --runcounter =    " << runcounter << std::endl;
+    if(verbosity == -1959) std::cout << "22222222AZ --ls0 =    " << ls0  << "--lscounter10 =    " << lscounter10  << "-lscounterrun10 =    " << lscounterrun10  << "--lumi =    " << lumi << std::endl;
+    if(verbosity == -1959) std::cout << "33333AZ --nevcounter0 =    " << nevcounter0 << " --nevcounter =    " << nevcounter << std::endl;
     if (nevcounter0 != 0 || nevcounter > 99999) {
       if (nevcounter > 99999)
         nevcounter0 = 1;
@@ -2922,6 +2934,9 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
                 //=0-normalizationOn#evOfLS;   =1-averagedMeanChannelVariable;   =2-averageVariable-normalizationOn#entriesInLS;
                 //flagestimatornormalization = cms.int32(2), !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 // zhokin 18.10.2018 STUDY:               CALL  HFF2 (ID,NID,X,Y,W)
+		if(verbosity == -1958) std::cout << "AZ --lscounterM1 =    " << lscounterM1 << std::endl;
+		if(verbosity == -1958) std::cout << "AZ --sumEstimator1[k0][k1][k2][k3] =    " << sumEstimator1[k0][k1][k2][k3]  << "    --sum0Estimator[k0][k1][k2][k3] =    " << sum0Estimator[k0][k1][k2][k3] << std::endl;
+		if(verbosity == -1958) std::cout << "AZ --bbbc =    " << bbbc  << "    --bbb1 =    " << bbb1 << std::endl;
                 if (lscounterM1 >= lsmin_ && lscounterM1 < lsmax_) {
                   //                                       INDEXIES:
                   int kkkk2 = (k2 - 1) / 4;
@@ -4189,6 +4204,12 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////       END of GENERAL NULLING       ////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+    if (flagToUseDigiCollectionsORNot_ != 0 ) {
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////      START of DigiCollections running:          ///////////////////////////////////
     ////////////////////////////////////////////////////////////////////
     if (flagupgradeqie1011_ != 2 && flagupgradeqie1011_ != 3 && flagupgradeqie1011_ != 6 && flagupgradeqie1011_ != 7 &&
@@ -4607,6 +4628,10 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       h_totalAmplitudeHO->Fill(totalAmplitudeHO);
       h_totalAmplitudeHOperEvent->Fill(float(eventcounter), totalAmplitudeHO);
     }  //ho.isValid(
+    //////////////////////////////////////////////////////////////////////////////
+  }// flagToUseDigiCollectionsORNot_
+
+
 
     //////////////////////////////////// RecHits for phi-symmetry monitoring of calibration group:
     // AZ 04.11.2019
@@ -4655,12 +4680,12 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 
           //std::cout<<sub<<std::endl;
           if (hid.depth() == 1 && sub == 1 && hid.iphi() == 25) {
-            if (verbosity == -9063)
+            if (verbosity < 0)
               std::cout << " Noise,sub = " << sub << " mdepth = " << hid.depth() << "  ieta= " << hid.ieta()
                         << "  iphi= " << hid.iphi() << "  energyhit= " << energyhit << std::endl;
           }
           if (hid.depth() == 1 && sub == 2 && hid.iphi() == 25) {
-            if (verbosity == -9063)
+            if (verbosity < 0)
               std::cout << " Noise,sub = " << sub << " mdepth = " << hid.depth() << "  ieta= " << hid.ieta()
                         << "  iphi= " << hid.iphi() << "  energyhit= " << energyhit << std::endl;
           }
@@ -4710,7 +4735,7 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 
           //std::cout<<sub<<std::endl;
           if (hid.iphi() == 25) {
-            if (verbosity == -9065)
+            if (verbosity < 0)
               std::cout << "HF Noise,sub = " << sub << " mdepth = " << hid.depth() << "  ieta= " << hid.ieta()
                         << "  iphi= " << hid.iphi() << "  energyhit= " << energyhit << std::endl;
           }
@@ -4768,12 +4793,12 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 
           //std::cout<<sub<<std::endl;
           if (hid.depth() == 1 && sub == 1 && hid.iphi() == 25) {
-            if (verbosity == -9062)
+            if (verbosity < 0)
               std::cout << "HBHE Signal,sub = " << sub << " mdepth = " << hid.depth() << "  ieta= " << hid.ieta()
                         << "  iphi= " << hid.iphi() << "  energyhit= " << energyhit << std::endl;
           }
           if (hid.depth() == 1 && sub == 2 && hid.iphi() == 25) {
-            if (verbosity == -9062)
+            if (verbosity < 0)
               std::cout << "HBHE Signal,sub = " << sub << " mdepth = " << hid.depth() << "  ieta= " << hid.ieta()
                         << "  iphi= " << hid.iphi() << "  energyhit= " << energyhit << std::endl;
           }
@@ -4823,7 +4848,7 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 
           //std::cout<<sub<<std::endl;
           if (hid.iphi() == 25) {
-            if (verbosity == -9064)
+            if (verbosity < 0)
               std::cout << "HF Signal,sub = " << sub << " mdepth = " << hid.depth() << "  ieta= " << hid.ieta()
                         << "  iphi= " << hid.iphi() << "  energyhit= " << energyhit << std::endl;
           }
@@ -4875,7 +4900,7 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
                 if (tocamplchannel[k0][k1][k2][k3] != 0) {
                   sumoverphi += tocamplchannel[k0][k1][k2][k3];
                   ++nsumoverphi;
-                  if (verbosity == -9504)
+                  if (verbosity < 0)
                     std::cout << "==== nsumoverphi = " << nsumoverphi << "  sumoverphi = " << sumoverphi
                               << "  k1 = " << k1 << "  k2 = " << k2 << " kkk = " << kkk << "  k3 = " << k3 << std::endl;
                 }  //if != 0
@@ -4884,7 +4909,7 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
               for (int k3 = 0; k3 < nphi; k3++) {
                 if (nsumoverphi != 0) {
                   maprphinorm[k0][k1][k2][k3] = tocamplchannel[k0][k1][k2][k3] / (sumoverphi / nsumoverphi);
-                  if (verbosity == -9504)
+                  if (verbosity < 0)
                     std::cout << "nsumoverphi= " << nsumoverphi << " sumoverphi= " << sumoverphi << " k1= " << k1
                               << " k2= " << k2 << " kkk= " << kkk << " k3= " << k3
                               << " maprphinorm= " << maprphinorm[k0][k1][k2][k3] << std::endl;
@@ -6119,9 +6144,9 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 
     ///////////////////////////////////////////////////
     if (++local_event % 100 == 0) {
-      if (verbosity == -22)
+      if (verbosity < 0)
         std::cout << "run " << Run << " processing events " << local_event << " ok, "
-                  << ", lumi " << lumi << ", numOfLaserEv " << numOfLaserEv << std::endl;
+                  << ", lumi " << lumi << ", numOfEv " << nevcounter << std::endl;
     }
   }  // bcn
 
@@ -6627,12 +6652,12 @@ void CMTRawAnalyzer::beginJob() {
     h_amplitudechannel2_HF4 = fs_->make<TH2F>("h_amplitudechannel2_HF4", " ", neta, -41., 41., nphi, 0., bphi);
 
     // Reco
-    h_energyhitSignal_HB = fs_->make<TH1F>("h_energyhitSignal_HB", " ", npfit, 0., 0.);  //
-    h_energyhitSignal_HE = fs_->make<TH1F>("h_energyhitSignal_HE", " ", npfit, 0., 0.);  //
-    h_energyhitSignal_HF = fs_->make<TH1F>("h_energyhitSignal_HF", " ", npfit, 0., 0.);  //
-    h_energyhitNoise_HB = fs_->make<TH1F>("h_energyhitNoise_HB", " ", npfit, 0., 0.);    //
-    h_energyhitNoise_HE = fs_->make<TH1F>("h_energyhitNoise_HE", " ", npfit, 0., 0.);    //
-    h_energyhitNoise_HF = fs_->make<TH1F>("h_energyhitNoise_HF", " ", npfit, 0., 0.);    //
+    h_energyhitSignal_HB = fs_->make<TH1F>("h_energyhitSignal_HB", " ", npfit, -0.22, 0.22);  //
+    h_energyhitSignal_HE = fs_->make<TH1F>("h_energyhitSignal_HE", " ", npfit, -0.22, 0.22);  //
+    h_energyhitSignal_HF = fs_->make<TH1F>("h_energyhitSignal_HF", " ", npfit, -6.6, 6.6);  //
+    h_energyhitNoise_HB = fs_->make<TH1F>("h_energyhitNoise_HB", " ", npfit, -0.22, 0.22);    //
+    h_energyhitNoise_HE = fs_->make<TH1F>("h_energyhitNoise_HE", " ", npfit, -0.22, 0.22);    //
+    h_energyhitNoise_HF = fs_->make<TH1F>("h_energyhitNoise_HF", " ", npfit, -4.4, 4.4);    //
 
     //HB:
     h_recSignalEnergy0_HB1 = fs_->make<TH2F>("h_recSignalEnergy0_HB1", " ", neta, -41., 41., nphi, 0., bphi);
@@ -8042,7 +8067,7 @@ void CMTRawAnalyzer::beginJob() {
 void CMTRawAnalyzer::fillDigiErrors(HBHEDigiCollection::const_iterator& digiItr) {
   CaloSamples toolOriginal;  // TS
   //    double tool[100];
-  if (verbosity == -22)
+  if (verbosity < 0)
     std::cout << "**************   in loop over Digis   counter =     " << nnnnnnhbhe << std::endl;
   HcalDetId cell(digiItr->id());
   int mdepth = cell.depth();
