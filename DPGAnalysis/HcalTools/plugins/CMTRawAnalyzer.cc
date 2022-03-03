@@ -1,6 +1,5 @@
 // -*- C++ -*-
 //
-//    QIE10DataFrame
 //
 // Package:    CMTRawAnalyzer
 //
@@ -11,19 +10,15 @@
 #include <bitset>
 #include <memory>
 
-//using namespace std;
-//#include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "FWCore/PluginManager/interface/ModuleDef.h"
 #include "FWCore/Framework/interface/Frameworkfwd.h"
-//#include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/one/EDAnalyzer.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
-// this line is to retrieve HCAL RecHitCollections:
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "DataFormats/HcalRecHit/interface/HcalRecHitCollections.h"
 #include "DataFormats/HcalDetId/interface/HcalElectronicsId.h"
@@ -72,7 +67,6 @@
 #include "TF1.h"
 
 #define NUMADCS 256
-// very preliminary,  NEEDS UPDATING
 double adc2fC_QIE10[NUMADCS] = {
     // - - - - - - - range 0 - - - - - - - -
     //subrange0
@@ -433,7 +427,6 @@ const int npfit = 220;
 const float anpfit = 220.;  // for SiPM:
 
 //
-//
 class CMTRawAnalyzer : public edm::one::EDAnalyzer<edm::one::WatchRuns, edm::one::SharedResources> {
 public:
   explicit CMTRawAnalyzer(const edm::ParameterSet&);
@@ -456,15 +449,12 @@ private:
   edm::EDGetTokenT<HFDigiCollection> tok_hf_;
   edm::EDGetTokenT<QIE11DigiCollection> tok_qie11_;
   edm::EDGetTokenT<QIE10DigiCollection> tok_qie10_;
-  // phi-symmetry monitoring for calibration group:
   edm::EDGetTokenT<HBHERecHitCollection> tok_hbheSignal_;
   edm::EDGetTokenT<HBHERecHitCollection> tok_hbheNoise_;
   edm::EDGetTokenT<HFRecHitCollection> tok_hfSignal_;
   edm::EDGetTokenT<HFRecHitCollection> tok_hfNoise_;
 
   edm::Service<TFileService> fs_;
-  //  std::string fOutputFileName;
-  //  std::string MAPOutputFileName;
   edm::InputTag inputTag_;
   const edm::ESGetToken<HcalDbService, HcalDbRecord> tokDB_;
   const edm::ESGetToken<HcalTopology, HcalRecNumberingRecord> tokTopo_;
@@ -546,15 +536,12 @@ private:
   double lsdep_estimator1_HFdepth1_;
   double lsdep_estimator1_HFdepth2_;
   double lsdep_estimator1_HOdepth4_;
-  // HE upgrade:
   double lsdep_estimator1_HEdepth4_;
   double lsdep_estimator1_HEdepth5_;
   double lsdep_estimator1_HEdepth6_;
   double lsdep_estimator1_HEdepth7_;
-  // HF upgrade:
   double lsdep_estimator1_HFdepth3_;
   double lsdep_estimator1_HFdepth4_;
-  // HB upgrade:
   double lsdep_estimator1_HBdepth3_;
   double lsdep_estimator1_HBdepth4_;
 
@@ -2189,9 +2176,6 @@ private:
   TH2F* h_recNoiseEnergy1_HF4;
   TH2F* h_recNoiseEnergy2_HF4;
 
-  // Digi as Reco:
-
-  //HB:
   TH2F* h_amplitudechannel0_HB1;
   TH2F* h_amplitudechannel1_HB1;
   TH2F* h_amplitudechannel2_HB1;
@@ -2204,7 +2188,6 @@ private:
   TH2F* h_amplitudechannel0_HB4;
   TH2F* h_amplitudechannel1_HB4;
   TH2F* h_amplitudechannel2_HB4;
-  //HE:
   TH2F* h_amplitudechannel0_HE1;
   TH2F* h_amplitudechannel1_HE1;
   TH2F* h_amplitudechannel2_HE1;
@@ -2226,7 +2209,6 @@ private:
   TH2F* h_amplitudechannel0_HE7;
   TH2F* h_amplitudechannel1_HE7;
   TH2F* h_amplitudechannel2_HE7;
-  //HF:
   TH2F* h_amplitudechannel0_HF1;
   TH2F* h_amplitudechannel1_HF1;
   TH2F* h_amplitudechannel2_HF1;
@@ -2239,7 +2221,7 @@ private:
   TH2F* h_amplitudechannel0_HF4;
   TH2F* h_amplitudechannel1_HF4;
   TH2F* h_amplitudechannel2_HF4;
-  // RADDAM:
+
   TH2F* h_mapDepth1RADDAM_HE;
   TH2F* h_mapDepth2RADDAM_HE;
   TH2F* h_mapDepth3RADDAM_HE;
@@ -2283,7 +2265,7 @@ private:
   double calib3[ndepth][neta][nphi];
   double signal3[ndepth][neta][nphi];
   double calib2[ndepth][neta][nphi];
-  int badchannels[nsub][ndepth][neta][nphi];  // for upgrade
+  int badchannels[nsub][ndepth][neta][nphi];
   double sumEstimator0[nsub][ndepth][neta][nphi];
   double sumEstimator1[nsub][ndepth][neta][nphi];
   double sumEstimator2[nsub][ndepth][neta][nphi];
@@ -2299,7 +2281,7 @@ private:
   double amplitudechannel2[nsub][ndepth][neta][nphi];
   double tocamplchannel[nsub][ndepth][neta][nphi];
   double maprphinorm[nsub][ndepth][neta][nphi];
-  // rec energy:
+
   double recNoiseEnergy0[nsub][ndepth][neta][nphi];
   double recNoiseEnergy1[nsub][ndepth][neta][nphi];
   double recNoiseEnergy2[nsub][ndepth][neta][nphi];
@@ -2314,9 +2296,9 @@ private:
   int mapRADDAM0_HE[ndepth][neta][nphi];
   double mapRADDAM_HED2[ndepth][neta];
   int mapRADDAM_HED20[ndepth][neta];
-  //  float binanpfit = anpfit / npfit;
-  //  long int gsmdepth1sipm[npfit][neta][nphi][ndepth];
-  ///////////////////////////////////////////// end massives
+  float binanpfit = anpfit / npfit;
+  long int gsmdepth1sipm[npfit][neta][nphi][ndepth];
+  /////////////////////////////////////////////
   long int Nevent;
   int Run;
   int run0;
@@ -2426,10 +2408,10 @@ CMTRawAnalyzer::CMTRawAnalyzer(const edm::ParameterSet& iConfig)
   MAPcreation = iConfig.getUntrackedParameter<int>("MapCreation");
   recordNtuples_ = iConfig.getUntrackedParameter<bool>("recordNtuples");
   maxNeventsInNtuple_ = iConfig.getParameter<int>("maxNeventsInNtuple");
-  tok_calib_ = consumes<HcalCalibDigiCollection>(iConfig.getParameter<edm::InputTag>("hcalCalibDigiCollectionTag"));  
+  tok_calib_ = consumes<HcalCalibDigiCollection>(iConfig.getParameter<edm::InputTag>("hcalCalibDigiCollectionTag"));  //
   tok_hbhe_ = consumes<HBHEDigiCollection>(iConfig.getParameter<edm::InputTag>("hbheDigiCollectionTag"));
   tok_ho_ = consumes<HODigiCollection>(iConfig.getParameter<edm::InputTag>("hoDigiCollectionTag"));
-  tok_hf_ = consumes<HFDigiCollection>(iConfig.getParameter<edm::InputTag>("hfDigiCollectionTag"));  
+  tok_hf_ = consumes<HFDigiCollection>(iConfig.getParameter<edm::InputTag>("hfDigiCollectionTag"));  //
   tok_qie11_ = consumes<QIE11DigiCollection>(iConfig.getParameter<edm::InputTag>("hbheQIE11DigiCollectionTag"));
   tok_qie10_ = consumes<QIE10DigiCollection>(iConfig.getParameter<edm::InputTag>("hbheQIE10DigiCollectionTag"));
   // phi-symmetry monitoring for calibration group:
@@ -2454,31 +2436,31 @@ CMTRawAnalyzer::CMTRawAnalyzer(const edm::ParameterSet& iConfig)
   useADCcounts_ = iConfig.getUntrackedParameter<bool>("useADCcounts");
   usePedestalSubtraction_ = iConfig.getUntrackedParameter<bool>("usePedestalSubtraction");
   usecontinuousnumbering_ = iConfig.getUntrackedParameter<bool>("usecontinuousnumbering");
-  flagLaserRaddam_ = iConfig.getParameter<int>("flagLaserRaddam");                                                  
-  flagToUseDigiCollectionsORNot_ = iConfig.getParameter<int>("flagToUseDigiCollectionsORNot");  
-  flagIterativeMethodCalibrationGroupDigi_ = iConfig.getParameter<int>("flagIterativeMethodCalibrationGroupDigi");  
-  flagIterativeMethodCalibrationGroupReco_ = iConfig.getParameter<int>("flagIterativeMethodCalibrationGroupReco");  
-  flagfitshunt1pedorledlowintensity_ = iConfig.getParameter<int>("flagfitshunt1pedorledlowintensity");                
-  flagabortgaprejected_ = iConfig.getParameter<int>("flagabortgaprejected");                                          
-  bcnrejectedlow_ = iConfig.getParameter<int>("bcnrejectedlow");                                                      
-  bcnrejectedhigh_ = iConfig.getParameter<int>("bcnrejectedhigh");                                                    
-  ratioHBMin_ = iConfig.getParameter<double>("ratioHBMin");                                                           
-  ratioHBMax_ = iConfig.getParameter<double>("ratioHBMax");                                                           
-  ratioHEMin_ = iConfig.getParameter<double>("ratioHEMin");                                                           
-  ratioHEMax_ = iConfig.getParameter<double>("ratioHEMax");                                                           
-  ratioHFMin_ = iConfig.getParameter<double>("ratioHFMin");                                                           
-  ratioHFMax_ = iConfig.getParameter<double>("ratioHFMax");                                                           
-  ratioHOMin_ = iConfig.getParameter<double>("ratioHOMin");                                                           
-  ratioHOMax_ = iConfig.getParameter<double>("ratioHOMax");                                                           
-  flagtodefinebadchannel_ = iConfig.getParameter<int>("flagtodefinebadchannel");                                      
-  howmanybinsonplots_ = iConfig.getParameter<int>("howmanybinsonplots");                                               
-  splashesUpperLimit_ = iConfig.getParameter<int>("splashesUpperLimit");                                              
-  flagtoaskrunsorls_ = iConfig.getParameter<int>("flagtoaskrunsorls");                                                
-  flagestimatornormalization_ = iConfig.getParameter<int>("flagestimatornormalization");                              
-  flagcpuoptimization_ = iConfig.getParameter<int>("flagcpuoptimization");                                            
-  flagupgradeqie1011_ = iConfig.getParameter<int>("flagupgradeqie1011");                                              
-  flagsipmcorrection_ = iConfig.getParameter<int>("flagsipmcorrection");                                              
-  flaguseshunt_ = iConfig.getParameter<int>("flaguseshunt");                                                          
+  flagLaserRaddam_ = iConfig.getParameter<int>("flagLaserRaddam");
+  flagToUseDigiCollectionsORNot_ = iConfig.getParameter<int>("flagToUseDigiCollectionsORNot");
+  flagIterativeMethodCalibrationGroupDigi_ = iConfig.getParameter<int>("flagIterativeMethodCalibrationGroupDigi");
+  flagIterativeMethodCalibrationGroupReco_ = iConfig.getParameter<int>("flagIterativeMethodCalibrationGroupReco");
+  flagfitshunt1pedorledlowintensity_ = iConfig.getParameter<int>("flagfitshunt1pedorledlowintensity");
+  flagabortgaprejected_ = iConfig.getParameter<int>("flagabortgaprejected");
+  bcnrejectedlow_ = iConfig.getParameter<int>("bcnrejectedlow");
+  bcnrejectedhigh_ = iConfig.getParameter<int>("bcnrejectedhigh");
+  ratioHBMin_ = iConfig.getParameter<double>("ratioHBMin");
+  ratioHBMax_ = iConfig.getParameter<double>("ratioHBMax");
+  ratioHEMin_ = iConfig.getParameter<double>("ratioHEMin");
+  ratioHEMax_ = iConfig.getParameter<double>("ratioHEMax");
+  ratioHFMin_ = iConfig.getParameter<double>("ratioHFMin");
+  ratioHFMax_ = iConfig.getParameter<double>("ratioHFMax");
+  ratioHOMin_ = iConfig.getParameter<double>("ratioHOMin");
+  ratioHOMax_ = iConfig.getParameter<double>("ratioHOMax");
+  flagtodefinebadchannel_ = iConfig.getParameter<int>("flagtodefinebadchannel");
+  howmanybinsonplots_ = iConfig.getParameter<int>("howmanybinsonplots");
+  splashesUpperLimit_ = iConfig.getParameter<int>("splashesUpperLimit");
+  flagtoaskrunsorls_ = iConfig.getParameter<int>("flagtoaskrunsorls");
+  flagestimatornormalization_ = iConfig.getParameter<int>("flagestimatornormalization");
+  flagcpuoptimization_ = iConfig.getParameter<int>("flagcpuoptimization");
+  flagupgradeqie1011_ = iConfig.getParameter<int>("flagupgradeqie1011");
+  flagsipmcorrection_ = iConfig.getParameter<int>("flagsipmcorrection");
+  flaguseshunt_ = iConfig.getParameter<int>("flaguseshunt");
   lsdep_cut1_peak_HBdepth1_ = iConfig.getParameter<int>("lsdep_cut1_peak_HBdepth1");
   lsdep_cut1_peak_HBdepth2_ = iConfig.getParameter<int>("lsdep_cut1_peak_HBdepth2");
   lsdep_cut1_peak_HEdepth1_ = iConfig.getParameter<int>("lsdep_cut1_peak_HEdepth1");
@@ -2544,90 +2526,88 @@ CMTRawAnalyzer::CMTRawAnalyzer(const edm::ParameterSet& iConfig)
   lsdep_estimator5_HFdepth2_ = iConfig.getParameter<double>("lsdep_estimator5_HFdepth2");
   lsdep_estimator5_HOdepth4_ = iConfig.getParameter<double>("lsdep_estimator5_HOdepth4");
   forallestimators_amplitude_bigger_ = iConfig.getParameter<double>("forallestimators_amplitude_bigger");
-  rmsHBMin_ = iConfig.getParameter<double>("rmsHBMin");                    
-  rmsHBMax_ = iConfig.getParameter<double>("rmsHBMax");                    
-  rmsHEMin_ = iConfig.getParameter<double>("rmsHEMin");                    
-  rmsHEMax_ = iConfig.getParameter<double>("rmsHEMax");                    
-  rmsHFMin_ = iConfig.getParameter<double>("rmsHFMin");                    
-  rmsHFMax_ = iConfig.getParameter<double>("rmsHFMax");                    
-  rmsHOMin_ = iConfig.getParameter<double>("rmsHOMin");                    
-  rmsHOMax_ = iConfig.getParameter<double>("rmsHOMax");                    
-  ADCAmplHBMin_ = iConfig.getParameter<double>("ADCAmplHBMin");            
-  ADCAmplHEMin_ = iConfig.getParameter<double>("ADCAmplHEMin");            
-  ADCAmplHOMin_ = iConfig.getParameter<double>("ADCAmplHOMin");            
-  ADCAmplHFMin_ = iConfig.getParameter<double>("ADCAmplHFMin");            
-  ADCAmplHBMax_ = iConfig.getParameter<double>("ADCAmplHBMax");            
-  ADCAmplHEMax_ = iConfig.getParameter<double>("ADCAmplHEMax");            
-  ADCAmplHOMax_ = iConfig.getParameter<double>("ADCAmplHOMax");            
-  ADCAmplHFMax_ = iConfig.getParameter<double>("ADCAmplHFMax");            
-  pedestalwHBMax_ = iConfig.getParameter<double>("pedestalwHBMax");        
-  pedestalwHEMax_ = iConfig.getParameter<double>("pedestalwHEMax");        
-  pedestalwHFMax_ = iConfig.getParameter<double>("pedestalwHFMax");        
-  pedestalwHOMax_ = iConfig.getParameter<double>("pedestalwHOMax");        
-  pedestalHBMax_ = iConfig.getParameter<double>("pedestalHBMax");          
-  pedestalHEMax_ = iConfig.getParameter<double>("pedestalHEMax");          
-  pedestalHFMax_ = iConfig.getParameter<double>("pedestalHFMax");          
-  pedestalHOMax_ = iConfig.getParameter<double>("pedestalHOMax");          
-  calibrADCHBMin_ = iConfig.getParameter<double>("calibrADCHBMin");        
-  calibrADCHEMin_ = iConfig.getParameter<double>("calibrADCHEMin");        
-  calibrADCHOMin_ = iConfig.getParameter<double>("calibrADCHOMin");        
-  calibrADCHFMin_ = iConfig.getParameter<double>("calibrADCHFMin");        
-  calibrADCHBMax_ = iConfig.getParameter<double>("calibrADCHBMax");        
-  calibrADCHEMax_ = iConfig.getParameter<double>("calibrADCHEMax");        
-  calibrADCHOMax_ = iConfig.getParameter<double>("calibrADCHOMax");        
-  calibrADCHFMax_ = iConfig.getParameter<double>("calibrADCHFMax");        
-  calibrRatioHBMin_ = iConfig.getParameter<double>("calibrRatioHBMin");    
-  calibrRatioHEMin_ = iConfig.getParameter<double>("calibrRatioHEMin");    
-  calibrRatioHOMin_ = iConfig.getParameter<double>("calibrRatioHOMin");    
-  calibrRatioHFMin_ = iConfig.getParameter<double>("calibrRatioHFMin");    
-  calibrRatioHBMax_ = iConfig.getParameter<double>("calibrRatioHBMax");    
-  calibrRatioHEMax_ = iConfig.getParameter<double>("calibrRatioHEMax");    
-  calibrRatioHOMax_ = iConfig.getParameter<double>("calibrRatioHOMax");    
-  calibrRatioHFMax_ = iConfig.getParameter<double>("calibrRatioHFMax");    
-  calibrTSmaxHBMin_ = iConfig.getParameter<double>("calibrTSmaxHBMin");    
-  calibrTSmaxHEMin_ = iConfig.getParameter<double>("calibrTSmaxHEMin");    
-  calibrTSmaxHOMin_ = iConfig.getParameter<double>("calibrTSmaxHOMin");    
-  calibrTSmaxHFMin_ = iConfig.getParameter<double>("calibrTSmaxHFMin");    
-  calibrTSmaxHBMax_ = iConfig.getParameter<double>("calibrTSmaxHBMax");    
-  calibrTSmaxHEMax_ = iConfig.getParameter<double>("calibrTSmaxHEMax");    
-  calibrTSmaxHOMax_ = iConfig.getParameter<double>("calibrTSmaxHOMax");    
-  calibrTSmaxHFMax_ = iConfig.getParameter<double>("calibrTSmaxHFMax");    
-  calibrTSmeanHBMin_ = iConfig.getParameter<double>("calibrTSmeanHBMin");  
-  calibrTSmeanHEMin_ = iConfig.getParameter<double>("calibrTSmeanHEMin");  
-  calibrTSmeanHOMin_ = iConfig.getParameter<double>("calibrTSmeanHOMin");  
-  calibrTSmeanHFMin_ = iConfig.getParameter<double>("calibrTSmeanHFMin");  
-  calibrTSmeanHBMax_ = iConfig.getParameter<double>("calibrTSmeanHBMax");  
-  calibrTSmeanHEMax_ = iConfig.getParameter<double>("calibrTSmeanHEMax");  
-  calibrTSmeanHOMax_ = iConfig.getParameter<double>("calibrTSmeanHOMax");  
-  calibrTSmeanHFMax_ = iConfig.getParameter<double>("calibrTSmeanHFMax");  
-  calibrWidthHBMin_ = iConfig.getParameter<double>("calibrWidthHBMin");    
-  calibrWidthHEMin_ = iConfig.getParameter<double>("calibrWidthHEMin");    
-  calibrWidthHOMin_ = iConfig.getParameter<double>("calibrWidthHOMin");    
-  calibrWidthHFMin_ = iConfig.getParameter<double>("calibrWidthHFMin");    
-  calibrWidthHBMax_ = iConfig.getParameter<double>("calibrWidthHBMax");    
-  calibrWidthHEMax_ = iConfig.getParameter<double>("calibrWidthHEMax");    
-  calibrWidthHOMax_ = iConfig.getParameter<double>("calibrWidthHOMax");    
-  calibrWidthHFMax_ = iConfig.getParameter<double>("calibrWidthHFMax");    
-  //  fOutputFileName = iConfig.getUntrackedParameter<std::string>("HistOutFile");
-  //  MAPOutputFileName = iConfig.getUntrackedParameter<std::string>("MAPOutFile");
-  TSpeakHBMin_ = iConfig.getParameter<double>("TSpeakHBMin");  
-  TSpeakHBMax_ = iConfig.getParameter<double>("TSpeakHBMax");  
-  TSpeakHEMin_ = iConfig.getParameter<double>("TSpeakHEMin");  
-  TSpeakHEMax_ = iConfig.getParameter<double>("TSpeakHEMax");  
-  TSpeakHFMin_ = iConfig.getParameter<double>("TSpeakHFMin");  
-  TSpeakHFMax_ = iConfig.getParameter<double>("TSpeakHFMax");  
-  TSpeakHOMin_ = iConfig.getParameter<double>("TSpeakHOMin");  
-  TSpeakHOMax_ = iConfig.getParameter<double>("TSpeakHOMax");  
-  TSmeanHBMin_ = iConfig.getParameter<double>("TSmeanHBMin");  
-  TSmeanHBMax_ = iConfig.getParameter<double>("TSmeanHBMax");  
-  TSmeanHEMin_ = iConfig.getParameter<double>("TSmeanHEMin");  
-  TSmeanHEMax_ = iConfig.getParameter<double>("TSmeanHEMax");  
-  TSmeanHFMin_ = iConfig.getParameter<double>("TSmeanHFMin");  
-  TSmeanHFMax_ = iConfig.getParameter<double>("TSmeanHFMax");  
-  TSmeanHOMin_ = iConfig.getParameter<double>("TSmeanHOMin");  
-  TSmeanHOMax_ = iConfig.getParameter<double>("TSmeanHOMax");  
-  lsmin_ = iConfig.getParameter<int>("lsmin");                 
-  lsmax_ = iConfig.getParameter<int>("lsmax");                 
+  rmsHBMin_ = iConfig.getParameter<double>("rmsHBMin");
+  rmsHBMax_ = iConfig.getParameter<double>("rmsHBMax");
+  rmsHEMin_ = iConfig.getParameter<double>("rmsHEMin");
+  rmsHEMax_ = iConfig.getParameter<double>("rmsHEMax");
+  rmsHFMin_ = iConfig.getParameter<double>("rmsHFMin");
+  rmsHFMax_ = iConfig.getParameter<double>("rmsHFMax");
+  rmsHOMin_ = iConfig.getParameter<double>("rmsHOMin");
+  rmsHOMax_ = iConfig.getParameter<double>("rmsHOMax");
+  ADCAmplHBMin_ = iConfig.getParameter<double>("ADCAmplHBMin");
+  ADCAmplHEMin_ = iConfig.getParameter<double>("ADCAmplHEMin");
+  ADCAmplHOMin_ = iConfig.getParameter<double>("ADCAmplHOMin");
+  ADCAmplHFMin_ = iConfig.getParameter<double>("ADCAmplHFMin");
+  ADCAmplHBMax_ = iConfig.getParameter<double>("ADCAmplHBMax");
+  ADCAmplHEMax_ = iConfig.getParameter<double>("ADCAmplHEMax");
+  ADCAmplHOMax_ = iConfig.getParameter<double>("ADCAmplHOMax");
+  ADCAmplHFMax_ = iConfig.getParameter<double>("ADCAmplHFMax");
+  pedestalwHBMax_ = iConfig.getParameter<double>("pedestalwHBMax");
+  pedestalwHEMax_ = iConfig.getParameter<double>("pedestalwHEMax");
+  pedestalwHFMax_ = iConfig.getParameter<double>("pedestalwHFMax");
+  pedestalwHOMax_ = iConfig.getParameter<double>("pedestalwHOMax");
+  pedestalHBMax_ = iConfig.getParameter<double>("pedestalHBMax");
+  pedestalHEMax_ = iConfig.getParameter<double>("pedestalHEMax");
+  pedestalHFMax_ = iConfig.getParameter<double>("pedestalHFMax");
+  pedestalHOMax_ = iConfig.getParameter<double>("pedestalHOMax");
+  calibrADCHBMin_ = iConfig.getParameter<double>("calibrADCHBMin");
+  calibrADCHEMin_ = iConfig.getParameter<double>("calibrADCHEMin");
+  calibrADCHOMin_ = iConfig.getParameter<double>("calibrADCHOMin");
+  calibrADCHFMin_ = iConfig.getParameter<double>("calibrADCHFMin");
+  calibrADCHBMax_ = iConfig.getParameter<double>("calibrADCHBMax");
+  calibrADCHEMax_ = iConfig.getParameter<double>("calibrADCHEMax");
+  calibrADCHOMax_ = iConfig.getParameter<double>("calibrADCHOMax");
+  calibrADCHFMax_ = iConfig.getParameter<double>("calibrADCHFMax");
+  calibrRatioHBMin_ = iConfig.getParameter<double>("calibrRatioHBMin");
+  calibrRatioHEMin_ = iConfig.getParameter<double>("calibrRatioHEMin");
+  calibrRatioHOMin_ = iConfig.getParameter<double>("calibrRatioHOMin");
+  calibrRatioHFMin_ = iConfig.getParameter<double>("calibrRatioHFMin");
+  calibrRatioHBMax_ = iConfig.getParameter<double>("calibrRatioHBMax");
+  calibrRatioHEMax_ = iConfig.getParameter<double>("calibrRatioHEMax");
+  calibrRatioHOMax_ = iConfig.getParameter<double>("calibrRatioHOMax");
+  calibrRatioHFMax_ = iConfig.getParameter<double>("calibrRatioHFMax");
+  calibrTSmaxHBMin_ = iConfig.getParameter<double>("calibrTSmaxHBMin");
+  calibrTSmaxHEMin_ = iConfig.getParameter<double>("calibrTSmaxHEMin");
+  calibrTSmaxHOMin_ = iConfig.getParameter<double>("calibrTSmaxHOMin");
+  calibrTSmaxHFMin_ = iConfig.getParameter<double>("calibrTSmaxHFMin");
+  calibrTSmaxHBMax_ = iConfig.getParameter<double>("calibrTSmaxHBMax");
+  calibrTSmaxHEMax_ = iConfig.getParameter<double>("calibrTSmaxHEMax");
+  calibrTSmaxHOMax_ = iConfig.getParameter<double>("calibrTSmaxHOMax");
+  calibrTSmaxHFMax_ = iConfig.getParameter<double>("calibrTSmaxHFMax");
+  calibrTSmeanHBMin_ = iConfig.getParameter<double>("calibrTSmeanHBMin");
+  calibrTSmeanHEMin_ = iConfig.getParameter<double>("calibrTSmeanHEMin");
+  calibrTSmeanHOMin_ = iConfig.getParameter<double>("calibrTSmeanHOMin");
+  calibrTSmeanHFMin_ = iConfig.getParameter<double>("calibrTSmeanHFMin");
+  calibrTSmeanHBMax_ = iConfig.getParameter<double>("calibrTSmeanHBMax");
+  calibrTSmeanHEMax_ = iConfig.getParameter<double>("calibrTSmeanHEMax");
+  calibrTSmeanHOMax_ = iConfig.getParameter<double>("calibrTSmeanHOMax");
+  calibrTSmeanHFMax_ = iConfig.getParameter<double>("calibrTSmeanHFMax");
+  calibrWidthHBMin_ = iConfig.getParameter<double>("calibrWidthHBMin");
+  calibrWidthHEMin_ = iConfig.getParameter<double>("calibrWidthHEMin");
+  calibrWidthHOMin_ = iConfig.getParameter<double>("calibrWidthHOMin");
+  calibrWidthHFMin_ = iConfig.getParameter<double>("calibrWidthHFMin");
+  calibrWidthHBMax_ = iConfig.getParameter<double>("calibrWidthHBMax");
+  calibrWidthHEMax_ = iConfig.getParameter<double>("calibrWidthHEMax");
+  calibrWidthHOMax_ = iConfig.getParameter<double>("calibrWidthHOMax");
+  calibrWidthHFMax_ = iConfig.getParameter<double>("calibrWidthHFMax");
+  TSpeakHBMin_ = iConfig.getParameter<double>("TSpeakHBMin");
+  TSpeakHBMax_ = iConfig.getParameter<double>("TSpeakHBMax");
+  TSpeakHEMin_ = iConfig.getParameter<double>("TSpeakHEMin");
+  TSpeakHEMax_ = iConfig.getParameter<double>("TSpeakHEMax");
+  TSpeakHFMin_ = iConfig.getParameter<double>("TSpeakHFMin");
+  TSpeakHFMax_ = iConfig.getParameter<double>("TSpeakHFMax");
+  TSpeakHOMin_ = iConfig.getParameter<double>("TSpeakHOMin");
+  TSpeakHOMax_ = iConfig.getParameter<double>("TSpeakHOMax");
+  TSmeanHBMin_ = iConfig.getParameter<double>("TSmeanHBMin");
+  TSmeanHBMax_ = iConfig.getParameter<double>("TSmeanHBMax");
+  TSmeanHEMin_ = iConfig.getParameter<double>("TSmeanHEMin");
+  TSmeanHEMax_ = iConfig.getParameter<double>("TSmeanHEMax");
+  TSmeanHFMin_ = iConfig.getParameter<double>("TSmeanHFMin");
+  TSmeanHFMax_ = iConfig.getParameter<double>("TSmeanHFMax");
+  TSmeanHOMin_ = iConfig.getParameter<double>("TSmeanHOMin");
+  TSmeanHOMax_ = iConfig.getParameter<double>("TSmeanHOMax");
+  lsmin_ = iConfig.getParameter<int>("lsmin");
+  lsmax_ = iConfig.getParameter<int>("lsmax");
   alsmin = lsmin_;
   blsmax = lsmax_;
   nlsminmax = lsmax_ - lsmin_ + 1;
@@ -2667,10 +2647,10 @@ CMTRawAnalyzer::CMTRawAnalyzer(const edm::ParameterSet& iConfig)
             mapRADDAM_HE[k1][k2][k3] = 0.;
             mapRADDAM0_HE[k1][k2][k3] = 0;
           }
-        }  //for
-      }    //for
-    }      //for
-  }        //for
+        }
+      }
+    }
+  }
   averSIGNALoccupancy_HB = 0.;
   averSIGNALoccupancy_HE = 0.;
   averSIGNALoccupancy_HF = 0.;
@@ -2699,7 +2679,6 @@ CMTRawAnalyzer::CMTRawAnalyzer(const edm::ParameterSet& iConfig)
 }
 CMTRawAnalyzer::~CMTRawAnalyzer() {}
 void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
-  if(verbosity== -300) std::cout << " -------------111111-----------analyze--------------- " << std::endl;
   conditions = &iSetup.getData(tokDB_);
   topo = &iSetup.getData(tokTopo_);
   if (MAPcreation > 0) {
@@ -2707,7 +2686,6 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       fillMAP();
     MAPcreation = 0;
   }
-  if(verbosity== -300) std::cout << " -------------2-----------analyze--------------- " << std::endl;
   nevent++;
   nevent50 = nevent / 50;
   Run = iEvent.id().run();
@@ -2715,14 +2693,12 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   lumi = iEvent.luminosityBlock();  // lumi section
   bcn = iEvent.bunchCrossing();
   orbitNum = iEvent.orbitNumber();
-    if(verbosity == -1959) std::cout << "000000000000000000AZ --Nevent =    " << Nevent << " --lumi =    " << lumi << " --bcn =    " << bcn << " --orbitNum =    " << orbitNum << std::endl;
   int outabortgap = 1;
   if (bcn >= bcnrejectedlow_ && bcn <= bcnrejectedhigh_)
     outabortgap = 0;  //  if(bcn>=3446 && bcn<=3564)
 
   if ((flagabortgaprejected_ == 1 && outabortgap == 1) || (flagabortgaprejected_ == 0 && outabortgap == 0) ||
       flagabortgaprejected_ == 2) {
-  if(verbosity== -300) std::cout << " -------------3-----------analyze--------------- " << std::endl;
     if (run0 != Run) {
       ++runcounter;
       if (runcounter != 1) {
@@ -2748,12 +2724,10 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       nevcounter00 = 0;
     }  //else new run
     ++eventcounter;
-    if(verbosity == -1959) std::cout << "0000000000000000000022222222AZ --ls0 =    " << ls0  << "--lumi =    " << lumi << std::endl;
     if (ls0 != lumi) {
       if (ls0 != -1) {
         h_nevents_per_eachLS->Fill(float(lscounter), float(nevcounter));  //
         nevcounter0 = nevcounter;
-    if(verbosity == -1959) std::cout << "00000000000022222222AZ --nevcounter0 =    " << nevcounter0  << "--ls0 =    " << ls0 << std::endl;
       }  // ls0>-1
       lscounter++;
       lscounterrun++;
@@ -2783,9 +2757,6 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       lscounterM1 = runcounter;
       nevcounter0 = nevcounter00;
     }
-    if(verbosity == -1959) std::cout << "1111111111111AZ --lscounterM1 =    " << lscounterM1 << " --lscounter =    " << lscounter << " --runcounter =    " << runcounter << std::endl;
-    if(verbosity == -1959) std::cout << "22222222AZ --ls0 =    " << ls0  << "--lscounter10 =    " << lscounter10  << "-lscounterrun10 =    " << lscounterrun10  << "--lumi =    " << lumi << std::endl;
-    if(verbosity == -1959) std::cout << "33333AZ --nevcounter0 =    " << nevcounter0 << " --nevcounter =    " << nevcounter << std::endl;
     if (nevcounter0 != 0 || nevcounter > 99999) {
       if (nevcounter > 99999)
         nevcounter0 = 1;
@@ -2917,7 +2888,7 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
                 }
               }  //if(sumEstimator0[k0][k1][k2][k3] != 0.
 
-              // ---------------------------------------------------------------------------------------------------------------------------sumEstimator1
+              // -------------------------------------------------------------------------------------   sumEstimator1
               if (sumEstimator1[k0][k1][k2][k3] != 0.) {
                 // fill histoes:
                 double bbbc = 0.;
@@ -2934,9 +2905,6 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
                 //=0-normalizationOn#evOfLS;   =1-averagedMeanChannelVariable;   =2-averageVariable-normalizationOn#entriesInLS;
                 //flagestimatornormalization = cms.int32(2), !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 // zhokin 18.10.2018 STUDY:               CALL  HFF2 (ID,NID,X,Y,W)
-		if(verbosity == -1958) std::cout << "AZ --lscounterM1 =    " << lscounterM1 << std::endl;
-		if(verbosity == -1958) std::cout << "AZ --sumEstimator1[k0][k1][k2][k3] =    " << sumEstimator1[k0][k1][k2][k3]  << "    --sum0Estimator[k0][k1][k2][k3] =    " << sum0Estimator[k0][k1][k2][k3] << std::endl;
-		if(verbosity == -1958) std::cout << "AZ --bbbc =    " << bbbc  << "    --bbb1 =    " << bbb1 << std::endl;
                 if (lscounterM1 >= lsmin_ && lscounterM1 < lsmax_) {
                   //                                       INDEXIES:
                   int kkkk2 = (k2 - 1) / 4;
@@ -4205,433 +4173,428 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     ///////////////////       END of GENERAL NULLING       ////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    if (flagToUseDigiCollectionsORNot_ != 0) {
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+      ////////////////////////      START of DigiCollections running:          ///////////////////////////////////
+      ////////////////////////////////////////////////////////////////////
+      if (flagupgradeqie1011_ != 2 && flagupgradeqie1011_ != 3 && flagupgradeqie1011_ != 6 &&
+          flagupgradeqie1011_ != 7 && flagupgradeqie1011_ != 8) {
+        edm::Handle<HFDigiCollection> hf;
+        iEvent.getByToken(tok_hf_, hf);
+        bool gotHFDigis = true;
+        if (!(iEvent.getByToken(tok_hf_, hf))) {
+          gotHFDigis = false;
+        }  //this is a boolean set up to check if there are HFdigis in input root file
+        if (!(hf.isValid())) {
+          gotHFDigis = false;
+        }  //if it is not there, leave it false
+        if (!gotHFDigis) {
+          std::cout << " ******************************  ===========================   No HFDigiCollection found "
+                    << std::endl;
+        } else {
+          ////////////////////////////////////////////////////////////////////   qie8   QIE8 :
+          for (HFDigiCollection::const_iterator digi = hf->begin(); digi != hf->end(); digi++) {
+            eta = digi->id().ieta();
+            phi = digi->id().iphi();
+            depth = digi->id().depth();
+            nTS = digi->size();
+            ///////////////////
+            counterhf++;
+            ////////////////////////////////////////////////////////////  for zerrors.C script:
+            if (recordHistoes_ && studyCapIDErrorsHist_)
+              fillDigiErrorsHF(digi);
+            //////////////////////////////////////  for ztsmaxa.C,zratio34.C,zrms.C & zdifampl.C scripts:
+            if (recordHistoes_)
+              fillDigiAmplitudeHF(digi);
+            //////////////////////////////////////////// calibration staff (often not needed):
+            if (recordHistoes_ && studyCalibCellsHist_) {
+              int iphi = phi - 1;
+              int ieta = eta;
+              if (ieta > 0)
+                ieta -= 1;
+              if (nTS <= numOfTS)
+                for (int i = 0; i < nTS; i++) {
+                  TS_data[i] = adc2fC[digi->sample(i).adc()];
+                  signal[3][ieta + 41][iphi] += TS_data[i];
+                  if (i > 1 && i < 6)
+                    signal3[3][ieta + 41][iphi] += TS_data[i];
+                }  // TS
+            }      // if(recordHistoes_ && studyCalibCellsHist_)
+          }        // for
+        }          // hf.isValid
+      }            // end flagupgrade
 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// HFQIE10 DigiCollection
+      //////////////////////////////////////////////////////////////////////////////////////////////////upgradeHF upgradehf
+      // upgrade:
+      if (flagupgradeqie1011_ != 1) {
+        edm::Handle<QIE10DigiCollection> hfqie10;
+        iEvent.getByToken(tok_qie10_, hfqie10);
+        const QIE10DigiCollection& qie10dc =
+            *(hfqie10);  ////////////////////////////////////////////////    <<<=========  !!!!
+        bool gotQIE10Digis = true;
+        if (!(iEvent.getByToken(tok_qie10_, hfqie10))) {
+          gotQIE10Digis = false;
+        }  //this is a boolean set up to check if there are HFdigis in input root file
+        if (!(hfqie10.isValid())) {
+          gotQIE10Digis = false;
+        }  //if it is not there, leave it false
+        if (!gotQIE10Digis) {
+          std::cout << " No QIE10DigiCollection collection is found " << std::endl;
+        } else {
+          ////////////////////////////////////////////////////////////////////   qie10   QIE10 :
+          double totalAmplitudeHF = 0.;
+          for (unsigned int j = 0; j < qie10dc.size(); j++) {
+            QIE10DataFrame qie10df = static_cast<QIE10DataFrame>(qie10dc[j]);
+            DetId detid = qie10df.detid();
+            HcalDetId hcaldetid = HcalDetId(detid);
+            int eta = hcaldetid.ieta();
+            int phi = hcaldetid.iphi();
+            //	int depth = hcaldetid.depth();
+            // loop over the samples in the digi
+            nTS = qie10df.samples();
+            ///////////////////
+            counterhfqie10++;
+            ////////////////////////////////////////////////////////////  for zerrors.C script:
+            if (recordHistoes_ && studyCapIDErrorsHist_)
+              fillDigiErrorsHFQIE10(qie10df);
+            //////////////////////////////////////  for ztsmaxa.C,zratio34.C,zrms.C & zdifampl.C scripts:
+            if (recordHistoes_)
+              fillDigiAmplitudeHFQIE10(qie10df);
+            ///////////////////
+            //     if(recordHistoes_ ) {
+            if (recordHistoes_ && studyCalibCellsHist_) {
+              int iphi = phi - 1;
+              int ieta = eta;
+              if (ieta > 0)
+                ieta -= 1;
+              double amplitudefullTSs = 0.;
+              double nnnnnnTS = 0.;
+              for (int i = 0; i < nTS; ++i) {
+                // j - QIE channel
+                // i - time sample (TS)
+                int adc = qie10df[i].adc();
+                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //	      float charge = adc2fC_QIE10[ adc ];
+                TS_data[i] = adc2fC_QIE10[adc];
+                signal[3][ieta + 41][iphi] += TS_data[i];
+                totalAmplitudeHF += TS_data[i];
+                amplitudefullTSs += TS_data[i];
+                nnnnnnTS++;
+                if (i > 1 && i < 6)
+                  signal3[3][ieta + 41][iphi] += TS_data[i];
 
+              }  // TS
+              h_numberofhitsHFtest->Fill(nnnnnnTS);
+              h_AmplitudeHFtest->Fill(amplitudefullTSs);
+            }  // if(recordHistoes_ && studyCalibCellsHist_)
+          }    // for
+          h_totalAmplitudeHF->Fill(totalAmplitudeHF);
+          h_totalAmplitudeHFperEvent->Fill(float(eventcounter), totalAmplitudeHF);
+        }  // hfqie10.isValid
+      }    // end flagupgrade
+      //end upgrade
+      //
+      //
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// HBHEDigiCollection  usual, <=2018
+      int qwert1 = 0;
+      int qwert2 = 0;
+      int qwert3 = 0;
+      int qwert4 = 0;
+      int qwert5 = 0;
+      if (flagupgradeqie1011_ != 2 && flagupgradeqie1011_ != 3) {
+        edm::Handle<HBHEDigiCollection> hbhe;
+        iEvent.getByToken(tok_hbhe_, hbhe);
+        bool gotHBHEDigis = true;
+        if (!(iEvent.getByToken(tok_hbhe_, hbhe)))
+          gotHBHEDigis = false;  //this is a boolean set up to check if there are HBHEgigis in input root file
+        if (!(hbhe.isValid()))
+          gotHBHEDigis = false;  //if it is not there, leave it false
+        if (!gotHBHEDigis) {
+          std::cout << " No HBHEDigiCollection collection is found " << std::endl;
+        } else {
+          //      unsigned int NHBHEDigiCollectionsize =  hbhe->size();
+          double totalAmplitudeHB = 0.;
+          double totalAmplitudeHE = 0.;
+          double nnnnnnTSHB = 0.;
+          double nnnnnnTSHE = 0.;
 
-    if (flagToUseDigiCollectionsORNot_ != 0 ) {
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////      START of DigiCollections running:          ///////////////////////////////////
-    ////////////////////////////////////////////////////////////////////
-    if (flagupgradeqie1011_ != 2 && flagupgradeqie1011_ != 3 && flagupgradeqie1011_ != 6 && flagupgradeqie1011_ != 7 &&
-        flagupgradeqie1011_ != 8) {
-      edm::Handle<HFDigiCollection> hf;
-      iEvent.getByToken(tok_hf_, hf);
-      bool gotHFDigis = true;
-      if (!(iEvent.getByToken(tok_hf_, hf))) {
-        gotHFDigis = false;
-      }  //this is a boolean set up to check if there are HFdigis in input root file
-      if (!(hf.isValid())) {
-        gotHFDigis = false;
-      }  //if it is not there, leave it false
-      if (!gotHFDigis) {
-        std::cout << " ******************************  ===========================   No HFDigiCollection found "
-                  << std::endl;
+          for (HBHEDigiCollection::const_iterator digi = hbhe->begin(); digi != hbhe->end(); digi++) {
+            eta = digi->id().ieta();
+            phi = digi->id().iphi();
+            depth = digi->id().depth();
+            nTS = digi->size();
+            /////////////////////////////////////// counters of event*digis
+            nnnnnnhbhe++;
+            nnnnnn++;
+            //////////////////////////////////  counters of event for subdet & depth
+            if (digi->id().subdet() == HcalBarrel && depth == 1 && qwert1 == 0) {
+              nnnnnn1++;
+              qwert1 = 1;
+            }
+            if (digi->id().subdet() == HcalBarrel && depth == 2 && qwert2 == 0) {
+              nnnnnn2++;
+              qwert2 = 1;
+            }
+            if (digi->id().subdet() == HcalEndcap && depth == 1 && qwert3 == 0) {
+              nnnnnn3++;
+              qwert3 = 1;
+            }
+            if (digi->id().subdet() == HcalEndcap && depth == 2 && qwert4 == 0) {
+              nnnnnn4++;
+              qwert4 = 1;
+            }
+            if (digi->id().subdet() == HcalEndcap && depth == 3 && qwert5 == 0) {
+              nnnnnn5++;
+              qwert5 = 1;
+            }
+            ////////////////////////////////////////////////////////////  for zerrors.C script:
+            if (recordHistoes_ && studyCapIDErrorsHist_)
+              fillDigiErrors(digi);
+            //////////////////////////////////////  for ztsmaxa.C,zratio34.C,zrms.C & zdifampl.C scripts:
+            if (recordHistoes_)
+              fillDigiAmplitude(digi);
+
+            if (recordHistoes_ && studyCalibCellsHist_) {
+              int iphi = phi - 1;
+              int ieta = eta;
+              if (ieta > 0)
+                ieta -= 1;
+              //////////////////////////////////////////    HB:
+              if (digi->id().subdet() == HcalBarrel) {
+                double amplitudefullTSs = 0.;
+                nnnnnnTSHB++;
+                if (nTS <= numOfTS)
+                  for (int i = 0; i < nTS; i++) {
+                    TS_data[i] = adc2fC[digi->sample(i).adc()];
+                    signal[0][ieta + 41][iphi] += TS_data[i];
+                    amplitudefullTSs += TS_data[i];
+                    totalAmplitudeHB += TS_data[i];
+                    if (i > 1 && i < 6)
+                      signal3[0][ieta + 41][iphi] += TS_data[i];
+                  }
+                h_AmplitudeHBtest->Fill(amplitudefullTSs);
+              }  // HB
+              //////////////////////////////////////////    HE:
+              if (digi->id().subdet() == HcalEndcap) {
+                double amplitudefullTSs = 0.;
+                nnnnnnTSHE++;
+                if (nTS <= numOfTS)
+                  for (int i = 0; i < nTS; i++) {
+                    TS_data[i] = adc2fC[digi->sample(i).adc()];
+                    signal[1][ieta + 41][iphi] += TS_data[i];
+                    totalAmplitudeHE += TS_data[i];
+                    amplitudefullTSs += TS_data[i];
+                    if (i > 1 && i < 6)
+                      signal3[1][ieta + 41][iphi] += TS_data[i];
+                  }
+                h_AmplitudeHEtest->Fill(amplitudefullTSs);
+              }  // HE
+
+            }  //if(recordHistoes_ && studyCalibCellsHist_)
+            if (recordNtuples_ && nevent50 < maxNeventsInNtuple_) {
+            }  //if(recordNtuples_)
+          }    // for HBHE digis
+          if (totalAmplitudeHB != 0.) {
+            h_numberofhitsHBtest->Fill(nnnnnnTSHB);
+            h_totalAmplitudeHB->Fill(totalAmplitudeHB);
+            h_totalAmplitudeHBperEvent->Fill(float(eventcounter), totalAmplitudeHB);
+          }
+          if (totalAmplitudeHE != 0.) {
+            h_numberofhitsHEtest->Fill(nnnnnnTSHE);
+            h_totalAmplitudeHE->Fill(totalAmplitudeHE);
+            h_totalAmplitudeHEperEvent->Fill(float(eventcounter), totalAmplitudeHE);
+          }
+        }  //hbhe.isValid
+      }    // end flagupgrade
+      //---------------------------------------------------------------
+      //////////////////////////////////////////////////////////////////////////////////////////////////    upgradeHBHE upgradehe       HBHE with SiPM (both >=2020)
+      // upgrade:
+      if (flagupgradeqie1011_ != 1 && flagupgradeqie1011_ != 4 && flagupgradeqie1011_ != 5 &&
+          flagupgradeqie1011_ != 10) {
+        edm::Handle<QIE11DigiCollection> heqie11;
+        iEvent.getByToken(tok_qie11_, heqie11);
+        const QIE11DigiCollection& qie11dc =
+            *(heqie11);  ////////////////////////////////////////////////    <<<=========  !!!!
+        bool gotQIE11Digis = true;
+        if (!(iEvent.getByToken(tok_qie11_, heqie11)))
+          gotQIE11Digis = false;  //this is a boolean set up to check if there are QIE11gigis in input root file
+        if (!(heqie11.isValid()))
+          gotQIE11Digis = false;  //if it is not there, leave it false
+        if (!gotQIE11Digis) {
+          std::cout << " No QIE11DigiCollection collection is found " << std::endl;
+        } else {
+          ////////////////////////////////////////////////////////////////////   qie11   QIE11 :
+          double totalAmplitudeHBQIE11 = 0.;
+          double totalAmplitudeHEQIE11 = 0.;
+          double nnnnnnTSHBQIE11 = 0.;
+          double nnnnnnTSHEQIE11 = 0.;
+          for (unsigned int j = 0; j < qie11dc.size(); j++) {
+            QIE11DataFrame qie11df = static_cast<QIE11DataFrame>(qie11dc[j]);
+            DetId detid = qie11df.detid();
+            HcalDetId hcaldetid = HcalDetId(detid);
+            int eta = hcaldetid.ieta();
+            int phi = hcaldetid.iphi();
+            int depth = hcaldetid.depth();
+            if (depth == 0)
+              return;
+            int sub = hcaldetid.subdet();  // 1-HB, 2-HE (HFDigiCollection: 4-HF)
+            // loop over the samples in the digi
+            nTS = qie11df.samples();
+            ///////////////////
+            nnnnnnhbheqie11++;
+            nnnnnn++;
+            if (recordHistoes_ && studyCapIDErrorsHist_)
+              fillDigiErrorsQIE11(qie11df);
+            //////////////////////////////////////  for ztsmaxa.C,zratio34.C,zrms.C & zdifampl.C scripts:
+            if (recordHistoes_)
+              fillDigiAmplitudeQIE11(qie11df);
+            ///////////////////
+            //////////////////////////////////  counters of event for subdet & depth
+            if (sub == 1 && depth == 1 && qwert1 == 0) {
+              nnnnnn1++;
+              qwert1 = 1;
+            }
+            if (sub == 1 && depth == 2 && qwert2 == 0) {
+              nnnnnn2++;
+              qwert2 = 1;
+            }
+            if (sub == 2 && depth == 1 && qwert3 == 0) {
+              nnnnnn3++;
+              qwert3 = 1;
+            }
+            if (sub == 2 && depth == 2 && qwert4 == 0) {
+              nnnnnn4++;
+              qwert4 = 1;
+            }
+            if (sub == 2 && depth == 3 && qwert5 == 0) {
+              nnnnnn5++;
+              qwert5 = 1;
+            }
+
+            if (recordHistoes_ && studyCalibCellsHist_) {
+              int iphi = phi - 1;
+              int ieta = eta;
+              if (ieta > 0)
+                ieta -= 1;
+              // HB:
+              if (sub == 1) {
+                double amplitudefullTSs1 = 0.;
+                double amplitudefullTSs6 = 0.;
+                nnnnnnTSHBQIE11++;
+                for (int i = 0; i < nTS; ++i) {
+                  int adc = qie11df[i].adc();
+                  double charge1 = adc2fC_QIE11_shunt1[adc];
+                  double charge6 = adc2fC_QIE11_shunt6[adc];
+                  amplitudefullTSs1 += charge1;
+                  amplitudefullTSs6 += charge6;
+                  double charge = charge6;
+                  TS_data[i] = charge;
+                  signal[0][ieta + 41][iphi] += charge;
+                  if (i > 1 && i < 6)
+                    signal3[0][ieta + 41][iphi] += charge;
+                  totalAmplitudeHBQIE11 += charge;
+                }  //for
+                h_AmplitudeHBtest1->Fill(amplitudefullTSs1, 1.);
+                h_AmplitudeHBtest6->Fill(amplitudefullTSs6, 1.);
+              }  //HB end
+              // HE:
+              if (sub == 2) {
+                double amplitudefullTSs1 = 0.;
+                double amplitudefullTSs6 = 0.;
+                nnnnnnTSHEQIE11++;
+                for (int i = 0; i < nTS; i++) {
+                  int adc = qie11df[i].adc();
+                  double charge1 = adc2fC_QIE11_shunt1[adc];
+                  double charge6 = adc2fC_QIE11_shunt6[adc];
+                  amplitudefullTSs1 += charge1;
+                  amplitudefullTSs6 += charge6;
+                  double charge = charge6;
+                  TS_data[i] = charge;
+                  signal[1][ieta + 41][iphi] += charge;
+                  if (i > 1 && i < 6)
+                    signal3[1][ieta + 41][iphi] += charge;
+                  totalAmplitudeHEQIE11 += charge;
+                }  //for
+                h_AmplitudeHEtest1->Fill(amplitudefullTSs1, 1.);
+                h_AmplitudeHEtest6->Fill(amplitudefullTSs6, 1.);
+
+              }  //HE end
+            }    //if(recordHistoes_ && studyCalibCellsHist_)
+          }      // for QIE11 digis
+
+          if (totalAmplitudeHBQIE11 != 0.) {
+            h_numberofhitsHBtest->Fill(nnnnnnTSHBQIE11);
+            h_totalAmplitudeHB->Fill(totalAmplitudeHBQIE11);
+            h_totalAmplitudeHBperEvent->Fill(float(eventcounter), totalAmplitudeHBQIE11);
+          }
+          if (totalAmplitudeHEQIE11 != 0.) {
+            h_numberofhitsHEtest->Fill(nnnnnnTSHEQIE11);
+            h_totalAmplitudeHE->Fill(totalAmplitudeHEQIE11);
+            h_totalAmplitudeHEperEvent->Fill(float(eventcounter), totalAmplitudeHEQIE11);
+          }
+        }  //heqie11.isValid
+      }    // end flagupgrade
+
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////////////   HODigiCollection
+      edm::Handle<HODigiCollection> ho;
+      iEvent.getByToken(tok_ho_, ho);
+      bool gotHODigis = true;
+      if (!(iEvent.getByToken(tok_ho_, ho)))
+        gotHODigis = false;  //this is a boolean set up to check if there are HOgigis in input root file
+      if (!(ho.isValid()))
+        gotHODigis = false;  //if it is not there, leave it false
+      if (!gotHODigis) {
+        //  if(!ho.isValid()) {
+        std::cout << " No HO collection is found " << std::endl;
       } else {
-        ////////////////////////////////////////////////////////////////////   qie8   QIE8 :
-        for (HFDigiCollection::const_iterator digi = hf->begin(); digi != hf->end(); digi++) {
+        int qwert6 = 0;
+        double totalAmplitudeHO = 0.;
+        for (HODigiCollection::const_iterator digi = ho->begin(); digi != ho->end(); digi++) {
           eta = digi->id().ieta();
           phi = digi->id().iphi();
           depth = digi->id().depth();
           nTS = digi->size();
           ///////////////////
-          counterhf++;
+          counterho++;
+          //////////////////////////////////  counters of event
+          if (qwert6 == 0) {
+            nnnnnn6++;
+            qwert6 = 1;
+          }
           ////////////////////////////////////////////////////////////  for zerrors.C script:
           if (recordHistoes_ && studyCapIDErrorsHist_)
-            fillDigiErrorsHF(digi);
+            fillDigiErrorsHO(digi);
           //////////////////////////////////////  for ztsmaxa.C,zratio34.C,zrms.C & zdifampl.C scripts:
           if (recordHistoes_)
-            fillDigiAmplitudeHF(digi);
-          //////////////////////////////////////////// calibration staff (often not needed):
+            fillDigiAmplitudeHO(digi);
+          ///////////////////
           if (recordHistoes_ && studyCalibCellsHist_) {
             int iphi = phi - 1;
             int ieta = eta;
             if (ieta > 0)
               ieta -= 1;
+            double nnnnnnTS = 0.;
+            double amplitudefullTSs = 0.;
             if (nTS <= numOfTS)
               for (int i = 0; i < nTS; i++) {
                 TS_data[i] = adc2fC[digi->sample(i).adc()];
-                signal[3][ieta + 41][iphi] += TS_data[i];
+                amplitudefullTSs += TS_data[i];
+                signal[2][ieta + 41][iphi] += TS_data[i];
+                totalAmplitudeHO += TS_data[i];
                 if (i > 1 && i < 6)
-                  signal3[3][ieta + 41][iphi] += TS_data[i];
-              }  // TS
-          }      // if(recordHistoes_ && studyCalibCellsHist_)
-        }        // for
-      }          // hf.isValid
-    }            // end flagupgrade
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// HFQIE10 DigiCollection
-    //////////////////////////////////////////////////////////////////////////////////////////////////upgradeHF upgradehf
-    // upgrade:
-    if (flagupgradeqie1011_ != 1) {
-      edm::Handle<QIE10DigiCollection> hfqie10;
-      iEvent.getByToken(tok_qie10_, hfqie10);
-      const QIE10DigiCollection& qie10dc =
-          *(hfqie10);  ////////////////////////////////////////////////    <<<=========  !!!!
-      bool gotQIE10Digis = true;
-      if (!(iEvent.getByToken(tok_qie10_, hfqie10))) {
-        gotQIE10Digis = false;
-      }  //this is a boolean set up to check if there are HFdigis in input root file
-      if (!(hfqie10.isValid())) {
-        gotQIE10Digis = false;
-      }  //if it is not there, leave it false
-      if (!gotQIE10Digis) {
-        std::cout << " No QIE10DigiCollection collection is found " << std::endl;
-      } else {
-        ////////////////////////////////////////////////////////////////////   qie10   QIE10 :
-        double totalAmplitudeHF = 0.;
-        for (unsigned int j = 0; j < qie10dc.size(); j++) {
-          QIE10DataFrame qie10df = static_cast<QIE10DataFrame>(qie10dc[j]);
-          DetId detid = qie10df.detid();
-          HcalDetId hcaldetid = HcalDetId(detid);
-          int eta = hcaldetid.ieta();
-          int phi = hcaldetid.iphi();
-          //	int depth = hcaldetid.depth();
-          // loop over the samples in the digi
-          nTS = qie10df.samples();
-          ///////////////////
-          counterhfqie10++;
-          ////////////////////////////////////////////////////////////  for zerrors.C script:
-          if (recordHistoes_ && studyCapIDErrorsHist_)
-            fillDigiErrorsHFQIE10(qie10df);
-          //////////////////////////////////////  for ztsmaxa.C,zratio34.C,zrms.C & zdifampl.C scripts:
-          if (recordHistoes_)
-            fillDigiAmplitudeHFQIE10(qie10df);
-          ///////////////////
-          //     if(recordHistoes_ ) {
-          if (recordHistoes_ && studyCalibCellsHist_) {
-            int iphi = phi - 1;
-            int ieta = eta;
-            if (ieta > 0)
-              ieta -= 1;
-            double amplitudefullTSs = 0.;
-            double nnnnnnTS = 0.;
-            for (int i = 0; i < nTS; ++i) {
-              // j - QIE channel
-              // i - time sample (TS)
-              int adc = qie10df[i].adc();
-              // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-              //	      float charge = adc2fC_QIE10[ adc ];
-              TS_data[i] = adc2fC_QIE10[adc];
-              signal[3][ieta + 41][iphi] += TS_data[i];
-              totalAmplitudeHF += TS_data[i];
-              amplitudefullTSs += TS_data[i];
-              nnnnnnTS++;
-              if (i > 1 && i < 6)
-                signal3[3][ieta + 41][iphi] += TS_data[i];
-
-            }  // TS
-            h_numberofhitsHFtest->Fill(nnnnnnTS);
-            h_AmplitudeHFtest->Fill(amplitudefullTSs);
-          }  // if(recordHistoes_ && studyCalibCellsHist_)
-        }    // for
-        h_totalAmplitudeHF->Fill(totalAmplitudeHF);
-        h_totalAmplitudeHFperEvent->Fill(float(eventcounter), totalAmplitudeHF);
-      }  // hfqie10.isValid
-    }    // end flagupgrade
-    //end upgrade
-    //
-    //
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// HBHEDigiCollection  usual, <=2018
-    int qwert1 = 0;
-    int qwert2 = 0;
-    int qwert3 = 0;
-    int qwert4 = 0;
-    int qwert5 = 0;
-    if (flagupgradeqie1011_ != 2 && flagupgradeqie1011_ != 3) {
-      edm::Handle<HBHEDigiCollection> hbhe;
-      iEvent.getByToken(tok_hbhe_, hbhe);
-      bool gotHBHEDigis = true;
-      if (!(iEvent.getByToken(tok_hbhe_, hbhe)))
-        gotHBHEDigis = false;  //this is a boolean set up to check if there are HBHEgigis in input root file
-      if (!(hbhe.isValid()))
-        gotHBHEDigis = false;  //if it is not there, leave it false
-      if (!gotHBHEDigis) {
-        std::cout << " No HBHEDigiCollection collection is found " << std::endl;
-      } else {
-        //      unsigned int NHBHEDigiCollectionsize =  hbhe->size();
-        double totalAmplitudeHB = 0.;
-        double totalAmplitudeHE = 0.;
-        double nnnnnnTSHB = 0.;
-        double nnnnnnTSHE = 0.;
-
-        for (HBHEDigiCollection::const_iterator digi = hbhe->begin(); digi != hbhe->end(); digi++) {
-          eta = digi->id().ieta();
-          phi = digi->id().iphi();
-          depth = digi->id().depth();
-          nTS = digi->size();
-          /////////////////////////////////////// counters of event*digis
-          nnnnnnhbhe++;
-          nnnnnn++;
-          //////////////////////////////////  counters of event for subdet & depth
-          if (digi->id().subdet() == HcalBarrel && depth == 1 && qwert1 == 0) {
-            nnnnnn1++;
-            qwert1 = 1;
-          }
-          if (digi->id().subdet() == HcalBarrel && depth == 2 && qwert2 == 0) {
-            nnnnnn2++;
-            qwert2 = 1;
-          }
-          if (digi->id().subdet() == HcalEndcap && depth == 1 && qwert3 == 0) {
-            nnnnnn3++;
-            qwert3 = 1;
-          }
-          if (digi->id().subdet() == HcalEndcap && depth == 2 && qwert4 == 0) {
-            nnnnnn4++;
-            qwert4 = 1;
-          }
-          if (digi->id().subdet() == HcalEndcap && depth == 3 && qwert5 == 0) {
-            nnnnnn5++;
-            qwert5 = 1;
-          }
-          ////////////////////////////////////////////////////////////  for zerrors.C script:
-          if (recordHistoes_ && studyCapIDErrorsHist_)
-            fillDigiErrors(digi);
-          //////////////////////////////////////  for ztsmaxa.C,zratio34.C,zrms.C & zdifampl.C scripts:
-          if (recordHistoes_)
-            fillDigiAmplitude(digi);
-
-          if (recordHistoes_ && studyCalibCellsHist_) {
-            int iphi = phi - 1;
-            int ieta = eta;
-            if (ieta > 0)
-              ieta -= 1;
-            //////////////////////////////////////////    HB:
-            if (digi->id().subdet() == HcalBarrel) {
-              double amplitudefullTSs = 0.;
-              nnnnnnTSHB++;
-              if (nTS <= numOfTS)
-                for (int i = 0; i < nTS; i++) {
-                  TS_data[i] = adc2fC[digi->sample(i).adc()];
-                  signal[0][ieta + 41][iphi] += TS_data[i];
-                  amplitudefullTSs += TS_data[i];
-                  totalAmplitudeHB += TS_data[i];
-                  if (i > 1 && i < 6)
-                    signal3[0][ieta + 41][iphi] += TS_data[i];
-                }
-              h_AmplitudeHBtest->Fill(amplitudefullTSs);
-            }  // HB
-            //////////////////////////////////////////    HE:
-            if (digi->id().subdet() == HcalEndcap) {
-              double amplitudefullTSs = 0.;
-              nnnnnnTSHE++;
-              if (nTS <= numOfTS)
-                for (int i = 0; i < nTS; i++) {
-                  TS_data[i] = adc2fC[digi->sample(i).adc()];
-                  signal[1][ieta + 41][iphi] += TS_data[i];
-                  totalAmplitudeHE += TS_data[i];
-                  amplitudefullTSs += TS_data[i];
-                  if (i > 1 && i < 6)
-                    signal3[1][ieta + 41][iphi] += TS_data[i];
-                }
-              h_AmplitudeHEtest->Fill(amplitudefullTSs);
-            }  // HE
-
+                  signal3[2][ieta + 41][iphi] += TS_data[i];
+                nnnnnnTS++;
+              }  //if for
+            h_AmplitudeHOtest->Fill(amplitudefullTSs);
+            h_numberofhitsHOtest->Fill(nnnnnnTS);
           }  //if(recordHistoes_ && studyCalibCellsHist_)
-          if (recordNtuples_ && nevent50 < maxNeventsInNtuple_) {
-          }  //if(recordNtuples_)
-        }    // for HBHE digis
-        if (totalAmplitudeHB != 0.) {
-          h_numberofhitsHBtest->Fill(nnnnnnTSHB);
-          h_totalAmplitudeHB->Fill(totalAmplitudeHB);
-          h_totalAmplitudeHBperEvent->Fill(float(eventcounter), totalAmplitudeHB);
-        }
-        if (totalAmplitudeHE != 0.) {
-          h_numberofhitsHEtest->Fill(nnnnnnTSHE);
-          h_totalAmplitudeHE->Fill(totalAmplitudeHE);
-          h_totalAmplitudeHEperEvent->Fill(float(eventcounter), totalAmplitudeHE);
-        }
-      }  //hbhe.isValid
-    }    // end flagupgrade
-    //---------------------------------------------------------------
-    //////////////////////////////////////////////////////////////////////////////////////////////////    upgradeHBHE upgradehe       HBHE with SiPM (both >=2020)
-    // upgrade:
-    if (flagupgradeqie1011_ != 1 && flagupgradeqie1011_ != 4 && flagupgradeqie1011_ != 5 && flagupgradeqie1011_ != 10) {
-      edm::Handle<QIE11DigiCollection> heqie11;
-      iEvent.getByToken(tok_qie11_, heqie11);
-      const QIE11DigiCollection& qie11dc =
-          *(heqie11);  ////////////////////////////////////////////////    <<<=========  !!!!
-      bool gotQIE11Digis = true;
-      if (!(iEvent.getByToken(tok_qie11_, heqie11)))
-        gotQIE11Digis = false;  //this is a boolean set up to check if there are QIE11gigis in input root file
-      if (!(heqie11.isValid()))
-        gotQIE11Digis = false;  //if it is not there, leave it false
-      if (!gotQIE11Digis) {
-        std::cout << " No QIE11DigiCollection collection is found " << std::endl;
-      } else {
-        ////////////////////////////////////////////////////////////////////   qie11   QIE11 :
-        double totalAmplitudeHBQIE11 = 0.;
-        double totalAmplitudeHEQIE11 = 0.;
-        double nnnnnnTSHBQIE11 = 0.;
-        double nnnnnnTSHEQIE11 = 0.;
-        for (unsigned int j = 0; j < qie11dc.size(); j++) {
-          QIE11DataFrame qie11df = static_cast<QIE11DataFrame>(qie11dc[j]);
-          DetId detid = qie11df.detid();
-          HcalDetId hcaldetid = HcalDetId(detid);
-          int eta = hcaldetid.ieta();
-          int phi = hcaldetid.iphi();
-          int depth = hcaldetid.depth();
-          if (depth == 0)
-            return;
-          int sub = hcaldetid.subdet();  // 1-HB, 2-HE (HFDigiCollection: 4-HF)
-          // loop over the samples in the digi
-          nTS = qie11df.samples();
-          ///////////////////
-          nnnnnnhbheqie11++;
-          nnnnnn++;
-          if (recordHistoes_ && studyCapIDErrorsHist_)
-            fillDigiErrorsQIE11(qie11df);
-          //////////////////////////////////////  for ztsmaxa.C,zratio34.C,zrms.C & zdifampl.C scripts:
-          if (recordHistoes_)
-            fillDigiAmplitudeQIE11(qie11df);
-          ///////////////////
-          //////////////////////////////////  counters of event for subdet & depth
-          if (sub == 1 && depth == 1 && qwert1 == 0) {
-            nnnnnn1++;
-            qwert1 = 1;
-          }
-          if (sub == 1 && depth == 2 && qwert2 == 0) {
-            nnnnnn2++;
-            qwert2 = 1;
-          }
-          if (sub == 2 && depth == 1 && qwert3 == 0) {
-            nnnnnn3++;
-            qwert3 = 1;
-          }
-          if (sub == 2 && depth == 2 && qwert4 == 0) {
-            nnnnnn4++;
-            qwert4 = 1;
-          }
-          if (sub == 2 && depth == 3 && qwert5 == 0) {
-            nnnnnn5++;
-            qwert5 = 1;
-          }
+        }    //for HODigiCollection
 
-          if (recordHistoes_ && studyCalibCellsHist_) {
-            int iphi = phi - 1;
-            int ieta = eta;
-            if (ieta > 0)
-              ieta -= 1;
-            // HB:
-            if (sub == 1) {
-              double amplitudefullTSs1 = 0.;
-              double amplitudefullTSs6 = 0.;
-              nnnnnnTSHBQIE11++;
-              for (int i = 0; i < nTS; ++i) {
-                int adc = qie11df[i].adc();
-                double charge1 = adc2fC_QIE11_shunt1[adc];
-                double charge6 = adc2fC_QIE11_shunt6[adc];
-                amplitudefullTSs1 += charge1;
-                amplitudefullTSs6 += charge6;
-                double charge = charge6;
-                TS_data[i] = charge;
-                signal[0][ieta + 41][iphi] += charge;
-                if (i > 1 && i < 6)
-                  signal3[0][ieta + 41][iphi] += charge;
-                totalAmplitudeHBQIE11 += charge;
-              }  //for
-              h_AmplitudeHBtest1->Fill(amplitudefullTSs1, 1.);
-              h_AmplitudeHBtest6->Fill(amplitudefullTSs6, 1.);
-            }  //HB end
-            // HE:
-            if (sub == 2) {
-              double amplitudefullTSs1 = 0.;
-              double amplitudefullTSs6 = 0.;
-              nnnnnnTSHEQIE11++;
-              for (int i = 0; i < nTS; i++) {
-                int adc = qie11df[i].adc();
-                double charge1 = adc2fC_QIE11_shunt1[adc];
-                double charge6 = adc2fC_QIE11_shunt6[adc];
-                amplitudefullTSs1 += charge1;
-                amplitudefullTSs6 += charge6;
-                double charge = charge6;
-                TS_data[i] = charge;
-                signal[1][ieta + 41][iphi] += charge;
-                if (i > 1 && i < 6)
-                  signal3[1][ieta + 41][iphi] += charge;
-                totalAmplitudeHEQIE11 += charge;
-              }  //for
-              h_AmplitudeHEtest1->Fill(amplitudefullTSs1, 1.);
-              h_AmplitudeHEtest6->Fill(amplitudefullTSs6, 1.);
-
-            }  //HE end
-          }    //if(recordHistoes_ && studyCalibCellsHist_)
-        }      // for QIE11 digis
-
-        if (totalAmplitudeHBQIE11 != 0.) {
-          h_numberofhitsHBtest->Fill(nnnnnnTSHBQIE11);
-          h_totalAmplitudeHB->Fill(totalAmplitudeHBQIE11);
-          h_totalAmplitudeHBperEvent->Fill(float(eventcounter), totalAmplitudeHBQIE11);
-        }
-        if (totalAmplitudeHEQIE11 != 0.) {
-          h_numberofhitsHEtest->Fill(nnnnnnTSHEQIE11);
-          h_totalAmplitudeHE->Fill(totalAmplitudeHEQIE11);
-          h_totalAmplitudeHEperEvent->Fill(float(eventcounter), totalAmplitudeHEQIE11);
-        }
-      }  //heqie11.isValid
-    }    // end flagupgrade
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////   HODigiCollection
-    edm::Handle<HODigiCollection> ho;
-    iEvent.getByToken(tok_ho_, ho);
-    bool gotHODigis = true;
-    if (!(iEvent.getByToken(tok_ho_, ho)))
-      gotHODigis = false;  //this is a boolean set up to check if there are HOgigis in input root file
-    if (!(ho.isValid()))
-      gotHODigis = false;  //if it is not there, leave it false
-    if (!gotHODigis) {
-      //  if(!ho.isValid()) {
-      std::cout << " No HO collection is found " << std::endl;
-    } else {
-      int qwert6 = 0;
-      double totalAmplitudeHO = 0.;
-      for (HODigiCollection::const_iterator digi = ho->begin(); digi != ho->end(); digi++) {
-        eta = digi->id().ieta();
-        phi = digi->id().iphi();
-        depth = digi->id().depth();
-        nTS = digi->size();
-        ///////////////////
-        counterho++;
-        //////////////////////////////////  counters of event
-        if (qwert6 == 0) {
-          nnnnnn6++;
-          qwert6 = 1;
-        }
-        ////////////////////////////////////////////////////////////  for zerrors.C script:
-        if (recordHistoes_ && studyCapIDErrorsHist_)
-          fillDigiErrorsHO(digi);
-        //////////////////////////////////////  for ztsmaxa.C,zratio34.C,zrms.C & zdifampl.C scripts:
-        if (recordHistoes_)
-          fillDigiAmplitudeHO(digi);
-        ///////////////////
-        if (recordHistoes_ && studyCalibCellsHist_) {
-          int iphi = phi - 1;
-          int ieta = eta;
-          if (ieta > 0)
-            ieta -= 1;
-          double nnnnnnTS = 0.;
-          double amplitudefullTSs = 0.;
-          if (nTS <= numOfTS)
-            for (int i = 0; i < nTS; i++) {
-              TS_data[i] = adc2fC[digi->sample(i).adc()];
-              amplitudefullTSs += TS_data[i];
-              signal[2][ieta + 41][iphi] += TS_data[i];
-              totalAmplitudeHO += TS_data[i];
-              if (i > 1 && i < 6)
-                signal3[2][ieta + 41][iphi] += TS_data[i];
-              nnnnnnTS++;
-            }  //if for
-          h_AmplitudeHOtest->Fill(amplitudefullTSs);
-          h_numberofhitsHOtest->Fill(nnnnnnTS);
-        }  //if(recordHistoes_ && studyCalibCellsHist_)
-      }    //for HODigiCollection
-
-      h_totalAmplitudeHO->Fill(totalAmplitudeHO);
-      h_totalAmplitudeHOperEvent->Fill(float(eventcounter), totalAmplitudeHO);
-    }  //ho.isValid(
-    //////////////////////////////////////////////////////////////////////////////
-  }// flagToUseDigiCollectionsORNot_
-
-
+        h_totalAmplitudeHO->Fill(totalAmplitudeHO);
+        h_totalAmplitudeHOperEvent->Fill(float(eventcounter), totalAmplitudeHO);
+      }  //ho.isValid(
+    }    // flagToUseDigiCollectionsORNot_
 
     //////////////////////////////////// RecHits for phi-symmetry monitoring of calibration group:
     // AZ 04.11.2019
@@ -4643,12 +4606,6 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       // HBHE:    HBHERecHitCollection hbheNoise Noise
       edm::Handle<HBHERecHitCollection> hbheNoise;
       iEvent.getByToken(tok_hbheNoise_, hbheNoise);
-      //  if(!hbheNoise.isValid()){edm::LogWarning("AnalyzerMB") << "VeRawAnalyzer: Error! can't get hbhe" << " product! No HBHE MS "; return ; }
-      //  const HBHERecHitCollection HithbheNoise = *(hbheNoise.product());
-      //  edm::LogInfo("AnalyzerMB")<<" HBHE Noise size of collection "<<HithbheNoise.size();
-      //  h_HBHERecHitssize->Fill((float)HithbheNoise.size());
-      //  if(HithbheNoise.size()!= 5184){edm::LogWarning("AnalyzerMB")<<" HBHE problem "<<rnnum<<" "<<HithbheNoise.size();//return;
-      //  }
       bool gotHBHERecHitsNoise = true;
       if (!(iEvent.getByToken(tok_hbheNoise_, hbheNoise)))
         gotHBHERecHitsNoise =
@@ -4704,12 +4661,6 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       // HF:    HFRecHitCollection hfNoise Noise
       edm::Handle<HFRecHitCollection> hfNoise;
       iEvent.getByToken(tok_hfNoise_, hfNoise);
-      //  if(!hfNoise.isValid()){edm::LogWarning("AnalyzerMB") << "VeRawAnalyzer: Error! can't get hf" << " product! No HF MS "; return ; }
-      //  const HFRecHitCollection HithfNoise = *(hfNoise.product());
-      //  edm::LogInfo("AnalyzerMB")<<" HF Noise size of collection "<<HithfNoise.size();
-      //  h_HFRecHitssize->Fill((float)HithfNoise.size());
-      //  if(HithfNoise.size()!= 5184){edm::LogWarning("AnalyzerMB")<<" HF problem "<<rnnum<<" "<<HithfNoise.size();//return;
-      //  }
       bool gotHFRecHitsNoise = true;
       if (!(iEvent.getByToken(tok_hfNoise_, hfNoise)))
         gotHFRecHitsNoise = false;  //this is a boolean set up to check if there are HFRecHitsNoise in input root file
@@ -4757,12 +4708,6 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       // HBHE:    HBHERecHitCollection hbheSignal Signal
       edm::Handle<HBHERecHitCollection> hbheSignal;
       iEvent.getByToken(tok_hbheSignal_, hbheSignal);
-      //  if(!hbheSignal.isValid()){edm::LogWarning("AnalyzerMB") << "VeRawAnalyzer: Error! can't get hbhe" << " product! No HBHE MS "; return ; }
-      //  const HBHERecHitCollection HithbheSignal = *(hbheSignal.product());
-      //  edm::LogInfo("AnalyzerMB")<<" HBHE Signal size of collection "<<HithbheSignal.size();
-      //  h_HBHERecHitssize->Fill((float)HithbheSignal.size());
-      //  if(HithbheSignal.size()!= 5184){edm::LogWarning("AnalyzerMB")<<" HBHE problem "<<rnnum<<" "<<HithbheSignal.size();//return;
-      //  }
       bool gotHBHERecHitsSignal = true;
       if (!(iEvent.getByToken(tok_hbheSignal_, hbheSignal)))
         gotHBHERecHitsSignal =
@@ -4817,12 +4762,6 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       // HF:    HFRecHitCollection hfSignal Signal
       edm::Handle<HFRecHitCollection> hfSignal;
       iEvent.getByToken(tok_hfSignal_, hfSignal);
-      //  if(!hfSignal.isValid()){edm::LogWarning("AnalyzerMB") << "VeRawAnalyzer: Error! can't get hf" << " product! No HF MS "; return ; }
-      //  const HFRecHitCollection HithfSignal = *(hfSignal.product());
-      //  edm::LogInfo("AnalyzerMB")<<" HF Signal size of collection "<<HithfSignal.size();
-      //  h_HFRecHitssize->Fill((float)HithfSignal.size());
-      //  if(HithfSignal.size()!= 5184){edm::LogWarning("AnalyzerMB")<<" HF problem "<<rnnum<<" "<<HithfSignal.size();//return;
-      //  }
       bool gotHFRecHitsSignal = true;
       if (!(iEvent.getByToken(tok_hfSignal_, hfSignal)))
         gotHFRecHitsSignal = false;  //this is a boolean set up to check if there are HFRecHitsSignal in input root file
@@ -4873,8 +4812,7 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 
     //////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////  TREATMENT OF OBTAINED DIGI-COLLECTION INFORMATION:
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////  TREATMENT OF OBTAINED DIGI-COLLECTION :
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  Phi-Symmetry Monitoring DIGI
     //////////// k0(sub):       =0 HB;      =1 HE;       =2 HO;       =3 HF;
@@ -4982,8 +4920,6 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
           }        //k1
         }          //if k0 == 1 HE
       }            //k0
-      //	  //	  //	  //	  //	  //	    //	  //	  //	  //	  //	  //	    //	  //	  //	  //	  //	  //	    //	  //	  //	  //	  //	  //
-      //	  //	  //	  //	  //	  //	    //	  //	  //	  //	  //	  //	    //	  //	  //	  //	  //	  //	    //	  //	  //	  //	  //	  //
       //	  //	  //	  //	  //	  //	    //	  //	  //	  //	  //	  //	    //	  //	  //	  //	  //	  //	    //	  //	  //	  //	  //	  //
       //	  //	  //	  //	  //	  //	  // amplitudechannel amplitudechannel amplitudechannel: calibration group, Iterative method, coding start 11.11.2019
       for (int k0 = 0; k0 < nsub; k0++) {
@@ -5117,9 +5053,6 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       //////////////////////////////////////////////////////////////////////////
       ////////////////////////////////////////////////////////////////////////// Reco Reco Reco Reco Reco Reco
       //////////////////////////////////////////////////////////////////////////
-      //	recSignalEnergy0[sub-1][mdepth-1][ieta+41][iphi] += 1.;                        	recNoiseEnergy0[sub-1][mdepth-1][ieta+41][iphi] += 1.;
-      //	recSignalEnergy1[sub-1][mdepth-1][ieta+41][iphi] += energyhit;                  recNoiseEnergy1[sub-1][mdepth-1][ieta+41][iphi] += energyhit;
-      //	recSignalEnergy2[sub-1][mdepth-1][ieta+41][iphi] += pow(energyhit,2);           recNoiseEnergy2[sub-1][mdepth-1][ieta+41][iphi] += pow(energyhit,2);
       //
       for (int k0 = 0; k0 < nsub; k0++) {
         // HB:
@@ -6146,7 +6079,7 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     if (++local_event % 100 == 0) {
       if (verbosity < 0)
         std::cout << "run " << Run << " processing events " << local_event << " ok, "
-                  << ", lumi " << lumi << ", numOfEv " << nevcounter << std::endl;
+                  << ", lumi " << lumi << ", numOfLaserEv " << numOfLaserEv << std::endl;
     }
   }  // bcn
 
@@ -6157,8 +6090,6 @@ void CMTRawAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 void CMTRawAnalyzer::beginJob() {
   if (verbosity > 0)
     std::cout << "========================   beignJob START   +++++++++++++++++++++++++++" << std::endl;
-  //  hOutputFile = new TFile(fOutputFileName.c_str(), "RECREATE");
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
   nnnnnn = 0;
   nnnnnnhbhe = 0;
   nnnnnnhbheqie11 = 0;
@@ -6173,9 +6104,6 @@ void CMTRawAnalyzer::beginJob() {
   nnnnnn4 = 0;
   nnnnnn5 = 0;
   nnnnnn6 = 0;
-  //  nnnnnn7= 0;
-  //  nnnnnn8= 0;
-
   //////////////////////////////////////////////////////////////////////////////////    book histoes
 
   if (recordHistoes_) {
@@ -6652,12 +6580,12 @@ void CMTRawAnalyzer::beginJob() {
     h_amplitudechannel2_HF4 = fs_->make<TH2F>("h_amplitudechannel2_HF4", " ", neta, -41., 41., nphi, 0., bphi);
 
     // Reco
-    h_energyhitSignal_HB = fs_->make<TH1F>("h_energyhitSignal_HB", " ", npfit, -0.22, 0.22);  //
-    h_energyhitSignal_HE = fs_->make<TH1F>("h_energyhitSignal_HE", " ", npfit, -0.22, 0.22);  //
-    h_energyhitSignal_HF = fs_->make<TH1F>("h_energyhitSignal_HF", " ", npfit, -6.6, 6.6);  //
-    h_energyhitNoise_HB = fs_->make<TH1F>("h_energyhitNoise_HB", " ", npfit, -0.22, 0.22);    //
-    h_energyhitNoise_HE = fs_->make<TH1F>("h_energyhitNoise_HE", " ", npfit, -0.22, 0.22);    //
-    h_energyhitNoise_HF = fs_->make<TH1F>("h_energyhitNoise_HF", " ", npfit, -4.4, 4.4);    //
+    h_energyhitSignal_HB = fs_->make<TH1F>("h_energyhitSignal_HB", " ", npfit, -0.22, 0.22);
+    h_energyhitSignal_HE = fs_->make<TH1F>("h_energyhitSignal_HE", " ", npfit, -0.22, 0.22);
+    h_energyhitSignal_HF = fs_->make<TH1F>("h_energyhitSignal_HF", " ", npfit, -6.6, 6.6);
+    h_energyhitNoise_HB = fs_->make<TH1F>("h_energyhitNoise_HB", " ", npfit, -0.22, 0.22);
+    h_energyhitNoise_HE = fs_->make<TH1F>("h_energyhitNoise_HE", " ", npfit, -0.22, 0.22);
+    h_energyhitNoise_HF = fs_->make<TH1F>("h_energyhitNoise_HF", " ", npfit, -4.4, 4.4);
 
     //HB:
     h_recSignalEnergy0_HB1 = fs_->make<TH2F>("h_recSignalEnergy0_HB1", " ", neta, -41., 41., nphi, 0., bphi);
@@ -7405,7 +7333,6 @@ void CMTRawAnalyzer::beginJob() {
     h_sum0TSmeanAperLS8 = fs_->make<TH1F>("h_sum0TSmeanAperLS8", " ", bac, 1., bac2);
     //--------------------------------------------------
     // for estimator3:
-    //  float est3 = 10.0;
     h_sumTSmaxALS1 = fs_->make<TH1F>("h_sumTSmaxALS1", " ", 100, 0., lsdep_estimator3_HBdepth1_);
     h_2DsumTSmaxALS1 = fs_->make<TH2F>("h_2DsumTSmaxALS1", " ", neta, -41., 41., nphi, 0., bphi);
     h_sumTSmaxAperLS1 = fs_->make<TH1F>("h_sumTSmaxAperLS1", " ", bac, 1., bac2);
@@ -7464,8 +7391,6 @@ void CMTRawAnalyzer::beginJob() {
     h_sum0TSmaxAperLS8 = fs_->make<TH1F>("h_sum0TSmaxAperLS8", " ", bac, 1., bac2);
     //--------------------------------------------------
     // for estimator4:
-    //  float est4 = 3.4;
-    //  float est41= 2.0;
     h_sumAmplitudeLS1 = fs_->make<TH1F>("h_sumAmplitudeLS1", " ", 100, 0.0, lsdep_estimator4_HBdepth1_);
     h_2DsumAmplitudeLS1 = fs_->make<TH2F>("h_2DsumAmplitudeLS1", " ", neta, -41., 41., nphi, 0., bphi);
     h_sumAmplitudeperLS1 = fs_->make<TH1F>("h_sumAmplitudeperLS1", " ", bac, 1., bac2);
@@ -7524,9 +7449,6 @@ void CMTRawAnalyzer::beginJob() {
     h_sum0AmplitudeperLS8 = fs_->make<TH1F>("h_sum0AmplitudeperLS8", " ", bac, 1., bac2);
     //--------------------------------------------------
     // for estimator5:
-    //  float est5 = 0.6;
-    //  float est51= 1.0;
-    //  float est52= 0.8;
     h_sumAmplLS1 = fs_->make<TH1F>("h_sumAmplLS1", " ", 100, 0.0, lsdep_estimator5_HBdepth1_);
     h_2DsumAmplLS1 = fs_->make<TH2F>("h_2DsumAmplLS1", " ", neta, -41., 41., nphi, 0., bphi);
     h_sumAmplperLS1 = fs_->make<TH1F>("h_sumAmplperLS1", " ", bac, 1., bac2);
@@ -8233,8 +8155,6 @@ void CMTRawAnalyzer::fillDigiErrors(HBHEDigiCollection::const_iterator& digiItr)
   //    ha2->Fill(double(ieta), double(iphi));
 }  //fillDigiErrors
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////    fillDigiErrorsHBHEQIE11
 // ------------ method called for each event  ------------
 void CMTRawAnalyzer::fillDigiErrorsQIE11(QIE11DataFrame qie11df) {
@@ -8518,20 +8438,6 @@ void CMTRawAnalyzer::fillDigiErrorsHFQIE10(QIE10DataFrame qie10df) {
   ///////////////////////////////////////
   if (!anycapid)
     error1 = 1;
-  //    if( anyer )                         error2 = 1;
-  //    if( !anydv )                        error3 = 1;
-  ///////////////////////////////////////Energy
-  // Energy:
-  // int adc = qie10df[ii].adc();
-  // int tdc = qie10df[ii].le_tdc();
-  // int trail = qie10df[ii].te_tdc();
-  // int capid = qie10df[ii].capid();
-  // int soi = qie10df[ii].soi();
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  // store pulse information
-  // THIS NEEDS TO BE UPDATED AND IS ONLY
-  // BEING USED AS A PLACE HOLDER UNTIL THE
-  // REAL LINEARIZATION CONSTANTS ARE DEFINED
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   double ampl = 0.;
   for (int ii = 0; ii < nTS; ii++) {
@@ -8563,7 +8469,6 @@ void CMTRawAnalyzer::fillDigiErrorsHFQIE10(QIE10DataFrame qie10df) {
     }
   }
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ------------ method called for each event  ------------
 void CMTRawAnalyzer::fillDigiErrorsHO(HODigiCollection::const_iterator& digiItr) {
@@ -8696,7 +8601,6 @@ void CMTRawAnalyzer::fillDigiErrorsHO(HODigiCollection::const_iterator& digiItr)
     }
   }
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CMTRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiItr) {
   CaloSamples toolOriginal;  // TS
@@ -8760,12 +8664,10 @@ void CMTRawAnalyzer::fillDigiAmplitude(HBHEDigiCollection::const_iterator& digiI
   int c4 = 0;
   double errorBtype = 0.;
 
-  //    int TSsize = 10;
   int TSsize = 10;  //HEHB for Run2
-  //     if((*digiItr).size() !=  10) std::cout << "TSsize HBHE != 10 and = " <<(*digiItr).size()<< std::endl;
-  if ((*digiItr).size() != TSsize)
-    errorBtype = 1.;
   TSsize = digiItr->size();
+  if ((*digiItr).size() != 10)
+    errorBtype = 1.;
   //     ii = 0 to 9
   for (int ii = 0; ii < TSsize; ii++) {
     //  for (int ii=0; ii<digiItr->size(); ii++) {
@@ -9740,7 +9642,6 @@ void CMTRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df) {
   int TSsize = 8;  // sub= 1 HB
   if (sub == 2)
     TSsize = 8;  // sub = 2 HE
-
   if (nTS != TSsize)
     errorBtype = 1.;
   TSsize = nTS;  //nTS = qie11df.samples();
@@ -10836,7 +10737,6 @@ void CMTRawAnalyzer::fillDigiAmplitudeQIE11(QIE11DataFrame qie11df) {
   }  //if ( sub == 2 )
      //
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CMTRawAnalyzer::fillDigiAmplitudeHF(HFDigiCollection::const_iterator& digiItr) {
   CaloSamples toolOriginal;  // TS

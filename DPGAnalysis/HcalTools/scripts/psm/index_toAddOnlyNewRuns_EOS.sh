@@ -4,6 +4,7 @@ WebDir='/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring'
 WebSite='https://cms-conddb.cern.ch/eosweb/hcal/HcalRemoteMonitoring'
 ##HistoDir='/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/GlobalPSM/histos'
 ##HistoDir='/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/ALCARECOPSM/histos'
+##HistoDir='/eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/IMPSM/histos'
 
 
 cmsenv 2>/dev/null
@@ -76,7 +77,8 @@ echo -e "Full runList for EOS complete\n"
 echo 'next message is Fine: '
 rm index.html
 #eoscp $WebDir/GlobalPSM/index.html index.html
-eoscp $WebDir/ALCARECOPSM/index.html index.html
+#eoscp $WebDir/ALCARECOPSM/index.html index.html
+eoscp $WebDir/IMPSM/index.html index.html
 cp index.html OLDindex.html
 
 # delete last line of copied index_draft.html which close the table
@@ -89,11 +91,12 @@ cat index.html | head -n -1 > index_draft.html
 #done
 
 #k=34
-k=42
+#k=42
+k=0
 
 ########################################## type by hands number of new runs k=k-number:
 #let "k = k - 1"
-echo ' ================>>>    k in old list = '$k
+echo ' =>>    k in old list = '$k
 
 for i in ${runListEOS} ; do
  
@@ -103,7 +106,7 @@ runnumber=${i}
 #if [[ "$runnumber" > 243400 ]] ; then
 let "k = k + 1"
 echo
-echo ' ================>>> new k in loop = '$k
+echo ' =>> new k in loop = '$k
 echo
 echo
 echo 'RUN number = '$runnumber
@@ -124,17 +127,20 @@ fi
 if [ ${got} -eq 0 ] ; then
 #dasgoclient  --query="file dataset=/HcalNZS/Run2018D-v1/RAW  run=${i} | grep file.size, file.nevents, file.modification_time "  > tmp
 #dasgoclient  --query="file dataset=/HcalNZS/Commissioning2021-v1/RAW  run=${i} | grep file.size, file.nevents, file.modification_time "  > tmp
-dasgoclient  --query="file dataset=/HcalNZS/Commissioning2021-HcalCalMinBias-PromptReco-v1/ALCARECO  run=${i} | grep file.size, file.nevents, file.modification_time "  > tmp
+#dasgoclient  --query="file dataset=/HcalNZS/Commissioning2021-HcalCalMinBias-PromptReco-v1/ALCARECO  run=${i} | grep file.size, file.nevents, file.modification_time "  > tmp
+dasgoclient  --query="file dataset=/MinimumBias3/Commissioning2021-HcalCalIterativePhiSym-PromptReco-v1/ALCARECO  run=${i} | grep file.size, file.nevents, file.modification_time "  > tmp
+
 fi
 
 timetmp=`cat tmp | head -n 1  | awk '{print $3}'`
 ############################################################################################################
 #type='ZeroBias'
-type='HcalNZS'
+#type='HcalNZS'
+type='MinimumBias1'
 timetmp2=`date -d @${timetmp} +%Y-%m-%d:%H-%M-%S`
 sizetmp=`cat tmp | head -n 1  | awk '{print $1}'`
 neventstmp=`cat tmp | head -n 1  | awk '{print $2}'`
-commentariy='2021first'
+commentariy='2021ALCARECO'
 #cat runs_info
 echo 'RUN Type = '$type
 echo ${sizetmp} ${neventstmp} ${timetmp2}
@@ -152,7 +158,8 @@ echo '<td class="s'$raw'" align="center">'$timetmp2'</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$sizetmp'</td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$neventstmp'</td>'>> index_draft.html
 #echo '<td class="s'$raw'" align="center"><a href="'$WebSite'/GlobalPSM/GLOBAL_'$runnumber'/MAP.html">GlobalPSM_'$runnumber'</a></td>'>> index_draft.html
-echo '<td class="s'$raw'" align="center"><a href="'$WebSite'/ALCARECOPSM/GLOBAL_'$runnumber'/MAP.html">ALCARECOPSMPSM_'$runnumber'</a></td>'>> index_draft.html
+#echo '<td class="s'$raw'" align="center"><a href="'$WebSite'/ALCARECOPSM/GLOBAL_'$runnumber'/MAP.html">ALCARECOPSM_'$runnumber'</a></td>'>> index_draft.html
+echo '<td class="s'$raw'" align="center"><a href="'$WebSite'/IMPSM/GLOBAL_'$runnumber'/MAP.html">IMPSM_'$runnumber'</a></td>'>> index_draft.html
 echo '<td class="s'$raw'" align="center">'$commentariy'</td>'>> index_draft.html
 
 

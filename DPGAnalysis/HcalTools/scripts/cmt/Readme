@@ -9,11 +9,11 @@ ssh lxplus
 
 cd your_working_dir
 
-setenv SCRAM_ARCH slc7_amd64_gcc900
+setenv SCRAM_ARCH slc7_amd64_gcc10
 
-cmsrel CMSSW_12_2_0_pre2
+cmsrel CMSSW_12_3_0_pre4
 
-cd CMSSW_12_2_0_pre2/src
+cd CMSSW_12_3_0_pre4/src
 
 cmsenv
 
@@ -26,7 +26,7 @@ II.  ----- Compilation of main code CMTRawAnalyzer.cc
 
 scram b 
 
-cd your_dir_CMSSW_12_2_0_pre2/src/DPGAnalysis/HcalTools/scripts/cmt 
+cd your_dir_CMSSW_12_3_0_pre4/src/DPGAnalysis/HcalTools/scripts/cmt 
 ( this is initial_dir )
 
 IIIa.-------   Necessary corrections: 
@@ -52,7 +52,7 @@ and specify in file " a.py.end " the HLT name in line "process.GlobalTag.globalt
 
 IVa.  -------  Running interactively: 
 ====================================
-setenv SCRAM_ARCH slc7_amd64_gcc900
+setenv SCRAM_ARCH slc7_amd64_gcc10
 cmsenv
 voms-proxy-init -voms cms -rfc
 
@@ -69,11 +69,11 @@ IVb.  ------  Running using condor.jdl:
 
 -  specify if necessary the lines in file    run_condor.csh : 
 
-setenv SCRAM_ARCH slc7_amd64_gcc900
+setenv SCRAM_ARCH slc7_amd64_gcc10
 
-cmsrel CMSSW_12_2_0_pre2
+cmsrel CMSSW_12_3_0_pre4
 
-cd CMSSW_12_2_0_pre2/src
+cd CMSSW_12_3_0_pre4/src
 
 - and line with eos-directory, 
 where you are going to record the resulting root files:
@@ -117,7 +117,7 @@ V.  -------------------  Copying:
 
  all good root files to be copied into /initial_dir/longruns/.
 (example:
-scp Global*.root /afs/cern.ch/work/z/zhokin/hcal/qq6/CMSSW_12_2_0_pre2/src/DPGAnalysis/HcalTools/scripts/cmt/longruns/.
+scp Global*.root /afs/cern.ch/work/z/zhokin/hcal/qq8/CMSSW_12_3_0_pre4/src/DPGAnalysis/HcalTools/scripts/cmt/longruns/.
 )
     check all root-files availability: 
 
@@ -144,12 +144,18 @@ eos ls -l /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/h
 
 VI. --- Three steps to provide visualization of new global-runs: 
 ================================================================
+ - correct in advance the file "index_zhokin.sh": 
+a) put last line number of CMT site; 
+b) check dataset name; 
+c) for printout:correct comments and type;
 
-- correct file "index_toAddOnlyNewRuns_EOS.sh" for "dasgoclient.. dataset=..." and 
+1) ./index_zhokin.sh runlist_run 
+
+[[[ (or absolet: try to correct file "index_toAddOnlyNewRuns_EOS.sh" for "dasgoclient.. dataset=..." and 
 "k=" - number(!) of new-recorded global-runs and execute:
 ( for tests use also: index_toAddOnlyNewRunsCRAFT_EOS.sh , index_toAddOnlyNewRunsCosmics_EOS.sh runlist_test )
   1) ./index_toAddOnlyNewRuns_EOS.sh runlist_run 
-(use for craft test: ./index_toAddOnlyNewRunsCRAFT_EOS.sh runlist_test )
+(use for craft test: ./index_toAddOnlyNewRunsCRAFT_EOS.sh runlist_test ) ]]]
 
 eos cp OLDindex.html /eos/cms/store/group/dpg_hcal/comm_hcal/www/HcalRemoteMonitoring/CMT/OLDindex.html
 

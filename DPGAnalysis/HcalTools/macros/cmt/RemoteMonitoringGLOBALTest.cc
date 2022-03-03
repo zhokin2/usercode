@@ -3489,7 +3489,7 @@ int main(int argc, char *argv[]) {
   //  int njeta = 22; int njphi = 18; int lsmax=2600;
   int njeta = 22;
   int njphi = 18;
-  int lsmax = 2600;
+  int lsmax = 1800;
   cout << ">>>>>>>>>>>>>>>>>>>>>>>>     int njeta = 22; int njphi = 18; int lsmax=2600;                        "
        << endl;
 

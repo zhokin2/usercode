@@ -15,11 +15,6 @@ process.maxEvents = cms.untracked.PSet(
 # input = cms.untracked.int32(-1)
   )
 
-process.TFileService = cms.Service("TFileService",
-      fileName = cms.string("LED331388.root")
-#      ,closeFileFast = cms.untracked.bool(True)
-  )
-
 # readme: on lxplus:
 # eos ls /store/group/dpg_hcal/comm_hcal/USC/
 # eos ls /store/group/dpg_hcal/comm_hcal/USC/run309445
@@ -323,13 +318,13 @@ process.Analyzer = cms.EDAnalyzer("CMTRawAnalyzer",
                                   forallestimators_amplitude_bigger = cms.double(-100.),
                                   #
                                   #
+                                  # if 0 - do not use digis at all
+                                  flagToUseDigiCollectionsORNot = cms.int32(1),
                                   #
                                   #usecontinuousnumbering = cms.untracked.bool(False),
                                   usecontinuousnumbering = cms.untracked.bool(True),
                                   #
                                   #
-                                  # if 0 - do not use digis at all
-                                  flagToUseDigiCollectionsORNot = cms.int32(1),
                                   #
                                   hcalCalibDigiCollectionTag = cms.InputTag('hcalDigis'),
                                   hbheDigiCollectionTag = cms.InputTag('hcalDigis'),
@@ -381,9 +376,9 @@ process.Analyzer = cms.EDAnalyzer("CMTRawAnalyzer",
                                   splashesUpperLimit = cms.int32(10000),
                                   #
                                   #
-                                  #HistOutFile = cms.untracked.string('LED331388.root'),
+                                  HistOutFile = cms.untracked.string('LED331388.root'),
                                   #
-                                  #MAPOutFile = cms.untracked.string('LogEleMapdb.h')
+                                  MAPOutFile = cms.untracked.string('LogEleMapdb.h')
                                   #
                                   #
                                   )		
@@ -414,15 +409,12 @@ from Configuration.AlCa.autoCond import autoCond
 # 2019:
 process.GlobalTag.globaltag = '106X_dataRun3_HLT_v3'
 
-
-process.hcalDigis= cms.EDProducer("HcalRawToDigi",
-#    FilterDataQuality = cms.bool(True),
-    FilterDataQuality = cms.bool(False),
-    HcalFirstFED = cms.untracked.int32(700),
-    InputLabel = cms.InputTag("source"),
+process.load('EventFilter.HcalRawToDigi.hcalRawToDigi_cfi')
+process.hcalDigis= process.hcalRawToDigi.clone(
+    FilterDataQuality = False,
+    InputLabel = "source",
     #InputLabel = cms.InputTag("rawDataCollector"),
 )
-
 process.p = cms.Path(process.hcalDigis*process.Analyzer)
 
 process.MessageLogger = cms.Service("MessageLogger",
